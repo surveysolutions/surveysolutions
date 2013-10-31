@@ -144,7 +144,7 @@ namespace Main.Core.Entities.SubEntities.Question
 
         #endregion
 
-        public bool IsAnswersOrdered { get; set; }
+        public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
     }
 }

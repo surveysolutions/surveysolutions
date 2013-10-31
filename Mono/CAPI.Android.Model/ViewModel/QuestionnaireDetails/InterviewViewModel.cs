@@ -775,25 +775,31 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private LinkedQuestionViewModel CreateLinkedQuestion(IQuestion question, QuestionType newType)
         {
+            var multyOptionsQuestion = question as MultyOptionsQuestion;
+
             return new LinkedQuestionViewModel(
                 new InterviewItemId(question.PublicKey), question.QuestionText,
                 newType,
                 true, question.Instructions,
                 true, question.Mandatory,question.ValidationMessage,
                 () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value), 
-                question.StataExportCaption, question.GetVariablesUsedInTitle());
+                question.StataExportCaption, question.GetVariablesUsedInTitle(),
+                multyOptionsQuestion != null? multyOptionsQuestion.AreAnswersOrdered : (bool?) null, 
+                multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
         private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType)
         {
+            var multyOptionsQuestion = question as MultyOptionsQuestion;
+
             return new SelectebleQuestionViewModel(
                 new InterviewItemId(question.PublicKey), question.QuestionText,
                 newType, question.Answers.Select(
-                    a =>
-                        new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage))
-                    .ToList(),
+                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
                 true, question.Instructions, null,
-                true, question.Mandatory,  null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
+                true, question.Mandatory,  null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
+                multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
+                multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
         protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId)

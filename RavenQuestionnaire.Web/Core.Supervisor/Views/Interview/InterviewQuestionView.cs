@@ -51,7 +51,7 @@ namespace Core.Supervisor.Views.Interview
             {
                 this.Settings = new
                 {
-                    IsAnswersOrdered = categoricalMultiQuestion.IsAnswersOrdered,
+                    AreAnswersOrdered = categoricalMultiQuestion.AreAnswersOrdered,
                     MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers
                 };
             }

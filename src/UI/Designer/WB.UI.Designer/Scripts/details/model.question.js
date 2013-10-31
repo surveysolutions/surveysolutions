@@ -22,9 +22,8 @@
                 self.isFeatured = ko.observable(false);
                 self.isMandatory = ko.observable(false);
 
-                self.isSupervisorQuestion = ko.observable();
-
                 self.qtype = ko.observable("Text"); // Questoin type
+                
                 self.isSupervisorQuestion = ko.observable(false);
 
                 self.scope = ko.computed({
@@ -67,19 +66,18 @@
                 });
 
                 self.answerOrder = ko.observable();
-                self.isAnswersOrdered = ko.observable(false);
+                self.areAnswersOrdered = ko.observable(false);
                 self.maxAllowedAnswers = ko.observable('').extend({
                     digit: true,
                     min: 1,
-                    max: 2147483647,
                     validation: [
                         {
                             validator: function (val) {
-                                var max = parseInt(val);
-                                if (isNaN(max)) {
+                                var parsedMaxAllowedAnswers = parseInt(val);
+                                if (self.isLinkedDurty() || isNaN(parsedMaxAllowedAnswers)) {
                                     return true;
                                 }
-                                return max <= self.answerOptions().length;
+                                return parsedMaxAllowedAnswers <= self.answerOptions().length;
                             },
                             message: 'could not be more than categories count'
                         }]
@@ -137,7 +135,7 @@
                 self.isNullo = false;
                 self.cloneSource = ko.observable();
 
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty, self.isInteger, self.countOfDecimalPlaces, self.isAnswersOrdered, self.maxAllowedAnswers]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty, self.isInteger, self.countOfDecimalPlaces, self.areAnswersOrdered, self.maxAllowedAnswers]);
                 self.dirtyFlag().reset();
                 self.errors = ko.validation.group(self);
                 this.cache = function () {
@@ -391,7 +389,7 @@
                     item.isInteger(this.isInteger());
                     item.countOfDecimalPlaces(this.countOfDecimalPlaces());
                     
-                    item.isAnswersOrdered(this.isAnswersOrdered());
+                    item.areAnswersOrdered(this.areAnswersOrdered());
                     item.maxAllowedAnswers(this.maxAllowedAnswers());
 
                     item.validationExpression(this.validationExpression());
@@ -447,7 +445,7 @@
                 this.isInteger(data.isInteger);
                 this.countOfDecimalPlaces(data.countOfDecimalPlaces);
                 
-                this.isAnswersOrdered(data.isAnswersOrdered);
+                this.areAnswersOrdered(data.areAnswersOrdered);
                 this.maxAllowedAnswers(data.maxAllowedAnswers);
 
                 this.answerOptions(_.map(data.answerOptions, function (answer) {

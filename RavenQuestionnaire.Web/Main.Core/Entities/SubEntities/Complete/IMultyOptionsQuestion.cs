@@ -7,7 +7,7 @@ namespace Main.Core.Entities.SubEntities.Complete
     {
         #region Public Properties
 
-        bool IsAnswersOrdered { get; set; }
+        bool AreAnswersOrdered { get; set; }
         int? MaxAllowedAnswers { get; set; }
 
         #endregion

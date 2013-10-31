@@ -21,7 +21,7 @@
 
                 break;
             case "MultyOption":
-                item = new model.MultyOptionQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsAnswersOrdered, _.isEmpty(dto.Settings) ? null : dto.Settings.MaxAllowedAnswers);
+                item = new model.MultyOptionQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.AreAnswersOrdered, _.isEmpty(dto.Settings) ? null : dto.Settings.MaxAllowedAnswers);
                 
                 item.options(_.map(dto.Options, function(option) {
                     var o = new model.Option(uiId);

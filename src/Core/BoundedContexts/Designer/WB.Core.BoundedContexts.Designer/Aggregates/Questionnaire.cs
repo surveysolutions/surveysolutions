@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, Guid sourceQuestionId, int targetIndex, Guid responsibleId, 
-            Guid? linkedToQuestionId, bool isAnswersOrdered, int? maxAllowedAnswers)
+            Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type); 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -337,7 +337,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
 
-                IsAnswersOrdered = isAnswersOrdered,
+                AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers
             });
         }
@@ -397,7 +397,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
            Guid groupId, string title, QuestionType type, string alias,
            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
            QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool isAnswersOrdered, int? maxAllowedAnswers)
+           string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -434,7 +434,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
 
-                IsAnswersOrdered = isAnswersOrdered,
+                AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers
             });
         }
@@ -538,7 +538,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, 
-            bool isAnswersOrdered, int? maxAllowedAnswers)
+            bool areAnswersOrdered, int? maxAllowedAnswers)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             
@@ -579,7 +579,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
 
-                IsAnswersOrdered = isAnswersOrdered,
+                AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers
             });
         }
@@ -820,7 +820,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.LinkedToQuestionId,
                         e.IsInteger,
                         null,
-                        e.IsAnswersOrdered,
+                        e.AreAnswersOrdered,
                         e.MaxAllowedAnswers));
             if (question == null)
             {
@@ -888,7 +888,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.LinkedToQuestionId,
                         e.IsInteger,
                         null,
-                        e.IsAnswersOrdered,
+                        e.AreAnswersOrdered,
                         e.MaxAllowedAnswers));
             if (question == null)
             {
@@ -968,7 +968,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.LinkedToQuestionId,
                         e.IsInteger,
                         null,
-                        e.IsAnswersOrdered,
+                        e.AreAnswersOrdered,
                         e.MaxAllowedAnswers));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
@@ -1361,7 +1361,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Maximum Allowed Answers for question has to be positive");
             }
 
-            if (!linkedToQuestionId.HasValue && options != null && maxAllowedAnswers > options.Length)
+            if (!linkedToQuestionId.HasValue && maxAllowedAnswers > options.Length)
             {
                 throw new DomainException(
                     DomainExceptionType.MaxAllowedAnswersMoreThanOptions,

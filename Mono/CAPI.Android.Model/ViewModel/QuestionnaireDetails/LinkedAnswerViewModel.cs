@@ -12,7 +12,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public int[] PropagationVector { get; private set; }
         public string Title { get; private set; }
-
+        
         public object Clone()
         {
             return new LinkedAnswerViewModel(this.PropagationVector, this.Title);

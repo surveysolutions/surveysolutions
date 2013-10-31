@@ -24,9 +24,9 @@ namespace WB.Core.BoundedContexts.Supervisor
         public override void Load()
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
-            this.Bind<IDataExportService>().To<CsvDataExportService>();
+            this.Bind<IDataExportService>().To<DataExportService>();
             this.Bind<IEnvironmentSupplier<InterviewDataExportView>>().To<StataEnvironmentSupplier>();
-            this.Bind<IExportProvider<InterviewDataExportView>>().To<CSVIterviewExporter>();
+            this.Bind<IExportProvider<InterviewDataExportView>>().To<IterviewExporter>();
             this.Bind(typeof(ITemporaryDataStorage<>)).To(typeof(FileTemporaryDataStorage<>));
 
             
