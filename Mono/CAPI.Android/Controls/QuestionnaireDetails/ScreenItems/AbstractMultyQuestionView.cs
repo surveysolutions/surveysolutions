@@ -105,12 +105,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             string answerTagId = GetAnswerId(answer);
             CheckBox cb = CreateCheckBox(answer, answerTagId);
             
-            if (this.IsAnswersOrdered == true || this.MaxAllowedAnswers.HasValue)
+            if (this.AreAnswersOrdered == true || this.MaxAllowedAnswers.HasValue)
             {
                 int answerOrder = GetAnswerOrder(answer);
                 orderedGivenAnswers.Add(answerTagId, answerOrder);
                 
-            if (this.AreAnswersOrdered == true)
+                if (this.AreAnswersOrdered == true)
                 {
                     var answerOrderText = CreateOrderText(cb.Checked, answerOrder);
                     container.AddView(answerOrderText);
