@@ -1,6 +1,6 @@
 ﻿<script type="text/html" id="Categorical">
     <div data-bind="visible: qtype() == 'MultyOption'">
-        <button type="button" class="btn btn-small" data-toggle="checkbox" data-value="true" data-bind="checkedButtons: isAnswersOrdered, popover: { content: 'We will be saving and displaying the order in which answers were given.', title: 'Ordered question', placement: 'right', trigger: 'hover' }"><i class="icon-list-ol"></i>&nbsp;ordered</button>
+        <button type="button" class="btn btn-small" data-toggle="checkbox" data-value="true" data-bind="checkedButtons: areAnswersOrdered, popover: { content: 'We will be saving and displaying the order in which answers were given.', title: 'Ordered question', placement: 'right', trigger: 'hover' }"><i class="icon-list-ol"></i>&nbsp;ordered</button>
         <div style="margin-top: 10px" class="control-group" data-bind="validationElement: maxAllowedAnswers">
                 <label class="control-label">Maximum number of answers</label>
                 <div class="controls">

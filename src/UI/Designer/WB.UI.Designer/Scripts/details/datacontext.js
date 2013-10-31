@@ -352,8 +352,8 @@
                 case "DropDownList":
                 case "MultyOption":
                     command.optionsOrder = question.answerOrder();
-                command.isAnswersOrdered = question.isAnswersOrdered();
-                command.maxAllowedAnswers = question.maxAllowedAnswers();
+                    command.areAnswersOrdered = question.areAnswersOrdered();
+                    command.maxAllowedAnswers = question.maxAllowedAnswers();
                     if (question.isLinked() == 1) {
                         command.linkedToQuestionId = question.selectedLinkTo();
                     } else {
@@ -402,7 +402,6 @@
                             uiCallbacks.error(response);
                         }
                         deferred.reject(response);
-                        return;
                     }
                 };
 
@@ -427,7 +426,6 @@
                             uiCallbacks.error(response);
                         }
                         deferred.reject(response);
-                        return;
                     }
                 };
                 dataservice.sendCommand(callbacks, command);
