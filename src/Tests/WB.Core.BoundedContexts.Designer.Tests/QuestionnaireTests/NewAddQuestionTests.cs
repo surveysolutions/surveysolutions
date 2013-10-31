@@ -1736,7 +1736,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, options, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, isAnswersOrdered: isAnswersOrdered, maxAllowedAnswers: maxAllowedAnswers);
+                                             string.Empty, options, Order.AsIs, responsibleId: responsibleId, 
+                                             linkedToQuestionId: null, isAnswersOrdered: isAnswersOrdered, maxAllowedAnswers: maxAllowedAnswers);
                 // assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
                 Assert.AreEqual(isAnswersOrdered, risedEvent.IsAnswersOrdered);

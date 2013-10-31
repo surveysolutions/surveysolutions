@@ -68,7 +68,22 @@
 
                 self.answerOrder = ko.observable();
                 self.isAnswersOrdered = ko.observable(false);
-                self.maxAllowedAnswers = ko.observable('').extend({ digit: true, min: 1 , max: 2147483647});
+                self.maxAllowedAnswers = ko.observable('').extend({
+                    digit: true,
+                    min: 1,
+                    max: 2147483647,
+                    validation: [
+                        {
+                            validator: function (val) {
+                                var max = parseInt(val);
+                                if (isNaN(max)) {
+                                    return true;
+                                }
+                                return max <= self.answerOptions().length;
+                            },
+                            message: 'could not be more than categories count'
+                        }]
+                });
                 self.answerOptions = ko.observableArray([]);
                 self.cards = ko.observableArray([]);
 
