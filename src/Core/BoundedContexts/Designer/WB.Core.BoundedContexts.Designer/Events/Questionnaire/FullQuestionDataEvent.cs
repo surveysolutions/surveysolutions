@@ -16,7 +16,7 @@ namespace Main.Core.Events.Questionnaire
         public Guid? LinkedToQuestionId { get; set; }
         public bool? IsInteger { get; set; }
 
-        public bool? IsAnswersOrdered { get; set; }
+        public bool? AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
     }
 }
