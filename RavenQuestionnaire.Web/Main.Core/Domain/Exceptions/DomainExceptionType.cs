@@ -179,6 +179,8 @@
 
         MaxAllowedAnswersIsNotPositive,
 
-        MaxAllowedAnswersMoreThanOptions
+        MaxAllowedAnswersMoreThanOptions,
+
+        MultiOptionQuestionCanNotBeFeatured
     }
 }

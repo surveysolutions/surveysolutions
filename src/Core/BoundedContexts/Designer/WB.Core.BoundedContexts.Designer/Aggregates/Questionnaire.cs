@@ -1339,9 +1339,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Categorical question cannot be with answers and linked to another question in the same time");
             }
 
+            if (isFeatured)
+            {
+                throw new DomainException(
+                    DomainExceptionType.MultiOptionQuestionCanNotBeFeatured,
+                    "Multiple answers question can not be pre-filled");
+            }
+
             if (questionIsLinked)
             {
-                this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured, isHead);
+                this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isHead);
             }
             else
             {
@@ -1369,7 +1376,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfLinkedCategoricalQuestionIsInvalid(Guid? linkedToQuestionId, bool isFeatured, bool isHead)
+        private void ThrowIfLinkedCategoricalQuestionIsInvalid(Guid? linkedToQuestionId, bool isHead)
         {
             var linkedToQuestion =
                 this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).FirstOrDefault();
@@ -1380,7 +1387,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.LinkedQuestionDoesNotExist,
                     "Question that you are linked to does not exist");
             }
-
 
             bool typeOfLinkedQuestionIsNotSupported = !(
                 linkedToQuestion.QuestionType == QuestionType.DateTime ||
@@ -1393,14 +1399,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.NotSupportedQuestionForLinkedQuestion,
                     "Linked question can be only type of number, text or date");
             }
-
-            if (isFeatured)
-            {
-                throw new DomainException(
-                    DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
-                    "Question that linked to another question can not be pre-filled");
-            }
-
+            
             if (isHead)
             {
                 throw new DomainException(
