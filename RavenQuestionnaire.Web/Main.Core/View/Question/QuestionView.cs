@@ -30,7 +30,8 @@ namespace Main.Core.View.Question
             this.Answers = null;
             this.Triggers = null;
 
-            this.Answers = doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
+            this.Answers =
+                doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
 
             var autoQuestion = doc as IAutoPropagate;
 
@@ -47,10 +48,20 @@ namespace Main.Core.View.Question
             if (numericQuestion != null)
             {
                 this.Settings = new
-                {
-                    numericQuestion.IsInteger,
-                    numericQuestion.CountOfDecimalPlaces
-                };
+                    {
+                        numericQuestion.IsInteger,
+                        numericQuestion.CountOfDecimalPlaces
+                    };
+            }
+
+            var multyoptionQuestion = doc as IMultyOptionsQuestion;
+            if (multyoptionQuestion != null)
+            {
+                this.Settings = new
+                    {
+                        AreAnswersOrdered = multyoptionQuestion.AreAnswersOrdered,
+                        multyoptionQuestion.MaxAllowedAnswers
+                    };
             }
         }
 
@@ -91,12 +102,6 @@ namespace Main.Core.View.Question
 
         public Guid? LinkedToQuestionId { get; set; }
 
-            }
-
-            var multyoptionQuestion = doc as IMultyOptionsQuestion;
-            if (multyoptionQuestion != null)
-            {
-                this.Settings = new { AreAnswersOrdered = multyoptionQuestion.AreAnswersOrdered, multyoptionQuestion.MaxAllowedAnswers };
         public dynamic Settings { get; set; }
     }
 }
