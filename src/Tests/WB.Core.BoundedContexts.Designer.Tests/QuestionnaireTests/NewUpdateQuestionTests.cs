@@ -1550,7 +1550,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         [Test]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion__When_MulitQuestion_With_Ordered_and_MaxAnswer_Are_Set_Then_DomainException_should_NOT_be_thrown(QuestionType questionType)
+        public void NewUpdateQuestion_When_Categorical_Not_Linked_Multi_Question_That_Ordered_and_MaxAnswer_Are_Set_Then_event_contains_values(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
@@ -1614,12 +1614,106 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewUpdateQuestion_When_categorical_multi_question_with_linked_question_that_has_max_allowed_answers()
+        public void NewUpdateQuestion_When_categorical_multi_question_with_linked_question_that_has_max_allowed_answers_Then_DomainException_should_NOT_be_thrown()
+        {
+            // arrange
+            const int maxAllowedAnswers = 5;
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: QuestionType.MultyOption);
+
+            // act
+            TestDelegate act = () => questionnaire.NewUpdateQuestion(
+                questionId: questionId,
+                title: "Question",
+                type: QuestionType.MultyOption,
+                alias: "test",
+                isMandatory: false,
+                isFeatured: false,
+                isHeaderOfPropagatableGroup: false,
+                scope: QuestionScope.Interviewer,
+                condition: string.Empty,
+                validationExpression: string.Empty,
+                validationMessage: string.Empty,
+                instructions: string.Empty,
+                options: null,
+                optionsOrder: Order.AZ,
+                responsibleId: responsibleId,
+                linkedToQuestionId: autoQuestionId,
+                areAnswersOrdered: false,
+                maxAllowedAnswers: maxAllowedAnswers);
+
+            // assert
+            Assert.DoesNotThrow(act);
+        }        
+
+        [Test]
+        public void NewUpdateQuestion_When_categorical_multi_question_with_linked_question_that_has_max_allowed_answers_Then_QuestionChanged_event_with_max_allowed_answers_value_should_be_raised()
+        {
+                using (var eventContext = new EventContext())
+                {
+                    // arrange
+                    const int maxAllowedAnswers = 5;
+                    // arrange
+                    Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+                    Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+                    Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+                    Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                    Guid responsibleId = Guid.NewGuid();
+                    Questionnaire questionnaire =
+                        CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                            autoGroupPublicKey: autoGroupId,
+                            secondGroup: groupId,
+                            autoQuestionId: autoQuestionId,
+                            questionId: questionId,
+                            responsibleId: responsibleId,
+                            questionType: QuestionType.MultyOption);
+
+                    // act
+                    questionnaire.NewUpdateQuestion(
+                        questionId: questionId,
+                        title: "Question",
+                        type: QuestionType.MultyOption,
+                        alias: "test",
+                        isMandatory: false,
+                        isFeatured: false,
+                        isHeaderOfPropagatableGroup: false,
+                        scope: QuestionScope.Interviewer,
+                        condition: string.Empty,
+                        validationExpression: string.Empty,
+                        validationMessage: string.Empty,
+                        instructions: string.Empty,
+                        options: null,
+                        optionsOrder: Order.AZ,
+                        responsibleId: responsibleId,
+                        linkedToQuestionId: autoQuestionId,
+                        areAnswersOrdered: false,
+                        maxAllowedAnswers: maxAllowedAnswers);
+
+                    // assert
+                    var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                    Assert.AreEqual(maxAllowedAnswers, risedEvent.MaxAllowedAnswers);
+                }
+        }
+
+        [Test]
+        public void NewUpdateQuestion_When_categorical_multi_question_with_linked_question_ordered_Then_QuestionChanged_event_with_ordered_value_should_be_raised()
         {
             using (var eventContext = new EventContext())
             {
                 // arrange
-                const int maxAllowedAnswers = 5;
+                const bool areAnswersOrdered = true;
                 // arrange
                 Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
                 Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
@@ -1637,28 +1731,28 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 // act
                 questionnaire.NewUpdateQuestion(
-                        questionId: questionId,
-                        title: "Question",
-                        type: QuestionType.MultyOption,
-                        alias: "test",
-                        isMandatory: false,
-                        isFeatured: false,
-                        isHeaderOfPropagatableGroup: false,
-                        scope: QuestionScope.Interviewer,
-                        condition: string.Empty,
-                        validationExpression: string.Empty,
-                        validationMessage: string.Empty,
-                        instructions: string.Empty,
-                        options: null,
-                        optionsOrder: Order.AZ,
-                        responsibleId: responsibleId,
-                        linkedToQuestionId: autoQuestionId, 
-                        areAnswersOrdered: false, 
-                        maxAllowedAnswers: maxAllowedAnswers);
+                    questionId: questionId,
+                    title: "Question",
+                    type: QuestionType.MultyOption,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: autoQuestionId,
+                    areAnswersOrdered: areAnswersOrdered,
+                    maxAllowedAnswers: null);
 
                 // assert
-                var risedEvent = GetLastEvent<QuestionChanged>(eventContext);
-                Assert.AreEqual(maxAllowedAnswers, risedEvent.MaxAllowedAnswers);
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual(areAnswersOrdered, risedEvent.AreAnswersOrdered);
             }
         }
     }
