@@ -94,11 +94,17 @@
                 questionnaire().isSelected(true);
                 openDetails("show-questionnaire");
             },
-            editQuestion = function(id) {
+            editQuestion = function (id) {
+                if (!_.isEmpty(selectedQuestion())) {
+                    selectedQuestion().detachValidation();
+                }
+
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
                     return;
                 }
+                question.attachValidation();
+                
                 question.isSelected(true);
                 question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
                 question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
