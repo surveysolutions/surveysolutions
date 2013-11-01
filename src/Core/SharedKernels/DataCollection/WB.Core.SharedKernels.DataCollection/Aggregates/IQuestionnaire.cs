@@ -29,13 +29,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
+        int? GetMaxSelectedAnswerOptions(Guid questionId);
+
         bool IsCustomValidationDefined(Guid questionId);
 
         IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId);
 
         string GetCustomValidationExpression(Guid questionId);
-
-        IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions();
 
         IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions();
 
@@ -55,17 +55,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions();
-
-        IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions();
-
         bool ShouldQuestionPropagateGroups(Guid questionId);
 
         IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId);
 
         int GetMaxAnswerValueForPropagatingQuestion(Guid questionId);
-
-        IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups();
 
         IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId);
 

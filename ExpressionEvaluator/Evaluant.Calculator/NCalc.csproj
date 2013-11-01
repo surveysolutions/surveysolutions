@@ -103,15 +103,79 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.1.2.41038, Culture=neutral, PublicKeyToken=3a9cab8f8d22bfb7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Antlr3.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Antlr\Runtime\ANTLRFileStream.cs" />
+    <Compile Include="Antlr\Runtime\ANTLRInputStream.cs" />
+    <Compile Include="Antlr\Runtime\ANTLRReaderStream.cs" />
+    <Compile Include="Antlr\Runtime\ANTLRStringStream.cs" />
+    <Compile Include="Antlr\Runtime\BaseRecognizer.cs" />
+    <Compile Include="Antlr\Runtime\BitSet.cs" />
+    <Compile Include="Antlr\Runtime\CharStreamConstants.cs" />
+    <Compile Include="Antlr\Runtime\CharStreamState.cs" />
+    <Compile Include="Antlr\Runtime\ClassicToken.cs" />
+    <Compile Include="Antlr\Runtime\Collections\CollectionUtils.cs" />
+    <Compile Include="Antlr\Runtime\Collections\HashList.cs" />
+    <Compile Include="Antlr\Runtime\Collections\StackList.cs" />
+    <Compile Include="Antlr\Runtime\CommonErrorNode.cs" />
+    <Compile Include="Antlr\Runtime\CommonToken.cs" />
+    <Compile Include="Antlr\Runtime\CommonTokenStream.cs" />
+    <Compile Include="Antlr\Runtime\Constants.cs" />
+    <Compile Include="Antlr\Runtime\DFA.cs" />
+    <Compile Include="Antlr\Runtime\EarlyExitException.cs" />
+    <Compile Include="Antlr\Runtime\FailedPredicateException.cs" />
+    <Compile Include="Antlr\Runtime\ICharStream.cs" />
+    <Compile Include="Antlr\Runtime\IIntStream.cs" />
+    <Compile Include="Antlr\Runtime\IToken.cs" />
+    <Compile Include="Antlr\Runtime\ITokenSource.cs" />
+    <Compile Include="Antlr\Runtime\ITokenStream.cs" />
+    <Compile Include="Antlr\Runtime\Lexer.cs" />
+    <Compile Include="Antlr\Runtime\Misc\ErrorManager.cs" />
+    <Compile Include="Antlr\Runtime\Misc\Stats.cs" />
+    <Compile Include="Antlr\Runtime\MismatchedNotSetException.cs" />
+    <Compile Include="Antlr\Runtime\MismatchedRangeException.cs" />
+    <Compile Include="Antlr\Runtime\MismatchedSetException.cs" />
+    <Compile Include="Antlr\Runtime\MismatchedTokenException.cs" />
+    <Compile Include="Antlr\Runtime\MismatchedTreeNodeException.cs" />
+    <Compile Include="Antlr\Runtime\MissingTokenException.cs" />
+    <Compile Include="Antlr\Runtime\NoViableAltException.cs" />
+    <Compile Include="Antlr\Runtime\Parser.cs" />
+    <Compile Include="Antlr\Runtime\ParserRuleReturnScope.cs" />
+    <Compile Include="Antlr\Runtime\RecognitionException.cs" />
+    <Compile Include="Antlr\Runtime\RecognizerSharedState.cs" />
+    <Compile Include="Antlr\Runtime\RuleReturnScope.cs" />
+    <Compile Include="Antlr\Runtime\SynPredPointer.cs" />
+    <Compile Include="Antlr\Runtime\Token.cs" />
+    <Compile Include="Antlr\Runtime\TokenRewriteStream.cs" />
+    <Compile Include="Antlr\Runtime\Tree\BaseTree.cs" />
+    <Compile Include="Antlr\Runtime\Tree\BaseTreeAdaptor.cs" />
+    <Compile Include="Antlr\Runtime\Tree\CommonTree.cs" />
+    <Compile Include="Antlr\Runtime\Tree\CommonTreeAdaptor.cs" />
+    <Compile Include="Antlr\Runtime\Tree\CommonTreeNodeStream.cs" />
+    <Compile Include="Antlr\Runtime\Tree\ITree.cs" />
+    <Compile Include="Antlr\Runtime\Tree\ITreeAdaptor.cs" />
+    <Compile Include="Antlr\Runtime\Tree\ITreeNodeStream.cs" />
+    <Compile Include="Antlr\Runtime\Tree\ITreeVisitorAction.cs" />
+    <Compile Include="Antlr\Runtime\Tree\ParseTree.cs" />
+    <Compile Include="Antlr\Runtime\Tree\RewriteCardinalityException.cs" />
+    <Compile Include="Antlr\Runtime\Tree\RewriteEarlyExitException.cs" />
+    <Compile Include="Antlr\Runtime\Tree\RewriteEmptyStreamException.cs" />
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleElementStream!1.cs" />
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleNodeStream.cs" />
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleSubtreeStream.cs" />
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleTokenStream.cs" />
+    <Compile Include="Antlr\Runtime\Tree\Tree.cs" />
+    <Compile Include="Antlr\Runtime\Tree\TreeParser.cs" />
+    <Compile Include="Antlr\Runtime\Tree\TreePatternLexer.cs" />
+    <Compile Include="Antlr\Runtime\Tree\TreePatternParser.cs" />
+    <Compile Include="Antlr\Runtime\Tree\TreeRuleReturnScope.cs" />
+    <Compile Include="Antlr\Runtime\Tree\TreeVisitor.cs" />
+    <Compile Include="Antlr\Runtime\Tree\TreeWizard.cs" />
+    <Compile Include="Antlr\Runtime\Tree\UnBufferedTreeNodeStream.cs" />
+    <Compile Include="Antlr\Runtime\UnwantedTokenException.cs" />
     <Compile Include="Domain\BinaryExpression.cs">
       <SubType>Code</SubType>
     </Compile>

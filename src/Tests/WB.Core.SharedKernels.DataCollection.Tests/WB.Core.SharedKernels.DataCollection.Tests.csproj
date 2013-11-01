@@ -64,12 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="ExpressionProcessorTests\ExpressionProcessorTestsContext.cs" />
-    <Compile Include="ExpressionProcessorTests\when_getting_identifiers_used_in_expression__a_or_colon_b_and_c_colon__.cs" />
     <Compile Include="InterviewItemIdTests.cs" />
     <Compile Include="InterviewItemIdTests\InterviewItemIdTestsContext.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
+    <Compile Include="InterviewTests\when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion.cs" />
+    <Compile Include="InterviewTests\when_length_of_selected_values_more_than_max_for_selected_answer_options_for_multiquestion_throw_interview_exception.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs" />
     <Compile Include="InterviewTests\when_answering_autopropagatable_question_which_triggers_group_propagation_with_mandatory_question.cs" />
     <Compile Include="InterviewTests\when_answering_autopropagatable_question_which_triggers_group_propagation_with_mandatory_question_inside_disabled_group.cs" />
@@ -87,7 +87,8 @@
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
-    <Compile Include="QuestionnaireTests\when_importing_questionannaire_and_question_in_it_has_custom_validation_involving_another_question_with_deeper_propagation_level.cs" />
+    <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
+    <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="InterviewTests\when_creating_interview.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_does_not_exist.cs" />
@@ -127,6 +128,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
