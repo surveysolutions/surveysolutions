@@ -50,9 +50,10 @@
                 
                 <div class="control-group" data-bind="validationElement: condition">
                     <div class="controls">
-                        <div class="editor-container" data-bind="validationElement: condition">
+                        <textarea rows="1" data-bind="autoGrowArea: condition, valueUpdate: 'afterkeydown'" class="input-block-level"></textarea>
+                       @* <div class="editor-container" data-bind="validationElement: condition">
                             <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
-                        </div>
+                        </div>*@
                         <span class="help-inline" data-bind="validationMessage: condition"></span>
                     </div>
                 </div>
