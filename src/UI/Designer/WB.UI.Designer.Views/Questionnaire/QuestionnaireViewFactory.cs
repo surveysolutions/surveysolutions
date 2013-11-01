@@ -9,8 +9,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
-    public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>,
-        IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView>
+    public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView>
     {
         private readonly IReadSideRepositoryReader<QuestionnaireDocument> _questionnaireStorage;
 
@@ -25,10 +24,10 @@ namespace WB.UI.Designer.Views.Questionnaire
             return doc == null ? null : new QuestionnaireView(doc);
         }
 
-        QuestionnaireStataMapView IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView>.Load(QuestionnaireViewInputModel input)
+        public EditQuestionnaireView Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
-            return doc == null ? null : new QuestionnaireStataMapView(doc);
+            return doc == null ? null : new EditQuestionnaireView(doc);
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)
@@ -42,5 +41,7 @@ namespace WB.UI.Designer.Views.Questionnaire
                 return null;
             }
         }
+
+      
     }
 }

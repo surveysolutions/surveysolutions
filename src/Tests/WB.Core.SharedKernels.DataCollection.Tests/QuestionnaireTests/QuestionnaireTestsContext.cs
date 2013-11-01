@@ -25,7 +25,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire()
         {
-            return new Questionnaire(/*new Guid(), new QuestionnaireDocument()*/);
+            return new Questionnaire(new Guid(), new QuestionnaireDocument());
+        }
+
+        public static Questionnaire CreateQuestionnaire(Guid creatorId, IQuestionnaireDocument document)
+        {
+            return new Questionnaire(creatorId, document);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

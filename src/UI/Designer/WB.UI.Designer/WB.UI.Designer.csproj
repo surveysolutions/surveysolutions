@@ -32,6 +32,8 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+    <PublishDatabases>false</PublishDatabases>
+    <DeployEncryptKey>Encryption password is used only if any deployment setting is marked as secure</DeployEncryptKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -249,6 +251,7 @@
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
+    <Compile Include="Models\JsonVerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnaireEditView.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
@@ -401,6 +404,10 @@
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Configuration\Amazon.Designer.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
@@ -412,6 +419,7 @@
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\config.js" />
+    <Content Include="Scripts\details\model.error.js" />
     <Content Include="Scripts\details\dataprimer.js" />
     <Content Include="Scripts\details\expressionParser.js" />
     <Content Include="Scripts\details\model.sharePerson.js" />
@@ -559,6 +567,7 @@
     <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
     <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
+    <Content Include="Views\ControlPanel\NConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -600,6 +609,14 @@
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>

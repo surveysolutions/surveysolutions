@@ -1,7 +1,9 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Domain.Exceptions;
 using Main.Core.Entities.SubEntities;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
@@ -10,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Utils;
+using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Membership;
 
@@ -90,18 +93,20 @@ namespace WB.UI.Designer.Tests
             return command;
         }
 
-        private CommandController CreateCommandController(Guid responsibleId, ICommandService commandService = null, ICommandDeserializer commandDeserializer = null, 
-            IExpressionReplacer expressionReplacer = null, ILogger logReplacer = null, IMembershipUserService userHelper = null)
+        private CommandController CreateCommandController(Guid responsibleId, ICommandService commandService = null, ICommandDeserializer commandDeserializer = null,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null, ILogger logReplacer = null, IMembershipUserService userHelper = null)
         {
-             var membershipUserService = Mock.Of<IMembershipUserService>();
+            var membershipUserService = Mock.Of<IMembershipUserService>();
             Mock.Get(membershipUserService).Setup(x => x.WebUser).Returns(new MembershipWebUser(Mock.Of<IMembershipHelper>()));
             Mock.Get(membershipUserService).Setup(x => x.WebUser.UserId).Returns(responsibleId);
 
             return new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
                 commandDeserializer ?? Mock.Of<ICommandDeserializer>(),
-                expressionReplacer ?? Mock.Of<IExpressionReplacer>(),
-                userHelper ?? membershipUserService);
+                userHelper ?? membershipUserService,
+                questionnaireViewFactory ??
+                    Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+                        _ => _.Load(It.IsAny<QuestionnaireViewInputModel>()) == new QuestionnaireView(new QuestionnaireDocument())));
         }
     }
 }
