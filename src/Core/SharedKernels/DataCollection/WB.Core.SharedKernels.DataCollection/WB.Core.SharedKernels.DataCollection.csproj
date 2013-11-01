@@ -149,6 +149,7 @@
     <Compile Include="ReadSide\IVersionedView.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
+    <Compile Include="ValueObjects\Questionnaire\QuestionIdAndVariableName.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
