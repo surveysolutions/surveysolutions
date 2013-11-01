@@ -126,6 +126,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private QuestionViewModel FindReferencedQuestion(string variableName, QuestionViewModel subscribedQuestion)
         {
+            var preFilledQuestion = this.FeaturedQuestions.Values.FirstOrDefault(q => q.Variable == variableName);
+            if (preFilledQuestion != null)
+                return preFilledQuestion;
+
             return this.Questions.Values.FirstOrDefault(question => question.Variable == variableName &&
                 this.PropagationVectorIsTheSameOrHigher(subscribedQuestion, question));
         }
