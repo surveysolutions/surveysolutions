@@ -96,8 +96,6 @@ namespace Main.Core.View.Question
 
         public string StataExportCaption { get; set; }
 
-        public Guid TargetGroupKey { get; set; }
-
         public string Title { get; set; }
 
         public string ValidationExpression { get; set; }
@@ -109,8 +107,6 @@ namespace Main.Core.View.Question
         public int MaxValue { get; set; }
 
         public Dictionary<string, Guid> Groups { get; set; }
-
-        public string GroupTitle { get; set; }
 
         public bool IsPropagated { get; set; }
 

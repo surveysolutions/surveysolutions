@@ -115,6 +115,8 @@
         groups.parse(input.questionnaire);
         questions.parse(input.questionnaire);
 
+        input.questionnaire = null;
+
         // set parents
         _.each(groups.getAllLocal(), function (parent) {
             _.each(parent.childrenID(), function (children) {
