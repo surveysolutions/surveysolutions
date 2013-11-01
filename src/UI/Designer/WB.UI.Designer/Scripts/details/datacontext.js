@@ -5,8 +5,8 @@
         var stack = [input.questionnaire];
         while (stack.length > 0) {
             var item = stack.pop();
-            var type = item['$type'].split(",")[0];
-            item["__type"] = type.substring(type.lastIndexOf('.') + 1);
+            var isGroup = item['IsGroup'] || false;
+            item["__type"] = isGroup ? "GroupView" : "QuestionView";
             _.each(item.Children, function (q) {
                 stack.push(q);
             });
@@ -114,6 +114,8 @@
 
         groups.parse(input.questionnaire);
         questions.parse(input.questionnaire);
+
+        input.questionnaire = null;
 
         // set parents
         _.each(groups.getAllLocal(), function (parent) {
