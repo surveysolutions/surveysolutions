@@ -1361,7 +1361,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Maximum Allowed Answers for question has to be positive");
             }
 
-            if (!linkedToQuestionId.HasValue && maxAllowedAnswers > options.Length)
+            if (!linkedToQuestionId.HasValue && maxAllowedAnswers.Value > options.Length)
             {
                 throw new DomainException(
                     DomainExceptionType.MaxAllowedAnswersMoreThanOptions,
