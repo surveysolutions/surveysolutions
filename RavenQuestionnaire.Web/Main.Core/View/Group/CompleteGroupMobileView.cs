@@ -50,7 +50,6 @@ namespace Main.Core.View.Group
                         var q = composite as ICompleteQuestion;
                         if (q.QuestionScope <= scope)
                         {
-                            var question = new CompleteQuestionView(doc, q);
                         }
                     }
                     else
@@ -131,10 +130,6 @@ namespace Main.Core.View.Group
         /// </param>
         private void CollectInstructions(CompleteGroupMobileView @group)
         {
-            List<CompleteQuestionView> qs = @group.Children.OfType<CompleteQuestionView>().ToList();
-            if (qs.Count > 0)
-            {
-            }
         }
 
         #endregion

@@ -17,7 +17,6 @@ namespace Main.Core.View.Question
         {
             this.Answers = new AnswerView[0];
             this.Triggers = new List<Guid>();
-            this.Groups = new Dictionary<string, Guid>();
             this.PublicKey = doc.PublicKey;
             this.Title = doc.QuestionText.Replace(System.Environment.NewLine, " ");
             this.QuestionType = doc.QuestionType;
@@ -35,7 +34,6 @@ namespace Main.Core.View.Question
             this.LinkedToQuestionId = doc.LinkedToQuestionId;
             this.Answers = new AnswerView[0];
             this.Triggers = new List<Guid>();
-            this.Groups = new Dictionary<string, Guid>();
 
             this.Answers = doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
 
@@ -66,23 +64,15 @@ namespace Main.Core.View.Question
         [JsonConverter(typeof(StringEnumConverter))]
         public Order AnswerOrder { get; set; }
 
-        public List<ICompositeView> Children { get; set; }
-
-        public string Comments { get; set; }
-
         public string ConditionExpression { get; set; }
 
         public bool Featured { get; set; }
-
-        public int Index { get; set; }
 
         public string Instructions { get; set; }
 
         public bool Mandatory { get; set; }
 
         public bool Capital { get; set; }
-
-        public Guid? Parent { get; set; }
 
         public Guid PublicKey { get; set; }
 
@@ -105,8 +95,6 @@ namespace Main.Core.View.Question
         public List<Guid> Triggers { get; set; }
 
         public int MaxValue { get; set; }
-
-        public Dictionary<string, Guid> Groups { get; set; }
 
         public bool IsPropagated { get; set; }
 

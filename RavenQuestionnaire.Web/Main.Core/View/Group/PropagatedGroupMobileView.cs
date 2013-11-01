@@ -33,12 +33,6 @@ namespace Main.Core.View.Group
             {
                 if (q.QuestionScope <= scope)
                 {
-                    var question = new CompleteQuestionView(doc, q);
-                    if (q.QuestionScope == scope)
-                    {
-                        question.Editable = true;
-                    }
-
                 }
             }
         }

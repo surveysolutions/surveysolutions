@@ -808,14 +808,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewFactory.cs">
       <Link>View\IViewFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\CompleteQuestionView.cs">
-      <Link>View\Question\CompleteQuestionView.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\QuestionView.cs">
       <Link>View\Question\QuestionView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\QuestionViewInputModel.cs">
-      <Link>View\Question\QuestionViewInputModel.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\CapiExportStatistics.cs">
       <Link>View\SyncProcess\CapiExportStatistics.cs</Link>

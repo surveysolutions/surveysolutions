@@ -87,8 +87,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                     var q = composite as ICompleteQuestion;
                     if (q.QuestionScope <= scope)
                     {
-                        var question = new CompleteQuestionView(doc, q);
-                        if (q.QuestionScope == scope) question.Editable = true;
+                       
                     }
                 }
                 else
