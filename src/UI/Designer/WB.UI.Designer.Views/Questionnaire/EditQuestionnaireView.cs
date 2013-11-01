@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
+using Main.Core.View.Question;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -36,6 +37,17 @@ namespace WB.UI.Designer.Views.Questionnaire
         public string Title { get; set; }
 
         public bool IsPublic { get; set; }
+
+        public List<QuestionView> GetAllQuestions()
+        {
+            var questions = new List<QuestionView>();
+            foreach (GroupView group in Children)
+            {
+                questions.AddRange(group.GetAllQuestions());
+            }
+            return questions;
+        }
+        
     }
 }
 

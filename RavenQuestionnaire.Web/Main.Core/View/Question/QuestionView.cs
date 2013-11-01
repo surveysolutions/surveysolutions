@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Answer;
@@ -13,15 +12,12 @@ namespace Main.Core.View.Question
 {
     public class QuestionView : ICompositeView
     {
-        public QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
+        public QuestionView(IQuestion doc)
         {
-            this.Answers = new AnswerView[0];
-            this.Triggers = new List<Guid>();
             this.PublicKey = doc.PublicKey;
             this.Title = doc.QuestionText.Replace(System.Environment.NewLine, " ");
             this.QuestionType = doc.QuestionType;
             this.QuestionScope = doc.QuestionScope;
-            this.QuestionnaireKey = questionnaire.PublicKey;
             this.ConditionExpression = doc.ConditionExpression;
             this.ValidationExpression = doc.ValidationExpression;
             this.ValidationMessage = doc.ValidationMessage;
@@ -32,8 +28,8 @@ namespace Main.Core.View.Question
             this.Mandatory = doc.Mandatory;
             this.Capital = doc.Capital;
             this.LinkedToQuestionId = doc.LinkedToQuestionId;
-            this.Answers = new AnswerView[0];
-            this.Triggers = new List<Guid>();
+            this.Answers = null;
+            this.Triggers = null;
 
             this.Answers = doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
 
@@ -82,8 +78,6 @@ namespace Main.Core.View.Question
         [JsonConverter(typeof(StringEnumConverter))]
         public QuestionScope QuestionScope { get; set; }
 
-        public Guid QuestionnaireKey { get; set; }
-
         public string StataExportCaption { get; set; }
 
         public string Title { get; set; }
@@ -96,11 +90,7 @@ namespace Main.Core.View.Question
 
         public int MaxValue { get; set; }
 
-        public bool IsPropagated { get; set; }
-
         public Guid? LinkedToQuestionId { get; set; }
-
-        public bool? IsInteger { get; set; }
 
         public dynamic Settings { get; set; }
     }

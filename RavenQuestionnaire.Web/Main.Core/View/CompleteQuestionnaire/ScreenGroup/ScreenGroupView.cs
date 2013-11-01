@@ -35,7 +35,6 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         protected ScreenGroupView(
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigationView navigation)
         {
-            this.QuestionnairePublicKey = doc.PublicKey;
             this.PublicKey = currentGroup.PublicKey;
             this.Title = currentGroup.Title;
             this.Status = doc.Status;
@@ -50,8 +49,6 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         {
             get { return !SurveyStatus.IsStatusAllowCapiSync(this.Status); }
         }
-
-        public Guid QuestionnairePublicKey { get; set; }
 
         public Guid PublicKey { get; set; }
 
