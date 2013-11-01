@@ -238,37 +238,37 @@ namespace WB.UI.Designer.Controllers
 
         private void ReplaceGuidsInValidationAndConditionRules(EditQuestionnaireView model)
         {
-            var elements = new Queue<ICompositeView>();
-            var expressionReplacer = new ExpressionReplacer(model);
-            foreach (ICompositeView compositeView in model.Children)
-            {
-                elements.Enqueue(compositeView);
-            }
+            //var elements = new Queue<ICompositeView>();
+            //var expressionReplacer = new ExpressionReplacer(model);
+            //foreach (ICompositeView compositeView in model)
+            //{
+            //    elements.Enqueue(compositeView);
+            //}
 
-            while (elements.Count > 0)
-            {
-                ICompositeView element = elements.Dequeue();
+            //while (elements.Count > 0)
+            //{
+            //    ICompositeView element = elements.Dequeue();
 
-                var question = element as QuestionView;
-                if (question != null)
-                {
-                    question.ConditionExpression =
-                        expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
-                    question.ValidationExpression =
-                        expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
-                }
+            //    var question = element as QuestionView;
+            //    if (question != null)
+            //    {
+            //        question.ConditionExpression =
+            //            expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
+            //        question.ValidationExpression =
+            //            expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
+            //    }
 
-                var group = element as GroupView;
-                if (group != null)
-                {
-                    group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
+            //    var group = element as GroupView;
+            //    if (group != null)
+            //    {
+            //        group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
 
-                    foreach (ICompositeView child in group.Children)
-                    {
-                        elements.Enqueue(child);
-                    }
-                }
-            }
+            //        foreach (ICompositeView child in group.Children)
+            //        {
+            //            elements.Enqueue(child);
+            //        }
+            //    }
+            //}
         }
 
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
