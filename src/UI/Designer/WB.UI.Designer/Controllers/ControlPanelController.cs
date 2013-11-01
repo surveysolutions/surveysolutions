@@ -13,6 +13,11 @@ namespace WB.UI.Designer.Controllers
             this.readSideAdministrationService = readSideAdministrationService;
         }
 
+        public ActionResult NConfig()
+        {
+            return this.View();
+        }
+
         public ActionResult ReadLayer()
         {
             return this.View(this.readSideAdministrationService.GetAllAvailableHandlers());
