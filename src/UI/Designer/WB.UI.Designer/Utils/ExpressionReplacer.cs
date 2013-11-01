@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.View;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -8,11 +9,19 @@ namespace WB.UI.Designer.Utils
 {
     public class ExpressionReplacer : IExpressionReplacer
     {
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView> viewFactory;
+        private readonly QuestionnaireStataMapView variableMap;
 
-        public ExpressionReplacer(IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView> viewFactory)
+
+        public ExpressionReplacer(EditQuestionnaireView questionnaireView)
         {
-            this.viewFactory = viewFactory;
+             this.variableMap = new QuestionnaireStataMapView(questionnaireView);
+        }
+
+        public ExpressionReplacer(IQuestionnaireDocument questionnaire)
+        {
+            var questionnaireDocument = questionnaire as QuestionnaireDocument;
+            if (questionnaireDocument != null)
+                this.variableMap = new QuestionnaireStataMapView(questionnaireDocument);
         }
 
         /// <summary>
@@ -32,7 +41,7 @@ namespace WB.UI.Designer.Utils
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
             var map = new Dictionary<string, string>();
-            foreach (var pair in this.LoadMap(questionnaireKey).StataMap)
+            foreach (var pair in variableMap.StataMap)
             {
                 if (string.IsNullOrWhiteSpace(pair.Value) || map.ContainsKey(pair.Value))
                     continue;
@@ -56,7 +65,7 @@ namespace WB.UI.Designer.Utils
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
             var map = new Dictionary<string, string>();
-            foreach (var pair in this.LoadMap(questionnaireKey).StataMap)
+            foreach (var pair in variableMap.StataMap)
             {
                 var key = pair.Key.ToString();
                 if (string.IsNullOrWhiteSpace(key) || map.ContainsKey(key))
@@ -64,11 +73,6 @@ namespace WB.UI.Designer.Utils
                 map.Add(key, pair.Value);
             }
             return MakeSubstitutions(expression, map);
-        }
-
-        private QuestionnaireStataMapView LoadMap(Guid questionnaireKey)
-        {
-            return this.viewFactory.Load(new QuestionnaireViewInputModel(questionnaireKey));
         }
 
         private static string MakeSubstitutions(string expression, IEnumerable<KeyValuePair<string, string>> map)

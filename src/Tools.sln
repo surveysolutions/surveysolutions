@@ -64,6 +64,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataCollection", "DataColle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection", "Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj", "{89B14B50-5305-45E2-9835-7A05BD0B97A9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExpressionProcessor", "ExpressionProcessor", "{F658A3B8-9FCE-4718-B899-018E12E2ADF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.ExpressionProcessor", "Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj", "{D55B9582-70FD-4340-A3BC-55A33D49B2E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuestionnaireVerification", "QuestionnaireVerification", "{9B3F04EC-3522-4DDD-BCBB-A35DA2621860}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification", "Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj", "{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +175,18 @@ Global
 		{89B14B50-5305-45E2-9835-7A05BD0B97A9}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{89B14B50-5305-45E2-9835-7A05BD0B97A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89B14B50-5305-45E2-9835-7A05BD0B97A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +217,10 @@ Global
 		{AE5B9E45-0758-47AA-AFB4-E2795F09F850} = {D02E77D7-B275-4D21-A59F-38DAE0552611}
 		{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A} = {D02E77D7-B275-4D21-A59F-38DAE0552611}
 		{CA99323A-7AE6-424F-BC62-1070F29D9C24} = {FD680D46-007F-4452-B149-A2AD16B00628}
+		{F658A3B8-9FCE-4718-B899-018E12E2ADF1} = {FD680D46-007F-4452-B149-A2AD16B00628}
+		{9B3F04EC-3522-4DDD-BCBB-A35DA2621860} = {FD680D46-007F-4452-B149-A2AD16B00628}
 		{89B14B50-5305-45E2-9835-7A05BD0B97A9} = {CA99323A-7AE6-424F-BC62-1070F29D9C24}
+		{D55B9582-70FD-4340-A3BC-55A33D49B2E6} = {F658A3B8-9FCE-4718-B899-018E12E2ADF1}
+		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4} = {9B3F04EC-3522-4DDD-BCBB-A35DA2621860}
 	EndGlobalSection
 EndGlobal

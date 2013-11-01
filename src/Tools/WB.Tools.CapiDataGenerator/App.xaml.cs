@@ -9,6 +9,8 @@ using System.Windows;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.Synchronization;
 using WB.Supervisor.CompleteQuestionnaireDenormalizer;
 
@@ -34,6 +36,8 @@ namespace CapiDataGenerator
                 new CapiDataGeneratorRegistry(),
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
+                new ExpressionProcessorModule(),
+                new QuestionnaireVerificationModule(),
                 new MainModelModule());
 
             var start = Mvx.Resolve<IMvxAppStart>();

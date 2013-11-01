@@ -67,6 +67,7 @@
         self.optionFor = ko.computed(function () {
             return 'option-' + questionId + '-' + self.value();
         });
+        self.orderNo = ko.observable(undefined);
         return self;
     };
 
@@ -138,19 +139,71 @@
             self.isValid = ko.observable(true);
             return self;
         },
-        MultyOptionQuestion: function () {
+        MultyOptionQuestion: function(areAnswersOrdered, maxAllowedAnswers) {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
+            self.areAnswersOrdered = ko.observable(areAnswersOrdered);
+            self.maxAllowedAnswers = ko.observable(maxAllowedAnswers);
+            self.orderedOptionsSelection = ko.observableArray([]);
+            self.selectedOptionsCount = 0;
             self.selectedOptions = ko.observableArray([]).extend({
-                validation: [{
-                    validator: function (val) {
-                        if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
-                            return false;
-                        return val.length > 0;
+                validation: [
+                    {
+                        validator: function(val) {
+                            if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                                return false;
+                            return val.length > 0;
+                        },
+                        message: 'At least one option should be checked'
                     },
-                    message: 'At least one option should be checked'
-                }]
+                    {
+                        validator: function(val) {
+                            if (_.isUndefined(self.maxAllowedAnswers()) || _.isNull(self.maxAllowedAnswers())) {
+                                return true;
+                            }
+
+                            return val.length <= self.maxAllowedAnswers();
+                        },
+                        message: 'Number of selected answers more than number of maximum permitted answers'
+                    }]
             });
+            self.orderSelectedOptions = function () {
+                if (self.selectedOptionsCount != self.selectedOptions().length) {
+                    if (self.selectedOptionsCount > self.selectedOptions().length) {
+                        _.each(self.orderedOptionsSelection(), function (answer) {
+                            if (!_.contains(self.selectedOptions(), answer)) {
+                                self.orderedOptionsSelection.remove(answer);
+                            }
+                        });
+                    }
+                    _.each(self.options(), function (option) {
+                        var orderIndex = self.orderedOptionsSelection().indexOf(option.value());
+                        if (_.contains(self.selectedOptions(), option.value())) {
+                            if (_.isUndefined(option.orderNo())) {
+                                option.orderNo(self.selectedOptions().length);
+                                self.orderedOptionsSelection.push(option.value());
+                            } else {
+                                if (orderIndex > -1) {
+                                    option.orderNo(orderIndex + 1);
+                                }
+                            }
+                        } else {
+                            if (self.selectedOptionsCount > self.selectedOptions().length) {
+                                if (orderIndex == -1) {
+                                    option.orderNo(undefined);
+                                }
+                            }
+                        }
+                    });
+                    self.selectedOptionsCount = self.selectedOptions().length;
+                }
+            };
+            if (self.areAnswersOrdered()) {
+                self.selectedOptions.subscribe(function() {
+                    self.orderSelectedOptions();
+                });
+            }
+            
             self.options = ko.observableArray();
             self.answer = ko.computed(function () {
                 var selected = _.filter(ko.toJS(self.options), function (option) {

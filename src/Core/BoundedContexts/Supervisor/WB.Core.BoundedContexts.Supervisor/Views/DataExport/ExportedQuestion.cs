@@ -33,28 +33,36 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             if (header.ColumnNames.Length == 1)
                 return new string[] { AnswerToStringValue(question.Answer) };
 
-            var listOfAnswers = question.Answer as IEnumerable<object>;
+            var listOfAnswers = TryCastToEnumerable(question.Answer);
             if (listOfAnswers != null)
                 return this.BuildAnswerListForQuestionByHeader(listOfAnswers.ToArray(), header);
 
             return new string[0];
         }
 
+        private IEnumerable<object> TryCastToEnumerable(object value)
+        {
+            var arrayOfDecimal = value as IEnumerable<decimal>;
+            if (arrayOfDecimal != null)
+                return arrayOfDecimal.Select(d => (object) d);
+
+            var arrayOfInteger = value as IEnumerable<int>;
+            if (arrayOfInteger != null)
+                return arrayOfInteger.Select(i => (object) i);
+
+            var listOfAnswers = value as IEnumerable<object>;
+            if (listOfAnswers != null)
+                return listOfAnswers;
+            return null;
+        }
+
         private string AnswerToStringValue(object answer)
         {
             const string DefaultDelimiter = ",";
 
-            var arrayOfDecimal = answer as decimal[];
-            if (arrayOfDecimal != null)
-                return string.Join(DefaultDelimiter, arrayOfDecimal);
-
-            var arrayOfInteger = answer as int[];
-            if (arrayOfInteger != null)
-                return string.Join(DefaultDelimiter, arrayOfInteger);
-
-            var listOfAnswers = answer as IEnumerable<object>;
-            if (listOfAnswers != null)
-                return string.Join(DefaultDelimiter, listOfAnswers);
+            var arrayOfObject = TryCastToEnumerable(answer);
+            if (arrayOfObject != null)
+                return string.Join(DefaultDelimiter, arrayOfObject);
 
             return answer.ToString();
         }

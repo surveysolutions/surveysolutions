@@ -68,9 +68,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Events\EventMergeUtilsTest.cs">
       <Link>Events\EventMergeUtilsTest.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\QuestionnaireParametersParserTest.cs">
-      <Link>ExpressionExecutors\QuestionnaireParametersParserTest.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\SimpleObjectExtensionsTests.cs">
       <Link>SimpleObjectExtensionsTests.cs</Link>
     </Compile>
@@ -129,11 +126,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\SubEntities\" />
+    <Folder Include="ExpressionExecutors\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" />
+      <UserProperties ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

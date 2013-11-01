@@ -82,16 +82,17 @@ namespace WB.UI.Shared.Web
             return !string.IsNullOrEmpty(value);
         }
 
-        public static T As<T>(this Exception source) where T: class 
+        public static TException GetSelfOrInnerAs<TException>(this Exception source)
+            where TException : Exception
         {
-            if (source is T)
+            if (source is TException)
             {
-                return source as T;
+                return (TException) source;
             }
 
             while (source.InnerException != null)
             {
-                return source.InnerException.As<T>();
+                return source.InnerException.GetSelfOrInnerAs<TException>();
             }
 
             return null;

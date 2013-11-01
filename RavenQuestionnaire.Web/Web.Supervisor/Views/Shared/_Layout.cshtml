@@ -105,11 +105,17 @@
                         <span>Errors log</span>
                     </div>
                     <div class="body">
-                        <ul data-bind="foreach: Errors" class="error-list">
-                            <li class="error">
-                                <pre data-bind="html: error"></pre>
-                            </li>
-                        </ul>
+                        <div class="container-fluid">
+                            <div class="form-horizontal">
+                                <ul data-bind="foreach: Errors" class="error-list">
+                                    <li class="error">
+                                        <pre data-bind="html: error"></pre>
+                                    </li>
+                                </ul>
+                                @RenderSection("output", false)
+                               
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,14 +128,14 @@
                 © 2013 <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
             </div>
             <div class="text-center">
-                @ViewContext.Controller.GetType().Assembly.GetName().Version (@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) 
-                    @if (AppSettings.IsDebugBuilded)
-                    {
-                        <span id="build-config">[D]</span>
-                    }
+                @ViewContext.Controller.GetType().Assembly.GetName().Version @*(@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) *@
+                @if (AppSettings.IsDebugBuilded)
+                {
+                    <span id="build-config">[.NET Debug]</span>
+                }
                 @if (HttpContext.Current.IsDebuggingEnabled)
                 {
-                    <span id="compile-config" style="color: red">D</span>
+                    <span id="compile-config" style="color: red">Web Debug</span>
                 }
                 | <a href="@Url.Action("GetLatestVersion", "Sync")">Get CAPI</a>
             </div>

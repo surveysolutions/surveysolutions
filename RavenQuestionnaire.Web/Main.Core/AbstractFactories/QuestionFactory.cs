@@ -12,29 +12,31 @@ namespace Main.Core.AbstractFactories
     {
         public AbstractQuestion CreateQuestion(QuestionData data)
         {
-            AbstractQuestion q = CreateQuestion(data.questionType, data.publicKey);
+            AbstractQuestion q = CreateQuestion(data.QuestionType, data.PublicKey);
 
             UpdateQuestion(
                 q,
-                data.questionType,
-                data.questionScope,
-                data.questionText,
-                data.stataExportCaption,
-                data.conditionExpression,
-                data.validationExpression,
-                data.validationMessage,
-                data.answerOrder,
-                data.featured,
-                data.mandatory,
-                data.capital,
-                data.instructions,
-                data.triggers,
-                data.maxValue,
-                data.linkedToQuestionId,
-                data.isInteger,
-                data.countOfDecimalPlaces);
+                data.QuestionType,
+                data.QuestionScope,
+                data.QuestionText,
+                data.StataExportCaption,
+                data.ConditionExpression,
+                data.ValidationExpression,
+                data.ValidationMessage,
+                data.AnswerOrder,
+                data.Featured,
+                data.Mandatory,
+                data.Capital,
+                data.Instructions,
+                data.Triggers,
+                data.MaxValue,
+                data.LinkedToQuestionId,
+                data.IsInteger,
+                data.CountOfDecimalPlaces,
+                data.AreAnswersOrdered,
+                data.MaxAllowedAnswers);
 
-            UpdateAnswerList(data.answers, q, data.linkedToQuestionId);
+            UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
             return q;
         }
@@ -114,7 +116,9 @@ namespace Main.Core.AbstractFactories
             int maxValue,
             Guid? linkedToQuestionId,
             bool? isInteger,
-            int? countOfDecimalPlaces)
+            int? countOfDecimalPlaces,
+            bool? areAnswersOrdered,
+            int? maxAllowedAnswers)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -129,7 +133,7 @@ namespace Main.Core.AbstractFactories
             question.Instructions = instructions;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
-
+            
             var autoQuestion = question as IAutoPropagate;
             if (autoQuestion != null)
             {
@@ -152,6 +156,13 @@ namespace Main.Core.AbstractFactories
             {
                 numericQuestion.IsInteger = isInteger ?? false;
                 numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
+            }
+
+            var multioptionQuestion = question as IMultyOptionsQuestion;
+            if (multioptionQuestion != null)
+            {
+                multioptionQuestion.AreAnswersOrdered = areAnswersOrdered ?? false;
+                multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
             }
         }
     }

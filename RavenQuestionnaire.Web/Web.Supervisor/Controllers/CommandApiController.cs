@@ -66,7 +66,7 @@ namespace Web.Supervisor.Controllers
                 }
                 catch (Exception e)
                 {
-                    var domainEx = e.As<InterviewException>();
+                    var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
                         this.Logger.Error("Unexpected error occurred", e);

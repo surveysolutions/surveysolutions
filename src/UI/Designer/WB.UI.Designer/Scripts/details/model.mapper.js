@@ -1,10 +1,10 @@
 ﻿define('model.mapper',
     ['model', 'config'],
     function (model, config) {
-        var
-        // private methods
+        var // private methods
             getGroups = function (group, level) {
-                var items = _.filter(group.Children, { '__type': 'GroupView' }).map(function (item) {
+               
+                var items = _.filter(group.Children, function (item) { return item['IsGroup'] || false; }).map(function (item) {
                     return { level: level, group: item };
                 });
                 var groups = [];
@@ -30,7 +30,7 @@
                 var stack = getGroups(questionnaire, 0);
                 while (stack.length > 0) {
                     var item = stack.pop();
-                    _.filter(item.group.Children, { '__type': 'QuestionView' }).map(function (q) {
+                    _.filter(item.group.Children, function (item) { return !(item['IsGroup'] || false); }).map(function (q) {
                         questions.push(q);
                     });
 
@@ -41,17 +41,28 @@
                 return questions;
             },
             // public mapping methods
-             questionnaire = {
-                 getDtoId: function (dto) { return dto.PublicKey; },
-                 fromDto: function (dto, item) {
-                     item = item || new model.Questionnaire().id(dto.PublicKey).title(dto.Title).isPublic(dto.IsPublic);
-                     item.childrenID(_.map(dto.Children, function (c) {
-                         return { type: c.__type, id: c.PublicKey };
-                     }));
-                     item.dirtyFlag().reset();
-                     return item;
-                 }
-             },
+            error = {
+                getDtoId: function (dto) { return dto.Code; },
+                fromDto: function (dto) {
+                    return new model.Error(dto.Message, dto.Code, _.map(dto.References, function (reference) {
+                        return {
+                            type: reference.Type,
+                            id: reference.Id
+                        };
+                    }));
+                }
+            },
+            questionnaire = {
+                getDtoId: function (dto) { return dto.PublicKey; },
+                fromDto: function (dto, item) {
+                    item = item || new model.Questionnaire().id(dto.PublicKey).title(dto.Title).isPublic(dto.IsPublic);
+                    item.childrenID(_.map(dto.Children, function (c) {
+                        return { type: c.__type, id: c.PublicKey };
+                    }));
+                    item.dirtyFlag().reset();
+                    return item;
+                }
+            },
             group = {
                 getDtoId: function (dto) { return dto.group.PublicKey; },
                 fromDto: function (dto, item) {
@@ -95,14 +106,14 @@
 
                     var triggers = _.filter(dto.Triggers, function (groupId) {
                         var item = groups.getLocalById(groupId);
-                        return !_.isNull(item);
+                        return !_.isEmpty(item);
                     }).map(function (groupId) {
                         return { key: groupId, value: groups.getLocalById(groupId).title() };
                     });
 
                     _.map(dto.Triggers, function (groupId) {
                         var item = groups.getLocalById(groupId);
-                        if (!_.isNull(item)) {
+                        if (!_.isEmpty(item)) {
                             return { key: groupId, value: groups.getLocalById(groupId).title() };
                         }
                         return;
@@ -117,24 +128,21 @@
                     item.condition(dto.ConditionExpression);
                     item.instruction(dto.Instructions);
                     item.maxValue(dto.MaxValue);
-
                     item.alias(dto.StataExportCaption);
-
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
                     item.selectedLinkTo(dto.LinkedToQuestionId);
-                    item.isLinked(_.isNull(dto.LinkedToQuestionId) == false ? 1 : 0);
-                    item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
+                    item.isLinked(_.isEmpty(dto.LinkedToQuestionId) == false ? 1 : 0);
+                    item.isInteger(_.isEmpty(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
                     item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
+                    item.areAnswersOrdered(_.isEmpty(dto.Settings) ? false : dto.Settings.AreAnswersOrdered);
+                    item.maxAllowedAnswers(_.isEmpty(dto.Settings) ? null : dto.Settings.MaxAllowedAnswers);
+                    
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();
-                    
-                    if (dto.Featured && dto.QuestionScope == config.questionScopes.supervisor) {
-                    //    item.isNew(true);
-                    }
-                    
+
                     return item;
                 },
                 objectsFromDto: function (dto) {
@@ -145,6 +153,7 @@
         return {
             questionnaire: questionnaire,
             question: question,
-            group: group
+            group: group,
+            error: error
         };
     });

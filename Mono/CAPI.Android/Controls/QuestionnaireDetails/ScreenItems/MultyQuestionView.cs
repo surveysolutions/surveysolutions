@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Android.App;
 using Android.Content;
-using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
@@ -29,6 +27,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return TypedMode.Answers; }
         }
 
+        protected override int? MaxAllowedAnswers
+        {
+            get { return TypedMode.MaxAllowedAnswers; }
+        }
+
+        protected override bool? AreAnswersOrdered
+        {
+            get { return TypedMode.AreAnswersOrdered; }
+        }
+        
         protected override string GetAnswerId(AnswerViewModel answer)
         {
             return answer.PublicKey.ToString();
@@ -48,7 +56,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override AnswerQuestionCommand CreateSaveAnswerCommand(AnswerViewModel[] selectedAnswers)
         {
-            var answered = selectedAnswers.Select(a => a.Value).ToList();
+            var answered = selectedAnswers.Where(w => w.AnswerOrder>0).OrderBy(o => o.AnswerOrder).Select(a => a.Value)
+                .Union(selectedAnswers.Where(w => w.AnswerOrder == 0).Select(s=>s.Value)).ToList();
 
             return new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
@@ -58,6 +67,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected override bool IsAnswerSelected(AnswerViewModel answer)
         {
             return answer.Selected;
+        }
+
+        protected override int GetAnswerOrder(AnswerViewModel answer)
+        {
+            return answer.AnswerOrder;
         }
 
         protected override void AddAdditionalAttributes(CheckBox checkBox, AnswerViewModel answer)
