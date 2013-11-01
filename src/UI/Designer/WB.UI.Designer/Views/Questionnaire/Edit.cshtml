@@ -23,7 +23,8 @@
                     {
                         TypeNameHandling = TypeNameHandling.None,
                         TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
-                        NullValueHandling = NullValueHandling.Ignore
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     }));
             return {
                 questionnaire: q,
