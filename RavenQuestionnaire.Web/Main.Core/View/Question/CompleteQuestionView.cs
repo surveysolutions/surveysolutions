@@ -10,7 +10,7 @@ namespace Main.Core.View.Question
     /// <summary>
     /// The complete question view.
     /// </summary>
-    public class CompleteQuestionView : QuestionView<CompleteAnswerView, ICompleteGroup, ICompleteQuestion>
+    public class CompleteQuestionView 
     {
         #region Constructors and Destructors
 
@@ -31,7 +31,6 @@ namespace Main.Core.View.Question
         /// The group public key.
         /// </param>
         public CompleteQuestionView(string questionnaireId, Guid? groupPublicKey)
-            : base(questionnaireId, groupPublicKey)
         {
         }
 
@@ -45,17 +44,11 @@ namespace Main.Core.View.Question
         /// The doc.
         /// </param>
         public CompleteQuestionView(ICompleteQuestionnaireDocument questionnaire, ICompleteQuestion doc)
-            : base(questionnaire, doc)
         {
-            this.QuestionnaireKey = questionnaire.PublicKey;
             this.Valid = doc.Valid;
             this.Enabled = doc.Enabled;
-            this.Answers = doc.Answers.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();
             this.Answered = doc.IsAnswered();
-            this.Featured = doc.Featured;
-            this.Mandatory = doc.Mandatory;
-            this.Comments = doc.LastComment;
         }
 
         /// <summary>
@@ -68,7 +61,6 @@ namespace Main.Core.View.Question
         /// The doc.
         /// </param>
         protected CompleteQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
-            : base(questionnaire, doc)
         {
         }
 

@@ -47,6 +47,8 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         public Guid? Parent { get; set; }
 
+        public bool IsGroup = true;
+
         private List<ICompositeView> ConvertChildrenFromGroupDocument(IQuestionnaireDocument doc, IComposite @group)
         {
             var compositeViews = new List<ICompositeView>();
