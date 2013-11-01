@@ -19,7 +19,6 @@
         return {
 
             isValidQuestionTitle: function (title, contextQuestion) {
-
                 var parts = title.split('%');
 
                 if (parts.length % 2 == 0)
