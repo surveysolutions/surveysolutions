@@ -666,12 +666,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\QuestionView.cs">
       <Link>View\Question\QuestionView.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\QuestionViewFactory.cs">
-      <Link>View\Question\QuestionViewFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\QuestionViewInputModel.cs">
-      <Link>View\Question\QuestionViewInputModel.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\CapiExportStatistics.cs">
       <Link>View\SyncProcess\CapiExportStatistics.cs</Link>
     </Compile>

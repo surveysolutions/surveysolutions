@@ -35,8 +35,9 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireVerifier questionnaireVerifier;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
-      
+
         private readonly ILogger logger;
 
         public QuestionnaireController(
@@ -46,7 +47,7 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            ILogger logger)
+            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -55,6 +56,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
+            this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
         }
 
         public ActionResult Clone(Guid id)
@@ -160,7 +162,9 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
+            // QuestionnaireView questionnaire = this.GetQuestionnaire(id);
+
+            var questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
                 this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
@@ -178,9 +182,7 @@ namespace WB.UI.Designer.Controllers
             }
 
             return
-                View(new QuestionnaireEditView(questionaire: questionnaire,
-                    questionnaireSharedPersons: questionnaireSharedPersons,
-                    isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
+                View(new QuestionnaireEditView(questionaire: questionnaire, questionnaireSharedPersons: questionnaireSharedPersons, isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)
@@ -234,39 +236,39 @@ namespace WB.UI.Designer.Controllers
                 viewerId: UserHelper.WebUser.UserId);
         }
 
-        private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
+        private void ReplaceGuidsInValidationAndConditionRules(EditQuestionnaireView model)
         {
-            var elements = new Queue<ICompositeView>();
-            var expressionReplacer = new ExpressionReplacer(model.Source);
-            foreach (ICompositeView compositeView in model.Children)
-            {
-                elements.Enqueue(compositeView);
-            }
+            //var elements = new Queue<ICompositeView>();
+            //var expressionReplacer = new ExpressionReplacer(model);
+            //foreach (ICompositeView compositeView in model)
+            //{
+            //    elements.Enqueue(compositeView);
+            //}
 
-            while (elements.Count > 0)
-            {
-                ICompositeView element = elements.Dequeue();
+            //while (elements.Count > 0)
+            //{
+            //    ICompositeView element = elements.Dequeue();
 
-                var question = element as QuestionView;
-                if (question != null)
-                {
-                    question.ConditionExpression =
-                        expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
-                    question.ValidationExpression =
-                        expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
-                }
+            //    var question = element as QuestionView;
+            //    if (question != null)
+            //    {
+            //        question.ConditionExpression =
+            //            expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
+            //        question.ValidationExpression =
+            //            expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
+            //    }
 
-                var group = element as GroupView;
-                if (group != null)
-                {
-                    group.ConditionExpression =
-                        expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
-                    foreach (ICompositeView child in element.Children)
-                    {
-                        elements.Enqueue(child);
-                    }
-                }
-            }
+            //    var group = element as GroupView;
+            //    if (group != null)
+            //    {
+            //        group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
+
+            //        foreach (ICompositeView child in group.Children)
+            //        {
+            //            elements.Enqueue(child);
+            //        }
+            //    }
+            //}
         }
 
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)

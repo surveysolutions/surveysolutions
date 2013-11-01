@@ -52,7 +52,7 @@
                 self.isInteger = ko.observable(1);
                 self.countOfDecimalPlaces = ko.observable('').extend({ digit: true, min: 1, max: 16});
                 self.isLinked = ko.observable(0);
-                self.isLinkedDurty = ko.computed(function () {
+                self.isLinkedAsBool = ko.computed(function () {
                     return self.isLinked() == 1;
                 });
                 self.selectedLinkTo = ko.observable();
@@ -74,7 +74,7 @@
                         {
                             validator: function (val) {
                                 var parsedMaxAllowedAnswers = parseInt(val);
-                                if (self.isLinkedDurty() || isNaN(parsedMaxAllowedAnswers)) {
+                                if (self.isLinked() == 1 || isNaN(parsedMaxAllowedAnswers)) {
                                     return true;
                                 }
                                 return parsedMaxAllowedAnswers <= self.answerOptions().length;
@@ -135,7 +135,7 @@
                 self.isNullo = false;
                 self.cloneSource = ko.observable();
 
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty, self.isInteger, self.countOfDecimalPlaces, self.areAnswersOrdered, self.maxAllowedAnswers]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces, self.areAnswersOrdered, self.maxAllowedAnswers]);
                 self.dirtyFlag().reset();
                 self.errors = ko.validation.group(self);
                 this.cache = function () {
@@ -146,9 +146,28 @@
                     return self.errors().length > 0;
                 });
 
+                self.detachValidation = function () {
+                    self.alias.extend({ validatable: false });
+
+                    self.qtype.extend({ validatable: false });
+
+                    self.selectedLinkTo.extend({ validatable: false });
+
+                    self.answerOptions.extend({ validatable: false });
+
+                    self.validationExpression.extend({ validatable: false });
+
+                    self.condition.extend({ validatable: false });
+
+                    self.title.extend({ validatable: false });
+                    
+                    self.errors = ko.validation.group(self);
+                },
+                
                 self.attachValidation = function () {
 
                     self.alias.extend({
+                        validatable: true,
                         required: true,
                         maxLength: 32,
                         pattern: {
@@ -159,6 +178,7 @@
                     });
 
                     self.qtype.extend({
+                        validatable: true,
                         validation: [{
                             validator: function (val) {
                                 if (self.isFeatured() == true && val == "GpsCoordinates") return false;
@@ -193,6 +213,7 @@
                     }); // Questoin type
                     
                     self.selectedLinkTo.extend({
+                        validatable: true,
                         required: {
                             onlyIf: function () {
                                 return self.isLinked() == 1;
@@ -201,6 +222,7 @@
                     });
 
                     self.answerOptions.extend({
+                        validatable: true,
                         required: {
                             onlyIf: function () {
                                 return self.isLinked() == 0 && (self.qtype() === "SingleOption" || self.qtype() === "MultyOption");
@@ -274,6 +296,7 @@
                     });
 
                     self.validationExpression.extend({
+                        validatable: true,
                         validation: [{
                             validator: function (val) {
                                 var validationResult = validator.isValidExpression(val);
@@ -289,6 +312,7 @@
                     });
                     
                     self.condition.extend({
+                        validatable: true,
                         validation: [{
                             validator: function (val) {
                                 if (_.isUndefined(val) || _.isNull(val)) {
@@ -319,6 +343,7 @@
                     });
 
                     self.title.extend({
+                        validatable: true,
                         validation: [{
                             validator: function (val) {
                                 var validationResult = validator.isValidQuestionTitle(val, self);
