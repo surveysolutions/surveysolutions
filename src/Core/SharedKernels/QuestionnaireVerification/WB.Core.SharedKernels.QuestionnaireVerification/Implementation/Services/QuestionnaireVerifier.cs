@@ -74,6 +74,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperPropagationLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
+                    ErrorsByPrefilledQuestionsOfIllegalTypes,
 
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
                 };
@@ -244,6 +245,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
 
             return errorByAllQuestionsWithCustomValidation;
+        }
+
+
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByPrefilledQuestionsOfIllegalTypes(QuestionnaireDocument questionnaire)
+        {
+            var prefilledQuestions = questionnaire.Find<IQuestion>(question => question.Featured);
+
+            foreach (var prefilledQuestion in prefilledQuestions)
+            {
+                if(prefilledQuestion.QuestionType == QuestionType.MultyOption)
+                    yield return PrefilledQuestionsOfIllegalType(prefilledQuestion);
+            }
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
@@ -502,6 +515,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
+        }
+
+        private static QuestionnaireVerificationError PrefilledQuestionsOfIllegalType(IQuestion prefilledQuestions)
+        {
+            return new QuestionnaireVerificationError("WB0022",
+                VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType,
+                CreateReference(prefilledQuestions));
         }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
