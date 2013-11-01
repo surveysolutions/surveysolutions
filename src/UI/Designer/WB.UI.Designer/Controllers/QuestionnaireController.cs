@@ -30,6 +30,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
 
         private readonly ILogger logger;
@@ -40,7 +41,7 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            ILogger logger)
+            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -48,6 +49,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
+            this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
         }
 
         public ActionResult Clone(Guid id)
@@ -144,7 +146,7 @@ namespace WB.UI.Designer.Controllers
         {
             // QuestionnaireView questionnaire = this.GetQuestionnaire(id);
 
-            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
                 this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
@@ -162,9 +164,7 @@ namespace WB.UI.Designer.Controllers
             }
 
             return
-                View(new QuestionnaireEditView(questionaire: questionnaire,
-                    questionnaireSharedPersons: questionnaireSharedPersons,
-                    isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
+                View(new QuestionnaireEditView(questionaire: questionnaire, questionnaireSharedPersons: questionnaireSharedPersons, isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)
@@ -218,10 +218,10 @@ namespace WB.UI.Designer.Controllers
                 viewerId: UserHelper.WebUser.UserId);
         }
 
-        private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
+        private void ReplaceGuidsInValidationAndConditionRules(EditQuestionnaireView model)
         {
             var elements = new Queue<ICompositeView>();
-            var expressionReplacer = new ExpressionReplacer(model.Source);
+            var expressionReplacer = new ExpressionReplacer(model);
             foreach (ICompositeView compositeView in model.Children)
             {
                 elements.Enqueue(compositeView);
