@@ -64,7 +64,6 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// </summary>
         protected CompleteQuestionnaireBrowseItem()
         {
-            this.FeaturedQuestions = new CompleteQuestionView[0];
         }
 
         #endregion
@@ -94,7 +93,6 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <summary>
         /// Gets or sets the featured questions.
         /// </summary>
-        public CompleteQuestionView[] FeaturedQuestions { get; set; }
 
         /// <summary>
         /// Gets or sets the last entry date.

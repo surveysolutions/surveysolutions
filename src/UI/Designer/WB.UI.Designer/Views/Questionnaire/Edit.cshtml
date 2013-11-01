@@ -21,8 +21,10 @@
             'use strict';
             var q = @Html.Raw(JsonConvert.SerializeObject(Model.Questionnaire, Formatting.None, new JsonSerializerSettings()
                     {
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                        TypeNameHandling = TypeNameHandling.None,
+                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     }));
             return {
                 questionnaire: q,

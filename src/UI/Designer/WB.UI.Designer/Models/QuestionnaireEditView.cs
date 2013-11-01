@@ -7,7 +7,7 @@ namespace WB.UI.Designer.Models
 {
     public class QuestionnaireEditView
     {
-        public QuestionnaireView Questionnaire { get; private set; }
+        public EditQuestionnaireView Questionnaire { get; private set; }
         public bool IsOwner { get; private set; }
         private readonly QuestionnaireSharedPersons questionnaireSharedPersons;
         public IEnumerable<string> SharedPersons {
@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Models
             }
         }
 
-        public QuestionnaireEditView(QuestionnaireView questionaire, QuestionnaireSharedPersons questionnaireSharedPersons, bool isOwner)
+        public QuestionnaireEditView(EditQuestionnaireView questionaire, QuestionnaireSharedPersons questionnaireSharedPersons, bool isOwner)
         {
             this.Questionnaire = questionaire;
             this.questionnaireSharedPersons = questionnaireSharedPersons;

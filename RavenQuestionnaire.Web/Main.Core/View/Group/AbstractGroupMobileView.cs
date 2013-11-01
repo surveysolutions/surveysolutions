@@ -19,8 +19,6 @@ namespace Main.Core.View.Group
         public AbstractGroupMobileView()
         {
             this.Children = new List<ICompositeView>();
-            this.QuestionsWithCards = new List<CompleteQuestionView>();
-            this.QuestionsWithInstructions = new List<CompleteQuestionView>();
         }
 
         #endregion
@@ -68,12 +66,10 @@ namespace Main.Core.View.Group
         /// <summary>
         /// Gets or sets the questions with cards.
         /// </summary>
-        public List<CompleteQuestionView> QuestionsWithCards { get; set; }
 
         /// <summary>
         /// Gets or sets the questions with instructions.
         /// </summary>
-        public List<CompleteQuestionView> QuestionsWithInstructions { get; set; }
 
         /// <summary>
         /// Gets or sets the title.

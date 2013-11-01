@@ -50,8 +50,6 @@ namespace Main.Core.View.Group
                         var q = composite as ICompleteQuestion;
                         if (q.QuestionScope <= scope)
                         {
-                            var question = new CompleteQuestionView(doc, q);
-                            this.Children.Add(question);
                         }
                     }
                     else
@@ -63,10 +61,7 @@ namespace Main.Core.View.Group
                         }
                         else
                         {
-                            ICompositeView template =
-                                this.Children.FirstOrDefault(
-                                    parent => parent.PublicKey == g.PublicKey && !(parent is PropagatedGroupMobileView));
-                            template.Children.Add(new PropagatedGroupMobileView(doc, g, scope));
+                           
                         }
                     }
 
@@ -135,12 +130,6 @@ namespace Main.Core.View.Group
         /// </param>
         private void CollectInstructions(CompleteGroupMobileView @group)
         {
-            List<CompleteQuestionView> qs = @group.Children.OfType<CompleteQuestionView>().ToList();
-            if (qs.Count > 0)
-            {
-                this.QuestionsWithInstructions.AddRange(
-                    qs.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
-            }
         }
 
         #endregion

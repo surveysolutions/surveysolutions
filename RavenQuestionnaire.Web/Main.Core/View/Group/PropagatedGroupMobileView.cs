@@ -10,26 +10,12 @@ namespace Main.Core.View.Group
 {
     using System.Collections.Generic;
 
-    /// <summary>
-    /// The propagated group mobile view.
-    /// </summary>
     public class PropagatedGroupMobileView : CompleteGroupMobileView
     {
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PropagatedGroupMobileView"/> class.
-        /// </summary>
-        /// <param name="doc">
-        /// The doc.
-        /// </param>
-        /// <param name="group">
-        /// The group.
-        /// </param>
         public PropagatedGroupMobileView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, QuestionScope scope)
         {
-            /* if (!group.PropogationPublicKey.HasValue)
-                 throw new ArgumentException("Group is not propagated");*/
             this.PublicKey = group.PublicKey;
             this.PropogationKey = group.PropagationPublicKey ?? Guid.Empty;
             this.Enabled = group.Enabled;
@@ -47,13 +33,6 @@ namespace Main.Core.View.Group
             {
                 if (q.QuestionScope <= scope)
                 {
-                    var question = new CompleteQuestionView(doc, q);
-                    if (q.QuestionScope == scope)
-                    {
-                        question.Editable = true;
-                    }
-
-                    this.Children.Add(question);
                 }
             }
         }
@@ -61,15 +40,9 @@ namespace Main.Core.View.Group
 
         #region Public Properties
 
-        /// <summary>
-        /// Gets a value indicating whether auto propagate.
-        /// </summary>
         public bool AutoPropagate { get; private set; }
 
 
-        /// <summary>
-        /// Gets the propogation key.
-        /// </summary>
         public Guid PropogationKey { get; private set; }
 
         #endregion

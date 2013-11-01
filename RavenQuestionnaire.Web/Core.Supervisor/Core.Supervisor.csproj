@@ -261,9 +261,7 @@
     <Compile Include="Views\Device\DeviceView.cs" />
     <Compile Include="Views\Device\DeviceViewFactory.cs" />
     <Compile Include="Views\Device\DeviceViewInputModel.cs" />
-    <Compile Include="Views\Interviewer\InterviewerGroupView.cs" />
     <Compile Include="Views\Interviewer\InterviewerInputModel.cs" />
-    <Compile Include="Views\Interviewer\InterviewerItemView.cs" />
     <Compile Include="Views\Interviewer\InterviewersInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewersItem.cs" />
     <Compile Include="Views\Interviewer\InterviewerStatistics.cs" />
@@ -273,8 +271,6 @@
     <Compile Include="Views\Interviewer\InterviewerStatisticsView.cs" />
     <Compile Include="Views\Interviewer\InterviewerStatisticsViewItem.cs" />
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
-    <Compile Include="Views\Interviewer\InterviewerView.cs" />
-    <Compile Include="Views\Interviewer\InterviewerViewFactory.cs" />
     <Compile Include="Views\Reposts\Views\UsersViewItem.cs" />
     <Compile Include="Views\Survey\WhereClouseHelper.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogViewItem.cs" />
