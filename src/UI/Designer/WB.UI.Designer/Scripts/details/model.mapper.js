@@ -95,14 +95,14 @@
 
                     var triggers = _.filter(dto.Triggers, function (groupId) {
                         var item = groups.getLocalById(groupId);
-                        return !_.isNull(item);
+                        return !_.isEmpty(item);
                     }).map(function (groupId) {
                         return { key: groupId, value: groups.getLocalById(groupId).title() };
                     });
 
                     _.map(dto.Triggers, function (groupId) {
                         var item = groups.getLocalById(groupId);
-                        if (!_.isNull(item)) {
+                        if (!_.isEmpty(item)) {
                             return { key: groupId, value: groups.getLocalById(groupId).title() };
                         }
                         return;
@@ -123,8 +123,8 @@
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
                     item.selectedLinkTo(dto.LinkedToQuestionId);
-                    item.isLinked(_.isNull(dto.LinkedToQuestionId) == false ? 1 : 0);
-                    item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
+                    item.isLinked(_.isEmpty(dto.LinkedToQuestionId) == false ? 1 : 0);
+                    item.isInteger(_.isEmpty(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
                     item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
                     item.isNew(false);
