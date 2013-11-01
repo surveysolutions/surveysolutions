@@ -548,13 +548,15 @@
                     }
                 };
 
-                _.each(datacontext.questions.getAllLocal(), function(question) {
-                    question.attachValidation();
-                });
+                if (datacontext.questions.getAllLocal().length <= 500) {
+                    _.each(datacontext.questions.getAllLocal(), function(question) {
+                        question.attachValidation();
+                    });
 
-                _.each(datacontext.groups.getAllLocal(), function(group) {
-                    group.attachValidation();
-                });
+                    _.each(datacontext.groups.getAllLocal(), function(group) {
+                        group.attachValidation();
+                    });
+                }
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {
