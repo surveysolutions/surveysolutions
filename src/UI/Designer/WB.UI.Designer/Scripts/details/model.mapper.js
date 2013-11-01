@@ -3,7 +3,8 @@
     function (model, config) {
         var // private methods
             getGroups = function (group, level) {
-                var items = _.filter(group.Children, { '__type': 'GroupView' }).map(function (item) {
+               
+                var items = _.filter(group.Children, function (item) { return item['IsGroup'] || false; }).map(function (item) {
                     return { level: level, group: item };
                 });
                 var groups = [];
@@ -29,7 +30,7 @@
                 var stack = getGroups(questionnaire, 0);
                 while (stack.length > 0) {
                     var item = stack.pop();
-                    _.filter(item.group.Children, { '__type': 'QuestionView' }).map(function (q) {
+                    _.filter(item.group.Children, function (item) { return !(item['IsGroup'] || false); }).map(function (q) {
                         questions.push(q);
                     });
 
