@@ -15,6 +15,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         public GroupView(IQuestionnaireDocument doc, IGroup group)
         {
             this.PublicKey = group.PublicKey;
+            this.ParentId = null;
             this.Title = group.Title;
             this.Propagated = group.Propagated;
             this.ConditionExpression = group.ConditionExpression;
@@ -30,6 +31,8 @@ namespace WB.UI.Designer.Views.Questionnaire
         public string Description { get; set; }
 
         public Guid PublicKey { get; set; }
+        
+        public Guid? ParentId { get; set; }
 
         public string Title { get; set; }
 
