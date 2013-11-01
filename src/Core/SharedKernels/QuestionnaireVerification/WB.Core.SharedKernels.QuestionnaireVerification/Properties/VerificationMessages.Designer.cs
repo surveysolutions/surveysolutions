@@ -249,5 +249,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question of this type cannot be prefilled .
+        /// </summary>
+        internal static string WB0022_PrefilledQuestionsOfIllegalType {
+            get {
+                return ResourceManager.GetString("WB0022_PrefilledQuestionsOfIllegalType", resourceCulture);
+            }
+        }
     }
 }

@@ -1459,7 +1459,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_categorical_question_with_linked_question_that_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewUpdateQuestion_When_categorical_question_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
             Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
@@ -1499,7 +1499,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MultiOptionQuestionCanNotBeFeatured));
         }
 
         [Test]
