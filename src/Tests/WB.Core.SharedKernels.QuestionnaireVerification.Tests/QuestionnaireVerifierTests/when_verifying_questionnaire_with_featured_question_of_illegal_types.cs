@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_question_that_has_substitutions_and_marked_as_featured : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_featured_question_of_illegal_types : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
