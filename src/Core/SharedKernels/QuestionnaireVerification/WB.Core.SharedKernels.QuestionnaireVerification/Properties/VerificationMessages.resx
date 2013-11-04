@@ -174,7 +174,7 @@
   <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
     <value>Question with title substitution can't have reference questions with deeper propagation level.</value>
   </data>
-  <data name="WB0020_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
+  <data name="WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
     <value>Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count.</value>
   </data>
 </root>

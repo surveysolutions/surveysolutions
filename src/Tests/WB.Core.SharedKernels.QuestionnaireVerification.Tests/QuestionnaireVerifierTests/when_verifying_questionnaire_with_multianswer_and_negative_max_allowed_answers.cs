@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors.Count().ShouldEqual(1);
 
         It should_return_error_with_code__WB0021__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0020");
+            resultErrors.Single().Code.ShouldEqual("WB0021");
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
