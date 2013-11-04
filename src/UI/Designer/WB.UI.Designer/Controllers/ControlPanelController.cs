@@ -30,34 +30,39 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult ReadLayer()
         {
+            return this.RedirectToActionPermanent("ReadSide");
+        }
+
+        public ActionResult ReadSide()
+        {
             return this.View(this.ReadSideAdministrationService.GetAllAvailableHandlers());
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public string GetReadLayerStatus()
+        public string GetReadSideStatus()
         {
             return this.ReadSideAdministrationService.GetReadableStatus();
         }
 
-        public ActionResult RebuildReadLayerPartially(string[] handlers)
+        public ActionResult RebuildReadSidePartially(string[] handlers)
         {
             this.ReadSideAdministrationService.RebuildViewsAsync(handlers);
             this.TempData["CheckedHandlers"] = handlers;
-            return this.RedirectToAction("ReadLayer");
+            return this.RedirectToAction("ReadSide");
         }
 
-        public ActionResult RebuildReadLayer()
+        public ActionResult RebuildReadSide()
         {
             this.ReadSideAdministrationService.RebuildAllViewsAsync();
 
-            return this.RedirectToAction("ReadLayer");
+            return this.RedirectToAction("ReadSide");
         }
 
-        public ActionResult StopReadLayerRebuilding()
+        public ActionResult StopReadSideRebuilding()
         {
             this.ReadSideAdministrationService.StopAllViewsRebuilding();
 
-            return this.RedirectToAction("ReadLayer");
+            return this.RedirectToAction("ReadSide");
         }
     }
 }
