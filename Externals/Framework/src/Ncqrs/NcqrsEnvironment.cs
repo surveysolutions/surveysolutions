@@ -91,13 +91,13 @@ namespace Ncqrs
                 object defaultResult;
                 Func<object> getter;
 
-                if (_defaults.TryGetValue(typeof(T), out defaultResult))
-                {
-                    result = (T)defaultResult;
-                }
-                else if (_getters.TryGetValue(typeof(T), out getter))
+                if (_getters.TryGetValue(typeof(T), out getter))
                 {
                     result = ((Func<T>) getter).Invoke();
+                }
+                else if (_defaults.TryGetValue(typeof(T), out defaultResult))
+                {
+                    result = (T)defaultResult;
                 }
             }
 
