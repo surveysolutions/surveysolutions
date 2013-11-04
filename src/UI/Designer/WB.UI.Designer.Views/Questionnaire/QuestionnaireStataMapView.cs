@@ -23,8 +23,8 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         public QuestionnaireStataMapView(EditQuestionnaireView doc)
         {
-            this.StataMap = doc.GetAllQuestions()
-                               .Select(q => new KeyValuePair<Guid, string>(q.PublicKey, q.StataExportCaption))
+            this.StataMap = doc.Questions
+                               .Select(q => new KeyValuePair<Guid, string>(q.Id, q.StataExportCaption))
                                .ToList();
         }
 

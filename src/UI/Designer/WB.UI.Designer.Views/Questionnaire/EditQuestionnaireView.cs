@@ -16,6 +16,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         {
             public IComposite Node { get; set; }
             public Guid? ParentId { get; set; }
+            public int Level { get; set; }
         }
 
         public EditQuestionnaireView(QuestionnaireDocument source)
@@ -23,43 +24,53 @@ namespace WB.UI.Designer.Views.Questionnaire
             CreatedBy = source.CreatedBy;
             CreationDate = source.CreationDate;
             LastEntryDate = source.LastEntryDate;
-            PublicKey = source.PublicKey;
+            Id = source.PublicKey;
             IsPublic = source.IsPublic;
             Title = source.Title;
 
             var questions = new List<NodeWithParent>();
             var groups = new List<NodeWithParent>();
 
-            var treeStack = new Stack<IGroup>();
-            treeStack.Push(source);
+            var treeStack = new Stack<NodeWithParent>();
+            treeStack.Push(new NodeWithParent { Node = source, Level = -1 });
             while (treeStack.Count > 0)
             {
                 var node = treeStack.Pop();
 
-                foreach (var child in node.Children)
+                foreach (var child in node.Node.Children)
                 {
                     if (child is IGroup)
                     {
                         var nodeWithParent = new NodeWithParent
                         {
-                            Node = child, ParentId = node.PublicKey
+                            Node = child,
+                            ParentId = node.Node.PublicKey,
+                            Level = node.Level + 1
                         };
                         groups.Add(nodeWithParent);
-                        treeStack.Push(child as IGroup);
+                        treeStack.Push(nodeWithParent);
                     }
                     else if (child is IQuestion)
                     {
                         questions.Add(new NodeWithParent
                         {
-                            Node = child, ParentId = node.PublicKey
-                        }); 
+                            Node = child,
+                            ParentId = node.Node.PublicKey
+                        });
                     }
                 }
             }
+            Chapters = source.Children.Select(composite => new QuestionnaireEntityNode
+            {
+                Id = composite.PublicKey,
+                Type = QuestionnaireEntityType.Group
+            }).ToList();
 
-            Groups = groups.Select(@group => new GroupView(source, @group.Node as IGroup)).ToList();
-            Questions = questions.Select(question => new QuestionView(question.Node as IQuestion)).ToList();
+            Groups = groups.Select(@group => new GroupView(@group.Node as IGroup, group.ParentId, group.Level)).ToList();
+            Questions = questions.Select(question => new QuestionView(question.Node as IQuestion, question.ParentId)).ToList();
         }
+
+        public List<QuestionnaireEntityNode> Chapters { get; set; }
 
         public List<GroupView> Groups { get; set; }
 
@@ -73,16 +84,11 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         public Guid? Parent { get; set; }
 
-        public Guid PublicKey { get; set; }
+        public Guid Id { get; set; }
 
         public string Title { get; set; }
 
         public bool IsPublic { get; set; }
-
-        public List<QuestionView> GetAllQuestions()
-        {
-            return this.Questions;
-        }
     }
 }
 
