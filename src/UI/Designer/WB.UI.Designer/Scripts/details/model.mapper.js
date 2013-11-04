@@ -72,7 +72,7 @@
                     item.answerOrder(dto.AnswerOrder);
 
                     var answers = _.map(dto.Answers, function(answer) {
-                        return new model.AnswerOption().id(answer.Id).title(answer.Title).value(answer.AnswerValue);
+                    return new model.AnswerOption().id(answer.Id).title(answer.Title).value(answer.AnswerValue);
                     });
 
                     var triggers = _.filter(dto.Triggers, function(groupId) {

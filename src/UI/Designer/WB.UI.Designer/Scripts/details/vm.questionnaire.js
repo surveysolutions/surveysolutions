@@ -95,9 +95,9 @@
                 openDetails("show-questionnaire");
             },
             editQuestion = function (id) {
-                if (!_.isEmpty(selectedQuestion())) {
-                    selectedQuestion().detachValidation();
-                }
+                //if (!_.isEmpty(selectedQuestion())) {
+                //    selectedQuestion().detachValidation();
+                //}
 
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
