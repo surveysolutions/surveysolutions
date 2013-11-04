@@ -123,7 +123,7 @@ namespace Web.Supervisor.App_Start
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings),
-                new RavenReadSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
@@ -140,8 +140,6 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IDomainRepository>().ToConstant(repository);
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
 #warning dirty index registrations
-            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
-            indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

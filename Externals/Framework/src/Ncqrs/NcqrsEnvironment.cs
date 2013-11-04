@@ -56,6 +56,8 @@ namespace Ncqrs
         /// </remarks>
         private static readonly Dictionary<Type, Object> _defaults = new Dictionary<Type, object>(0);
 
+        private static readonly Dictionary<Type, Func<object>> _getters = new Dictionary<Type, Func<object>>();
+
         /// <summary>
         /// Hold the environment configuration. This is initialized by the <see cref="Configure"/> method.
         /// </summary>
@@ -87,11 +89,15 @@ namespace Ncqrs
             if (_instance == null || !_instance.TryGet(out result))
             {
                 object defaultResult;
+                Func<object> getter;
 
                 if (_defaults.TryGetValue(typeof(T), out defaultResult))
                 {
                     result = (T)defaultResult;
-                    
+                }
+                else if (_getters.TryGetValue(typeof(T), out getter))
+                {
+                    result = ((Func<T>) getter).Invoke();
                 }
             }
 
@@ -117,6 +123,14 @@ namespace Ncqrs
             Contract.Requires<ArgumentNullException>(instance != null, "The instance cannot be null.");
 #endif
             _defaults[typeof(T)] = instance;
+        }
+
+        public static void SetGetter<T>(Func<T> getter) where T : class
+        {
+#if USE_CONTRACTS
+            Contract.Requires<ArgumentNullException>(get != null, "The getter cannot be null.");
+#endif
+            _getters[typeof(T)] = getter;
         }
 
         /// <summary>
