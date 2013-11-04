@@ -5,7 +5,7 @@ namespace Main.Core.View
 {
     public interface ICompositeView
     {
-        Guid PublicKey { get; set; }
+        Guid Id { get; set; }
 
         string Title { get; set; }
     }

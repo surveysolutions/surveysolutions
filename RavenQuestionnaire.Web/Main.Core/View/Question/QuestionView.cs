@@ -11,9 +11,10 @@ namespace Main.Core.View.Question
 {
     public class QuestionView : ICompositeView
     {
-        public QuestionView(IQuestion doc)
+        public QuestionView(IQuestion doc, Guid? parentId)
         {
-            this.PublicKey = doc.PublicKey;
+            this.Id = doc.PublicKey;
+            this.ParentId = parentId;
             this.Title = doc.QuestionText.Replace(System.Environment.NewLine, " ");
             this.QuestionType = doc.QuestionType;
             this.QuestionScope = doc.QuestionScope;
@@ -30,8 +31,8 @@ namespace Main.Core.View.Question
             this.Answers = null;
             this.Triggers = null;
 
-            this.Answers =
-                doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
+            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
+                
 
             var autoQuestion = doc as IAutoPropagate;
 
@@ -65,6 +66,8 @@ namespace Main.Core.View.Question
             }
         }
 
+        public Guid? ParentId { get; set; }
+
         public AnswerView[] Answers { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
@@ -80,7 +83,7 @@ namespace Main.Core.View.Question
 
         public bool Capital { get; set; }
 
-        public Guid PublicKey { get; set; }
+        public Guid Id { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public QuestionType QuestionType { get; set; }
