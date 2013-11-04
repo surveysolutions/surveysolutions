@@ -473,13 +473,10 @@
     <Compile Include="Export\IEnvironmentSupplier.cs" />
     <Compile Include="Export\IExportProvider.cs" />
     <Compile Include="Export\StataSuplier.cs" />
-    <Compile Include="ExpressionExecutors\ExpressionDependencyBuilder.cs" />
-    <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
     <Compile Include="ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
-    <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
@@ -528,15 +525,7 @@
     <Compile Include="View\Group\ScreenNavigation.cs" />
     <Compile Include="View\ICompositeView.cs" />
     <Compile Include="View\IViewFactory.cs" />
-    <Compile Include="View\Question\AutoPropagateQuestionView.cs" />
-    <Compile Include="View\Question\BaseQuestionView.cs" />
-    <Compile Include="View\Question\DateTimeQuestionView.cs" />
-    <Compile Include="View\Question\MultiOptionsQuestionView.cs" />
-    <Compile Include="View\Question\NumericQuestionView.cs" />
     <Compile Include="View\Question\QuestionView.cs" />
-    <Compile Include="View\Question\QuestionViewFactory.cs" />
-    <Compile Include="View\Question\QuestionViewInputModel.cs" />
-    <Compile Include="View\Question\TextQuestionView.cs" />
     <Compile Include="View\Register\RegisterInputModel.cs" />
     <Compile Include="View\Register\RegisterView.cs" />
     <Compile Include="View\Register\RegisterViewFactory.cs" />
@@ -561,10 +550,6 @@
     <Compile Include="WCF\IAuthorizationService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
-      <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
-      <Name>NCalc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
       <Project>{ea93a91d-7bc9-4ec0-8a22-8a772afd76c3}</Project>
       <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
@@ -584,6 +569,10 @@
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -606,6 +595,7 @@
     <Folder Include="Commands\Questionnaire\Group\" />
     <Folder Include="Documents\Statistics\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
+    <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
     <Folder Include="Synchronization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

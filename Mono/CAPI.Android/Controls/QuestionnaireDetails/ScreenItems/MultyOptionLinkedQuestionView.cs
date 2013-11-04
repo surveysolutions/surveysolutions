@@ -2,14 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-
-using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -39,16 +32,26 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (!answerOptionsChanged)
                 return;
 
-            this.CreateCheckBoxesByOptions();
+            this.CreateAnswersByOptions();
         }
 
-        protected LinkedQuestionViewModel TypedMode {
+        protected LinkedQuestionViewModel TypedModel {
             get { return Model as LinkedQuestionViewModel; }
         }
 
         protected override IEnumerable<LinkedAnswerViewModel> Answers
         {
-            get { return TypedMode.AnswerOptions; }
+            get { return TypedModel.AnswerOptions; }
+        }
+
+        protected override int? MaxAllowedAnswers
+        {
+            get { return TypedModel.MaxAllowedAnswers; }
+        }
+
+        protected override bool? AreAnswersOrdered
+        {
+            get { return TypedModel.AreAnswersOrdered; }
         }
 
         protected override string GetAnswerId(LinkedAnswerViewModel answer)
@@ -70,8 +73,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel[] selectedAnswers)
         {
-            var answered = selectedAnswers.Select(a => a.PropagationVector);
+            var elements = selectedAnswers.Select(a => new Tuple<int[],int> (a.PropagationVector, GetAnswerOrder(a))).ToList();
 
+            var answered = elements.OrderBy(tuple => tuple.Item2).Where(w => w.Item2 > 0).Select(a => a.Item1).
+                Union(elements.Where(w => w.Item2 == 0).Select(a => a.Item1));
+            
             return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
                 Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
@@ -80,7 +86,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override bool IsAnswerSelected(LinkedAnswerViewModel answer)
         {
-            return TypedMode.SelectedAnswers.Any(a => LinkedQuestionViewModel.IsVectorsEqual(a, answer.PropagationVector));
+            return TypedModel.SelectedAnswers.Any(a => LinkedQuestionViewModel.IsVectorsEqual(a, answer.PropagationVector));
+        }
+
+        protected override int GetAnswerOrder(LinkedAnswerViewModel answer)
+        {
+            return Array.FindIndex(TypedModel.SelectedAnswers, a => LinkedQuestionViewModel.IsVectorsEqual(a, answer.PropagationVector)) + 1;
         }
 
         protected override void Dispose(bool disposing)

@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
@@ -24,14 +21,20 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             object answerObject,
             string validationMessage,
             string variable, 
-            IEnumerable<string> substitutionReferences)
-            : base(
-                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answerObject, validationMessage, variable, substitutionReferences)
+            IEnumerable<string> substitutionReferences,
+            bool? areAnswersOrdered,
+            int? maxAllowedAnswers)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, 
+                   answerObject, validationMessage, variable, substitutionReferences)
         {
             Answers = answers;
+            MaxAllowedAnswers = maxAllowedAnswers;
+            this.AreAnswersOrdered = areAnswersOrdered;
         }
 
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
+        public int? MaxAllowedAnswers { get; private set; }
+        public bool? AreAnswersOrdered { get; private set; }
 
         public override string AnswerString
         {
@@ -53,7 +56,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.SourceText, this.QuestionType, newAnswers,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                this.Mandatory,  this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences);
+                this.Mandatory,  this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences,
+                this.AreAnswersOrdered, this.MaxAllowedAnswers);
         }
 
         public override void SetAnswer(object answer)
@@ -73,6 +77,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             foreach (var item in this.Answers)
             {
                 item.Selected = typedAnswers.Contains(item.Value);
+                item.AnswerOrder = Array.IndexOf(typedAnswers, item.Value) + 1;
             }
 
             base.SetAnswer(answer);

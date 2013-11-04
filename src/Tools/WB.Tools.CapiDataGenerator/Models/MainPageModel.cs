@@ -525,7 +525,7 @@ namespace CapiDataGenerator
         private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users, bool onlyForSupervisor)
         {
             Log("import template");
-            commandService.Execute(new ImportQuestionnaireCommand(_headquarterUser.Id, template));
+            commandService.Execute(new ImportFromDesigner(_headquarterUser.Id, template));
 
             var featuredQuestions = template.GetFeaturedQuestions();
 
@@ -715,7 +715,7 @@ namespace CapiDataGenerator
 
             if (isInteger)
                 return new AnswerNumericIntegerQuestionCommand(interviewId, userId, question.PublicKey, emptyPropagationVector, answersTime,
-                    (int) answer);
+                    Convert.ToInt32(answer));
 
                 return new AnswerNumericRealQuestionCommand(interviewId, userId, question.PublicKey, emptyPropagationVector, answersTime,
                     (decimal) answer);

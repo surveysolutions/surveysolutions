@@ -32,8 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NConfig">
-      <HintPath>..\..\..\packages\NConfig.1.0.15\lib\Net40\NConfig.dll</HintPath>
+    <Reference Include="NConfig, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\NConfig.1.0.16\lib\Net40\NConfig.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -67,10 +68,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
-      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
-      <Name>NCalc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
       <Project>{ea93a91d-7bc9-4ec0-8a22-8a772afd76c3}</Project>
       <Name>Ncqrs.Eventing.Storage.RavenDB</Name>

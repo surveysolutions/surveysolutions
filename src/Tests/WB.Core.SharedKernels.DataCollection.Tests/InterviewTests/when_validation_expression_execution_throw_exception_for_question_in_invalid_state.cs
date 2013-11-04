@@ -12,7 +12,8 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -30,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
                                                         => _.HasQuestion(validatingQuestionId) == true
                                                         && _.GetQuestionType(validatingQuestionId) == QuestionType.Numeric
-                                                        && _.GetQuestionsInvolvedInCustomValidation(validatingQuestionId) == new Guid[] { validatingQuestionId }
+                                                        && _.GetQuestionsInvolvedInCustomValidation(validatingQuestionId) == new [] { new QuestionIdAndVariableName(validatingQuestionId,"var name") }
                                                         && _.IsCustomValidationDefined(validatingQuestionId)==true
                                                         );
             var expressionProcessor = new Mock<IExpressionProcessor>();

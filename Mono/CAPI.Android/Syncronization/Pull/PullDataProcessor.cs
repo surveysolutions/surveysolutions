@@ -169,7 +169,7 @@ namespace CAPI.Android.Syncronization.Pull
         {
             string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
             var template = JsonUtils.GetObject<QuestionnaireDocument>(content);
-            commandService.Execute(new ImportQuestionnaireCommand(Guid.NewGuid(), template));
+            commandService.Execute(new ImportFromSupervisor(template));
         }
     }
 }

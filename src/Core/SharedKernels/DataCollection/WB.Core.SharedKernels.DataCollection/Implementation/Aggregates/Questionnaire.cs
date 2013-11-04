@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -16,7 +14,9 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -27,10 +27,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
-        private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsInvolvedInCustomValidationOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>> cacheOfQuestionsInvolvedInCustomValidationOfQuestion = new Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsWhichCustomValidationDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
-        private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsInvolvedInCustomEnablementConditionOfGroup = new Dictionary<Guid, IEnumerable<Guid>>();
-        private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>> cacheOfQuestionsInvolvedInCustomEnablementConditionOfGroup = new Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>>();
+        private Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>> cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -46,10 +46,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.questionCache = null;
             this.groupCache = null;
-            this.cacheOfQuestionsInvolvedInCustomValidationOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfQuestionsInvolvedInCustomValidationOfQuestion = new Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>>();
             this.cacheOfQuestionsWhichCustomValidationDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
-            this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfGroup = new Dictionary<Guid, IEnumerable<Guid>>();
-            this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfGroup = new Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>>();
+            this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<QuestionIdAndVariableName>>();
             this.cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -116,6 +116,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
 
+        private static IQuestionnaireVerifier QuestionnaireVerifier
+        {
+            get { return ServiceLocator.Current.GetInstance<IQuestionnaireVerifier>(); }
+        }
+
         #endregion
 
 
@@ -124,30 +129,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
-            this.ImportQuestionnaire(createdBy, source);
+            this.ImportFromDesigner(createdBy, source);
+        }
+
+        public Questionnaire(IQuestionnaireDocument source)
+            : base(source.PublicKey)
+        {
+            this.ImportFromSupervisor(source);
         }
 
 
-        public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
+        public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             document.ConnectChildrenWithParent();
 
-            ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
-            ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(document);
-            ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(document);
-            ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(document);
-            ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(document);
-            ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(document);
-            ThrowIfSomeQuestionsHaveCustomValidationReferencingQuestionsWithDeeperPropagationLevel(document);
-            ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(document);
-
+            this.ThrowIfVerifierFindsErrors(document);
+            
             document.CreatedBy = this.innerDocument.CreatedBy;
 
             this.ApplyEvent(new TemplateImported() {Source = document});
         }
 
-
+        public void ImportFromSupervisor(IQuestionnaireDocument source)
+        {
+            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            this.ApplyEvent(new TemplateImported() { Source = document });
+        }
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
@@ -203,6 +211,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
 
+        public int? GetMaxSelectedAnswerOptions(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion))
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
+                    questionId, question.QuestionType));
+
+            return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
+        }
+
         public bool IsCustomValidationDefined(Guid questionId)
         {
             var validationExpression = this.GetCustomValidationExpression(questionId);
@@ -210,7 +231,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return IsExpressionDefined(validationExpression);
         }
 
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId)
+        public IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomValidation(Guid questionId)
         {
             if (!this.cacheOfQuestionsInvolvedInCustomValidationOfQuestion.ContainsKey(questionId))
                 this.cacheOfQuestionsInvolvedInCustomValidationOfQuestion[questionId]
@@ -232,32 +253,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
             return question.ValidationExpression;
-        }
-
-        public IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions()
-        {
-            var invalidQuestions = new List<Guid>();
-
-            foreach (IQuestion question in this.GetAllQuestions())
-            {
-                try
-                {
-                    this.GetQuestionsInvolvedInCustomValidation(question.PublicKey);
-                }
-                catch (Exception exception)
-                {
-                    invalidQuestions.Add(question.PublicKey);
-
-                    this.Logger.Info(
-                        string.Format(
-                            "Validation expression '{0}' for question '{1}' treated invalid " +
-                            "because exception occurred when tried to determine questions involved in validation expression.",
-                            question.ValidationExpression, question.PublicKey),
-                        exception);
-                }
-            }
-
-            return invalidQuestions;
         }
 
         public IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId)
@@ -288,7 +283,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return group.ConditionExpression;
         }
 
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId)
+        public IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId)
         {
             if (!this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfGroup.ContainsKey(groupId))
                 this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfGroup[groupId]
@@ -297,7 +292,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfGroup[groupId];
         }
 
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
+        public IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
         {
             if (!this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion.ContainsKey(questionId))
                 this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion[questionId]
@@ -322,58 +317,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     = this.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestionImpl(questionId);
 
             return this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion[questionId];
-        }
-
-        public IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions()
-        {
-            var invalidGroups = new List<Guid>();
-
-            foreach (IGroup @group in this.GetAllGroups())
-            {
-                try
-                {
-                    this.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(@group.PublicKey);
-                }
-                catch (Exception exception)
-                {
-                    invalidGroups.Add(@group.PublicKey);
-
-                    this.Logger.Info(
-                        string.Format(
-                            "Enablement condition '{0}' for group '{1}' treated invalid " +
-                            "because exception occurred when tried to determine questions involved in enablement condition.",
-                            @group.ConditionExpression, @group.PublicKey),
-                        exception);
-                }
-            }
-
-            return invalidGroups;
-        }
-
-        public IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions()
-        {
-            var invalidQuestions = new List<Guid>();
-
-            foreach (IQuestion question in this.GetAllQuestions())
-            {
-                try
-                {
-                    this.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.PublicKey);
-                }
-                catch (Exception exception)
-                {
-                    invalidQuestions.Add(question.PublicKey);
-
-                    this.Logger.Info(
-                        string.Format(
-                            "Enablement condition '{0}' for question '{1}' treated invalid " +
-                            "because exception occurred when tried to determine questions involved in enablement condition.",
-                            question.ConditionExpression, question.PublicKey),
-                        exception);
-                }
-            }
-
-            return invalidQuestions;
         }
 
         public bool ShouldQuestionPropagateGroups(Guid questionId)
@@ -405,16 +348,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
 
             return autoPropagatingQuestion.MaxValue;
-        }
-
-        public IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups()
-        {
-            return (
-                from question in this.GetAllPropagatingQuestions()
-                let questionHasMissingGroup = question.Triggers.Any(groupId => !this.HasGroup(groupId) || !this.IsGroupPropagatable(groupId))
-                where questionHasMissingGroup
-                select question.PublicKey
-            ).ToList();
         }
 
         public IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId)
@@ -581,210 +514,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return document;
         }
 
-        private static void ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(QuestionnaireDocument document)
-        {
-            IEnumerable<IAutoPropagateQuestion> propagatingQuestionsWithNoAssociatedGroups
-                = document.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0);
-
-            if (propagatingQuestionsWithNoAssociatedGroups.Any())
-                throw new QuestionnaireException(string.Format(
-                    "Following questions are propagating and are expected to have associated groups, but they have no groups associated:{0}{1}",
-                    Environment.NewLine,
-                    string.Join(Environment.NewLine, propagatingQuestionsWithNoAssociatedGroups.Select(FormatQuestionForException))));
-        }
-
-        private static void ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(QuestionnaireDocument document)
-        {
-            IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = document.Find<IGroup>(group
-                => IsGroupPropagatable(group)
-                && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, document).Count() == 0);
-
-            if (propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Any())
-                throw new QuestionnaireException(string.Format(
-                    "Following groups are propagated but there are no propagating questions which point to these groups:{0}{1}",
-                    Environment.NewLine,
-                    string.Join(Environment.NewLine, propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Select(FormatGroupForException))));
-        }
-
-        private static void ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(QuestionnaireDocument document)
-        {
-            IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = document.Find<IGroup>(group
-                => IsGroupPropagatable(group)
-                && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, document).Count() > 1);
-
-            if (propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Any())
-                throw new QuestionnaireException(string.Format(
-                    "Following groups are propagated but there is more than one propagating question which points to these groups:{0}{1}",
-                    Environment.NewLine,
-                    string.Join(Environment.NewLine, propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Select(FormatGroupForException))));
-        }
-
-        private static void ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument document)
-        {
-            Func<Guid, bool> isQuestionPresentInQuestionnaire = questionId => document.Find<IQuestion>(questionId) != null;
-
-            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
-                question => question.LinkedToQuestionId.HasValue && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value));
-        }
-
-        private static void ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(QuestionnaireDocument document)
-        {
-            Func<Guid, bool> isReferencedQuestionTypeSupported = questionId =>
-            {
-                var question = document.Find<IQuestion>(questionId);
-
-                return question.QuestionType == QuestionType.Text
-                    || question.QuestionType == QuestionType.Numeric
-                    || question.QuestionType == QuestionType.DateTime;
-            };
-
-            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following linked questions are referencing questions, but referenced questions are of not supported type",
-                question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value));
-        }
-
-        private static void ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(QuestionnaireDocument document)
-        {
-            Func<Guid, bool> isQuestionUnderPropagatedGroup = questionId =>
-            {
-                var parentGroups = GetAllParentGroupsForQuestion(questionId, document);
-
-                return parentGroups.Any(IsGroupPropagatable);
-            };
-
-            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following linked questions are referencing questions, but referenced questions are not under propagated group",
-                question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
-        }
-
-        //could be split into several methods but it involves several scans of questionnaire 
-        private void ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(QuestionnaireDocument document)
-        {
-            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following questions contain unknown substitution references or target question has wrong type",
-                question => !this.IsReferencedQuestionsSubstitutionsAreValidInDocument(document, question.PublicKey));
-        }
-
-        private bool IsReferencedQuestionsSubstitutionsAreValidInDocument(QuestionnaireDocument document, Guid questionId)
-        {
-            var question = document.Find<IQuestion>(questionId);
-            string[] substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(question.QuestionText);
-
-            if (substitutionReferences.Length == 0)
-                return true;
-
-            if (question.Featured)
-                return false;
-
-            if (substitutionReferences.Contains(question.StataExportCaption))
-                return false;
-
-            return IsSubstitutionReferencesSatisfyToStructureRestrictions(document, question, substitutionReferences);
-        }
-
-        private bool IsSubstitutionReferencesSatisfyToStructureRestrictions(QuestionnaireDocument document, IQuestion question,string[] substitutionReferences)
-        {
-            //not the most efficient way - we scan all document.
-            //We need cache by VariableName 
-            IEnumerable<IQuestion> substitutionReferencedQuestions = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
-            if (substitutionReferencedQuestions.Count() < substitutionReferences.Count())
-                return false;
-
-            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(question, document);
-
-
-            Func<IQuestion, bool> referenceIsValid =
-                reference =>
-                {
-                    List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(reference, document);
-                    if (referencedPropagationQuestionsVector.Count == 0)
-                        //referenced Question not in propagation - OK
-                        return true;
-
-                    var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
-
-                    return lengthDiff >= 0 
-                        && propagationQuestionsVector.Except(propagationQuestionsVector).Count() == lengthDiff;
-                };
-
-            return substitutionReferencedQuestions.All(q =>
-                    this.IsQuestionTypeAllowedToBeSourceOfSubstitution(q.QuestionType) && referenceIsValid(q));
-        }
-
-
-        private bool IsQuestionTypeAllowedToBeSourceOfSubstitution(QuestionType type)
-        {
-            return type == QuestionType.DateTime || type == QuestionType.Numeric || type == QuestionType.SingleOption ||
-                   type == QuestionType.Text || type == QuestionType.AutoPropagate;
-        }
-        
-        private List<Guid> GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument document)
-        {
-            List<Guid> propagationQuestions = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document)
-                .Where(IsGroupPropagatable)
-                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, document).FirstOrDefault().PublicKey)
-                .ToList();
-
-            return propagationQuestions;
-        }
-
-        private static void ThrowIfSomeQuestionsHaveCustomValidationReferencingQuestionsWithDeeperPropagationLevel(QuestionnaireDocument document)
-        {
-            Func<IQuestion, bool> haveSomeOfQuestionsInvolvedInCustomValidationDeeperPropagationLevel = question =>
-            {
-                int questionPropagationLevel = GetPropagationLevelForQuestion(question.PublicKey, document);
-
-                IEnumerable<Guid> involvedQuestionIds = GetQuestionsInvolvedInCustomValidation(question.PublicKey, question.ValidationExpression,
-                    hasQuestion: questionId => document.Find<IQuestion>(questionId) != null);
-
-                IEnumerable<int> involvedQuestionsPropagationLevels =
-                    involvedQuestionIds.Select(involvedQuestion => GetPropagationLevelForQuestion(involvedQuestion, document));
-
-                return involvedQuestionsPropagationLevels.Any(
-                    involvedQuestionPropagationLevel => involvedQuestionPropagationLevel > questionPropagationLevel);
-            };
-
-            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following questions have custom validation which involves questions, but some of involved questions have deeper propagation level",
-                haveSomeOfQuestionsInvolvedInCustomValidationDeeperPropagationLevel);
-        }
-
-        private static void ThrowIfSomeQuestionsSatisfySpecifiedCondition(QuestionnaireDocument document,
-            string exceptionTextDescribingFollowingQuestions, Func<IQuestion, bool> condition)
-        {
-            IEnumerable<IQuestion> questionsSatisfyingTheCondition = document.Find<IQuestion>(condition);
-
-            if (questionsSatisfyingTheCondition.Any())
-                throw new QuestionnaireException(string.Format("{1}:{0}{2}",
-                    Environment.NewLine,
-                    exceptionTextDescribingFollowingQuestions,
-                    string.Join(Environment.NewLine, questionsSatisfyingTheCondition.Select(FormatQuestionForException))));
-        }
-
-
-        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
-        {
-            return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(groupId));
-        }
-
-
-        private IEnumerable<Guid> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
+        private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
         {
             string validationExpression = this.GetCustomValidationExpression(questionId);
 
-            return GetQuestionsInvolvedInCustomValidation(questionId, validationExpression, this.HasQuestion);
+            return GetQuestionsInvolvedInCustomValidation(questionId, validationExpression);
         }
 
-        private static IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId, string validationExpression, Func<Guid, bool> hasQuestion)
+        private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomValidation(Guid questionId, string validationExpression)
         {
             if (!IsExpressionDefined(validationExpression))
-                return Enumerable.Empty<Guid>();
+                return Enumerable.Empty<QuestionIdAndVariableName>();
 
             IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
 
             return DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
-                identifiersUsedInExpression, questionId, validationExpression, hasQuestion);
+                identifiersUsedInExpression, questionId, validationExpression);
         }
 
         private IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestionImpl(Guid questionId)
@@ -799,14 +544,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             );
         }
 
-        private IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroupImpl(Guid groupId)
+        private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfGroupImpl(Guid groupId)
         {
             string enablementCondition = this.GetCustomEnablementConditionForGroup(groupId);
 
             return this.GetQuestionsInvolvedInCustomEnablementCondition(enablementCondition);
         }
 
-        private IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestionImpl(Guid questionId)
+        private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfQuestionImpl(Guid questionId)
         {
             string enablementCondition = this.GetCustomEnablementConditionForQuestion(questionId);
 
@@ -909,14 +654,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Cast<IAutoPropagateQuestion>();
         }
 
-        private static int GetPropagationLevelForQuestion(Guid questionId, QuestionnaireDocument document)
-        {
-            return GetPropagationLevelForQuestion(questionId,
-                getAllParentGroupsForQuestion: qId => GetAllParentGroupsForQuestion(qId, document).Select(group => group.PublicKey),
-                isGroupPropagatable: groupId => document.Find<IGroup>(groupId).Propagated == Propagate.AutoPropagated);
-        }
-
-        private static int GetPropagationLevelForQuestion(Guid questionId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForQuestion, Func<Guid, bool> isGroupPropagatable)
+        private int GetPropagationLevelForQuestion(Guid questionId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForQuestion, Func<Guid, bool> isGroupPropagatable)
         {
             return getAllParentGroupsForQuestion(questionId).Count(isGroupPropagatable);
         }
@@ -930,19 +668,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
 
-        private static IEnumerable<IGroup> GetAllParentGroupsForQuestion(Guid questionId, QuestionnaireDocument document)
-        {
-            var question = document.Find<IQuestion>(questionId);
-
-            return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), document);
-        }
-
         private IEnumerable<Guid> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group)
         {
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(group, this.innerDocument).Select(_ => _.PublicKey);
         }
 
-        private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
+        private IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
         {
             var parentGroups = new List<IGroup>();
 
@@ -955,10 +686,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return parentGroups;
         }
 
-        private IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementCondition(string enablementCondition)
+        private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementCondition(string enablementCondition)
         {
             if (!IsExpressionDefined(enablementCondition))
-                return Enumerable.Empty<Guid>();
+                return Enumerable.Empty<QuestionIdAndVariableName>();
 
             IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(enablementCondition);
 
@@ -979,53 +710,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return parsedValue;
         }
 
-        private static IEnumerable<Guid> DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
-            IEnumerable<string> identifiers, Guid contextQuestionId, string expression, Func<Guid, bool> hasQuestion)
+        private IEnumerable<QuestionIdAndVariableName> DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
+            IEnumerable<string> identifiers, Guid contextQuestionId, string expression)
         {
-            var distinctQuestionIds = new HashSet<Guid>();
+            var distinctQuestionIds = new HashSet<QuestionIdAndVariableName>();
 
             foreach (var identifier in identifiers)
             {
                 if (IsSpecialThisIdentifier(identifier))
                 {
-                    distinctQuestionIds.Add(contextQuestionId);
+                    var contextQuestion = this.GetQuestion(contextQuestionId);
+                    distinctQuestionIds.Add(new QuestionIdAndVariableName(contextQuestion.PublicKey, contextQuestion.StataExportCaption));
                 }
                 else
                 {
-                    Guid parsedId;
-                    if (!Guid.TryParse(identifier, out parsedId))
-                        throw new QuestionnaireException(string.Format(
-                            "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
-                            identifier, expression));
-
-                    ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId, hasQuestion);
-
-                    distinctQuestionIds.Add(parsedId);
+                    distinctQuestionIds.Add(ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier,
+                        expression));
                 }
             }
 
             return distinctQuestionIds;
         }
 
-        private Guid ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier, string expression)
+        private IQuestion GetQuestionByStringIdOrVariableName(string identifier)
         {
             Guid parsedId;
-            if (!Guid.TryParse(identifier, out parsedId))
-                throw new QuestionnaireException(string.Format(
-                    "Identifier '{0}' from expression '{1}' is not a valid guid.",
-                    identifier, expression));
-
-            ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId, this.HasQuestion);
-
-            return parsedId;
+            return !Guid.TryParse(identifier, out parsedId) ? this.GetQuestionByStataCaption(identifier) : this.GetQuestion(parsedId);
         }
 
-        private static void ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(string identifier, string expression, Guid parsedId, Func<Guid, bool> hasQuestion)
+        private QuestionIdAndVariableName ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier,
+            string expression)
         {
-            if (!hasQuestion(parsedId))
+            IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
+
+            if (question == null)
                 throw new QuestionnaireException(string.Format(
-                    "Identifier '{0}' from expression '{1}' is a valid guid '{2}' but questionnaire has no questions with such id.",
-                    identifier, expression, parsedId));
+                    "Identifier '{0}' from expression '{1}' is not valid question identifier. Question with such a identifier is missing.",
+                    identifier, expression));
+
+            return new QuestionIdAndVariableName(question.PublicKey, question.StataExportCaption);
+        }
+
+        private void ThrowIfVerifierFindsErrors(QuestionnaireDocument document)
+        {
+            var errors = QuestionnaireVerifier.Verify(document);
+            if (errors.Any())
+                throw new QuestionnaireVerificationException(string.Format("Questionnaire '{0}' can't be imported", document.Title),
+                    errors.ToArray());
         }
 
         private static bool IsSpecialThisIdentifier(string identifier)
@@ -1040,18 +771,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool DoesQuestionCustomValidationDependOnSpecifiedQuestion(Guid questionId, Guid specifiedQuestionId)
         {
-            IEnumerable<Guid> involvedQuestions = this.GetQuestionsInvolvedInCustomValidation(questionId);
+            IEnumerable<QuestionIdAndVariableName> involvedQuestions = this.GetQuestionsInvolvedInCustomValidation(questionId);
 
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
+            bool isSpecifiedQuestionInvolved = involvedQuestions.Any(question => question.Id == specifiedQuestionId);
 
             return isSpecifiedQuestionInvolved;
         }
 
         private bool DoesCustomEnablementConditionDependOnSpecifiedQuestion(string enablementCondition, Guid specifiedQuestionId)
         {
-            IEnumerable<Guid> involvedQuestions = this.GetQuestionsInvolvedInCustomEnablementCondition(enablementCondition);
+            IEnumerable<QuestionIdAndVariableName> involvedQuestions = this.GetQuestionsInvolvedInCustomEnablementCondition(enablementCondition);
 
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
+            bool isSpecifiedQuestionInvolved = involvedQuestions.Any(question => question.Id == specifiedQuestionId);
 
             return isSpecifiedQuestionInvolved;
         }
@@ -1130,13 +861,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 question.QuestionText ?? "<<NO QUESTION TITLE>>",
                 question.StataExportCaption ?? "<<NO VARIABLE NAME>>",
                 question.PublicKey);
-        }
-
-        private static string FormatGroupForException(IGroup group)
-        {
-            return string.Format("'{0} ({1:N})'",
-                group.Title ?? "<<NO GROUP TITLE>>",
-                group.PublicKey);
         }
     }
 }

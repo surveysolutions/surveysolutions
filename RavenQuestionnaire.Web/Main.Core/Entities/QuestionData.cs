@@ -6,7 +6,6 @@ namespace Main.Core.Entities
 {
     public class QuestionData
     {
-        public QuestionData(){}
         public QuestionData(
             Guid publicKey,
             QuestionType questionType,
@@ -26,46 +25,56 @@ namespace Main.Core.Entities
             Answer[] answers,
             Guid? linkedToQuestionId,
             bool? isInteger,
-            int? countOfDecimalPlaces = null)
+            int? countOfDecimalPlaces,
+            bool? areAnswersOrdered,
+            int? maxAllowedAnswers
+            )
         {
-            this.publicKey = publicKey;
-            this.questionType = questionType;
-            this.questionScope = questionScope;
-            this.questionText = questionText;
-            this.stataExportCaption = stataExportCaption;
-            this.conditionExpression = conditionExpression;
-            this.validationExpression = validationExpression;
-            this.validationMessage = validationMessage;
-            this.answerOrder = answerOrder;
-            this.featured = featured;
-            this.mandatory = mandatory;
-            this.capital = capital;
-            this.instructions = instructions;
-            this.triggers = triggers;
-            this.maxValue = maxValue;
-            this.answers = answers;
-            this.linkedToQuestionId = linkedToQuestionId;
-            this.isInteger = isInteger;
-            this.countOfDecimalPlaces = countOfDecimalPlaces;
+            this.PublicKey = publicKey;
+            this.QuestionType = questionType;
+            this.QuestionScope = questionScope;
+            this.QuestionText = questionText;
+            this.StataExportCaption = stataExportCaption;
+            this.ConditionExpression = conditionExpression;
+            this.ValidationExpression = validationExpression;
+            this.ValidationMessage = validationMessage;
+            this.AnswerOrder = answerOrder;
+            this.Featured = featured;
+            this.Mandatory = mandatory;
+            this.Capital = capital;
+            this.Instructions = instructions;
+            this.Triggers = triggers;
+            this.MaxValue = maxValue;
+            this.Answers = answers;
+            this.LinkedToQuestionId = linkedToQuestionId;
+            this.IsInteger = isInteger;
+            this.CountOfDecimalPlaces = countOfDecimalPlaces;
+
+            this.AreAnswersOrdered = areAnswersOrdered;
+            this.MaxAllowedAnswers = maxAllowedAnswers;
         }
-        public Guid publicKey { get; set; }
-        public QuestionType questionType { get; set; }
-        public QuestionScope questionScope { get; set; }
-        public string questionText { get; set; }
-        public string stataExportCaption { get; set; }
-        public string conditionExpression { get; set; }
-        public string validationExpression { get; set; }
-        public string validationMessage { get; set; }
-        public Order answerOrder { get; set; }
-        public bool featured { get; set; }
-        public bool mandatory { get; set; }
-        public bool capital { get; set; }
-        public string instructions { get; set; }
-        public List<Guid> triggers { get; set; }
-        public int maxValue { get; set; }
-        public Answer[] answers { get; set; }
-        public Guid? linkedToQuestionId { get; set; }
-        public bool? isInteger { get; set; }
-        public int? countOfDecimalPlaces { get; set; }
+
+        public readonly Guid PublicKey;
+        public readonly QuestionType QuestionType;
+        public readonly QuestionScope QuestionScope;
+        public readonly string QuestionText;
+        public readonly string StataExportCaption;
+        public readonly string ConditionExpression;
+        public readonly string ValidationExpression;
+        public readonly string ValidationMessage;
+        public readonly Order AnswerOrder;
+        public readonly bool Featured;
+        public readonly bool Mandatory;
+        public readonly bool Capital;
+        public readonly string Instructions;
+        public readonly List<Guid> Triggers;
+        public readonly int MaxValue;
+        public readonly Answer[] Answers;
+        public readonly Guid? LinkedToQuestionId;
+        public readonly bool? IsInteger;
+        public readonly int? CountOfDecimalPlaces;
+
+        public readonly bool? AreAnswersOrdered;
+        public readonly int? MaxAllowedAnswers;
     }
 }

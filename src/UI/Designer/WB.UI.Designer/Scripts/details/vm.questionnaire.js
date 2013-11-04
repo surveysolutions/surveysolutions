@@ -7,10 +7,14 @@
             selectedQuestion = ko.observable(),
             questionnaire = ko.observable(model.Questionnaire.Nullo),
             chapters = ko.observableArray(),
-            errors = ko.observableArray(),
+            verificationMessages = ko.observableArray(),
+            saveMessages = ko.observableArray(),
             searchResult = ko.observableArray(),
+            isVerificationSucceeded = ko.observable(),
             statistics = new model.Statistic(),
             isInitialized = false,
+            isVerificationRunning = ko.observable(false),
+            selectedMessageTab = ko.observable(config.messageTabs.saveMessagesTab),            
             cloneQuestion = function(question) {
                 if (question.isNew())
                     return;
@@ -90,11 +94,17 @@
                 questionnaire().isSelected(true);
                 openDetails("show-questionnaire");
             },
-            editQuestion = function(id) {
+            editQuestion = function (id) {
+                if (!_.isEmpty(selectedQuestion())) {
+                    selectedQuestion().detachValidation();
+                }
+
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
                     return;
                 }
+                question.attachValidation();
+                
                 question.isSelected(true);
                 question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
                 question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
@@ -172,14 +182,15 @@
                             {
                                 success: function() {
                                     deleteGroupSuccessCallback(item);
+                                    clearSaveMessages();
                                 },
                                 error: function(d) {
-                                    showError(d);
+                                    showSaveMessage(d);
                                 }
                             });
                     }
                 });
-            },
+            },            
             deleteGroupSuccessCallback = function(item) {
                 datacontext.groups.removeGroup(item.id());
 
@@ -218,10 +229,10 @@
                             {
                                 success: function() {
                                     deleteQuestionSuccessCallback(item);
-
+                                    clearSaveMessages();
                                 },
                                 error: function(d) {
-                                    showError(d);
+                                    showSaveMessage(d);
                                 }
                             });
                     }
@@ -273,13 +284,12 @@
                             group.dirtyFlag().reset();
                             group.fillChildren();
                             calcStatistics();
-                            isOutputVisible(false);
                             group.canUpdate(true);
                             group.commit();
-                               
+                            clearSaveMessages();
                         },
                         error: function(d) {
-                            showError(d);
+                            showSaveMessage(d);
                             group.canUpdate(true);
                         }
                     });
@@ -293,28 +303,28 @@
 
                 var command = '';
                 switch (question.qtype()) {
-                    case config.questionTypes.AutoPropagate:
-                    case config.questionTypes.Numeric:
-                        if (question.isNew()) {
-                            if (question.isClone()) {
-                                command = config.commands.cloneNumericQuestion;
-                            } else {
-                                command = config.commands.createNumericQuestion;
-                            }
+                case config.questionTypes.AutoPropagate:
+                case config.questionTypes.Numeric:
+                    if (question.isNew()) {
+                        if (question.isClone()) {
+                            command = config.commands.cloneNumericQuestion;
                         } else {
-                            command = config.commands.updateNumericQuestion;
+                            command = config.commands.createNumericQuestion;
                         }
-                        break;
-                    default:
-                        if (question.isNew()) {
-                            if (question.isClone()) {
-                                command = config.commands.cloneQuestion;
-                            } else {
-                                command = config.commands.createQuestion;
-                            }
+                    } else {
+                        command = config.commands.updateNumericQuestion;
+                    }
+                    break;
+                default:
+                    if (question.isNew()) {
+                        if (question.isClone()) {
+                            command = config.commands.cloneQuestion;
                         } else {
-                            command = config.commands.updateQuestion;
+                            command = config.commands.createQuestion;
                         }
+                    } else {
+                        command = config.commands.updateQuestion;
+                    }
                 }
 
                 question.canUpdate(false);
@@ -327,12 +337,12 @@
                             question.isNew(false);
                             question.dirtyFlag().reset();
                             calcStatistics();
-                            isOutputVisible(false);
                             question.canUpdate(true);
                             question.commit();
+                            clearSaveMessages();
                         },
                         error: function(d) {
-                            showError(d);
+                            showSaveMessage(d);
                             question.canUpdate(true);
                         }
                     });
@@ -347,11 +357,11 @@
                     {
                         success: function() {
                             questionnaire.dirtyFlag().reset();
-                            isOutputVisible(false);
                             questionnaire.canUpdate(true);
+                            clearSaveMessages();
                         },
                         error: function(d) {
-                            showError(d);
+                            showSaveMessage(d);
                             questionnaire.canUpdate(true);
                         }
                     });
@@ -364,23 +374,25 @@
                         {
                             success: function() {
                                 questionnaire().addSharedPerson();
+                                clearSaveMessages();
                             },
                             error: function(d) {
-                                showError(d);
+                                showSaveMessage(d);
                             }
                         });
                 });
             },
-            removeSharedPerson = function (sharedUser) {
+            removeSharedPerson = function(sharedUser) {
                 datacontext.sendCommand(
                     config.commands.removeSharedPersonFromQuestionnaire,
                     sharedUser,
                     {
                         success: function() {
                             questionnaire().removeSharedPerson(sharedUser);
+                            clearSaveMessages();
                         },
                         error: function(d) {
-                            showError(d);
+                            showSaveMessage(d);
                         }
                     });
             },
@@ -410,7 +422,7 @@
                     isItemHeadQuestion = arg.item.isHead();
                     isItemFeaturedQuestion = arg.item.isFeatured();
                 }
-                
+
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
@@ -421,7 +433,7 @@
                     config.logger(config.warnings.cantMoveUnsavedItem);
                     return;
                 }
-                
+
                 if (isDropedOutsideAnyChapter && itemIsAutopropagateGroup) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveAutoPropagatedGroupOutsideGroup);
@@ -443,19 +455,19 @@
                     config.logger(config.warnings.cantMoveIntoUnsavedItem);
                     return;
                 }
-                
+
                 if (isItemFeaturedQuestion && targetGroupIsAuto) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveFeaturedQuestionIntoAutoGroup);
                     return;
                 }
-                
+
                 if (isItemAutoQuestion && targetGroupIsAuto) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveAutoQuestionIntoAutoGroup);
                     return;
                 }
-                
+
                 if (isItemHeadQuestion && targetGroupIsAuto == false) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveHeadQuestionOutsideAutoGroup);
@@ -487,6 +499,7 @@
                     moveCommand,
                     {
                         success: function(d) {
+                            saveMessages.removeAll();
                             if (isDraggedFromChapter) {
                                 var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
                                 datacontext.questionnaire.childrenID.remove(child);
@@ -516,7 +529,7 @@
 
                             chapters(datacontext.groups.getChapters());
 
-                            showError(d);
+                            showSaveMessage(d);
                         }
                     });
             },
@@ -540,50 +553,115 @@
                         }
                     }
                 };
-                
-                _.each(datacontext.questions.getAllLocal(), function (question) {
-                    question.attachValidation();
-                });
 
-                _.each(datacontext.groups.getAllLocal(), function (group) {
-                    group.attachValidation();
-                });
+                if (datacontext.questions.getAllLocal().length <= 500) {
+                    _.each(datacontext.questions.getAllLocal(), function(question) {
+                        question.attachValidation();
+                    });
+
+                    _.each(datacontext.groups.getAllLocal(), function(group) {
+                        group.attachValidation();
+                    });
+                }
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {
                     return chapter.isExpanded();
                 });
             }),
-            toggleAllChapters = function () {
+            toggleAllChapters = function() {
                 if (isAllChaptersExpanded()) {
-                    _.each(chapters(), function (chapter) {
+                    _.each(chapters(), function(chapter) {
                         chapter.isExpanded(false);
                     });
                 } else {
-                    _.each(chapters(), function (chapter) {
+                    _.each(chapters(), function(chapter) {
                         chapter.isExpanded(true);
                     });
                 }
             },
-            toggleAllChaptersTooltip = ko.computed(function () {
+            toggleAllChaptersTooltip = ko.computed(function() {
                 var tooltip = {
                     title: (isAllChaptersExpanded() == true ? 'Collapse' : 'Expand') + ' all chapters',
                     placement: 'right'
                 };
                 return tooltip;
-            }).extend({throttle: 400}),
+            }).extend({ throttle: 400 }),
             focusOnSearch = function() {
                 $('#filter input').get(0).focus();
             },
-            showError = function(message) {
-                errors.removeAll();
-                if (!_.isUndefined(message.error)) {
-                    errors.push(message.error);
-                } else {
-                    errors.push(message);
-                }
+            showSaveMessage = function(message) {
+                saveMessages.removeAll();
+
+                saveMessages.push(new model.Error(
+                    _.isUndefined(message.error) ? message : message.error
+                ));
+
+                isVerificationSucceeded(false);
                 isOutputVisible(true);
-            };
+                selectedMessageTab(config.messageTabs.saveMessagesTab);
+
+            },
+            clearSaveMessages = function() {
+                isOutputVisible(false);
+                saveMessages.removeAll();
+                selectedMessageTab(config.messageTabs.verificationMessagesTab);
+            },
+            showVerificationMessages = function(messages) {
+                _.each(messages, function(message) {
+                    verificationMessages.push(message);
+                });
+                isOutputVisible(true);
+            },
+            getErrorWithUnsavedItems = function() {
+                var unsavedQuestionReferences = _.filter(datacontext.questions.getAllLocal(), function(q) {
+                    return q.dirtyFlag().isDirty() || q.isNew();
+                }).map(function(q) {
+                    return {
+                        id: q.id(),
+                        type: config.verificationReferenceType.question
+                    };
+                });
+                var unsavedGroupsReferences = _.filter(datacontext.groups.getAllLocal(), function(g) {
+                    return g.dirtyFlag().isDirty() || g.isNew();
+                }).map(function(g) {
+                    return {
+                        id: g.id(),
+                        type: config.verificationReferenceType.group
+                    };
+                });
+                var message = "Following items are not saved, please save them before proceeding with verification:";
+                var code = "WB0000";
+                var references = _.union(unsavedQuestionReferences, unsavedGroupsReferences);
+                return _.isEmpty(references) ? null : new model.Error(message, code, references);
+            },
+            runVerifier = function() {
+                var unsavedItemsError = getErrorWithUnsavedItems();
+                if (_.isNull(unsavedItemsError)) {
+                    saveMessages.removeAll();
+                    verificationMessages.removeAll();
+                    isVerificationRunning(true);
+                    datacontext.runRemoteVerification({
+                        success: function(response) {
+                            isVerificationSucceeded(response.length == 0);
+                            showVerificationMessages(response);
+                            isVerificationRunning(false);
+                        },
+                        error: function(response) {
+                            showSaveMessage(response.error);
+                            isVerificationRunning(false);
+                        }
+                    });
+                } else {
+                    isVerificationSucceeded(false);
+                    verificationMessages.removeAll();
+                    showVerificationMessages([unsavedItemsError]);
+                }
+                selectedMessageTab(config.messageTabs.verificationMessagesTab);
+            },
+            isToggleMessagesButtonIsVisible = ko.computed(function () {
+                return (saveMessages().length + verificationMessages().length) + (isVerificationSucceeded() ? 1 : 0) > 0;
+            });
 
         init();
 
@@ -609,7 +687,8 @@
             deleteQuestion: deleteQuestion,
             isOutputVisible: isOutputVisible,
             toggleOutput: toggleOutput,
-            errors: errors,
+            verificationMessages: verificationMessages,
+            saveMessages: saveMessages,
             statistics: statistics,
             searchResult: searchResult,
             saveQuestionnaire: saveQuestionnaire,
@@ -617,6 +696,12 @@
             toggleAllChapters: toggleAllChapters,
             toggleAllChaptersTooltip: toggleAllChaptersTooltip,
             addSharedPerson: addSharedPerson,
-            removeSharedPerson : removeSharedPerson
+            removeSharedPerson: removeSharedPerson,
+            runVerifier: runVerifier,
+            switchMessageTab: selectedMessageTab,
+            selectedMessageTab: selectedMessageTab,
+            isVerificationSucceeded: isVerificationSucceeded,
+            isVerificationRunning: isVerificationRunning,
+            isToggleMessagesButtonIsVisible: isToggleMessagesButtonIsVisible
         };
     });

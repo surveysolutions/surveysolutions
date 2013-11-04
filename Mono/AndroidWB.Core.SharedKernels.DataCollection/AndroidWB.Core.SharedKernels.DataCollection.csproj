@@ -139,8 +139,11 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs">
       <Link>Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportQuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\ImportQuestionnaireCommand.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromDesigner.cs">
+      <Link>Commands\Questionnaire\ImportFromDesigner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromSupervisor.cs">
+      <Link>Commands\Questionnaire\ImportFromSupervisor.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataCollectionSharedKernelModule.cs">
       <Link>DataCollectionSharedKernelModule.cs</Link>
@@ -289,6 +292,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\QuestionnaireException.cs">
       <Link>Exceptions\QuestionnaireException.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\QuestionnaireVerificationException.cs">
+      <Link>Exceptions\QuestionnaireVerificationException.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Factories\IQuestionnaireFactory.cs">
       <Link>Factories\IQuestionnaireFactory.cs</Link>
     </Compile>
@@ -319,15 +325,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Repositories\QuestionnaireRepository.cs">
       <Link>Implementation\Repositories\QuestionnaireRepository.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\ExpressionProcessor.cs">
-      <Link>Implementation\Services\ExpressionProcessor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\IdentifierCollector.cs">
-      <Link>Implementation\Services\IdentifierCollector.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\IExpressionProcessor.cs">
-      <Link>Implementation\Services\IExpressionProcessor.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedReadSideRepositoryReader.cs">
       <Link>ReadSide\IVersionedReadSideRepositoryReader.cs</Link>
     </Compile>
@@ -342,6 +339,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewStatus.cs">
       <Link>ValueObjects\Interview\InterviewStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Questionnaire\QuestionIdAndVariableName.cs">
+      <Link>ValueObjects\Questionnaire\QuestionIdAndVariableName.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\FeaturedQuestionItem.cs">
       <Link>Views\Questionnaire\FeaturedQuestionItem.cs</Link>
@@ -386,17 +386,9 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
-      <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
-      <Name>AndroidAntlr3.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
-      <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
-      <Name>AndroidNCalc</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
@@ -406,12 +398,22 @@
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
+      <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.Android\WB.Core.SharedKernels.QuestionnaireVerification.Android.csproj">
+      <Project>{2f566dd5-1692-4890-9ff7-bcb21b8c372b}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification.Android</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Implementation\Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

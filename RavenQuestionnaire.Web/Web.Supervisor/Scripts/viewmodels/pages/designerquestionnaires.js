@@ -2,6 +2,10 @@
     Supervisor.VM.DesignerQuestionnaires.superclass.constructor.apply(this, arguments);
     
     var self = this;
+
+    self.ImportFailMessage = ko.observable();
+    self.VerificationErrors = ko.observableArray([]);
+
     self.getQuestionnaireUrl = getQuestionnaireUrl;
     self.Query = ko.observable('');
     
@@ -13,39 +17,27 @@
     self.load = function () {
         self.search();
     };
-
     self.getQuestionnaire = function(questionnaireViewItem) {
 
-        if (!self.IsAjaxComplete()) {
-            self.CheckForRequestComplete();
-            return;
-        }
-
-        self.IsAjaxComplete(false);
-
         var request = { questionnaireId: questionnaireViewItem.Id() };
-        
-        $.post(self.getQuestionnaireUrl, request, null, "json")
-            .done(function(data) {
-                if (data.IsSuccess) {
-                    self.onQuestionnaireImported();
-                } else {
-                    self.showImportQuestionnaireError();
-                }
-            }).fail(function() {
-                self.showImportQuestionnaireError();
-            }).always(function() {
-                self.IsAjaxComplete(true);
-            });
 
+        self.SendCommand(request, function (data) {
+
+            if (!Supervisor.Framework.Objects.isUndefined(data.Errors) && !Supervisor.Framework.Objects.isNull(data.Errors) && data.Errors.length > 0) {
+                self.VerificationErrors.removeAll();
+                self.ImportFailMessage('Failed to import questionnaire: ' + data.QuestionnaireTitle);
+                $.each(data.Errors, function (index, error) {
+                    var uiReferences = $.map(error.References, function (item) {
+                        return { title: item.Title, type: item.Type, id: item.Id };
+                    });
+                    self.VerificationErrors.push({ message: error.Message, code: error.Code, references: uiReferences });
+                });
+                self.ShowOutput();
+            } else
+                self.onQuestionnaireImported();
+        });
     };
-
-    self.showImportQuestionnaireError = function() {
-        self.ShowError(input.settings.messages.unhandledExceptionMessage);
-    };
-
-    self.onQuestionnaireImported = function() {
-
+    self.onQuestionnaireImported = function () {
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.DesignerQuestionnaires, Supervisor.VM.ListView);

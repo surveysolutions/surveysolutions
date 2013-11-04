@@ -10,6 +10,8 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.UI.Shared.Web;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
 
@@ -57,27 +59,38 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public JsonBaseResponse GetQuestionnaire(ImportQuestionnaireRequest request)
+        public QuestionnaireVerificationResponse GetQuestionnaire(ImportQuestionnaireRequest request)
         {
-            var returnedJson = new JsonBaseResponse();
-
+            QuestionnaireDocument document = null;
             try
             {
                 RemoteFileInfo docSource =
                     this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId));
-                var document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
-                this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
+                document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
-                returnedJson.IsSuccess = true;
+                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document));
+
+                return new QuestionnaireVerificationResponse(true);
             }
             catch (Exception ex)
             {
-                this.Logger.Error(
-                    string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
-            }
+                var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
+                if (domainEx == null)
+                {
+                    this.Logger.Error(
+                        string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                    return new QuestionnaireVerificationResponse(false);
+                }
 
-            return returnedJson;
+                var response = new QuestionnaireVerificationResponse(true, document.Title);
+                var verificationException = domainEx as QuestionnaireVerificationException;
+                if (verificationException != null)
+                {
+                    response.SetErrorsForQuestionnaire(verificationException.Errors, document);
+                }
+                return response;
+            }
         }
 
         public class ImportQuestionnaireRequest
