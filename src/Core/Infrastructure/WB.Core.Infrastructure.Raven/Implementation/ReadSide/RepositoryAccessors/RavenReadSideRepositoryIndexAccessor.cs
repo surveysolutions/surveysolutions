@@ -12,19 +12,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 {
     internal class RavenReadSideRepositoryIndexAccessor : IReadSideRepositoryIndexAccessor
     {
-        private readonly DocumentStore ravenStore;
-
         private const string Database = "Views";
 
-        public RavenReadSideRepositoryIndexAccessor(DocumentStore ravenStore)
+        private readonly DocumentStore ravenStore;
+        private readonly Assembly[] assembliesWithIndexes;
+        private bool wereIndexesCreated = false;
+
+        public RavenReadSideRepositoryIndexAccessor(DocumentStore ravenStore, Assembly[] assembliesWithIndexes)
         {
             this.ravenStore = ravenStore;
-        }
-
-        protected IDocumentSession OpenSession()
-        {
-            this.EnsureDatabaseExists();
-            return this.ravenStore.OpenSession(Database);
+            this.assembliesWithIndexes = assembliesWithIndexes;
         }
 
         public IQueryable<TResult> Query<TResult>(string indexName)
@@ -44,16 +41,36 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        public void RegisterIndexesFromAssembly(Assembly assembly)
+        private IDocumentSession OpenSession()
         {
-            var catalog = new CompositionContainer(new AssemblyCatalog(assembly));
             this.EnsureDatabaseExists();
-            IndexCreation.CreateIndexes(catalog, this.ravenStore.DatabaseCommands.ForDatabase(Database), ravenStore.Conventions);
+            this.EnsureIndexesExist();
+
+            return this.ravenStore.OpenSession(Database);
         }
 
         private void EnsureDatabaseExists()
         {
             this.ravenStore.DatabaseCommands.EnsureDatabaseExists(Database);
+        }
+
+        private void EnsureIndexesExist()
+        {
+            if (this.wereIndexesCreated)
+                return;
+
+            foreach (Assembly assembly in this.assembliesWithIndexes)
+            {
+                this.RegisterIndexesFromAssembly(assembly);
+            }
+
+            this.wereIndexesCreated = true;
+        }
+
+        private void RegisterIndexesFromAssembly(Assembly assembly)
+        {
+            var catalog = new CompositionContainer(new AssemblyCatalog(assembly));
+            IndexCreation.CreateIndexes(catalog, this.ravenStore.DatabaseCommands.ForDatabase(Database), this.ravenStore.Conventions);
         }
     }
 }
