@@ -567,7 +567,7 @@
     <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
-    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
+    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>
