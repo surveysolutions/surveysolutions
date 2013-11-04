@@ -2,18 +2,7 @@
     ['jquery', 'underscore', 'ko', 'model', 'config', 'dataservice', 'model.mapper', 'utils', 'input'],
     function ($, _, ko, model, config, dataservice, modelmapper, utils, input) {
 
-        //var stack = [input.questionnaire];
-        //while (stack.length > 0) {
-        //    var item = stack.pop();
-        //    var isGroup = item['IsGroup'] || false;
-        //    item["__type"] = isGroup ? "GroupView" : "QuestionView";
-        //    _.each(item.Children, function (q) {
-        //        stack.push(q);
-        //    });
-        //}
-
-
-        var logger = config.logger,
+        var 
             itemsToArray = function (items, observableArray, filter, sortFunction) {
                 // Maps the memo to an observableArray, 
                 // then returns the observableArray
@@ -75,13 +64,8 @@
                                 filter = options && options.filter,
                                 forceRefresh = (options && options.forceRefresh) || false;
 
-                            var dtos = mapper.objectsFromDto(data);
-
-                            // If the internal items object doesnt exist, 
-                            // or it exists but has no properties, 
-                            // or we force a refresh
                             if (forceRefresh || !items || !utils.hasProperties(items)) {
-                                items = mapToContext(dtos, items, results, mapper, filter, sortFunction, otherData);
+                                items = mapToContext(data, items, results, mapper, filter, sortFunction, otherData);
                                 def.resolve(results);
                             } else {
                                 itemsToArray(items, results, filter, sortFunction);
@@ -112,17 +96,14 @@
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
 
-        groups.parse(input.questionnaire);
-        questions.parse(input.questionnaire);
+        groups.parse(input.questionnaire.Groups);
+        questions.parse(input.questionnaire.Questions);
 
-        input.questionnaire = null;
+        //input.questionnaire = null;
 
         // set parents
-        _.each(groups.getAllLocal(), function (parent) {
-            _.each(parent.childrenID(), function (children) {
-                var item = (children.type === "GroupView") ? groups.getLocalById(children.id) : questions.getLocalById(children.id);
-                item.parent(parent);
-            });
+        _.each(groups.getAllLocal(), function (group) {
+            group.parent(groups.getLocalById(group.parent()));
         });
 
         groups.search = function (query) {
