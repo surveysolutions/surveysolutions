@@ -1456,7 +1456,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_categorical_question_with_linked_question_that_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewAddQuestion_When_categorical_question_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
             Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
@@ -1498,6 +1498,49 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured));
+        }
+
+        [Test]
+        //[TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_categorical_multyOption_question_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, null, groupId);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: questionType,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: true,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: new Option[2]
+                                       {
+                                           new Option(id: Guid.NewGuid(), value: "1", title: "text"),
+                                           new Option(id: Guid.NewGuid(), value: "2", title: "text1")
+                                       },
+                    optionsOrder: Order.AZ,
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: null, 
+                    areAnswersOrdered: false, 
+                    maxAllowedAnswers: null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MultiOptionQuestionCanNotBeFeatured));
         }
 
         [Test]
