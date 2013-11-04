@@ -238,37 +238,19 @@ namespace WB.UI.Designer.Controllers
 
         private void ReplaceGuidsInValidationAndConditionRules(EditQuestionnaireView model)
         {
-            //var elements = new Queue<ICompositeView>();
-            //var expressionReplacer = new ExpressionReplacer(model);
-            //foreach (ICompositeView compositeView in model)
-            //{
-            //    elements.Enqueue(compositeView);
-            //}
+            var expressionReplacer = new ExpressionReplacer(model);
+            foreach (QuestionView question in model.Questions)
+            {
+                question.ConditionExpression =
+                       expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.Id);
+                question.ValidationExpression =
+                    expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.Id);
+            }
 
-            //while (elements.Count > 0)
-            //{
-            //    ICompositeView element = elements.Dequeue();
-
-            //    var question = element as QuestionView;
-            //    if (question != null)
-            //    {
-            //        question.ConditionExpression =
-            //            expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
-            //        question.ValidationExpression =
-            //            expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
-            //    }
-
-            //    var group = element as GroupView;
-            //    if (group != null)
-            //    {
-            //        group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
-
-            //        foreach (ICompositeView child in group.Children)
-            //        {
-            //            elements.Enqueue(child);
-            //        }
-            //    }
-            //}
+            foreach (GroupView group in model.Groups)
+            {
+                group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.Id);
+            }
         }
 
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
