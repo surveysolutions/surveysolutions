@@ -1,7 +1,9 @@
 ﻿using System.Web.SessionState;
+using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Shared.Web.Elmah;
 
 namespace Web.Supervisor
 {
@@ -142,6 +144,16 @@ namespace Web.Supervisor
         {
             HttpContext.Current.SetSessionStateBehavior(
                 SessionStateBehavior.Required);
+        }
+
+        void ErrorLog_Filtering(object sender, ExceptionFilterEventArgs e)
+        {
+            var ctx = e.Context as HttpContext;
+            if (ctx == null)
+            {
+                return;
+            }
+            ElmahDataFilter.Apply(e, ctx);
         }
     }
 }
