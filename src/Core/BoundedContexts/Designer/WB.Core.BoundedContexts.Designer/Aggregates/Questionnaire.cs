@@ -1347,6 +1347,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
             }
+
+            if (questionType == QuestionType.MultyOption && isFeatured)
+            {
+                throw new DomainException(
+                    DomainExceptionType.MultiOptionQuestionCanNotBeFeatured,
+                    "Multiple answers question can not be pre-filled");
+            }
         }
 
         private void ThrowIfMaxAllowedAnswersInvalid(QuestionType questionType, Guid? linkedToQuestionId, int? maxAllowedAnswers, Option[] options)
@@ -1380,7 +1387,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.LinkedQuestionDoesNotExist,
                     "Question that you are linked to does not exist");
             }
-
 
             bool typeOfLinkedQuestionIsNotSupported = !(
                 linkedToQuestion.QuestionType == QuestionType.DateTime ||

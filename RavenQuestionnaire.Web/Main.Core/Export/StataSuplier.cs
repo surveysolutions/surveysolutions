@@ -221,7 +221,7 @@ namespace Main.Core.Export
 
         protected string RemoveNonUnicode(string s)
         {
-            var onlyUnicode = Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
+            var onlyUnicode = Regex.Replace(s, @"[^\u0020-\u007E]", string.Empty);
             return Regex.Replace(onlyUnicode, @"\t|\n|\r", "");
         }
 

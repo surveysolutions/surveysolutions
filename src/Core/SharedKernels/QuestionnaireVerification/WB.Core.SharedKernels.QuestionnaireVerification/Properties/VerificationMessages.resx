@@ -177,4 +177,7 @@
   <data name="WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
     <value>Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count.</value>
   </data>
+  <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+    <value>Question of this type cannot be prefilled </value>
+  </data>
 </root>

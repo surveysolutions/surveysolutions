@@ -477,7 +477,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void CloneQuestion_When_categorical_question_with_linked_question_that_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void CloneQuestion_When_categorical_question_that_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
             Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
