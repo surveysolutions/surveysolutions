@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Question;
 
 
@@ -19,7 +18,7 @@ namespace Core.Supervisor.Views.TakeNew
             this.Supervisors = new List<UserDocument>();
             foreach (IQuestion q in questionnaire.GetFeaturedQuestions())
             {
-                var questionView = new QuestionView(q);
+                var questionView = new QuestionView(q, null);
                 this.FeaturedQuestions.Add(questionView);
             }
         }

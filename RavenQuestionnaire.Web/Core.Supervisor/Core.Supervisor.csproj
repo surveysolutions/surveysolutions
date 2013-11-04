@@ -253,8 +253,6 @@
     <Compile Include="Views\Survey\DetailsMenuItem.cs" />
     <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
     <Compile Include="Views\Survey\ScreenWithRout.cs" />
-    <Compile Include="Views\Survey\DisplaySurveyViewFactory.cs" />
-    <Compile Include="Views\Survey\SurveyScreenView.cs" />
     <Compile Include="Views\Survey\ScreenNavigationView.cs" />
     <Compile Include="Views\Survey\ChangeStatusHistoryView.cs" />
     <Compile Include="Views\Survey\QuestionStatisticView.cs" />
