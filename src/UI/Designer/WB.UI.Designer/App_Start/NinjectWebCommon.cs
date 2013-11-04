@@ -69,7 +69,7 @@ namespace WB.UI.Designer.App_Start
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new RavenWriteSideInfrastructureModule(ravenSettings),
-                new RavenReadSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(),
                 new ExpressionProcessorModule(),
@@ -83,9 +83,6 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             PrepareNcqrsInfrastucture(kernel);
-
-            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
-            indexccessor.RegisterIndexesFromAssembly(typeof(DesignerReportQuestionnaireListViewItem).Assembly);
 
             return kernel;
         }
