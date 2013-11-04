@@ -13,6 +13,7 @@ namespace WB.Core.Infrastructure.Raven
     public class RavenWriteSideInfrastructureModule : RavenInfrastructureModule
     {
         private readonly int pageSize;
+        private IStreamableEventStore singleEventStore;
 
         public RavenWriteSideInfrastructureModule(RavenConnectionSettings settings, int pageSize = 50)
             : base(settings)
@@ -24,12 +25,20 @@ namespace WB.Core.Infrastructure.Raven
         {
             this.BindDocumentStore();
 
-            var store = new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), this.pageSize);
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
-            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
-            this.Kernel.Bind<IStreamableEventStore>().ToConstant(store);
+            NcqrsEnvironment.SetGetter<IStreamableEventStore>(this.GetEventStore);
+            NcqrsEnvironment.SetGetter<IEventStore>(this.GetEventStore);
+            this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore());
+            this.Kernel.Bind<IEventStore>().ToMethod(_ => this.GetEventStore());
+
             this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
-            this.Kernel.Bind<IEventStore>().ToConstant(store);
+        }
+
+        private IStreamableEventStore GetEventStore()
+        {
+            return this.singleEventStore ?? (this.singleEventStore =
+                new RavenDBEventStore(
+                    this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(),
+                    this.pageSize));
         }
     }
 }
