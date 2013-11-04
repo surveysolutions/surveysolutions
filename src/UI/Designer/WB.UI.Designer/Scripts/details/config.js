@@ -1,6 +1,6 @@
 ﻿define('config',
     ['pnotify', 'ko', 'amplify'],
-    function (toastr, ko, amplify) {
+    function(toastr, ko, amplify) {
 
         var // properties
             //-----------------
@@ -12,6 +12,14 @@
                 "Text": "Text",
                 "AutoPropagate": "AutoPropagate",
                 "GpsCoordinates": "GpsCoordinates"
+            },
+            verificationReferenceType = {
+                question: 1,
+                group: 10,
+            },
+            messageTabs = {
+                saveMessagesTab: 1,
+                verificationMessagesTab: 2
             },
             questionTypeOptions = [
                 {
@@ -180,7 +188,7 @@
                     okBtn: "Yes, disable it",
                     cancelBtn: "No, don't disable it"
                 },
-                weWillClearHeadFlag:{
+                weWillClearHeadFlag: {
                     message: "Questions answered by supervisor can't serve as a header of a roster group. Would you like to disable the 'head' option for this question?",
                     okBtn: "Yes, disable it",
                     cancelBtn: "No, don't disable it"
@@ -189,7 +197,7 @@
             // methods
             //-----------------
 
-            init = function () {
+            init = function() {
                 logger.defaults.delay = loggerTmeout;
 
                 ko.validation.configure({
@@ -222,6 +230,8 @@
             answerOrders: answerOrders,
             groupTypes: groupTypes,
             commands: commands,
-            tips: tips
+            tips: tips,
+            verificationReferenceType: verificationReferenceType,
+            messageTabs: messageTabs
         };
     });

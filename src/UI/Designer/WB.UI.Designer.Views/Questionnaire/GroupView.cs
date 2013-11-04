@@ -4,7 +4,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
-using Main.Core.View.Group;
 using Main.Core.View.Question;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -13,22 +12,14 @@ namespace WB.UI.Designer.Views.Questionnaire
 {
     public class GroupView : ICompositeView
     {
-        public GroupView(IQuestionnaireDocument doc, IGroup group): this (doc, group, null)
-        {
-     
-        }
-
-        public GroupView(IQuestionnaireDocument doc, IGroup group, ICompositeView parentView)
+        public GroupView(IQuestionnaireDocument doc, IGroup group)
         {
             this.PublicKey = group.PublicKey;
+            this.ParentId = null;
             this.Title = group.Title;
             this.Propagated = group.Propagated;
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
-
-            var parent = group.GetParent();
-            this.Parent = parent == null ? (Guid?)null : parent.PublicKey;
-
             this.Children = this.ConvertChildrenFromGroupDocument(doc, @group);
         }
 
@@ -40,12 +31,14 @@ namespace WB.UI.Designer.Views.Questionnaire
         public string Description { get; set; }
 
         public Guid PublicKey { get; set; }
+        
+        public Guid? ParentId { get; set; }
 
         public string Title { get; set; }
 
         public List<ICompositeView> Children { get; set; }
 
-        public Guid? Parent { get; set; }
+        public bool IsGroup = true;
 
         private List<ICompositeView> ConvertChildrenFromGroupDocument(IQuestionnaireDocument doc, IComposite @group)
         {
@@ -55,15 +48,34 @@ namespace WB.UI.Designer.Views.Questionnaire
                 if ((composite as IQuestion) != null)
                 {
                     var q = composite as IQuestion;
-                    compositeViews.Add(new QuestionView(doc, q));
+                    compositeViews.Add(new QuestionView(q));
                 }
                 else
                 {
                     var g = composite as IGroup;
-                    compositeViews.Add(new GroupView(doc, g, this));
+                    compositeViews.Add(new GroupView(doc, g));
                 }
             }
             return compositeViews;
+        }
+
+        public List<QuestionView> GetAllQuestions()
+        {
+            var questions = new List<QuestionView>();
+            foreach (ICompositeView composite in Children)
+            {
+                if ((composite as QuestionView) != null)
+                {
+                    var q = composite as QuestionView;
+                    questions.Add(q);
+                }
+                else
+                {
+                    var g = composite as GroupView;
+                    questions.AddRange(g.GetAllQuestions());
+                }
+            }
+            return questions;
         }
     }
 }

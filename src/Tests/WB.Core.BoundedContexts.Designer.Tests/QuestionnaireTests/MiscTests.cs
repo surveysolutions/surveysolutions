@@ -89,7 +89,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 questionnaire.NewAddQuestion(publicKey, groupPublicKey, questionText, questionType,
                     stataExportCaption, mandatory, featured, capital, questionScope, conditionExpression,
-                    validationExpression, validationMessage, instructions, answers, answerOrder,responsibleId: responsibleId, linkedToQuestionId: null);
+                    validationExpression, validationMessage, instructions, answers, answerOrder, 
+                    responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
                 Assert.True(ctx.Events.Count() == 1);
 

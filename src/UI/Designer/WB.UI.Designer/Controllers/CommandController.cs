@@ -1,11 +1,13 @@
 ﻿using System.Web.Security;
 using Main.Core.Domain.Exceptions;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Membership;
@@ -27,17 +29,16 @@ namespace WB.UI.Designer.Controllers
         private readonly IMembershipUserService userHelper;
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
-        private readonly IExpressionReplacer expressionReplacer;
         private readonly ILogger logger;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer,
-            IExpressionReplacer expressionReplacer, IMembershipUserService userHelper)
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IMembershipUserService userHelper, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
         {
             this.userHelper = userHelper;
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
-            this.expressionReplacer = expressionReplacer;
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
         [HttpPost]
@@ -55,7 +56,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                var domainEx = e.As<DomainException>();
+                var domainEx = e.GetSelfOrInnerAs<DomainException>();
                 if (domainEx == null)
                 {
                     logger.Error(string.Format("Error on command of type ({0}) handling ", type), e);
@@ -84,22 +85,21 @@ namespace WB.UI.Designer.Controllers
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
         {
-
             var questionCommand = command as AbstractQuestionCommand;
             if (questionCommand != null)
             {
-                questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
-                questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
+                questionCommand.Condition = questionCommand.Condition;
+                questionCommand.ValidationExpression = questionCommand.ValidationExpression;
 
                 return;
             }
-            
+
             var newGroupCommand = command as FullGroupDataCommand;
             if (newGroupCommand != null)
             {
-                newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
-             } 
-         }
+                newGroupCommand.Condition = newGroupCommand.Condition;
+            }
+        }
 
         private void ValidateAddSharedPersonCommand(ICommand command)
         {
