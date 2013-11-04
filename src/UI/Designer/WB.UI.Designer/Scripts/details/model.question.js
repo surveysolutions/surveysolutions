@@ -146,23 +146,23 @@
                     return self.errors().length > 0;
                 });
 
-                self.detachValidation = function () {
-                    self.alias.extend({ validatable: false });
+                //self.detachValidation = function () {
+                //    self.alias.extend({ validatable: false });
 
-                    self.qtype.extend({ validatable: false });
+                //    self.qtype.extend({ validatable: false });
 
-                    self.selectedLinkTo.extend({ validatable: false });
+                //    self.selectedLinkTo.extend({ validatable: false });
 
-                    self.answerOptions.extend({ validatable: false });
+                //    self.answerOptions.extend({ validatable: false });
 
-                    self.validationExpression.extend({ validatable: false });
+                //    self.validationExpression.extend({ validatable: false });
 
-                    self.condition.extend({ validatable: false });
+                //    self.condition.extend({ validatable: false });
 
-                    self.title.extend({ validatable: false });
+                //    self.title.extend({ validatable: false });
                     
-                    self.errors = ko.validation.group(self);
-                },
+                //    self.errors = ko.validation.group(self);
+                //},
                 
                 self.attachValidation = function () {
 
