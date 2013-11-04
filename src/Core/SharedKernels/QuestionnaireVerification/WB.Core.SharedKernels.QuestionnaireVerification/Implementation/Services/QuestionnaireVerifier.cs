@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
 
-                    Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0020", VerificationMessages.WB0020_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
+                    Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
                 };
             }
         }
