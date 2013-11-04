@@ -28,48 +28,52 @@ namespace WB.UI.Designer
             }
         }
 
-        const string ENABLEPASSWORDRETRIEVAL = "enablePasswordRetrieval";
-        const string ENABLEPASSWORDRESET = "enablePasswordReset";
-        const string REQUIRESQUESTIONANDANSWER = "requiresQuestionAndAnswer";
-        const string MINREQUIREDPASSWORDLENGTH = "minRequiredPasswordLength";
-        const string MINREQUIREDNONALPHANUMERICCHARACTERS = "minRequiredNonalphanumericCharacters";
-        const string MAXINVALIDPASSWORDATTEMPTS = "maxInvalidPasswordAttempts";
-        const string PASSWORDATTEMPTWINDOW = "passwordAttemptWindow";
-        const string PASSWORDSTRENGTHREGULAREXPRESSION = "passwordStrengthRegularExpression";
-        private const string REQUIRESUNIQUEEMAIL = "requiresUniqueEmail";
+        private MembershipProviderSettings(NameValueCollection customSettingsSection)
+            : base(customSettingsSection) { }
 
-        public bool EnablePasswordRetrieval { get; private set; }
-        public bool EnablePasswordReset { get; private set; }
-        public bool RequiresQuestionAndAnswer { get; private set; }
-        public int MinRequiredPasswordLength { get; private set; }
-        public int MinRequiredNonalphanumericCharacters { get; private set; }
-        public int MaxInvalidPasswordAttempts { get; private set; }
-        public int PasswordAttemptWindow { get; private set; }
-        public string PasswordStrengthRegularExpression { get; private set; }
-        public bool RequiresUniqueEmail { get; private set; }
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MembershipProviderSettings"/> class.
-        /// </summary>
-        /// <param name="settingsCollection">
-        /// The settings Collection.
-        /// </param>
-        private MembershipProviderSettings(NameValueCollection settingsCollection)
-            : base(settingsCollection)
+        public bool EnablePasswordRetrieval
         {
-            this.EnablePasswordRetrieval = GetBoolean(ENABLEPASSWORDRETRIEVAL, false);
-            this.EnablePasswordReset = GetBoolean(ENABLEPASSWORDRESET, true);
-            this.RequiresQuestionAndAnswer = GetBoolean(REQUIRESQUESTIONANDANSWER, false);
-            this.MinRequiredPasswordLength = GetInt(MINREQUIREDPASSWORDLENGTH, 6);
-            this.MinRequiredNonalphanumericCharacters = GetInt(MINREQUIREDNONALPHANUMERICCHARACTERS, 0);
-            this.MaxInvalidPasswordAttempts = GetInt(MAXINVALIDPASSWORDATTEMPTS, 5);
-            this.PasswordAttemptWindow = GetInt(PASSWORDATTEMPTWINDOW, 10);
-            this.PasswordStrengthRegularExpression = GetString(PASSWORDSTRENGTHREGULAREXPRESSION, string.Empty);
-            this.RequiresUniqueEmail = GetBoolean(REQUIRESUNIQUEEMAIL, true);
+            get { return this.GetBoolean("enablePasswordRetrieval", false); }
         }
 
-        #endregion
+        public bool EnablePasswordReset
+        {
+            get { return this.GetBoolean("enablePasswordReset", true); }
+        }
+
+        public bool RequiresQuestionAndAnswer
+        {
+            get { return this.GetBoolean("requiresQuestionAndAnswer", false); }
+        }
+
+        public int MinRequiredPasswordLength
+        {
+            get { return this.GetInt("minRequiredPasswordLength", 6); }
+        }
+
+        public int MinRequiredNonalphanumericCharacters
+        {
+            get { return this.GetInt("minRequiredNonalphanumericCharacters", 0); }
+        }
+
+        public int MaxInvalidPasswordAttempts
+        {
+            get { return this.GetInt("maxInvalidPasswordAttempts", 5); }
+        }
+
+        public int PasswordAttemptWindow
+        {
+            get { return this.GetInt("passwordAttemptWindow", 10); }
+        }
+
+        public string PasswordStrengthRegularExpression
+        {
+            get { return this.GetString("passwordStrengthRegularExpression", string.Empty); }
+        }
+
+        public bool RequiresUniqueEmail
+        {
+            get { return this.GetBoolean("requiresUniqueEmail", true); }
+        }
     }
 }
