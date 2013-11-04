@@ -57,7 +57,7 @@
             fromDto: function(dto, item, otherData) {
                 var groups = otherData.groups;
                 item = item || new model.Question();
-                item.id(dto.PublicKey);
+                item.id(this.getDtoId(dto));
                 item.title(dto.Title);
                 item.parent(null);
                 if (!_.isEmpty(dto.ParentId)) {
