@@ -3,7 +3,7 @@
     function(model, config) {
         var getType = function(intType) {
             return intType === 1 ? "QuestionView" : "GroupView";
-        }
+        },
         // public mapping methods
         questionnaire = {
             getDtoId: function(dto) { return dto.Id; },
@@ -61,7 +61,7 @@
                 item.answerOrder(dto.AnswerOrder);
 
                 var answers = _.map(dto.Answers, function(answer) {
-                    return new model.AnswerOption().id(answer.PublicKey).title(answer.Title).value(answer.AnswerValue);
+                    return new model.AnswerOption().id(answer.Id).title(answer.Title).value(answer.AnswerValue);
                 });
 
                 var triggers = _.filter(dto.Triggers, function(groupId) {
