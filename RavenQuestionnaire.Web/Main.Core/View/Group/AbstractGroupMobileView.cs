@@ -52,7 +52,7 @@ namespace Main.Core.View.Group
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
-        public Guid PublicKey { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// get or set questionnaire active status - active if allow to edit, not error or completed
         /// </summary>

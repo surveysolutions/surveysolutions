@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Views.Questionnaire
             {
                 return this.children
                        ?? (this.children =
-                           this.Source.Children.Cast<IGroup>().Select(@group => new GroupView(this.Source, @group)).ToList());
+                           this.Source.Children.Cast<IGroup>().Select(@group => new GroupView(@group, null, 0)).ToList());
             }
         }
 

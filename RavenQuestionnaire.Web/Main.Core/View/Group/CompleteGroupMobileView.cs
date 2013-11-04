@@ -31,7 +31,7 @@ namespace Main.Core.View.Group
             : this()
         {
             this.QuestionnairePublicKey = doc.PublicKey;
-            this.PublicKey = currentGroup.PublicKey;
+            this.Id = currentGroup.PublicKey;
             this.Title = currentGroup.Title;
             this.Propagated = currentGroup.Propagated;
             this.Enabled = currentGroup.Enabled;
@@ -115,7 +115,7 @@ namespace Main.Core.View.Group
         /// </returns>
         public virtual string GetClientId(string prefix)
         {
-            return string.Format("{0}_{1}", prefix, this.PublicKey);
+            return string.Format("{0}_{1}", prefix, this.Id);
         }
 
         #endregion

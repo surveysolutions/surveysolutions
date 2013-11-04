@@ -16,7 +16,7 @@ namespace Main.Core.View.Group
 
         public PropagatedGroupMobileView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, QuestionScope scope)
         {
-            this.PublicKey = group.PublicKey;
+            this.Id = group.PublicKey;
             this.PropogationKey = group.PropagationPublicKey ?? Guid.Empty;
             this.Enabled = group.Enabled;
             this.QuestionnairePublicKey = doc.PublicKey;

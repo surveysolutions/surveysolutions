@@ -70,7 +70,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
             this.Group = new CompleteGroupMobileView()
             {
-                PublicKey = currentGroup.PublicKey,
+                Id = currentGroup.PublicKey,
                 Title = currentGroup.Title,
                 Propagated = currentGroup.Propagated,
                 Enabled = currentGroup.Enabled,
