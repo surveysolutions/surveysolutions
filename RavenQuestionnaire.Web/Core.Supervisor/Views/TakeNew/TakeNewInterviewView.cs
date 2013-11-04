@@ -18,7 +18,7 @@ namespace Core.Supervisor.Views.TakeNew
             this.Supervisors = new List<UserDocument>();
             foreach (IQuestion q in questionnaire.GetFeaturedQuestions())
             {
-                var questionView = new QuestionView(q);
+                var questionView = new QuestionView(q, null);
                 this.FeaturedQuestions.Add(questionView);
             }
         }
