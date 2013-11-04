@@ -6,16 +6,16 @@ namespace WB.UI.Shared.Web
 {
     public abstract class WebConfigHelper
     {
-        private readonly NameValueCollection settingsCollection;
+        private readonly NameValueCollection customSettingsSection;
 
-        protected WebConfigHelper(NameValueCollection settingsCollection)
+        protected WebConfigHelper(NameValueCollection customSettingsSection = null)
         {
-            this.settingsCollection = settingsCollection;
+            this.customSettingsSection = customSettingsSection;
         }
 
         protected string GetString(string key)
         {
-            return this.settingsCollection[key];
+            return (this.customSettingsSection ?? ConfigurationManager.AppSettings)[key];
         }
 
         protected string GetString(string key, string @default)
