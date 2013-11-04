@@ -74,6 +74,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
 
+                    Verifier<IMultyOptionsQuestion>(this.CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
                 };
             }
@@ -281,6 +282,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
             return identifiersUsedInExpression.Any(
                 identifier => !QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(questionnaire, identifier));
+        }
+
+        private bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return question.Featured;
         }
 
         private static bool PropagatingQuestionReferencesNotExistingGroup(IAutoPropagateQuestion question, QuestionnaireDocument questionnaire)
