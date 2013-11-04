@@ -12,7 +12,7 @@ namespace Main.Core.View.Answer
 
         public AnswerView(Guid questionPublicKey, IAnswer answer)
         {
-            this.PublicKey = answer.PublicKey;
+            this.Id = answer.PublicKey;
             this.Title = answer.AnswerText;
             this.AnswerValue = answer.AnswerValue;
         }
@@ -25,7 +25,7 @@ namespace Main.Core.View.Answer
         public string AnswerValue { get; set; }
 
         
-        public Guid PublicKey { get; set; }
+        public Guid Id { get; set; }
 
         public string Title { get; set; }
     }
