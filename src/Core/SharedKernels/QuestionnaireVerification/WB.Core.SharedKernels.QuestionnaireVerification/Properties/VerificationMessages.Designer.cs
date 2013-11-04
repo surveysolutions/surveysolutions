@@ -235,9 +235,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count..
         /// </summary>
-        internal static string WB0020_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount {
+        internal static string WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount {
             get {
-                return ResourceManager.GetString("WB0020_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
+                return ResourceManager.GetString("WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
             }
         }
     }
