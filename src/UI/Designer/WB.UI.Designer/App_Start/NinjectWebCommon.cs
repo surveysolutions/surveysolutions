@@ -35,6 +35,7 @@ namespace WB.UI.Designer.App_Start
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
+        private static ViewConstructorEventBus eventBus;
 
         /// <summary>
         ///     Starts the application
@@ -93,7 +94,7 @@ namespace WB.UI.Designer.App_Start
             NcqrsEnvironment.SetDefault(commandService);
             NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
             kernel.Bind<ICommandService>().ToConstant(commandService);
-            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetGetter(() => kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
@@ -102,15 +103,26 @@ namespace WB.UI.Designer.App_Start
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
+            NcqrsEnvironment.SetGetter<IEventBus>(() => GetEventBus(kernel));
+            kernel.Bind<IEventBus>().ToMethod(_ => GetEventBus(kernel));
+            kernel.Bind<IViewConstructorEventBus>().ToMethod(_ => GetEventBus(kernel));
+        }
+
+        private static ViewConstructorEventBus GetEventBus(StandardKernel kernel)
+        {
+            return eventBus ?? (eventBus = CreateEventBus(kernel));
+        }
+
+        private static ViewConstructorEventBus CreateEventBus(StandardKernel kernel)
+        {
             var bus = new ViewConstructorEventBus();
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
-            kernel.Bind<IEventBus>().ToConstant(bus);
-            kernel.Bind<IViewConstructorEventBus>().ToConstant(bus);
-            foreach (var handler in kernel.GetAll(typeof(IEventHandler)))
+
+            foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {
                 bus.AddHandler(handler as IEventHandler);
             }
 
+            return bus;
         }
     }
 }
