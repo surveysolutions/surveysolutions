@@ -698,7 +698,6 @@
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Interview\_StatusHistory.cshtml" />
-    <Content Include="Views\Shared\_SurveyContent.cshtml" />
     <Content Include="Views\Interview\ChangeState.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml">
       <SubType>
