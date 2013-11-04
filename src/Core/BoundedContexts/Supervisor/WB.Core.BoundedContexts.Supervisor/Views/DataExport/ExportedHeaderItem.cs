@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             PublicKey = question.PublicKey;
             QuestionType = question.QuestionType;
+            VariableName = question.StataExportCaption;
             Titles = new string[]{question.QuestionText};
             ColumnNames = new string[] { question.StataExportCaption };
 
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
             for (int i = 0; i < columnCount; i++)
             {
-                ColumnNames[i] = question.StataExportCaption + GetIntAsWord(i);
+                ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, i);
 
                 if (!IsQuestionLinked(question))
                     Titles[i] += string.Format(":{0}", question.Answers[i].AnswerText);
@@ -60,24 +61,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         public QuestionType QuestionType { get; private set; }
         public string[] ColumnNames { get; private set; }
         public string[] Titles { get; private set; }
-       
-        public Dictionary<Guid, LabelItem> Labels { get; private set; }
-
-        protected string GetIntAsWord(int num)
-        {
-            var word = "";
-            decimal t = num + 1;
-            while (t > 0)
-            {
-                t--;
-                word = alpha[((int) t%26)].ToString(CultureInfo.InvariantCulture) + word;
-                t = Math.Floor(t/26);
-            }
-            return word;
-        }
-
-        private char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-    }
+        public string VariableName { get; private set; }
+        public Dictionary<Guid, LabelItem> Labels { get; private set; }}
 
 
     public class LabelItem

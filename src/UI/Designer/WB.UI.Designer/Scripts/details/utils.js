@@ -1,6 +1,6 @@
 ﻿define('utils',
-['underscore'],
-    function (_) {
+['underscore', 'config'],
+    function (_, config) {
         var
             findChildById = function (collection, id) {
                 var item = _.find(collection, { 'id': id });
@@ -10,7 +10,7 @@
                     index: index
                 };
             }
-        hasProperties = function (obj) {
+        hasProperties = function(obj) {
             for (var prop in obj) {
                 if (obj.hasOwnProperty(prop)) {
                     return true;
@@ -18,12 +18,12 @@
             }
             return false;
         },
-        invokeFunctionIfExists = function (callback) {
+        invokeFunctionIfExists = function(callback) {
             if (_.isFunction(callback)) {
                 callback();
             }
         },
-        mapMemoToArray = function (items) {
+        mapMemoToArray = function(items) {
             var underlyingArray = [];
             for (var prop in items) {
                 if (items.hasOwnProperty(prop)) {
@@ -32,9 +32,11 @@
             }
             return underlyingArray;
         },
-        regExEscape = function (text) {
-            // Removes regEx characters from search filter boxes in our app
-            return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        questionUrl = function(id) {
+            return config.hashes.detailsQuestion + "/" + id;
+        },
+        groupUrl = function (id) {
+            return config.hashes.detailsGroup + "/" + id;
         };
 
         return {
@@ -42,7 +44,8 @@
             hasProperties: hasProperties,
             invokeFunctionIfExists: invokeFunctionIfExists,
             mapMemoToArray: mapMemoToArray,
-            regExEscape: regExEscape
-        };
+            questionUrl: questionUrl,
+            groupUrl: groupUrl
+    };
     });
 

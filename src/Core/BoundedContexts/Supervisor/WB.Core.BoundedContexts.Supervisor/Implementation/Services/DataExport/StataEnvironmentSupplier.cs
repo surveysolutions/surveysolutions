@@ -53,35 +53,37 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         protected void BuildLabelsForLevel(InterviewDataExportView result, StringBuilder doContent)
         {
-           
-            var createdLabels = new List<Guid>();
             foreach (ExportedHeaderItem headerItem in result.Header)
             {
+                bool hasLabels = headerItem.Labels.Count > 0;
+
+                string labelName = this.CreateLabelName(headerItem.VariableName);
+
+                doContent.AppendLine();
+                
+                if (hasLabels)
+                {
+                    doContent.AppendFormat("label define {0} ", labelName);
+                    foreach (var label in headerItem.Labels)
+                    {
+                        doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, RemoveNonUnicode(label.Value.Title));
+                    }
+
+                    doContent.AppendLine();
+                }
+
                 for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                 {
-                    if (headerItem.Labels.Count > 0)
+                    if (hasLabels)
                     {
-                        string labelName = this.CreateLabelName(headerItem.ColumnNames[i]);
-
-                        if (!createdLabels.Contains(headerItem.PublicKey))
+                        if (headerItem.Labels.Count > 0)
                         {
-                            doContent.AppendLine();
-                            doContent.AppendFormat(string.Format("label define {0} ", labelName));
-                            foreach (var label in headerItem.Labels)
-                            {
-                                doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, RemoveNonUnicode(label.Value.Title));
-                            }
-
-                            doContent.AppendLine();
+                            doContent.AppendLine(string.Format("label values {0} {1}", headerItem.ColumnNames[i], labelName));
                         }
-
-                        doContent.AppendLine(string.Format("label values {0} {1}", headerItem.ColumnNames[i], labelName));
-
-                        createdLabels.Add(headerItem.PublicKey);
                     }
 
                     doContent.AppendLine(
-                        string.Format("label var {0} `\"{1}\"'", headerItem.ColumnNames[i], RemoveNonUnicode(headerItem.Titles[i])));
+                        string.Format("label variable {0} `\"{1}\"'", headerItem.ColumnNames[i], RemoveNonUnicode(headerItem.Titles[i])));
                 }
             }
         
@@ -94,7 +96,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         protected string RemoveNonUnicode(string s)
         {
-            var onlyUnicode = Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
+            if (string.IsNullOrEmpty(s))
+                return string.Empty;
+            var onlyUnicode = Regex.Replace(s, @"[^\u0020-\u007E]", string.Empty);
             return Regex.Replace(onlyUnicode, @"\t|\n|\r", "");
         }
 
