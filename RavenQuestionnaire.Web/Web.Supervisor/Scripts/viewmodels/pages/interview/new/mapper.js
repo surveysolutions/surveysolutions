@@ -1,9 +1,9 @@
 ﻿Mapper = function (model) {
     var question = {
-        getDtoId: function (dto) { return dto.PublicKey; },
+        getDtoId: function (dto) { return dto.Id; },
         fromDto: function (dto) {
             var item = new model.Question();
-            item.id(dto.PublicKey);
+            item.id(this.getDtoId(dto));
             item.title(dto.Title);
             item.type(dto.QuestionType);
             item.variable(dto.StataExportCaption);
@@ -56,7 +56,7 @@
 
                 var item = new model.Option();
                 item.id(dto.AnswerValue);
-                item.questionId(dto.PublicKey);
+                item.questionId(dto.Id);
                 item.title(dto.Title);
                 item.value(dto.AnswerValue);
                 item.isSelected(dto.Selected || false);
