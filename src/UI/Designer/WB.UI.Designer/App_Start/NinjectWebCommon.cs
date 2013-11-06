@@ -17,8 +17,6 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.UI.Designer.App_Start;

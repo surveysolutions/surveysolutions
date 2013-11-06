@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IJsonExportService>().To<JsonExportService>().InSingletonScope();
             this.Bind<IQuestionFactory>().To<QuestionFactory>().InSingletonScope();
 
-            ReqistyHelper.RegisterDemormalizer(this.Kernel, new[] { typeof(IEventHandler<>), typeof(IEventHandler) }, typeof(QuestionnaireDenormalizer));
+            ReqistyHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
         }
     }
 }
