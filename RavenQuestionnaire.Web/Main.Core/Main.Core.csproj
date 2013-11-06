@@ -138,7 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\QuestionData.cs" />
-    <Compile Include="Backup\IBackupManager.cs" />
     <Compile Include="CommandListSupplier.cs" />
     <Compile Include="Commands\ConcurrencyResolveCommandService.cs" />
     <Compile Include="Commands\File\DeleteFileCommand.cs" />
