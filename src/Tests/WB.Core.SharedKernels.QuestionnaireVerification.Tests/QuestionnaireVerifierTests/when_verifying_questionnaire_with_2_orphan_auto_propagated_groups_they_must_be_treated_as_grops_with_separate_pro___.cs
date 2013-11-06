@@ -46,17 +46,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_3_errors = () =>
-            resultErrors.Count().ShouldEqual(3);
+        It should_return_2_errors = () =>
+            resultErrors.Count().ShouldEqual(2);
 
         It should_return_first_error_with_code__WB0009 = () =>
             resultErrors.First().Code.ShouldEqual("WB0009");
 
         It should_return_second_error_with_code_WB0009 = () =>
-            resultErrors.Skip(1).First().Code.ShouldEqual("WB0009");
-
-        It should_return_third_error_with_code__WB0019 = () =>
-            resultErrors.Last().Code.ShouldEqual("WB0019");
+            resultErrors.Last().Code.ShouldEqual("WB0009");
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
