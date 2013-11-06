@@ -181,6 +181,10 @@
 
         MaxAllowedAnswersMoreThanOptions,
 
-        MultiOptionQuestionCanNotBeFeatured
+        MultiOptionQuestionCanNotBeFeatured,
+
+        ExpressionContainsNotExistingQuestionReference,
+
+        QuestionOrGroupDependOnAnotherQuestion
     }
 }
