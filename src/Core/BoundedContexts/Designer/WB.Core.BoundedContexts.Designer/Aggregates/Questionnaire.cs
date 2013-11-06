@@ -17,6 +17,7 @@ using Main.Core.Utility;
 using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -49,6 +50,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         };
         
         private static readonly int maxCountOfDecimaPlaces = 15;
+
+        private static IExpressionProcessor ExpressionProcessor
+        {
+            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
+        }
 
         public Questionnaire()
             : base()
@@ -190,6 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
             this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
+            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
             this.ApplyEvent(new NewGroupAdded
             {
@@ -214,6 +221,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
             this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
+            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
             this.ApplyEvent(new GroupCloned
             {
@@ -235,6 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
+            this.ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(groupId);
 
             this.ApplyEvent(new GroupDeleted(){GroupPublicKey = groupId, ResponsibleId = responsibleId});   
         }
@@ -276,6 +285,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGroupsPropagationKindCannotBeChanged(groupId, propagationKind);
 
+            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
+
             this.ApplyEvent(new GroupUpdated
             {
                 QuestionnaireId = this.innerDocument.PublicKey.ToString(),
@@ -309,6 +320,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
             
 
             this.ApplyEvent(new QuestionCloned
@@ -364,7 +376,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
-
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
             this.ApplyEvent(new NumericQuestionCloned
             {
@@ -393,6 +405,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
+        private void ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(string condition, string validationExpression)
+        {
+            this.ThrowIfExpressionContainsNotExistingQuestionReference(validationExpression);
+            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
+        }
+
         public void NewAddQuestion(Guid questionId,
            Guid groupId, string title, QuestionType type, string alias,
            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
@@ -413,6 +431,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -459,6 +478,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger,countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
             this.ApplyEvent(new NumericQuestionAdded
             {
@@ -507,6 +527,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+            this.ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(questionId);
 
             this.ApplyEvent(new QuestionDeleted() {QuestionId = questionId, ResponsibleId = responsibleId});
         }
@@ -555,6 +576,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -606,6 +628,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
             this.ApplyEvent(new NumericQuestionChanged
             {
@@ -1303,6 +1326,55 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return allQuestion;
         }
 
+        private void ThrowIfExpressionContainsNotExistingQuestionReference(string expression)
+        {
+            if (!IsExpressionDefined(expression))
+                return;
+
+            IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(expression);
+
+            foreach (var identifier in identifiersUsedInExpression.Where(identifier => !IsSpecialThisIdentifier(identifier))) {
+                this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, expression);
+            }
+        }
+
+        private void ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier,
+            string expression)
+        {
+            IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
+
+            if (question == null)
+                throw new DomainException(DomainExceptionType.ExpressionContainsNotExistingQuestionReference, string.Format(
+                    "Identifier '{0}' from expression '{1}' is not valid question identifier. Question with such an identifier is missing.",
+                    identifier, expression));
+        }
+
+        private IQuestion GetQuestionByStringIdOrVariableName(string identifier)
+        {
+            Guid parsedId;
+            return !Guid.TryParse(identifier, out parsedId) ? this.GetQuestionByStataCaption(identifier) : this.GetQuestion(parsedId);
+        }
+
+        public IQuestion GetQuestionByStataCaption(string stataCaption)
+        {
+            return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
+        }
+
+        private IQuestion GetQuestion(Guid questionId)
+        {
+            return this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
+        }
+
+        private static bool IsSpecialThisIdentifier(string identifier)
+        {
+            return identifier.ToLower() == "this";
+        }
+
+        private static bool IsExpressionDefined(string expression)
+        {
+            return !string.IsNullOrWhiteSpace(expression);
+        }
+
 
         private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
         {
@@ -1570,7 +1642,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             DomainExceptionType exceptionType, Func<IEnumerable<T>, string> getExceptionDescription)
             where T : class, IComposite
         {
-            List<T> elementsWithSameId = this.innerDocument.Find<T>(element => element.PublicKey == elementId).ToList();
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<T>(x => x.PublicKey == elementId, expectedCount,
+                exceptionType, getExceptionDescription);
+        }
+
+        private void ThrowDomainExceptionIfElementCountIsMoreThanExpected<T>(Func<T, bool> condition, int expectedCount,
+            DomainExceptionType exceptionType, Func<IEnumerable<T>, string> getExceptionDescription)
+            where T : class, IComposite
+        {
+            List<T> elementsWithSameId = this.innerDocument.Find(condition).ToList();
 
             if (elementsWithSameId.Count > expectedCount)
             {
@@ -1696,6 +1776,116 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return false;
 
             return propagationQuestionsVector.Except(propagationQuestionsVector).Count() <= propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
+        }
+
+        private void ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid questionId)
+        {
+            var question = this.innerDocument.FirstOrDefault<IQuestion>(x => x.PublicKey == questionId);
+
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IComposite>(
+                condition: x => IsGroupAndHaveQuestionIdInCondition(x, question) || IsQuestionAndHaveQuestionIdInConditionOrValidation(x, question),
+                expectedCount: 0,
+                exceptionType: DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
+                getExceptionDescription:
+                    groupsAndQuestions => string.Format("One or more questions/groups depend on {0}:{1}{2}",
+                        question.QuestionText,
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, GetTitleList(groupsAndQuestions))));
+        }
+
+        private void ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid groupId)
+        {
+            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x.PublicKey));
+
+            var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
+                question =>
+                    this.innerDocument.Find<IComposite>(
+                        x =>
+                            IsGroupAndHaveQuestionIdInCondition(x, question) ||
+                                IsQuestionAndHaveQuestionIdInConditionOrValidation(x, question)).Select(GetTitle));
+
+
+            if (referencedQuestions.Values.Count(x=>x.Any()) > 0)
+            {
+                throw new DomainException(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
+                    string.Join(Environment.NewLine,
+                        referencedQuestions.Select(x => string.Format("One or more questions/groups depend on {0}:{1}{2}",
+                            x.Key,
+                            Environment.NewLine,
+                            string.Join(Environment.NewLine, x.Value)))));
+
+            }
+        }
+
+        private bool IsQuestionParent(Guid groupId, Guid questionId)
+        {
+            var parentOfQuestion = this.innerDocument.GetParentOfQuestion(questionId);
+            return parentOfQuestion != null && parentOfQuestion.PublicKey == groupId;
+        }
+
+        private static string[] GetTitleList(IEnumerable<IComposite> groupsAndQuestions)
+        {
+            return groupsAndQuestions.Select(GetTitle).ToArray();
+        }
+
+        private static string GetTitle(IComposite composite)
+        {
+            var question = composite as IQuestion;
+            var group = composite as IGroup;
+            if (group != null)
+            {
+                return group.Title;
+            }
+            if (question != null)
+            {
+                return question.QuestionText;
+            }
+            return "<untitled>";
+        }
+
+        private static bool IsQuestionAndHaveQuestionIdInConditionOrValidation(IComposite composite, IQuestion sourceQuestion)
+        {
+            var question = composite as IQuestion;
+
+            if (question != null)
+            {
+                string questionId = sourceQuestion.PublicKey.ToString();
+                string alias = sourceQuestion.StataExportCaption;
+
+                IEnumerable<string> conditionIds = new List<string>();
+                if (IsExpressionDefined(question.ConditionExpression))
+                {
+                    conditionIds = ExpressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression);    
+                }
+
+                IEnumerable<string> validationIds = new List<string>();
+                if (IsExpressionDefined(question.ValidationExpression))
+                {
+                    validationIds = ExpressionProcessor.GetIdentifiersUsedInExpression(question.ValidationExpression);
+                }
+
+                return validationIds.Contains(questionId) || validationIds.Contains(alias) ||
+                    conditionIds.Contains(questionId) || conditionIds.Contains(alias);
+            }
+            return false;
+        }
+
+        private static bool IsGroupAndHaveQuestionIdInCondition(IComposite composite, IQuestion question)
+        {
+            var group = composite as IGroup;
+            if (group != null)
+            {
+                string questionId = question.PublicKey.ToString();
+                string alias = question.StataExportCaption;
+
+                IEnumerable<string> conditionIds = new List<string>();
+                if (IsExpressionDefined(group.ConditionExpression))
+                {
+                    conditionIds = ExpressionProcessor.GetIdentifiersUsedInExpression(group.ConditionExpression);
+                }
+                return conditionIds.Contains(questionId) || conditionIds.Contains(alias);
+            }
+            return false;
         }
     }
 }
