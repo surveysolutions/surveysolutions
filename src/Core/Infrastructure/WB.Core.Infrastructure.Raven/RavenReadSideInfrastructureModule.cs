@@ -1,4 +1,6 @@
-﻿using WB.Core.Infrastructure.Raven.Implementation;
+﻿using System.Reflection;
+using Ninject;
+using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
@@ -8,15 +10,21 @@ namespace WB.Core.Infrastructure.Raven
 {
     public class RavenReadSideInfrastructureModule : RavenInfrastructureModule
     {
-        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings)
-            : base(settings) {}
+        private readonly Assembly[] assembliesWithIndexes;
+
+        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings, params Assembly[] assembliesWithIndexes)
+            : base(settings)
+        {
+            this.assembliesWithIndexes = assembliesWithIndexes;
+        }
 
         public override void Load()
         {
             this.BindDocumentStore();
 
             this.Bind<IReadSideStatusService>().To<RavenReadSideService>().InSingletonScope();
-            this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope();
+            this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope()
+                .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
             this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
 
             this.Bind<IRavenReadSideRepositoryWriterRegistry>().To<RavenReadSideRepositoryWriterRegistry>().InSingletonScope();

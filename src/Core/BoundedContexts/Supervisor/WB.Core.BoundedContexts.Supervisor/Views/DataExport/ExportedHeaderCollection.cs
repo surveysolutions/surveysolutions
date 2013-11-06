@@ -73,7 +73,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         protected void AddHeadersForMultiOptions(IQuestion question)
         {
-            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, question.Answers.Count));
+            var multiOptionQuestion = question as IMultyOptionsQuestion;
+            var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
+            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, maxCount));
         }
 
         private int GetMaxAvailablePropagationCountForLinkedQuestion(IQuestion question)
