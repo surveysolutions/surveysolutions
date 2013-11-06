@@ -1,11 +1,11 @@
 using System;
-using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
     using Main.Core.Entities;
 
-    public class QuestionnaireDenormalizer :
+    internal class QuestionnaireDenormalizer :
         IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<NewGroupAdded>,
         IEventHandler<GroupCloned>,

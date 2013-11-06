@@ -121,6 +121,8 @@
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
+    <Compile Include="Implementation\Factories\QuestionFactory.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
