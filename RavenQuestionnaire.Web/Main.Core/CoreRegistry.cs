@@ -20,8 +20,7 @@ namespace Main.Core
     {
         protected virtual IEnumerable<Assembly> GetAssembliesForRegistration()
         {
-            return new[] {(typeof (CoreRegistry)).Assembly};
-
+            return new[] { (typeof(CoreRegistry)).Assembly };
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace Main.Core
 
         protected virtual void RegisterViewFactories()
         {
-            BindInterface(this.GetAssembliesForRegistration(),typeof (IViewFactory<,>), (c) => Guid.NewGuid());
+            BindInterface(this.GetAssembliesForRegistration(), typeof(IViewFactory<,>), (c) => Guid.NewGuid());
         }
 
         protected virtual void RegisterEventHandlers()
@@ -104,14 +103,13 @@ namespace Main.Core
             return this.Kernel.Get(typeof(InMemoryReadSideRepositoryAccessor<>).MakeGenericType(genericParameter));
         }
 
-        protected void BindInterface(IEnumerable<Assembly> assembyes,Type interfaceType, Func<IContext,object> scope)
+        protected void BindInterface(IEnumerable<Assembly> assembyes, Type interfaceType, Func<IContext, object> scope)
         {
 
             var implementations =
-             assembyes.SelectMany(a => a.GetTypes()).Where(t =>t.IsPublic && ImplementsAtLeastOneInterface(t, interfaceType));
+             assembyes.SelectMany(a => a.GetTypes()).Where(t => t.IsPublic && ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
-
                 this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
                 if (interfaceType.IsGenericType)
                 {
@@ -120,25 +118,23 @@ namespace Main.Core
                     foreach (Type interfaceImplementation in interfaceImplementations)
                     {
                         this.Kernel.Bind(interfaceType.MakeGenericType(interfaceImplementation.GetGenericArguments())).
-                            To(
-                                implementation).InScope(scope);
+                            To(implementation).InScope(scope);
                     }
                 }
             }
         }
-       
+
         private bool ImplementsAtLeastOneInterface(Type type, Type interfaceType)
         {
             return type.IsClass && !type.IsAbstract &&
                    type.GetInterfaces().Any(i => IsInterfaceInterface(i, interfaceType));
         }
 
-        private  bool IsInterfaceInterface(Type type, Type interfaceType)
+        private bool IsInterfaceInterface(Type type, Type interfaceType)
         {
-            return type.IsInterface &&
-                   ((interfaceType.IsGenericType && type.IsGenericType &&
-                     type.GetGenericTypeDefinition() == interfaceType) ||
-                    (!type.IsGenericType && !interfaceType.IsGenericType && type==interfaceType));
+            return type.IsInterface
+                && ((interfaceType.IsGenericType && type.IsGenericType && type.GetGenericTypeDefinition() == interfaceType)
+                    || (!type.IsGenericType && !interfaceType.IsGenericType && type == interfaceType));
         }
     }
 }
