@@ -3,30 +3,14 @@
     this.ViewBag.Title = "Control Panel: NConfig";
 }
 
-<b>Value of Test Parameter:</br></b>
+<b>Value of Test Parameter:</b><br/>
 @(System.Configuration.ConfigurationManager.AppSettings["Test"] ?? "<null>")
 
 <br/><br/>
 
-<b>Resolved Files:<br/></b>
+<b>Dump:</b><br/>
+<pre style="height: 300px; overflow-y: scroll;">
+@Html.Raw(NConfig.NConfigurator.Default.DumpDiagnostics())
+</pre>
 
-@{
-    foreach (var path in NConfig.NConfigurator.Default.FileNames)
-    {
-        if (Path.GetFullPath(path) == path)
-        {
-            continue;
-        }
-
-        string filePath = path;
-
-        if (!VirtualPathUtility.IsAbsolute(path) && !VirtualPathUtility.IsAppRelative(path))
-        {
-            filePath = VirtualPathUtility.ToAppRelative("\\" + path);
-        }
-
-        filePath = System.Web.Hosting.HostingEnvironment.MapPath(filePath);
-        @Html.Raw("File Path: " + filePath + "<br/>")
-    }
-}
 

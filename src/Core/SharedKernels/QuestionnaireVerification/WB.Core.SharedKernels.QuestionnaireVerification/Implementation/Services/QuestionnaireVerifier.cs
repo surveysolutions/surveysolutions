@@ -63,7 +63,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
                     Verifier<IQuestion>(this.CustomValidationExpressionHasIncorrectSyntax, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
                     Verifier<IComposite>(this.CustomEnablementConditionHasIncorrectSyntax, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
-                    Verifier<IQuestion>(this.CustomValidationExpressionReferencesNotExistingQuestion, "WB0004", VerificationMessages.WB0004_CustomValidationExpressionReferencesNotExistingQuestion),
                     Verifier<IComposite>(this.CustomEnablementConditionReferencesNotExistingQuestion, "WB0005", VerificationMessages.WB0005_CustomEnablementConditionReferencesNotExistingQuestion),
                     Verifier<IAutoPropagateQuestion>(PropagatingQuestionReferencesNotExistingGroup, "WB0006", VerificationMessages.WB0006_PropagatingQuestionReferencesNotExistingGroup),
                     Verifier<IAutoPropagateQuestion, IComposite>(PropagatingQuestionReferencesNotPropagatableGroup, "WB0007", VerificationMessages.WB0007_PropagatingQuestionReferencesNotPropagatableGroup),
@@ -272,20 +271,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !this.expressionProcessor.IsSyntaxValid(customEnablementCondition);
         }
 
-        private bool CustomValidationExpressionReferencesNotExistingQuestion(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            string validationExpression = question.ValidationExpression;
-
-            if (string.IsNullOrWhiteSpace(validationExpression))
-                return false;
-
-            IEnumerable<string> identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
-
-            return identifiersUsedInExpression.Any(identifier
-                => IsGuid(identifier)
-                && !QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(questionnaire, identifier));
-        }
-
         private bool CustomEnablementConditionReferencesNotExistingQuestion(IComposite entity, QuestionnaireDocument questionnaire)
         {
             string enablementCondition = GetCustomEnablementCondition(entity);
@@ -339,7 +324,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             Guid questionId;
             if (!Guid.TryParse(identifier, out questionId))
-                return false;
+                return questionnaire.FirstOrDefault<IQuestion>(question=>question.StataExportCaption==identifier) != null;
 
             return questionnaire.Find<IQuestion>(questionId) != null;
         }
@@ -367,17 +352,21 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             {
                 return null;
             }
-
+            IQuestion questionsReferencedInValidation = null;
             Guid parsedId;
-            if (!Guid.TryParse(identifier, out parsedId))
+
+            if (Guid.TryParse(identifier, out parsedId))
             {
-                return CustomValidationExpressionUsesNotRecognizedParameter(questionWithValidationExpression);
+                questionsReferencedInValidation = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == parsedId);
+            }
+            else
+            {
+                questionsReferencedInValidation = questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier);
             }
 
-            var questionsReferencedInValidation = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == parsedId);
             if (questionsReferencedInValidation == null)
             {
-                return null;
+                return CustomValidationExpressionUsesNotRecognizedParameter(questionWithValidationExpression);
             }
 
             if (QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(questionsReferencedInValidation,
@@ -426,8 +415,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static QuestionnaireVerificationError CustomValidationExpressionUsesNotRecognizedParameter(IQuestion questionWithValidationExpression)
         {
-            return new QuestionnaireVerificationError("WB0020",
-                VerificationMessages.WB0020_CustomValidationExpressionUsesNotRecognizedParameter,
+            return new QuestionnaireVerificationError("WB0004",
+                VerificationMessages.WB0004_CustomValidationExpressionReferencesNotExistingQuestion,
                 CreateReference(questionWithValidationExpression));
         }
 
@@ -552,7 +541,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                             return null;
                         return firstTrigger.PublicKey;
                     })
-
                     .ToList();
 
             return propagationQuestions;
@@ -604,6 +592,5 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return obj.GetHashCode();
             }
         }
-
     }
 }
