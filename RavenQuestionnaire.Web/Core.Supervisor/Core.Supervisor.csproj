@@ -245,7 +245,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Survey\DetailsMenuItem.cs" />
     <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
-    <Compile Include="Views\Survey\ScreenNavigationView.cs" />
     <Compile Include="Views\Survey\ChangeStatusHistoryView.cs" />
     <Compile Include="Views\Device\DeviceView.cs" />
     <Compile Include="Views\Device\DeviceViewFactory.cs" />

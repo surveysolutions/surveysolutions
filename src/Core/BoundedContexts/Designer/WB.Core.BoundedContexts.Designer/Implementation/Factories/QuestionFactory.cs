@@ -6,9 +6,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 
-namespace Main.Core.AbstractFactories
+namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
-    public class QuestionFactory : IQuestionFactory
+    internal class QuestionFactory : IQuestionFactory
     {
         public AbstractQuestion CreateQuestion(QuestionData data)
         {

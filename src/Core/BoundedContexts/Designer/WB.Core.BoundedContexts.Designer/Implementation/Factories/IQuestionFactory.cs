@@ -1,9 +1,9 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 
-namespace Main.Core.AbstractFactories
+namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
-    public interface IQuestionFactory {
+    internal interface IQuestionFactory {
         AbstractQuestion CreateQuestion(QuestionData question);
     }
 }

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Main.Core.AbstractFactories;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;

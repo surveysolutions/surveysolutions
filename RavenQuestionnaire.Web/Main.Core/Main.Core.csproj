@@ -137,12 +137,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
-    <Compile Include="AbstractFactories\IQuestionFactory.cs" />
-    <Compile Include="AbstractFactories\QuestionFactory.cs" />
     <Compile Include="Entities\QuestionData.cs" />
-    <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
-    <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="Backup\IBackupManager.cs" />
     <Compile Include="CommandListSupplier.cs" />
     <Compile Include="Commands\ConcurrencyResolveCommandService.cs" />
@@ -223,9 +218,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\CompleteGroup.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Complete\IAutoPropagate.cs">
@@ -413,9 +405,6 @@
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupDeleted.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\Completed\PropagateGroupCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -486,7 +475,6 @@
     <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
-    <Compile Include="Utility\GroupWithRout.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
     <Compile Include="Utility\NodeWithLevel.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
@@ -504,7 +492,6 @@
     <Compile Include="View\Answer\CompleteAnswerView.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
-    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenNavigationView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\ChangeStatusHistoryView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs" />
@@ -520,9 +507,7 @@
     <Compile Include="View\Export\HeaderCollection.cs" />
     <Compile Include="View\Export\HeaderItem.cs" />
     <Compile Include="View\Export\ValueCollection.cs" />
-    <Compile Include="View\Group\CompleteGroupHeaders.cs" />
     <Compile Include="View\Group\Counter.cs" />
-    <Compile Include="View\Group\ScreenNavigation.cs" />
     <Compile Include="View\ICompositeView.cs" />
     <Compile Include="View\IViewFactory.cs" />
     <Compile Include="View\Question\QuestionView.cs" />
@@ -597,6 +582,7 @@
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
     <Folder Include="Synchronization\" />
+    <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
