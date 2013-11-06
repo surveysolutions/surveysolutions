@@ -72,8 +72,9 @@
     <Reference Include="Mvc.Mailer">
       <HintPath>..\..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
     </Reference>
-    <Reference Include="NConfig">
-      <HintPath>..\..\..\..\packages\NConfig.1.0.14\lib\Net40\NConfig.dll</HintPath>
+    <Reference Include="NConfig, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\NConfig.1.0.16\lib\Net40\NConfig.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -566,7 +567,7 @@
     <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
-    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
+    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>

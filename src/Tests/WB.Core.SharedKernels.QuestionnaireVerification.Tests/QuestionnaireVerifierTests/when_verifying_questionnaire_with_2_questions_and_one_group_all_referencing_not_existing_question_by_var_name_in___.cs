@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -13,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_by_id_in_enablement_condition :  QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_by_var_name_in_enablement_condition : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -33,7 +35,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.IsSyntaxValid(EnablementConditionWithNotExistingQuestion) == true
-                && processor.GetIdentifiersUsedInExpression(EnablementConditionWithNotExistingQuestion) == new[] { "99999999999999999999999999999999" });
+                && processor.GetIdentifiersUsedInExpression(EnablementConditionWithNotExistingQuestion) == new[] { "notExistingVariableName" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
         };

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
@@ -9,7 +8,5 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         IQueryable<TResult> Query<TResult>(string indexName);
 
         TResult Query<TEntity, TResult>(string indexName, Func<IQueryable<TEntity>, TResult> query);
-
-        void RegisterIndexesFromAssembly(Assembly assembly);
     }
 }

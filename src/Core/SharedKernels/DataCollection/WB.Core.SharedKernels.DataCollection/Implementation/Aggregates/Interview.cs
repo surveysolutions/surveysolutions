@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using InterviewDeleted = WB.Core.SharedKernels.DataCollection.Events.Interview.InterviewDeleted;
 
@@ -1498,8 +1499,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             string validationExpression = questionnaire.GetCustomValidationExpression(question.Id);
 
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
-            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
+            IEnumerable<QuestionIdAndVariableName> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
+            IEnumerable<KeyValuePair<string,Identity>> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
             return this.EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(
                 validationExpression, involvedQuestions, getAnswer, resultIfExecutionFailsWhenAnswersAreEnough: false,
@@ -1666,11 +1667,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 getAnswer);
         }
 
-        private bool ShouldBeEnabledByCustomEnablementCondition(string enablementCondition, int[] propagationVector, IEnumerable<Guid> involvedQuestionIds, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        private bool ShouldBeEnabledByCustomEnablementCondition(string enablementCondition, int[] propagationVector, IEnumerable<QuestionIdAndVariableName> involvedQuestionIds, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
             const bool ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered = false;
 
-            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, propagationVector, questionnaire);
+            IEnumerable<KeyValuePair<string, Identity>> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, propagationVector, questionnaire);
 
             return this.EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(
                 enablementCondition, involvedQuestions, getAnswer, resultIfExecutionFailsWhenAnswersAreEnough: true)
@@ -1691,26 +1692,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
-            IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare)
+        private static IEnumerable<KeyValuePair<string, Identity>> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
+            IEnumerable<QuestionIdAndVariableName> questionIds, int[] propagationVector, IQuestionnaire questionnare)
         {
             return questionIds.Select(
                 questionId => GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(questionId, propagationVector, questionnare));
         }
 
-        private static Identity GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(Guid questionId, int[] propagationVector, IQuestionnaire questionnare)
+        private static KeyValuePair<string, Identity> GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(QuestionIdAndVariableName questionId, int[] propagationVector, IQuestionnaire questionnare)
         {
             int vectorPropagationLevel = propagationVector.Length;
-            int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
+            int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId.Id);
 
             if (questionPropagationLevel > vectorPropagationLevel)
                 throw new InterviewException(string.Format(
                     "Question {0} expected to have propagation level not deeper than {1} but it is {2}.",
-                    FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
+                    FormatQuestionForException(questionId.Id, questionnare), vectorPropagationLevel, questionPropagationLevel));
 
             int[] questionPropagationVector = ShrinkPropagationVector(propagationVector, questionPropagationLevel);
 
-            return new Identity(questionId, questionPropagationVector);
+            return new KeyValuePair<string, Identity>(questionId.VariableName, new Identity(questionId.Id, questionPropagationVector));
         }
 
         private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
@@ -1985,18 +1986,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private bool? EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
+        private bool? EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(string expression, IEnumerable<KeyValuePair<string, Identity>> involvedQuestions,
             Func<Identity, object> getAnswer, bool? resultIfExecutionFailsWhenAnswersAreEnough, Guid? thisIdentifierQuestionId = null)
         {
             Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
-                involvedQuestion => involvedQuestion.Id,
-                involvedQuestion => getAnswer(involvedQuestion));
+                involvedQuestion => involvedQuestion.Value.Id,
+                involvedQuestion => getAnswer(involvedQuestion.Value));
+
+            Dictionary<string, Guid> questionMappedOnVariableNames = involvedQuestions.ToDictionary(
+                involvedQuestion => involvedQuestion.Key,
+                involvedQuestion => involvedQuestion.Value.Id);
 
             bool isSpecialThisIdentifierSupportedByExpression = thisIdentifierQuestionId.HasValue;
 
             var mapIdentifierToQuestionId = isSpecialThisIdentifierSupportedByExpression
-                ? (Func<string, Guid>)(identifier => GetQuestionIdByExpressionIdentifierIncludingThis(identifier, thisIdentifierQuestionId.Value))
-                : (Func<string, Guid>)(identifier => GetQuestionIdByExpressionIdentifierExcludingThis(identifier));
+                ? (Func<string, Guid>)(identifier => GetQuestionIdByExpressionIdentifierIncludingThis(identifier, questionMappedOnVariableNames, thisIdentifierQuestionId.Value))
+                : (Func<string, Guid>)(identifier => GetQuestionIdByExpressionIdentifierExcludingThis(identifier, questionMappedOnVariableNames));
 
             try
             {
@@ -2026,17 +2031,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static Guid GetQuestionIdByExpressionIdentifierIncludingThis(string identifier, Guid contextQuestionId)
+        private static Guid GetQuestionIdByExpressionIdentifierIncludingThis(string identifier,Dictionary<string, Guid> questionMappedOnVariableNames, Guid contextQuestionId)
         {
             if (identifier.ToLower() == "this")
                 return contextQuestionId;
 
-            return GetQuestionIdByExpressionIdentifierExcludingThis(identifier);
+            return GetQuestionIdByExpressionIdentifierExcludingThis(identifier, questionMappedOnVariableNames);
         }
 
-        private static Guid GetQuestionIdByExpressionIdentifierExcludingThis(string identifier)
+        private static Guid GetQuestionIdByExpressionIdentifierExcludingThis(string identifier, Dictionary<string, Guid> questionMappedOnVariableNames)
         {
-            return Guid.Parse(identifier);
+            Guid questionId;
+            if (Guid.TryParse(identifier, out questionId))
+                return questionId;
+            return questionMappedOnVariableNames[identifier];
         }
 
         private int GetCountOfPropagatableGroupInstances(Guid propagatableGroupId, int[] outerScopePropagationVector)

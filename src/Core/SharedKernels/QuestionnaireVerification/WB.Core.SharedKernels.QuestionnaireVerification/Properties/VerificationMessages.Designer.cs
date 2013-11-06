@@ -233,15 +233,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom validation expression references not recognized parameter..
-        /// </summary>
-        internal static string WB0020_CustomValidationExpressionUsesNotRecognizedParameter {
-            get {
-                return ResourceManager.GetString("WB0020_CustomValidationExpressionUsesNotRecognizedParameter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count..
         /// </summary>
         internal static string WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount {
