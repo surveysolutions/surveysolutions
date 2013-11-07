@@ -131,6 +131,7 @@
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\CommentDocument.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\InterviewViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\GridItems\HeaderItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireItemViewModel.cs" />

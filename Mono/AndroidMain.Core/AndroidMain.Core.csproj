@@ -68,21 +68,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UploadFileCommand.cs">
       <Link>Commands\File\UploadFileCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\ChangeEventStatusCommand.cs">
-      <Link>Commands\Synchronization\ChangeEventStatusCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs">
-      <Link>Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\EndProcessComand.cs">
-      <Link>Commands\Synchronization\EndProcessComand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\PushEventsCommand.cs">
-      <Link>Commands\Synchronization\PushEventsCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\PushStatisticsCommand.cs">
-      <Link>Commands\Synchronization\PushStatisticsCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterDeviceCommand.cs">
       <Link>Commands\Synchronization\RegisterDeviceCommand.cs</Link>
     </Compile>
@@ -110,14 +95,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ClientDeviceDocument.cs">
       <Link>Documents\ClientDeviceDocument.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CommentDocument.cs">
-      <Link>Documents\CommentDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\QuestionAnswer.cs">
       <Link>Documents\QuestionAnswer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\EventState.cs">
-      <Link>Documents\EventState.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\FileDescription.cs">
       <Link>Documents\FileDescription.cs</Link>
@@ -146,9 +125,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\SyncProcessDocument.cs">
       <Link>Documents\SyncProcessDocument.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\SyncProcessStatisticsDocument.cs">
-      <Link>Documents\SyncProcessStatisticsDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\UserDocument.cs">
       <Link>Documents\UserDocument.cs</Link>
     </Compile>
@@ -169,9 +145,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\LocationAR.cs">
       <Link>Domain\LocationAR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\SyncProcessAR.cs">
-      <Link>Domain\SyncProcessAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\UserAR.cs">
       <Link>Domain\UserAR.cs</Link>
@@ -234,9 +207,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteItem.cs">
       <Link>Entities\SubEntities\Complete\ICompleteItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteQuestion.cs">
-      <Link>Entities\SubEntities\Complete\ICompleteQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IDateTimeQuestion.cs">
       <Link>Entities\SubEntities\Complete\IDateTimeQuestion.cs</Link>
@@ -427,17 +397,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\AggregateRootEventStreamPushed.cs">
       <Link>Events\Synchronization\AggregateRootEventStreamPushed.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\AggregateRootStatusChanged.cs">
-      <Link>Events\Synchronization\AggregateRootStatusChanged.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\NewDeviceRegistered.cs">
       <Link>Events\Synchronization\NewDeviceRegistered.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\NewSynchronizationProcessCreated.cs">
       <Link>Events\Synchronization\NewSynchronizationProcessCreated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\ProcessEnded.cs">
-      <Link>Events\Synchronization\ProcessEnded.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\ProcessStatisticsCalculated.cs">
       <Link>Events\Synchronization\ProcessStatisticsCalculated.cs</Link>
@@ -550,20 +514,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportInputModel.cs">
       <Link>View\Export\CompleteQuestionnaireExportInputModel.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportItem.cs">
-      <Link>View\Export\CompleteQuestionnaireExportItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportView.cs">
-      <Link>View\Export\CompleteQuestionnaireExportView.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\HeaderCollection.cs">
       <Link>View\Export\HeaderCollection.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\HeaderItem.cs">
       <Link>View\Export\HeaderItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\ValueCollection.cs">
-      <Link>View\Export\ValueCollection.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Group\Counter.cs">
       <Link>View\Group\Counter.cs</Link>
@@ -582,12 +537,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessInputModel.cs">
       <Link>View\SyncProcess\SyncProcessInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessView.cs">
-      <Link>View\SyncProcess\SyncProcessView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessViewFactory.cs">
-      <Link>View\SyncProcess\SyncProcessViewFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncStatisticInfo.cs">
       <Link>View\SyncProcess\SyncStatisticInfo.cs</Link>

@@ -45,11 +45,6 @@ namespace Main.Core.Documents
         public DateTime? EndDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the handled.
-        /// </summary>
-        public EventState Handled { get; set; }
-
-        /// <summary>
         /// Gets or sets the id.
         /// </summary>
         public string Id { get; set; }
