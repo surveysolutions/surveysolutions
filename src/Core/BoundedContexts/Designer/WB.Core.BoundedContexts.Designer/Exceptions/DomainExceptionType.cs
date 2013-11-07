@@ -1,4 +1,4 @@
-﻿namespace Main.Core.Domain.Exceptions
+﻿namespace WB.Core.BoundedContexts.Designer.Exceptions
 {
     /// <summary>
     /// The domain exception type.
