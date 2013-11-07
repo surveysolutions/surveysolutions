@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.GenericSubdomains.Logging;
 using System;
@@ -99,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var document = source as QuestionnaireDocument;
             if (document == null)
-                throw new DomainException(DomainExceptionType.TemplateIsInvalid, "only QuestionnaireDocuments are supported for now");
+                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "only QuestionnaireDocuments are supported for now");
 
             var clonedDocument = (QuestionnaireDocument)document.Clone();
             clonedDocument.PublicKey = this.EventSourceId;
@@ -138,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
            
             var document = source as QuestionnaireDocument;
             if (document == null)
-                throw new DomainException(DomainExceptionType.TemplateIsInvalid, "Only QuestionnaireDocuments are supported for now");
+                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Only QuestionnaireDocuments are supported for now");
             document.CreatedBy = createdBy;
             ApplyEvent(new TemplateImported() {Source = document});
            
@@ -660,14 +661,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (responsibleId == personId)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.OwnerCannotBeInShareList,
                     "You are the owner of this questionnaire. Please, input another email");
             }
 
             if (this.innerDocument.SharedPersons.Contains(personId))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.UserExistInShareList,
                     string.Format("User {0} already exist in share list", email));
             }
@@ -686,7 +687,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (!this.innerDocument.SharedPersons.Contains(personId))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                    DomainExceptionType.UserDoesNotExistInShareList,
                    "Couldn't remove user, because it doesn't exist in share list");
             }
@@ -1054,7 +1055,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool hasAnyChildGroup = group.Children.Any(g => g is Group);
             if (hasAnyChildGroup)
             {
-                throw new DomainException(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup, "Auto propagated groups can't have child groups");
+                throw new QuestionnaireException(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup, "Auto propagated groups can't have child groups");
             }
         }
 
@@ -1063,7 +1064,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = this.innerDocument.Find<Group>(groupId);
             if (group.Propagated == Propagate.AutoPropagated)
             {
-                throw new DomainException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
+                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
             }
         }
 
@@ -1076,7 +1077,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var parentGroup = this.innerDocument.Find<Group>(parentGroupId.Value);
             if (parentGroup.Propagated == Propagate.AutoPropagated)
             {
-                throw new DomainException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
+                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
             }
         }
 
@@ -1092,13 +1093,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var group = this.innerDocument.Find<Group>(groupId);
                 if (@group == null)
                 {
-                    throw new DomainException(
+                    throw new QuestionnaireException(
                         DomainExceptionType.TriggerLinksToNotExistingGroup, "Question can trigger only existing group");
                 }
 
                 if (@group.Propagated != Propagate.AutoPropagated)
                 {
-                    throw new DomainException(DomainExceptionType.TriggerLinksToNotPropagatedGroup,
+                    throw new QuestionnaireException(DomainExceptionType.TriggerLinksToNotPropagatedGroup,
                         string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
                 }
             }
@@ -1111,7 +1112,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (group.Propagated == Propagate.None)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                      DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup,
                      "Question inside propagated group can not be head of group");
             }
@@ -1124,7 +1125,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (group.Propagated != Propagate.None)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
                     "Question inside propagated group can not be pre-filled");
             }
@@ -1133,7 +1134,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
         {
             if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.NotSupportedPropagationGroup,
                     string.Format("Group's propagation kind {0} is unsupported", propagationKind));
         }
@@ -1142,7 +1143,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.GroupTitleRequired,
                     "The titles of groups and chapters can not be empty or contains whitespace only");
             }
@@ -1152,7 +1153,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionnaireTitleRequired,
                     "Questionnaire's title can not be empty or contains whitespace only");
             }
@@ -1163,7 +1164,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionNotFound,
                     string.Format("Question with public key {0} can't be found", publicKey));
             }
@@ -1174,7 +1175,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.GroupNotFound,
                     string.Format("group with public key {0} can't be found", groupPublicKey));
             }
@@ -1183,28 +1184,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfTitleIsEmpty(string title)
         {
             if (string.IsNullOrEmpty(title))
-                throw new DomainException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
+                throw new QuestionnaireException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
         }
 
         private void ThrowDomainExceptionIfVariableNameIsInvalid(Guid questionPublicKey, string stataCaption)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.VariableNameRequired, "Variable name shouldn't be empty or contains white spaces");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.VariableNameMaxLength, "Variable name shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.VariableNameSpecialCharacters,
                     "Valid variable name should contains only letters, digits and underscore character");
             }
@@ -1212,7 +1213,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit");
             }
 
@@ -1223,7 +1224,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                    DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
 
@@ -1232,7 +1233,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 if (stataCaption.ToLower() == keyword)
                 {
-                    throw new DomainException(
+                    throw new QuestionnaireException(
                         DomainExceptionType.VariableNameShouldNotMatchWithKeywords, keyword + " is a keyword. Variable name shouldn't match with keywords");
                 }
             }
@@ -1243,7 +1244,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isQuestionTypeAllowed = AllowedQuestionTypes.Contains(type);
 
             if (!isQuestionTypeAllowed)
-                throw new DomainException(DomainExceptionType.NotAllowedQuestionType,
+                throw new QuestionnaireException(DomainExceptionType.NotAllowedQuestionType,
                     string.Format("Question type {0} is not allowed", type));
         }
 
@@ -1252,7 +1253,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isQuestionTypeRerouted = ReroutedQuestionTypes.Contains(type);
 
             if (isQuestionTypeRerouted)
-                throw new DomainException(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
+                throw new QuestionnaireException(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
                     string.Format("Question type {0} rerouted on QuestionType specific command", type));
         }
 
@@ -1312,7 +1313,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (notCategoricalQuestionHasLinkedQuestionId)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion,
                     "Only categorical question can be linked to another question");
             }
@@ -1333,7 +1334,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (questionIsLinked && questionHasOptions)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions,
                     "Categorical question cannot be with answers and linked to another question in the same time");
             }
@@ -1349,7 +1350,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (questionType == QuestionType.MultyOption && isFeatured)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.MultiOptionQuestionCanNotBeFeatured,
                     "Multiple answers question can not be pre-filled");
             }
@@ -1362,14 +1363,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (maxAllowedAnswers.Value < 1)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.MaxAllowedAnswersIsNotPositive,
                     "Maximum Allowed Answers for question has to be positive");
             }
 
             if (!linkedToQuestionId.HasValue && maxAllowedAnswers.Value > options.Length)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.MaxAllowedAnswersMoreThanOptions,
                     "Maximum Allowed Answers more than question's options");
             }
@@ -1382,7 +1383,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (linkedToQuestion == null)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.LinkedQuestionDoesNotExist,
                     "Question that you are linked to does not exist");
             }
@@ -1394,28 +1395,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (typeOfLinkedQuestionIsNotSupported)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.NotSupportedQuestionForLinkedQuestion,
                     "Linked question can be only type of number, text or date");
             }
 
             if (isFeatured)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
                     "Question that linked to another question can not be pre-filled");
             }
 
             if (isHead)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead,
                     "Question that linked to another question can not be head");
             }
 
             if (!this.IsUnderPropagatableGroup(linkedToQuestion))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
                     "Question that you are linked to is not in the propagated group");
             }
@@ -1425,38 +1426,38 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (options == null || !options.Any())
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
             }
 
             if (options.Any(x => string.IsNullOrEmpty(x.Value)))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueRequired, "Answer option value is required");
             }
 
             if (options.Any(x => !x.Value.IsInteger()))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueSpecialCharacters,
                     "Answer option value should have only number characters");
             }
 
             if (!AreElementsUnique(options.Select(x => x.Value)))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueNotUnique,
                     "Answer option value should have unique in options scope");
             }
 
             if (options.Any(x => string.IsNullOrEmpty(x.Title)))
             {
-                throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
+                throw new QuestionnaireException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
             }
 
             if (!AreElementsUnique(options.Select(x => x.Title)))
             {
-                throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
+                throw new QuestionnaireException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
             }
         }
 
@@ -1509,7 +1510,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isAutoPropagateQuestion)
             {
                 if (!isInteger)
-                    throw new DomainException(
+                    throw new QuestionnaireException(
                     DomainExceptionType.AutoPropagateQuestionCantBeReal,
                     "AutoPropagate question can't be real");
             }
@@ -1519,7 +1520,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (isInteger && countOfDecimalPlaces.HasValue)
             {
-                    throw new DomainException(
+                    throw new QuestionnaireException(
                     DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
                     "AutoPropagate question can't have decimal places settings");
             }
@@ -1532,21 +1533,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (countOfDecimalPlaces.Value > maxCountOfDecimaPlaces)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
                     string.Format("Count of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, maxCountOfDecimaPlaces));
             }
 
             if (countOfDecimalPlaces.Value < 0)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
                     string.Format("Count of decimal places cant be negative."));
             }
 
             if (countOfDecimalPlaces.Value == 0)
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
                     string.Format("If you want Count of decimal places equals to 0 please select integer."));
             }
@@ -1573,7 +1574,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (elementsWithSameId.Count > expectedCount)
             {
-                throw new DomainException(exceptionType, getExceptionDescription(elementsWithSameId));
+                throw new QuestionnaireException(exceptionType, getExceptionDescription(elementsWithSameId));
             }
         }
 
@@ -1581,7 +1582,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if(this.innerDocument.CreatedBy != viewerId && !this.innerDocument.SharedPersons.Contains(viewerId))
             {
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.DoesNotHavePermissionsForEdit,
                     "You don't have permissions for changing this questionnaire");
             }
@@ -1590,7 +1591,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionCanNotBeFeatured(QuestionType questionType, bool isFeatured)
         {
             if (isFeatured && questionType == QuestionType.GpsCoordinates)
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionCanNotBeFeatured,
                     "Question can't be pre-filled");
         }
@@ -1598,7 +1599,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionCanNotContainValidations(QuestionType questionType, string validationExpression)
         {
             if (!String.IsNullOrEmpty(validationExpression) && questionType == QuestionType.GpsCoordinates)
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionCanNotContainValidation,
                     "Question cannot contain validations");
         }
@@ -1610,12 +1611,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
 
             if (isFeatured)
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
                     "Pre-filled question title contains substitution references. It's illegal");
 
             if (substitutionReferences.Contains(alias))
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
                     "Question title contains illegal substitution references to self");
 
@@ -1627,17 +1628,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 out unknownReferences, out questionsIncorrectTypeOfReferenced, out questionsIllegalPropagationScope);
 
             if(unknownReferences.Count > 0)
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
                     "Question title contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
 
             if (questionsIncorrectTypeOfReferenced.Count > 0)
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
                     "Question title contains substitution references to questions of illegal type: " + String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
 
             if (questionsIllegalPropagationScope.Count > 0)
-                throw new DomainException(
+                throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
                     "Question title contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
         }

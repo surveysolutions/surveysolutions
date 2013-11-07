@@ -121,6 +121,7 @@
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Exceptions\DomainException.cs" />
     <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionFactory.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
@@ -174,6 +175,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
