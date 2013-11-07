@@ -80,12 +80,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\UpdateRegisterDeviceCommand.cs">
       <Link>Commands\Synchronization\UpdateRegisterDeviceCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\ChangeUserCommand.cs">
-      <Link>Commands\User\ChangeUserCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\CreateUserCommand.cs">
-      <Link>Commands\User\CreateUserCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Conventions\RegisterFirstInstanceOfInterface.cs">
       <Link>Conventions\RegisterFirstInstanceOfInterface.cs</Link>
     </Compile>
@@ -125,20 +119,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\UserDocument.cs">
       <Link>Documents\UserDocument.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\CollectionAR.cs">
-      <Link>Domain\CollectionAR.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\DeviceAR.cs">
       <Link>Domain\DeviceAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\LocationAR.cs">
-      <Link>Domain\LocationAR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\UserAR.cs">
-      <Link>Domain\UserAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Composite\CompositeException.cs">
       <Link>Entities\Composite\CompositeException.cs</Link>
@@ -607,6 +592,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
+    <Folder Include="Commands\User\" />
     <Folder Include="Entities\Extensions\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />

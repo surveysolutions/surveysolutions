@@ -154,7 +154,6 @@
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="Domain\TestDataConfigurator.cs" />
-    <Compile Include="Domain\UserARTests.cs" />
     <Compile Include="Entities\GroupTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />

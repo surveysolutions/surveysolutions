@@ -149,10 +149,6 @@
     <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
     <Compile Include="Commands\Sync\CreateClientDeviceCommand.cs" />
     <Compile Include="Commands\Sync\CreateSyncActivityCommand.cs" />
-    <Compile Include="Commands\User\ChangeUserCommand.cs" />
-    <Compile Include="Commands\User\CreateUserCommand.cs" />
-    <Compile Include="Commands\User\LockUserCommand.cs" />
-    <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
@@ -168,12 +164,9 @@
     <Compile Include="Documents\SyncProcessDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Domain\ClientDeviceAR.cs" />
-    <Compile Include="Domain\CollectionAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\FileAR.cs" />
-    <Compile Include="Domain\LocationAR.cs" />
     <Compile Include="Domain\SyncActivityAR.cs" />
-    <Compile Include="Domain\UserAR.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Observers\ITriggerable.cs" />
@@ -532,6 +525,7 @@
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Commands\Questionnaire\Group\" />
+    <Folder Include="Commands\User\" />
     <Folder Include="Entities\Extensions\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />

@@ -1,21 +1,16 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events.User;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace Main.Core.Tests.Domain
+namespace WB.Core.SharedKernels.DataCollection.Tests
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.User;
-
-    using NUnit.Framework;
-
-    using Ncqrs.Spec;
-
     [TestFixture]
     public class UserARTests
     {

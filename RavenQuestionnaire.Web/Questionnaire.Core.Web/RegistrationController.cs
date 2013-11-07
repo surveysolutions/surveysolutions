@@ -1,9 +1,6 @@
 ﻿namespace Questionnaire.Core.Web
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Main.Core.Entities;
     using System.Web.Mvc;
     using Main.Core.View;
@@ -11,7 +8,6 @@
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Main.Core.Commands.Synchronization;
-    using System.Security.Cryptography;
 
     public abstract class RegistrationController : Controller
     {
@@ -24,15 +20,6 @@
             this.deviceViewFactory = deviceViewFactory;
         }
 
-        /// <summary>
-        /// save info about register device to database
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// boolean about successful saving
-        /// </returns>
         protected bool SaveRegistration(RegisterData data)
         {
             try
@@ -59,25 +46,12 @@
             return true;
         }
 
-        /// <summary>
-        /// info about register device
-        /// </summary>
-        /// <param name="registrator">
-        /// The registrator.
-        /// </param>
-        /// <returns>
-        /// register device view
-        /// </returns>
         protected DeviceView GetRegisteredData(Guid registrator)
         {
             var model = this.deviceViewFactory.Load(new DeviceViewInputModel(registrator));
             return model;
         }
 
-        #region Helpers
-
         protected abstract Guid GetARPublicKey(RegisterData data);
-
-        #endregion
     }
 }

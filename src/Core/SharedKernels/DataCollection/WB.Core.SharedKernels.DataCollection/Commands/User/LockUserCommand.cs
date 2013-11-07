@@ -2,16 +2,17 @@
 using Main.Core.Domain;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace Main.Core.Commands.User
+namespace WB.Core.SharedKernels.DataCollection.Commands.User
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(UserAR), "Unlock")]
-    public class UnlockUserCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof(UserAR), "Lock")]
+    public class LockUserCommand : CommandBase
     {
-        public UnlockUserCommand() { }
+        public LockUserCommand() {}
 
-        public UnlockUserCommand(Guid publicKey)
+        public LockUserCommand(Guid publicKey)
         {
             this.PublicKey = publicKey;
         }

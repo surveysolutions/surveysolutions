@@ -8,7 +8,6 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Services;
 using Main.Core;
 using Main.Core.Commands.File;
-using Main.Core.Commands.User;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
@@ -19,6 +18,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Commands.User;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Commanding;
@@ -15,10 +14,8 @@ using Ncqrs.Commanding;
 namespace AndroidMain.Core.Tests.CommonTests
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
-    using Android.App;
     using Android.Content;
 
     using AndroidMain.Core.Tests.AndroidSpecificTests;
