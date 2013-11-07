@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.InterviewDetails.GridItems
+namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems
 {
     public class HeaderItem
     {

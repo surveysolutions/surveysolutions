@@ -1,11 +1,11 @@
 using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-namespace WB.Core.BoundedContexts.CAPI.EventHandler
+namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
     public class AnswerOptionsForLinkedQuestionsDenormalizer :
         IEventHandler<AnswerRemoved>,
