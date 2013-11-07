@@ -4,7 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.InterviewDetails
+namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class SelectebleQuestionViewModel : QuestionViewModel
     {

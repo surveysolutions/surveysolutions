@@ -5,7 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.InterviewDetails
+namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class QuestionnaireScreenViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {

@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.View;
 using Ninject.Modules;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
-using WB.Core.BoundedContexts.CAPI.Views.Statistics;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.Statistics;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.BoundedContexts.CAPI
+namespace WB.Core.BoundedContexts.Capi
 {
     public class CAPIBoundedContextModule : NinjectModule
     {

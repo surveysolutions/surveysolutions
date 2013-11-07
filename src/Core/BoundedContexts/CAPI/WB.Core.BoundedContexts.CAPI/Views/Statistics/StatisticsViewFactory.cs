@@ -1,10 +1,10 @@
 using System.Linq;
 using Main.Core.View;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.Statistics
+namespace WB.Core.BoundedContexts.Capi.Views.Statistics
 {
     public class StatisticsViewFactory : IViewFactory<StatisticsInput, StatisticsViewModel>
     {

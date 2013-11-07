@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.InterviewDetails
+namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class QuestionnaireScreenInput
     {
