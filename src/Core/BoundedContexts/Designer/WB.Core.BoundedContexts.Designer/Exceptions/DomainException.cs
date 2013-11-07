@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core.Domain.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Exceptions
 {

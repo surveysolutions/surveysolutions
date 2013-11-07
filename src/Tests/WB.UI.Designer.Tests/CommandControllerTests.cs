@@ -1,7 +1,6 @@
 ﻿using System;
 using Main.Core.Documents;
 using Main.Core.Domain;
-using Main.Core.Domain.Exceptions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
