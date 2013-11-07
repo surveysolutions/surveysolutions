@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
