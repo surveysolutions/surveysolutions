@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Utils;
@@ -76,7 +77,7 @@ namespace WB.UI.Designer.Tests
 
         private Exception CreateTwoLevelException()
         {
-            return new Exception("message", new DomainException(DomainExceptionType.GroupNotFound, "exception message"));
+            return new Exception("message", new QuestionnaireException(DomainExceptionType.GroupNotFound, "exception message"));
         }
 
         private Exception CreateThreeLevelException()

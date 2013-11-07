@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -67,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act = () => questionnaire.DeleteImage(questionKey, imageKey, responsibleId: Guid.NewGuid());
             // assert
-            var domainException = Assert.Throws<DomainException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 

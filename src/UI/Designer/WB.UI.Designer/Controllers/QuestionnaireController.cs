@@ -2,6 +2,7 @@
 using Main.Core.Domain;
 using Main.Core.Domain.Exceptions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using System.Linq;
@@ -102,7 +103,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     logger.Error("Error on questionnaire cloning.", e);
 
-                    if (e.InnerException is DomainException)
+                    if (e.InnerException is QuestionnaireException)
                     {
                         this.Error(e.InnerException.Message);
                         logger.Error("Inner exception: " + e.InnerException.Message, e.InnerException);

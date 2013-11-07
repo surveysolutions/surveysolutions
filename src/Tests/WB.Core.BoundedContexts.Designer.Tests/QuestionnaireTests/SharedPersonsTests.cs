@@ -7,6 +7,7 @@ using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -76,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act = () => questionnaire.AddSharedPerson(responsibleId, email, responsibleId);
             // assert
-            var domainException = Assert.Throws<DomainException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.OwnerCannotBeInShareList));
         }
 
@@ -93,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.AddSharedPerson(personId, email, responsibleId);
             TestDelegate act = () => questionnaire.AddSharedPerson(personId, email, responsibleId);
             // assert
-            var domainException = Assert.Throws<DomainException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.UserExistInShareList));
         }
 
@@ -108,7 +109,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act = () => questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
             // assert
-            var domainException = Assert.Throws<DomainException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.UserDoesNotExistInShareList));
         }
     }
