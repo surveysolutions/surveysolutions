@@ -8,10 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails.GridItems;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.InterviewDetails
+namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     /// <summary>
     /// TODO: Update summary.

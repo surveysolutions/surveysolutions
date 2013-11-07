@@ -6,7 +6,7 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Services

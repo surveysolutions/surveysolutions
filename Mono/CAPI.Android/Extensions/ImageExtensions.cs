@@ -3,7 +3,7 @@ using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 
 namespace CAPI.Android.Extensions
 {

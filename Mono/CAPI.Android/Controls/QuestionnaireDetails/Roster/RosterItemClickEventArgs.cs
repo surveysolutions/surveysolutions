@@ -1,5 +1,5 @@
 using System;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
 {

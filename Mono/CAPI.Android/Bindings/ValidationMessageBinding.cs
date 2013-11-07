@@ -3,7 +3,7 @@ using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 
 namespace CAPI.Android.Bindings
 {

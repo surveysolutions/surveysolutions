@@ -133,9 +133,9 @@
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\AndroidWB.Core.BoundedContexts.CAPI\AndroidWB.Core.BoundedContexts.CAPI.csproj">
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\Capi\AndroidWB.Core.BoundedContexts.Capi\AndroidWB.Core.BoundedContexts.Capi.csproj">
       <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
-      <Name>AndroidWB.Core.BoundedContexts.CAPI</Name>
+      <Name>AndroidWB.Core.BoundedContexts.Capi</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>

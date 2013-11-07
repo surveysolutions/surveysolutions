@@ -14,7 +14,7 @@ using CAPI.Android.Controls.QuestionnaireDetails.Roster;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails.GridItems;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails

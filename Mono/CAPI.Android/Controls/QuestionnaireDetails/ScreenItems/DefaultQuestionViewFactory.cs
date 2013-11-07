@@ -3,7 +3,7 @@ using Android.Content;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {

@@ -10,7 +10,7 @@ using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 

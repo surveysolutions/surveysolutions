@@ -1,14 +1,14 @@
 using System;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.CAPI.EventHandler
+namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
     public class InterviewViewModelDenormalizer :
         IEventHandler<InterviewSynchronized>,

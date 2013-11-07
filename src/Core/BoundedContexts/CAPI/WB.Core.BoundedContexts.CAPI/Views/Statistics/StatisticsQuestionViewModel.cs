@@ -2,7 +2,7 @@
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
  using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.Statistics
+namespace WB.Core.BoundedContexts.Capi.Views.Statistics
 {
     public class StatisticsQuestionViewModel
     {

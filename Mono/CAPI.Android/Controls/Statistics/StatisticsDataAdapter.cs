@@ -12,7 +12,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
 using CAPI.Android.Events;
-using WB.Core.BoundedContexts.CAPI.Views.Statistics;
+using WB.Core.BoundedContexts.Capi.Views.Statistics;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Orientation = Android.Widget.Orientation;

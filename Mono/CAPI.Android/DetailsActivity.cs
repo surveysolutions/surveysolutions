@@ -14,7 +14,7 @@ using Cirrious.MvvmCross.Droid.Fragging;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

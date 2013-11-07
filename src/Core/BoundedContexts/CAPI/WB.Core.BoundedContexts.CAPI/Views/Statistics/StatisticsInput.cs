@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.CAPI.Views.Statistics
+namespace WB.Core.BoundedContexts.Capi.Views.Statistics
 {
     public class StatisticsInput
     {
