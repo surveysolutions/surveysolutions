@@ -107,17 +107,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CoreRegistry.cs">
       <Link>CoreRegistry.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\AbstractDocument.cs">
-      <Link>Documents\AbstractDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ChangeStatusDocument.cs">
-      <Link>Documents\ChangeStatusDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ClientDeviceDocument.cs">
       <Link>Documents\ClientDeviceDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CollectionDocument.cs">
-      <Link>Documents\CollectionDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CommentDocument.cs">
       <Link>Documents\CommentDocument.cs</Link>
@@ -128,20 +119,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\EventState.cs">
       <Link>Documents\EventState.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ExportSchemaDocument.cs">
-      <Link>Documents\ExportSchemaDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\FileDescription.cs">
       <Link>Documents\FileDescription.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\FlowGraphDocument.cs">
-      <Link>Documents\FlowGraphDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ICollectionDocument.cs">
-      <Link>Documents\ICollectionDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\IFlowGraphDocument.cs">
-      <Link>Documents\IFlowGraphDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\IQuestionnaireDocument.cs">
       <Link>Documents\IQuestionnaireDocument.cs</Link>
@@ -154,9 +133,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\QuestionnaireDocument.cs">
       <Link>Documents\QuestionnaireDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\StatusDocument.cs">
-      <Link>Documents\StatusDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\SyncDeviceRegisterDocument.cs">
       <Link>Documents\SyncDeviceRegisterDocument.cs</Link>
@@ -208,19 +184,8 @@
       <Link>Entities\Composite\IComposite.cs</Link>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\CompleteQuestionWrapper.cs">
-      <Link>Entities\Extensions\CompleteQuestionWrapper.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\CompositeWrapper.cs">
       <Link>Entities\Extensions\CompositeWrapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\ICompleteGroupExtensions.cs">
-      <Link>Entities\Extensions\ICompleteGroupExtensions.cs</Link>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\ICompleteQuestionExtensions.cs">
-      <Link>Entities\Extensions\ICompleteQuestionExtensions.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Observers\ITriggerable.cs">
       <Link>Entities\Observers\ITriggerable.cs</Link>
@@ -516,9 +481,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\StataSuplier.cs">
       <Link>Export\StataSuplier.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
-      <Link>ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\IExpressionExecutor.cs">
       <Link>ExpressionExecutors\IExpressionExecutor.cs</Link>
     </Compile>
@@ -602,9 +564,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs">
       <Link>View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs">
-      <Link>View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportInputModel.cs">
       <Link>View\Export\CompleteQuestionnaireExportInputModel.cs</Link>
@@ -729,7 +688,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
-    <Folder Include="Documents\Statistics\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
     <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
@@ -737,7 +695,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

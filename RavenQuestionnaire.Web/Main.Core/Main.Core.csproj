@@ -160,23 +160,15 @@
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
-    <Compile Include="Documents\AbstractDocument.cs" />
-    <Compile Include="Documents\ChangeStatusDocument.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
-    <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CommentDocument.cs" />
     <Compile Include="Documents\EventState.cs" />
-    <Compile Include="Documents\ExportSchemaDocument.cs" />
     <Compile Include="Documents\FileDescription.cs" />
-    <Compile Include="Documents\FlowGraphDocument.cs" />
-    <Compile Include="Documents\ICollectionDocument.cs" />
-    <Compile Include="Documents\IFlowGraphDocument.cs" />
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\ProcessedEventChunk.cs" />
     <Compile Include="Documents\QuestionAnswer.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
-    <Compile Include="Documents\StatusDocument.cs" />
     <Compile Include="Documents\SyncActivityDocument.cs" />
     <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
     <Compile Include="Documents\SynchronizationStatisticType.cs" />
@@ -196,10 +188,7 @@
     <Compile Include="Domain\UserAR.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
-    <Compile Include="Entities\Extensions\CompleteQuestionWrapper.cs" />
     <Compile Include="Entities\Extensions\CompositeWrapper.cs" />
-    <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
-    <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
     <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="Entities\OrderDirection.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
@@ -461,9 +450,6 @@
     <Compile Include="Export\IEnvironmentSupplier.cs" />
     <Compile Include="Export\IExportProvider.cs" />
     <Compile Include="Export\StataSuplier.cs" />
-    <Compile Include="ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
@@ -494,7 +480,6 @@
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\ChangeStatusHistoryView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
-    <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs" />
     <Compile Include="View\Device\DeviceItemView.cs" />
     <Compile Include="View\Device\DeviceItemViewFactory.cs" />
     <Compile Include="View\Device\DeviceItemViewInputModel.cs" />
@@ -578,7 +563,6 @@
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Commands\Questionnaire\Group\" />
-    <Folder Include="Documents\Statistics\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
     <Folder Include="Synchronization\" />

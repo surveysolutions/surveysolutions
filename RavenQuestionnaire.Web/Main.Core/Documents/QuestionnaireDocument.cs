@@ -302,6 +302,32 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
+
+        public IEnumerable<T> GetAllQuestions<T>() where T : class, IComposite
+        {
+            var result = new List<T>();
+            var groups = new Queue<IComposite>();
+            groups.Enqueue(this);
+
+            while (groups.Count != 0)
+            {
+                IComposite queueItem = groups.Dequeue();
+                var question = queueItem as T;
+                if (question != null)
+                {
+                    result.Add(question);
+                    continue;
+                }
+
+                foreach (IComposite child in queueItem.Children)
+                {
+                    groups.Enqueue(child);
+                }
+            }
+
+            return result;
+        }
+
         internal IEnumerable<IQuestion> GetAllQuestions()
         {
             var treeStack = new Stack<IComposite>();
