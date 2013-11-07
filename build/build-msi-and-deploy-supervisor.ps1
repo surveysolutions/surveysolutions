@@ -170,14 +170,15 @@ function CopyFilesForInstallation($TargetCapiFileName, $SourceFolder, $BuildNumb
 	}
 	Copy-Item "$SourceFolder\*" "Installation\SupervisorInstallProj\WebSiteToHarvest" -Recurse
 
-	Write-Host "##teamcity[message text='Copy browser to install folder']"
+	##Write-Host "##teamcity[message text='Copy browser to install folder']"
 	
 	#Could be turned off later
 	#Do not forget to remove Shortcut for app from installation
-	If (Test-Path "Installation\SupervisorInstallProj\BrowserToHarvest"){
-		Remove-Item "Installation\SupervisorInstallProj\BrowserToHarvest\*" -Force -Recurse 
-	}	
-	Copy-Item "Awesomium\Supervisor\bin\$BuildConfiguration\*" "Installation\SupervisorInstallProj\BrowserToHarvest" -Recurse
+	
+	##If (Test-Path "Installation\SupervisorInstallProj\BrowserToHarvest"){
+	##	Remove-Item "Installation\SupervisorInstallProj\BrowserToHarvest\*" -Force -Recurse 
+	##}	
+	##Copy-Item "Awesomium\Supervisor\bin\$BuildConfiguration\*" "Installation\SupervisorInstallProj\BrowserToHarvest" -Recurse
 	
 	Write-Host "##teamcity[progressFinish 'Copy files for installation']"
     Write-Host "##teamcity[blockClosed name='Copy files for installation']"
@@ -196,7 +197,7 @@ function CreateInstallation($Solution, $Project, $CapiProject, $BuildConfigurati
 
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 			
-	BuildSolution 'Awesomium\Awesomium.NET Browser.sln' $BuildConfiguration | %{ if (-not $_) { Exit } }
+	#BuildSolution 'Awesomium\Awesomium.NET Browser.sln' $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	UpdateAndroidManifest $VersionPrefix $BuildNumber 
 	
@@ -209,7 +210,7 @@ function CreateInstallation($Solution, $Project, $CapiProject, $BuildConfigurati
     PublishZippedWebPackage $SourceFolder 'package.zip' | %{ if (-not $_) { Exit } }	
 	
 	#Build installation
-	BuildMSI "Installation\SupervisorInstallProj\Setup.sln" $BuildConfiguration $BuildNumber $VersionPrefix | %{ if (-not $_) { Exit } }	
+	#BuildMSI "Installation\SupervisorInstallProj\Setup.sln" $BuildConfiguration $BuildNumber $VersionPrefix | %{ if (-not $_) { Exit } }	
 }
 
 try {
