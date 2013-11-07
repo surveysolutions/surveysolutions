@@ -52,9 +52,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
+    <Compile Include="Aggregates\UserAR.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
+    <Compile Include="Commands\User\ChangeUserCommand.cs" />
+    <Compile Include="Commands\User\CreateUserCommand.cs" />
+    <Compile Include="Commands\User\LockUserCommand.cs" />
+    <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="EventHandler\QuestionnairePropagationStructureDenormalizer.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
