@@ -1,5 +1,4 @@
-﻿using Main.Core.Domain.Exceptions;
-using Main.Core.Entities.SubEntities.Question;
+﻿using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
