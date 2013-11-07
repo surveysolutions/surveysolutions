@@ -104,9 +104,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\IQuestionnaireDocument.cs">
       <Link>Documents\IQuestionnaireDocument.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\LocationDocument.cs">
-      <Link>Documents\LocationDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ProcessedEventChunk.cs">
       <Link>Documents\ProcessedEventChunk.cs</Link>
     </Compile>
@@ -156,9 +153,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Composite\IComposite.cs">
       <Link>Entities\Composite\IComposite.cs</Link>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\CompositeWrapper.cs">
-      <Link>Entities\Extensions\CompositeWrapper.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Observers\ITriggerable.cs">
       <Link>Entities\Observers\ITriggerable.cs</Link>
@@ -619,6 +613,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
+    <Folder Include="Entities\Extensions\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
     <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
