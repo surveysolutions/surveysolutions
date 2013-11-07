@@ -1,4 +1,4 @@
-namespace Main.Core.Export
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
     /// <summary>
     /// The file type.

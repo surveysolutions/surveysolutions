@@ -7,7 +7,7 @@ using Ninject.Activation;
 
 namespace Main.Core.Utility
 {
-    public static class ReqistyHelper
+    public static class RegistryHelper
     {
         public static void RegisterDenormalizer<T>(IKernel kernel)
         {

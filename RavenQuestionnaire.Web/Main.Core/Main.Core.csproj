@@ -444,12 +444,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Sync\NewSyncActivityCreated.cs" />
-    <Compile Include="Export\ExportManager.cs" />
-    <Compile Include="Export\FileType.cs" />
-    <Compile Include="Export\IDataExport.cs" />
-    <Compile Include="Export\IEnvironmentSupplier.cs" />
-    <Compile Include="Export\IExportProvider.cs" />
-    <Compile Include="Export\StataSuplier.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
@@ -470,7 +464,9 @@
     <Compile Include="Utility\OrderStrategy\OrderStrategyFactory.cs" />
     <Compile Include="Utility\OrderStrategy\RandomStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\ZAStrategy.cs" />
-    <Compile Include="Utility\ReqistyHelper.cs" />
+    <Compile Include="Utility\RegistryHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Utility\SimpleHash.cs" />
     <Compile Include="Utility\SimpleObjectExtensions.cs" />
     <Compile Include="Utility\StringUtil.cs" />

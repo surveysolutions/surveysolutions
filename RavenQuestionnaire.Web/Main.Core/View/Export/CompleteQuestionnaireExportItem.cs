@@ -16,7 +16,7 @@ namespace Main.Core.View.Export
             foreach (Guid key in headerKey)
             {
                 var question = document.FirstOrDefault<AbstractQuestion>(c => c.PublicKey == key);
-                this.Values.Add(key, question);
+               // this.Values.Add(key, question);
             }
         }
 
