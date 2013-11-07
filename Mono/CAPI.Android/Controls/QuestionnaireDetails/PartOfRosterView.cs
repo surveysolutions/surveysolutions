@@ -11,11 +11,10 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails.Roster;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails.GridItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails

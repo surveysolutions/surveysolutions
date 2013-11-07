@@ -100,9 +100,7 @@
     <Compile Include="ChangeLog\ChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
-    <Compile Include="EventHandlers\InterviewViewModelDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
-    <Compile Include="EventHandlers\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
@@ -130,32 +128,15 @@
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\CommentDocument.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\InterviewViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\HeaderItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireItemViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\LinkedAnswerViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\LinkedQuestionViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireGridViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnairePropagatedScreenViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenInput.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewFactory.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionViewModel.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsInput.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsQuestionViewModel.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsViewFactory.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsViewModel.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\AndroidWB.Core.BoundedContexts.CAPI\AndroidWB.Core.BoundedContexts.CAPI.csproj">
+      <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
+      <Name>AndroidWB.Core.BoundedContexts.CAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
@@ -198,7 +179,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

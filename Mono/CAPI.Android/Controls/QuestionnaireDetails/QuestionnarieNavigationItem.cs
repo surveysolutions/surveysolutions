@@ -10,7 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {

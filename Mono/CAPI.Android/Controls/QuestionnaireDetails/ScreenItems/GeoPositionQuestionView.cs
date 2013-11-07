@@ -7,10 +7,10 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.GeolocationServices;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using Xamarin.Geolocation;
 

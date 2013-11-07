@@ -9,8 +9,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails.GridItems;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {

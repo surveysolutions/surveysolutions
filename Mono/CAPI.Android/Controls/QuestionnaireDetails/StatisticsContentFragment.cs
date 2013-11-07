@@ -6,8 +6,8 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.Statistics;
 using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.ViewModel.Statistics;
 using Ninject;
+using WB.Core.BoundedContexts.CAPI.Views.Statistics;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

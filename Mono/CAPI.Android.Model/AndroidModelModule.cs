@@ -10,8 +10,6 @@ using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
 using Main.Core.Documents;
@@ -20,6 +18,7 @@ using Main.Core.View;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -38,7 +37,6 @@ namespace CAPI.Android.Core.Model
             var snapshotStore = new AndroidSnapshotStore();
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
-            var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
             var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
@@ -50,7 +48,9 @@ namespace CAPI.Android.Core.Model
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnairePropagationStructure>();
-         
+
+            var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
+
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
@@ -73,9 +73,6 @@ namespace CAPI.Android.Core.Model
             this.Bind<ISyncCacher>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
-            this.Bind<IViewFactory<QuestionnaireScreenInput, InterviewViewModel>>()
-                .To<QuestionnaireScreenViewFactory>().InSingletonScope();
-            this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
             this.Bind<IBackup>()
                 .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore,

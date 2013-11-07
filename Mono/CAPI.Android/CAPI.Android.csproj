@@ -287,6 +287,10 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\AndroidWB.Core.BoundedContexts.CAPI\AndroidWB.Core.BoundedContexts.CAPI.csproj">
+      <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
+      <Name>AndroidWB.Core.BoundedContexts.CAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj">
       <Project>{a3369307-fdfa-4cd2-9ff4-6a7e23c47dd6}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.AndroidLogger</Name>

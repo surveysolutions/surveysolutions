@@ -10,8 +10,8 @@ using Android.Runtime;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {

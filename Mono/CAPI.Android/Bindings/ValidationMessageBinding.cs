@@ -1,9 +1,9 @@
 using System;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 
 namespace CAPI.Android.Bindings
 {

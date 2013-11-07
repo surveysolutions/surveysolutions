@@ -6,11 +6,11 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 

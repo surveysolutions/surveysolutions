@@ -1,6 +1,6 @@
 using System;
 using Android.Content;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {

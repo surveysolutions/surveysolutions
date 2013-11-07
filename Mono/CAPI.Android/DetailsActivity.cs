@@ -7,7 +7,6 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
 using CAPI.Android.Core.Model.SnapshotStore;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
@@ -15,6 +14,7 @@ using Cirrious.MvvmCross.Droid.Fragging;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

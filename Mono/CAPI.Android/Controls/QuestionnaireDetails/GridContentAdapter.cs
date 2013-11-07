@@ -13,10 +13,9 @@ using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails.Roster;
 using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
 using Ninject;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

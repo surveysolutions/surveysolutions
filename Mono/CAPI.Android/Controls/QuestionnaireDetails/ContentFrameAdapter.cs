@@ -6,10 +6,10 @@
 
 using Android.Support.V4.App;
 using Android.Support.V4.View;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

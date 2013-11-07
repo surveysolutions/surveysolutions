@@ -4,13 +4,13 @@ using Android.Content;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Entities.SubEntities;
 using Ninject;
+using WB.Core.BoundedContexts.CAPI.Views.InterviewDetails;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
 {

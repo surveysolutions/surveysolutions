@@ -6,7 +6,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class AbstractScreenChangingFragment : Fragment, IScreenChanging
     {
-     
         public AbstractScreenChangingFragment()
         {
             
