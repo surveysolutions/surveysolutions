@@ -324,15 +324,6 @@
     <Compile Include="Events\AggregateRootEvent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Collection\CollectionItemRemoved.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Collection\CollectionRemoved.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Collection\NewCollectionCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Events\File\FileDeleted.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -340,43 +331,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\File\FileUploaded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Location\LocationDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Location\NewLocationCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\ConditionalStatusChanged.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\FlagSet.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\InterviewDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\PropagatableGroupDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs">
@@ -525,8 +479,6 @@
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Commands\Questionnaire\Group\" />
-    <Folder Include="Commands\User\" />
-    <Folder Include="Entities\Extensions\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
     <Folder Include="Synchronization\" />

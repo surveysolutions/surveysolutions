@@ -310,15 +310,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\AggregateRootEvent.cs">
       <Link>Events\AggregateRootEvent.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Collection\CollectionItemRemoved.cs">
-      <Link>Events\Collection\CollectionItemRemoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Collection\CollectionRemoved.cs">
-      <Link>Events\Collection\CollectionRemoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Collection\NewCollectionCreated.cs">
-      <Link>Events\Collection\NewCollectionCreated.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\File\FileDeleted.cs">
       <Link>Events\File\FileDeleted.cs</Link>
     </Compile>
@@ -327,45 +318,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\File\FileUploaded.cs">
       <Link>Events\File\FileUploaded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Location\LocationDeleted.cs">
-      <Link>Events\Location\LocationDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Location\NewLocationCreated.cs">
-      <Link>Events\Location\NewLocationCreated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\AnswerSet.cs">
-      <Link>Events\Questionnaire\Completed\AnswerSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\CommentSeted.cs">
-      <Link>Events\Questionnaire\Completed\CommentSeted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ConditionalStatusChanged.cs">
-      <Link>Events\Questionnaire\Completed\ConditionalStatusChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs">
-      <Link>Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\FlagSet.cs">
-      <Link>Events\Questionnaire\Completed\FlagSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
-      <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\PropagatableGroupAdded.cs">
-      <Link>Events\Questionnaire\Completed\PropagatableGroupAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\PropagatableGroupDeleted.cs">
-      <Link>Events\Questionnaire\Completed\PropagatableGroupDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs">
-      <Link>Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs">
-      <Link>Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ValidStatusChanged.cs">
-      <Link>Events\Questionnaire\Completed\ValidStatusChanged.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\AggregateRootEventStreamPushed.cs">
       <Link>Events\Synchronization\AggregateRootEventStreamPushed.cs</Link>
@@ -592,8 +544,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
-    <Folder Include="Commands\User\" />
-    <Folder Include="Entities\Extensions\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
     <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
     <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
