@@ -18,7 +18,6 @@ using WB.UI.Capi.Shared.Frames;
 
 namespace WB.UI.Capi.Shared.Activities
 {
-    [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public abstract class DetailsActivity : MvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener, GestureDetector.IOnGestureListener
     {
         protected Guid QuestionnaireId
