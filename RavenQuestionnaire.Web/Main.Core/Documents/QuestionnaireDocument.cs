@@ -79,6 +79,16 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
+        public bool IsRoster
+        {
+            get { return false; }
+        }
+
+        public Guid? RosterSizeQuestionId
+        {
+            get { return null; }
+        }
+
         public List<Guid> Triggers
         {
             get
