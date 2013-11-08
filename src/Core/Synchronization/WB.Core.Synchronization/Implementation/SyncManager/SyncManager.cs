@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncProvider;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.SyncManager
 {
@@ -18,13 +17,13 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         public HandshakePackage ItitSync(ClientIdentifier clientIdentifier)
         {
             if (clientIdentifier.ClientInstanceKey == Guid.Empty)
-                throw new ArgumentException("ClientInstanceKey is incorrecct.");
+                throw new ArgumentException("ClientInstanceKey is incorrect.");
 
             if (string.IsNullOrWhiteSpace(clientIdentifier.ClientDeviceKey))
-                throw new ArgumentException("ClientDeviceKey is incorrecct.");
+                throw new ArgumentException("ClientDeviceKey is incorrect.");
 
             if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
-                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
+                throw new ArgumentException("ClientVersionIdentifier is incorrect.");
 
             return syncProvider.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
@@ -48,7 +47,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 throw new ArgumentException("Package is not valid.");
 
             if(package.ItemsContainer == null || package.ItemsContainer.Count == 0)
-                throw new ArgumentException("Package does'n contain correct content.");
+                throw new ArgumentException("Package doesn't contain correct content.");
 
             if (package.SyncProcessKey == Guid.Empty)
             {
