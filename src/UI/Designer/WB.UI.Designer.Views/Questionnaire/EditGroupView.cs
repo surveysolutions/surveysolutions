@@ -20,9 +20,9 @@ namespace WB.UI.Designer.Views.Questionnaire
         public Guid Id { get; set; }
     }
 
-    public class GroupView : ICompositeView
+    public class EditGroupView : ICompositeView
     {
-        public GroupView(IGroup group, Guid? parentId, int level)
+        public EditGroupView(IGroup group, Guid? parentId, int level)
         {
             this.Id = group.PublicKey;
             this.ParentId = parentId;
