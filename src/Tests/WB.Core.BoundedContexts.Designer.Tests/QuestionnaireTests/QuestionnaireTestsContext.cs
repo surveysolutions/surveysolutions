@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -129,6 +133,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return questionnaire;
         }
 
+        public static void AddGroup(Questionnaire questionnaire, Guid groupId, Guid? parentGroupId, string condition, Guid responsibleId)
+        {
+            questionnaire.NewAddGroup(groupId, null, "New group", Propagate.None, null, condition,
+                responsibleId: responsibleId);
+        }
+
         public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroup(Guid autoGroupPublicKey, Guid secondGroup, Guid responsibleId)
         {
             Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupPublicKey,
@@ -210,18 +220,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         public static void AddQuestion(Questionnaire questionnaire, Guid questionId, Guid groupId, Guid responsible,
-            QuestionType questionType, string alias, Option[] options = null)
+            QuestionType questionType, string alias, Option[] options = null, string condition = "", string validation = "")
         {
             if (IsNumericQuestion(questionType))
             {
                 questionnaire.AddNumericQuestion(questionId, groupId, "Title", questionType == QuestionType.AutoPropagate, alias, false,
                     false,
-                    false, QuestionScope.Interviewer, "", "", "", "", null, new Guid[0], responsible, true, null);
+                    false, QuestionScope.Interviewer, condition, validation, "", "", null, new Guid[0], responsible, true, null);
                 return;
             }
             questionnaire.NewAddQuestion(questionId, groupId, "Title", questionType, alias, false,
                 false,
-                false, QuestionScope.Interviewer, "", "", "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
+                false, QuestionScope.Interviewer, condition, validation, "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
                 Order.AsIs, responsible, null, areAnswersOrdered: false, maxAllowedAnswers: null);
         }
 
@@ -254,6 +264,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 responsibleId: responsibleId);
 
             return questionnaire;
+        }
+
+        protected static void RegisterExpressionProcessorMock(string expression, string[] identifiers)
+        {
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                => processor.GetIdentifiersUsedInExpression(expression) == identifiers);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(x => x.GetInstance<IExpressionProcessor>())
+                .Returns(expressionProcessor);
         }
     }
 }
