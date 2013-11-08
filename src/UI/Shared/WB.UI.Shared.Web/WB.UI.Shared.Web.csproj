@@ -126,7 +126,7 @@
     <Compile Include="Membership\IMembershipWebUser.cs" />
     <Compile Include="Membership\IMembershipUserService.cs" />
     <Compile Include="Membership\MembershipUserService.cs" />
-    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
