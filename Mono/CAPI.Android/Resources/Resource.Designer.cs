@@ -41,6 +41,7 @@ namespace CAPI.Android
 			global::WB.UI.Capi.Shared.Resource.Drawable.questionDisabledShape = global::CAPI.Android.Resource.Drawable.questionDisabledShape;
 			global::WB.UI.Capi.Shared.Resource.Drawable.questionInvalidShape = global::CAPI.Android.Resource.Drawable.questionInvalidShape;
 			global::WB.UI.Capi.Shared.Resource.Drawable.questionShape = global::CAPI.Android.Resource.Drawable.questionShape;
+			global::WB.UI.Capi.Shared.Resource.Drawable.splash = global::CAPI.Android.Resource.Drawable.splash;
 			global::WB.UI.Capi.Shared.Resource.Drawable.statistics_row_style = global::CAPI.Android.Resource.Drawable.statistics_row_style;
 			global::WB.UI.Capi.Shared.Resource.Id.AnswerId = global::CAPI.Android.Resource.Id.AnswerId;
 			global::WB.UI.Capi.Shared.Resource.Id.ElementId = global::CAPI.Android.Resource.Id.ElementId;
@@ -77,6 +78,7 @@ namespace CAPI.Android
 			global::WB.UI.Capi.Shared.Resource.Id.vpContent = global::CAPI.Android.Resource.Id.vpContent;
 			global::WB.UI.Capi.Shared.Resource.Layout.AbstractQuestionView = global::CAPI.Android.Resource.Layout.AbstractQuestionView;
 			global::WB.UI.Capi.Shared.Resource.Layout.Details = global::CAPI.Android.Resource.Layout.Details;
+			global::WB.UI.Capi.Shared.Resource.Layout.FirstView = global::CAPI.Android.Resource.Layout.FirstView;
 			global::WB.UI.Capi.Shared.Resource.Layout.list_navigation_item = global::CAPI.Android.Resource.Layout.list_navigation_item;
 			global::WB.UI.Capi.Shared.Resource.Layout.RosterQuestion = global::CAPI.Android.Resource.Layout.RosterQuestion;
 			global::WB.UI.Capi.Shared.Resource.Layout.ScreenContentFragment = global::CAPI.Android.Resource.Layout.ScreenContentFragment;
@@ -431,40 +433,43 @@ namespace CAPI.Android
 			public const int Details = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int list_navigation_item = 2130903047;
+			public const int FirstView = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int Login = 2130903048;
+			public const int list_navigation_item = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int Main = 2130903049;
+			public const int Login = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int RosterQuestion = 2130903050;
+			public const int Main = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int ScreenContentFragment = 2130903051;
+			public const int RosterQuestion = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int ScreenGroupView = 2130903052;
+			public const int ScreenContentFragment = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int ScreenNavigationView = 2130903053;
+			public const int ScreenGroupView = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int settings_dialog = 2130903054;
+			public const int ScreenNavigationView = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int SplashScreen = 2130903055;
+			public const int settings_dialog = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int StatisticsContent = 2130903056;
+			public const int SplashScreen = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int sync_dialog = 2130903057;
+			public const int StatisticsContent = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int SyncLogin = 2130903058;
+			public const int sync_dialog = 2130903058;
+			
+			// aapt resource value: 0x7f030013
+			public const int SyncLogin = 2130903059;
 			
 			static Layout()
 			{
@@ -479,8 +484,8 @@ namespace CAPI.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int ApplicationName = 2131034112;
+			// aapt resource value: 0x7f060000
+			public const int ApplicationName = 2131099648;
 			
 			static String()
 			{
@@ -488,6 +493,22 @@ namespace CAPI.Android
 			}
 			
 			private String()
+			{
+			}
+		}
+		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f050000
+			public const int Theme_Splash = 2131034112;
+			
+			static Style()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Style()
 			{
 			}
 		}

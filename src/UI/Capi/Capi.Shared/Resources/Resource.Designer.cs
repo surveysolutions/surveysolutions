@@ -86,7 +86,10 @@ namespace WB.UI.Capi.Shared
 			public static int questionShape = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public static int statistics_row_style = 2130837513;
+			public static int splash = 2130837513;
+			
+			// aapt resource value: 0x7f02000a
+			public static int statistics_row_style = 2130837514;
 			
 			static Drawable()
 			{
@@ -220,16 +223,19 @@ namespace WB.UI.Capi.Shared
 			public static int Details = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public static int list_navigation_item = 2130903042;
+			public static int FirstView = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public static int RosterQuestion = 2130903043;
+			public static int list_navigation_item = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public static int ScreenContentFragment = 2130903044;
+			public static int RosterQuestion = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public static int StatisticsContent = 2130903045;
+			public static int ScreenContentFragment = 2130903045;
+			
+			// aapt resource value: 0x7f030006
+			public static int StatisticsContent = 2130903046;
 			
 			static Layout()
 			{
