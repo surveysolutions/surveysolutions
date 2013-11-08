@@ -12,6 +12,7 @@ using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.UI.Shared.Web;
+using WB.UI.Shared.Web.Extensions;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
 

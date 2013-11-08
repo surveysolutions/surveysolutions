@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Configuration;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Shared.Web
 {

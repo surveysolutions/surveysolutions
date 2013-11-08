@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Extensions;
 using Web.Supervisor.Code.CommandTransformation;
 using Web.Supervisor.Models;
 
