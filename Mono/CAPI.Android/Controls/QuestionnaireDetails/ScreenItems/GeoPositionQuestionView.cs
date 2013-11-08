@@ -78,7 +78,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             if (!this.geoservice.IsGeolocationAvailable || !this.geoservice.IsGeolocationEnabled)
             {
-                Toast.MakeText(this.Context, "Geo location is unavailable", ToastLength.Long).Show();
+                Toast.MakeText(this.Context, "Geo location service is unavailable", ToastLength.Long).Show();
                 return;
             }
 
@@ -103,14 +103,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (activity == null)
                 return;
 
-            geoservice.GetPositionAsync(20000, cancelSource.Token).ContinueWith((Task<Position>t) => activity.RunOnUiThread(() =>
+            geoservice.GetPositionAsync(cancelSource.Token).ContinueWith((Task<Position>t) => activity.RunOnUiThread(() =>
             {
                 if (progress != null)
                     progress.Dismiss();
 
                 if (t.IsCanceled)
                 {
-                    Toast.MakeText(this.Context, "Canceled or Timeout.", ToastLength.Long).Show();
+                    Toast.MakeText(this.Context, "Operation was canceled or timeout is reached.", ToastLength.Long).Show();
                 }
                 else if (t.IsFaulted)
                 {
