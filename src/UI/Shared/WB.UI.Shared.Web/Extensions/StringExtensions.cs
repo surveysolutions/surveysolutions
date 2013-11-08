@@ -1,10 +1,9 @@
-﻿
-namespace WB.UI.Shared.Web
-{
-    using System;
-    using System.IO;
-    using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 
+namespace WB.UI.Shared.Web.Extensions
+{
     public static class StringExtensions
     {
         public static string ToValidFileName(this string source)

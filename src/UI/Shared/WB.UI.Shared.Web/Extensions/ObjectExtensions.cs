@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.UI.Shared.Web
+namespace WB.UI.Shared.Web.Extensions
 {
     public static class ObjectExtensions
     {
@@ -8,27 +8,33 @@ namespace WB.UI.Shared.Web
         {
             return obj == null;
         }
+
         public static bool IsNotNull(this object obj)
         {
             return !obj.IsNull();
         }
 
+
         public static int ToInt(this string value)
         {
             return value.ToInt(default(int));
         }
+
         public static byte ToByte(this string value)
         {
             return value.ToByte(default(byte));
         }
+
         public static bool ToBoolean(this string value)
         {
             return value.ToBoolean(false);
         }
+
         public static decimal ToDecimal(this string value)
         {
             return value.ToDecimal(decimal.Zero);
         }
+
 
         public static int ToInt(this string value, int @default)
         {
@@ -39,6 +45,7 @@ namespace WB.UI.Shared.Web
             }
             return @default;
         }
+
         public static byte ToByte(this string value, byte @default)
         {
             byte result;
@@ -48,6 +55,7 @@ namespace WB.UI.Shared.Web
             }
             return @default;
         }
+
         public static bool ToBoolean(this string value, bool @default)
         {
             bool result;
@@ -57,6 +65,7 @@ namespace WB.UI.Shared.Web
             }
             return @default;
         }
+
         public static decimal ToDecimal(this string value, decimal @default)
         {
             decimal result;
@@ -66,6 +75,7 @@ namespace WB.UI.Shared.Web
             }
             return @default;
         }
+
 
         public static DateTime ToDateTime(this string value, DateTime @default)
         {
