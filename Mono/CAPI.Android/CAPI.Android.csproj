@@ -125,11 +125,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bindings\HtmlBinding.cs" />
-    <Compile Include="Bindings\CustomImageGetter.cs" />
-    <Compile Include="Bindings\MvvmBindingWrapper.cs" />
-    <Compile Include="Bindings\ValidationMessageBinding.cs" />
-    <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
     <Compile Include="Controls\DashboardAdapter.cs" />
@@ -137,27 +132,6 @@
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
     <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\AbstractScreenChangingFragment.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\Breadcrumbs.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\GridContentAdapter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\PartialRosterRowView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\PartOfRosterView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\QuestionnarieNavigationItem.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractMultyQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractSingleOptionQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DecimalPlacesFilter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IAnswerOnQuestionCommandService.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyOptionLinkedQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericIntegerQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericRealQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleOptionLinkedQuestionView.cs" />
-    <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
     <Compile Include="Core\AjustableListView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
       <SubType>Code</SubType>
@@ -165,38 +139,16 @@
     <Compile Include="Core\ParcelableWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\SmartAdapter.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="Bindings\BackgroundBinding.cs" />
-    <Compile Include="BroadcastReceivers\ScreenChangedReciver.cs" />
     <Compile Include="CapiApplication.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\GridContentFragment.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemClickEventArgs.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\Roster\RosterQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DateQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DefaultQuestionViewFactory.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GroupView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IQuestionViewFactory.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleOptionQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\TextQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
-    <Compile Include="DetailsActivity.cs" />
-    <Compile Include="Events\AnswerSetEventArgs.cs" />
-    <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
-    <Compile Include="Extensions\ContextExtensions.cs" />
-    <Compile Include="Extensions\ImageExtensions.cs" />
-    <Compile Include="Extensions\ViewExtensions.cs" />
-    <Compile Include="GeolocationServices\GeoService.cs" />
-    <Compile Include="GeolocationServices\IGeoService.cs" />
+    <Compile Include="Implementations\Activities\DataCollectionDetailsActivity.cs" />
+    <Compile Include="Implementations\Adapters\DataCollectionContentFrameAdapter.cs" />
+    <Compile Include="Implementations\Fragments\DataCollectionGridContentFragment.cs" />
+    <Compile Include="Implementations\Fragments\DataCollectionScreenContentFragment.cs" />
+    <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -232,16 +184,6 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Drawable\navigateRightIcon.png" />
-    <AndroidResource Include="Resources\Layout\list_navigation_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\RosterQuestion.axml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_row.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -257,16 +199,12 @@
     <AndroidResource Include="Resources\Layout\Login.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\StatisticsContent.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Layout\sync_dialog.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\settings_dialog.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml" />
     <AndroidResource Include="Resources\Layout\SyncLogin.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -306,6 +244,10 @@
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\UI\Capi\Capi.Shared\WB.UI.Capi.Shared.csproj">
+      <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
+      <Name>WB.UI.Capi.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
@@ -353,20 +295,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Layout\Details.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\Drawable\cell_shape.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\SurveyShape.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\SurveyTableHeader.xml" />
@@ -377,30 +309,19 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
     <AndroidResource Include="Resources\Drawable\navigateLeftIcon.png" />
-    <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
     <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />
-    <AndroidResource Include="Resources\Drawable\questionShape.xml" />
-    <AndroidResource Include="Resources\Drawable\questionInvalidShape.xml" />
-    <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
     <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
     <AndroidResource Include="Resources\Drawable\capi.png" />
     <AndroidResource Include="Resources\Drawable\dashboardquestionnaire.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Drawable\splash.png" />
-    <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
-    <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
-    <AndroidResource Include="Resources\Drawable\donecountershape.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\Synchroniation\" />
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

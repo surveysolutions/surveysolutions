@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.Authorization
 {
-    public class AndroidAuthentication : IAuthentication
+    public class AndroidAuthentication : IDataCollectionAuthentication
     {
         #warning ViewFactory should be used here
         private readonly IFilterableReadSideRepositoryReader<LoginDTO> documentStorage;

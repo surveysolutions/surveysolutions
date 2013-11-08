@@ -9,12 +9,12 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Extensions;
-using CAPI.Android.GeolocationServices;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Update;
 using CAPI.Android.Utils;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Capi.Shared.GeolocationServices;
 using Xamarin.Geolocation;
 
 namespace CAPI.Android

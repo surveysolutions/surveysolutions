@@ -71,6 +71,7 @@
     <Compile Include="CAPIBoundedContextModule.cs" />
     <Compile Include="EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewViewModelDenormalizer.cs" />
+    <Compile Include="IAuthentication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InterviewDetails\AnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\CommentDocument.cs" />

@@ -18,6 +18,7 @@ using Main.Core.View;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -68,7 +69,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
-            this.Bind<IAuthentication>().To<AndroidAuthentication>().InSingletonScope();
+            this.Bind<IDataCollectionAuthentication, IAuthentication>().To<IDataCollectionAuthentication>().InSingletonScope();
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
             this.Bind<ISyncCacher>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();

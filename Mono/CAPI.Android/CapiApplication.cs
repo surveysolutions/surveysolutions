@@ -39,6 +39,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.UI.Capi.Shared.Controls.ScreenItems;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android
@@ -65,9 +66,9 @@ namespace CAPI.Android
             get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
-        public static IAuthentication Membership
+        public static IDataCollectionAuthentication Membership
         {
-            get { return Kernel.Get<IAuthentication>(); }
+            get { return Kernel.Get<IDataCollectionAuthentication>(); }
         }
         public static IFileStorageService FileStorageService
         {

@@ -104,7 +104,7 @@
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
-    <Compile Include="IAuthentication.cs" />
+    <Compile Include="IDataCollectionAuthentication.cs" />
     <Compile Include="IChangeLogManipulator.cs" />
     <Compile Include="IChangeLogStore.cs" />
     <Compile Include="ISyncAuthenticator.cs" />

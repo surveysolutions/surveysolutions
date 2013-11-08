@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
+using CAPI.Android.Implementations.Activities;
 using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -50,7 +51,7 @@ namespace CAPI.Android
                 this.RunOnUiThread(this.Finish);
                 return;
             }
-            var intent = new Intent(this, typeof (DetailsActivity));
+            var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
             intent.PutExtra("publicKey", publicKey.ToString());
             StartActivity(intent);
         }

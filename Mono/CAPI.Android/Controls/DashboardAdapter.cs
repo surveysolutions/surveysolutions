@@ -12,6 +12,7 @@ using Android.Widget;
 using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Capi.Shared.Adapters;
 
 namespace CAPI.Android.Controls
 {

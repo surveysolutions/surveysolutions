@@ -59,24 +59,5 @@ namespace CAPI.Android.Extensions
             intent.AddFlags(ActivityFlags.NewTask);
             context.StartActivity(intent);
         }
-
-        public static void EnableDisableView(this View view, bool enabled)
-        {
-            bool parentEnabled = true;
-            var parentView = view.Parent as View;
-            if (parentView != null)
-                parentEnabled = parentView.Enabled;
-            view.Enabled = parentEnabled && enabled;
-            ViewGroup group = view as ViewGroup;
-            if (group != null)
-            {
-
-                for (int idx = 0; idx < group.ChildCount; idx++)
-                {
-                    EnableDisableView(group.GetChildAt(idx), enabled);
-                }
-            }
-
-        }
     }
 }
