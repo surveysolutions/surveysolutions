@@ -223,11 +223,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidWB.Core.BoundedConte
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Capi", "Capi", "{1A83E353-7CA5-4220-8880-F204B28E6D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Capi.DataCollection", "UI\Capi\WB.UI.DataCollection\WB.UI.Capi.DataCollection.csproj", "{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Capi.Tester", "UI\Capi\WB.UI.Tester\WB.UI.Capi.Tester.csproj", "{FF5E3210-CF6A-4413-94AA-288E8B80E128}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Shared.Android", "UI\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj", "{596BDADC-EFF5-474D-B028-2F5C60B59050}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Capi.DataCollection", "UI\Capi\WB.UI.Capi.DataCollection\WB.UI.Capi.DataCollection.csproj", "{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Capi.Tester", "UI\Capi\WB.UI.Capi.Tester\WB.UI.Capi.Tester.csproj", "{FF5E3210-CF6A-4413-94AA-288E8B80E128}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1424,6 +1424,21 @@ Global
 		{C62669D1-2B5F-4976-A33D-A66B674D0149}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C62669D1-2B5F-4976-A33D-A66B674D0149}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C62669D1-2B5F-4976-A33D-A66B674D0149}.Release|x86.ActiveCfg = Release|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|x86.ActiveCfg = Release|Any CPU
 		{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -1466,21 +1481,6 @@ Global
 		{FF5E3210-CF6A-4413-94AA-288E8B80E128}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FF5E3210-CF6A-4413-94AA-288E8B80E128}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{FF5E3210-CF6A-4413-94AA-288E8B80E128}.Release|x86.ActiveCfg = Release|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Any CPU.Build.0 = Release|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{596BDADC-EFF5-474D-B028-2F5C60B59050}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
