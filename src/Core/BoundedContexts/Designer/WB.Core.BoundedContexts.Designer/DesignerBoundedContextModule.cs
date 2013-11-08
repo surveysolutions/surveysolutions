@@ -13,7 +13,9 @@ using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -25,6 +27,9 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionFactory>().To<QuestionFactory>().InSingletonScope();
 
             RegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
+            RegistryHelper.RegisterDenormalizer<QuestionnaireBrowseItemDenormalizer>(this.Kernel);
+            RegistryHelper.RegisterDenormalizer<QuestionnaireSharedPersonsDenormalizer>(this.Kernel);
+
         }
     }
 }
