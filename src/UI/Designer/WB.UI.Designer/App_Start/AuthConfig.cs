@@ -1,5 +1,4 @@
-﻿
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer.App_Start
 {
     public static class AuthConfig
     {

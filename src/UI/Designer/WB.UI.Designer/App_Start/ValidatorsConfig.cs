@@ -1,18 +1,11 @@
-﻿namespace WB.UI.Designer
+﻿namespace WB.UI.Designer.App_Start
 {
-    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
-
-    /// <summary>
-    /// The validators config.
-    /// </summary>
+    
     public class ValidatorsConfig
     {
         #region Public Methods and Operators
-
-        /// <summary>
-        /// The register.
-        /// </summary>
+        
         public static void Register()
         {
             DataAnnotationsModelValidatorProvider.RegisterAdapter(
