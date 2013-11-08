@@ -10,7 +10,7 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-using WB.UI.Capi.Shared;
+using WB.UI.Shared.Android;
 
 namespace CAPI.Android
 {

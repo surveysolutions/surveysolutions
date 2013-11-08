@@ -26,74 +26,72 @@ namespace CAPI.Android
 		
 		public static void UpdateIdValues()
 		{
-			global::WB.UI.Capi.Shared.Resource.Attribute.MvxBind = global::CAPI.Android.Resource.Attribute.MvxBind;
-			global::WB.UI.Capi.Shared.Resource.Attribute.MvxDropDownItemTemplate = global::CAPI.Android.Resource.Attribute.MvxDropDownItemTemplate;
-			global::WB.UI.Capi.Shared.Resource.Attribute.MvxItemTemplate = global::CAPI.Android.Resource.Attribute.MvxItemTemplate;
-			global::WB.UI.Capi.Shared.Resource.Attribute.MvxLang = global::CAPI.Android.Resource.Attribute.MvxLang;
-			global::WB.UI.Capi.Shared.Resource.Attribute.MvxSource = global::CAPI.Android.Resource.Attribute.MvxSource;
-			global::WB.UI.Capi.Shared.Resource.Attribute.MvxTemplate = global::CAPI.Android.Resource.Attribute.MvxTemplate;
-			global::WB.UI.Capi.Shared.Resource.Drawable.bookmarkStyle = global::CAPI.Android.Resource.Drawable.bookmarkStyle;
-			global::WB.UI.Capi.Shared.Resource.Drawable.CounterRoundShape = global::CAPI.Android.Resource.Drawable.CounterRoundShape;
-			global::WB.UI.Capi.Shared.Resource.Drawable.donecountershape = global::CAPI.Android.Resource.Drawable.donecountershape;
-			global::WB.UI.Capi.Shared.Resource.Drawable.errorwarningstyle = global::CAPI.Android.Resource.Drawable.errorwarningstyle;
-			global::WB.UI.Capi.Shared.Resource.Drawable.grid_headerItem = global::CAPI.Android.Resource.Drawable.grid_headerItem;
-			global::WB.UI.Capi.Shared.Resource.Drawable.questionAnsweredShape = global::CAPI.Android.Resource.Drawable.questionAnsweredShape;
-			global::WB.UI.Capi.Shared.Resource.Drawable.questionDisabledShape = global::CAPI.Android.Resource.Drawable.questionDisabledShape;
-			global::WB.UI.Capi.Shared.Resource.Drawable.questionInvalidShape = global::CAPI.Android.Resource.Drawable.questionInvalidShape;
-			global::WB.UI.Capi.Shared.Resource.Drawable.questionShape = global::CAPI.Android.Resource.Drawable.questionShape;
-			global::WB.UI.Capi.Shared.Resource.Drawable.splash = global::CAPI.Android.Resource.Drawable.splash;
-			global::WB.UI.Capi.Shared.Resource.Drawable.statistics_row_style = global::CAPI.Android.Resource.Drawable.statistics_row_style;
-			global::WB.UI.Capi.Shared.Resource.Id.AnswerId = global::CAPI.Android.Resource.Id.AnswerId;
-			global::WB.UI.Capi.Shared.Resource.Id.ElementId = global::CAPI.Android.Resource.Id.ElementId;
-			global::WB.UI.Capi.Shared.Resource.Id.Index = global::CAPI.Android.Resource.Id.Index;
-			global::WB.UI.Capi.Shared.Resource.Id.MvxBindingTagUnique = global::CAPI.Android.Resource.Id.MvxBindingTagUnique;
-			global::WB.UI.Capi.Shared.Resource.Id.MyLayout = global::CAPI.Android.Resource.Id.MyLayout;
-			global::WB.UI.Capi.Shared.Resource.Id.PrpagationKey = global::CAPI.Android.Resource.Id.PrpagationKey;
-			global::WB.UI.Capi.Shared.Resource.Id.QuestionnaireId = global::CAPI.Android.Resource.Id.QuestionnaireId;
-			global::WB.UI.Capi.Shared.Resource.Id.ScreenId = global::CAPI.Android.Resource.Id.ScreenId;
-			global::WB.UI.Capi.Shared.Resource.Id.btnAnswered = global::CAPI.Android.Resource.Id.btnAnswered;
-			global::WB.UI.Capi.Shared.Resource.Id.btnComplete = global::CAPI.Android.Resource.Id.btnComplete;
-			global::WB.UI.Capi.Shared.Resource.Id.btnInstructions = global::CAPI.Android.Resource.Id.btnInstructions;
-			global::WB.UI.Capi.Shared.Resource.Id.btnInvalid = global::CAPI.Android.Resource.Id.btnInvalid;
-			global::WB.UI.Capi.Shared.Resource.Id.btnNavigation = global::CAPI.Android.Resource.Id.btnNavigation;
-			global::WB.UI.Capi.Shared.Resource.Id.btnUnanswered = global::CAPI.Android.Resource.Id.btnUnanswered;
-			global::WB.UI.Capi.Shared.Resource.Id.etComments = global::CAPI.Android.Resource.Id.etComments;
-			global::WB.UI.Capi.Shared.Resource.Id.lNavigationContainer = global::CAPI.Android.Resource.Id.lNavigationContainer;
-			global::WB.UI.Capi.Shared.Resource.Id.llButtom = global::CAPI.Android.Resource.Id.llButtom;
-			global::WB.UI.Capi.Shared.Resource.Id.llContainer = global::CAPI.Android.Resource.Id.llContainer;
-			global::WB.UI.Capi.Shared.Resource.Id.llContent = global::CAPI.Android.Resource.Id.llContent;
-			global::WB.UI.Capi.Shared.Resource.Id.llNavigationButton = global::CAPI.Android.Resource.Id.llNavigationButton;
-			global::WB.UI.Capi.Shared.Resource.Id.llNavigationHolder = global::CAPI.Android.Resource.Id.llNavigationHolder;
-			global::WB.UI.Capi.Shared.Resource.Id.llRoot = global::CAPI.Android.Resource.Id.llRoot;
-			global::WB.UI.Capi.Shared.Resource.Id.llSpaceFiller = global::CAPI.Android.Resource.Id.llSpaceFiller;
-			global::WB.UI.Capi.Shared.Resource.Id.llTop = global::CAPI.Android.Resource.Id.llTop;
-			global::WB.UI.Capi.Shared.Resource.Id.llWrapper = global::CAPI.Android.Resource.Id.llWrapper;
-			global::WB.UI.Capi.Shared.Resource.Id.tvComments = global::CAPI.Android.Resource.Id.tvComments;
-			global::WB.UI.Capi.Shared.Resource.Id.tvCommentsTitle = global::CAPI.Android.Resource.Id.tvCommentsTitle;
-			global::WB.UI.Capi.Shared.Resource.Id.tvCount = global::CAPI.Android.Resource.Id.tvCount;
-			global::WB.UI.Capi.Shared.Resource.Id.tvError = global::CAPI.Android.Resource.Id.tvError;
-			global::WB.UI.Capi.Shared.Resource.Id.tvErrorWarning = global::CAPI.Android.Resource.Id.tvErrorWarning;
-			global::WB.UI.Capi.Shared.Resource.Id.tvITem = global::CAPI.Android.Resource.Id.tvITem;
-			global::WB.UI.Capi.Shared.Resource.Id.tvTitle = global::CAPI.Android.Resource.Id.tvTitle;
-			global::WB.UI.Capi.Shared.Resource.Id.vpContent = global::CAPI.Android.Resource.Id.vpContent;
-			global::WB.UI.Capi.Shared.Resource.Layout.AbstractQuestionView = global::CAPI.Android.Resource.Layout.AbstractQuestionView;
-			global::WB.UI.Capi.Shared.Resource.Layout.Details = global::CAPI.Android.Resource.Layout.Details;
-			global::WB.UI.Capi.Shared.Resource.Layout.FirstView = global::CAPI.Android.Resource.Layout.FirstView;
-			global::WB.UI.Capi.Shared.Resource.Layout.list_navigation_item = global::CAPI.Android.Resource.Layout.list_navigation_item;
-			global::WB.UI.Capi.Shared.Resource.Layout.RosterQuestion = global::CAPI.Android.Resource.Layout.RosterQuestion;
-			global::WB.UI.Capi.Shared.Resource.Layout.ScreenContentFragment = global::CAPI.Android.Resource.Layout.ScreenContentFragment;
-			global::WB.UI.Capi.Shared.Resource.Layout.StatisticsContent = global::CAPI.Android.Resource.Layout.StatisticsContent;
-			global::WB.UI.Capi.Shared.Resource.String.ApplicationName = global::CAPI.Android.Resource.String.ApplicationName;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxBinding = global::CAPI.Android.Resource.Styleable.MvxBinding;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxBinding_MvxBind = global::CAPI.Android.Resource.Styleable.MvxBinding_MvxBind;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxBinding_MvxLang = global::CAPI.Android.Resource.Styleable.MvxBinding_MvxLang;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxControl = global::CAPI.Android.Resource.Styleable.MvxControl;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxControl_MvxTemplate = global::CAPI.Android.Resource.Styleable.MvxControl_MvxTemplate;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxImageView = global::CAPI.Android.Resource.Styleable.MvxImageView;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxImageView_MvxSource = global::CAPI.Android.Resource.Styleable.MvxImageView_MvxSource;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxListView = global::CAPI.Android.Resource.Styleable.MvxListView;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxListView_MvxDropDownItemTemplate = global::CAPI.Android.Resource.Styleable.MvxListView_MvxDropDownItemTemplate;
-			global::WB.UI.Capi.Shared.Resource.Styleable.MvxListView_MvxItemTemplate = global::CAPI.Android.Resource.Styleable.MvxListView_MvxItemTemplate;
+			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::CAPI.Android.Resource.Attribute.MvxBind;
+			global::WB.UI.Shared.Android.Resource.Attribute.MvxDropDownItemTemplate = global::CAPI.Android.Resource.Attribute.MvxDropDownItemTemplate;
+			global::WB.UI.Shared.Android.Resource.Attribute.MvxItemTemplate = global::CAPI.Android.Resource.Attribute.MvxItemTemplate;
+			global::WB.UI.Shared.Android.Resource.Attribute.MvxLang = global::CAPI.Android.Resource.Attribute.MvxLang;
+			global::WB.UI.Shared.Android.Resource.Attribute.MvxSource = global::CAPI.Android.Resource.Attribute.MvxSource;
+			global::WB.UI.Shared.Android.Resource.Attribute.MvxTemplate = global::CAPI.Android.Resource.Attribute.MvxTemplate;
+			global::WB.UI.Shared.Android.Resource.Drawable.bookmarkStyle = global::CAPI.Android.Resource.Drawable.bookmarkStyle;
+			global::WB.UI.Shared.Android.Resource.Drawable.CounterRoundShape = global::CAPI.Android.Resource.Drawable.CounterRoundShape;
+			global::WB.UI.Shared.Android.Resource.Drawable.donecountershape = global::CAPI.Android.Resource.Drawable.donecountershape;
+			global::WB.UI.Shared.Android.Resource.Drawable.errorwarningstyle = global::CAPI.Android.Resource.Drawable.errorwarningstyle;
+			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::CAPI.Android.Resource.Drawable.grid_headerItem;
+			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::CAPI.Android.Resource.Drawable.questionAnsweredShape;
+			global::WB.UI.Shared.Android.Resource.Drawable.questionDisabledShape = global::CAPI.Android.Resource.Drawable.questionDisabledShape;
+			global::WB.UI.Shared.Android.Resource.Drawable.questionInvalidShape = global::CAPI.Android.Resource.Drawable.questionInvalidShape;
+			global::WB.UI.Shared.Android.Resource.Drawable.questionShape = global::CAPI.Android.Resource.Drawable.questionShape;
+			global::WB.UI.Shared.Android.Resource.Drawable.statistics_row_style = global::CAPI.Android.Resource.Drawable.statistics_row_style;
+			global::WB.UI.Shared.Android.Resource.Id.AnswerId = global::CAPI.Android.Resource.Id.AnswerId;
+			global::WB.UI.Shared.Android.Resource.Id.ElementId = global::CAPI.Android.Resource.Id.ElementId;
+			global::WB.UI.Shared.Android.Resource.Id.Index = global::CAPI.Android.Resource.Id.Index;
+			global::WB.UI.Shared.Android.Resource.Id.MvxBindingTagUnique = global::CAPI.Android.Resource.Id.MvxBindingTagUnique;
+			global::WB.UI.Shared.Android.Resource.Id.MyLayout = global::CAPI.Android.Resource.Id.MyLayout;
+			global::WB.UI.Shared.Android.Resource.Id.PrpagationKey = global::CAPI.Android.Resource.Id.PrpagationKey;
+			global::WB.UI.Shared.Android.Resource.Id.QuestionnaireId = global::CAPI.Android.Resource.Id.QuestionnaireId;
+			global::WB.UI.Shared.Android.Resource.Id.ScreenId = global::CAPI.Android.Resource.Id.ScreenId;
+			global::WB.UI.Shared.Android.Resource.Id.btnAnswered = global::CAPI.Android.Resource.Id.btnAnswered;
+			global::WB.UI.Shared.Android.Resource.Id.btnComplete = global::CAPI.Android.Resource.Id.btnComplete;
+			global::WB.UI.Shared.Android.Resource.Id.btnInstructions = global::CAPI.Android.Resource.Id.btnInstructions;
+			global::WB.UI.Shared.Android.Resource.Id.btnInvalid = global::CAPI.Android.Resource.Id.btnInvalid;
+			global::WB.UI.Shared.Android.Resource.Id.btnNavigation = global::CAPI.Android.Resource.Id.btnNavigation;
+			global::WB.UI.Shared.Android.Resource.Id.btnUnanswered = global::CAPI.Android.Resource.Id.btnUnanswered;
+			global::WB.UI.Shared.Android.Resource.Id.etComments = global::CAPI.Android.Resource.Id.etComments;
+			global::WB.UI.Shared.Android.Resource.Id.lNavigationContainer = global::CAPI.Android.Resource.Id.lNavigationContainer;
+			global::WB.UI.Shared.Android.Resource.Id.llButtom = global::CAPI.Android.Resource.Id.llButtom;
+			global::WB.UI.Shared.Android.Resource.Id.llContainer = global::CAPI.Android.Resource.Id.llContainer;
+			global::WB.UI.Shared.Android.Resource.Id.llContent = global::CAPI.Android.Resource.Id.llContent;
+			global::WB.UI.Shared.Android.Resource.Id.llNavigationButton = global::CAPI.Android.Resource.Id.llNavigationButton;
+			global::WB.UI.Shared.Android.Resource.Id.llNavigationHolder = global::CAPI.Android.Resource.Id.llNavigationHolder;
+			global::WB.UI.Shared.Android.Resource.Id.llRoot = global::CAPI.Android.Resource.Id.llRoot;
+			global::WB.UI.Shared.Android.Resource.Id.llSpaceFiller = global::CAPI.Android.Resource.Id.llSpaceFiller;
+			global::WB.UI.Shared.Android.Resource.Id.llTop = global::CAPI.Android.Resource.Id.llTop;
+			global::WB.UI.Shared.Android.Resource.Id.llWrapper = global::CAPI.Android.Resource.Id.llWrapper;
+			global::WB.UI.Shared.Android.Resource.Id.tvComments = global::CAPI.Android.Resource.Id.tvComments;
+			global::WB.UI.Shared.Android.Resource.Id.tvCommentsTitle = global::CAPI.Android.Resource.Id.tvCommentsTitle;
+			global::WB.UI.Shared.Android.Resource.Id.tvCount = global::CAPI.Android.Resource.Id.tvCount;
+			global::WB.UI.Shared.Android.Resource.Id.tvError = global::CAPI.Android.Resource.Id.tvError;
+			global::WB.UI.Shared.Android.Resource.Id.tvErrorWarning = global::CAPI.Android.Resource.Id.tvErrorWarning;
+			global::WB.UI.Shared.Android.Resource.Id.tvITem = global::CAPI.Android.Resource.Id.tvITem;
+			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::CAPI.Android.Resource.Id.tvTitle;
+			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::CAPI.Android.Resource.Id.vpContent;
+			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::CAPI.Android.Resource.Layout.AbstractQuestionView;
+			global::WB.UI.Shared.Android.Resource.Layout.Details = global::CAPI.Android.Resource.Layout.Details;
+			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::CAPI.Android.Resource.Layout.list_navigation_item;
+			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::CAPI.Android.Resource.Layout.RosterQuestion;
+			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::CAPI.Android.Resource.Layout.ScreenContentFragment;
+			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::CAPI.Android.Resource.Layout.StatisticsContent;
+			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::CAPI.Android.Resource.String.ApplicationName;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding = global::CAPI.Android.Resource.Styleable.MvxBinding;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding_MvxBind = global::CAPI.Android.Resource.Styleable.MvxBinding_MvxBind;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding_MvxLang = global::CAPI.Android.Resource.Styleable.MvxBinding_MvxLang;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxControl = global::CAPI.Android.Resource.Styleable.MvxControl;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxControl_MvxTemplate = global::CAPI.Android.Resource.Styleable.MvxControl_MvxTemplate;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxImageView = global::CAPI.Android.Resource.Styleable.MvxImageView;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxImageView_MvxSource = global::CAPI.Android.Resource.Styleable.MvxImageView_MvxSource;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView = global::CAPI.Android.Resource.Styleable.MvxListView;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView_MvxDropDownItemTemplate = global::CAPI.Android.Resource.Styleable.MvxListView_MvxDropDownItemTemplate;
+			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView_MvxItemTemplate = global::CAPI.Android.Resource.Styleable.MvxListView_MvxItemTemplate;
 		}
 		
 		public partial class Attribute
@@ -433,43 +431,40 @@ namespace CAPI.Android
 			public const int Details = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int FirstView = 2130903047;
+			public const int list_navigation_item = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int list_navigation_item = 2130903048;
+			public const int Login = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int Login = 2130903049;
+			public const int Main = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int Main = 2130903050;
+			public const int RosterQuestion = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int RosterQuestion = 2130903051;
+			public const int ScreenContentFragment = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int ScreenContentFragment = 2130903052;
+			public const int ScreenGroupView = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int ScreenGroupView = 2130903053;
+			public const int ScreenNavigationView = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int ScreenNavigationView = 2130903054;
+			public const int settings_dialog = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int settings_dialog = 2130903055;
+			public const int SplashScreen = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int SplashScreen = 2130903056;
+			public const int StatisticsContent = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int StatisticsContent = 2130903057;
+			public const int sync_dialog = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int sync_dialog = 2130903058;
-			
-			// aapt resource value: 0x7f030013
-			public const int SyncLogin = 2130903059;
+			public const int SyncLogin = 2130903058;
 			
 			static Layout()
 			{
@@ -484,8 +479,8 @@ namespace CAPI.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f060000
-			public const int ApplicationName = 2131099648;
+			// aapt resource value: 0x7f050000
+			public const int ApplicationName = 2131034112;
 			
 			static String()
 			{
@@ -493,22 +488,6 @@ namespace CAPI.Android
 			}
 			
 			private String()
-			{
-			}
-		}
-		
-		public partial class Style
-		{
-			
-			// aapt resource value: 0x7f050000
-			public const int Theme_Splash = 2131034112;
-			
-			static Style()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
-			private Style()
 			{
 			}
 		}

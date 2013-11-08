@@ -14,7 +14,7 @@ using CAPI.Android.Syncronization.Update;
 using CAPI.Android.Utils;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
-using WB.UI.Capi.Shared.GeolocationServices;
+using WB.UI.Shared.Android.GeolocationServices;
 using Xamarin.Geolocation;
 
 namespace CAPI.Android

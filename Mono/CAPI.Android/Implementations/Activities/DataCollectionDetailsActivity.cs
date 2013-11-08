@@ -16,8 +16,8 @@ using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Capi.Shared.Activities;
-using WB.UI.Capi.Shared.Adapters;
+using WB.UI.Shared.Android.Activities;
+using WB.UI.Shared.Android.Adapters;
 
 namespace CAPI.Android.Implementations.Activities
 {

@@ -14,7 +14,7 @@ using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.Statistics;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Capi.Shared.Frames;
+using WB.UI.Shared.Android.Frames;
 
 namespace CAPI.Android.Implementations.Fragments
 {

@@ -11,8 +11,8 @@ using Android.Views;
 using Android.Widget;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.UI.Capi.Shared.Controls.ScreenItems;
-using WB.UI.Capi.Shared.Frames;
+using WB.UI.Shared.Android.Controls.ScreenItems;
+using WB.UI.Shared.Android.Frames;
 
 namespace CAPI.Android.Implementations.Fragments
 {
