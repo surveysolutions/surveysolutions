@@ -2,7 +2,7 @@ using System;
 
 namespace WB.UI.Shared.Web.Extensions
 {
-    public static class ObjectExtensions
+    public static class ExceptionExtensions
     {
         public static TException GetSelfOrInnerAs<TException>(this Exception source)
             where TException : Exception
