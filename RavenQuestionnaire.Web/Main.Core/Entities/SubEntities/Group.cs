@@ -6,71 +6,44 @@ using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities
 {
-    /// <summary>
-    /// The group.
-    /// </summary>
     [DebuggerDisplay("Group {PublicKey}")]
     public class Group : IGroup
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Group"/> class.
-        /// </summary>
         public Group()
         {
             this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
-            this.Triggers = new List<Guid>();
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Group"/> class.
-        /// </summary>
-        /// <param name="text">
-        /// The text.
-        /// </param>
         public Group(string text)
             : this()
         {
             this.Title = text;
         }
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
         public List<IComposite> Children { get; set; }
 
-        /// <summary>
-        /// Gets or sets the condition expression.
-        /// </summary>
         public string ConditionExpression { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether enabled.
-        /// </summary>
         public bool Enabled { get; set; }
 
-        /// <summary>
-        /// Gets or sets Description.
-        /// </summary>
         public string Description { get; set; }
 
-        /// <summary>
-        /// Gets or sets the parent.
-        /// </summary>
+        public bool IsRoster
+        {
+            get { return this.Propagated == Propagate.AutoPropagated; }
+        }
+
+        public Guid? RosterSizeQuestionId
+        {
+            get { return null; }
+        }
+
         private IComposite parent;
         
-        /// <summary>
-        /// Gets or sets the propagated.
-        /// </summary>
         public Propagate Propagated { get; set; }
 
         public IComposite GetParent()
@@ -83,36 +56,10 @@ namespace Main.Core.Entities.SubEntities
             this.parent = parent;
         }
 
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
         public Guid PublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
         public string Title { get; set; }
 
-        /// <summary>
-        /// Gets or sets the triggers.
-        /// </summary>
-        public List<Guid> Triggers { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
             foreach (IComposite child in this.Children)
@@ -132,17 +79,6 @@ namespace Main.Core.Entities.SubEntities
             return null;
         }
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
-        /// </returns>
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
@@ -150,34 +86,12 @@ namespace Main.Core.Entities.SubEntities
                     this.Children.SelectMany(q => q.Find(condition)));
         }
 
-        /// <summary>
-        /// The first or default.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        /// <summary>
-        /// The insert.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="afterItem">
-        /// The after item.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
         public void Insert(IComposite c, Guid? afterItem)
         {
             try
@@ -199,9 +113,6 @@ namespace Main.Core.Entities.SubEntities
             throw new CompositeException();
         }
         
-        /// <summary>
-        /// The connect childs with parent.
-        /// </summary>
         public void ConnectChildrenWithParent()
         {
             foreach (var item in this.Children)
@@ -211,12 +122,6 @@ namespace Main.Core.Entities.SubEntities
             }
         }
 
-        /// <summary>
-        /// The clone.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IComposite"/>.
-        /// </returns>
         public IComposite Clone()
         {
             var newGroup = new Group
@@ -227,7 +132,6 @@ namespace Main.Core.Entities.SubEntities
                     Propagated = this.Propagated,
                     PublicKey = this.PublicKey,
                     Title = this.Title,
-                    Triggers = new List<Guid>(this.Triggers)
                 };
 
             foreach (var composite in this.Children)
@@ -238,18 +142,10 @@ namespace Main.Core.Entities.SubEntities
             return newGroup;
         }
 
-        /// <summary>
-        /// The update.
-        /// </summary>
-        /// <param name="groupText">
-        /// The group text.
-        /// </param>
         public void Update(string groupText)
         {
             this.Title = groupText;
         }
-
-        #endregion
 
         public override string ToString()
         {

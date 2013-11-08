@@ -12,10 +12,6 @@ namespace Main.Core.Documents
 {
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
-
-        private readonly List<Guid> triggers = new List<Guid>();
-        
-
         public QuestionnaireDocument()
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
@@ -79,16 +75,14 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
-        public List<Guid> Triggers
+        public bool IsRoster
         {
-            get
-            {
-                return this.triggers;
-            }
+            get { return false; }
+        }
 
-            set
-            {
-            }
+        public Guid? RosterSizeQuestionId
+        {
+            get { return null; }
         }
 
         public List<Guid> SharedPersons { get; set; }
@@ -459,7 +453,6 @@ namespace Main.Core.Documents
         {
             var doc = this.MemberwiseClone() as QuestionnaireDocument;
 
-            doc.Triggers = new List<Guid>(this.Triggers);
             doc.SetParent(null);
 
             doc.Children = new List<IComposite>();
