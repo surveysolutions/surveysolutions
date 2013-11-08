@@ -1343,7 +1343,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
 
             if (question == null)
-                throw new DomainException(DomainExceptionType.ExpressionContainsNotExistingQuestionReference, string.Format(
+                throw new QuestionnaireException(DomainExceptionType.ExpressionContainsNotExistingQuestionReference, string.Format(
                     "Identifier '{0}' from expression '{1}' is not valid question identifier. Question with such an identifier is missing.",
                     identifier, expression));
         }
@@ -1806,7 +1806,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (referencedQuestions.Values.Count(x=>x.Any()) > 0)
             {
-                throw new DomainException(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
+                throw new QuestionnaireException(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
                     string.Join(Environment.NewLine,
                         referencedQuestions.Select(x => string.Format("One or more questions/groups depend on {0}:{1}{2}",
                             x.Key,

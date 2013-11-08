@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Documents;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
@@ -11,7 +10,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Controllers;
-using WB.UI.Designer.Utils;
 using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Membership;

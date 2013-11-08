@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                         responsibleId: responsibleId);
 
             // assert
-            var domainException = Assert.Throws<DomainException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
         }
     }
