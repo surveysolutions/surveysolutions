@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.Question;
-
-namespace WB.UI.Designer.Views.Questionnaire
+﻿namespace WB.UI.Designer.Views.Questionnaire
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.View;
+
     public class QuestionnaireView
     {
         private IEnumerable<ICompositeView> children;
