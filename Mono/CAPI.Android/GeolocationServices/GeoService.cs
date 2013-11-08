@@ -10,7 +10,7 @@ namespace CAPI.Android.GeolocationServices
     {
         private readonly Geolocator geolocator;
 
-        private const int defaultTimeout = 45;
+        private const int defaultTimeout = 45000;
 
         public bool IsListening
         {
