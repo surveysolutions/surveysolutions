@@ -1,9 +1,11 @@
-﻿using WB.UI.Shared.Web;
+﻿using System.Configuration;
+using WB.UI.Shared.Web;
 using System.Collections.Specialized;
+using WB.UI.Shared.Web.Extensions;
 
 namespace Web.Supervisor.Code
 {
-    public sealed class AppSettings : WebConfigHelper
+    public sealed class AppSettings
     {
         public static readonly AppSettings Instance = new AppSettings();
 
@@ -21,12 +23,12 @@ namespace Web.Supervisor.Code
 
         public string AdminEmail
         {
-            get { return this.GetString("AdminEmail"); }
+            get { return ConfigurationManager.AppSettings.GetString("AdminEmail"); }
         }
 
         public bool AcceptUnsignedCertificate
         {
-            get { return this.GetBoolean("AcceptUnsignedCertificate", true); }
+            get { return ConfigurationManager.AppSettings.GetBool("AcceptUnsignedCertificate", true); }
         }
     }
 }
