@@ -17,7 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
 
         [Test]
@@ -295,6 +296,67 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
+        }
+
+        [Test]
+        public void NewUpdateGroup_When_Group_Have_Condition_With_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
+        {
+            // arrange
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string aliasForExistingQuestion = "q2";
+            string expression = string.Format("[{0}] > 0", aliasForExistingQuestion);
+
+            RegisterExpressionProcessorMock(expression, new[] { aliasForExistingQuestion });
+
+            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, aliasForExistingQuestion);
+
+            // act
+            TestDelegate act =
+                () =>
+                    questionnaire.NewUpdateGroup(
+                        groupId: groupId,
+                        title: "Title",
+                        propagationKind: Propagate.None,
+                        condition: expression,
+                        description: null,
+                        responsibleId: responsibleId);
+
+            // assert
+            Assert.DoesNotThrow(act);
+        }
+
+        [Test]
+        public void NewUpdateGroup_When_Group_Have_Condition_With_Reference_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string aliasForNotExistingQuestion = "q2";
+            string expression = string.Format("[{0}] > 0", aliasForNotExistingQuestion);
+
+            RegisterExpressionProcessorMock(expression, new[] { aliasForNotExistingQuestion });
+
+            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q1");
+
+            // act
+            TestDelegate act =
+                () =>
+                    questionnaire.NewUpdateGroup(
+                        groupId: groupId,
+                        title: "Title",
+                        propagationKind: Propagate.None,
+                        condition: expression,
+                        description: null,
+                        responsibleId: responsibleId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
         }
     }
 }
