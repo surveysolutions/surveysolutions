@@ -161,7 +161,6 @@
     <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
     <Compile Include="Documents\SynchronizationStatisticType.cs" />
     <Compile Include="Documents\SynchronizationType.cs" />
-    <Compile Include="Documents\SyncProcessDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Domain\ClientDeviceAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
@@ -182,74 +181,17 @@
     <Compile Include="Entities\SubEntities\AnswerType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\CollectionItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\IAutoPropagate.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\SubEntities\GeoPosition.cs" />
     <Compile Include="Entities\SubEntities\NumericQuestionUtils.cs" />
+    <Compile Include="Entities\SubEntities\Question\IAutoPropagate.cs" />
     <Compile Include="Entities\SubEntities\Question\IAutoPropagateQuestion.cs" />
-    <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\ICompleteAnswer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\ICompleteGroup.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\ICompleteItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\IDateTimeQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\IGpsCoordinatesQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\IMultyOptionsQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\INumericQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\IPercentageQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\ISingleQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\ITextCompleteQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\SurveyStatusLight.cs" />
-    <Compile Include="Entities\SubEntities\FlowBlock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\FlowConnection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\FlowRule.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\SubEntities\Group.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\IAnswer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\ICollectionItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\SubEntities\IConditional.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\IFlowBlock.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\IGroup.cs">
@@ -259,9 +201,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\IQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Option.cs">
@@ -288,6 +227,8 @@
     <Compile Include="Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\Question\IMultyOptionsQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\INumericQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -300,22 +241,10 @@
     <Compile Include="Entities\SubEntities\Question\TextQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\StatusesWithCompleteQuestionnaireStatistic.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\StatusItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\SurveyStatus.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\SubEntities\UserLight.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\UserRoles.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\VisitedGroup.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\TemplateLight.cs" />
@@ -342,9 +271,6 @@
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Synchronization\ProcessStatisticsCalculated.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -369,18 +295,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Sync\NewSyncActivityCreated.cs" />
-    <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
     <Compile Include="PackageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IFileStorageService.cs" />
-    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
-    <Compile Include="Utility\NodeWithLevel.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\AZStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />
@@ -396,10 +318,8 @@
     <Compile Include="Utility\SimpleObjectExtensions.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="View\Answer\AnswerView.cs" />
-    <Compile Include="View\Answer\CompleteAnswerView.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
-    <Compile Include="View\CompleteQuestionnaire\Statistics\ChangeStatusHistoryView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="View\Device\DeviceItemView.cs" />
     <Compile Include="View\Device\DeviceItemViewFactory.cs" />
@@ -419,10 +339,8 @@
     <Compile Include="View\Register\RegisterViewFactory.cs" />
     <Compile Include="View\StatusReport\CQStatusReportItemView.cs" />
     <Compile Include="View\StatusReport\CQStatusReportViewInputModel.cs" />
-    <Compile Include="View\SyncProcess\CapiExportStatistics.cs" />
     <Compile Include="View\SyncProcess\SyncProcessInputModel.cs" />
     <Compile Include="View\SyncProcess\SyncStatisticInfo.cs" />
-    <Compile Include="View\SyncProcess\UserSyncProcessStatistics.cs" />
     <Compile Include="View\User\UserBrowseInputModel.cs" />
     <Compile Include="View\User\UserBrowseItem.cs" />
     <Compile Include="View\User\UserBrowseView.cs" />
@@ -479,9 +397,7 @@
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Commands\Questionnaire\Group\" />
-    <Folder Include="Entities\SubEntities\Complete\Question\" />
-    <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
-    <Folder Include="Synchronization\" />
+    <Folder Include="Services\" />
     <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

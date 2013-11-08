@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Main.Core.Documents;
 using Main.Core.Events.File;
-using Main.Core.Services;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -11,26 +10,16 @@ namespace Main.Core.EventHandlers
     /// <summary>
     /// Class handles file changes events.
     /// </summary>
-    public abstract class FileStoreDenormalizer : IEventHandler<FileUploaded>, IEventHandler<FileDeleted>
+    public abstract class FileStoreDenormalizer : 
+        IEventHandler<FileUploaded>, 
+        IEventHandler<FileDeleted>
     {
-        #region Fields
-
         private readonly IReadSideRepositoryWriter<FileDescription> attachments;
-        private readonly IFileStorageService storage;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments, IFileStorageService storage)
+        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments)
         {
             this.attachments = attachments;
-            this.storage = storage;
         }
-
-        #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// The handle.
@@ -51,7 +40,6 @@ namespace Main.Core.EventHandlers
             using (MemoryStream original = this.FromBase64(evnt.Payload.OriginalFile))
             {
                 fileDescription.Content = original;
-                this.storage.StoreFile(fileDescription);
                 fileDescription.Content = null;
             }
             PostSaveHandler(evnt);
@@ -66,30 +54,14 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<FileDeleted> evnt)
         {
             this.attachments.Remove(evnt.Payload.PublicKey);
-            this.storage.DeleteFile(evnt.Payload.PublicKey.ToString());
         }
-
-        #endregion
 
         public abstract void PostSaveHandler(IPublishedEvent<FileUploaded> evnt);
 
-        #region Methods
-
-        /// <summary>
-        /// The from base 64.
-        /// </summary>
-        /// <param name="text">
-        /// The text.
-        /// </param>
-        /// <returns>
-        /// The System.IO.MemoryStream.
-        /// </returns>
         protected MemoryStream FromBase64(string text)
         {
             byte[] raw = Convert.FromBase64String(text);
             return new MemoryStream(raw);
         }
-
-        #endregion
     }
 }

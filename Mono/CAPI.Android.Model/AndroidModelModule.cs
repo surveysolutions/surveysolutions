@@ -14,8 +14,6 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
-using Main.Core.Documents;
-using Main.Core.Services;
 using Main.Core.View;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;

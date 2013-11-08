@@ -5,6 +5,7 @@ using Android.Runtime;
 using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
+using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -17,7 +18,6 @@ using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-using Main.Core.Services;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
@@ -159,8 +159,7 @@ namespace CAPI.Android
 
         private void InitFileStorage(InProcessEventBus bus)
         {
-            var fileSorage = new AndroidFileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>(),
-                                                       kernel.Get<IFileStorageService>());
+            var fileSorage = new AndroidFileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>());
             bus.RegisterHandler(fileSorage, typeof (FileUploaded));
             bus.RegisterHandler(fileSorage, typeof (FileDeleted));
         }

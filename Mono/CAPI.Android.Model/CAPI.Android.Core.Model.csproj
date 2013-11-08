@@ -116,6 +116,7 @@
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
     <Compile Include="SnapshotStore\AndroidSnapshotStore.cs" />
+    <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="SyncCacher\ISyncCacher.cs" />
     <Compile Include="SyncCacher\FileSyncCacher.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
@@ -200,6 +201,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

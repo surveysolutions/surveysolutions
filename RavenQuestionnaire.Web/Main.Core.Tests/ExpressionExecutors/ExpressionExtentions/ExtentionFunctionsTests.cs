@@ -5,9 +5,6 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
 {
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.ExpressionExecutors;
-
     using NUnit.Framework;
 
     /// <summary>

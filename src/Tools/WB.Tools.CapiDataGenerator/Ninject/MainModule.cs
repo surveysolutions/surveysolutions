@@ -14,7 +14,6 @@ using Main.Core;
 using Main.Core.Commands;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-using Main.Core.Services;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -103,7 +102,6 @@ namespace CapiDataGenerator
             var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.SetDefault(commandService);
             NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), commandService);
-            NcqrsEnvironment.SetDefault(Kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             var snpshotStore = new InMemoryEventStore();
