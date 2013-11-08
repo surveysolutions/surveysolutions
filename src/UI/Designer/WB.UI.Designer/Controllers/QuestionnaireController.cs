@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using System.Linq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -96,10 +97,11 @@ namespace WB.UI.Designer.Controllers
                 {
                     logger.Error("Error on questionnaire cloning.", e);
 
-                    if (e.InnerException is QuestionnaireException)
+                    var domainException = e.GetSelfOrInnerAs<QuestionnaireException>();
+                    if (domainException != null)
                     {
-                        this.Error(e.InnerException.Message);
-                        logger.Error("Inner exception: " + e.InnerException.Message, e.InnerException);
+                        this.Error(domainException.Message);
+                        logger.Error("Questionnaire controller -> clone: " + domainException.Message, domainException);
                     }
                     else
                     {
