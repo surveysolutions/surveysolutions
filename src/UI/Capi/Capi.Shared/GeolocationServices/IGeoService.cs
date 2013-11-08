@@ -5,7 +5,7 @@ using Xamarin.Geolocation;
 
 namespace WB.UI.Capi.Shared.GeolocationServices
 {
-    interface IGeoService
+    public interface IGeoService
     {
         bool IsGeolocationEnabled { get; }
         bool IsGeolocationAvailable { get; }
