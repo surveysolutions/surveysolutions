@@ -13,7 +13,6 @@ namespace Main.Core.Entities.SubEntities
         {
             this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
-            this.Triggers = new List<Guid>();
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
@@ -60,8 +59,6 @@ namespace Main.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
 
         public string Title { get; set; }
-
-        public List<Guid> Triggers { get; set; }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
@@ -135,7 +132,6 @@ namespace Main.Core.Entities.SubEntities
                     Propagated = this.Propagated,
                     PublicKey = this.PublicKey,
                     Title = this.Title,
-                    Triggers = new List<Guid>(this.Triggers)
                 };
 
             foreach (var composite in this.Children)
