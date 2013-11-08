@@ -1,8 +1,5 @@
-﻿using System.Web.Security;
-using Main.Core.Domain;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+﻿using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using System.Linq;
 using WB.Core.GenericSubdomains.Logging;
@@ -11,13 +8,10 @@ using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 namespace WB.UI.Designer.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
     using Main.Core.View;
-    using Main.Core.View.Question;
-
     using Ncqrs.Commanding.ServiceModel;
 
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
@@ -162,8 +156,6 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            // QuestionnaireView questionnaire = this.GetQuestionnaire(id);
-
             var questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
@@ -239,7 +231,7 @@ namespace WB.UI.Designer.Controllers
         private void ReplaceGuidsInValidationAndConditionRules(EditQuestionnaireView model)
         {
             var expressionReplacer = new ExpressionReplacer(model);
-            foreach (QuestionView question in model.Questions)
+            foreach (EditQuestionView question in model.Questions)
             {
                 question.ConditionExpression =
                        expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.Id);
@@ -247,7 +239,7 @@ namespace WB.UI.Designer.Controllers
                     expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.Id);
             }
 
-            foreach (GroupView group in model.Groups)
+            foreach (EditGroupView group in model.Groups)
             {
                 group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.Id);
             }

@@ -1,30 +1,24 @@
 using System;
-using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Main.Core.View;
 
-namespace Main.Core.View.Answer
+namespace Core.Supervisor.Views.TakeNew
 {
-    public class AnswerView : ICompositeView
+    public class FeaturedAnswerView : ICompositeView
     {
-        public AnswerView()
+        public FeaturedAnswerView()
         {
         }
 
-        public AnswerView(Guid questionPublicKey, IAnswer answer)
+        public FeaturedAnswerView(IAnswer answer)
         {
             this.Id = answer.PublicKey;
             this.Title = answer.AnswerText;
             this.AnswerValue = answer.AnswerValue;
         }
 
-        public AnswerView(Guid questionPublicKey)
-        {
-        }
-
-    
         public string AnswerValue { get; set; }
 
-        
         public Guid Id { get; set; }
 
         public string Title { get; set; }

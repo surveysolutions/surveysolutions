@@ -340,9 +340,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\StringUtil.cs">
       <Link>Utility\StringUtil.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Answer\AnswerView.cs">
-      <Link>View\Answer\AnswerView.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs">
       <Link>View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs</Link>
     </Compile>
@@ -369,9 +366,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewFactory.cs">
       <Link>View\IViewFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\QuestionView.cs">
-      <Link>View\Question\QuestionView.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessInputModel.cs">
       <Link>View\SyncProcess\SyncProcessInputModel.cs</Link>
@@ -455,7 +449,9 @@
   <ItemGroup>
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Services\" />
+    <Folder Include="View\Answer\" />
     <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
+    <Folder Include="View\Question\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>

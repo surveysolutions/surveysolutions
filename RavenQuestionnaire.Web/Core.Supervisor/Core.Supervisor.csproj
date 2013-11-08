@@ -220,6 +220,8 @@
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
     <Compile Include="Views\Survey\SurveysViewFactory.cs" />
+    <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
+    <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />

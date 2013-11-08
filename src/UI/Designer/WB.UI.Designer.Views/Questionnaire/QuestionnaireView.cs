@@ -5,7 +5,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
-using Main.Core.View.Question;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -24,7 +23,7 @@ namespace WB.UI.Designer.Views.Questionnaire
             {
                 return this.children
                        ?? (this.children =
-                           this.Source.Children.Cast<IGroup>().Select(@group => new GroupView(@group, null, 0)).ToList());
+                           this.Source.Children.Cast<IGroup>().Select(@group => new EditGroupView(@group, null, 0)).ToList());
             }
         }
 

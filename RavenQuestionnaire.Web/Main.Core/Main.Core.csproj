@@ -317,7 +317,6 @@
     <Compile Include="Utility\SimpleHash.cs" />
     <Compile Include="Utility\SimpleObjectExtensions.cs" />
     <Compile Include="Utility\StringUtil.cs" />
-    <Compile Include="View\Answer\AnswerView.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
@@ -333,7 +332,6 @@
     <Compile Include="View\Group\Counter.cs" />
     <Compile Include="View\ICompositeView.cs" />
     <Compile Include="View\IViewFactory.cs" />
-    <Compile Include="View\Question\QuestionView.cs" />
     <Compile Include="View\Register\RegisterInputModel.cs" />
     <Compile Include="View\Register\RegisterView.cs" />
     <Compile Include="View\Register\RegisterViewFactory.cs" />
@@ -398,7 +396,9 @@
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Commands\Questionnaire\Group\" />
     <Folder Include="Services\" />
+    <Folder Include="View\Answer\" />
     <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
+    <Folder Include="View\Question\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

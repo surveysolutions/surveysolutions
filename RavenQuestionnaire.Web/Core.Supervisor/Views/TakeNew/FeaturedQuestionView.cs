@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.View.Answer;
+using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Main.Core.View.Question
+namespace Core.Supervisor.Views.TakeNew
 {
-    public class QuestionView : ICompositeView
+    public class FeaturedQuestionView : ICompositeView
     {
-        public QuestionView(IQuestion doc, Guid? parentId)
+        public FeaturedQuestionView(IQuestion doc, Guid? parentId)
         {
             this.Id = doc.PublicKey;
             this.ParentId = parentId;
@@ -31,8 +31,8 @@ namespace Main.Core.View.Question
             this.Answers = null;
             this.Triggers = null;
 
-            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
-                
+            this.Answers = doc.Answers.Select(a => new FeaturedAnswerView(a)).ToArray();
+
 
             var autoQuestion = doc as IAutoPropagate;
 
@@ -49,26 +49,26 @@ namespace Main.Core.View.Question
             if (numericQuestion != null)
             {
                 this.Settings = new
-                    {
-                        numericQuestion.IsInteger,
-                        numericQuestion.CountOfDecimalPlaces
-                    };
+                {
+                    numericQuestion.IsInteger,
+                    numericQuestion.CountOfDecimalPlaces
+                };
             }
 
             var multyoptionQuestion = doc as IMultyOptionsQuestion;
             if (multyoptionQuestion != null)
             {
                 this.Settings = new
-                    {
-                        AreAnswersOrdered = multyoptionQuestion.AreAnswersOrdered,
-                        multyoptionQuestion.MaxAllowedAnswers
-                    };
+                {
+                    AreAnswersOrdered = multyoptionQuestion.AreAnswersOrdered,
+                    multyoptionQuestion.MaxAllowedAnswers
+                };
             }
         }
 
         public Guid? ParentId { get; set; }
 
-        public AnswerView[] Answers { get; set; }
+        public FeaturedAnswerView[] Answers { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public Order AnswerOrder { get; set; }

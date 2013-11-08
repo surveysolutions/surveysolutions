@@ -5,8 +5,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.Question;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -66,15 +64,15 @@ namespace WB.UI.Designer.Views.Questionnaire
                 Type = QuestionnaireEntityType.Group
             }).ToList();
 
-            Groups = groups.Select(@group => new GroupView(@group.Node as IGroup, group.ParentId, group.Level)).ToList();
-            Questions = questions.Select(question => new QuestionView(question.Node as IQuestion, question.ParentId)).ToList();
+            Groups = groups.Select(@group => new EditGroupView(@group.Node as IGroup, group.ParentId, group.Level)).ToList();
+            Questions = questions.Select(question => new EditQuestionView(question.Node as IQuestion, question.ParentId)).ToList();
         }
 
         public List<QuestionnaireEntityNode> Chapters { get; set; }
 
-        public List<GroupView> Groups { get; set; }
+        public List<EditGroupView> Groups { get; set; }
 
-        public List<QuestionView> Questions { get; set; }
+        public List<EditQuestionView> Questions { get; set; }
 
         public Guid? CreatedBy { get; set; }
 
