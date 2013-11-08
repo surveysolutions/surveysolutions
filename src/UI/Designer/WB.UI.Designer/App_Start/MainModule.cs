@@ -3,8 +3,6 @@
 namespace WB.UI.Designer.App_Start
 {
     using System.Web.Mvc;
-
-    using Ncqrs.Commanding.ServiceModel;
     using Ninject.Modules;
     using Ninject.Web.Mvc.FilterBindingSyntax;
     using WB.Core.SharedKernel.Utils.Compression;
