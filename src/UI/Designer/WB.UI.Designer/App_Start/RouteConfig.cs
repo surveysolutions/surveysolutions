@@ -1,23 +1,13 @@
-﻿namespace WB.UI.Designer
+﻿namespace WB.UI.Designer.App_Start
 {
     using System.Web.Mvc;
     using System.Web.Routing;
+    using Code.Helpers.Routes;
 
-    using WB.UI.Designer.Code.Helpers.Routes;
-
-    /// <summary>
-    ///     The route config.
-    /// </summary>
     public class RouteConfig
     {
         #region Public Methods and Operators
-
-        /// <summary>
-        /// The register routes.
-        /// </summary>
-        /// <param name="routes">
-        /// The routes.
-        /// </param>
+        
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace WB.Core.SharedKernel.Structures.Synchronization
+﻿namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class BasePackage
     {
