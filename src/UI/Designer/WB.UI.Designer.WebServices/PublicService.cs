@@ -1,5 +1,6 @@
 ﻿using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Views.Questionnaire;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer.WebServices
 {
