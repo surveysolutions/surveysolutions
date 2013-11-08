@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using Android.Content;
 using CAPI.Android.Extensions;
+using WB.Core.BoundedContexts.Capi;
 
 namespace CAPI.Android.Controls.Navigation
 {

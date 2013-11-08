@@ -392,7 +392,9 @@
     <Content Include="Configuration\Dev-Stable.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\Stacy.Designer.Web.config" />
+    <Content Include="Configuration\Stacy.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configuration\Roma.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>

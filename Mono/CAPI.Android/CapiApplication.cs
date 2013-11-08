@@ -2,7 +2,6 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
-using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;

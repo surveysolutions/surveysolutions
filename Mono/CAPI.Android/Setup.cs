@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Bindings;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
