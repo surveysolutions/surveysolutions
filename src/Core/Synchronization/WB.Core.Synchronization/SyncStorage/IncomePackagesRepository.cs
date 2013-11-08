@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Events;
-using Main.Core.Utility;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.Synchronization.SyncProvider;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
@@ -45,7 +40,8 @@ namespace WB.Core.Synchronization.SyncStorage
 
             NcqrsEnvironment.Get<ICommandService>()
                             .Execute(new ApplySynchronizationMetadata(
-                                meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid));
+                                meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, 
+                                null, meta.Comments, meta.Valid));
         }
 
 
