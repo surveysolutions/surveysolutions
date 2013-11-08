@@ -28,6 +28,7 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
@@ -204,6 +205,7 @@ namespace CAPI.Android
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
             kernel = new StandardKernel(
+                new CAPIBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new AndroidModelModule(),
                 new AndroidLoggingModule(),
@@ -220,9 +222,12 @@ namespace CAPI.Android
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
             var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
-            Kernel.Unbind<IAnswerOnQuestionCommandService>();
-            Kernel.Bind<IAnswerOnQuestionCommandService>()
-                  .ToConstant(new AnswerOnQuestionCommandService(CommandService));
+            kernel.Bind<ICommandService>().ToConstant(CommandService);
+
+            kernel.Unbind<IAnswerOnQuestionCommandService>();
+            kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
+            kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
+            
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;

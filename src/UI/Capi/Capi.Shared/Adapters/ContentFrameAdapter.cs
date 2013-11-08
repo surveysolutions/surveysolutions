@@ -68,14 +68,14 @@ namespace WB.UI.Capi.Shared.Adapters
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
-                    fragment = CreateRosterScreen(screenModel.ScreenId, this.questionnaire.PublicKey);
+                    fragment = CreateContentScreen(screenModel.ScreenId, this.questionnaire.PublicKey);
                 }
                 else
                 {
                     var grid = model as QuestionnaireGridViewModel;
                     if (grid != null)
                     {
-                        fragment = CreateContentScreen(grid.ScreenId, this.questionnaire.PublicKey);
+                        fragment = CreateRosterScreen(grid.ScreenId, this.questionnaire.PublicKey);
                     }
                 }
             }

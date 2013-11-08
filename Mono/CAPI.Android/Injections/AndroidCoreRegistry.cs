@@ -18,6 +18,7 @@ using Ninject;
 using Ninject.Activation;
 using Main.Core;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.UI.Capi.Shared.Controls.ScreenItems;
 
 namespace CAPI.Android.Injections
 {

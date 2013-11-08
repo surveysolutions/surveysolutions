@@ -69,7 +69,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
-            this.Bind<IDataCollectionAuthentication, IAuthentication>().To<IDataCollectionAuthentication>().InSingletonScope();
+            this.Bind<IDataCollectionAuthentication, IAuthentication>().To<AndroidAuthentication>().InSingletonScope();
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
             this.Bind<ISyncCacher>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();

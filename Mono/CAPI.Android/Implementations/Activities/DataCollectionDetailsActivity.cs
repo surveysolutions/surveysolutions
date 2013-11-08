@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -20,6 +21,7 @@ using WB.UI.Capi.Shared.Adapters;
 
 namespace CAPI.Android.Implementations.Activities
 {
+    [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DataCollectionDetailsActivity : DetailsActivity
     {
         protected override ContentFrameAdapter CreateFrameAdapter(InterviewItemId? screenId)
