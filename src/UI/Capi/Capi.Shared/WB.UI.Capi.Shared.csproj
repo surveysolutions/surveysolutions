@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{596BDADC-EFF5-474D-B028-2F5C60B59050}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.UI.Capi.Shared</RootNamespace>
+    <AssemblyName>WB.UI.Capi.Shared</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk />
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cirrious.CrossCore">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.CrossCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.CrossCore.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.CrossCore.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Binding">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.0.9\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Localization">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Support.v4" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net">
+      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows">
+      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization">
+      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Activities\DetailsActivity.cs" />
+    <Compile Include="Adapters\ContentFrameAdapter.cs" />
+    <Compile Include="Adapters\GridContentAdapter.cs" />
+    <Compile Include="Adapters\ScreenContentAdapter.cs" />
+    <Compile Include="Adapters\SmartAdapter.cs" />
+    <Compile Include="Adapters\StatisticsDataAdapter.cs" />
+    <Compile Include="Bindings\BackgroundBinding.cs" />
+    <Compile Include="Bindings\HtmlBinding.cs" />
+    <Compile Include="Bindings\MvvmBindingWrapper.cs" />
+    <Compile Include="Bindings\ValidationMessageBinding.cs" />
+    <Compile Include="Bindings\VisibilityBinding.cs" />
+    <Compile Include="Controls\Breadcrumbs.cs" />
+    <Compile Include="Controls\IScreenChanging.cs" />
+    <Compile Include="Controls\PartialRosterRowView.cs" />
+    <Compile Include="Controls\PartOfRosterView.cs" />
+    <Compile Include="Controls\QuestionnaireNavigationView.cs" />
+    <Compile Include="Controls\QuestionnarieNavigationItem.cs" />
+    <Compile Include="Controls\RosterTable.cs" />
+    <Compile Include="Controls\Roster\RosterItemClickEventArgs.cs" />
+    <Compile Include="Controls\Roster\RosterQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\AbstractMultyQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\AbstractQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\AbstractSingleOptionQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\AnswerOnQuestionCommandService.cs" />
+    <Compile Include="Controls\ScreenItems\AutoPropagateQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\DateQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\DecimalPlacesFilter.cs" />
+    <Compile Include="Controls\ScreenItems\DefaultQuestionViewFactory.cs" />
+    <Compile Include="Controls\ScreenItems\GeoPositionQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\GroupView.cs" />
+    <Compile Include="Controls\ScreenItems\IAnswerOnQuestionCommandService.cs" />
+    <Compile Include="Controls\ScreenItems\IQuestionViewFactory.cs" />
+    <Compile Include="Controls\ScreenItems\MultyOptionLinkedQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\MultyQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\NumericIntegerQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\NumericQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\NumericRealQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\SingleOptionLinkedQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\SingleOptionQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\TextQuestionView.cs" />
+    <Compile Include="Events\AnswerSetEventArgs.cs" />
+    <Compile Include="Events\ScreenChangedEventArgs.cs" />
+    <Compile Include="Extensions\ContextExtensions.cs" />
+    <Compile Include="Extensions\ViewExtensions.cs" />
+    <Compile Include="Frames\AbstractScreenChangingFragment.cs" />
+    <Compile Include="Frames\GridContentFragment.cs" />
+    <Compile Include="Frames\ScreenContentFragment.cs" />
+    <Compile Include="Frames\StatisticsContentFragment.cs" />
+    <Compile Include="GeolocationServices\GeoService.cs" />
+    <Compile Include="GeolocationServices\IGeoService.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CapiSharedSetup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\AboutResources.txt" />
+    <AndroidResource Include="Resources\Layout\Details.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\StatisticsContent.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml" />
+    <AndroidResource Include="Resources\Layout\RosterQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\list_navigation_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
+      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
+      <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Mono\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
+      <Name>AndroidNCQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
+      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
+      <Name>AndroidNinject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Mono\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
+      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\AndroidWB.Core.BoundedContexts.Capi\AndroidWB.Core.BoundedContexts.Capi.csproj">
+      <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
+      <Name>AndroidWB.Core.BoundedContexts.Capi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\questionShape.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\questionInvalidShape.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\donecountershape.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

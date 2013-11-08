@@ -74,6 +74,9 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\InterviewViewModelDenormalizer.cs">
       <Link>EventHandler\InterviewViewModelDenormalizer.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\IAuthentication.cs">
+      <Link>IAuthentication.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\AnswerViewModel.cs">
       <Link>Views\InterviewDetails\AnswerViewModel.cs</Link>
     </Compile>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+  <LinearLayout
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:orientation="vertical">
+    <Button android:id="@+id/btnAnswered"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="10px"
+              android:text="Answered"/>
+    <Button android:id="@+id/btnUnanswered"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="10px"
+              android:text="Unanswered"/>
+    <TextView android:id="@+id/tvErrorWarning"
+              android:padding="10px"
+              android:background="@drawable/errorwarningstyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                 android:textColor="#000"
+              android:textSize="20px"
+                android:layout_marginTop="10px"
+              android:layout_marginLeft="15px"
+              android:layout_marginRight="15px"
+                android:text="Please fix invalid questions!"/>
+    <Button android:id="@+id/btnInvalid"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+               android:layout_marginBottom="10px"
+              android:layout_marginLeft="10px"
+              android:layout_marginRight="10px"
+              android:text="Invalid"/>
+
+    <TextView android:id="@+id/tvComments"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="10px"
+                 android:layout_marginLeft="15px"
+                 android:layout_marginRight="15px"
+              android:textColor="#FF0000"
+                   android:text="Need attention comments:"/>
+    <EditText android:id="@+id/etComments"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+              android:imeOptions="actionDone"
+              android:singleLine="true" 
+    android:lines="5"
+     android:layout_marginBottom="10px"
+              android:layout_marginLeft="10px"
+              android:layout_marginRight="10px" />
+
+
+    <Button android:id="@+id/btnComplete"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_margin="10px"
+             android:text="Complete"/>
+  </LinearLayout>
+</ScrollView>
