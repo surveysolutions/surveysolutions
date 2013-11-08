@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Core.Supervisor.DenormalizerStorageItem;
 
 namespace Core.Supervisor.Views.Survey
 {

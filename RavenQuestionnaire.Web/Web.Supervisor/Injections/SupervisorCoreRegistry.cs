@@ -15,8 +15,6 @@ namespace Web.Supervisor.Injections
     using System.Web.Mvc;
 
     using Main.Core;
-    using Main.Core.View.Export;
-
     using Ninject;
     using Ninject.Activation;
     using Questionnaire.Core.Web.Security;
