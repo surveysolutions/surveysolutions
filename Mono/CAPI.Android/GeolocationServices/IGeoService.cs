@@ -16,6 +16,7 @@ namespace CAPI.Android.GeolocationServices
         event EventHandler<PositionEventArgs> PositionChanged;
 
         Task<Position> GetPositionAsync(int timeout, CancellationToken cancelToken);
+        Task<Position> GetPositionAsync(CancellationToken cancelToken);
         void StartListening(int minTime, double minDistance);
     }
 
