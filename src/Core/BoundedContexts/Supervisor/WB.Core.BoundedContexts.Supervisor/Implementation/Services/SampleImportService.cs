@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
