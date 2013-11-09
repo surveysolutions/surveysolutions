@@ -1,10 +1,7 @@
-﻿namespace WB.UI.Designer
+﻿namespace WB.UI.Designer.App_Start
 {
     using System.Web.Optimization;
 
-    /// <summary>
-    /// The bundle config.
-    /// </summary>
     public class BundleConfig
     {
         #region Public Methods and Operators
