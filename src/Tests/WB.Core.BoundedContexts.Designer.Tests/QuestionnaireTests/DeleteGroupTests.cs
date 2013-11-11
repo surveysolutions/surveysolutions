@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 // act
                 Guid parentPublicKey = Guid.NewGuid();
-                questionnaire.NewDeleteGroup(groupPublicKey, responsibleId: responsibleId);
+                questionnaire.DeleteGroup(groupPublicKey, responsibleId: responsibleId);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupPublicKey, responsibleId: Guid.NewGuid());
 
             // act
-            TestDelegate act = () => questionnaire.NewDeleteGroup(groupPublicKey, responsibleId: Guid.NewGuid());
+            TestDelegate act = () => questionnaire.DeleteGroup(groupPublicKey, responsibleId: Guid.NewGuid());
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q1");
 
             // act
-            TestDelegate act = () => questionnaire.NewDeleteGroup(groupId, responsibleId: responsibleId);
+            TestDelegate act = () => questionnaire.DeleteGroup(groupId, responsibleId: responsibleId);
 
             // assert
             Assert.DoesNotThrow(act);
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 condition: expression);
 
             // act
-            TestDelegate act = () => questionnaire.NewDeleteGroup(firstGroupId, responsibleId: responsibleId);
+            TestDelegate act = () => questionnaire.DeleteGroup(firstGroupId, responsibleId: responsibleId);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 validation: expression);
 
             // act
-            TestDelegate act = () => questionnaire.NewDeleteGroup(firstGroupId, responsibleId: responsibleId);
+            TestDelegate act = () => questionnaire.DeleteGroup(firstGroupId, responsibleId: responsibleId);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 condition: expression);
             
             // act
-            TestDelegate act = () => questionnaire.NewDeleteGroup(firstGroupId, responsibleId: responsibleId);
+            TestDelegate act = () => questionnaire.DeleteGroup(firstGroupId, responsibleId: responsibleId);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
