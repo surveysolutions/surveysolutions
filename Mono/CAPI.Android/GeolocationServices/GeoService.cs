@@ -10,6 +10,8 @@ namespace CAPI.Android.GeolocationServices
     {
         private readonly Geolocator geolocator;
 
+        private const int defaultTimeout = 45000;
+
         public bool IsListening
         {
             get { return geolocator.IsListening; }
@@ -56,8 +58,13 @@ namespace CAPI.Android.GeolocationServices
 
         public Task<Position> GetPositionAsync(int timeout, CancellationToken cancelToken)
         {
-            // we need caching to save a battery if we want to track all coordinates of the answers
+            
             return geolocator.GetPositionAsync(timeout, cancelToken);
+        }
+
+        public Task<Position> GetPositionAsync(CancellationToken cancelToken)
+        {
+            return GetPositionAsync(defaultTimeout, cancelToken);
         }
     }
 }
