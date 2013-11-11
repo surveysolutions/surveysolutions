@@ -49,7 +49,7 @@ function UpdateAndroidManifest( $VersionPrefix, $BuildNumber ){
 	Write-Host "##teamcity[blockOpened name='Updating Capi Manifest']"
 	Write-Host "##teamcity[progressStart 'Updating Capi Manifest']"
 
-	$PahToManifest =  (Join-Path (Get-Location).Path "Mono\CAPI.Android\Properties\AndroidManifest.xml")
+	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi.DataCollection\Properties\AndroidManifest.xml")
 
 	[xml] $xam = Get-Content -Path ($PahToManifest)
     
@@ -91,8 +91,8 @@ function SignAndPackCapi($KeyStorePass, $PahToFinalCapi){
 	Write-Host "##teamcity[blockOpened name='Signing and Zipaligning Capi package']"
 	Write-Host "##teamcity[progressStart 'Signing and Zipaligning Capi package']"
 
-	$PahToSigned = (Join-Path (Get-Location).Path "Mono/CAPI.Android/bin/$BuildConfiguration/CAPI.Android-signed.apk")
-	$PahToCreated = (Join-Path (Get-Location).Path "Mono/CAPI.Android/bin/$BuildConfiguration/CAPI.Android.apk")
+	$PahToSigned = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi.DataCollection/bin/$BuildConfiguration/CAPI.Android-signed.apk")
+	$PahToCreated = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi.DataCollection/bin/$BuildConfiguration/CAPI.Android.apk")
 	$PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/WBCapi.keystore")
 
 	& (GetPathToJarsigner)  '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
@@ -187,7 +187,7 @@ function CopyFilesForInstallation($TargetCapiFileName, $SourceFolder, $BuildNumb
 
 function CreateInstallation($Solution, $Project, $CapiProject, $BuildConfiguration, $SourceFolder, $TargetFolder, $VersionPrefix, $BuildNumber) {
 
-	$PahToFinalCapi = (Join-Path (Get-Location).Path "Mono/CAPI.Android/bin/$BuildConfiguration/WBCapi.apk")
+	$PahToFinalCapi = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi.DataCollection/bin/$BuildConfiguration/WBCapi.apk")
 	
     CleanBinAndObjFolders
 			
@@ -220,7 +220,7 @@ try {
 	CreateInstallation `
 			-Solution 'src\Supervisor.sln' `
 			-Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
-			-CapiProject 'Mono\CAPI.Android\CAPI.Android.csproj' `
+			-CapiProject 'src\UI\Capi\WB.UI.Capi.DataCollection\WB.UI.Capi.DataCollection.csproj' `
 			-BuildConfiguration $BuildConfiguration `
 			-SourceFolder $PathToBeDeployed `
 			-TargetFolder $TargetDeployFolder `

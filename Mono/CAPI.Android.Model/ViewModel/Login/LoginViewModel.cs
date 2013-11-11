@@ -1,6 +1,7 @@
 using System;
 using CAPI.Android.Core.Model.Authorization;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Capi;
 
 namespace CAPI.Android.Core.Model.ViewModel.Login
 {

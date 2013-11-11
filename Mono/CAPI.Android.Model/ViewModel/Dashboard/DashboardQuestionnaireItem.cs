@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

@@ -29,7 +29,7 @@ try {
 	BuildSupervisor `
 		-Solution 'src\Supervisor.sln' `
 		-Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
-		-CapiProject 'Mono\CAPI.Android\CAPI.Android.csproj' `
+		-CapiProject 'src\UI\Capi\WB.UI.Capi.DataCollection\WB.UI.Capi.DataCollection.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-VersionPrefix $VersionPrefix `
 		-BuildNumber $BuildNumber
