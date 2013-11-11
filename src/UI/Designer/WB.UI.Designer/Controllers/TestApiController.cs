@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Main.Core;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -12,7 +14,6 @@ namespace WB.UI.Designer.Controllers
     using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
     using WB.Core.GenericSubdomains.Logging;
     using WB.Core.SharedKernel.Utils.Compression;
-    using WB.UI.Designer.Views.Questionnaire;
     using WB.UI.Shared.Web.Exceptions;
     using WB.UI.Shared.Web.Membership;
 
