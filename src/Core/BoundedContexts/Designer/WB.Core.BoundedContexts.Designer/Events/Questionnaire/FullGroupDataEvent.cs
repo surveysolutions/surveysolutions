@@ -8,5 +8,8 @@ namespace Main.Core.Events.Questionnaire
         public string ConditionExpression { get; set; }
         public string GroupText { get; set; }
         public string Description { get; set; }
+
+        public bool IsRoster { get; set; }
+        public Guid? RosterSizeQuestionId { get; set; }
     }
 }
