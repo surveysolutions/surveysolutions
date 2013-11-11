@@ -532,6 +532,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Paropagateble = propagationKind,
+                IsRoster = rosterSizeQuestionId.HasValue,
+                RosterSizeQuestionId = rosterSizeQuestionId,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
@@ -557,6 +559,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Paropagateble = propagationKind,
+                IsRoster = rosterSizeQuestionId.HasValue,
+                RosterSizeQuestionId = rosterSizeQuestionId,
                 Description = description,
                 ConditionExpression = condition,
                 SourceGroupId = sourceGroupId,
@@ -587,6 +591,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 GroupPublicKey = groupId,
                 GroupText = title,
                 Propagateble = propagationKind,
+                IsRoster = rosterSizeQuestionId.HasValue,
+                RosterSizeQuestionId = rosterSizeQuestionId,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
