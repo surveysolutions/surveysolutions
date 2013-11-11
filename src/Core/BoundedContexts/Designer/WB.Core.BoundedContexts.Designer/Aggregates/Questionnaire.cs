@@ -584,7 +584,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ApplyEvent(new GroupUpdated
             {
-                QuestionnaireId = this.innerDocument.PublicKey.ToString(),
                 GroupPublicKey = groupId,
                 GroupText = title,
                 Propagateble = propagationKind,

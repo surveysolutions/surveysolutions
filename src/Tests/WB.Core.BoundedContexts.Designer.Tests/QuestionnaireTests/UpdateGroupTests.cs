@@ -171,25 +171,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewUpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_questionnaire_id()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var questionnaireId = Guid.NewGuid();
-                var existingGroupPublicKey = Guid.NewGuid();
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: questionnaireId, groupId: existingGroupPublicKey, responsibleId: responsibleId);
-
-                // act
-                questionnaire.UpdateGroup(existingGroupPublicKey, responsibleId: responsibleId, title: "Title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null);
-
-                // assert
-                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId.ToString()));
-            }
-        }
-
-        [Test]
         public void NewUpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_group_public_key()
         {
             using (var eventContext = new EventContext())
