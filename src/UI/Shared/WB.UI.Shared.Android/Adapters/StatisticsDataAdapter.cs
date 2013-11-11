@@ -27,7 +27,7 @@ namespace WB.UI.Shared.Android.Adapters
             LinearLayout view = new LinearLayout(this.context);
             view.Orientation = Orientation.Horizontal;
             view.LayoutParameters = new ListView.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                              ViewGroup.LayoutParams.FillParent, 1);
+                                                              ViewGroup.LayoutParams.FillParent,1);
 
             view.Clickable = true;
             view.Click += this.tr_Click;
