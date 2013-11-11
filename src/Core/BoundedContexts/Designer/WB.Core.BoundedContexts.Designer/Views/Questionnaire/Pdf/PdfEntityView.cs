@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Newtonsoft.Json;
 
-namespace WB.UI.Designer.Views.Questionnaire.Pdf
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     [DebuggerDisplay("Id = {Id}, Title = {Title}")]
     public abstract class PdfEntityView

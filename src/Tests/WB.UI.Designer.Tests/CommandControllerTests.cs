@@ -8,9 +8,10 @@ using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Controllers;
-using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Membership;
 
@@ -86,7 +87,8 @@ namespace WB.UI.Designer.Tests
         {
             var qId = questionnaireId.HasValue ? questionnaireId.Value : Guid.NewGuid();
 
-            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty, responsibleId: responsibleId);
+            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), responsibleId: responsibleId,
+                title: string.Empty, propagationKind: Propagate.None, rosterSizeQuestionId: null, description: string.Empty, condition: string.Empty);
 
             return command;
         }

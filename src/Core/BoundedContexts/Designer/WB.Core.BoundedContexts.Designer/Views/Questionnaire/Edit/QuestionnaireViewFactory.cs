@@ -1,15 +1,12 @@
 ﻿using System;
 using Main.Core.Documents;
 using Main.Core.View;
-using Main.DenormalizerStorage;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
-    public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView>
+    public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>, 
+        IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView>
     {
         private readonly IReadSideRepositoryReader<QuestionnaireDocument> _questionnaireStorage;
 

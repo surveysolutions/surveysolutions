@@ -6,20 +6,8 @@ using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
-    public enum QuestionnaireEntityType
-    {
-        Question = 1,
-        Group = 10
-    }
-
-    public class QuestionnaireEntityNode
-    {
-        public QuestionnaireEntityType Type { get; set; }
-        public Guid Id { get; set; }
-    }
-
     public class EditGroupView : ICompositeView
     {
         public EditGroupView(IGroup group, Guid? parentId, int level)
@@ -29,6 +17,8 @@ namespace WB.UI.Designer.Views.Questionnaire
             this.Level = level;
             this.Title = group.Title;
             this.Propagated = group.Propagated;
+            this.IsRoster = group.IsRoster;
+            this.RosterSizeQuestionId = group.RosterSizeQuestionId;
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
             this.Children = @group.Children.Select(composite => new QuestionnaireEntityNode
@@ -44,6 +34,10 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         [JsonConverter(typeof (StringEnumConverter))]
         public Propagate Propagated { get; set; }
+
+        public bool IsRoster { get; set; }
+
+        public Guid? RosterSizeQuestionId { get; set; }
 
         public string Description { get; set; }
 
