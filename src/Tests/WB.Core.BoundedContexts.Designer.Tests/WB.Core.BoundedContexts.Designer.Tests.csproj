@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +95,13 @@
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="ShouldExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
