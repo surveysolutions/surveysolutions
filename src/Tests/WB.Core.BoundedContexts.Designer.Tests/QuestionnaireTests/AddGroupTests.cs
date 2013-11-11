@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId : responsibleId);
 
             // act
-            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), null, emptyTitle, Propagate.None, null, null, responsibleId: responsibleId);
+            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: emptyTitle, propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string notEmptyNewTitle = "Some new title";
 
                 // act
-                questionnaire.AddGroup(Guid.NewGuid(), null, notEmptyNewTitle, Propagate.None, null, null, responsibleId: responsibleId);
+                questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
                 // assert
                 Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: parentAutoPropagateGroupId, responsibleId: responsibleId);
 
             // act
-            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), parentAutoPropagateGroupId, "Title", Propagate.None, null, null, responsibleId: responsibleId);
+            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: parentAutoPropagateGroupId);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
 
                 // act
-                questionnaire.AddGroup(Guid.NewGuid(), parentRegularGroupId, "Title", Propagate.None, null, null, responsibleId: responsibleId);
+                questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: parentRegularGroupId);
 
                 // assert
                 Assert.That(GetLastEvent<NewGroupAdded>(eventContext).ParentGroupPublicKey, Is.EqualTo(parentRegularGroupId));
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var unsupportedPropagationKing = Propagate.Propagated;
 
             // act
-            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), null, "Title", unsupportedPropagationKing, null, null, responsibleId: responsibleId);
+            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", propagationKind: unsupportedPropagationKing, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
                 // act
-                questionnaire.AddGroup(Guid.NewGuid(), null, "Title", supportedPopagationKind, null, null, responsibleId: responsibleId);
+                questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", propagationKind: supportedPopagationKind, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
                 // assert
                 Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).Paropagateble, Is.EqualTo(supportedPopagationKind));
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
 
             // act
-            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), null, "Title", supportedPopagationKind, null, null, responsibleId: Guid.NewGuid());
+            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), responsibleId: Guid.NewGuid(), title: "Title", propagationKind: supportedPopagationKind, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
@@ -158,12 +158,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
-                        parentGroupId: groupId,
-                        title: "Title",
-                        propagationKind: Propagate.None,
-                        condition: expression,
-                        description: null,
-                        responsibleId: responsibleId);
+                        responsibleId: responsibleId, title: "Title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: expression, parentGroupId: groupId);
 
             // assert
             Assert.DoesNotThrow(act);
@@ -189,12 +184,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
-                        parentGroupId: groupId,
-                        title: "Title",
-                        propagationKind: Propagate.None,
-                        condition: expression,
-                        description: null,
-                        responsibleId: responsibleId);
+                        responsibleId: responsibleId, title: "Title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: expression, parentGroupId: groupId);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);

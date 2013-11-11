@@ -7,9 +7,6 @@ namespace Main.Core.Events.Questionnaire
     {
         public string ConditionExpression { get; set; }
         public string GroupText { get; set; }
-        public Guid? ParentGroupPublicKey { get; set; }
-        public Propagate Paropagateble { get; set; }
-        public Guid PublicKey { get; set; }
         public string Description { get; set; }
     }
 }

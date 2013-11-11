@@ -38,14 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.CloneGroupWithoutChildren(
                         groupId: Guid.NewGuid(),
-                        parentGroupId: null,
-                        sourceGroupId: groupId,
-                        title: "Title",
-                        propagationKind: Propagate.None,
-                        condition: expression,
-                        description: null,
-                        responsibleId: responsibleId,
-                        targetIndex: 1);
+                        responsibleId: responsibleId, title: "Title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: expression, parentGroupId: null, sourceGroupId: groupId, targetIndex: 1);
 
             // assert
             Assert.DoesNotThrow(act);
@@ -71,14 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.CloneGroupWithoutChildren(
                         groupId: Guid.NewGuid(),
-                        parentGroupId: null,
-                        sourceGroupId: groupId,
-                        title: "Title",
-                        propagationKind: Propagate.None,
-                        condition: expression,
-                        description: null,
-                        responsibleId: responsibleId,
-                        targetIndex: 1);
+                        responsibleId: responsibleId, title: "Title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: expression, parentGroupId: null, sourceGroupId: groupId, targetIndex: 1);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);

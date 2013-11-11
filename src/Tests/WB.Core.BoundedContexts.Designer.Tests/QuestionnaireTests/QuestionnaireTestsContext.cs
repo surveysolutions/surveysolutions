@@ -66,8 +66,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
-            questionnaire.AddGroup(groupId ?? Guid.NewGuid(), null, "New group", propagationKind, null, null,
-                responsibleId: responsibleId);
+            questionnaire.AddGroup(groupId ?? Guid.NewGuid(),
+                responsibleId: responsibleId, title: "New group", propagationKind: propagationKind, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
             return questionnaire;
         }
@@ -127,16 +127,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: firstGroup,
                 responsibleId: responsibleId, propagationKind: propagationKind);
 
-            questionnaire.AddGroup(secondGroup, null, "Second group", propagationKind, null, null,
-                responsibleId: responsibleId);
+            questionnaire.AddGroup(secondGroup,
+                responsibleId: responsibleId, title: "Second group", propagationKind: propagationKind, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
             return questionnaire;
         }
 
         public static void AddGroup(Questionnaire questionnaire, Guid groupId, Guid? parentGroupId, string condition, Guid responsibleId)
         {
-            questionnaire.AddGroup(groupId, null, "New group", Propagate.None, null, condition,
-                responsibleId: responsibleId);
+            questionnaire.AddGroup(groupId,
+                responsibleId: responsibleId, title: "New group", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: condition, parentGroupId: null);
         }
 
         public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroup(Guid autoGroupPublicKey, Guid secondGroup, Guid responsibleId)
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupPublicKey,
                 responsibleId: responsibleId);
 
-            questionnaire.AddGroup(secondGroup, null, "Second group", Propagate.None, null, null, responsibleId);
+            questionnaire.AddGroup(secondGroup, responsibleId, "Second group", Propagate.None, null, null, null, null);
 
             return questionnaire;
         }
@@ -260,8 +260,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId: groupId,
                 responsibleId: responsibleId);
 
-            questionnaire.AddGroup(Guid.NewGuid(), groupId, "New group", Propagate.None, null, null,
-                responsibleId: responsibleId);
+            questionnaire.AddGroup(Guid.NewGuid(),
+                responsibleId: responsibleId, title: "New group", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: groupId);
 
             return questionnaire;
         }

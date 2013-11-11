@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "UpdateGroup")]
     public class UpdateGroupCommand : FullGroupDataCommand
     {
-        public UpdateGroupCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
-            : base(questionnaireId, groupId, title, propagationKind, description, condition, responsibleId) {}
+        public UpdateGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
+            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition)
+            : base(questionnaireId, groupId, responsibleId, title, propagationKind, rosterSizeQuestionId, description, condition) {}
     }
 }
