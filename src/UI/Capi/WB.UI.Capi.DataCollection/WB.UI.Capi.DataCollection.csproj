@@ -61,12 +61,6 @@
     <Reference Include="Cirrious.MvvmCross.Binding.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Community.Plugins.Sqlite">
-      <HintPath>..\..\..\..\packages\MvvmCross.Community.Plugin.Sqlite.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Community.Plugins.Sqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Community.Plugins.Sqlite.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.Community.Plugin.Sqlite.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Community.Plugins.Sqlite.Droid.dll</HintPath>
-    </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.dll</HintPath>
     </Reference>
@@ -81,6 +75,13 @@
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.ResourceLoader.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -117,8 +118,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Bootstrap\CommunitySqlitePluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\DashboardAdapter.cs" />
     <Compile Include="Controls\Navigation\NavigationItem.cs" />
