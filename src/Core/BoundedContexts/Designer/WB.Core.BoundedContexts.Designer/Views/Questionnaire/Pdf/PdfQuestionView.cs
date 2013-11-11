@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.UI.Designer.Views.Questionnaire.Pdf
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfQuestionView : PdfEntityView
     {

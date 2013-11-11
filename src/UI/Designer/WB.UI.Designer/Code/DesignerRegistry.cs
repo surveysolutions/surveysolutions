@@ -6,11 +6,12 @@ using Main.Core;
 using Ncqrs;
 using Ninject;
 using Ninject.Activation;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
-using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer.Code
 {

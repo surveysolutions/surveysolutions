@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class QuestionnaireViewInputModel
     {
