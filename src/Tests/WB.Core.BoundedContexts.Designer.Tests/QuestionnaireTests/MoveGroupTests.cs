@@ -85,9 +85,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: chapterId, responsibleId: responsibleId);
 
-            questionnaire.AddGroup(autoPropagateGroupId, chapterId, "autoPropagateGroup", Propagate.AutoPropagated, null, null, responsibleId: responsibleId);
+            questionnaire.AddGroup(autoPropagateGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", propagationKind: Propagate.AutoPropagated, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: chapterId);
 
-            questionnaire.AddGroup(regularGroupId, chapterId, "regularGroup", Propagate.None, null, null, responsibleId: responsibleId);
+            questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: chapterId);
 
             return questionnaire;
         }

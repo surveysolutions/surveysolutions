@@ -87,7 +87,8 @@ namespace WB.UI.Designer.Tests
         {
             var qId = questionnaireId.HasValue ? questionnaireId.Value : Guid.NewGuid();
 
-            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty, responsibleId: responsibleId);
+            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), responsibleId: responsibleId,
+                title: string.Empty, propagationKind: Propagate.None, rosterSizeQuestionId: null, description: string.Empty, condition: string.Empty);
 
             return command;
         }
