@@ -17,6 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.Level = level;
             this.Title = group.Title;
             this.Propagated = group.Propagated;
+            this.IsRoster = group.IsRoster;
+            this.RosterSizeQuestionId = group.RosterSizeQuestionId;
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
             this.Children = @group.Children.Select(composite => new QuestionnaireEntityNode
@@ -32,6 +34,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         [JsonConverter(typeof (StringEnumConverter))]
         public Propagate Propagated { get; set; }
+
+        public bool IsRoster { get; set; }
+
+        public Guid? RosterSizeQuestionId { get; set; }
 
         public string Description { get; set; }
 
