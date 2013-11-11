@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -84,6 +85,21 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         private It should_chapters_count_equals_1 = () =>
             interviewViewModel.Chapters.Count.ShouldEqual(1);
 
+        private It should_roster_size_equals_2 = () =>
+            interviewViewModel.Screens.Values.Count(s => s.ScreenId.Id == propagatedGroupId && !s.ScreenId.IsTopLevel()).ShouldEqual(2);
+
+        private It should_answer_on_first_question_in_first_row_of_roster_equals_to_1 = () =>
+            interviewViewModel.FindQuestion(
+                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new int[] { 0 }))
+                .FirstOrDefault()
+                .AnswerObject.ShouldEqual(1);
+
+        private It should_answer_on_first_question_in_second_row_of_roster_equals_to_2 = () =>
+            interviewViewModel.FindQuestion(
+                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new int[] { 1 }))
+                .FirstOrDefault()
+                .AnswerObject.ShouldEqual(2);
+
         private static WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnairePropagationStructure propagationStructure;
@@ -91,7 +107,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         private static Guid propagatedGroupId;
         private static Guid autoPropagatedQuestionId;
         private static Guid sourceForLinkedQuestionId;
-        private static string sourceForLinkedQuestionVariableName = "var";
+        private const string sourceForLinkedQuestionVariableName = "var";
         private static Guid linkedQuestionId;
         
     }
