@@ -162,6 +162,9 @@ namespace WB.UI.Designer.Controllers
         {
             var questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
+            if(questionnaire == null)
+                throw new HttpException(404, string.Empty);
+
             QuestionnaireSharedPersons questionnaireSharedPersons =
                 this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
 

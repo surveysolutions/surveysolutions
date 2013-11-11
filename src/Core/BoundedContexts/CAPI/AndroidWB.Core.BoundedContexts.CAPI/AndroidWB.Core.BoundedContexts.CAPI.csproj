@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C62669D1-2B5F-4976-A33D-A66B674D0149}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.BoundedContexts.Capi</RootNamespace>
+    <AssemblyName>WB.Core.BoundedContexts.Capi</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\net45\Cirrious.CrossCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.CrossCore.Wpf">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\net45\Cirrious.CrossCore.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.13\lib\net45\Cirrious.MvvmCross.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\net45\Cirrious.MvvmCross.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Wpf">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.13\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\Mono\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\CAPIBoundedContextModule.cs">
+      <Link>CAPIBoundedContextModule.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs">
+      <Link>EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\InterviewViewModelDenormalizer.cs">
+      <Link>EventHandler\InterviewViewModelDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\IAuthentication.cs">
+      <Link>IAuthentication.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\AnswerViewModel.cs">
+      <Link>Views\InterviewDetails\AnswerViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\CommentDocument.cs">
+      <Link>Views\InterviewDetails\CommentDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\GridItems\HeaderItem.cs">
+      <Link>Views\InterviewDetails\GridItems\HeaderItem.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\InterviewViewModel.cs">
+      <Link>Views\InterviewDetails\InterviewViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\IQuestionnaireItemViewModel.cs">
+      <Link>Views\InterviewDetails\IQuestionnaireItemViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\IQuestionnaireViewModel.cs">
+      <Link>Views\InterviewDetails\IQuestionnaireViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\LinkedAnswerViewModel.cs">
+      <Link>Views\InterviewDetails\LinkedAnswerViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\LinkedQuestionViewModel.cs">
+      <Link>Views\InterviewDetails\LinkedQuestionViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\QuestionnaireGridViewModel.cs">
+      <Link>Views\InterviewDetails\QuestionnaireGridViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\QuestionnaireNavigationPanelItem.cs">
+      <Link>Views\InterviewDetails\QuestionnaireNavigationPanelItem.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\QuestionnairePropagatedScreenViewModel.cs">
+      <Link>Views\InterviewDetails\QuestionnairePropagatedScreenViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\QuestionnaireScreenInput.cs">
+      <Link>Views\InterviewDetails\QuestionnaireScreenInput.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\QuestionnaireScreenViewFactory.cs">
+      <Link>Views\InterviewDetails\QuestionnaireScreenViewFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\QuestionnaireScreenViewModel.cs">
+      <Link>Views\InterviewDetails\QuestionnaireScreenViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\QuestionViewModel.cs">
+      <Link>Views\InterviewDetails\QuestionViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\SelectebleQuestionViewModel.cs">
+      <Link>Views\InterviewDetails\SelectebleQuestionViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\ValueQuestionViewModel.cs">
+      <Link>Views\InterviewDetails\ValueQuestionViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Statistics\StatisticsInput.cs">
+      <Link>Views\Statistics\StatisticsInput.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Statistics\StatisticsQuestionViewModel.cs">
+      <Link>Views\Statistics\StatisticsQuestionViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Statistics\StatisticsViewFactory.cs">
+      <Link>Views\Statistics\StatisticsViewFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Statistics\StatisticsViewModel.cs">
+      <Link>Views\Statistics\StatisticsViewModel.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
+      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
+      <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
+      <Name>AndroidNCQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
+      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
+      <Name>AndroidNinject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
+      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
