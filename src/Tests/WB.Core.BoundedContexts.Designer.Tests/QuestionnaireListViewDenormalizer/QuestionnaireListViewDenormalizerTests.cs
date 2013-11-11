@@ -1,28 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
-using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
-using WB.UI.Designer.Views.EventHandler;
-using WB.UI.Designer.Views.Questionnaire;
 
-namespace WB.UI.Designer.Views.Tests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormalizer
 {
     [TestFixture]
-    public class QuestionnaireDenormalizerTests
+    public class QuestionnaireListViewDenormalizerTests
     {
         [Test]
         public void Handle_When_SnapshotLoaded_event_template_is_absent_Then_new_document_is_added()

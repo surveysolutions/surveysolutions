@@ -4,20 +4,16 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.View;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
-using WB.UI.Designer.Providers.CQRS.Accounts.View;
-using WB.UI.Designer.Views.Questionnaire.Pdf;
-using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.Views.EventHandler
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
-    public class PdfQuestionnaireDenormalizer :
+    internal class PdfQuestionnaireDenormalizer :
         IEventHandler<GroupCloned>,
         IEventHandler<GroupDeleted>,
         IEventHandler<GroupUpdated>,

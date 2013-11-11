@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class EditQuestionnaireView
     {

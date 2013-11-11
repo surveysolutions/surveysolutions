@@ -6,20 +6,8 @@ using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
-    public enum QuestionnaireEntityType
-    {
-        Question = 1,
-        Group = 10
-    }
-
-    public class QuestionnaireEntityNode
-    {
-        public QuestionnaireEntityType Type { get; set; }
-        public Guid Id { get; set; }
-    }
-
     public class EditGroupView : ICompositeView
     {
         public EditGroupView(IGroup group, Guid? parentId, int level)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
     /// <summary>
     /// The questionnaire browse item.
