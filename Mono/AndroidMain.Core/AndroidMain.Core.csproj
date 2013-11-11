@@ -59,17 +59,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\ConcurrencyResolveCommandService.cs">
       <Link>Commands\ConcurrencyResolveCommandService.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\DeleteFileCommand.cs">
-      <Link>Commands\File\DeleteFileCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UpdateFileMetaCommand.cs">
-      <Link>Commands\File\UpdateFileMetaCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UploadFileCommand.cs">
       <Link>Commands\File\UploadFileCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterDeviceCommand.cs">
-      <Link>Commands\Synchronization\RegisterDeviceCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterNewDeviceCapiCommand.cs">
       <Link>Commands\Synchronization\RegisterNewDeviceCapiCommand.cs</Link>
@@ -295,38 +286,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\PackageHelper.cs">
       <Link>PackageHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\EnumerableExtensions.cs">
-      <Link>Utility\EnumerableExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\EventMergeUtils.cs">
       <Link>Utility\EventMergeUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\LINQExtensions.cs">
       <Link>Utility\LINQExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\AsIsStrategy.cs">
-      <Link>Utility\OrderStrategy\AsIsStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\AZStrategy.cs">
-      <Link>Utility\OrderStrategy\AZStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\IOrderStrategy.cs">
-      <Link>Utility\OrderStrategy\IOrderStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\MaxMinStrategy.cs">
-      <Link>Utility\OrderStrategy\MaxMinStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\MinMaxStrategy.cs">
-      <Link>Utility\OrderStrategy\MinMaxStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\OrderStrategyFactory.cs">
-      <Link>Utility\OrderStrategy\OrderStrategyFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\RandomStrategy.cs">
-      <Link>Utility\OrderStrategy\RandomStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\ZAStrategy.cs">
-      <Link>Utility\OrderStrategy\ZAStrategy.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\RegistryHelper.cs">
       <Link>Utility\RegistryHelper.cs</Link>
@@ -340,38 +304,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\StringUtil.cs">
       <Link>Utility\StringUtil.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs">
-      <Link>View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs">
-      <Link>View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs">
-      <Link>View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportInputModel.cs">
-      <Link>View\Export\CompleteQuestionnaireExportInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\HeaderCollection.cs">
-      <Link>View\Export\HeaderCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\HeaderItem.cs">
-      <Link>View\Export\HeaderItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Group\Counter.cs">
-      <Link>View\Group\Counter.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\ICompositeView.cs">
       <Link>View\ICompositeView.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewFactory.cs">
       <Link>View\IViewFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessInputModel.cs">
-      <Link>View\SyncProcess\SyncProcessInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncStatisticInfo.cs">
-      <Link>View\SyncProcess\SyncStatisticInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\User\UserBrowseInputModel.cs">
       <Link>View\User\UserBrowseInputModel.cs</Link>
@@ -446,17 +383,11 @@
       <Name>AndroidNinject</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\Questionnaire\Completed\" />
-    <Folder Include="Services\" />
-    <Folder Include="View\Answer\" />
-    <Folder Include="View\CompleteQuestionnaire\ScreenGroup\" />
-    <Folder Include="View\Question\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

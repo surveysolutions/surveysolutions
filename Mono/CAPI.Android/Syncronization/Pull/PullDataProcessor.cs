@@ -107,9 +107,7 @@ namespace CAPI.Android.Syncronization.Pull
             catch (Exception ex)
             {
                 logger.Error("Error on item deletion " + questionnarieId, ex);
-                //throw;
             }
-          
         }
 
         private void ExecuteUser(SyncItem item)
@@ -132,8 +130,6 @@ namespace CAPI.Android.Syncronization.Pull
 
         private void ExecuteInterview(SyncItem item)
         {
-            /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
-             {*/
             string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
             var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
@@ -151,18 +147,6 @@ namespace CAPI.Android.Syncronization.Pull
                             q.PublicKey, new int[0], q.Value,
                             string.Empty))
                     .ToArray(), string.Empty, true));
-
-
-            /*    }
-            
-            else
-            {
-                string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
-
-                var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
-                commandService.Execute(new CreateNewAssigment(questionnarieContent));    
-            }*/
-
         }
 
         private void ExecuteTemplate(SyncItem item)
