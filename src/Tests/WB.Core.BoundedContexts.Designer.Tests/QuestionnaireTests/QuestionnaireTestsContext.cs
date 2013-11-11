@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey,
                                                                                           secondGroup, responsibleId);
 
-            questionnaire.OnNewQuestionAdded(new NewQuestionAdded()
+            questionnaire.Apply(new NewQuestionAdded()
                 {
                     PublicKey = autoQuestionId,
                     GroupPublicKey = autoGroupPublicKey,
