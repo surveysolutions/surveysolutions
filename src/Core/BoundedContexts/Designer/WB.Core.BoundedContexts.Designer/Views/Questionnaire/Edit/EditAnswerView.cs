@@ -2,7 +2,7 @@ using System;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class EditAnswerView : ICompositeView
     {

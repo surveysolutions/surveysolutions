@@ -1,18 +1,16 @@
 using System.Collections.Generic;
-using Main.Core.View;
-using System;
 using System.Linq;
 using Main.Core.Utility;
-using Raven.Client.Linq;
+using Main.Core.View;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Views.Questionnaire.Indexes;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
     /// <summary>
     /// The questionnaire browse view factory.
     /// </summary>
-    public class QuestionnaireListViewFactory : IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView>
+    internal class QuestionnaireListViewFactory : IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
@@ -20,8 +18,8 @@ namespace WB.UI.Designer.Views.Questionnaire
         {
             this.indexAccessor = indexAccessor;
         }
-        
-        public QuestionnaireListView Load(QuestionnaireListViewInputModel input)
+
+        public QuestionnaireListView Load(QuestionnaireListInputModel input)
         {
             var indexName = typeof(DesignerReportQuestionnaireListViewItem).Name;
             var count =
@@ -44,7 +42,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         }
 
         private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItemSearchable> questionnaire,
-            QuestionnaireListViewInputModel input)
+            QuestionnaireListInputModel input)
         {
             var result = questionnaire;
             if (!string.IsNullOrEmpty(input.Filter))

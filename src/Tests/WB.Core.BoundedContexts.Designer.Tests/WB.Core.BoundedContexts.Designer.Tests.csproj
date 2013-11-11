@@ -77,6 +77,7 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="QuestionnaireDocumentExtentions.cs" />
+    <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />
@@ -85,9 +86,9 @@
     <Compile Include="QuestionnaireTests\DeleteQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\MoveGroupTests.cs" />
-    <Compile Include="QuestionnaireTests\NewAddGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\AddGroupTests.cs" />
     <Compile Include="QuestionnaireTests\NewAddQuestionTests.cs" />
-    <Compile Include="QuestionnaireTests\NewUpdateGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\UpdateGroupTests.cs" />
     <Compile Include="QuestionnaireTests\NewUpdateQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\MiscTests.cs" />
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
@@ -123,6 +124,14 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
+      <Project>{400CDE74-7407-4388-8D57-BF429E7C508D}</Project>
+      <Name>WB.UI.Designer.Providers.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

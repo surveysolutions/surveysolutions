@@ -13,6 +13,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
@@ -21,7 +22,6 @@ using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
-using WB.UI.Designer.Views.Questionnaire.Indexes;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]

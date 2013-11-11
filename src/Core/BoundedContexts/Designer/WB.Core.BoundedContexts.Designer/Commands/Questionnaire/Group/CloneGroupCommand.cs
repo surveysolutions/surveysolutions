@@ -10,9 +10,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneGroupWithoutChildren")]
     public class CloneGroupWithoutChildrenCommand : FullGroupDataCommand
     {
-        public CloneGroupWithoutChildrenCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, Guid sourceGroupId, int targetIndex,
-            string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
-            : base(questionnaireId, groupId, title, propagationKind, description, condition, responsibleId)
+        public CloneGroupWithoutChildrenCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
+            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition,
+            Guid? parentGroupId, Guid sourceGroupId, int targetIndex)
+            : base(questionnaireId, groupId, responsibleId, title, propagationKind, rosterSizeQuestionId, description, condition)
         {
             this.ParentGroupId = parentGroupId;
             this.SourceGroupId = sourceGroupId;

@@ -1,6 +1,6 @@
 ﻿using Main.Core.Entities.SubEntities;
 
-namespace WB.UI.Designer.Views.Questionnaire.Pdf
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfAnswerView
     {
