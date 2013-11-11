@@ -23,7 +23,7 @@
     <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RejectedBySupervisorCount(), Status : '@InterviewStatus.RejectedBySupervisor' }}"></span>
 </script>
 <script type="text/html" id="RestoredCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RestoredCount(), Status : '@SurveyStatus.Approve.PublicId' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RestoredCount(), Status : '@InterviewStatus.Restored' }}"></span>
 </script>
 
 <script type="text/html" id="statusTemplate">

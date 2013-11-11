@@ -15,8 +15,6 @@ namespace Web.Supervisor.Injections
     using System.Web.Mvc;
 
     using Main.Core;
-    using Main.Core.View.Export;
-
     using Ninject;
     using Ninject.Activation;
     using Questionnaire.Core.Web.Security;
@@ -74,6 +72,8 @@ namespace Web.Supervisor.Injections
         public override void Load()
         {
             base.Load();
+
+            RegisterViewFactories();
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();

@@ -1,6 +1,4 @@
-﻿using WB.UI.Designer.Views.Questionnaire;
-
-namespace WB.UI.Designer.WebServices
+﻿namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.ServiceModel;

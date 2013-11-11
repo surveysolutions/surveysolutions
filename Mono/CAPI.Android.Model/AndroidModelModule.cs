@@ -12,8 +12,6 @@ using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
-using Main.Core.Documents;
-using Main.Core.Services;
 using Main.Core.View;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;

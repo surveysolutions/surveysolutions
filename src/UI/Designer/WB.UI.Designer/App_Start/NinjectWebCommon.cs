@@ -2,7 +2,6 @@ using System;
 using System.Web;
 using Main.Core;
 using Main.Core.Commands;
-using Main.Core.Services;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
@@ -14,6 +13,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
@@ -22,7 +22,6 @@ using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
-using WB.UI.Designer.Views.Questionnaire.Indexes;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -92,7 +91,6 @@ namespace WB.UI.Designer.App_Start
             NcqrsEnvironment.SetDefault(commandService);
             NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
             kernel.Bind<ICommandService>().ToConstant(commandService);
-            NcqrsEnvironment.SetGetter(() => kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 

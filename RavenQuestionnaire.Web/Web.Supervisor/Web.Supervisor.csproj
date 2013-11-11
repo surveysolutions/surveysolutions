@@ -324,10 +324,8 @@
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
-    <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -521,7 +519,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
-    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
     <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
@@ -558,6 +555,7 @@
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -697,7 +695,6 @@
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
-    <Content Include="Views\Interview\_StatusHistory.cshtml" />
     <Content Include="Views\Interview\ChangeState.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml">
       <SubType>

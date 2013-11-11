@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
@@ -12,10 +12,6 @@ namespace Main.Core.Documents
 {
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
-
-        private readonly List<Guid> triggers = new List<Guid>();
-        
-
         public QuestionnaireDocument()
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
@@ -79,16 +75,14 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
-        public List<Guid> Triggers
+        public bool IsRoster
         {
-            get
-            {
-                return this.triggers;
-            }
+            get { return false; }
+        }
 
-            set
-            {
-            }
+        public Guid? RosterSizeQuestionId
+        {
+            get { return null; }
         }
 
         public List<Guid> SharedPersons { get; set; }
@@ -216,7 +210,8 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string description, Propagate kindOfPropagation, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string description,
+            Propagate kindOfPropagation, bool isRoster, Guid? rosterSizeQuestionId, string conditionExpression)
         {
             var group = this.Find<Group>(groupId);
             if (@group == null) return;
@@ -224,6 +219,8 @@ namespace Main.Core.Documents
             this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
 
             @group.Propagated = kindOfPropagation;
+            @group.IsRoster = isRoster;
+            @group.RosterSizeQuestionId = rosterSizeQuestionId;
             @group.ConditionExpression = conditionExpression;
             @group.Description = description;
             @group.Update(title);
@@ -459,7 +456,6 @@ namespace Main.Core.Documents
         {
             var doc = this.MemberwiseClone() as QuestionnaireDocument;
 
-            doc.Triggers = new List<Guid>(this.Triggers);
             doc.SetParent(null);
 
             doc.Children = new List<IComposite>();

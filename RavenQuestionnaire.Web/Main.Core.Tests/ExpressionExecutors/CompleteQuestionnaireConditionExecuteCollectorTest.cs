@@ -4,13 +4,10 @@ using Moq;
 namespace Main.Core.Tests.ExpressionExecutors
 {
     using System;
-    using System.Collections.Generic;
 
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Question;
-    using Main.Core.ExpressionExecutors;
-
     using NUnit.Framework;
 
     /// <summary>

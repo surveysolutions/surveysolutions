@@ -106,10 +106,8 @@ namespace WB.UI.Capi.DataCollection.Syncronization.Pull
             #warning replace catch with propper handler of absent questionnaries
             catch (Exception ex)
             {
-                this.logger.Error("Error on item deletion " + questionnarieId, ex);
-                //throw;
+                logger.Error("Error on item deletion " + questionnarieId, ex);
             }
-          
         }
 
         private void ExecuteUser(SyncItem item)
@@ -132,8 +130,6 @@ namespace WB.UI.Capi.DataCollection.Syncronization.Pull
 
         private void ExecuteInterview(SyncItem item)
         {
-            /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
-             {*/
             string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
             var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
@@ -151,18 +147,6 @@ namespace WB.UI.Capi.DataCollection.Syncronization.Pull
                             q.PublicKey, new int[0], q.Value,
                             string.Empty))
                     .ToArray(), string.Empty, true));
-
-
-            /*    }
-            
-            else
-            {
-                string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
-
-                var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
-                commandService.Execute(new CreateNewAssigment(questionnarieContent));    
-            }*/
-
         }
 
         private void ExecuteTemplate(SyncItem item)

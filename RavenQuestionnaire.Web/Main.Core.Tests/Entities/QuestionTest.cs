@@ -55,8 +55,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                     AnswerOrder = Order.Random, 
                     StataExportCaption = "stata", 
                     Answers = answers,
-                    ConditionalDependentGroups = new List<Guid>(){ Guid.NewGuid() },
-                    AddSingleAttr = "testAttr"
+                    ConditionalDependentGroups = new List<Guid>(){ Guid.NewGuid() }
                 };
 
             var target = question.Clone() as SingleQuestion;

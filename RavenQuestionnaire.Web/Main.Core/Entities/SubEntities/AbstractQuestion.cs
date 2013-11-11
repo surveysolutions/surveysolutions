@@ -12,7 +12,6 @@ namespace Main.Core.Entities.SubEntities
     {
         protected AbstractQuestion()
         {
-            // PublicKey = Guid.NewGuid();
             this.Cards = new List<Image>();
             this.Answers = new List<IAnswer>();
             this.ConditionalDependentGroups = new List<Guid>();
@@ -24,8 +23,6 @@ namespace Main.Core.Entities.SubEntities
         {
             this.QuestionText = text;
         }
-
-        #region Public Properties
 
         public Order AnswerOrder { get; set; }
 
@@ -89,8 +86,6 @@ namespace Main.Core.Entities.SubEntities
         public string ValidationMessage { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
-
-        #endregion
 
         public abstract void AddAnswer(IAnswer answer);
 
