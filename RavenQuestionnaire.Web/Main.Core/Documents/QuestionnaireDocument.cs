@@ -210,7 +210,8 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string description, Propagate kindOfPropagation, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string description,
+            Propagate kindOfPropagation, bool isRoster, Guid? rosterSizeQuestionId, string conditionExpression)
         {
             var group = this.Find<Group>(groupId);
             if (@group == null) return;
@@ -218,6 +219,8 @@ namespace Main.Core.Documents
             this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
 
             @group.Propagated = kindOfPropagation;
+            @group.IsRoster = isRoster;
+            @group.RosterSizeQuestionId = rosterSizeQuestionId;
             @group.ConditionExpression = conditionExpression;
             @group.Description = description;
             @group.Update(title);
