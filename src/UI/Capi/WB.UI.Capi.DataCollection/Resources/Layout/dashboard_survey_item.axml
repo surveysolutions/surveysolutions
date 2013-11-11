@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:background="@drawable/dashboardquestionnaire"
+               
+               >  
+    <LinearLayout android:id="@+id/llQuestionnairie"
+          android:orientation=    "horizontal"
+          android:layout_width=    "fill_parent"
+          android:layout_height=    "wrap_content"
+          android:background="?android:attr/selectableItemBackground"
+          android:padding="10dip">
+      <TextView  android:id="@+id/tvStatus"
+               android:layout_width="200px"
+               android:layout_height="wrap_content"
+               android:gravity=    "center"
+               android:textSize="20dp"/>
+      <LinearLayout android:id="@+id/llPropertyHolder"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:gravity=    "center_horizontal"
+           android:orientation="vertical"
+      />
+    </LinearLayout>
+  <!--</RelativeLayout>-->
+</LinearLayout>

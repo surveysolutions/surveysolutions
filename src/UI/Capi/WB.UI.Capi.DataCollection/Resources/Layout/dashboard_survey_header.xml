@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+       android:id="@+id/MyLayout"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:padding="8px"
+       android:background="@drawable/surveyshape"
+      >
+
+
+  <TextView
+       android:id="@+id/txtSurveyName"
+      android:textColor="#000"
+       android:textSize="22dp"
+       android:layout_alignParentLeft="true"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"/>
+
+
+  <TextView
+      android:id="@+id/txtSurveyCount"
+      android:gravity="center"
+      android:paddingLeft="5dp"
+      android:paddingRight="5dp"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:textColor="#000"
+      
+      android:background="@drawable/counterroundshape"
+     
+      android:layout_width="wrap_content"
+      android:layout_height="20dp"
+        />
+</RelativeLayout>
