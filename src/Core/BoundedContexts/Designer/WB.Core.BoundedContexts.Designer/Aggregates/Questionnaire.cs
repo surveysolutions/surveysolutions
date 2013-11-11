@@ -173,18 +173,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey, ResponsibleId = responsibleId });
         }
 
-        [Obsolete]
-        public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
-        {
-            this.ApplyEvent(
-                new QuestionnaireItemMoved
-                    {
-                        AfterItemKey = afterItemKey,
-                        GroupKey = groupKey,
-                        PublicKey = publicKey
-                    });
-        }
-
         public void NewAddGroup(Guid groupId,
             Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
         {
