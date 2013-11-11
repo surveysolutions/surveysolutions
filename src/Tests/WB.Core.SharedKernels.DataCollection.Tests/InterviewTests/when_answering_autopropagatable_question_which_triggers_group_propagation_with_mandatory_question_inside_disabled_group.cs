@@ -35,16 +35,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                                                         && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                                                         && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
-                                                        && _.GetPropagationLevelForQuestion(mandatoryQuestionId) == 1
+                                                        && _.GetRosterLevelForQuestion(mandatoryQuestionId) == 1
 
                                                         && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
                                                         && _.HasGroup(propagatedGroupId) == true
-                                                        && _.GetPropagationLevelForGroup(propagatedGroupId) == 1
+                                                        && _.GetRosterLevelForGroup(propagatedGroupId) == 1
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetParentPropagatableGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetParentRosterGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
                                                         && _.GetUnderlyingMandatoryQuestions(propagatedGroupId) == new Guid[] { mandatoryQuestionId });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
