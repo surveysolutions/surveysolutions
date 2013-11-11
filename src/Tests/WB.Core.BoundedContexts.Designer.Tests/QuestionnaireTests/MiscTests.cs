@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string conditionExpression = "1=1";
                 string description = "group desct";
 
-                questionnaire.NewAddGroup(publicKey, parentGroupKey, text, propagateble, description, conditionExpression, responsibleId: responsibleId);
+                questionnaire.AddGroup(publicKey, parentGroupKey, text, propagateble, description, conditionExpression, responsibleId: responsibleId);
 
                 Assert.True(ctx.Events.Count() == 1);
 
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             Guid groupPublicKey = Guid.NewGuid();
 
-            questionnaire.NewAddGroup(groupPublicKey, null, "title", Propagate.None, "description", null, responsibleId: responsibleId);
+            questionnaire.AddGroup(groupPublicKey, null, "title", Propagate.None, "description", null, responsibleId: responsibleId);
 
             using (var ctx = new EventContext())
             {

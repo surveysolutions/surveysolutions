@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(groupId ?? Guid.NewGuid(), null, "New group", propagationKind, null, null,
+            questionnaire.AddGroup(groupId ?? Guid.NewGuid(), null, "New group", propagationKind, null, null,
                 responsibleId: responsibleId);
 
             return questionnaire;
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: firstGroup,
                 responsibleId: responsibleId, propagationKind: propagationKind);
 
-            questionnaire.NewAddGroup(secondGroup, null, "Second group", propagationKind, null, null,
+            questionnaire.AddGroup(secondGroup, null, "Second group", propagationKind, null, null,
                 responsibleId: responsibleId);
 
             return questionnaire;
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         public static void AddGroup(Questionnaire questionnaire, Guid groupId, Guid? parentGroupId, string condition, Guid responsibleId)
         {
-            questionnaire.NewAddGroup(groupId, null, "New group", Propagate.None, null, condition,
+            questionnaire.AddGroup(groupId, null, "New group", Propagate.None, null, condition,
                 responsibleId: responsibleId);
         }
 
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupPublicKey,
                 responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(secondGroup, null, "Second group", Propagate.None, null, null, responsibleId);
+            questionnaire.AddGroup(secondGroup, null, "Second group", Propagate.None, null, null, responsibleId);
 
             return questionnaire;
         }
@@ -260,7 +260,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId: groupId,
                 responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(Guid.NewGuid(), groupId, "New group", Propagate.None, null, null,
+            questionnaire.AddGroup(Guid.NewGuid(), groupId, "New group", Propagate.None, null, null,
                 responsibleId: responsibleId);
 
             return questionnaire;
