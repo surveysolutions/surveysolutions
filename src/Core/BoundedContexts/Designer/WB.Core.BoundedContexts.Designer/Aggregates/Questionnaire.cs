@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void NewDeleteGroup(Guid groupId, Guid responsibleId)
+        public void DeleteGroup(Guid groupId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
