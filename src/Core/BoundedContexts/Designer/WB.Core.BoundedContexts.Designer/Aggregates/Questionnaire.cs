@@ -50,45 +50,45 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
-        protected void OnSharedPersonToQuestionnaireAdded(SharedPersonToQuestionnaireAdded e)
+        private void Apply(SharedPersonToQuestionnaireAdded e)
         {
             this.innerDocument.SharedPersons.Add(e.PersonId);
         }
 
-        protected void OnSharedPersonFromQuestionnaireRemoved(SharedPersonFromQuestionnaireRemoved e)
+        private void Apply(SharedPersonFromQuestionnaireRemoved e)
         {
             this.innerDocument.SharedPersons.Remove(e.PersonId);
         }
 
-        protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
+        private void Apply(QuestionnaireUpdated e)
         {
             this.innerDocument.Title = e.Title;
             this.innerDocument.IsPublic = e.IsPublic;
         }
 
-        protected void OnQuestionnaireDeleted(QuestionnaireDeleted e)
+        private void Apply(QuestionnaireDeleted e)
         {
             this.innerDocument.IsDeleted = true;
         }
 
-        protected void OnGroupDeleted(GroupDeleted e)
+        private void Apply(GroupDeleted e)
         {
             this.innerDocument.RemoveGroup(e.GroupPublicKey);
         }
 
-        protected void OnGroupUpdated(GroupUpdated e)
+        private void Apply(GroupUpdated e)
         {
             this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description, e.Propagateble, e.ConditionExpression);
         }
 
-        protected void OnImageDeleted(ImageDeleted e)
+        private void Apply(ImageDeleted e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
 
             question.RemoveCard(e.ImageKey);
         }
 
-        protected void OnImageUpdated(ImageUpdated e)
+        private void Apply(ImageUpdated e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
             if (question == null)
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             question.UpdateCard(e.ImageKey, e.Title, e.Description);
         }
 
-        protected void OnImageUploaded(ImageUploaded e)
+        private void Apply(ImageUploaded e)
         {
             var newImage = new Image
             {
@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             question.AddCard(newImage);
         }
 
-        protected internal void OnNewGroupAdded(NewGroupAdded e)
+        private void Apply(NewGroupAdded e)
         {
             var group = new Group();
             group.Title = e.GroupText;
@@ -125,17 +125,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
-        protected internal void OnTemplateImported(TemplateImported e)
+        private void Apply(TemplateImported e)
         {
             this.innerDocument = e.Source;
         }
 
-        protected internal void OnQuestionnaireCloned(QuestionnaireCloned e)
+        private void Apply(QuestionnaireCloned e)
         {
             this.innerDocument = e.QuestionnaireDocument;
         }
 
-        protected internal void OnGroupCloned(GroupCloned e)
+        private void Apply(GroupCloned e)
         {
             var group = new Group();
             group.Title = e.GroupText;
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
         }
 
-        protected internal void OnNewQuestionAdded(NewQuestionAdded e)
+        internal void Apply(NewQuestionAdded e)
         {
             AbstractQuestion question =
                 new QuestionFactory().CreateQuestion(
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(question, e.GroupPublicKey, null);
         }
 
-        protected internal void OnNumericQuestionAdded(NumericQuestionAdded e)
+        private void Apply(NumericQuestionAdded e)
         {
             AbstractQuestion question =
                 new QuestionFactory().CreateQuestion(
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(question, e.GroupPublicKey, null);
         }
 
-        protected internal void OnQuestionCloned(QuestionCloned e)
+        private void Apply(QuestionCloned e)
         {
             AbstractQuestion question =
                 new QuestionFactory().CreateQuestion(
@@ -248,7 +248,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
         }
 
-        protected internal void OnNumericQuestionCloned(NumericQuestionCloned e)
+        private void Apply(NumericQuestionCloned e)
         {
             AbstractQuestion question =
                 new QuestionFactory().CreateQuestion(
@@ -283,7 +283,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
         }
 
-        protected void OnNewQuestionnaireCreated(NewQuestionnaireCreated e)
+        private void Apply(NewQuestionnaireCreated e)
         {
             this.innerDocument.IsPublic = e.IsPublic;
             this.innerDocument.Title = e.Title;
@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.CreatedBy = e.CreatedBy;
         }
 
-        protected void OnQuestionChanged(QuestionChanged e)
+        private void Apply(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
-        protected void OnNumericQuestionChanged(NumericQuestionChanged e)
+        private void Apply(NumericQuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
@@ -353,12 +353,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
-        protected void OnQuestionDeleted(QuestionDeleted e)
+        private void Apply(QuestionDeleted e)
         {
             this.innerDocument.RemoveQuestion(e.QuestionId);
         }
 
-        protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
+        private void Apply(QuestionnaireItemMoved e)
         {
             bool isLegacyEvent = e.AfterItemKey != null;
 
