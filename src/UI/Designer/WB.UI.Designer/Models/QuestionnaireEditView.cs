@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.UI.Designer.Views.Questionnaire;
 using System.Linq;
 
 namespace WB.UI.Designer.Models

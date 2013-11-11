@@ -1,4 +1,5 @@
-using WB.UI.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
 namespace WB.UI.Designer.WebServices.Questionnaire
 {

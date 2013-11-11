@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -62,8 +67,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(groupId ?? Guid.NewGuid(), null, "New group", propagationKind, null, null,
-                responsibleId: responsibleId);
+            questionnaire.AddGroup(groupId ?? Guid.NewGuid(),
+                responsibleId: responsibleId, title: "New group", propagationKind: propagationKind, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
             return questionnaire;
         }
@@ -123,10 +128,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: firstGroup,
                 responsibleId: responsibleId, propagationKind: propagationKind);
 
-            questionnaire.NewAddGroup(secondGroup, null, "Second group", propagationKind, null, null,
-                responsibleId: responsibleId);
+            questionnaire.AddGroup(secondGroup,
+                responsibleId: responsibleId, title: "Second group", propagationKind: propagationKind, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
             return questionnaire;
+        }
+
+        public static void AddGroup(Questionnaire questionnaire, Guid groupId, Guid? parentGroupId, string condition, Guid responsibleId)
+        {
+            questionnaire.AddGroup(groupId,
+                responsibleId: responsibleId, title: "New group", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: condition, parentGroupId: null);
         }
 
         public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroup(Guid autoGroupPublicKey, Guid secondGroup, Guid responsibleId)
@@ -134,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupPublicKey,
                 responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(secondGroup, null, "Second group", Propagate.None, null, null, responsibleId);
+            questionnaire.AddGroup(secondGroup, responsibleId, "Second group", Propagate.None, null, null, null, null);
 
             return questionnaire;
         }
@@ -154,7 +165,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey,
                                                                                           secondGroup, responsibleId);
 
-            questionnaire.OnNewQuestionAdded(new NewQuestionAdded()
+            questionnaire.Apply(new NewQuestionAdded()
                 {
                     PublicKey = autoQuestionId,
                     GroupPublicKey = autoGroupPublicKey,
@@ -210,18 +221,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         public static void AddQuestion(Questionnaire questionnaire, Guid questionId, Guid groupId, Guid responsible,
-            QuestionType questionType, string alias, Option[] options = null)
+            QuestionType questionType, string alias, Option[] options = null, string condition = "", string validation = "")
         {
             if (IsNumericQuestion(questionType))
             {
                 questionnaire.AddNumericQuestion(questionId, groupId, "Title", questionType == QuestionType.AutoPropagate, alias, false,
                     false,
-                    false, QuestionScope.Interviewer, "", "", "", "", null, new Guid[0], responsible, true, null);
+                    false, QuestionScope.Interviewer, condition, validation, "", "", null, new Guid[0], responsible, true, null);
                 return;
             }
             questionnaire.NewAddQuestion(questionId, groupId, "Title", questionType, alias, false,
                 false,
-                false, QuestionScope.Interviewer, "", "", "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
+                false, QuestionScope.Interviewer, condition, validation, "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
                 Order.AsIs, responsible, null, areAnswersOrdered: false, maxAllowedAnswers: null);
         }
 
@@ -250,10 +261,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId: groupId,
                 responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(Guid.NewGuid(), groupId, "New group", Propagate.None, null, null,
-                responsibleId: responsibleId);
+            questionnaire.AddGroup(Guid.NewGuid(),
+                responsibleId: responsibleId, title: "New group", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: groupId);
 
             return questionnaire;
+        }
+
+        protected static void RegisterExpressionProcessorMock(string expression, string[] identifiers)
+        {
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                => processor.GetIdentifiersUsedInExpression(expression) == identifiers);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(x => x.GetInstance<IExpressionProcessor>())
+                .Returns(expressionProcessor);
         }
     }
 }
