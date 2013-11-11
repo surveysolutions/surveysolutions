@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities.Question;
+﻿using Main.Core.Entities;
+using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -20,16 +21,11 @@ using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    using Main.Core.Entities;
-
     public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
     {
-        
-        private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        #region Constants
 
-        private readonly IQuestionFactory questionFactory;
-
-        private readonly ILogger logger;
+        private const int MaxCountOfDecimalPlaces = 15;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
@@ -47,13 +43,368 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.Numeric,
             QuestionType.AutoPropagate
         };
-        
-        private static readonly int maxCountOfDecimaPlaces = 15;
 
+        #endregion
+
+        #region State
+
+        private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+
+        private void Apply(SharedPersonToQuestionnaireAdded e)
+        {
+            this.innerDocument.SharedPersons.Add(e.PersonId);
+        }
+
+        private void Apply(SharedPersonFromQuestionnaireRemoved e)
+        {
+            this.innerDocument.SharedPersons.Remove(e.PersonId);
+        }
+
+        private void Apply(QuestionnaireUpdated e)
+        {
+            this.innerDocument.Title = e.Title;
+            this.innerDocument.IsPublic = e.IsPublic;
+        }
+
+        private void Apply(QuestionnaireDeleted e)
+        {
+            this.innerDocument.IsDeleted = true;
+        }
+
+        private void Apply(GroupDeleted e)
+        {
+            this.innerDocument.RemoveGroup(e.GroupPublicKey);
+        }
+
+        private void Apply(GroupUpdated e)
+        {
+            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description, e.Propagateble, e.ConditionExpression);
+        }
+
+        private void Apply(ImageDeleted e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+
+            question.RemoveCard(e.ImageKey);
+        }
+
+        private void Apply(ImageUpdated e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+            if (question == null)
+            {
+                return;
+            }
+
+            question.UpdateCard(e.ImageKey, e.Title, e.Description);
+        }
+
+        private void Apply(ImageUploaded e)
+        {
+            var newImage = new Image
+            {
+                PublicKey = e.ImagePublicKey,
+                Title = e.Title,
+                Description = e.Description,
+                CreationDate = DateTime.Now
+            };
+
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+
+            question.AddCard(newImage);
+        }
+
+        private void Apply(NewGroupAdded e)
+        {
+            var group = new Group();
+            group.Title = e.GroupText;
+            group.Propagated = e.Paropagateble;
+            group.PublicKey = e.PublicKey;
+            group.Description = e.Description;
+            group.ConditionExpression = e.ConditionExpression;
+            this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
+        }
+
+        private void Apply(TemplateImported e)
+        {
+            this.innerDocument = e.Source;
+        }
+
+        private void Apply(QuestionnaireCloned e)
+        {
+            this.innerDocument = e.QuestionnaireDocument;
+        }
+
+        private void Apply(GroupCloned e)
+        {
+            var group = new Group();
+            group.Title = e.GroupText;
+            group.Propagated = e.Paropagateble;
+            group.PublicKey = e.PublicKey;
+            group.Description = e.Description;
+            group.ConditionExpression = e.ConditionExpression;
+            this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
+        }
+
+        internal void Apply(NewQuestionAdded e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        e.AnswerOrder,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        e.Answers,
+                        e.LinkedToQuestionId,
+                        e.IsInteger,
+                        null,
+                        e.AreAnswersOrdered,
+                        e.MaxAllowedAnswers));
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
+        }
+
+        private void Apply(NumericQuestionAdded e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger,
+                        e.CountOfDecimalPlaces,
+                        null,
+                        null));
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
+        }
+
+        private void Apply(QuestionCloned e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        e.AnswerOrder,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        e.Answers,
+                        e.LinkedToQuestionId,
+                        e.IsInteger,
+                        null,
+                        e.AreAnswersOrdered,
+                        e.MaxAllowedAnswers));
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+        }
+
+        private void Apply(NumericQuestionCloned e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger,
+                        e.CountOfDecimalPlaces,
+                        null,
+                        null));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+        }
+
+        private void Apply(NewQuestionnaireCreated e)
+        {
+            this.innerDocument.IsPublic = e.IsPublic;
+            this.innerDocument.Title = e.Title;
+            this.innerDocument.PublicKey = e.PublicKey;
+            this.innerDocument.CreationDate = e.CreationDate;
+            this.innerDocument.LastEntryDate = e.CreationDate;
+            this.innerDocument.CreatedBy = e.CreatedBy;
+        }
+
+        private void Apply(QuestionChanged e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            IQuestion newQuestion =
+                this.questionFactory.CreateQuestion(
+                    new QuestionData(
+                        question.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        e.AnswerOrder,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        e.Answers,
+                        e.LinkedToQuestionId,
+                        e.IsInteger,
+                        null,
+                        e.AreAnswersOrdered,
+                        e.MaxAllowedAnswers));
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+        }
+
+        private void Apply(NumericQuestionChanged e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            IQuestion newQuestion =
+                this.questionFactory.CreateQuestion(
+                    new QuestionData(
+                        question.PublicKey,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger,
+                        e.CountOfDecimalPlaces,
+                        null,
+                        null));
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+        }
+
+        private void Apply(QuestionDeleted e)
+        {
+            this.innerDocument.RemoveQuestion(e.QuestionId);
+        }
+
+        private void Apply(QuestionnaireItemMoved e)
+        {
+            bool isLegacyEvent = e.AfterItemKey != null;
+
+            if (isLegacyEvent)
+            {
+                logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                return;
+            }
+
+            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
+        }
+
+        public QuestionnaireState CreateSnapshot()
+        {
+            return new QuestionnaireState
+            {
+                QuestionnaireDocument = this.innerDocument,
+                Version = this.Version
+            };
+        }
+
+        public void RestoreFromSnapshot(QuestionnaireState snapshot)
+        {
+            this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
+        }
+
+        #endregion
+
+        #region Dependencies
+
+        private readonly IQuestionFactory questionFactory;
+
+        private readonly ILogger logger;
+
+        /// <remarks>
+        /// All operations with expressions are time-consuming.
+        /// So this processor may be used only in command handlers.
+        /// And should never be used in event handlers!!
+        /// </remarks>
         private static IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
+
+        #endregion
+
 
         public Questionnaire()
             : base()
@@ -126,18 +477,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public QuestionnaireState CreateSnapshot()
-        {
-            return new QuestionnaireState
-            {
-                QuestionnaireDocument = this.innerDocument,
-                Version = this.Version
-            };
-        }
-        public void RestoreFromSnapshot(QuestionnaireState snapshot)
-       {
-            this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
-        }
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
@@ -173,19 +512,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey, ResponsibleId = responsibleId });
         }
 
-        [Obsolete]
-        public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
-        {
-            this.ApplyEvent(
-                new QuestionnaireItemMoved
-                    {
-                        AfterItemKey = afterItemKey,
-                        GroupKey = groupKey,
-                        PublicKey = publicKey
-                    });
-        }
-
-        public void NewAddGroup(Guid groupId,
+        public void AddGroup(Guid groupId,
             Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -237,7 +564,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void NewDeleteGroup(Guid groupId, Guid responsibleId)
+        public void DeleteGroup(Guid groupId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
@@ -270,7 +597,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void NewUpdateGroup(Guid groupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
+        public void UpdateGroup(Guid groupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -721,327 +1048,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        protected void OnSharedPersonToQuestionnaireAdded(SharedPersonToQuestionnaireAdded e)
-        {
-            this.innerDocument.SharedPersons.Add(e.PersonId);
-        }
-
-        protected void OnSharedPersonFromQuestionnaireRemoved(SharedPersonFromQuestionnaireRemoved e)
-        {
-            this.innerDocument.SharedPersons.Remove(e.PersonId);
-        }
-
-        protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
-        {
-            this.innerDocument.Title = e.Title;
-            this.innerDocument.IsPublic = e.IsPublic;
-        }
-
-        protected void OnQuestionnaireDeleted(QuestionnaireDeleted e)
-        {
-            this.innerDocument.IsDeleted = true;
-        }
-
-        protected void OnGroupDeleted(GroupDeleted e)
-        {
-            this.innerDocument.RemoveGroup(e.GroupPublicKey);
-        }
-
-        protected void OnGroupUpdated(GroupUpdated e)
-        {
-            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description, e.Propagateble, e.ConditionExpression);
-        }
-
-        protected void OnImageDeleted(ImageDeleted e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-
-            question.RemoveCard(e.ImageKey);
-        }
-
-        protected void OnImageUpdated(ImageUpdated e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-            if (question == null)
-            {
-                return;
-            }
-
-            question.UpdateCard(e.ImageKey, e.Title, e.Description);
-        }
-
-        protected void OnImageUploaded(ImageUploaded e)
-        {
-            var newImage = new Image
-                {
-                    PublicKey = e.ImagePublicKey,
-                    Title = e.Title,
-                    Description = e.Description,
-                    CreationDate = DateTime.Now
-                };
-
-            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-
-            question.AddCard(newImage);
-        }
-
-        protected internal void OnNewGroupAdded(NewGroupAdded e)
-        {
-            var group = new Group();
-            group.Title = e.GroupText;
-            group.Propagated = e.Paropagateble;
-            group.PublicKey = e.PublicKey;
-            group.Description = e.Description;
-            group.ConditionExpression = e.ConditionExpression;
-            this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
-        }
-
-        protected internal void OnTemplateImported(TemplateImported e)
-        {
-            this.innerDocument = e.Source;
-        }
-
-        protected internal void OnQuestionnaireCloned(QuestionnaireCloned e)
-        {
-            this.innerDocument = e.QuestionnaireDocument;
-        }
-
-        protected internal void OnGroupCloned(GroupCloned e)
-        {
-            var group = new Group();
-            group.Title = e.GroupText;
-            group.Propagated = e.Paropagateble;
-            group.PublicKey = e.PublicKey;
-            group.Description = e.Description;
-            group.ConditionExpression = e.ConditionExpression;
-            this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
-        }
-
-
-        protected internal void OnNewQuestionAdded(NewQuestionAdded e)
-        {
-            AbstractQuestion question =
-                new QuestionFactory().CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.IsInteger,
-                        null,
-                        e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Add(question, e.GroupPublicKey, null);
-        }
-
-        protected internal void OnNumericQuestionAdded(NumericQuestionAdded e)
-        {
-            AbstractQuestion question =
-                new QuestionFactory().CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        Order.AZ, 
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        null,
-                        null,
-                        e.IsInteger,
-                        e.CountOfDecimalPlaces,
-                        null,
-                        null));
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Add(question, e.GroupPublicKey, null);
-        }
-
-        protected internal void OnQuestionCloned(QuestionCloned e)
-        {
-            AbstractQuestion question =
-                new QuestionFactory().CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.IsInteger,
-                        null,
-                        e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
-        }
-
-        protected internal void OnNumericQuestionCloned(NumericQuestionCloned e)
-        {
-            AbstractQuestion question =
-                new QuestionFactory().CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        Order.AZ, 
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        null,
-                        null,
-                        e.IsInteger, 
-                        e.CountOfDecimalPlaces,
-                        null,
-                        null));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
-        }
-
-        protected void OnNewQuestionnaireCreated(NewQuestionnaireCreated e)
-        {
-            this.innerDocument.IsPublic = e.IsPublic;
-            this.innerDocument.Title = e.Title;
-            this.innerDocument.PublicKey = e.PublicKey;
-            this.innerDocument.CreationDate = e.CreationDate;
-            this.innerDocument.LastEntryDate = e.CreationDate;
-            this.innerDocument.CreatedBy = e.CreatedBy;
-        }
-
-        protected void OnQuestionChanged(QuestionChanged e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(
-                    new QuestionData(
-                        question.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.IsInteger,
-                        null,
-                        e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
-            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
-        }
-
-        protected void OnNumericQuestionChanged(NumericQuestionChanged e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(
-                    new QuestionData(
-                        question.PublicKey,
-                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        Order.AZ, 
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        null,
-                        null,
-                        e.IsInteger, 
-                        e.CountOfDecimalPlaces,
-                        null,
-                        null));
-            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
-        }
-
-        protected void OnQuestionDeleted(QuestionDeleted e)
-        {
-            this.innerDocument.RemoveQuestion(e.QuestionId);
-        }
-
-        protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
-        {
-            bool isLegacyEvent = e.AfterItemKey != null;
-
-            if (isLegacyEvent)
-            {
-                logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
-                return;
-            }
-
-            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
-        }
 
         private static Answer[] ConvertOptionsToAnswers(Option[] options)
         {
@@ -1602,11 +1608,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if(!countOfDecimalPlaces.HasValue)
                 return;
 
-            if (countOfDecimalPlaces.Value > maxCountOfDecimaPlaces)
+            if (countOfDecimalPlaces.Value > MaxCountOfDecimalPlaces)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
-                    string.Format("Count of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, maxCountOfDecimaPlaces));
+                    string.Format("Count of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, MaxCountOfDecimalPlaces));
             }
 
             if (countOfDecimalPlaces.Value < 0)
