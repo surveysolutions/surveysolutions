@@ -7,11 +7,13 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "NewAddGroup")]
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "AddGroup")]
     public class AddGroupCommand : FullGroupDataCommand
     {
-        public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
-            : base(questionnaireId, groupId, title, propagationKind, description, condition, responsibleId)
+        public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
+            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition,
+            Guid? parentGroupId)
+            : base(questionnaireId, groupId, responsibleId, title, propagationKind, rosterSizeQuestionId, description, condition)
         {
             this.ParentGroupId = parentGroupId;
         }

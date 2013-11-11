@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Runtime;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
+using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Cirrious.MvvmCross.Droid.Platform;
@@ -12,7 +13,6 @@ using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-using Main.Core.Services;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
@@ -159,8 +159,7 @@ namespace WB.UI.Capi.DataCollection
 
         private void InitFileStorage(InProcessEventBus bus)
         {
-            var fileSorage = new AndroidFileStoreDenormalizer(this.kernel.Get<IReadSideRepositoryWriter<FileDescription>>(),
-                                                       this.kernel.Get<IFileStorageService>());
+            var fileSorage = new AndroidFileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>());
             bus.RegisterHandler(fileSorage, typeof (FileUploaded));
             bus.RegisterHandler(fileSorage, typeof (FileDeleted));
         }

@@ -89,8 +89,8 @@ namespace WB.UI.Capi.DataCollection
         
         private void GetLocation()
         {
-            this.cancelSource = new CancellationTokenSource();
-            this.geoservice.GetPositionAsync(20000, this.cancelSource.Token).ContinueWith((Task<Position> t) => this.RunOnUiThread(() =>
+            cancelSource = new CancellationTokenSource();
+            geoservice.GetPositionAsync(cancelSource.Token).ContinueWith((Task<Position> t) => RunOnUiThread(() =>
                 {
                     if (this.progress != null)
                         this.progress.Dismiss();

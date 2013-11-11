@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
 {
-    public class QuestionnaireBrowseItemDenormalizer :
+    internal class QuestionnaireBrowseItemDenormalizer :
         IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireUpdated>,
