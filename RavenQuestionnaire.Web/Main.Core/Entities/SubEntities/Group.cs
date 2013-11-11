@@ -32,15 +32,9 @@ namespace Main.Core.Entities.SubEntities
 
         public string Description { get; set; }
 
-        public bool IsRoster
-        {
-            get { return this.Propagated == Propagate.AutoPropagated; }
-        }
+        public bool IsRoster { get; set; }
 
-        public Guid? RosterSizeQuestionId
-        {
-            get { return null; }
-        }
+        public Guid? RosterSizeQuestionId { get; set; }
 
         private IComposite parent;
         

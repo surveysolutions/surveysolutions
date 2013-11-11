@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
-                && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupId) == new[] { parentPropagatableGroupId });
+                && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupId) == new[] { parentPropagatableGroupId });
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire);
