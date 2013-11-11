@@ -85,7 +85,7 @@
     <Compile Include="QuestionnaireTests\DeleteQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\MoveGroupTests.cs" />
-    <Compile Include="QuestionnaireTests\NewAddGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\AddGroupTests.cs" />
     <Compile Include="QuestionnaireTests\NewAddQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\NewUpdateGroupTests.cs" />
     <Compile Include="QuestionnaireTests\NewUpdateQuestionTests.cs" />

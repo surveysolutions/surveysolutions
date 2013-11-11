@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey, ResponsibleId = responsibleId });
         }
 
-        public void NewAddGroup(Guid groupId,
+        public void AddGroup(Guid groupId,
             Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
