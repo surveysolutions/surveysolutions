@@ -512,8 +512,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey, ResponsibleId = responsibleId });
         }
 
-        public void AddGroup(Guid groupId,
-            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
+
+        public void AddGroup(Guid groupId, Guid responsibleId,
+            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition,
+            Guid? parentGroupId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -536,9 +538,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-
-        public void CloneGroupWithoutChildren(Guid groupId,
-            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid sourceGroupId, int targetIndex, Guid responsibleId)
+        public void CloneGroupWithoutChildren(Guid groupId, Guid responsibleId,
+            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition,
+            Guid? parentGroupId, Guid sourceGroupId, int targetIndex)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -563,6 +565,34 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
+        public void UpdateGroup(Guid groupId, Guid responsibleId,
+            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
+            this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
+
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+
+            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
+
+            this.ThrowDomainExceptionIfGroupsPropagationKindCannotBeChanged(groupId, propagationKind);
+
+            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
+
+            this.ApplyEvent(new GroupUpdated
+            {
+                QuestionnaireId = this.innerDocument.PublicKey.ToString(),
+                GroupPublicKey = groupId,
+                GroupText = title,
+                Propagateble = propagationKind,
+                Description = description,
+                ConditionExpression = condition,
+                ResponsibleId = responsibleId
+            });
+        }
 
         public void DeleteGroup(Guid groupId, Guid responsibleId)
         {
@@ -597,33 +627,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateGroup(Guid groupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
-        {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-
-            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
-
-            this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
-
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
-
-            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
-
-            this.ThrowDomainExceptionIfGroupsPropagationKindCannotBeChanged(groupId, propagationKind);
-
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
-
-            this.ApplyEvent(new GroupUpdated
-            {
-                QuestionnaireId = this.innerDocument.PublicKey.ToString(),
-                GroupPublicKey = groupId,
-                GroupText = title,
-                Propagateble = propagationKind,
-                Description = description,
-                ConditionExpression = condition,
-                ResponsibleId = responsibleId
-            });
-        }
 
         public void CloneQuestion(Guid questionId,
             Guid groupId, string title, QuestionType type, string alias,
