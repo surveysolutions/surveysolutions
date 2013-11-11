@@ -1735,7 +1735,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             Questionnaire questionnaire = CreateQuestionnaireWithTwoGroups(autoGroupId1, autoGroupId2, responsibleId, Propagate.AutoPropagated);
 
-            questionnaire.NewAddGroup(groupId , null, "New group", Propagate.None, null, null, responsibleId: responsibleId);
+            questionnaire.AddGroup(groupId, responsibleId: responsibleId, title: "New group", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
 
             questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId1, "Question", QuestionType.Text, "test", false, false,
                                                                   false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,

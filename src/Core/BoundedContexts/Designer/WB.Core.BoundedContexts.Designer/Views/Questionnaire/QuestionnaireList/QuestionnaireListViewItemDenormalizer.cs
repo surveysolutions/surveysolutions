@@ -1,19 +1,15 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using Main.Core.Documents;
+using Main.Core.Events.Questionnaire;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
-using WB.UI.Designer.Views.Questionnaire;
 
-namespace WB.UI.Designer.Views.EventHandler
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
-    using System;
-
-    using Main.Core.Events.Questionnaire;
-
-    using Ncqrs.Eventing.ServiceModel.Bus;
-
-    public class QuestionnaireListViewItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
+    internal class QuestionnaireListViewItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,

@@ -73,6 +73,8 @@ namespace Web.Supervisor.Injections
         {
             base.Load();
 
+            RegisterViewFactories();
+
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
         }

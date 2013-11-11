@@ -37,7 +37,6 @@ namespace Main.Core
         {
             RegisterDenormalizers();
             RegisterEventHandlers();
-            RegisterViewFactories();
             RegisterAdditionalElements();
         }
 
@@ -110,7 +109,10 @@ namespace Main.Core
              assembyes.SelectMany(a => a.GetTypes()).Where(t => t.IsPublic && ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
-                this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
+                if (interfaceType != typeof(IViewFactory<,>))
+                {
+                    this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
+                }
                 if (interfaceType.IsGenericType)
                 {
                     var interfaceImplementations =

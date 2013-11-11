@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
-namespace WB.UI.Designer.Views.Questionnaire.Indexes
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes
 {
     public class DesignerReportQuestionnaireListViewItem : AbstractIndexCreationTask<QuestionnaireListViewItem, QuestionnaireListViewItemSearchable>
     {

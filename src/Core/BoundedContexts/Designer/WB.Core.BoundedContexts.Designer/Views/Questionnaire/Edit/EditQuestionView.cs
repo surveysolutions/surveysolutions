@@ -7,7 +7,7 @@ using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace WB.UI.Designer.Views.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class EditQuestionView : ICompositeView
     {
