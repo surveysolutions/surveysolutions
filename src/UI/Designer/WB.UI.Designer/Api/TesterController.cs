@@ -1,24 +1,22 @@
-﻿using System.Collections.Generic;
-using Main.Core;
+﻿using Main.Core;
+using Main.Core.View;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.Controllers
+namespace WB.UI.Designer.Api
 {
-    using Main.Core.View;
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Web.Http;
-    using WB.Core.BoundedContexts.Designer.Services;
-    using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-    using WB.Core.GenericSubdomains.Logging;
-    using WB.Core.SharedKernel.Utils.Compression;
-    using WB.UI.Shared.Web.Exceptions;
-    using WB.UI.Shared.Web.Membership;
-
-
-    public class TestApiController : ApiController
+    public class TesterController : ApiController
     {
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> questionnaireListViewFactory;
@@ -30,7 +28,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
 
-        public TestApiController(IMembershipUserService userHelper, 
+        public TesterController(IMembershipUserService userHelper, 
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
@@ -47,7 +45,8 @@ namespace WB.UI.Designer.Controllers
             this.logger = logger;
         }
         
-        [Authorize]
+        //[Authorize]
+        [HttpGet]
         public List<string> GetAllTemplates()
         {
             // change to other return type
@@ -66,7 +65,8 @@ namespace WB.UI.Designer.Controllers
             return questionnaireList.Items.Select(q=>q.Title).ToList();
         }
 
-        [Authorize]
+        //[Authorize]
+        [HttpGet]
         public string GetTemplate(Guid id)
         {
             // change to other return type 
