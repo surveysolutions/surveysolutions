@@ -2,23 +2,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using Android.Views.Animations;
 using Android.Widget;
+using Main.Core.Utility;
+using RestSharp;
 using WB.UI.Shared.Android.Adapters;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Tester.Adapters
 {
     public class TemplateListAdapter:SmartAdapter<string>
     {
+        private readonly IRestUrils webExecutor;
         private readonly Context context;
         public TemplateListAdapter(Context context)
-            : base(new string[] { "Vegetables", "Fruits", "Flower Buds", "Legumes", "Bulbs", "Tubers" })
+            : base()
         {
+            this.webExecutor = new AndroidRestUrils("http://192.168.173.1/designer");
+            items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
+                "TestApi/GetAllTemplates", new CancellationToken(), null,
+                new HttpBasicAuthenticator("admin", SimpleHash.ComputeHash("qwerty")));
             this.context = context;
         }
 
@@ -32,6 +41,15 @@ namespace WB.UI.Capi.Tester.Adapters
                 view.FindViewById<TextView>(Resource.Id.tvTitle);
 
             tvTitle.Text = dataItem;
+
+          /*  var tvTryMe =
+              view.FindViewById<TextView>(Resource.Id.tvTryMe);
+            Animation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.Duration= 50; //You can manage the time of the blink with this parameter
+            anim.StartOffset =20;
+            anim.RepeatMode= RepeatMode.Reverse;
+            anim.RepeatCount = Animation.Infinite;
+            tvTryMe.StartAnimation(anim);*/
 
             return view;
         }

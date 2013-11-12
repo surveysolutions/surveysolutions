@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
-using CAPI.Android.Core.Model.ModelUtils;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace WB.UI.Capi.DataCollection.Syncronization.RestUtils
+namespace WB.UI.Shared.Android.RestUtils
 {
     public class AndroidRestUrils : IRestUrils
     {

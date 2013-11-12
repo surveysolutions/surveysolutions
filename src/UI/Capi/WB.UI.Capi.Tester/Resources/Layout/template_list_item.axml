@@ -11,11 +11,11 @@
              android:layout_weight="8"
            android:layout_height="wrap_content"
            android:textSize="20dp"/>
-  <TextView  android:id="@+id/tvTryMe"
-           android:layout_width="0dp"
-           android:layout_height="wrap_content"
-             android:layout_weight="2"
-           android:gravity=    "center"
-             android:text="Try me!"
-           android:textSize="20dp"/>
+    <TextView  android:id="@+id/tvTryMe"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+               android:layout_weight="2"
+             android:gravity=    "center"
+               android:text="Try me!"
+             android:textSize="20dp"/>
 </LinearLayout>

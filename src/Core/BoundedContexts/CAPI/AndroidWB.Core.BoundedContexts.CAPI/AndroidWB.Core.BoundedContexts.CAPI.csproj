@@ -81,6 +81,9 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\IAuthentication.cs">
       <Link>IAuthentication.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\ModelUtils\JsonUtils.cs">
+      <Link>ModelUtils\JsonUtils.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\AnswerViewModel.cs">
       <Link>Views\InterviewDetails\AnswerViewModel.cs</Link>
     </Compile>
@@ -176,7 +179,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

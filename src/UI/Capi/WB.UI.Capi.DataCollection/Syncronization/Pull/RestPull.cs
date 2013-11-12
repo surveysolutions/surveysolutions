@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.UI.Capi.DataCollection.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.DataCollection.Syncronization.Pull
 {

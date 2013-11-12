@@ -82,6 +82,9 @@
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Support.v4" />
     <Reference Include="mscorlib" />
+    <Reference Include="RestSharp.MonoDroid">
+      <HintPath>..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net">
@@ -124,6 +127,10 @@
     <AndroidResource Include="Resources\Drawable\capi.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
+      <Project>{6B9B6AB7-8858-49A3-A44A-4B56EE31C12C}</Project>
+      <Name>AndroidMain.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj">
       <Project>{596BDADC-EFF5-474D-B028-2F5C60B59050}</Project>
       <Name>WB.UI.Shared.Android</Name>
