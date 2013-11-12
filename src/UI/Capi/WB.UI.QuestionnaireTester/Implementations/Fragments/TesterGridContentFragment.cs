@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
 
-namespace WB.UI.Capi.Tester.Implementations.Fragments
+namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 {
     public class TesterGridContentFragment : GridContentFragment
     {

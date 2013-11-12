@@ -1,8 +1,6 @@
-using CAPI.Android.Core.Model.ViewModel.Login;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.UI.Capi.Tester
+namespace WB.UI.QuestionnaireTester
 {
     public class App : MvxApplication
     {

@@ -5,9 +5,7 @@ using Android.Runtime;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.FileStorage;
-using CAPI.Android.Tester;
 using Cirrious.MvvmCross.Droid.Platform;
-using Main.Core;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
@@ -16,9 +14,7 @@ using Mono.Android.Crasher.Attributes;
 using Mono.Android.Crasher.Data.Submit;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
@@ -32,9 +28,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
 
-using WB.UI.Shared.Android.Controls.ScreenItems;
-
-namespace WB.UI.Capi.Tester
+namespace WB.UI.QuestionnaireTester
 {
     #if RELEASE 
     [Application(Debuggable=false)] 
@@ -186,7 +180,7 @@ namespace WB.UI.Capi.Tester
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
             this.kernel = new StandardKernel(
-                new CAPIBoundedContextModule(),
+                new CapiBoundedContextModule(),
                 //new AndroidCoreRegistry(),
                 new AndroidTesterModelModule(),
                 new AndroidLoggingModule(),

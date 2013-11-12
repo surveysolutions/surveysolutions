@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 
-namespace WB.UI.Capi.Tester
+namespace WB.UI.QuestionnaireTester
 {
     public class NinjectServiceLocator : ServiceLocatorImplBase
     {

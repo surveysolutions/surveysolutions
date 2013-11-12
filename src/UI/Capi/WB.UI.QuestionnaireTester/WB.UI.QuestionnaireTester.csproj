@@ -191,7 +191,7 @@
       <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>
       <Name>Mono.Android.Crasher</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\AndroidWB.Core.BoundedContexts.Capi\AndroidWB.Core.BoundedContexts.Capi.csproj">
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
       <Project>{C62669D1-2B5F-4976-A33D-A66B674D0149}</Project>
       <Name>AndroidWB.Core.BoundedContexts.Capi</Name>
     </ProjectReference>

@@ -2,7 +2,7 @@ using Android.App;
 using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Views;
 
-namespace WB.UI.Capi.Tester
+namespace WB.UI.QuestionnaireTester
 {
     [Activity(Label = "CAPI",  /*MainLauncher = true,*/ NoHistory = true,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]

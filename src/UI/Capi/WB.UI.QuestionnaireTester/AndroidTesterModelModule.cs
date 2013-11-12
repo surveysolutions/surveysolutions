@@ -1,24 +1,13 @@
-using CAPI.Android.Core.Model.Authorization;
-using CAPI.Android.Core.Model.Backup;
-using CAPI.Android.Core.Model.ChangeLog;
-
 using CAPI.Android.Core.Model.ReadSideStore;
 using CAPI.Android.Core.Model.SnapshotStore;
-
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
-
 using Main.Core.View;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
-using WB.Core.BoundedContexts.Capi;
-using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace CAPI.Android.Tester
+namespace WB.UI.QuestionnaireTester
 {
     public class AndroidTesterModelModule : NinjectModule
     {

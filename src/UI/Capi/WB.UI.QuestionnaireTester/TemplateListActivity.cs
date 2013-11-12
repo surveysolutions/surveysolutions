@@ -1,9 +1,9 @@
-namespace WB.UI.Capi.Tester
-{
-    using Android.App;
-    using Android.OS;
-    using WB.UI.Capi.Tester.Adapters;
+using WB.UI.QuestionnaireTester.Adapters;
+using Android.App;
+using Android.OS;
 
+namespace WB.UI.QuestionnaireTester
+{
     [Activity(MainLauncher = true)]
     public class TemplateListActivity : ListActivity 
     {
