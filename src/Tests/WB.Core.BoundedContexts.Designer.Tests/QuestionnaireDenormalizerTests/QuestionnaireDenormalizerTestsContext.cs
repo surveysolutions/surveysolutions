@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -35,8 +36,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 logger ?? Mock.Of<ILogger>());
         }
 
-        protected static QuestionnaireDocument CreateQuestionnaireDocument(
-            IEnumerable<IComposite> children = null)
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] children)
+        {
+            return CreateQuestionnaireDocument(children.AsEnumerable());
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> children = null)
         {
             var questionnaire = new QuestionnaireDocument();
 
@@ -91,12 +96,39 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
         }
 
-        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, string title = "New Group X")
+        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId,
+            string title = "New Group X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
         {
             return ToPublishedEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
                 GroupText = title,
+                IsRoster = isRoster,
+                RosterSizeQuestionId = rosterSizeQuestionId,
+            });
+        }
+
+        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId,
+            string title = "New Cloned Group X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+        {
+            return ToPublishedEvent(new GroupCloned
+            {
+                PublicKey = groupId,
+                GroupText = title,
+                IsRoster = isRoster,
+                RosterSizeQuestionId = rosterSizeQuestionId,
+            });
+        }
+
+        protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId,
+            string title = "Updated Group Title X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+        {
+            return ToPublishedEvent(new GroupUpdated
+            {
+                GroupPublicKey = groupId,
+                GroupText = title,
+                IsRoster = isRoster,
+                RosterSizeQuestionId = rosterSizeQuestionId,
             });
         }
 
@@ -108,15 +140,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 GroupPublicKey = groupId,
                 QuestionText = title,
                 QuestionType = QuestionType.Numeric,
-            });
-        }
-
-        protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId, string title)
-        {
-            return ToPublishedEvent(new GroupUpdated
-            {
-                GroupPublicKey = groupId,
-                GroupText = title,
             });
         }
 
