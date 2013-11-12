@@ -1,21 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
-using Android.Views.Animations;
 using Android.Widget;
 using Main.Core.Utility;
 using RestSharp;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.RestUtils;
 
-namespace WB.UI.Capi.Tester.Adapters
+namespace WB.UI.QuestionnaireTester.Adapters
 {
     public class TemplateListAdapter:SmartAdapter<string>
     {
@@ -25,7 +18,7 @@ namespace WB.UI.Capi.Tester.Adapters
             : base()
         {
             this.webExecutor = new AndroidRestUrils("http://192.168.173.1/designer");
-            items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
+            this.items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
                 "TestApi/GetAllTemplates", new CancellationToken(), null,
                 new HttpBasicAuthenticator("admin", SimpleHash.ComputeHash("qwerty")));
             this.context = context;
