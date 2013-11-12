@@ -164,6 +164,9 @@ namespace WB.UI.Capi.Tester
 			// aapt resource value: 0x7f02000b
 			public const int statistics_row_style = 2130837515;
 			
+			// aapt resource value: 0x7f02000c
+			public const int statistics_row_style = 2130837516;
+			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -267,17 +270,29 @@ namespace WB.UI.Capi.Tester
 			// aapt resource value: 0x7f04000a
 			public const int tvError = 2130968586;
 			
-			// aapt resource value: 0x7f04001e
-			public const int tvErrorWarning = 2130968606;
+			// aapt resource value: 0x7f04001c
+			public const int tePassword = 2130968604;
+			
+			// aapt resource value: 0x7f04000c
+			public const int tvComments = 2130968588;
+			
+			// aapt resource value: 0x7f04000d
+			public const int tvCommentsTitle = 2130968589;
+			
+			// aapt resource value: 0x7f040018
+			public const int tvCount = 2130968600;
+			
+			// aapt resource value: 0x7f040010
+			public const int vpContent = 2130968592;
+			
+			// aapt resource value: 0x7f040024
+			public const int tvErrorWarning = 2130968612;
 			
 			// aapt resource value: 0x7f040017
 			public const int tvITem = 2130968599;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvTitle = 2130968587;
-			
-			// aapt resource value: 0x7f040022
-			public const int tvTryMe = 2130968610;
 			
 			// aapt resource value: 0x7f040010
 			public const int vpContent = 2130968592;
@@ -305,16 +320,19 @@ namespace WB.UI.Capi.Tester
 			public const int list_navigation_item = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int RosterQuestion = 2130903043;
+			public const int Login = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int ScreenContentFragment = 2130903044;
+			public const int RosterQuestion = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int StatisticsContent = 2130903045;
+			public const int ScreenContentFragment = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int template_list_item = 2130903046;
+			public const int SplashScreen = 2130903046;
+			
+			// aapt resource value: 0x7f030007
+			public const int StatisticsContent = 2130903047;
 			
 			static Layout()
 			{
