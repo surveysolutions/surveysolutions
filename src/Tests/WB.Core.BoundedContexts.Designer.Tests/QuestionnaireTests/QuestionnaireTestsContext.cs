@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
+    [Subject(typeof(Questionnaire))]
     public class QuestionnaireTestsContext
     {
         public static T GetSingleEvent<T>(EventContext eventContext)
@@ -30,9 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return new Questionnaire(publicKey: Guid.NewGuid(), title: "title", createdBy: responsibleId);
         }
 
-        public static Questionnaire CreateQuestionnaireWithOneQuestion(Guid questionId, Guid responsibleId)
+        public static Questionnaire CreateQuestionnaireWithOneQuestion(Guid? questionId = null, Guid? responsibleId = null)
         {
-            return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: questionId, responsibleId: responsibleId);
+            return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: questionId ?? Guid.NewGuid(), responsibleId: responsibleId ?? Guid.NewGuid());
         }
 
         public static Questionnaire CreateQuestionnaireWithOneQuestionInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options, Guid responsibleId, Guid? groupId = null)
@@ -67,8 +68,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
-            questionnaire.AddGroup(groupId ?? Guid.NewGuid(),
-                responsibleId: responsibleId, title: "New group", propagationKind: propagationKind, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: null);
+            questionnaire.Apply(new NewGroupAdded
+            {
+                PublicKey = groupId ?? Guid.NewGuid(),
+                ResponsibleId = responsibleId,
+                GroupText = "New group",
+                Paropagateble = propagationKind,
+            });
 
             return questionnaire;
         }
