@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
@@ -34,6 +37,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                     => @event.Payload is TEvent
                         && condition.Invoke((TEvent)@event.Payload));
             }
+        }
+
+        public static void ShouldContainGroup(this QuestionnaireDocument questionnaireDocument, Expression<Func<IGroup, bool>> condition)
+        {
+            questionnaireDocument.GetAllGroups().ShouldContain(condition);
         }
     }
 }
