@@ -186,9 +186,9 @@
       <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
       <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\AndroidWB.Core.BoundedContexts.Capi\AndroidWB.Core.BoundedContexts.Capi.csproj">
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
       <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
-      <Name>AndroidWB.Core.BoundedContexts.Capi</Name>
+      <Name>WB.Core.BoundedContexts.Capi.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
