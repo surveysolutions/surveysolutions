@@ -71,6 +71,12 @@
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
+      <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
+      <Name>WB.Core.BoundedContexts.Capi.Android</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
