@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
-using WB.UI.Capi.DataCollection.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.DataCollection.Syncronization.Update
 {

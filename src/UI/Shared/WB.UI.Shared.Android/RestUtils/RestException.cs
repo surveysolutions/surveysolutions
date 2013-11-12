@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace WB.UI.Capi.DataCollection.Syncronization.RestUtils
+namespace WB.UI.Shared.Android.RestUtils
 {
     public class RestException:Exception
     {

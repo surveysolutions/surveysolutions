@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using RestSharp;
-using WB.UI.Capi.DataCollection.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.DataCollection.Syncronization.Push
 {

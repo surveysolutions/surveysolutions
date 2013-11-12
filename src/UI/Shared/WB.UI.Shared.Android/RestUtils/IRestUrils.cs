@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using RestSharp;
 
-namespace WB.UI.Capi.DataCollection.Syncronization.RestUtils
+namespace WB.UI.Shared.Android.RestUtils
 {
     public interface IRestUrils
     {

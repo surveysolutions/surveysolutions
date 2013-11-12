@@ -19,8 +19,8 @@ using WB.UI.Capi.DataCollection.Settings;
 using WB.UI.Capi.DataCollection.Syncronization.Handshake;
 using WB.UI.Capi.DataCollection.Syncronization.Pull;
 using WB.UI.Capi.DataCollection.Syncronization.Push;
-using WB.UI.Capi.DataCollection.Syncronization.RestUtils;
 using WB.UI.Capi.DataCollection.Utils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.DataCollection.Syncronization
 {

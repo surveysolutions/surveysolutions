@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.UI.Capi.DataCollection.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.DataCollection.Syncronization.Handshake
 {

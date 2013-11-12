@@ -48,7 +48,7 @@ namespace WB.UI.Designer.Controllers
         }
         
         [Authorize]
-        public IEnumerable<QuestionnaireListViewItem> GetAllTemplates()
+        public List<string> GetAllTemplates()
         {
             // change to other return type
             var user = this.userHelper.WebUser;
@@ -63,7 +63,7 @@ namespace WB.UI.Designer.Controllers
                                 IsAdminMode = false,
                             });
 
-            return questionnaireList.Items;
+            return questionnaireList.Items.Select(q=>q.Title).ToList();
         }
 
         [Authorize]
