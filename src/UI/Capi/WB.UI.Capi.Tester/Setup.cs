@@ -18,7 +18,7 @@ namespace WB.UI.Capi.Tester
             base.InitializeViewLookup();
             var container = Mvx.Resolve<IMvxViewsContainer>();
 #warning: change viewModelType
-            container.Add(typeof(LoginViewModel), typeof(HomeActivity));
+            container.Add(typeof(LoginViewModel), typeof(TemplateListActivity));
         }
 
         protected override IMvxApplication CreateApp()

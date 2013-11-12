@@ -26,8 +26,8 @@ namespace WB.UI.Capi.Tester.Adapters
         {
             this.webExecutor = new AndroidRestUrils("http://192.168.173.1/designer");
             items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
-                "TestApi/GetAllTemplates", new CancellationToken(), null,
-                new HttpBasicAuthenticator("admin", SimpleHash.ComputeHash("qwerty")));
+                "Api/Tester/GetAllTemplates", new CancellationToken(), null,
+                new HttpBasicAuthenticator("admin", "Qwerty1234"));
             this.context = context;
         }
 

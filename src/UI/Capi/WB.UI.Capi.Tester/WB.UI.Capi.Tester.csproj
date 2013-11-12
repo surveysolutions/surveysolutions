@@ -78,7 +78,7 @@
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-    <Reference Include="Cirrious.MvvmCross.Localization">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader">
@@ -90,6 +90,10 @@
     <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Support.v4" />
@@ -118,7 +122,9 @@
     <Compile Include="Adapters\TemplateListAdapter.cs" />
     <Compile Include="AndroidTesterModelModule.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="CapiTesterApplication.cs" />
+    <Compile Include="CapiTesterApplication.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HomeActivity.cs" />
     <Compile Include="Implementations\Activities\TesterDetailsActivity.cs" />
     <Compile Include="Implementations\Adapters\TesterContentFrameAdapter.cs" />
@@ -143,6 +149,7 @@
     <AndroidResource Include="Resources\Layout\SplashScreen.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\template_list_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml" />
