@@ -10,7 +10,6 @@
                 "Numeric": "Numeric",
                 "DateTime": "DateTime",
                 "Text": "Text",
-                "AutoPropagate": "AutoPropagate",
                 "GpsCoordinates": "GpsCoordinates"
             },
             verificationReferenceType = {
@@ -43,10 +42,6 @@
                     value: "Text"
                 },
                 {
-                    key: "AutoPropagate",
-                    value: "Auto propagate"
-                },
-                {
                     key: "GpsCoordinates",
                     value: "Geo Location"
                 }
@@ -77,11 +72,6 @@
                     key: "MaxMin",
                     value: "Value: descending"
                 }
-            ],
-            groupTypes = [
-                "None",
-                "",
-                "AutoPropagated"
             ],
             commands = {
                 updateQuestionnaire: "UpdateQuestionnaire",
@@ -228,7 +218,6 @@
             questionTypeOptions: questionTypeOptions,
             questionScopes: questionScopes,
             answerOrders: answerOrders,
-            groupTypes: groupTypes,
             commands: commands,
             tips: tips,
             verificationReferenceType: verificationReferenceType,

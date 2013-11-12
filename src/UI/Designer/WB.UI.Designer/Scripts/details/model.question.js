@@ -83,29 +83,10 @@
                         }]
                 });
                 self.answerOptions = ko.observableArray([]);
-                self.cards = ko.observableArray([]);
 
                 self.maxValue = ko.observable();
-                self.triggers = ko.observableArray([]);
 
                 // UI stuff
-                self.currentTrigger = ko.observable();
-                self.localPropagatedGroups = ko.observableArray();
-                self.propagatedGroups = ko.computed(function () {
-                    return _.filter(self.localPropagatedGroups(), function (item) {
-                        var trigger = _.find(self.triggers(), function (t) { return t.key == item.id(); });
-                        if (!_.isUndefined(trigger)) {
-                            return false;
-                        }
-                        return true;
-                    }).map(function (item) {
-                        return { key: item.id(), value: item.title() };
-                    });
-                }).extend({ throttle: 500 });
-
-                self.hasPropagatedGroups = ko.computed(function () {
-                    return self.propagatedGroups().length != 0;
-                });
                 self.addAnswer = function () {
                     var answer = new answerOption().id(Math.uuid()).title('').value('');
 
@@ -115,13 +96,6 @@
                 };
                 self.removeAnswer = function (answer) {
                     self.answerOptions.remove(answer);
-                };
-
-                self.addTrigger = function () {
-                    self.triggers.push(self.currentTrigger());
-                };
-                self.removeTrigger = function (trigger) {
-                    self.triggers.remove(trigger);
                 };
 
                 self.typeOptions = config.questionTypeOptions;
@@ -135,37 +109,46 @@
                 self.isNullo = false;
                 self.cloneSource = ko.observable();
 
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces, self.areAnswersOrdered, self.maxAllowedAnswers]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces, self.areAnswersOrdered, self.maxAllowedAnswers]);
                 self.dirtyFlag().reset();
                 self.errors = ko.validation.group(self);
                 this.cache = function () {
                 };
+                
                 self.canUpdate = ko.observable(true);
 
                 self.hasErrors = ko.computed(function() {
                     return self.errors().length > 0;
                 });
 
-                //self.detachValidation = function () {
-                //    self.alias.extend({ validatable: false });
+                self.wasValidationAttached = false;
 
-                //    self.qtype.extend({ validatable: false });
-
-                //    self.selectedLinkTo.extend({ validatable: false });
-
-                //    self.answerOptions.extend({ validatable: false });
-
-                //    self.validationExpression.extend({ validatable: false });
-
-                //    self.condition.extend({ validatable: false });
-
-                //    self.title.extend({ validatable: false });
+                self.detachValidation = function () {
+                    if (self.wasValidationAttached == false)
+                        return;
                     
-                //    self.errors = ko.validation.group(self);
-                //},
+                    self.alias.extend({ validatable: false });
+
+                    self.qtype.extend({ validatable: false });
+
+                    self.selectedLinkTo.extend({ validatable: false });
+
+                    self.answerOptions.extend({ validatable: false });
+
+                    self.validationExpression.extend({ validatable: false });
+
+                    self.condition.extend({ validatable: false });
+
+                    self.title.extend({ validatable: false });
+                    
+                    self.errors = ko.validation.group(self);
+
+                    self.wasValidationAttached = false;
+                },
                 
                 self.attachValidation = function () {
-
+                    if (self.wasValidationAttached)
+                        return;
                     self.alias.extend({
                         validatable: true,
                         required: true,
@@ -356,6 +339,18 @@
                             message: 'Question title is invalid.'
                         }]
                     });
+
+                    self.alias.valueHasMutated();
+                    self.qtype.valueHasMutated();
+                    self.selectedLinkTo.valueHasMutated();
+                    self.answerOptions.valueHasMutated();
+                    self.validationExpression.valueHasMutated();
+                    self.condition.valueHasMutated();
+                    self.title.valueHasMutated();
+                   
+                    self.errors = ko.validation.group(self);
+                    
+                    self.wasValidationAttached = true;
                 };
                 return self;
             };
@@ -399,10 +394,6 @@
 
                     item.answerOptions(_.map(this.answerOptions(), function (answer) {
                         return new answerOption().id(answer.id()).title(answer.title()).value(answer.value());
-                    }));
-
-                    item.triggers(_.map(this.triggers(), function (trigger) {
-                        return { key: trigger.key, value: trigger.value };
                     }));
 
                     item.isHead(this.isHead());
@@ -475,10 +466,6 @@
 
                 this.answerOptions(_.map(data.answerOptions, function (answer) {
                     return new answerOption().id(answer.id).title(answer.title).value(answer.value);
-                }));
-
-                this.triggers(_.map(data.triggers, function (trigger) {
-                    return { key: trigger.key, value: trigger.value };
                 }));
 
                 this.isLinked(data.isLinked);
