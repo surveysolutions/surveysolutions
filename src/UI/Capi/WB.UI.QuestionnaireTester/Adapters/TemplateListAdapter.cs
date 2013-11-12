@@ -18,9 +18,9 @@ namespace WB.UI.QuestionnaireTester.Adapters
             : base()
         {
             this.webExecutor = new AndroidRestUrils("http://192.168.173.1/designer");
-            this.items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
-                "TestApi/GetAllTemplates", new CancellationToken(), null,
-                new HttpBasicAuthenticator("admin", SimpleHash.ComputeHash("qwerty")));
+            items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
+                "Api/Tester/GetAllTemplates", new CancellationToken(), null,
+                new HttpBasicAuthenticator("admin", "P@$$w0rd"));
             this.context = context;
         }
 
