@@ -1,17 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using WB.UI.Capi.Tester.Adapters;
+using WB.UI.QuestionnaireTester.Adapters;
 
-namespace WB.UI.Capi.Tester
+namespace WB.UI.QuestionnaireTester
 {
     [Activity(MainLauncher = true)]
     public class TemplateListActivity : ListActivity 
@@ -20,7 +11,7 @@ namespace WB.UI.Capi.Tester
         {
             base.OnCreate(bundle);
 
-            ListAdapter = new TemplateListAdapter(this);
+            this.ListAdapter = new TemplateListAdapter(this);
         }
     }
 }
