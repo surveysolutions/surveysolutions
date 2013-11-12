@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,11 +73,14 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_adding_a_question_and_there_already_is_one_question_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_deleting_group_by_id_and_there_are_3_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_deleting_question_by_id_and_there_are_4_questions_with_same_id.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_group_added_event_and_IsRoster_set_to_true_and_RosterSizeQuestionId_is_specified.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_group_cloned_event_and_IsRoster_set_to_true_and_RosterSizeQuestionId_is_specified.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_group_updated_event_and_IsRoster_set_to_true_and_RosterSizeQuestionId_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
-    <Compile Include="QuestionnaireDocumentExtentions.cs" />
+    <Compile Include="QuestionnaireDocumentExtensions.cs" />
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
@@ -94,6 +98,13 @@
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="ShouldExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

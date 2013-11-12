@@ -69,8 +69,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\CAPIBoundedContextModule.cs">
-      <Link>CAPIBoundedContextModule.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\CapiBoundedContextModule.cs">
+      <Link>CapiBoundedContextModule.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs">
       <Link>EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs</Link>
