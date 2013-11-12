@@ -812,9 +812,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 ? Enumerable.Empty<LinkedAnswerViewModel>()
                 : this
                     .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
-                    .Select(instanceId => this.Questions[instanceId])
-                    .Where(questionInstance => questionInstance.IsEnabled())
-                    .Select(questionInstance => new LinkedAnswerViewModel(questionInstance.PublicKey.PropagationVector, questionInstance.AnswerString));
+                    .Select(instanceId => this.Questions.ContainsKey(instanceId) ? this.Questions[instanceId] : null)
+                    .Where(questionInstance => questionInstance != null && questionInstance.IsEnabled())
+                    .Select(
+                        questionInstance =>
+                            new LinkedAnswerViewModel(questionInstance.PublicKey.PropagationVector, questionInstance.AnswerString));
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)

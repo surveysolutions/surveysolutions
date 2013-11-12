@@ -536,7 +536,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
-            if (questionnaire.ShouldQuestionPropagateGroups(questionId))
+            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
                 ThrowIfAnswerCannotBeUsedAsPropagationCount(questionId, answer, questionnaire);
             }
@@ -1142,7 +1142,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             ThrowIfPropagationVectorIsNull(questionId, propagationVector, questionnaire);
 
-            Guid[] parentPropagatableGroupIdsStartingFromTop = questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
+            Guid[] parentPropagatableGroupIdsStartingFromTop = questionnaire.GetParentRosterGroupsForQuestionStartingFromTop(questionId).ToArray();
 
             ThrowIfPropagationVectorLengthDoesNotCorrespondToParentPropagatableGroupsCount(questionId, propagationVector, parentPropagatableGroupIdsStartingFromTop, questionnaire);
 
@@ -1319,7 +1319,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void ThrowIfAnswerCannotBeUsedAsPropagationCount(Guid questionId, decimal answer, IQuestionnaire questionnaire)
         {
-            int maxValue = questionnaire.GetMaxAnswerValueForPropagatingQuestion(questionId);
+            int maxValue = questionnaire.GetMaxAnswerValueForRoserSizeQuestion(questionId);
 
             bool answerIsNotInteger = answer != (int) answer;
             bool answerIsNegative = answer < 0;
@@ -1702,7 +1702,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static KeyValuePair<string, Identity> GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(QuestionIdAndVariableName questionId, int[] propagationVector, IQuestionnaire questionnare)
         {
             int vectorPropagationLevel = propagationVector.Length;
-            int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId.Id);
+            int questionPropagationLevel = questionnare.GetRosterLevelForQuestion(questionId.Id);
 
             if (questionPropagationLevel > vectorPropagationLevel)
                 throw new InterviewException(string.Format(
@@ -1725,7 +1725,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid questionId, int[] propagationVector, IQuestionnaire questionnare, Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             int vectorPropagationLevel = propagationVector.Length;
-            int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
+            int questionPropagationLevel = questionnare.GetRosterLevelForQuestion(questionId);
 
             if (questionPropagationLevel < vectorPropagationLevel)
                 throw new InterviewException(string.Format(
@@ -1733,7 +1733,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
 
             Guid[] parentPropagatableGroupsStartingFromTop =
-                questionnare.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
+                questionnare.GetParentRosterGroupsForQuestionStartingFromTop(questionId).ToArray();
 
             IEnumerable<int[]> questionPropagationVectors = this.ExtendPropagationVector(
                 propagationVector, questionPropagationLevel, parentPropagatableGroupsStartingFromTop, getCountOfPropagatableGroupInstances);
@@ -1751,7 +1751,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Guid groupId in groupIds)
             {
-                int groupPropagationLevel = questionnare.GetPropagationLevelForGroup(groupId);
+                int groupPropagationLevel = questionnare.GetRosterLevelForGroup(groupId);
 
                 if (groupPropagationLevel > vectorPropagationLevel)
                     throw new InterviewException(string.Format(
@@ -1771,14 +1771,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Guid groupId in groupIds)
             {
-                int groupPropagationLevel = questionnare.GetPropagationLevelForGroup(groupId);
+                int groupPropagationLevel = questionnare.GetRosterLevelForGroup(groupId);
 
                 if (groupPropagationLevel < vectorPropagationLevel)
                     throw new InterviewException(string.Format(
                         "Group {0} expected to have propagation level not upper than {1} but it is {2}.",
                         FormatGroupForException(groupId, questionnare), vectorPropagationLevel, groupPropagationLevel));
 
-                Guid[] propagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupId).ToArray();
+                Guid[] propagatableGroupsStartingFromTop = questionnare.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupId).ToArray();
                 IEnumerable<int[]> groupPropagationVectors = this.ExtendPropagationVector(
                     propagationVector, groupPropagationLevel, propagatableGroupsStartingFromTop, getCountOfPropagatableGroupInstances);
 
@@ -1793,7 +1793,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return questionnaire
                 .GetAllGroupsWithNotEmptyCustomEnablementConditions()
-                .Where(groupId => !questionnaire.IsGroupPropagatable(groupId))
+                .Where(groupId => !questionnaire.IsRosterGroup(groupId))
                 .Where(groupId => !IsGroupUnderPropagatableGroup(questionnaire, groupId))
                 .Select(groupId => new Identity(groupId, EmptyPropagationVector))
                 .ToList();
@@ -1824,12 +1824,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool IsGroupUnderPropagatableGroup(IQuestionnaire questionnaire, Guid groupId)
         {
-            return questionnaire.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupId).Any();
+            return questionnaire.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupId).Any();
         }
 
         private static bool IsQuestionUnderPropagatableGroup(IQuestionnaire questionnaire, Guid questionId)
         {
-            return questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).Any();
+            return questionnaire.GetParentRosterGroupsForQuestionStartingFromTop(questionId).Any();
         }
 
         private List<Identity> GetAnswersToRemoveIfPropagationCountIsBeingDecreased(
@@ -1980,7 +1980,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static int GetIndexOfPropagatedGroupInPropagationVector(Guid propagatedGroup, IQuestionnaire questionnaire)
         {
             return questionnaire
-                .GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroup)
+                .GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroup)
                 .ToList()
                 .IndexOf(propagatedGroup);
         }
@@ -2058,10 +2058,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<int[]> AvailablePropagationLevelsForGroup(IQuestionnaire questionnaire, Guid groupdId)
         {
-            int groupPropagationLevel = questionnaire.GetPropagationLevelForGroup(groupdId);
+            int groupPropagationLevel = questionnaire.GetRosterLevelForGroup(groupdId);
 
             Guid[] parentPropagatableGroupsStartingFromTop =
-                questionnaire.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupdId)
+                questionnaire.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupdId)
                     .ToArray();
 
             var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, groupPropagationLevel,
@@ -2071,10 +2071,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<int[]> AvailablePropagationLevelsForQuestion(IQuestionnaire questionnaire, Guid questionId)
         {
-            int questionPropagationLevel = questionnaire.GetPropagationLevelForQuestion(questionId);
+            int questionPropagationLevel = questionnaire.GetRosterLevelForQuestion(questionId);
 
             Guid[] parentPropagatableGroupsStartingFromTop =
-                questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId)
+                questionnaire.GetParentRosterGroupsForQuestionStartingFromTop(questionId)
                     .ToArray();
 
             var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, questionPropagationLevel,

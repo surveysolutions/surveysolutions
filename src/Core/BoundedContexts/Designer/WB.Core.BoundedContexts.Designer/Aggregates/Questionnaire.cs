@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             question.AddCard(newImage);
         }
 
-        private void Apply(NewGroupAdded e)
+        internal void Apply(NewGroupAdded e)
         {
             var group = new Group();
             group.Title = e.GroupText;

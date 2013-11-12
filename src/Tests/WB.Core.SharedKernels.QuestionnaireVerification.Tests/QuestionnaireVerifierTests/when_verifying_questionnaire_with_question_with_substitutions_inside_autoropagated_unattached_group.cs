@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_questioWn_with_substitutions_inside_autoropagated_unattached_group : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_with_substitutions_inside_autoropagated_unattached_group : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -41,35 +41,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
-            resultErrors.Count().ShouldEqual(2);
+        It should_return_1_error = () =>
+            resultErrors.Count().ShouldEqual(1);
 
-        It should_return_first_error_with_code__WB0009 = () =>
-            resultErrors.First().Code.ShouldEqual("WB0009");
-
-        It should_return_second_error_with_code__WB0019 = () =>
-            resultErrors.Last().Code.ShouldEqual("WB0019");
-
-        It should_return_WB0019_error_with_two_references = () =>
-            resultErrors.Last().References.Count().ShouldEqual(2);
-
-        It should_return_WB0019_first_error_reference_with_type_Question = () =>
-            resultErrors.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_WB0019_first_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
-            resultErrors.Last().References.First().Id.ShouldEqual(questionWithSubstitutionsId);
-
-        It should_return_WB0019_last_error_reference_with_type_Question = () =>
-            resultErrors.Last().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_WB0019_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
-            resultErrors.Last().References.Last().Id.ShouldEqual(underDeeperPropagationLevelQuestionId);
+        It should_return_error_with_code__WB0009 = () =>
+            resultErrors.Single().Code.ShouldEqual("WB0009");
 
         It should_return_WB0009_error_with_single_referenceon_group = () =>
-            resultErrors.First().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            resultErrors.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
         It should_return_WB0009_error_with_single_reference_with_id_of_autopropagatedGroupId = () =>
-            resultErrors.First().References.Single().Id.ShouldEqual(autoPropagatedGroupId);
+            resultErrors.Single().References.Single().Id.ShouldEqual(autoPropagatedGroupId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;

@@ -32,17 +32,18 @@ namespace WB.Tests.Integration.InterviewTests
                     {
                         Children = new List<IComposite>
                         {
-                            new AutoPropagateQuestion
+                            new NumericQuestion
                             {
                                 PublicKey = numericQuestionId,
+                                IsInteger = true,
                                 QuestionType = QuestionType.Numeric,
-                                MaxValue = 10,
-                                Triggers = new List<Guid> {propagatableGroupId},
+                                MaxValue = 10
                             },
                             new Group
                             {
                                 PublicKey = propagatableGroupId,
-                                Propagated = Propagate.AutoPropagated,
+                                IsRoster = true,
+                                RosterSizeQuestionId = numericQuestionId,
                                 Children = new List<IComposite>
                                 {
                                     new TextQuestion
