@@ -8,7 +8,7 @@ namespace WB.UI.Capi.Tester
     {
         public App()
         {
-            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
+            //Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
         }
     }
 }

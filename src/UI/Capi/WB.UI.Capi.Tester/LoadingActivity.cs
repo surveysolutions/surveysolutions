@@ -4,13 +4,14 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ModelUtils;
+//using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using System;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -76,7 +77,6 @@ namespace WB.UI.Capi.Tester
                 //CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
             }
             syncCacher.DeleteItem(itemKey);
-
 
         }
     }

@@ -197,7 +197,7 @@ namespace WB.UI.Capi.Tester
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            NcqrsInit.Init(this.kernel);
+           /* NcqrsInit.Init(this.kernel);
        
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
@@ -208,14 +208,14 @@ namespace WB.UI.Capi.Tester
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
-            
+            */
             #region register handlers
 
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+           /* var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
             this.InitTemplateStorage(bus);
 
-            this.InitInterviewStorage(bus);
+            this.InitInterviewStorage(bus);*/
 
 /*
             this.InitUserStorage(bus);
