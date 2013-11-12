@@ -118,7 +118,9 @@
                 if (_.isNull(group) || group.isNullo) {
                     return;
                 }
+                group.attachValidation();
                 group.isSelected(true);
+                group.integerQuestions(datacontext.questions.getAllIntegerQuestionsForSelect());
                 selectedGroup(group);
                 openDetails("show-group");
             },
@@ -202,7 +204,6 @@
                     _.each(datacontext.groups.getAllLocal(), function(group) {
                         group.fillChildren();
                     });
-                    //parent.fillChildren();
                     datacontext.questions.cleanTriggers(child);
                     router.navigateTo(parent.getHref());
                 } else {

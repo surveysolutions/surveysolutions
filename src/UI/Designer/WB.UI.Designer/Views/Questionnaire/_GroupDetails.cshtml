@@ -14,28 +14,39 @@
         <td class="body">
             <div class="container-fluid">
                 <!-- ko if : level() != 0 -->
-               
+                <div class="control-group" data-bind="validationElement: isRoster">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" data-bind="checked: isRoster">
+                            Is Roster
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group" data-bind="validationElement: rosterSizeQuestion, visible: isRoster">
+                    <div class="controls">
+                        <label class="control-label">Roster size</label>
+                         <select class="input-block-level" data-bind="options: integerQuestions, optionsValue: 'questionId', optionsText: 'title', value: rosterSizeQuestion, optionsCaption: 'Choose integer question'"></select>
+                    </div>
+                </div>
                 <!-- /ko -->
                 <div class="row-fluid">
                     <label>Description</label>
-                    <div class="note">
-                        <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
-                    </div>
+                    <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
                 </div>
 
                 <label>
                     <a href="#" class="btn btn-info btn btn-help"
-                       data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
-                       data-original-title="Condition expression"
-                       data-html="true"
-                       data-trigger="hover"
-                       data-placement="right"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
-                
+                        data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+                        data-original-title="Condition expression"
+                        data-html="true"
+                        data-trigger="hover"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
+
                 <div class="control-group" data-bind="validationElement: condition">
                     <div class="controls">
                         <textarea rows="1" data-bind="autoGrowArea: condition, valueUpdate: 'afterkeydown'" class="input-block-level"></textarea>
-                       @* <div class="editor-container" data-bind="validationElement: condition">
+                        @* <div class="editor-container" data-bind="validationElement: condition">
                             <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                         </div>*@
                         <span class="help-inline" data-bind="validationMessage: condition"></span>
