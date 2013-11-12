@@ -65,7 +65,6 @@
                     });
                 });
 
-                self.answerOrder = ko.observable();
                 self.areAnswersOrdered = ko.observable(false);
                 self.maxAllowedAnswers = ko.observable('').extend({
                     digit: true,
@@ -109,7 +108,11 @@
                 self.isNullo = false;
                 self.cloneSource = ko.observable();
 
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces, self.areAnswersOrdered, self.maxAllowedAnswers]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead,
+                    self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression,
+                    self.validationMessage, self.instruction, self.answerOptions, self.maxValue,
+                    self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces,
+                    self.areAnswersOrdered, self.maxAllowedAnswers]);
                 self.dirtyFlag().reset();
                 self.errors = ko.validation.group(self);
                 this.cache = function () {
@@ -149,6 +152,16 @@
                 self.attachValidation = function () {
                     if (self.wasValidationAttached)
                         return;
+                    
+                    self.maxValue.extend({
+                        digit: {
+                            params: true,
+                            onlyIf: function() {
+                                return self.isInteger();
+                            }
+                        }
+                    });
+
                     self.alias.extend({
                         validatable: true,
                         required: true,
