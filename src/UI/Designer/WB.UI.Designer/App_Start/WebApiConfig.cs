@@ -7,7 +7,7 @@ namespace WB.UI.Designer.App_Start
     {
         public static void Register(HttpConfiguration config)
         {
-            config.MessageHandlers.Add(new HttpsVerifier());
+            //config.MessageHandlers.Add(new HttpsVerifier());
             config.MessageHandlers.Add(new BasicAuthMessageHandler());
 
             config.Routes.MapHttpRoute(
