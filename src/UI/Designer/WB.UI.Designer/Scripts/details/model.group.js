@@ -17,20 +17,12 @@
 
                 self.isRoster = ko.observable(false);
                 self.rosterSizeQuestion = ko.observable();
+                
+                self.integerQuestions = ko.observableArray([]);
 
                 self.level = ko.observable();
                 self.description = ko.observable('');
-                self.condition = ko.observable('').extend({
-                    validation: [{
-                        validator: function (val) {
-                            if (_.isUndefined(val) || _.isNull(val)) {
-                                return true;
-                            }
-                            return (val.indexOf("[this]") == -1);
-                        },
-                        message: 'You cannot use self-reference in conditions'
-                    }]
-                });;
+                self.condition = ko.observable('');
                 
                 self.children = ko.observableArray();
                 self.childrenID = ko.observableArray();
@@ -49,7 +41,7 @@
                 self.isSelected = ko.observable();
                 self.isExpanded = ko.observable(true);
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition, self.isRoster, self.rosterSizeQuestion]);
                 self.dirtyFlag().reset();
                 
                 self.errors = ko.validation.group(self);
@@ -72,6 +64,15 @@
                                 return false;
                             },
                             message: 'Error'
+                        },
+                        {
+                            validator: function (val) {
+                                if (_.isUndefined(val) || _.isNull(val)) {
+                                    return true;
+                                }
+                                return (val.indexOf("[this]") == -1);
+                            },
+                            message: 'You cannot use self-reference in conditions'
                         }]
                     });
                 };

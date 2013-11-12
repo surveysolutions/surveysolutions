@@ -80,16 +80,12 @@
 
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
-                   
-                   
-                    item.isInteger(_.isEmpty(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
 
                     if (!_.isEmpty(dto.Settings)) {
                         var settings = dto.Settings;
                         
                         item.isLinked(_.isEmpty(settings.LinkedToQuestionId) == false ? 1 : 0);
                         item.selectedLinkTo(settings.LinkedToQuestionId);
-                        item.answerOrder(settings.AnswerOrder);
 
                         item.answerOptions(_.map(settings.Answers, function (answer) {
                             return new model.AnswerOption()
@@ -97,9 +93,9 @@
                                 .title(answer.Title)
                                 .value(answer.AnswerValue);
                         }));
-
-                      
-                        item.maxValue(_.isEmpty(settings.MaxValue) ? null : settings.MaxValue);
+                       
+                        item.isInteger(_.isBoolean(settings.IsInteger) ? (settings.IsInteger ? 1 : 0) : 0);
+                        item.maxValue(_.isNumber(settings.MaxValue) ? settings.MaxValue * 1 : null);
                         item.countOfDecimalPlaces(_.isEmpty(settings.CountOfDecimalPlaces) ? null : settings.CountOfDecimalPlaces);
                         item.areAnswersOrdered(_.isEmpty(dto.Settings.AreAnswersOrdered) ? false : settings.AreAnswersOrdered);
                         item.maxAllowedAnswers(_.isEmpty(dto.Settings.MaxAllowedAnswers) ? null : settings.MaxAllowedAnswers);

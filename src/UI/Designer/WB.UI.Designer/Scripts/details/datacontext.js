@@ -177,6 +177,17 @@
                 return question.alias();
             });
         };
+        
+        questions.getAllIntegerQuestionsForSelect = function () {
+            return _.filter(questions.getAllLocal(), function (question) {
+                if (question.parent().isRoster()) {
+                    return false;
+                }
+                return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
+            }).map(function (item) {
+                return { questionId: item.id(), title: item.alias() + ": " + item.title() };
+            });
+        };
 
 
         var getChildItemByIdAndType = function (item) {
@@ -213,21 +224,6 @@
             return command;
         };
 
-        commands[config.commands.createGroup] = function (group) {
-            var parent = group.parent();
-            if (!_.isNull(parent))
-                parent = parent.id();
-
-            return {
-                questionnaireId: questionnaire.id(),
-                groupId: group.id(),
-                title: group.title(),
-                description: group.description(),
-                condition: group.condition(),
-                parentGroupId: parent
-            };
-        };
-
         commands[config.commands.deleteGroup] = function (group) {
             return {
                 questionnaireId: questionnaire.id(),
@@ -235,13 +231,28 @@
             };
         };
 
+        commands[config.commands.createGroup] = function (group) {
+            var parent = group.parent();
+            if (!_.isNull(parent))
+                parent = parent.id();
+
+            var groupCommand = converGroupToCommand(group);
+            groupCommand.parentGroupId = parent;
+            return groupCommand;
+        };
+        
         commands[config.commands.updateGroup] = function (group) {
+            return converGroupToCommand(group);
+        };
+
+        var converGroupToCommand = function(group) {
             return {
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
                 description: group.description(),
-                condition: group.condition()
+                condition: group.condition(),
+                rosterSizeQuestionId: group.isRoster() ? group.rosterSizeQuestion() : null
             };
         };
 
@@ -351,17 +362,10 @@
                     command.isInteger = question.isInteger() == 1 ? true : false;
                     command.isAutopropagating = false;
                     command.countOfDecimalPlaces = command.isInteger == false ? question.countOfDecimalPlaces() : null;
+                    command.maxValue = question.maxValue();
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
-                    break;
-                case "AutoPropagate":
-                    command.isAutopropagating = true;
-                    command.isInteger = true;
-                    command.maxValue = question.maxValue();
-                    command.triggeredGroupIds = _.map(question.triggers(), function (trigger) {
-                    return trigger.key;
-                    });
                     break;
             }
             return command;

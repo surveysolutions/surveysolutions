@@ -34,12 +34,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             this.Id = doc.PublicKey;
             this.ParentId = parentId;
-            this.Title = doc.QuestionText.Replace(System.Environment.NewLine, " ");
+            this.Title = doc.QuestionText.Replace(Environment.NewLine, " ");
             this.QuestionType = doc.QuestionType;
-            if (doc.QuestionType == QuestionType.AutoPropagate)
-            {
-                this.QuestionType = QuestionType.Numeric;
-            }
             this.QuestionScope = doc.QuestionScope;
             this.ConditionExpression = doc.ConditionExpression;
             this.ValidationExpression = doc.ValidationExpression;
@@ -69,7 +65,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces
                     };
             }
-
+            #warning: remove this after QuestionnaireDenormalizer modifications
+            var autoQuestion = doc as AutoPropagateQuestion;
+            if (autoQuestion != null)
+            {
+                this.QuestionType = QuestionType.Numeric;
+                this.Settings = new NumericSettings
+                {
+                    MaxValue = autoQuestion.MaxValue,
+                    IsInteger = true,
+                    CountOfDecimalPlaces = 0
+                };
+            }
             var multyoptionQuestion = doc as IMultyOptionsQuestion;
             if (multyoptionQuestion != null)
             {
