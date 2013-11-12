@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
             questionnaireDocument = CreateQuestionnaireDocument(
                 CreateGroup(groupId: groupId)
-                );
+            );
 
             @event = CreateGroupUpdatedEvent(groupId: groupId, isRoster: true, rosterSizeQuestionId: rosterSizeQuestionId);
 
