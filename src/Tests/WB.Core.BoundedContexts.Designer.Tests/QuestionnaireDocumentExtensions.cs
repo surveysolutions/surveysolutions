@@ -1,13 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
 {
-    public static class QuestionnaireDocumentExtentions
+    public static class QuestionnaireDocumentExtensions
     {
+        public static IGroup GetGroup(this QuestionnaireDocument questionnaireDocument, Guid groupId)
+        {
+            return questionnaireDocument.GetAllGroups().Single(group => group.PublicKey == groupId);
+        }
+
+        public static IEnumerable<IGroup> GetAllGroups(this QuestionnaireDocument questionnaireDocument)
+        {
+            return questionnaireDocument.Find<IGroup>(_ => true);
+        }
+
         public static Group AddChapter(this QuestionnaireDocument document, Guid groupId)
         {
             var group = new Group(string.Format("Chapter {0}", groupId))
