@@ -137,14 +137,14 @@
 
         groups.getPropagateableGroups = function () {
             var propagatable = _.filter(groups.getAllLocal(), function (item) {
-                return item.gtype() !== "None";
+                return item.isRoster();
             });
             return propagatable;
         };
 
         groups.getQuestionsFromPropagatableGroups = function () {
             return _.filter(questions.getAllLocal(), function (item) {
-                return !_.isUndefined(item.parent()) && !_.isNull(item.parent()) && item.parent().gtype() !== "None";
+                return !_.isUndefined(item.parent()) && !_.isNull(item.parent()) && item.parent().isRoster();
             });
         };
 
@@ -222,7 +222,6 @@
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
-                propagationKind: group.gtype(),
                 description: group.description(),
                 condition: group.condition(),
                 parentGroupId: parent
@@ -241,7 +240,6 @@
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
-                propagationKind: group.gtype(),
                 description: group.description(),
                 condition: group.condition()
             };
