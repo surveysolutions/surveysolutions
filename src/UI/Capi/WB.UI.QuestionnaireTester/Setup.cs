@@ -5,7 +5,7 @@ using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.UI.Shared.Android;
 
-namespace WB.UI.Capi.Tester
+namespace WB.UI.QuestionnaireTester
 {
     public class Setup : CapiSharedSetup
     {

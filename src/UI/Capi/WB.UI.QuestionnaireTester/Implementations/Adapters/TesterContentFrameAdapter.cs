@@ -3,11 +3,11 @@ using Android.OS;
 using Android.Support.V4.App;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Capi.Tester.Implementations.Fragments;
+using WB.UI.QuestionnaireTester.Implementations.Fragments;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Frames;
 
-namespace WB.UI.Capi.Tester.Implementations.Adapters
+namespace WB.UI.QuestionnaireTester.Implementations.Adapters
 {
     public class TesterContentFrameAdapter : ContentFrameAdapter
     {

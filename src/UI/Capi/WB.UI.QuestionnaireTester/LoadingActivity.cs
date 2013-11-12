@@ -4,7 +4,6 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-//using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using Main.Core;
 using Ncqrs;
@@ -15,11 +14,12 @@ using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.UI.Capi.Tester.Implementations.Activities;
+using WB.UI.QuestionnaireTester.Implementations.Activities;
+//using CAPI.Android.Core.Model.ModelUtils;
 
 //using WB.UI.Capi.DataCollection.Implementations.Activities;
 
-namespace WB.UI.Capi.Tester
+namespace WB.UI.QuestionnaireTester
 {
     [Activity(Label = "Loading", NoHistory = true, 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]

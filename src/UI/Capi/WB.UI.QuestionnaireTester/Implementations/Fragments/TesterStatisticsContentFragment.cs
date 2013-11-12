@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.BoundedContexts.Capi.Views.Statistics;
 using WB.UI.Shared.Android.Frames;
 
-namespace WB.UI.Capi.Tester.Implementations.Fragments
+namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 {
     public class TesterStatisticsContentFragment : StatisticsContentFragment
     {
