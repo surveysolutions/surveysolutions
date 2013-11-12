@@ -37,5 +37,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public bool IsInteger { get; set; }
         
         public int? CountOfDecimalPlaces { get; set; }
+        public int? MaxValue { get; set; }
     }
 }

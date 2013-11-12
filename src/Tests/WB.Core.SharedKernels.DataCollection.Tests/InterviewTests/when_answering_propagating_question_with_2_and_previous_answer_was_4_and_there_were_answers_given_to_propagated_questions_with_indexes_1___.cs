@@ -29,8 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => _.HasQuestion(propagatingQuestionId) == true
                 && _.GetQuestionType(propagatingQuestionId) == QuestionType.AutoPropagate
                 && _.IsQuestionInteger(propagatingQuestionId) == true
-                && _.ShouldQuestionPropagateGroups(propagatingQuestionId) == true
-                && _.GetMaxAnswerValueForPropagatingQuestion(propagatingQuestionId) == 100
+                && _.ShouldQuestionSpecifyRosterSize(propagatingQuestionId) == true
+                && _.GetMaxAnswerValueForRoserSizeQuestion(propagatingQuestionId) == 100
                 && _.GetGroupsPropagatedByQuestion(propagatingQuestionId) == new[] { propagatedGroupId }
 
                 && _.HasGroup(propagatedGroupId) == true
@@ -38,9 +38,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                 && _.HasQuestion(propagatedQuestionId) == true
                 && _.GetQuestionType(propagatedQuestionId) == QuestionType.Text
-                && _.GetPropagationLevelForQuestion(propagatedQuestionId) == 1
-                && _.GetParentPropagatableGroupsForQuestionStartingFromTop(propagatedQuestionId) == new [] { propagatedGroupId }
-                && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroupId) == new[] { propagatedGroupId });
+                && _.GetRosterLevelForQuestion(propagatedQuestionId) == 1
+                && _.GetParentRosterGroupsForQuestionStartingFromTop(propagatedQuestionId) == new [] { propagatedGroupId }
+                && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new[] { propagatedGroupId });
 
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
