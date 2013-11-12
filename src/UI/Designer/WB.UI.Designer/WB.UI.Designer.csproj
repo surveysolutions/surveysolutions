@@ -214,7 +214,7 @@
     <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
-    <Compile Include="Controllers\TestApiController.cs" />
+    <Compile Include="Api\TesterController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
