@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
     internal class when_verifying_questionnaire_with_1_orphan_auto_propagated_group_and_question_referencing_himself_inside :
         QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
 
             autoPropagatedGroupId = Guid.Parse("13333333333333333333333333333333");
@@ -48,13 +48,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_1_errors = () =>
+        It should_return_1_errors = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        private It should_return_first_error_with_code__WB0009 = () =>
+        It should_return_first_error_with_code__WB0009 = () =>
             resultErrors.First().Code.ShouldEqual("WB0009");
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
