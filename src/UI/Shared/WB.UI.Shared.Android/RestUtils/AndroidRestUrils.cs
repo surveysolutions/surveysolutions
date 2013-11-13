@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
+using Java.Security.Cert;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
@@ -22,11 +23,13 @@ namespace WB.UI.Shared.Android.RestUtils
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
-        public void ExcecuteRestRequest(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams)
+        public void ExcecuteRestRequest(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = this.BuildRequest(url, additionalParams, null);
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+            var request = this.BuildRequest(url, additionalParams, null, GetRequestMethod(method));
 
             if (authenticator != null)
                 restClient.Authenticator = authenticator;
@@ -46,11 +49,13 @@ namespace WB.UI.Shared.Android.RestUtils
             }
         }
 
-        public T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams)
+        public T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = this.BuildRequest(url, additionalParams, null);
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+            var request = this.BuildRequest(url, additionalParams, null, GetRequestMethod(method));
 
             if (authenticator != null)
                 restClient.Authenticator = authenticator;
@@ -60,12 +65,14 @@ namespace WB.UI.Shared.Android.RestUtils
             return this.HandlerResponse<T>(response);
         }
 
-        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator,
+        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator, string method,
             params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = this.BuildRequest(url, additionalParams, requestBody);
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+            var request = this.BuildRequest(url, additionalParams, requestBody, GetRequestMethod(method));
 
             if (authenticator != null)
                 restClient.Authenticator = authenticator;
@@ -84,6 +91,14 @@ namespace WB.UI.Shared.Android.RestUtils
             }
 
             return this.HandlerResponse<T>(response);
+        }
+
+        private Method GetRequestMethod(string method)
+        {
+            Method result;
+            if (string.IsNullOrEmpty(method) || !Method.TryParse(method, out result))
+                return Method.POST;
+            return result;
         }
 
         private T HandlerResponse<T>(IRestResponse response)
@@ -118,9 +133,9 @@ namespace WB.UI.Shared.Android.RestUtils
             return syncItemsMetaContainer;
         }
 
-        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, string requestBody)
+        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, string requestBody, RestSharp.Method method)
         {
-            var request = new RestRequest(url, Method.POST);
+            var request = new RestRequest(url, method);
             request.RequestFormat = DataFormat.Json;
 
             request.AddHeader("Accept-Encoding", "gzip,deflate");

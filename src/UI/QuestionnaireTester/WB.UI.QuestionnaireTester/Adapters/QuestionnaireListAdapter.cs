@@ -17,10 +17,10 @@ namespace WB.UI.QuestionnaireTester.Adapters
         public QuestionnaireListAdapter(Context context)
             : base()
         {
-            this.webExecutor = new AndroidRestUrils("http://192.168.173.1/designer");
-            items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
-                "Api/Tester/GetAllTemplates", new CancellationToken(), null,
-                new HttpBasicAuthenticator("admin", "qwerty"));
+            this.webExecutor = new AndroidRestUrils("https://192.168.173.1/designer");
+            items = this.webExecutor.ExcecuteRestRequest<List<string>>(
+                "Api/Tester/GetAllTemplates",
+                new HttpBasicAuthenticator("admin", "qwerty"), "GET");
             this.context = context;
         }
 

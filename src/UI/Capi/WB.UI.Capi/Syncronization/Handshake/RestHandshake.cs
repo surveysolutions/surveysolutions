@@ -18,8 +18,8 @@ namespace WB.UI.Capi.Syncronization.Handshake
 
         public string Execute(string login, string password, string androidId, string appID, string registrationKey)
         {
-            var package = this.webExecutor.ExcecuteRestRequest<HandshakePackage>(handshakePath, 
-                new HttpBasicAuthenticator(login, password),
+            var package = this.webExecutor.ExcecuteRestRequest<HandshakePackage>(handshakePath,
+                new HttpBasicAuthenticator(login, password), null,
                 new KeyValuePair<string, string>("clientId", appID),
                 new KeyValuePair<string, string>("clientRegistrationId", registrationKey),
                 new KeyValuePair<string, string>("androidId", androidId));
