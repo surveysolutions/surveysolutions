@@ -212,11 +212,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
 
                 Guid[] vectorOfAutopropagatedQuestionsForQuestionWithSubstitution =
-                    GetAllAutopropagationQuestionsAsVector(questionWithSubstitution, questionnaire);
+                    GetAllAutopropagationQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
 
-                VerifyEnumerableAndAccumulateErrorsToList(substitutionReferences, errorByAllQuestionsWithSubstitutions,
-                    identifier => GetVerificationErrorBySubstitutionReferenceOrNull(
-                        questionWithSubstitution, identifier, vectorOfAutopropagatedQuestionsForQuestionWithSubstitution, questionnaire));
+                if (vectorOfAutopropagatedQuestionsForQuestionWithSubstitution != null)
+                {
+                    VerifyEnumerableAndAccumulateErrorsToList(substitutionReferences, errorByAllQuestionsWithSubstitutions,
+                        identifier => GetVerificationErrorBySubstitutionReferenceOrNull(
+                            questionWithSubstitution, identifier, vectorOfAutopropagatedQuestionsForQuestionWithSubstitution, questionnaire));
+                }
             }
 
             return errorByAllQuestionsWithSubstitutions;
@@ -235,11 +238,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     this.expressionProcessor.GetIdentifiersUsedInExpression(questionWithValidationExpression.ValidationExpression);
 
                 Guid[] vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation =
-                    GetAllAutopropagationQuestionsAsVector(questionWithValidationExpression, questionnaire);
+                    GetAllAutopropagationQuestionsAsVectorOrNullIfSomeAreMissing(questionWithValidationExpression, questionnaire);
 
-                VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
-                    identifier => GetVerificationErrorByCustomValidationReferenceOrNull(
-                        questionWithValidationExpression, identifier, vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, questionnaire));
+                if (vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation != null)
+                {
+                    VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
+                        identifier => GetVerificationErrorByCustomValidationReferenceOrNull(
+                            questionWithValidationExpression, identifier, vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation,
+                            questionnaire));
+                }
             }
 
             return errorByAllQuestionsWithCustomValidation;
@@ -527,22 +534,24 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
         }
 
-        private static Guid[] GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument questionnaire)
+        private static Guid[] GetAllAutopropagationQuestionsAsVectorOrNullIfSomeAreMissing(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            Guid[] propagationQuestions =
+            Guid?[] propagationQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), questionnaire)
                     .Where(IsGroupPropagatable)
-                    .Select<IGroup, Guid>(g =>
+                    .Select<IGroup, Guid?>(g =>
                     {
                         var propagationTriggers = GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, questionnaire);
                         var firstTrigger = propagationTriggers.FirstOrDefault();
                         if (firstTrigger == null)
-                            return Guid.Empty;
+                            return null;
                         return firstTrigger.PublicKey;
                     })
                     .ToArray();
 
-            return propagationQuestions;
+            return propagationQuestions.All(id => id.HasValue)
+                ? propagationQuestions.Select(id => id.Value).ToArray()
+                : null;
         }
 
         private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
@@ -562,10 +571,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             Guid[] vectorOfAutopropagatedQuestions, QuestionnaireDocument questionnaire)
         {
             Guid[] autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution =
-                GetAllAutopropagationQuestionsAsVector(question, questionnaire);
+                GetAllAutopropagationQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
          
-            return autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Length > 0
-                &&
+            return
+                autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution != null &&
+                autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Length > 0 &&
                 autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Except(
                     vectorOfAutopropagatedQuestions).Any();
         }
