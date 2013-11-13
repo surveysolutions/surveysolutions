@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
@@ -12,22 +14,46 @@ namespace WB.UI.QuestionnaireTester.Adapters
 {
     public class QuestionnaireListAdapter:SmartAdapter<string>
     {
-        private readonly IRestUrils webExecutor;
-        private readonly Context context;
-        public QuestionnaireListAdapter(Context context)
+        private readonly Activity activity;
+        private CancellationToken cancellationToken;
+        private readonly ProgressDialog progressDialog;
+
+        public QuestionnaireListAdapter(Activity activity)
             : base()
         {
-            this.webExecutor = new AndroidRestUrils("https://192.168.173.1/designer");
-            items = this.webExecutor.ExcecuteRestRequest<List<string>>(
-                "Api/Tester/GetAllTemplates",
+            this.items = new List<string>();
+
+            this.activity = activity;
+            this.progressDialog = new ProgressDialog(activity);
+
+            this.progressDialog.SetTitle("Loading");
+            this.progressDialog.SetMessage("Uploading templates from Designer");
+            this.progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
+            this.progressDialog.SetCancelable(false);
+
+            var tokenSource2 = new CancellationTokenSource();
+            this.cancellationToken = tokenSource2.Token;
+            progressDialog.Show();
+            Task.Factory.StartNew(UploadQuestionnairesFromDesigner, this.cancellationToken);
+        }
+
+        protected void UploadQuestionnairesFromDesigner()
+        {
+            var webExecutor = new AndroidRestUrils("https://192.168.173.1/designer");
+            items = webExecutor.ExcecuteRestRequestAsync<List<string>>(
+                "Api/Tester/GetAllTemplates", cancellationToken, null,
                 new HttpBasicAuthenticator("admin", "qwerty"), "GET");
-            this.context = context;
+            activity.RunOnUiThread(() =>
+            {
+                this.NotifyDataSetChanged();
+                progressDialog.Hide();
+            });
         }
 
         protected override View BuildViewItem(string dataItem, int position)
         {
             LayoutInflater layoutInflater =
-                (LayoutInflater) this.context.GetSystemService(Context.LayoutInflaterService);
+                (LayoutInflater) this.activity.GetSystemService(Context.LayoutInflaterService);
 
             View view = layoutInflater.Inflate(Resource.Layout.template_list_item, null);
             var tvTitle =
