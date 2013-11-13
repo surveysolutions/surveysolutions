@@ -108,7 +108,7 @@ namespace WB.UI.Capi
             var eventHandler =
                 new InterviewViewModelDenormalizer(
                     this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>>());
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -150,11 +150,11 @@ namespace WB.UI.Capi
             var templateDenoramalizer = new QuestionnaireDenormalizer(this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
             
-            var propagationStructureDenormalizer =
-                new QuestionnairePropagationStructureDenormalizer(
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>>());
+            var rosterStructureDenormalizer =
+                new QuestionnaireRosterStructureDenormalizer(
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
 
-            bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
+            bus.RegisterHandler(rosterStructureDenormalizer, typeof(TemplateImported));
         }
 
         private void InitFileStorage(InProcessEventBus bus)

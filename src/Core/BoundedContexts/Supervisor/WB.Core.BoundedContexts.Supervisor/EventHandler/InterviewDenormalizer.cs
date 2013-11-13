@@ -46,11 +46,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<InterviewDeclaredValid>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
         private readonly IReadSideRepositoryWriter<InterviewData> interviews;
 
         public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users, 
-                                     IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures, 
+                                     IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures, 
                                      IReadSideRepositoryWriter<InterviewData> interviews)
         {
             this.users = users;
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public Type[] UsesViews
         {
-            get { return new[] { typeof(UserDocument), typeof(QuestionnairePropagationStructure) }; }
+            get { return new[] { typeof(UserDocument), typeof(QuestionnaireRosterStructure) }; }
         }
 
         public Type[] BuildsViews
@@ -425,9 +425,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-            foreach (var scopeId in questionnarie.PropagationScopes.Keys)
+            foreach (var scopeId in questionnarie.RosterScopes.Keys)
             {
-                if (questionnarie.PropagationScopes[scopeId].Contains(groupId))
+                if (questionnarie.RosterScopes[scopeId].Contains(groupId))
                 {
                     return scopeId;
                 }

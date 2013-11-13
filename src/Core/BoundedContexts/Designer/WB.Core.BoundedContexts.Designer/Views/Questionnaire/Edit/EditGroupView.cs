@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.ParentId = parentId;
             this.Level = level;
             this.Title = group.Title;
-            this.Propagated = group.Propagated;
             this.IsRoster = group.IsRoster;
             this.RosterSizeQuestionId = group.RosterSizeQuestionId;
             this.ConditionExpression = group.ConditionExpression;
@@ -31,9 +30,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int Level { get; set; }
 
         public string ConditionExpression { get; set; }
-
-        [JsonConverter(typeof (StringEnumConverter))]
-        public Propagate Propagated { get; set; }
 
         public bool IsRoster { get; set; }
 

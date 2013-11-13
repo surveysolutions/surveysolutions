@@ -60,7 +60,7 @@
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
-    <Compile Include="EventHandler\QuestionnairePropagationStructureDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
@@ -171,7 +171,7 @@
     <Compile Include="Views\Questionnaire\QuestionnaireItemViewFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnairePropagationStructure.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

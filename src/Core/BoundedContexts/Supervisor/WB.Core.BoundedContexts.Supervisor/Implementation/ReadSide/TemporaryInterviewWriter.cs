@@ -23,12 +23,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         private InterviewData tempView;
 
         public TemporaryInterviewWriter(Guid id, InterviewData view, IReadSideRepositoryWriter<UserDocument> users,
-                                        IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>
-                                            questionnairePropagationStructures)
+                                        IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>
+                                            questionnaireRosterStructures)
         {
             this.tempViewId = id;
             this.tempView = view;
-            this.denormalizer = new InterviewDenormalizer(users, questionnairePropagationStructures, this);
+            this.denormalizer = new InterviewDenormalizer(users, questionnaireRosterStructures, this);
             RegisterInterviewDenormalizerAtProcessBus();
         }
 
