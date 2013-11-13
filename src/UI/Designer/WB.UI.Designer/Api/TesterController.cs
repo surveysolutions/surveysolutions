@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
@@ -42,12 +43,10 @@ namespace WB.UI.Designer.Api
             this.logger = logger;
             this.questionnaireHelper = questionnaireHelper;
         }
-
-
-        // change to other return type
+        
         [Authorize]
         [HttpGet]
-        public List<string> GetAllTemplates()
+        public QuestionnaireListSyncPackage GetAllTemplates()
         {
             var user = this.userHelper.WebUser;
 
@@ -56,13 +55,16 @@ namespace WB.UI.Designer.Api
 
             var questionnaireList = this.questionnaireHelper.GetQuestionnaires(
                 viewerId: user.UserId);
-            return questionnaireList.Select(q=>q.Title).ToList();
-        }
+            var questionnaireSyncPackage = new QuestionnaireListSyncPackage();
 
-        // change to other return type
+            questionnaireSyncPackage.Items = questionnaireList.Select(q => new QuestionnaireListItem(q.Id, q.Title)).ToList();
+
+            return questionnaireSyncPackage;
+        }
+        
         [Authorize]
         [HttpGet]
-        public string GetTemplate(Guid id)
+        public QuestionnaireSyncPackage GetTemplate(Guid id)
         {
             var user = this.userHelper.WebUser;
 
@@ -73,7 +75,8 @@ namespace WB.UI.Designer.Api
             if (questionnaireView == null)
                 return null;
 
-            ValidateAccessPermissions(questionnaireView, user.UserId);
+            if (!ValidateAccessPermissions(questionnaireView, user.UserId))
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
 
             var templateInfo = this.exportService.GetQuestionnaireTemplate(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
@@ -83,21 +86,23 @@ namespace WB.UI.Designer.Api
 
             var template = PackageHelper.CompressString(templateInfo.Source);
 
-            return template;
+            var questionnaireSyncPackage = new QuestionnaireSyncPackage(template);
+
+            return questionnaireSyncPackage;
         }
 
-        private void ValidateAccessPermissions(QuestionnaireView questionnaireView, Guid currentPersonId)
+        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView, Guid currentPersonId)
         {
             if (questionnaireView.CreatedBy == currentPersonId)
-                return;
+                return true;
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
                 this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = questionnaireView.PublicKey });
             
             bool isQuestionnaireIsSharedWithThisPerson = (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == currentPersonId);
-            
-            if (!isQuestionnaireIsSharedWithThisPerson)
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            return isQuestionnaireIsSharedWithThisPerson;
+
         }
     }
 }
