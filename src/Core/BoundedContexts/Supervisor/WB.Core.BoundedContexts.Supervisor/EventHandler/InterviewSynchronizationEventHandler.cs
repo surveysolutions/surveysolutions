@@ -23,11 +23,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<InterviewData> interviewDataWriter;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
 
         public InterviewSynchronizationEventHandler(ISynchronizationDataStorage syncStorage,
             IReadSideRepositoryWriter<InterviewData> interviewDataWriter,
-            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>
+            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>
                 questionnriePropagationStructures)
         {
             this.syncStorage = syncStorage;
@@ -107,24 +107,24 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 foreach (var interviewQuestion in interviewLevel.GetAllQuestions())
                 {
-                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.PropagationVector,
+                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.RosterVector,
                         interviewQuestion.Answer,
                         interviewQuestion.Comments.Any()
                             ? interviewQuestion.Comments.Last().Text
                             : null);
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
-                        disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
+                        disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
 
 #warning TLK: validness flag misses undefined state
                     if (!interviewQuestion.Valid)
-                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
+                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                     if (interviewQuestion.Valid)
-                        validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
+                        validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
                 {
-                    disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.PropagationVector));
+                    disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.RosterVector));
                 }
 
                 FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
@@ -138,17 +138,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
-            QuestionnairePropagationStructure questionnariePropagationStructure, InterviewLevel interviewLevel,
+            QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
             Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts)
         {
-            if (interviewLevel.PropagationVector.Length == 0)
+            if (interviewLevel.RosterVector.Length == 0)
                 return;
 
             var outerVector = CreateOuterVector(interviewLevel);
 
             foreach (var scopeId in interviewLevel.ScopeIds)
             {
-                foreach (var groupId in questionnariePropagationStructure.PropagationScopes[scopeId])
+                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId])
                 {
                     var groupKey = new InterviewItemId(groupId, outerVector);
 
@@ -172,10 +172,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private int[] CreateOuterVector(InterviewLevel interviewLevel)
         {
-            var outerVector = new int[interviewLevel.PropagationVector.Length - 1];
-            for (int i = 0; i < interviewLevel.PropagationVector.Length - 1; i++)
+            var outerVector = new int[interviewLevel.RosterVector.Length - 1];
+            for (int i = 0; i < interviewLevel.RosterVector.Length - 1; i++)
             {
-                outerVector[i] = interviewLevel.PropagationVector[i];
+                outerVector[i] = interviewLevel.RosterVector[i];
             }
             return outerVector;
         }
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public Type[] UsesViews
         {
-            get { return new Type[] {typeof (InterviewData), typeof (QuestionnairePropagationStructure)}; }
+            get { return new Type[] {typeof (InterviewData), typeof (QuestionnaireRosterStructure)}; }
         }
 
         public Type[] BuildsViews
