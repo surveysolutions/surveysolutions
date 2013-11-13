@@ -11,7 +11,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Capi
 {
-    public class CAPIBoundedContextModule : NinjectModule
+    public class CapiBoundedContextModule : NinjectModule
     {
         public override void Load()
         {
