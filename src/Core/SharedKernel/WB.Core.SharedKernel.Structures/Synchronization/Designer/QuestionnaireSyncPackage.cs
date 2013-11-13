@@ -1,12 +1,7 @@
 ﻿namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
-    public class QuestionnaireSyncPackage
+    public class QuestionnaireSyncPackage : BasePackage
     {
-        public string Questionnaire;
-
-        public QuestionnaireSyncPackage(string questionnaire)
-        {
-            Questionnaire = questionnaire;
-        }
+        public string Questionnaire { get; set; }
     }
 }
