@@ -321,14 +321,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool ShouldQuestionSpecifyRosterSize(Guid questionId)
         {
             return this.DoesQuestionSupportRoster(questionId)
-                && this.GetGroupsPropagatedByQuestion(questionId).Any();
+                && this.GetRosterGroupsByRosterSizeQuestion(questionId).Any();
         }
 
-        public IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId)
+        public IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId)
         {
             if (!this.DoesQuestionSupportRoster(questionId))
                 return Enumerable.Empty<Guid>();
 
+            //### old questionnaires supporting
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
+            if (autoPropagatingQuestion != null)
+            {
+                foreach (Guid groupId in autoPropagatingQuestion.Triggers)
+                {
+                    this.ThrowIfGroupDoesNotExist(groupId);
+                }
+
+                return autoPropagatingQuestion.Triggers.ToList();
+            }
+            
+            //### roster
             return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId).Select(x => x.PublicKey);
         }
 
@@ -336,9 +350,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
-            var rosterSizeQuestion = (INumericQuestion) question;
 
-            return rosterSizeQuestion.MaxValue.Value;
+            //### old questionnaires supporting
+            var autoPropagatingQuestion = (IAutoPropagateQuestion)question;
+            if (autoPropagatingQuestion != null)
+                return autoPropagatingQuestion.MaxValue;
+
+            //### roster
+            var numericQuestion = (INumericQuestion) question;
+            return numericQuestion.MaxValue.Value;
         }
 
         public IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId)
@@ -464,6 +484,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
+            //### old questionnaires supporting
+            var autoPropagateQuestion = question as IAutoPropagate;
+            if (autoPropagateQuestion != null)
+                return true;
+
+            //### roster
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
@@ -775,12 +801,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool DoesQuestionSupportRoster(IQuestion question)
         {
-            return question.QuestionType == QuestionType.Numeric;
+                    //### roster
+            return (question.QuestionType == QuestionType.Numeric ||
+                    //### old questionnaires supporting
+                    question.QuestionType == QuestionType.AutoPropagate) && (question is IAutoPropagateQuestion);
+
         }
 
         private static bool IsRosterGroup(IGroup group)
         {
-            return group.IsRoster;
+            //### old questionnaires supporting                    //### roster
+            return group.Propagated == Propagate.AutoPropagated || group.IsRoster;
         }
 
         private void ThrowIfQuestionDoesNotSupportRoster(Guid questionId)
