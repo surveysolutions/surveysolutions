@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
@@ -7,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Main.Core.Utility;
 using RestSharp;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.RestUtils;
 
@@ -40,9 +42,9 @@ namespace WB.UI.QuestionnaireTester.Adapters
         protected void UploadQuestionnairesFromDesigner()
         {
             var webExecutor = new AndroidRestUrils("https://192.168.173.1/designer");
-            items = webExecutor.ExcecuteRestRequestAsync<List<string>>(
+            items = webExecutor.ExcecuteRestRequestAsync<QuestionnaireListSyncPackage>(
                 "Api/Tester/GetAllTemplates", cancellationToken, null,
-                new HttpBasicAuthenticator("admin", "qwerty"), "GET");
+                new HttpBasicAuthenticator("admin", "qwerty"), "GET").Items.Select(i => i.Title).ToList();
             activity.RunOnUiThread(() =>
             {
                 this.NotifyDataSetChanged();
