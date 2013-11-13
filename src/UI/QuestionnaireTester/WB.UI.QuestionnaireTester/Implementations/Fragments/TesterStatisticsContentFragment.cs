@@ -1,4 +1,5 @@
 using System;
+//using CAPI.Android.Core.Model;
 using Ninject;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -17,7 +18,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
         {
             base.PreCompleteAction();
 
-        /*    var logManipulator = CapiTesterApplication.Kernel.Get<IChangeLogManipulator>();
+           /* var logManipulator = CapiTesterApplication.Kernel.Get<IChangeLogManipulator>();
 
             if (this.Model.Status == InterviewStatus.Completed)
             {

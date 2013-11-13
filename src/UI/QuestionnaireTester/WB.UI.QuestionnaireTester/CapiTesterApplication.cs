@@ -3,7 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.Runtime;
 using Cirrious.MvvmCross.Droid.Platform;
-using Main.Core.Events.Questionnaire;
+using Main.Core;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Mono.Android.Crasher;
@@ -122,7 +122,7 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
         }
 
-      /*  private void InitTemplateStorage(InProcessEventBus bus)
+        /*private void InitTemplateStorage(InProcessEventBus bus)
         {
             var templateDenoramalizer = new QuestionnaireDenormalizer(this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
@@ -187,18 +187,18 @@ namespace WB.UI.QuestionnaireTester
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-           /* NcqrsInit.Init(this.kernel);
-       
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
-            NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-            var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
-            this.kernel.Bind<ICommandService>().ToConstant(CommandService);
+            NcqrsInit.Init(this.kernel);
+            /* 
+                 NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
+                 NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+                 var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
+                 this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
+                 this.kernel.Bind<ICommandService>().ToConstant(CommandService);
 
-            this.kernel.Unbind<IAnswerOnQuestionCommandService>();
-            this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
-            this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
-            */
+                 this.kernel.Unbind<IAnswerOnQuestionCommandService>();
+                 this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
+                 this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
+                 */
             #region register handlers
 
            /* var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
