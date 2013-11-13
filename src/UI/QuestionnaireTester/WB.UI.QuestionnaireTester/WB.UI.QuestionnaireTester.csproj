@@ -131,7 +131,6 @@
     <Compile Include="Implementations\Fragments\TesterGridContentFragment.cs" />
     <Compile Include="Implementations\Fragments\TesterScreenContentFragment.cs" />
     <Compile Include="Implementations\Fragments\TesterStatisticsContentFragment.cs" />
-    <Compile Include="LoadingActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -182,10 +181,6 @@
     <ProjectReference Include="..\..\..\..\Mono\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
       <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
-      <Project>{EA102E79-6CCF-49F7-9B12-C26320C91CA2}</Project>
-      <Name>CAPI.Android.Core.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>
