@@ -61,7 +61,16 @@ namespace WB.UI.Designer.Api
 
             return questionnaireSyncPackage;
         }
-        
+
+        [Authorize]
+        [HttpPost]
+        public bool Authorize()
+        {
+            if (this.userHelper.WebUser == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+            return true;
+        }
+
         [Authorize]
         [HttpGet]
         public QuestionnaireSyncPackage GetTemplate(Guid id)
