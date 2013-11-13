@@ -251,7 +251,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                 var innerGroup = groupChild as IGroup;
                 if (innerGroup != null)
                 {
-                    if (innerGroup.Propagated != Propagate.None)
+                        //### old questionnaires supporting        //### roster
+                    if (innerGroup.Propagated != Propagate.None || innerGroup.IsRoster)
                         continue;
                     FillHeaderWithQuestionsInsideGroup(headerItems, innerGroup);
                 }
