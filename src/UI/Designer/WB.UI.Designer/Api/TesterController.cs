@@ -1,17 +1,14 @@
 ﻿using Main.Core;
 using Main.Core.View;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernel.Utils.Compression;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Membership;
@@ -57,7 +54,12 @@ namespace WB.UI.Designer.Api
                 viewerId: user.UserId);
             var questionnaireSyncPackage = new QuestionnaireListSyncPackage();
 
-            questionnaireSyncPackage.Items = questionnaireList.Select(q => new QuestionnaireListItem(q.Id, q.Title)).ToList();
+            questionnaireSyncPackage.Items = 
+                questionnaireList.Select(q => new QuestionnaireListItem()
+                    {
+                        Id = q.Id, 
+                        Title = q.Title
+                    }).ToList();
 
             return questionnaireSyncPackage;
         }
@@ -95,7 +97,10 @@ namespace WB.UI.Designer.Api
 
             var template = PackageHelper.CompressString(templateInfo.Source);
 
-            var questionnaireSyncPackage = new QuestionnaireSyncPackage(template);
+            var questionnaireSyncPackage = new QuestionnaireSyncPackage()
+                {
+                    Questionnaire = template
+                };
 
             return questionnaireSyncPackage;
         }
