@@ -39,6 +39,7 @@ using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Injections;
 using WB.UI.Shared.Android.Controls.ScreenItems;
+using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
 {

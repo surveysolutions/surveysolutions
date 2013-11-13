@@ -6,7 +6,9 @@ using Android.Widget;
 using Android.Content.PM;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Cirrious.MvvmCross.Droid.Simple;
+using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.UI.Capi.Extensions;
+using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
 {
@@ -14,37 +16,20 @@ namespace WB.UI.Capi
     /// The login activity.
     /// </summary>
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class LoginActivity : MvxSimpleBindingActivity//<LoginViewModel>
+    public class LoginActivity : MvxSimpleBindingActivity
     {
-        #region Properties
-
-        /// <summary>
-        /// Gets the btn login.
-        /// </summary>
         protected Button btnLogin
         {
             get { return this.FindViewById<Button>(WB.UI.Capi.Resource.Id.btnLogin); }
         }
-
-        /// <summary>
-        /// Gets the te login.
-        /// </summary>
         protected EditText teLogin
         {
             get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.teLogin); }
         }
-
-        /// <summary>
-        /// Gets the te password.
-        /// </summary>
         protected EditText tePassword
         {
             get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.tePassword); }
         }
-
-        #endregion
-
-        #region Public Methods and Operators
 
         protected override void OnStart()
         {
@@ -53,19 +38,8 @@ namespace WB.UI.Capi
 
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The on create.
-        /// </summary>
-        /// <param name="bundle">
-        /// The bundle.
-        /// </param>
         protected override void OnCreate(Bundle bundle)
         {
-
             this.DataContext = new LoginViewModel();
             base.OnCreate(bundle);
             if (CapiApplication.Membership.IsLoggedIn)
@@ -77,48 +51,17 @@ namespace WB.UI.Capi
             this.btnLogin.Click += this.btnLogin_Click;
         }
 
-        /// <summary>
-        /// The btn login_ click.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         private void btnLogin_Click(object sender, EventArgs e)
         {
             bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
                 this.ClearAllBackStack<DashboardActivity>();
-             
-                /*restore = () =>
-                    {
-                        CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
-                        this.StartActivity(typeof (DashboardActivity));
-                    };
-                ProgressBar pb = new ProgressBar(this);
-                this.AddContentView(pb,
-                                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                               ViewGroup.LayoutParams.FillParent));
-                restore.BeginInvoke(Callback, restore);
-                */
                 return;
             }
 
             this.teLogin.SetBackgroundColor(Color.Red);
             this.tePassword.SetBackgroundColor(Color.Red);
         }
-/*
-        private void Callback(IAsyncResult asyncResult)
-        {
-            Action asyncAction = (Action)asyncResult.AsyncState;
-            asyncAction.EndInvoke(asyncResult);
-        }
-
-        private Action restore;*/
-
-        #endregion
     }
 }
