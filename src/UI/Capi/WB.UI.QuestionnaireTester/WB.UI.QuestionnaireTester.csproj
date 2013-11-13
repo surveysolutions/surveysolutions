@@ -119,7 +119,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\TemplateListAdapter.cs" />
+    <Compile Include="Adapters\QuestionnaireListAdapter.cs" />
     <Compile Include="AndroidTesterModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="CapiTesterApplication.cs">
@@ -135,7 +135,7 @@
     <Compile Include="NinjectServiceLocator.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TemplateListActivity.cs" />
+    <Compile Include="QuestionnaireListActivity.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="SplashScreen.cs" />
   </ItemGroup>

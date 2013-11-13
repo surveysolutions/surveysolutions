@@ -5,13 +5,13 @@ using Android.OS;
 namespace WB.UI.QuestionnaireTester
 {
     [Activity(MainLauncher = true)]
-    public class TemplateListActivity : ListActivity 
+    public class QuestionnaireListActivity : ListActivity 
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            this.ListAdapter = new TemplateListAdapter(this);
+            this.ListAdapter = new QuestionnaireListAdapter(this);
         }
     }
 }
