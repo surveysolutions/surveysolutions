@@ -429,6 +429,10 @@
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Configuration\Super1.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\t1.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\director.js" />
@@ -514,7 +518,7 @@
     <Content Include="Configuration\Stacy.Supervisor.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
+    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
@@ -556,6 +560,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\ControlPanel\NConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
