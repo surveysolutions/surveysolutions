@@ -1,5 +1,7 @@
 using System;
 using System.Web;
+using System.Web.Http;
+using System.Web.Http.Dependencies;
 using Main.Core;
 using Main.Core.Commands;
 using Microsoft.Practices.ServiceLocation;
@@ -11,7 +13,9 @@ using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using Ninject.Syntax;
 using Ninject.Web.Common;
+using Ninject.Web.Mvc;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
@@ -79,9 +83,11 @@ namespace WB.UI.Designer.App_Start
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
+            
             PrepareNcqrsInfrastucture(kernel);
-
+            
+            GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
+            
             return kernel;
         }
 
@@ -120,5 +126,58 @@ namespace WB.UI.Designer.App_Start
 
             return bus;
         }
+
+
+        public class NinjectDependencyScope : IDependencyScope
+        {
+            IResolutionRoot resolver;
+
+            public NinjectDependencyScope(IResolutionRoot resolver)
+            {
+                this.resolver = resolver;
+            }
+
+            public object GetService(Type serviceType)
+            {
+                if (resolver == null)
+                    throw new ObjectDisposedException("this", "This scope has been disposed");
+
+                return resolver.TryGet(serviceType);
+            }
+
+            public System.Collections.Generic.IEnumerable<object> GetServices(Type serviceType)
+            {
+                if (resolver == null)
+                    throw new ObjectDisposedException("this", "This scope has been disposed");
+
+                return resolver.GetAll(serviceType);
+            }
+
+            public void Dispose()
+            {
+                IDisposable disposable = resolver as IDisposable;
+                if (disposable != null)
+                    disposable.Dispose();
+
+                resolver = null;
+            }
+        }
+
+
+        public class NinjectDependencyResolver : NinjectDependencyScope, IDependencyResolver
+        {
+            private IKernel kernel;
+
+            public NinjectDependencyResolver(IKernel kernel): base(kernel)
+            {
+                this.kernel = kernel;
+            }
+
+            public IDependencyScope BeginScope()
+            {
+                return new NinjectDependencyScope(kernel.BeginBlock());
+            }
+        }
+
     }
 }
