@@ -49,7 +49,7 @@ function UpdateAndroidManifest( $VersionPrefix, $BuildNumber ){
 	Write-Host "##teamcity[blockOpened name='Updating Capi Manifest']"
 	Write-Host "##teamcity[progressStart 'Updating Capi Manifest']"
 
-	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi.DataCollection\Properties\AndroidManifest.xml")
+	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi\Properties\AndroidManifest.xml")
 
 	[xml] $xam = Get-Content -Path ($PahToManifest)
     
@@ -91,8 +91,8 @@ function SignAndPackCapi($KeyStorePass, $PahToFinalCapi){
 	Write-Host "##teamcity[blockOpened name='Signing and Zipaligning Capi package']"
 	Write-Host "##teamcity[progressStart 'Signing and Zipaligning Capi package']"
 
-	$PahToSigned = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi.DataCollection/bin/$BuildConfiguration/CAPI.Android-signed.apk")
-	$PahToCreated = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi.DataCollection/bin/$BuildConfiguration/CAPI.Android.apk")
+	$PahToSigned = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android-signed.apk")
+	$PahToCreated = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android.apk")
 	$PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/WBCapi.keystore")
 
 	& (GetPathToJarsigner)  '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `

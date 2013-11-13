@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public QuestionnaireStataMapView(EditQuestionnaireView doc)
         {
             this.StataMap = doc.Questions
-                               .Select(q => new KeyValuePair<Guid, string>(q.Id, q.StataExportCaption))
+                               .Select(q => new KeyValuePair<Guid, string>(q.Id, q.Alias))
                                .ToList();
         }
 
