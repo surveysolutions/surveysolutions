@@ -74,10 +74,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             return initialDocument;
         }
 
-        private static QuestionnairePropagationStructure CreateQuestionnairePropagationStructure()
+        private static QuestionnaireRosterStructure CreateQuestionnairePropagationStructure()
         {
-            var propagationStructure = new QuestionnairePropagationStructure();
-            propagationStructure.PropagationScopes.Add(propagationScopeKey, new HashSet<Guid>() { propagatedGroup });
+            var propagationStructure = new QuestionnaireRosterStructure();
+            propagationStructure.RosterScopes.Add(propagationScopeKey, new HashSet<Guid>() { propagatedGroup });
             return propagationStructure;
         }
 

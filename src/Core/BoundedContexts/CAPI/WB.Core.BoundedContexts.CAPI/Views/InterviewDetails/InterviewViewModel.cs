@@ -26,14 +26,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.FeaturedQuestions = new Dictionary<InterviewItemId, QuestionViewModel>();
         }
 
-        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnairePropagationStructure propagationStructure, InterviewSynchronizationDto interview)
+        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interview)
             : this(id)
         {
             this.Status = interview.Status;
 
             #region interview structure initialization
 
-            this.propagationStructure = propagationStructure;
+            this.rosterStructure = rosterStructure;
 
             this.BuildInterviewStructureFromTemplate(questionnaire);
 
@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public Guid GetScopeOfPropagatedScreen(Guid itemKey)
         {
-            var itemScope = this.propagationStructure.PropagationScopes.FirstOrDefault(s => s.Value.Contains(itemKey));
+            var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.Contains(itemKey));
             if (itemScope.Equals(default(KeyValuePair<Guid, HashSet<Guid>>)))
                 throw new ArgumentException("item is absent in any scope");
             return itemScope.Key;
@@ -269,9 +269,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected void CreateNextPreviousButtonsForPropagatedGroups()
         {
-            foreach (var propagationScopeId in this.propagationStructure.PropagationScopes.Keys)
+            foreach (var propagationScopeId in this.rosterStructure.RosterScopes.Keys)
             {
-                var screenSiblingByPropagationScopeIds = this.propagationStructure.PropagationScopes[propagationScopeId].ToArray();
+                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].ToArray();
 
                 for (int i = 0; i < screenSiblingByPropagationScopeIds.Length; i++)
                 {
@@ -309,7 +309,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions;
         private readonly Dictionary<Guid, Guid> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, Guid>(); 
         private readonly Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
-        private readonly QuestionnairePropagationStructure propagationStructure;
+        private readonly QuestionnaireRosterStructure rosterStructure;
         private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> propagatedScreenPrototypes =
             new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
 
@@ -523,7 +523,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void UpdatePropagationScopeTitleForVector(Guid scopeId, int[] propagationVector)
         {
-            var siblingsByPropagationScopeIds = this.propagationStructure.PropagationScopes[scopeId];
+            var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId];
 
             var screensSiblingByPropagationScopeWithVector =
                 siblingsByPropagationScopeIds.Select(

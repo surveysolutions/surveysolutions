@@ -155,6 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             {
                 numericQuestion.IsInteger = isInteger ?? false;
                 numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
+                numericQuestion.MaxValue = maxValue;
             }
 
             var multioptionQuestion = question as IMultyOptionsQuestion;
