@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
             chapter.Children.Add(roster);
             questionnarie.Children.Add(chapter);
 
-            propagationStructure = new QuestionnairePropagationStructure(questionnarie, 1);
+            rosterStructure = new QuestionnaireRosterStructure(questionnarie, 1);
             interviewSynchronizationDto = new InterviewSynchronizationDto(id: Guid.NewGuid(), status: InterviewStatus.InterviewerAssigned,
                 userId: Guid.NewGuid(), questionnaireId: questionnarie.PublicKey, questionnaireVersion: 1,
                 answers: new AnsweredQuestionSynchronizationDto[]
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 
         private Because of = () =>
             interviewViewModel =
-                new Capi.Views.InterviewDetails.InterviewViewModel(interviewSynchronizationDto.Id, questionnarie, propagationStructure,
+                new Capi.Views.InterviewDetails.InterviewViewModel(interviewSynchronizationDto.Id, questionnarie, rosterStructure,
                     interviewSynchronizationDto);
 
         private It should_chapters_count_equals_1 = () =>
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 
         private static WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
-        private static QuestionnairePropagationStructure propagationStructure;
+        private static QuestionnaireRosterStructure rosterStructure;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Guid propagatedGroupId;
         private static Guid autoPropagatedQuestionId;

@@ -36,16 +36,16 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnairePropagationStructureStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
         public InterviewViewModelDenormalizer(
             IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnairePropagationStructureStorage)
+            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
             this.interviewStorage = interviewStorage;
             this.questionnarieStorage = questionnarieStorage;
-            this.questionnairePropagationStructureStorage = questionnairePropagationStructureStorage;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
@@ -61,18 +61,18 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             this.interviewStorage.Store(view, evnt.EventSourceId);
         }
 
-        private QuestionnairePropagationStructure GetPropagationStructureOfQuestionnaireAndBuildItIfAbsent(QuestionnaireDocumentVersioned questionnaire)
+        private QuestionnaireRosterStructure GetPropagationStructureOfQuestionnaireAndBuildItIfAbsent(QuestionnaireDocumentVersioned questionnaire)
         {
-            var propagationStructure = this.questionnairePropagationStructureStorage.GetById(questionnaire.Questionnaire.PublicKey,
+            var propagationStructure = this.questionnaireRosterStructureStorage.GetById(questionnaire.Questionnaire.PublicKey,
                 questionnaire.Version);
 
             if (propagationStructure != null)
                 return propagationStructure;
 
-#warning it's bad to write data to other storage, but I've wrote this code for backward compatibility with old versions of CAPI where QuestionnairePropagationStructureDenormalizer haven't been running
+#warning it's bad to write data to other storage, but I've wrote this code for backward compatibility with old versions of CAPI where QuestionnaireRosterStructureDenormalizer haven't been running
 
-            propagationStructure = new QuestionnairePropagationStructure(questionnaire.Questionnaire, questionnaire.Version);
-            this.questionnairePropagationStructureStorage.Store(propagationStructure, propagationStructure.QuestionnaireId);
+            propagationStructure = new QuestionnaireRosterStructure(questionnaire.Questionnaire, questionnaire.Version);
+            this.questionnaireRosterStructureStorage.Store(propagationStructure, propagationStructure.QuestionnaireId);
             return propagationStructure;
         }
 
