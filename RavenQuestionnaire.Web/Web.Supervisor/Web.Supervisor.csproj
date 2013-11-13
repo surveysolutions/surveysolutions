@@ -560,6 +560,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\ControlPanel\NConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

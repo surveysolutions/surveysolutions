@@ -23,6 +23,11 @@ namespace Web.Supervisor.Controllers
             get { return this.serviceLocator.GetInstance<IReadSideAdministrationService>(); }
         }
 
+        public ActionResult NConfig()
+        {
+            return this.View();
+        }
+
         public ActionResult ReadLayer()
         {
             return this.RedirectToActionPermanent("ReadSide");
