@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool ShouldQuestionSpecifyRosterSize(Guid questionId);
 
-        IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId);
+        IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
         int GetMaxAnswerValueForRoserSizeQuestion(Guid questionId);
 
