@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Membership;
 
@@ -19,57 +20,50 @@ namespace WB.UI.Designer.Api
     public class TesterController : ApiController
     {
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
-        private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> questionnaireListViewFactory;
         private readonly IMembershipUserService userHelper;
+        private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IJsonExportService exportService;
-        private readonly IStringCompressor zipUtils;
         private readonly ILogger logger;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
 
-        public TesterController(IMembershipUserService userHelper, 
+        public TesterController(IMembershipUserService userHelper,
+            IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IJsonExportService exportService,
-            IStringCompressor zipUtils,
             ILogger logger)
         {
             this.userHelper = userHelper;
-            this.questionnaireListViewFactory = viewFactory;
             this.exportService = exportService;
-            this.zipUtils = zipUtils;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.logger = logger;
+            this.questionnaireHelper = questionnaireHelper;
         }
-        
-        //[Authorize]
+
+
+        // change to other return type
+        [Authorize]
         [HttpGet]
         public List<string> GetAllTemplates()
         {
-            // change to other return type
             var user = this.userHelper.WebUser;
 
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
-            var questionnaireList = this.questionnaireListViewFactory.Load(
-                        new QuestionnaireListViewInputModel
-                            {
-                                ViewerId = user.UserId,
-                                IsAdminMode = false,
-                            });
-
-            return questionnaireList.Items.Select(q=>q.Title).ToList();
+            var questionnaireList = this.questionnaireHelper.GetQuestionnaires(
+                viewerId: user.UserId);
+            return questionnaireList.Select(q=>q.Title).ToList();
         }
 
-        //[Authorize]
+        // change to other return type
+        [Authorize]
         [HttpGet]
         public string GetTemplate(Guid id)
         {
-            // change to other return type 
             var user = this.userHelper.WebUser;
 
             if (user == null)
