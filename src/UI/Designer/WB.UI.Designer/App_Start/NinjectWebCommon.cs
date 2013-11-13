@@ -85,16 +85,9 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
             PrepareNcqrsInfrastucture(kernel);
-
-            // Install our Ninject-based IDependencyResolver into the Web API config
+            
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
-
-            // if you still use the beta version - change above line to:
-            //GlobalConfiguration.Configuration.ServiceResolver.SetResolver(new Unity.WebApi.UnityDependencyResolver(container));
-
-            /*// Install into the MVC dependency resolver
-            System.Web.Mvc.DependencyResolver.SetResolver(new NinjectMVCDependencyResolver(kernel));*/
-
+            
             return kernel;
         }
 
