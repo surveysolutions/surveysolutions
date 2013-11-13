@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LoginActivity.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The login activity.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using Android.App;
 using Android.Graphics;
@@ -32,7 +23,7 @@ namespace WB.UI.Capi
         /// </summary>
         protected Button btnLogin
         {
-            get { return this.FindViewById<Button>(Resource.Id.btnLogin); }
+            get { return this.FindViewById<Button>(WB.UI.Capi.Resource.Id.btnLogin); }
         }
 
         /// <summary>
@@ -40,7 +31,7 @@ namespace WB.UI.Capi
         /// </summary>
         protected EditText teLogin
         {
-            get { return this.FindViewById<EditText>(Resource.Id.teLogin); }
+            get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.teLogin); }
         }
 
         /// <summary>
@@ -48,7 +39,7 @@ namespace WB.UI.Capi
         /// </summary>
         protected EditText tePassword
         {
-            get { return this.FindViewById<EditText>(Resource.Id.tePassword); }
+            get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.tePassword); }
         }
 
         #endregion

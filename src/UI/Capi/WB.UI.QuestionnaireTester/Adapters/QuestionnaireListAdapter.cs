@@ -10,17 +10,17 @@ using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Adapters
 {
-    public class TemplateListAdapter:SmartAdapter<string>
+    public class QuestionnaireListAdapter:SmartAdapter<string>
     {
         private readonly IRestUrils webExecutor;
         private readonly Context context;
-        public TemplateListAdapter(Context context)
+        public QuestionnaireListAdapter(Context context)
             : base()
         {
             this.webExecutor = new AndroidRestUrils("http://192.168.173.1/designer");
             items = this.webExecutor.ExcecuteRestRequestAsync<List<string>>(
                 "Api/Tester/GetAllTemplates", new CancellationToken(), null,
-                new HttpBasicAuthenticator("admin", "P@$$w0rd"));
+                new HttpBasicAuthenticator("admin", "qwerty"));
             this.context = context;
         }
 
