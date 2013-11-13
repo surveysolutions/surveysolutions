@@ -141,7 +141,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Cap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Capi", "UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj", "{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.QuestionnaireTester", "UI\Capi\WB.UI.QuestionnaireTester\WB.UI.QuestionnaireTester.csproj", "{FF5E3210-CF6A-4413-94AA-288E8B80E128}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.QuestionnaireTester", "UI\QuestionnaireTester\WB.UI.QuestionnaireTester\WB.UI.QuestionnaireTester.csproj", "{FF5E3210-CF6A-4413-94AA-288E8B80E128}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

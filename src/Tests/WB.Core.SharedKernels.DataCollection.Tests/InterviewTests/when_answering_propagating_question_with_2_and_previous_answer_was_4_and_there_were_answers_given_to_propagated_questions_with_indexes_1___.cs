@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.IsQuestionInteger(propagatingQuestionId) == true
                 && _.ShouldQuestionSpecifyRosterSize(propagatingQuestionId) == true
                 && _.GetMaxAnswerValueForRoserSizeQuestion(propagatingQuestionId) == 100
-                && _.GetGroupsPropagatedByQuestion(propagatingQuestionId) == new[] { propagatedGroupId }
+                && _.GetRosterGroupsByRosterSizeQuestion(propagatingQuestionId) == new[] { propagatedGroupId }
 
                 && _.HasGroup(propagatedGroupId) == true
                 && _.GetAllUnderlyingQuestions(propagatedGroupId) == new[] { propagatedQuestionId }

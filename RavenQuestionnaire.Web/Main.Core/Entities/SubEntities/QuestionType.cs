@@ -22,6 +22,7 @@ namespace Main.Core.Entities.SubEntities
 
         Text = 7, 
 
+        [Obsolete]
         AutoPropagate = 8
     }
 }

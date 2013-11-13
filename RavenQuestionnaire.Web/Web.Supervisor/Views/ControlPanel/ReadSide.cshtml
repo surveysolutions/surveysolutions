@@ -1,15 +1,15 @@
 ﻿@{
     this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
-    this.ViewBag.Title = "Control Panel: Read Layer";
+    this.ViewBag.Title = "Control Panel: Read Side";
 }
 @model IEnumerable<WB.Core.Infrastructure.EventHandlerDescription>
-<h3>Read Layer Control Panel</h3>
+<h3>Read Side Control Panel</h3>
 
 <pre id="statusArea" style="height: 500px; overflow-y: scroll;">
 Requesting status...
 </pre>
 <h3 style="color: red">We have an issue with synchronization packages. If your denormalizer builds  SynchronizationDelta view you need to rebuild all</h3>
-@using (Html.BeginForm("RebuildReadLayerPartially", "ControlPanel", FormMethod.Post))
+@using (Html.BeginForm("RebuildReadSidePartially", "ControlPanel", FormMethod.Post))
 {
     <ul style="list-style: none;">
 
@@ -39,9 +39,9 @@ Requesting status...
       
     </ul>
    
-    @Html.ActionLink("Rebuild All", "RebuildReadLayer", new { }, new { @class = "btn " })
-     <button class="btn" type="submit">Rebuild Selected</button>
-    @Html.ActionLink("Stop", "StopReadLayerRebuilding", new { }, new { @class = "btn " })
+    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn " })
+    <button class="btn" type="submit">Rebuild Selected</button>
+    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn " })
 }
 
 @functions{
@@ -61,9 +61,9 @@ Requesting status...
 
     <script type="text/javascript">
 
-        function updateReadLayerStatus() {
+        function updateReadSideStatus() {
             return $.ajax({
-                url: '@Url.Action("GetReadLayerStatus")',
+                url: '@Url.Action("GetReadSideStatus")',
                 data: { timestamp: new Date().getMilliseconds() }
             }).done(function (result) {
                 $('#statusArea').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
@@ -72,14 +72,14 @@ Requesting status...
             });
         }
 
-        function updateReadLayerStatusNeverending() {
-            $.when(updateReadLayerStatus()).always(function () {
-                setTimeout(updateReadLayerStatusNeverending, 1000);
+        function updateReadSideStatusNeverending() {
+            $.when(updateReadSideStatus()).always(function () {
+                setTimeout(updateReadSideStatusNeverending, 1000);
             });
         }
 
         $(function () {
-            updateReadLayerStatusNeverending();
+            updateReadSideStatusNeverending();
         });
 
     </script>
