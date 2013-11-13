@@ -28,14 +28,14 @@ namespace WB.UI.QuestionnaireTester
             //var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
             
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
-            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnairePropagationStructure>();
+            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>();
 
             //var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
-            this.Bind<IReadSideRepositoryWriter<QuestionnairePropagationStructure>>().ToConstant(propagationStructureStore);
+            this.Bind<IReadSideRepositoryWriter<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);
             //this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             //this.Bind<IReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             //this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);

@@ -91,7 +91,7 @@ namespace WB.UI.QuestionnaireTester
             var eventHandler =
                 new InterviewViewModelDenormalizer(
                     this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>>());
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -134,8 +134,8 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
             
             var propagationStructureDenormalizer =
-                new QuestionnairePropagationStructureDenormalizer(
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>>());
+                new QuestionnaireRosterStructureDenormalizer(
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
 
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
         }
