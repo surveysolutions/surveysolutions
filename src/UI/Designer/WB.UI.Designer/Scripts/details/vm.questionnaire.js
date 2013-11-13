@@ -95,7 +95,7 @@
                 openDetails("show-questionnaire");
             },
             editQuestion = function (id) {
-                if (!_.isEmpty(selectedQuestion())) {
+                if (!_.isEmpty(selectedQuestion()) && selectedQuestion().id() !== id) {
                     selectedQuestion().detachValidation();
                 }
 
