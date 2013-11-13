@@ -7,38 +7,24 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-    <!--  Header  Starts-->
-    <!--android:background="@layout/header_gradient"-->
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingTop="5dip"
             android:paddingBottom="5dip">
-        <!-- Logo Start-->
-        <!--<ImageView android:src="@drawable/logo"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="10dip"/>-->
-        <!-- Logo Ends -->
         </LinearLayout>
-    <!--  Header Ends -->
-    <!-- Footer Start -->
-    <!--android:background="@layout/footer_repeat"-->
         <LinearLayout
             android:id="@+id/footer"
             android:layout_width="fill_parent"
             android:layout_height="90dip"
             android:layout_alignParentBottom="true" />
-    <!-- Footer Ends -->
-    <!-- Login Form -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dip"
             android:layout_below="@id/header">
-        <!--  Email Label -->
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +37,6 @@
                 android:layout_marginBottom="20dip"
                 local:MvxBind="Text Login"
                 android:singleLine="true" />
-        <!--  Password Label -->
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -64,15 +49,12 @@
                 android:singleLine="true"
                 local:MvxBind="Text Password"
                 android:password="true" />
-        <!-- Login button -->
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:text="Login" />
-        <!-- Link to Registration Screen -->
         </LinearLayout>
-    <!-- Login Form Ends -->
     </RelativeLayout>
 </ScrollView>

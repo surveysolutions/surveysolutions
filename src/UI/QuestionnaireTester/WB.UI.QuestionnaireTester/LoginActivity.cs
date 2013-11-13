@@ -4,47 +4,39 @@ using Android.Graphics;
 using Android.OS;
 using Android.Widget;
 using Android.Content.PM;
-using CAPI.Android.Core.Model.ViewModel.Login;
 using Cirrious.MvvmCross.Droid.Simple;
 using WB.Core.BoundedContexts.Capi.Views.Login;
-using WB.UI.Capi.Extensions;
 using WB.UI.Shared.Android.Extensions;
 
-namespace WB.UI.Capi
+namespace WB.UI.QuestionnaireTester
 {
-    /// <summary>
-    /// The login activity.
-    /// </summary>
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxSimpleBindingActivity
     {
         protected Button btnLogin
         {
-            get { return this.FindViewById<Button>(WB.UI.Capi.Resource.Id.btnLogin); }
+            get { return this.FindViewById<Button>(Resource.Id.btnLogin); }
         }
+
         protected EditText teLogin
         {
-            get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.teLogin); }
+            get { return this.FindViewById<EditText>(Resource.Id.teLogin); }
         }
+
         protected EditText tePassword
         {
-            get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.tePassword); }
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
-            this.CreateActionBar();
-
+            get { return this.FindViewById<EditText>(Resource.Id.tePassword); }
         }
 
         protected override void OnCreate(Bundle bundle)
         {
+
             this.DataContext = new LoginViewModel();
             base.OnCreate(bundle);
-            if (CapiApplication.Membership.IsLoggedIn)
+
+            if (CapiTesterApplication.Membership.IsLoggedIn)
             {
-                this.StartActivity(typeof (DashboardActivity));
+                this.StartActivity(typeof(QuestionnaireListActivity));
             }
 
             this.SetContentView(Resource.Layout.Login);
@@ -53,10 +45,10 @@ namespace WB.UI.Capi
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
+            bool result = CapiTesterApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
-                this.ClearAllBackStack<DashboardActivity>();
+                this.ClearAllBackStack<QuestionnaireListActivity>();
                 return;
             }
 

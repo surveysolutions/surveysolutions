@@ -4,7 +4,6 @@ using Android.OS;
 
 namespace WB.UI.QuestionnaireTester
 {
-    [Activity(MainLauncher = true)]
     public class QuestionnaireListActivity : ListActivity 
     {
         protected override void OnCreate(Bundle bundle)

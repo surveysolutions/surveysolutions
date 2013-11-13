@@ -1,7 +1,6 @@
 using System;
 using Android.App;
 using Android.Content.PM;
-using CAPI.Android.Core.Model.SnapshotStore;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
@@ -28,10 +27,6 @@ namespace WB.UI.QuestionnaireTester.Implementations.Activities
         public override void Finish()
         {
             base.Finish();
-
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
-            if (snapshotStore != null)
-                snapshotStore.PersistShapshot(this.QuestionnaireId);
         }
     }
 }

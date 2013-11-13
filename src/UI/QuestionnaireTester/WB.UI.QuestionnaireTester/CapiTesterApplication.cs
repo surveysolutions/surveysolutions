@@ -2,9 +2,6 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
-using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.EventHandlers;
-using CAPI.Android.Core.Model.FileStorage;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View;
@@ -27,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.UI.QuestionnaireTester.Authentication;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -52,13 +50,9 @@ namespace WB.UI.QuestionnaireTester
             get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
-        public static IDataCollectionAuthentication Membership
+        public static DesignerAuthentication Membership
         {
-            get { return Kernel.Get<IDataCollectionAuthentication>(); }
-        }
-        public static IFileStorageService FileStorageService
-        {
-            get { return Kernel.Get<IFileStorageService>(); }
+            get { return Kernel.Get<DesignerAuthentication>(); }
         }
         
         public static IKernel Kernel
@@ -128,7 +122,7 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
         }
 
-        private void InitTemplateStorage(InProcessEventBus bus)
+      /*  private void InitTemplateStorage(InProcessEventBus bus)
         {
             var templateDenoramalizer = new QuestionnaireDenormalizer(this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
@@ -138,7 +132,7 @@ namespace WB.UI.QuestionnaireTester
                     this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
 
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
-        }
+        }*/
 
         
 
@@ -187,7 +181,9 @@ namespace WB.UI.QuestionnaireTester
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule());
 
+            this.kernel.Bind<DesignerAuthentication>().ToSelf();
             this.kernel.Bind<Context>().ToConstant(this);
+            
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

@@ -4,7 +4,6 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.SyncCacher;
 using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -62,7 +61,7 @@ namespace WB.UI.QuestionnaireTester
 
         private void CheckAndRestoreFromSyncPackage(Guid itemKey)
         {
-            var syncCacher = CapiTesterApplication.Kernel.Get<ISyncCacher>();
+          /*  var syncCacher = CapiTesterApplication.Kernel.Get<ISyncCacher>();
 
             if (!syncCacher.DoesCachedItemExist(itemKey))
                 return;
@@ -76,7 +75,7 @@ namespace WB.UI.QuestionnaireTester
                 NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
                 //CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
             }
-            syncCacher.DeleteItem(itemKey);
+            syncCacher.DeleteItem(itemKey);*/
 
         }
     }

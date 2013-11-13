@@ -128,7 +128,6 @@
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
-    <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />

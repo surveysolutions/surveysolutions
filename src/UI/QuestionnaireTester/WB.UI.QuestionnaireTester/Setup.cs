@@ -1,8 +1,8 @@
 using Android.Content;
-using CAPI.Android.Core.Model.ViewModel.Login;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
+using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.UI.Shared.Android;
 
 namespace WB.UI.QuestionnaireTester
@@ -17,8 +17,7 @@ namespace WB.UI.QuestionnaireTester
         {
             base.InitializeViewLookup();
             var container = Mvx.Resolve<IMvxViewsContainer>();
-#warning: change viewModelType
-            container.Add(typeof(LoginViewModel), typeof(QuestionnaireListActivity));
+            container.Add(typeof(LoginViewModel), typeof(LoginActivity));
         }
 
         protected override IMvxApplication CreateApp()
