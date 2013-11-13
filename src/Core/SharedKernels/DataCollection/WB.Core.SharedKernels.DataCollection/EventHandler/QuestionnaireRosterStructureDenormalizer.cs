@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
@@ -10,12 +7,12 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.EventHandler
 {
-    public class QuestionnairePropagationStructureDenormalizer : IEventHandler, IEventHandler<TemplateImported>
+    public class QuestionnaireRosterStructureDenormalizer : IEventHandler, IEventHandler<TemplateImported>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnries;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnries;
 
-        public QuestionnairePropagationStructureDenormalizer(
-            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnries)
+        public QuestionnaireRosterStructureDenormalizer(
+            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnries)
         {
             this.questionnries = questionnries;
         }
@@ -32,12 +29,12 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
 
         public Type[] BuildsViews
         {
-            get { return new[] {typeof (QuestionnairePropagationStructure)}; }
+            get { return new[] {typeof (QuestionnaireRosterStructure)}; }
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            this.questionnries.Store(new QuestionnairePropagationStructure(evnt.Payload.Source, evnt.EventSequence), evnt.EventSourceId);
+            this.questionnries.Store(new QuestionnaireRosterStructure(evnt.Payload.Source, evnt.EventSequence), evnt.EventSourceId);
         }
     }
 }

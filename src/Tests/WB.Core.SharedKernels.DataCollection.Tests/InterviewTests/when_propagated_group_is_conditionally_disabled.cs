@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                                                         && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                                                         && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
-                                                        && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
 
                                                         && _.HasGroup(propagatedGroupId) == true
                                                         && _.GetRosterLevelForGroup(propagatedGroupId)==1
