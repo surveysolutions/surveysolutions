@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
@@ -12,12 +9,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         public InterviewLevel(Guid scopeId, int[] vector)
         {
             this.ScopeIds = new HashSet<Guid>(new[] {scopeId});
-            this.PropagationVector = vector;
+            this.RosterVector = vector;
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
         }
 
-        public int[] PropagationVector { get; private set; }
+        public int[] RosterVector { get; private set; }
         public HashSet<Guid> ScopeIds { get; private set; }
         private List<InterviewQuestion> Questions { get; set; }
         public HashSet<Guid> DisabledGroups { get; private set; }
