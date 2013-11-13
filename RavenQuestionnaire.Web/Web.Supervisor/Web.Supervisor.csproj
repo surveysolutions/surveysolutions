@@ -518,7 +518,7 @@
     <Content Include="Configuration\Stacy.Supervisor.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
+    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
