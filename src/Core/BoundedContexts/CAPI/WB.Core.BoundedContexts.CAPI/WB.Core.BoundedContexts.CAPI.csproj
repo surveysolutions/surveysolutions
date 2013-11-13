@@ -96,6 +96,7 @@
     <Compile Include="Views\InterviewDetails\QuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\SelectebleQuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\ValueQuestionViewModel.cs" />
+    <Compile Include="Views\Login\LoginViewModel.cs" />
     <Compile Include="Views\Statistics\StatisticsInput.cs" />
     <Compile Include="Views\Statistics\StatisticsQuestionViewModel.cs" />
     <Compile Include="Views\Statistics\StatisticsViewFactory.cs" />
