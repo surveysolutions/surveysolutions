@@ -93,7 +93,7 @@ namespace WB.UI.Shared.Android.RestUtils
                 this.logger
                           .Error("Sync error, response contains exception. Message:" + response.ErrorMessage, 
                                  response.ErrorException);
-                throw new Exception("Error occured on communication with target. Please, check settings or try again later.");
+                throw new Exception("Error occurred on communication with target. Please, check settings or try again later.");
             }
 
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)

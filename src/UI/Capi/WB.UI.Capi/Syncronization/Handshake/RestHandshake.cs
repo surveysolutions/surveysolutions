@@ -26,7 +26,7 @@ namespace WB.UI.Capi.Syncronization.Handshake
 
             if (package.IsErrorOccured)
             {
-                throw new SynchronizationException("Error occured during handshake. Message:" + package.ErrorMessage);
+                throw new SynchronizationException("Error occurred during handshake. Message:" + package.ErrorMessage);
             }
 
             return package.ClientRegistrationKey.ToString();
