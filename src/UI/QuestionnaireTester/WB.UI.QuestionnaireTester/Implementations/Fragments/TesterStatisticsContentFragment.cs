@@ -1,5 +1,4 @@
 using System;
-//using CAPI.Android.Core.Model;
 using Ninject;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;

@@ -1,6 +1,8 @@
 using Main.Core.View;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -28,17 +30,18 @@ namespace WB.UI.QuestionnaireTester
             /*var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>();*/
 
-            //var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
+            var bigSurveyStore = new InMemoryReadSideRepositoryAccessor<InterviewViewModel>();
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
+
             /*this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);*/
             //this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             //this.Bind<IReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             //this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
-            //this.Bind<IReadSideRepositoryWriter<InterviewViewModel>>().ToConstant(bigSurveyStore);
-            //this.Bind<IReadSideRepositoryReader<InterviewViewModel>>().ToConstant(bigSurveyStore);
+            this.Bind<IReadSideRepositoryWriter<InterviewViewModel>>().ToConstant(bigSurveyStore);
+            this.Bind<IReadSideRepositoryReader<InterviewViewModel>>().ToConstant(bigSurveyStore);
             //this.Bind<IReadSideRepositoryWriter<SurveyDto>>().ToConstant(surveyStore);
             //this.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
             //this.Bind<IReadSideRepositoryWriter<QuestionnaireDTO>>().ToConstant(questionnaireStore);
