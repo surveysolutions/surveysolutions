@@ -1,4 +1,6 @@
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Capi.Views.Login;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -6,7 +8,7 @@ namespace WB.UI.QuestionnaireTester
     {
         public App()
         {
-            //Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
+            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
         }
     }
 }

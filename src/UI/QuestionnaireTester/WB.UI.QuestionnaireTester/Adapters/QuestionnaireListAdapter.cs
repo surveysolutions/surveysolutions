@@ -41,12 +41,16 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
         protected void UploadQuestionnairesFromDesigner()
         {
-            var webExecutor = new AndroidRestUrils("https://192.168.173.1/designer");
-            items = webExecutor.ExcecuteRestRequestAsync<QuestionnaireListSyncPackage>(
-                "Api/Tester/GetAllTemplates", cancellationToken, null,
-                new HttpBasicAuthenticator("admin", "qwerty"), "GET").Items.Select(i => i.Title).ToList();
+            items =
+                CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(cancellationToken)
+                    .Items.Select(i => i.Title)
+                    .ToList();
             activity.RunOnUiThread(() =>
             {
+                if (items == null)
+                {
+                    activity.Finish();
+                }
                 this.NotifyDataSetChanged();
                 progressDialog.Hide();
             });

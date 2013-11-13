@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using RestSharp;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.UI.QuestionnaireTester.Authentication;
+using WB.UI.Shared.Android.RestUtils;
+
+namespace WB.UI.QuestionnaireTester.Services
+{
+    public class DesignerService
+    {
+        private readonly string designerUrl;
+
+        public DesignerService(string designerUrl)
+        {
+            this.designerUrl = designerUrl;
+        }
+
+        public bool Login(string userName, string password, CancellationToken cancellationToken)
+        {
+            var webExecutor = new AndroidRestUrils(designerUrl);
+            try
+            {
+                webExecutor.ExcecuteRestRequestAsync<bool>(
+                    "Authorize",cancellationToken,null,
+                    new HttpBasicAuthenticator(userName, password), "POST");
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public QuestionnaireListSyncPackage GetQuestionnaireListForCurrentUser(CancellationToken cancellationToken)
+        {
+            var webExecutor = new AndroidRestUrils(designerUrl);
+            try
+            {
+                return webExecutor.ExcecuteRestRequestAsync<QuestionnaireListSyncPackage>(
+                    "GetAllTemplates", cancellationToken, null,
+                    new HttpBasicAuthenticator(CapiTesterApplication.Membership.CurrentUser.UserName,
+                        CapiTesterApplication.Membership.CurrentUser.Password), "GET");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public QuestionnaireSyncPackage GetTemplate(Guid id, CancellationToken cancellationToken)
+        {
+            var webExecutor = new AndroidRestUrils(designerUrl);
+            try
+            {
+                return webExecutor.ExcecuteRestRequestAsync<QuestionnaireSyncPackage>(
+                    "GetTemplate", cancellationToken, null,
+                    new HttpBasicAuthenticator(CapiTesterApplication.Membership.CurrentUser.UserName,
+                        CapiTesterApplication.Membership.CurrentUser.Password), "GET", new KeyValuePair<string, string>("id", id.ToString()));
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+    }
+}

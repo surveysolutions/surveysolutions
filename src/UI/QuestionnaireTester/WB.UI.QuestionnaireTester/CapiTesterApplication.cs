@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.QuestionnaireTester.Authentication;
+using WB.UI.QuestionnaireTester.Services;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -54,7 +55,12 @@ namespace WB.UI.QuestionnaireTester
         {
             get { return Kernel.Get<DesignerAuthentication>(); }
         }
-        
+
+        public static DesignerService DesignerServices
+        {
+            get { return Kernel.Get<DesignerService>(); }
+        }
+
         public static IKernel Kernel
         {
             get
@@ -174,14 +180,16 @@ namespace WB.UI.QuestionnaireTester
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
             this.kernel = new StandardKernel(
+                new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
-                //new AndroidCoreRegistry(),
                 new AndroidTesterModelModule(),
                 new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule());
 
             this.kernel.Bind<DesignerAuthentication>().ToSelf();
+            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService("https://192.168.173.1/designer/api/tester"));
+            
             this.kernel.Bind<Context>().ToConstant(this);
             
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
@@ -249,5 +257,9 @@ namespace WB.UI.QuestionnaireTester
             base.OnLowMemory();
             GC.Collect();
         }
+    }
+
+    public class CapiTesterCoreRegistry : CoreRegistry
+    {
     }
 }

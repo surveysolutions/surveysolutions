@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -26,21 +26,14 @@ namespace WB.UI.QuestionnaireTester.Authentication
             get { return CurrentUser != null; }
         }
 
-        public bool LogOn(string userName, string password)
+        public bool LogOn(string userName, string password, CancellationToken cancellationToken)
         {
-            var webExecutor = new AndroidRestUrils("https://192.168.173.1/designer");
-            try
+            if (CapiTesterApplication.DesignerServices.Login(userName, password, cancellationToken))
             {
-                webExecutor.ExcecuteRestRequest<bool>(
-                    "Api/Tester/Authorize",
-                    new HttpBasicAuthenticator(userName, password), "POST");
                 CurrentUser = new UserInfo(userName, password);
                 return true;
             }
-            catch (Exception e)
-            {
-                return false;
-            }
+            return false;
         }
 
         public void LogOff()
