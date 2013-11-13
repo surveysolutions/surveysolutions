@@ -1121,7 +1121,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                                                new Option[0], Order.AZ, 0, new Guid[0]);
 
 //                // Assert
-//                Assert.That(GetSingleEvent<QuestionCloned>(eventContext).StataExportCaption, Is.EqualTo(validVariableName));
+//                Assert.That(GetSingleEvent<QuestionCloned>(eventContext).Alias, Is.EqualTo(validVariableName));
 //            }
 //        }
 
@@ -1200,7 +1200,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
 //                // Assert
 //                var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
-//                Assert.AreEqual(variableNameWithTrailingSpaces.Trim(), risedEvent.StataExportCaption);
+//                Assert.AreEqual(variableNameWithTrailingSpaces.Trim(), risedEvent.Alias);
 //            }
 //        }
 
