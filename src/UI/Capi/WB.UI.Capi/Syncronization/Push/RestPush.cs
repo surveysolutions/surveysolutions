@@ -24,7 +24,7 @@ namespace WB.UI.Capi.Syncronization.Push
             {
                 var result = this.webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct,
                     content, 
-                    new HttpBasicAuthenticator(login, password));
+                    new HttpBasicAuthenticator(login, password), null);
 
                 if (!result)
                     throw new SynchronizationException("Push was failed. Try again later.");
