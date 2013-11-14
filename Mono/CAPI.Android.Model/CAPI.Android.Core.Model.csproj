@@ -102,7 +102,6 @@
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
-    <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="IDataCollectionAuthentication.cs" />

@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Runtime;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
+using Main.Core.Events.Questionnaire;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Mono.Android.Crasher;
@@ -128,7 +129,7 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
         }
 
-        /*private void InitTemplateStorage(InProcessEventBus bus)
+        private void InitTemplateStorage(InProcessEventBus bus)
         {
             var templateDenoramalizer = new QuestionnaireDenormalizer(this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
@@ -138,7 +139,7 @@ namespace WB.UI.QuestionnaireTester
                     this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
 
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
-        }*/
+        }
 
         
 
@@ -209,14 +210,14 @@ namespace WB.UI.QuestionnaireTester
                  */
             #region register handlers
 
-           /* var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
+            
+
+            this.InitInterviewStorage(bus);
             this.InitTemplateStorage(bus);
 
-            this.InitInterviewStorage(bus);*/
-
-/*
-            this.InitUserStorage(bus);
+            /*this.InitUserStorage(bus);
 
             this.InitDashboard(bus);
 */
