@@ -41,8 +41,10 @@ namespace WB.UI.QuestionnaireTester.Services
             }
         }
 
-        public QuestionnaireListSyncPackage GetQuestionnaireListForCurrentUser(CancellationToken cancellationToken)
+        public QuestionnaireListSyncPackage  GetQuestionnaireListForCurrentUser(CancellationToken cancellationToken)
         {
+            if (!CapiTesterApplication.Membership.IsLoggedIn)
+                return null;
             var webExecutor = new AndroidRestUrils(designerUrl);
             try
             {
@@ -57,8 +59,10 @@ namespace WB.UI.QuestionnaireTester.Services
             }
         }
 
-        public QuestionnaireSyncPackage GetTemplate(Guid id, CancellationToken cancellationToken)
+        public QuestionnaireSyncPackage GetTemplateForCurrentUser(Guid id, CancellationToken cancellationToken)
         {
+            if (!CapiTesterApplication.Membership.IsLoggedIn)
+                return null;
             var webExecutor = new AndroidRestUrils(designerUrl);
             try
             {
