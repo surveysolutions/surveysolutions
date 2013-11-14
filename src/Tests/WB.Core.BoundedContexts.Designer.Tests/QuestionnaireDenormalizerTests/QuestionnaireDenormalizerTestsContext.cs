@@ -103,38 +103,32 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         }
 
         protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId,
-            string title = "New Group X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+            string title = "New Group X")
         {
             return ToPublishedEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
                 GroupText = title,
-                IsRoster = isRoster,
-                RosterSizeQuestionId = rosterSizeQuestionId,
             });
         }
 
         protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId,
-            string title = "New Cloned Group X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+            string title = "New Cloned Group X")
         {
             return ToPublishedEvent(new GroupCloned
             {
                 PublicKey = groupId,
                 GroupText = title,
-                IsRoster = isRoster,
-                RosterSizeQuestionId = rosterSizeQuestionId,
             });
         }
 
         protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId,
-            string title = "Updated Group Title X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+            string title = "Updated Group Title X")
         {
             return ToPublishedEvent(new GroupUpdated
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
-                IsRoster = isRoster,
-                RosterSizeQuestionId = rosterSizeQuestionId,
             });
         }
 
