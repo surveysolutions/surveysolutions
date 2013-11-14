@@ -71,21 +71,18 @@ namespace WB.UI.QuestionnaireTester.Adapters
             LayoutInflater layoutInflater =
                 (LayoutInflater) this.activity.GetSystemService(Context.LayoutInflaterService);
 
-            View view = layoutInflater.Inflate(Resource.Layout.template_list_item, null);
+            var view = layoutInflater.Inflate(Resource.Layout.template_list_item, null) as LinearLayout;
             var tvTitle =
                 view.FindViewById<TextView>(Resource.Id.tvTitle);
 
             tvTitle.Text = dataItem.Title;
 
-          /*  var tvTryMe =
-              view.FindViewById<TextView>(Resource.Id.tvTryMe);
-            Animation anim = new AlphaAnimation(0.0f, 1.0f);
-            anim.Duration= 50; //You can manage the time of the blink with this parameter
-            anim.StartOffset =20;
-            anim.RepeatMode= RepeatMode.Reverse;
-            anim.RepeatCount = Animation.Infinite;
-            tvTryMe.StartAnimation(anim);*/
 
+            var tvArrow =
+              view.FindViewById<TextView>(Resource.Id.tvArrow);
+            var img = activity.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
+            tvArrow.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+            view.SetTag(Resource.Id.QuestionnaireId, dataItem.Id.ToString());
             return view;
         }
     }

@@ -294,6 +294,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04001a
 			public const int topView = 2130968602;
 			
+			// aapt resource value: 0x7f04002e
+			public const int tvArrow = 2130968622;
+			
 			// aapt resource value: 0x7f04000c
 			public const int tvComments = 2130968588;
 			
@@ -314,9 +317,6 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvTitle = 2130968587;
-			
-			// aapt resource value: 0x7f04002e
-			public const int tvTryMe = 2130968622;
 			
 			// aapt resource value: 0x7f040010
 			public const int vpContent = 2130968592;

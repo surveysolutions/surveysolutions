@@ -14,9 +14,6 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.UI.QuestionnaireTester.Implementations.Activities;
-//using CAPI.Android.Core.Model.ModelUtils;
-
-//using WB.UI.Capi.DataCollection.Implementations.Activities;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -49,7 +46,7 @@ namespace WB.UI.QuestionnaireTester
                 new QuestionnaireScreenInput(publicKey));
             if (questionnaire == null)
             {
-                this.RunOnUiThread(this.Finish);
+              //  this.RunOnUiThread(this.Finish);
                 return;
             }
 
