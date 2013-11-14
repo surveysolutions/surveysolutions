@@ -19,13 +19,13 @@ namespace WB.UI.Designer.WebServices
         private readonly IJsonExportService exportService;
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
-        private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory;
+        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
 
         public PublicService(
             IJsonExportService exportService,
             IStringCompressor zipUtils, 
             IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)
+            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
@@ -67,7 +67,7 @@ namespace WB.UI.Designer.WebServices
             return new QuestionnaireListViewMessage(
                 this.viewFactory.Load(
                     input:
-                        new QuestionnaireListViewInputModel
+                        new QuestionnaireListInputModel
                             {
 
                                 ViewerId = this.userHelper.WebServiceUser.UserId,
