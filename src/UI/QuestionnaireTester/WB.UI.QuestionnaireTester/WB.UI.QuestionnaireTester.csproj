@@ -117,6 +117,7 @@
     <Compile Include="CapiTesterApplication.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="HomeActivity.cs" />
     <Compile Include="Implementations\Activities\TesterDetailsActivity.cs" />
     <Compile Include="Implementations\Adapters\TesterContentFrameAdapter.cs" />

@@ -2,6 +2,8 @@ using Android.Content.PM;
 using WB.UI.QuestionnaireTester.Adapters;
 using Android.App;
 using Android.OS;
+using WB.UI.QuestionnaireTester.Extensions;
+using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -14,6 +16,12 @@ namespace WB.UI.QuestionnaireTester
             base.OnCreate(bundle);
 
             this.ListAdapter = new QuestionnaireListAdapter(this);
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            this.CreateActionBar();
         }
     }
 }

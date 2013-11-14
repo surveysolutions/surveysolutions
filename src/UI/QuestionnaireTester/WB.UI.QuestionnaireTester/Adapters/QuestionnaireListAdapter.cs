@@ -49,7 +49,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
             {
                 if (items == null)
                 {
-                    activity.Finish();
+                    CapiTesterApplication.Membership.LogOff();
                 }
                 this.NotifyDataSetChanged();
                 progressDialog.Hide();

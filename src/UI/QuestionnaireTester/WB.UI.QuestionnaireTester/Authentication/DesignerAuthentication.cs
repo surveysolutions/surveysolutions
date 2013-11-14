@@ -13,6 +13,7 @@ using Main.Core.Entities.SubEntities;
 using RestSharp;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.UI.Shared.Android.Extensions;
 using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Authentication
@@ -39,6 +40,7 @@ namespace WB.UI.QuestionnaireTester.Authentication
         public void LogOff()
         {
             CurrentUser = null;
+            CapiTesterApplication.Context.ClearAllBackStack<LoginActivity>();
         }
     }
 }

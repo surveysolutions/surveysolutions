@@ -69,8 +69,10 @@ namespace WB.UI.QuestionnaireTester
             bool result = CapiTesterApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text, cancellationToken);
             this.RunOnUiThread(() =>
             {
+                progressDialog.Hide();
                 if (result)
                 {
+                    this.teLogin.Text = this.tePassword.Text = string.Empty;
                     this.ClearAllBackStack<QuestionnaireListActivity>();
                     return;
                 }
