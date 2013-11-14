@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             sourceGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeQuestionId = null;
 
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, groupId: sourceGroupId);
@@ -21,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.CloneGroupWithoutChildren(Guid.NewGuid(), responsibleId, "title", Propagate.None, rosterSizeQuestionId, null, null, null, sourceGroupId, 0);
+            questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title", Propagate.None, rosterSizeQuestionId, null, null, null, sourceGroupId, 0);
 
         Cleanup stuff = () =>
         {
@@ -29,17 +31,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = null;
         };
 
-        It should_raise_GroupCloned_event = () =>
-            eventContext.ShouldContainEvent<GroupCloned>();
+        It should_raise_GroupStoppedBeingARoster_event = () =>
+            eventContext.ShouldContainEvent<GroupStoppedBeingARoster>();
 
-        It should_raise_GroupCloned_event_with_IsRoster_equal_false = () =>
-            eventContext.GetSingleEvent<GroupCloned>()
-                .IsRoster.ShouldEqual(false);
+        It should_raise_GroupStoppedBeingARoster_event_with_GroupId_equal_to_target_group_id = () =>
+            eventContext.GetSingleEvent<GroupStoppedBeingARoster>()
+                .GroupId.ShouldEqual(targetGroupId);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid sourceGroupId;
         private static Guid? rosterSizeQuestionId;
+        private static Guid targetGroupId;
     }
 }

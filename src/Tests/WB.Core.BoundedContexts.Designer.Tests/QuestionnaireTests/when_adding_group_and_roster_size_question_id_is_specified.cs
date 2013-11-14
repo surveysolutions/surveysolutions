@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -12,6 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -21,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.AddGroup(Guid.NewGuid(), responsibleId, "title", Propagate.None, rosterSizeQuestionId, null, null, null);
+            questionnaire.AddGroup(groupId, responsibleId, "title", Propagate.None, rosterSizeQuestionId, null, null, null);
 
         Cleanup stuff = () =>
         {
@@ -29,20 +31,28 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = null;
         };
 
-        It should_raise_NewGroupAdded_event = () =>
-            eventContext.ShouldContainEvent<NewGroupAdded>();
+        It should_raise_GroupBecameARoster_event = () =>
+            eventContext.ShouldContainEvent<GroupBecameARoster>();
 
-        It should_raise_NewGroupAdded_event_with_IsRoster_equal_true = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .IsRoster.ShouldEqual(true);
+        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<GroupBecameARoster>()
+                .GroupId.ShouldEqual(groupId);
 
-        It should_raise_NewGroupAdded_event_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
+        It should_raise_RosterChanged_event = () =>
+            eventContext.ShouldContainEvent<RosterChanged>();
+
+        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<RosterChanged>()
+                .GroupId.ShouldEqual(groupId);
+
+        It should_raise_RosterChanged_event_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
+            eventContext.GetSingleEvent<RosterChanged>()
                 .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid rosterSizeQuestionId;
+        private static Guid groupId;
     }
 }
