@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Controllers
     public class TestApiController : ApiController
     {
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
-        private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> questionnaireListViewFactory;
+        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> questionnaireListViewFactory;
         private readonly IMembershipUserService userHelper;
         private readonly IJsonExportService exportService;
         private readonly IStringCompressor zipUtils;
@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Controllers
 
         public TestApiController(IMembershipUserService userHelper, 
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory,
+            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IJsonExportService exportService,
             IStringCompressor zipUtils,
@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Controllers
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
             var questionnaireList = this.questionnaireListViewFactory.Load(
-                        new QuestionnaireListViewInputModel
+                        new QuestionnaireListInputModel
                             {
                                 ViewerId = user.UserId,
                                 IsAdminMode = false,
