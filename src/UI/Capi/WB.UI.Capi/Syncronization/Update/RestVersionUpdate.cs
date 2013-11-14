@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
-using WB.UI.Capi.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization.Update
 {
@@ -18,7 +18,7 @@ namespace WB.UI.Capi.Syncronization.Update
         public bool Execute(string version, int versionCode, string androidId)
         {
             var newVersionExists = this.webExecutor.ExcecuteRestRequest<bool>(checkPath,
-                null,
+                null,null,
                 new KeyValuePair<string, string>("version", version),
                 new KeyValuePair<string, string>("versionCode", versionCode.ToString(CultureInfo.InvariantCulture)),
                 new KeyValuePair<string, string>("androidId", androidId));

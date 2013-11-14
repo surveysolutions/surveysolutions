@@ -3,6 +3,7 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
+using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.UI.Shared.Android;
 
 namespace WB.UI.Capi
