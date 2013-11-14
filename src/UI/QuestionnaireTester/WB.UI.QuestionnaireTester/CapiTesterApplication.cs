@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Runtime;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
+using Main.Core.Events.Questionnaire;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Mono.Android.Crasher;
@@ -19,6 +20,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -124,7 +126,7 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
         }
 
-        /*private void InitTemplateStorage(InProcessEventBus bus)
+        private void InitTemplateStorage(InProcessEventBus bus)
         {
             var templateDenoramalizer = new QuestionnaireDenormalizer(this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
@@ -134,7 +136,7 @@ namespace WB.UI.QuestionnaireTester
                     this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
 
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
-        }*/
+        }
 
         
 
@@ -201,14 +203,14 @@ namespace WB.UI.QuestionnaireTester
                  */
             #region register handlers
 
-           /* var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
+            
+
+            this.InitInterviewStorage(bus);
             this.InitTemplateStorage(bus);
 
-            this.InitInterviewStorage(bus);*/
-
-/*
-            this.InitUserStorage(bus);
+            /*this.InitUserStorage(bus);
 
             this.InitDashboard(bus);
 */
