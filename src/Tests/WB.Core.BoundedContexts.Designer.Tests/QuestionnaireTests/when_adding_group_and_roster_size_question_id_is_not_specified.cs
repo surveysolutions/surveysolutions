@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -12,6 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = null;
 
             questionnaire = CreateQuestionnaire(responsibleId);
@@ -20,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.AddGroup(Guid.NewGuid(), responsibleId, "title", Propagate.None, rosterSizeQuestionId, null, null, null);
+            questionnaire.AddGroup(groupId, responsibleId, "title", Propagate.None, rosterSizeQuestionId, null, null, null);
 
         Cleanup stuff = () =>
         {
@@ -28,16 +30,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = null;
         };
 
-        It should_raise_NewGroupAdded_event = () =>
-            eventContext.ShouldContainEvent<NewGroupAdded>();
+        It should_raise_GroupStoppedBeingARoster_event = () =>
+            eventContext.ShouldContainEvent<GroupStoppedBeingARoster>();
 
-        It should_raise_NewGroupAdded_event_with_IsRoster_equal_false = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .IsRoster.ShouldEqual(false); 
+        It should_raise_GroupStoppedBeingARoster_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<GroupStoppedBeingARoster>()
+                .GroupId.ShouldEqual(groupId);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid? rosterSizeQuestionId;
+        private static Guid groupId;
     }
 }

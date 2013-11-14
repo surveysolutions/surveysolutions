@@ -3,7 +3,9 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
+using NUnit.Framework.Constraints;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -29,12 +31,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = null;
         };
 
-        It should_raise_GroupUpdated_event = () =>
-            eventContext.ShouldContainEvent<GroupUpdated>();
+        It should_raise_GroupStoppedBeingARoster_event = () =>
+            eventContext.ShouldContainEvent<GroupStoppedBeingARoster>();
 
-        It should_raise_GroupUpdated_event_with_IsRoster_equal_false = () =>
-            eventContext.GetSingleEvent<GroupUpdated>()
-                .IsRoster.ShouldEqual(false);
+        It should_raise_GroupStoppedBeingARoster_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<GroupStoppedBeingARoster>()
+                .GroupId.ShouldEqual(groupId);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
