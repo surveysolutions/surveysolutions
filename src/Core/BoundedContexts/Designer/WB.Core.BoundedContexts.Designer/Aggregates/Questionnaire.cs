@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
 using System;
 using System.Collections.Generic;
@@ -130,7 +131,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(TemplateImported e)
         {
-            this.innerDocument = e.Source;
+            var upgrader = QuestionnaireDocumentUpgrader;
+            var document = upgrader.TranslatePropagatePropertiesToRosterProperties(e.Source);
+            this.innerDocument = document;
         }
 
         private void Apply(QuestionnaireCloned e)
@@ -177,9 +180,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers));
+
             if (question == null)
             {
                 return;
+            }
+
+            if (e.QuestionType == QuestionType.AutoPropagate)
+            {
+
             }
 
             this.innerDocument.Add(question, e.GroupPublicKey, null);
@@ -406,6 +415,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
+        }
+
+        private static IQuestionnaireDocumentUpgrader QuestionnaireDocumentUpgrader
+        {
+            get { return ServiceLocator.Current.GetInstance<IQuestionnaireDocumentUpgrader>(); }
         }
 
         #endregion
