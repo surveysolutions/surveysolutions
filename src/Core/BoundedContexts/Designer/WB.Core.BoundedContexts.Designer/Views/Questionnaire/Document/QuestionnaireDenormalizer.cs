@@ -6,6 +6,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -35,13 +37,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>, IEventHandler
     {
+        private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly IQuestionFactory questionFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            IQuestionFactory questionFactory, ILogger logger)
+            IQuestionFactory questionFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
         {
+            this.upgrader = upgrader;
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
             this.logger = logger;
@@ -438,8 +442,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var document = evnt.Payload.Source;
-            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
+            var document = upgrader.TranslatePropagatePropertiesToRosterProperties(evnt.Payload.Source);
+            this.documentStorage.Store(document, document.PublicKey);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
