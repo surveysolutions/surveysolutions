@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(GroupUpdated e)
         {
             this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description,
-                e.Propagateble, e.IsRoster, e.RosterSizeQuestionId, e.ConditionExpression);
+                e.Propagateble, e.ConditionExpression);
         }
 
         private void Apply(ImageDeleted e)
@@ -120,8 +120,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = new Group();
             group.Title = e.GroupText;
             group.Propagated = e.Paropagateble;
-            group.IsRoster = e.IsRoster;
-            group.RosterSizeQuestionId = e.RosterSizeQuestionId;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
@@ -143,8 +141,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = new Group();
             group.Title = e.GroupText;
             group.Propagated = e.Paropagateble;
-            group.IsRoster = e.IsRoster;
-            group.RosterSizeQuestionId = e.RosterSizeQuestionId;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;

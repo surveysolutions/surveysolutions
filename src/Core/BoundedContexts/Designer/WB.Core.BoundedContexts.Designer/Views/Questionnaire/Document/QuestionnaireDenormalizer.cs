@@ -71,8 +71,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
             group.Propagated = evnt.Payload.Paropagateble;
-            group.IsRoster = evnt.Payload.IsRoster;
-            group.RosterSizeQuestionId = evnt.Payload.RosterSizeQuestionId;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -109,8 +107,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
             group.Propagated = evnt.Payload.Paropagateble;
-            group.IsRoster = evnt.Payload.IsRoster;
-            group.RosterSizeQuestionId = evnt.Payload.RosterSizeQuestionId;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -408,8 +404,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupText,
                 evnt.Payload.Description,
                 evnt.Payload.Propagateble,
-                evnt.Payload.IsRoster,
-                evnt.Payload.RosterSizeQuestionId,
                 evnt.Payload.ConditionExpression);
 
             this.UpdateQuestionnaire(evnt, item);

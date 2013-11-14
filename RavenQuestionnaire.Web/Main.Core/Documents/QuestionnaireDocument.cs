@@ -211,15 +211,13 @@ namespace Main.Core.Documents
         }
 
         public void UpdateGroup(Guid groupId, string title, string description,
-            Propagate kindOfPropagation, bool isRoster, Guid? rosterSizeQuestionId, string conditionExpression)
+            Propagate kindOfPropagation, string conditionExpression)
         {
             this.UpdateGroup(groupId, group =>
             {
                 this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
 
                 @group.Propagated = kindOfPropagation;
-                @group.IsRoster = isRoster;
-                @group.RosterSizeQuestionId = rosterSizeQuestionId;
                 @group.ConditionExpression = conditionExpression;
                 @group.Description = description;
                 @group.Update(title);
