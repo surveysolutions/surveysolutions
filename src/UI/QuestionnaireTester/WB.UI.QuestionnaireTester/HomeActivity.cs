@@ -8,6 +8,7 @@ using Cirrious.MvvmCross.Droid.Simple;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.UI.QuestionnaireTester.Implementations.Activities;
 
 namespace WB.UI.QuestionnaireTester
@@ -30,13 +31,18 @@ namespace WB.UI.QuestionnaireTester
         {
             Guid interviewId = Guid.NewGuid();
             Guid interviewUserId = Guid.NewGuid();
-            /*var interview = 
+            
+            /*var template = JsonUtils.GetObject<QuestionnaireDocument>(content);
+            NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromSupervisor(template));
+            
+            //fix
+            var interview = new InterviewSynchronizationDto();
 
-            NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interviewId, interviewUserId, interview));
+            NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interviewId, interviewUserId, interview));*/
 
             var intent = new Intent(this, typeof(TesterDetailsActivity));
             intent.PutExtra("publicKey", interviewId.ToString());
-            this.StartActivity(intent);*/
+            this.StartActivity(intent);
         }
     }
 }
