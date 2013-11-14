@@ -28,7 +28,7 @@ namespace WB.UI.Capi
         {
             this.restore = this.Restore;
             base.OnCreate(bundle);
-            var pb=new ProgressBar(this);
+            var pb = new ProgressBar(this);
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
             this.ActionBar.SetDisplayShowHomeEnabled(false);
             this.restore.BeginInvoke(Guid.Parse(this.Intent.GetStringExtra("publicKey")), this.Callback, this.restore);
