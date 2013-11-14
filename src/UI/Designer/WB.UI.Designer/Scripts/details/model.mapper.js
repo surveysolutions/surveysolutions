@@ -97,8 +97,8 @@
                         item.isInteger(_.isBoolean(settings.IsInteger) ? (settings.IsInteger ? 1 : 0) : 0);
                         item.maxValue(_.isNumber(settings.MaxValue) ? settings.MaxValue * 1 : null);
                         item.countOfDecimalPlaces(_.isEmpty(settings.CountOfDecimalPlaces) ? null : settings.CountOfDecimalPlaces);
-                        item.areAnswersOrdered(_.isEmpty(dto.Settings.AreAnswersOrdered) ? false : settings.AreAnswersOrdered);
-                        item.maxAllowedAnswers(_.isEmpty(dto.Settings.MaxAllowedAnswers) ? null : settings.MaxAllowedAnswers);
+                        item.areAnswersOrdered(_.isBoolean(dto.Settings.AreAnswersOrdered) ? settings.AreAnswersOrdered : false);
+                        item.maxAllowedAnswers(_.isNumber(dto.Settings.MaxAllowedAnswers) ? settings.MaxAllowedAnswers: null);
                     }
                     item.isNew(false);
                     item.dirtyFlag().reset();

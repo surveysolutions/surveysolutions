@@ -99,7 +99,6 @@
 
                 self.typeOptions = config.questionTypeOptions;
                 self.scopeOptions = config.questionScopes;
-                self.orderOptions = config.answerOrders;
 
                 self.getHref = function () {
                     return utils.questionUrl(self.id());
@@ -403,7 +402,6 @@
                     item.title(this.title());
                     item.qtype(this.qtype());
                     item.scope(this.scope());
-                    item.answerOrder(this.answerOrder());
 
                     item.answerOptions(_.map(this.answerOptions(), function (answer) {
                         return new answerOption().id(answer.id()).title(answer.title()).value(answer.value());
@@ -469,7 +467,6 @@
                 this.validationExpression(data.validationExpression);
                 this.validationMessage(data.validationMessage);
                 this.instruction(data.instruction);
-                this.answerOrder(data.answerOrder);
                 this.maxValue(data.maxValue);
                 this.isInteger(data.isInteger);
                 this.countOfDecimalPlaces(data.countOfDecimalPlaces);

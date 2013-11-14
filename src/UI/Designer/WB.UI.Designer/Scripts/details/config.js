@@ -51,28 +51,6 @@
                 supervisor: "Supervisor",
                 headquarters: "Headquarters"
             },
-            answerOrders = [
-                {
-                    key: "AsIs",
-                    value: "Nothing"
-                },
-                {
-                    key: "AZ",
-                    value: "Label: A to Z"
-                },
-                {
-                    key: "ZA",
-                    value: "Label: Z to A"
-                },
-                {
-                    key: "MinMax",
-                    value: "Value: ascending"
-                },
-                {
-                    key: "MaxMin",
-                    value: "Value: descending"
-                }
-            ],
             commands = {
                 updateQuestionnaire: "UpdateQuestionnaire",
                 createGroup: "AddGroup",
@@ -217,7 +195,6 @@
             questionTypes: questionTypes,
             questionTypeOptions: questionTypeOptions,
             questionScopes: questionScopes,
-            answerOrders: answerOrders,
             commands: commands,
             tips: tips,
             verificationReferenceType: verificationReferenceType,
