@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 questionnaire.AddGroup(publicKey, responsibleId: responsibleId, title: text, propagationKind: propagateble, rosterSizeQuestionId: null, description: description, condition: conditionExpression, parentGroupId: parentGroupKey);
 
-                Assert.True(ctx.Events.Count() == 1);
+                Assert.True(ctx.Events.Count() >= 1);
 
                 foreach (UncommittedEvent item in ctx.Events)
                 {
@@ -50,8 +50,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                         continue;
                     }
-
-                    Assert.Fail("Unexpected event was raised.");
                 }
             }
         }

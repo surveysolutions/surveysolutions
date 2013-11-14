@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -31,15 +32,22 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = null;
         };
 
-        It should_raise_GroupUpdated_event = () =>
-            eventContext.ShouldContainEvent<GroupUpdated>();
+        It should_raise_GroupBecameARoster_event = () =>
+            eventContext.ShouldContainEvent<GroupBecameARoster>();
 
-        It should_raise_GroupUpdated_event_with_IsRoster_equal_true = () =>
-            eventContext.GetSingleEvent<GroupUpdated>()
-                .IsRoster.ShouldEqual(true);
+        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<GroupBecameARoster>()
+                .GroupId.ShouldEqual(groupId);
 
-        It should_raise_GroupUpdated_event_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
-            eventContext.GetSingleEvent<GroupUpdated>()
+        It should_raise_RosterChanged_event = () =>
+            eventContext.ShouldContainEvent<RosterChanged>();
+
+        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<RosterChanged>()
+                .GroupId.ShouldEqual(groupId);
+
+        It should_raise_RosterChanged_event_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
+            eventContext.GetSingleEvent<RosterChanged>()
                 .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
 
         private static EventContext eventContext;
