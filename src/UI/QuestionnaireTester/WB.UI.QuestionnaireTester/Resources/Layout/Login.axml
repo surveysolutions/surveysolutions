@@ -3,7 +3,8 @@
     xmlns:local="http://schemas.android.com/apk/res/CAPI.Android.Tester"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+            android:id="@+id/topView">
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
@@ -24,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dip"
+            android:id="@+id/loginForm"
             android:layout_below="@id/header">
             <TextView
                 android:layout_width="fill_parent"
@@ -56,5 +58,33 @@
                 android:layout_marginTop="10dip"
                 android:text="Login" />
         </LinearLayout>
+
+
+      <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/llDesignerPath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dip"
+            android:visibility="gone"
+            android:layout_below="@id/loginForm">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Path to designer" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:id="@+id/tePathToDesigner"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="20dip"
+            android:singleLine="true" />
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:text="Save" />
+      </LinearLayout>
     </RelativeLayout>
 </ScrollView>

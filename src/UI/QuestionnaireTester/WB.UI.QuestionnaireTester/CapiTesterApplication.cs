@@ -62,6 +62,24 @@ namespace WB.UI.QuestionnaireTester
             get { return Kernel.Get<DesignerService>(); }
         }
 
+        private const string DesignerPath = "DesignerPath";
+
+        public static string GetPathToDesigner()
+        {
+            ISharedPreferences prefs = Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName),
+                FileCreationMode.Private);
+            return prefs.GetString(DesignerPath, Context.Resources.GetString(Resource.String.DesignerPath));
+        }
+
+        public static void SetPathToDesigner(string path)
+        {
+            ISharedPreferences prefs = Application.Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName),
+             FileCreationMode.Private);
+            ISharedPreferencesEditor prefEditor = prefs.Edit();
+            prefEditor.PutString(DesignerPath, path);
+            prefEditor.Commit();
+        }
+
         public static IKernel Kernel
         {
             get
@@ -189,7 +207,7 @@ namespace WB.UI.QuestionnaireTester
                 new ExpressionProcessorModule());
 
             this.kernel.Bind<DesignerAuthentication>().ToSelf().InSingletonScope();
-            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService(Resources.GetString(Resource.String.DesignerPath)));
+            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService());
             
             this.kernel.Bind<Context>().ToConstant(this);
             

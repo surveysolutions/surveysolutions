@@ -18,16 +18,9 @@ namespace WB.UI.QuestionnaireTester.Services
 {
     public class DesignerService
     {
-        private readonly string designerUrl;
-
-        public DesignerService(string designerUrl)
-        {
-            this.designerUrl = designerUrl;
-        }
-
         public bool Login(string userName, string password, CancellationToken cancellationToken)
         {
-            var webExecutor = new AndroidRestUrils(designerUrl);
+            var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
                 webExecutor.ExcecuteRestRequestAsync<bool>(
@@ -45,7 +38,7 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             if (!CapiTesterApplication.Membership.IsLoggedIn)
                 return null;
-            var webExecutor = new AndroidRestUrils(designerUrl);
+            var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
                 return webExecutor.ExcecuteRestRequestAsync<QuestionnaireListSyncPackage>(
@@ -63,7 +56,7 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             if (!CapiTesterApplication.Membership.IsLoggedIn)
                 return null;
-            var webExecutor = new AndroidRestUrils(designerUrl);
+            var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
                 return webExecutor.ExcecuteRestRequestAsync<QuestionnaireSyncPackage>(
