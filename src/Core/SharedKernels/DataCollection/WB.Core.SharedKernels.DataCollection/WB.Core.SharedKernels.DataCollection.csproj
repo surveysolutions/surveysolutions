@@ -60,6 +60,7 @@
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
+    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
