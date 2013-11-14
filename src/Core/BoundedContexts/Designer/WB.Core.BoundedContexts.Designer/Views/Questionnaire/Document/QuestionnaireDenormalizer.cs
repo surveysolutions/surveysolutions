@@ -32,6 +32,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<ImageDeleted>,
         IEventHandler<GroupDeleted>,
         IEventHandler<GroupUpdated>,
+        IEventHandler<GroupBecameARoster>,
+        IEventHandler<RosterChanged>,
+        IEventHandler<GroupStoppedBeingARoster>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
@@ -72,8 +75,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
             group.Propagated = evnt.Payload.Paropagateble;
-            group.IsRoster = evnt.Payload.IsRoster;
-            group.RosterSizeQuestionId = evnt.Payload.RosterSizeQuestionId;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -110,8 +111,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
             group.Propagated = evnt.Payload.Paropagateble;
-            group.IsRoster = evnt.Payload.IsRoster;
-            group.RosterSizeQuestionId = evnt.Payload.RosterSizeQuestionId;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -409,11 +408,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupText,
                 evnt.Payload.Description,
                 evnt.Payload.Propagateble,
-                evnt.Payload.IsRoster,
-                evnt.Payload.RosterSizeQuestionId,
                 evnt.Payload.ConditionExpression);
 
             this.UpdateQuestionnaire(evnt, item);
+        }
+
+        public void Handle(IPublishedEvent<GroupBecameARoster> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId,  group => group.IsRoster = true);
+
+            this.UpdateQuestionnaire(@event, item);
+        }
+
+        public void Handle(IPublishedEvent<RosterChanged> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId, group => group.RosterSizeQuestionId = @event.Payload.RosterSizeQuestionId);
+
+            this.UpdateQuestionnaire(@event, item);
+        }
+
+        public void Handle(IPublishedEvent<GroupStoppedBeingARoster> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId, group => group.IsRoster = false);
+
+            this.UpdateQuestionnaire(@event, item);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
