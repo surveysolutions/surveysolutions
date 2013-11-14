@@ -213,17 +213,25 @@ namespace Main.Core.Documents
         public void UpdateGroup(Guid groupId, string title, string description,
             Propagate kindOfPropagation, bool isRoster, Guid? rosterSizeQuestionId, string conditionExpression)
         {
+            this.UpdateGroup(groupId, group =>
+            {
+                this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
+
+                @group.Propagated = kindOfPropagation;
+                @group.IsRoster = isRoster;
+                @group.RosterSizeQuestionId = rosterSizeQuestionId;
+                @group.ConditionExpression = conditionExpression;
+                @group.Description = description;
+                @group.Update(title);
+            });
+        }
+
+        public void UpdateGroup(Guid groupId, Action<Group> update)
+        {
             var group = this.Find<Group>(groupId);
-            if (@group == null) return;
 
-            this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
-
-            @group.Propagated = kindOfPropagation;
-            @group.IsRoster = isRoster;
-            @group.RosterSizeQuestionId = rosterSizeQuestionId;
-            @group.ConditionExpression = conditionExpression;
-            @group.Description = description;
-            @group.Update(title);
+            if (@group != null)
+                update(@group);
         }
 
         private void UpdateAutoPropagateQuestionsTriggersIfNeeded(IGroup group, Propagate newPropagationKind = Propagate.None)
