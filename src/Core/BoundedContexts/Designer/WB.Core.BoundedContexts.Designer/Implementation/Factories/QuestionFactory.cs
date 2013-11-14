@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool capital,
             string instructions,
             IEnumerable<Guid> triggers,
-            int maxValue,
+            int? maxValue,
             Guid? linkedToQuestionId,
             bool? isInteger,
             int? countOfDecimalPlaces,
@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             var autoQuestion = question as IAutoPropagate;
             if (autoQuestion != null)
             {
-                autoQuestion.MaxValue = maxValue;
+                autoQuestion.MaxValue = maxValue.HasValue? maxValue.Value : 16;
                 if (triggers != null)
                 {
                     autoQuestion.Triggers = new List<Guid>();

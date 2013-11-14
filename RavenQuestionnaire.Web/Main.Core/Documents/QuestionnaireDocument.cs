@@ -452,7 +452,12 @@ namespace Main.Core.Documents
             return foundGroup;
         }
 
-        public IComposite Clone()
+        IComposite IComposite.Clone()
+        {
+            return this.Clone();
+        }
+
+        public QuestionnaireDocument Clone()
         {
             var doc = this.MemberwiseClone() as QuestionnaireDocument;
 
