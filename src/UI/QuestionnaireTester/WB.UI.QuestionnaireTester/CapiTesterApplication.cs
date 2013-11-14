@@ -188,7 +188,7 @@ namespace WB.UI.QuestionnaireTester
                 new ExpressionProcessorModule());
 
             this.kernel.Bind<DesignerAuthentication>().ToSelf().InSingletonScope();
-            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService("https://192.168.173.1/designer/api/tester"));
+            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService(Resources.GetString(Resource.String.DesignerPath)));
             
             this.kernel.Bind<Context>().ToConstant(this);
             
