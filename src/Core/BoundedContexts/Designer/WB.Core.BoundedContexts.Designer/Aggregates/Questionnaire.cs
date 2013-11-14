@@ -151,6 +151,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
         }
 
+        private void Apply(GroupBecameARoster e)
+        {
+            this.innerDocument.UpdateGroup(e.GroupId, group => group.IsRoster = true);
+        }
+
+        private void Apply(RosterChanged e)
+        {
+            this.innerDocument.UpdateGroup(e.GroupId, group => group.RosterSizeQuestionId = e.RosterSizeQuestionId);
+        }
+
+        private void Apply(GroupStoppedBeingARoster e)
+        {
+            this.innerDocument.UpdateGroup(e.GroupId, group => group.IsRoster = false);
+        }
+
         internal void Apply(NewQuestionAdded e)
         {
             AbstractQuestion question =
@@ -537,12 +552,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Paropagateble = propagationKind,
-                IsRoster = rosterSizeQuestionId.HasValue,
-                RosterSizeQuestionId = rosterSizeQuestionId,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
             });
+
+            if (rosterSizeQuestionId.HasValue)
+            {
+                this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+            }
+            else
+            {
+                this.ApplyEvent(new GroupStoppedBeingARoster(responsibleId, groupId));
+            }
         }
 
         public void CloneGroupWithoutChildren(Guid groupId, Guid responsibleId,
@@ -564,14 +587,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Paropagateble = propagationKind,
-                IsRoster = rosterSizeQuestionId.HasValue,
-                RosterSizeQuestionId = rosterSizeQuestionId,
                 Description = description,
                 ConditionExpression = condition,
                 SourceGroupId = sourceGroupId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId
             });
+
+            if (rosterSizeQuestionId.HasValue)
+            {
+                this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+            }
+            else
+            {
+                this.ApplyEvent(new GroupStoppedBeingARoster(responsibleId, groupId));
+            }
         }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
@@ -596,12 +627,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 GroupPublicKey = groupId,
                 GroupText = title,
                 Propagateble = propagationKind,
-                IsRoster = rosterSizeQuestionId.HasValue,
-                RosterSizeQuestionId = rosterSizeQuestionId,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
             });
+
+            if (rosterSizeQuestionId.HasValue)
+            {
+                this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+            }
+            else
+            {
+                this.ApplyEvent(new GroupStoppedBeingARoster(responsibleId, groupId));
+            }
         }
 
         public void DeleteGroup(Guid groupId, Guid responsibleId)
