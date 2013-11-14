@@ -30,6 +30,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<ImageDeleted>,
         IEventHandler<GroupDeleted>,
         IEventHandler<GroupUpdated>,
+        IEventHandler<GroupBecameARoster>,
+        IEventHandler<RosterChanged>,
+        IEventHandler<GroupStoppedBeingARoster>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
@@ -410,6 +413,33 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.ConditionExpression);
 
             this.UpdateQuestionnaire(evnt, item);
+        }
+
+        public void Handle(IPublishedEvent<GroupBecameARoster> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId,  group => group.IsRoster = true);
+
+            this.UpdateQuestionnaire(@event, item);
+        }
+
+        public void Handle(IPublishedEvent<RosterChanged> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId, group => group.RosterSizeQuestionId = @event.Payload.RosterSizeQuestionId);
+
+            this.UpdateQuestionnaire(@event, item);
+        }
+
+        public void Handle(IPublishedEvent<GroupStoppedBeingARoster> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId, group => group.IsRoster = false);
+
+            this.UpdateQuestionnaire(@event, item);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
