@@ -24,7 +24,6 @@ namespace WB.UI.QuestionnaireTester
         private int loginClickCount = 0;
         private int passwordClickCount = 0;
         private const int RequiredAmountOfClick = 5;
-        private const string DesignerPath = "DesignerPath";
 
         protected Button btnLogin
         {
