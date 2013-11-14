@@ -343,7 +343,6 @@
                 case "YesNo":
                 case "DropDownList":
                 case "MultyOption":
-                    command.optionsOrder = question.answerOrder();
                     command.areAnswersOrdered = question.areAnswersOrdered();
                     command.maxAllowedAnswers = question.maxAllowedAnswers();
                     if (question.isLinked() == 1) {
