@@ -5,7 +5,7 @@ using Android.Content;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Capi.Settings;
-using WB.UI.Capi.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization.Update
 {

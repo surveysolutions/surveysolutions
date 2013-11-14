@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Hello">Hello World, Click Me!</string>
-    <string name="ApplicationName">Capi.Tester</string>
+  <string name="ApplicationName">Capi.Tester</string>
+  <string name="DesignerPath">https://192.168.173.1/designer/api/tester</string>
+  <string name="DesignerDev">https://design1.wbcapi.org/api/tester</string>
+  <string name="DesignerProduction">https://solutions.worldbank.org/api/tester</string>
 </resources>
