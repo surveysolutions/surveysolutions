@@ -1,4 +1,6 @@
 using Android.Content.PM;
+using Android.Views;
+using Android.Widget;
 using WB.UI.QuestionnaireTester.Adapters;
 using Android.App;
 using Android.OS;
@@ -9,13 +11,15 @@ namespace WB.UI.QuestionnaireTester
 {
     [Activity(Label = "CAPI",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class QuestionnaireListActivity : ListActivity 
+    public class QuestionnaireListActivity : Activity
     {
+        protected ListView listView;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            this.ListAdapter = new QuestionnaireListAdapter(this);
+            this.listView=new ListView(this);
+            this.listView.Adapter = new QuestionnaireListAdapter(this);
+            this.AddContentView(listView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
         }
 
         protected override void OnStart()

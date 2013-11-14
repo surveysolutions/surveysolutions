@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Main.Core.Utility;
@@ -14,37 +15,45 @@ using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Adapters
 {
-    public class QuestionnaireListAdapter:SmartAdapter<string>
+    public class QuestionnaireListAdapter : SmartAdapter<QuestionnaireListItem>
     {
-        private readonly Activity activity;
+        private Activity activity;
         private CancellationToken cancellationToken;
-        private readonly ProgressDialog progressDialog;
+        private ProgressBar progressDialog;
 
         public QuestionnaireListAdapter(Activity activity)
             : base()
         {
-            this.items = new List<string>();
+            this.items = new List<QuestionnaireListItem>();
 
             this.activity = activity;
-            this.progressDialog = new ProgressDialog(activity);
 
-            this.progressDialog.SetTitle("Loading");
-            this.progressDialog.SetMessage("Uploading templates from Designer");
-            this.progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
-            this.progressDialog.SetCancelable(false);
-
+            this.AddLoader();
+            
             var tokenSource2 = new CancellationTokenSource();
             this.cancellationToken = tokenSource2.Token;
-            progressDialog.Show();
             Task.Factory.StartNew(UploadQuestionnairesFromDesigner, this.cancellationToken);
+        }
+
+        private void AddLoader()
+        {
+            this.progressDialog = new ProgressBar(activity);
+
+            activity.AddContentView(this.progressDialog,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent));
+
+            Display display = activity.WindowManager.DefaultDisplay;
+            Point size = new Point();
+            display.GetSize(size);
+
+            this.progressDialog.SetX(size.X/2);
+            this.progressDialog.SetY(size.Y/2);
         }
 
         protected void UploadQuestionnairesFromDesigner()
         {
             items =
-                CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(cancellationToken)
-                    .Items.Select(i => i.Title)
-                    .ToList();
+                CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(cancellationToken).Items;
             activity.RunOnUiThread(() =>
             {
                 if (items == null)
@@ -52,11 +61,12 @@ namespace WB.UI.QuestionnaireTester.Adapters
                     CapiTesterApplication.Membership.LogOff();
                 }
                 this.NotifyDataSetChanged();
-                progressDialog.Hide();
+                progressDialog.Visibility = ViewStates.Gone;
+                
             });
         }
 
-        protected override View BuildViewItem(string dataItem, int position)
+        protected override View BuildViewItem(QuestionnaireListItem dataItem, int position)
         {
             LayoutInflater layoutInflater =
                 (LayoutInflater) this.activity.GetSystemService(Context.LayoutInflaterService);
@@ -65,7 +75,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
             var tvTitle =
                 view.FindViewById<TextView>(Resource.Id.tvTitle);
 
-            tvTitle.Text = dataItem;
+            tvTitle.Text = dataItem.Title;
 
           /*  var tvTryMe =
               view.FindViewById<TextView>(Resource.Id.tvTryMe);
