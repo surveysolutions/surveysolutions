@@ -32,7 +32,9 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<AnswerDeclaredValid>,
         IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<AnswerRemoved>,
-        IEventHandler<SingleOptionLinkedQuestionAnswered>, IEventHandler<MultipleOptionsLinkedQuestionAnswered>
+        IEventHandler<SingleOptionLinkedQuestionAnswered>, 
+        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IEventHandler<InterviewForTestingCreated>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -236,5 +238,23 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             this.interviewStorage.Remove(evnt.EventSourceId);
         }
+
+
+
+        public void Handle(IPublishedEvent<InterviewForTestingCreated> evnt)
+        {
+            var questionnaire = this.questionnarieStorage.GetById(evnt.Payload.QuestionnaireId,
+                                                             evnt.Payload.QuestionnaireVersion);
+            if (questionnaire == null)
+                return;
+
+            var propagationStructure = this.GetPropagationStructureOfQuestionnaireAndBuildItIfAbsent(questionnaire);
+
+            var view = new InterviewViewModel(evnt.EventSourceId, questionnaire.Questionnaire, propagationStructure);
+
+            this.interviewStorage.Store(view, evnt.EventSourceId);
+            
+        }
+
     }
 }

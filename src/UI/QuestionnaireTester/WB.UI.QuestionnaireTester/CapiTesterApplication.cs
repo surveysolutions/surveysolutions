@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -12,7 +15,9 @@ using Mono.Android.Crasher.Attributes;
 using Mono.Android.Crasher.Data.Submit;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
@@ -20,6 +25,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -27,6 +33,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.QuestionnaireTester.Authentication;
 using WB.UI.QuestionnaireTester.Services;
+using WB.UI.Shared.Android.Controls.ScreenItems;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -136,6 +143,8 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
 
+            bus.RegisterHandler(eventHandler, typeof(InterviewForTestingCreated));
+            
 
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
 
@@ -185,7 +194,7 @@ namespace WB.UI.QuestionnaireTester
             
         }*/
 
-        
+
         public override void OnCreate()
         {
             base.OnCreate();
@@ -194,7 +203,7 @@ namespace WB.UI.QuestionnaireTester
             CrashManager.AttachSender(() => new FileReportSender("Capi.Tester"));
             this.RestoreAppState();
 
-             // initialize app if necessary
+            // initialize app if necessary
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
@@ -206,31 +215,32 @@ namespace WB.UI.QuestionnaireTester
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule());
 
-            this.kernel.Bind<DesignerAuthentication>().ToSelf().InSingletonScope();
+            this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());
             this.kernel.Bind<DesignerService>().ToConstant(new DesignerService());
             
             this.kernel.Bind<Context>().ToConstant(this);
-            
+
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
             NcqrsInit.Init(this.kernel);
-            /* 
-                 NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
-                 NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-                 var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
-                 this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
-                 this.kernel.Bind<ICommandService>().ToConstant(CommandService);
 
-                 this.kernel.Unbind<IAnswerOnQuestionCommandService>();
-                 this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
-                 this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
-                 */
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
+            NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());
+            //NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+            var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
+            this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
+            this.kernel.Bind<ICommandService>().ToConstant(CommandService);
+
+            this.kernel.Unbind<IAnswerOnQuestionCommandService>();
+            this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
+            this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
+
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
-            
+
 
             this.InitInterviewStorage(bus);
             this.InitTemplateStorage(bus);
@@ -239,7 +249,7 @@ namespace WB.UI.QuestionnaireTester
 
             this.InitDashboard(bus);
 */
-            
+
             #endregion
         }
 
@@ -280,5 +290,10 @@ namespace WB.UI.QuestionnaireTester
 
     public class CapiTesterCoreRegistry : CoreRegistry
     {
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
+        {
+            return
+                Enumerable.Concat(base.GetAssembliesForRegistration(), new[] { typeof(ImportFromDesignerForTester).Assembly, this.GetType().Assembly });
+        }
     }
 }
