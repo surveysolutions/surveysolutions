@@ -1,45 +1,47 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Main.Core.Entities.SubEntities;
-using RestSharp;
 using WB.Core.BoundedContexts.Capi;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Shared.Android.Extensions;
-using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Authentication
 {
-    public class DesignerAuthentication
+    public class DesignerAuthentication  : IAuthentication
     {
-        public UserInfo CurrentUser { get; private set; }
+        public UserInfo RemoteUser { get; private set; }
+
+        private UserLight currentUser; 
+    
+        
+        UserLight IAuthentication.CurrentUser {
+            get { return currentUser; }
+        }
 
         public bool IsLoggedIn
         {
-            get { return CurrentUser != null; }
+            get { return RemoteUser != null; }
         }
 
         public bool LogOn(string userName, string password, CancellationToken cancellationToken)
         {
             if (CapiTesterApplication.DesignerServices.Login(userName, password, cancellationToken))
             {
-                CurrentUser = new UserInfo(userName, password);
+                RemoteUser = new UserInfo(userName, password);
+                currentUser = new UserLight(Guid.NewGuid(), userName);
                 return true;
             }
             return false;
         }
 
+        public bool LogOn(string userName, string password)
+        {
+            return LogOn(userName, password, new CancellationToken());
+        }
+
         public void LogOff()
         {
-            CurrentUser = null;
+            RemoteUser = null;
+            currentUser = null;
             CapiTesterApplication.Context.ClearAllBackStack<LoginActivity>();
         }
     }
