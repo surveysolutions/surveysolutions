@@ -47,14 +47,15 @@ namespace WB.UI.QuestionnaireTester
             Guid interviewId = Guid.NewGuid();
             this.LoadTemplateAndCreateInterview(publicKey, interviewId);
             
-            /*var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+            var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                     new QuestionnaireScreenInput(interviewId));
 
             if (questionnaire == null)
             {
                 this.RunOnUiThread(this.Finish);
                 return;
-            }*/
+            }
+
             var intent = new Intent(this, typeof(TesterDetailsActivity));
             intent.PutExtra("publicKey", interviewId.ToString());
             this.StartActivity(intent);
