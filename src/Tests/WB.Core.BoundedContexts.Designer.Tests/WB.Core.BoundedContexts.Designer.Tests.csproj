@@ -101,10 +101,22 @@
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_not_numeric.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_under_another_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_not_numeric.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_under_another_roster.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_not_numeric.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_under_another_roster.cs" />
     <Compile Include="ShouldExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
