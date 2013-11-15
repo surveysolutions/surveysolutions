@@ -189,7 +189,7 @@ function BuildDesigner($Solution, $Project,  $CapiTesterProject, $BuildConfigura
 					-TempPackageNamePrefix "CAPI.Android.Tester" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 	
-	CopyCapi -Project $Project 
+	CopyCapi -Project $Project `
 			 -CapiProject $CapiTesterProject `
 			 -FinalPackageName $FinalPackageName
 	

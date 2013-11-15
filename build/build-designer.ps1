@@ -33,7 +33,7 @@ try {
 		-CapiTesterProject 'src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\WB.UI.QuestionnaireTester.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-VersionPrefix $VersionPrefix `
-		-BuildNumber $BuildNumber		
+		-BuildNumber $BuildNumber
 }
 catch {
 	Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred']"
