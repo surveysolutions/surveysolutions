@@ -71,7 +71,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                     return new NumericQuestion();
 
                 case QuestionType.AutoPropagate:
-                    return new AutoPropagateQuestion();
+                    return new NumericQuestion()
+                    {
+                        IsInteger = true
+                    };
 
                 case QuestionType.GpsCoordinates:
                     return new GpsCoordinateQuestion();
@@ -133,23 +136,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             
-            var autoQuestion = question as IAutoPropagate;
-            if (autoQuestion != null)
-            {
-                autoQuestion.MaxValue = maxValue.HasValue? maxValue.Value : 16;
-                if (triggers != null)
-                {
-                    autoQuestion.Triggers = new List<Guid>();
-                    foreach (var guid in triggers)
-                    {
-                        if (!autoQuestion.Triggers.Contains(guid))
-                        {
-                            autoQuestion.Triggers.Add(guid);
-                        }
-                    }
-                }
-            }
-
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
             {
