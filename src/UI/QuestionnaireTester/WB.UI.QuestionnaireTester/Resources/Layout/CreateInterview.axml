@@ -16,5 +16,5 @@ android:layout_height="fill_parent">
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
       android:layout_centerHorizontal="true"
-      android:text="Next"/>
+      android:text="Go to questionnarie testing"/>
 </RelativeLayout>

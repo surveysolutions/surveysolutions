@@ -61,6 +61,7 @@ namespace WB.UI.QuestionnaireTester
             SupportFragmentManager.BeginTransaction().Add(Resource.Id.flFragmentHolder, screen).Commit();
 
             btnNext.Click += btnNext_Click;
+            this.Title = string.Format("List of pre-filled questions");
         }
 
         void btnNext_Click(object sender, EventArgs e)

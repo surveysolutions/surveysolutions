@@ -28,6 +28,7 @@ namespace WB.UI.QuestionnaireTester
             this.listView.Adapter = new QuestionnaireListAdapter(this);
             this.listView.ChoiceMode = ChoiceMode.Single;
             this.listView.ItemClick += listView_ItemClick;
+            this.Title = string.Format("List of {0}'s questionnaires", CapiTesterApplication.Membership.RemoteUser.UserName);
             this.AddContentView(listView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
         }
 
