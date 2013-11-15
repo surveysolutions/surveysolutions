@@ -167,7 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(NewQuestionAdded e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(NumericQuestionAdded e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(QuestionCloned e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(NumericQuestionCloned e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,

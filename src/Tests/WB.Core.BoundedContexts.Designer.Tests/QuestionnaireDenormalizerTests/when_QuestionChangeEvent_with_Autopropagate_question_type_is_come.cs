@@ -49,13 +49,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         Because of = () => denormalizer.Handle(questionChangedEvent);
 
-        private It should_not_add_Autopropagate_question_in_questionnaire = () =>
+        It should_not_add_Autopropagate_question_in_questionnaire = () =>
             (questionnaire.Find<IQuestion>(autoQuestionId) as AutoPropagateQuestion).ShouldBeNull();
 
-        private It should_add_Numeric_question_in_questionnaire = () =>
+        It should_add_Numeric_question_in_questionnaire = () =>
             (questionnaire.Find<IQuestion>(autoQuestionId) as NumericQuestion).ShouldNotBeNull();
 
-        private It should_add_Numeric_question_with_integer_flag_set_in_true = () =>
+        It should_add_Numeric_question_with_integer_flag_set_in_true = () =>
         {
             var numericQuestion = questionnaire.Find<IQuestion>(autoQuestionId) as NumericQuestion;
             numericQuestion.IsInteger.ShouldBeTrue();

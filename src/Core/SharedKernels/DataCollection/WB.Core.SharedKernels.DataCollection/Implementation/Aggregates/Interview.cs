@@ -604,11 +604,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
+            ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                ThrowIfAnswerCannotBeUsedAsRosterSize(questionId, answer, questionnaire);
+                ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
             }
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
@@ -701,6 +702,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
+            ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
             this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
 
@@ -1385,28 +1387,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatQuestionForException(questionId, questionnaire)));
         }
 
-        private static void ThrowIfAnswerCannotBeUsedAsRosterSize(Guid questionId, decimal answer, IQuestionnaire questionnaire)
+        private static void ThrowIfNumericAnswerExceedsMaxValue(Guid questionId, decimal answer, IQuestionnaire questionnaire)
         {
-            int maxValue = questionnaire.GetMaxAnswerValueForRoserSizeQuestion(questionId);
+            int? maxValue = questionnaire.GetMaxValueForNumericQuestion(questionId);
 
-            bool answerIsNotInteger = answer != (int) answer;
-            bool answerIsNegative = answer < 0;
-            bool answerExceedsMaxValue = answer > maxValue;
+            if (!maxValue.HasValue)
+                return;
 
-            if (answerIsNotInteger)
-                throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question should roster groups and answer is not a valid integer.",
-                    answer, FormatQuestionForException(questionId, questionnaire)));
-
-            if (answerIsNegative)
-                throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question should roster groups and answer is negative.",
-                    answer, FormatQuestionForException(questionId, questionnaire)));
+            bool answerExceedsMaxValue = answer > maxValue.Value;
 
             if (answerExceedsMaxValue)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question should roster groups and answer is greater than max value '{2}'.",
-                    answer, FormatQuestionForException(questionId, questionnaire), maxValue));
+                    "Answer '{0}' for question {1} is incorrect because answer is greater than max value '{2}'.",
+                    answer, FormatQuestionForException(questionId, questionnaire), maxValue.Value));
+        }
+
+        private static void ThrowIfRosterSizeAnswerIsNegative(Guid questionId, int answer, IQuestionnaire questionnaire)
+        {
+            bool answerIsNegative = answer < 0;
+
+            if (answerIsNegative)
+                throw new InterviewException(string.Format(
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster group and specified answer is negative.",
+                    answer, FormatQuestionForException(questionId, questionnaire)));
         }
 
         private void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)

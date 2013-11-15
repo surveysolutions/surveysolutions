@@ -17,16 +17,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
             var linkedQuestionId = Guid.Parse("20000000000000000000000000000000");
-            var groupTrigger = Guid.Parse("30000000000000000000000000000000");
+            var rosterSizeQuestion = Guid.Parse("30000000000000000000000000000000");
+            var rosterGroup = Guid.Parse("40000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("Group")
             {
                 Children = new List<IComposite>()
                 {
-                    new AutoPropagateQuestion("AutoQuestion") { Triggers = new List<Guid>() { groupTrigger } },
-                    new Group("AutoGroup")
+                    new NumericQuestion("Roster Size Question")
                     {
-                        PublicKey = groupTrigger,
-                        Propagated = Propagate.AutoPropagated,
+                        PublicKey = rosterSizeQuestion,
+                        IsInteger = true,
+                        MaxValue = 5
+                    },
+                    new Group("Roster Group")
+                    {
+                        PublicKey = rosterGroup,
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterSizeQuestion,
                         Children = new List<IComposite>()
                         {
                             new TextQuestion("TextQuestion")
