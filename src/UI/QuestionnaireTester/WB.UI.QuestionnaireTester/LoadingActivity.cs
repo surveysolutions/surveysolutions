@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -5,6 +7,7 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Main.Core;
+using Main.Core.Documents;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
@@ -12,6 +15,7 @@ using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.UI.QuestionnaireTester.Implementations.Activities;
 
@@ -27,7 +31,7 @@ namespace WB.UI.QuestionnaireTester
         {
             this.restore = this.Restore;
             base.OnCreate(bundle);
-            var pb=new ProgressBar(this);
+            var pb = new ProgressBar(this);
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
             this.ActionBar.SetDisplayShowHomeEnabled(false);
             this.restore.BeginInvoke(Guid.Parse(this.Intent.GetStringExtra("publicKey")), this.Callback, this.restore);
@@ -58,22 +62,19 @@ namespace WB.UI.QuestionnaireTester
 
         private void CheckAndRestoreFromSyncPackage(Guid itemKey)
         {
-          /*  var syncCacher = CapiTesterApplication.Kernel.Get<ISyncCacher>();
+            var token = new CancellationToken();
+            var template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, token);
 
-            if (!syncCacher.DoesCachedItemExist(itemKey))
-                return;
+            string content = PackageHelper.DecompressString(template.Questionnaire);
+            var interview = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
-            var item = syncCacher.LoadItem(itemKey);
-            if (!string.IsNullOrWhiteSpace(item))
-            {
-                string content = PackageHelper.DecompressString(item);
-                var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
+            NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(interview));
 
-                NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
-                //CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
-            }
-            syncCacher.DeleteItem(itemKey);*/
+            Guid interviewId = Guid.NewGuid();
+            Guid interviewUserId = Guid.NewGuid();
 
+            NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
+                    interview.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
         }
     }
 }
