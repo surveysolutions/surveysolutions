@@ -29,8 +29,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             QuestionType.DateTime,
             QuestionType.Numeric,
             QuestionType.SingleOption,
-            QuestionType.Text,
-            QuestionType.AutoPropagate
+            QuestionType.Text
         };
 
         #endregion
@@ -63,13 +62,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(this.CustomValidationExpressionHasIncorrectSyntax, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
                     Verifier<IComposite>(this.CustomEnablementConditionHasIncorrectSyntax, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
                     Verifier<IComposite>(this.CustomEnablementConditionReferencesNotExistingQuestion, "WB0005", VerificationMessages.WB0005_CustomEnablementConditionReferencesNotExistingQuestion),
-                    Verifier<IGroup>(RosterGroupHasNoRosterSizeQuestionPointingToIt, "WB0009", VerificationMessages.WB0009_PropagatedGroupHasNoPropagatingQuestionsPointingToIt),
+                    Verifier<IGroup>(QuestionnaireHaveAutopropagatedGroups, "WB0027", VerificationMessages.WB0027_QuestionnaireHaveAutopropagatedGroups),
+                    Verifier<IQuestion>(QuestionnaireHaveAutopropagatedQuestions, "WB0028", VerificationMessages.WB0028_QuestionnaireHaveAutopropagatedQuestions),
+                    Verifier<IGroup>(RosterGroupHasGroupInsideItself, "WB0029", VerificationMessages.WB0029_RosterGroupHasGroup),
+                    Verifier<IGroup>(RosterGroupHasNoRosterSizeQuestionPointingToIt, "WB0009", VerificationMessages.WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt),
                     Verifier<IGroup>(RosterGroupHasNotNumericRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_RosterGroupHasNotNumericRosterSizeQuestion),
                     Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And16, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16),
 
-                    ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperPropagationLevel,
+                    this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
 
@@ -141,7 +143,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool RosterGroupHasNoRosterSizeQuestionPointingToIt(IGroup group, QuestionnaireDocument questionnaire)
         {
-            return IsGroupRoster(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
+            return IsRosterGroup(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
         }
 
         private static bool RosterGroupHasNotNumericRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
@@ -152,7 +154,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool RosterSizeQuestionCannotBeInsideAnyRosterGroup(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            return IsRosterSizeQuestion(question, questionnaire) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsGroupRoster);
+            return IsRosterSizeQuestion(question, questionnaire) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
         }
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
@@ -168,6 +170,27 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsRosterSizeQuestion(question, questionnaire) && rosterSizeQuestionAsIntegerQuestion != null &&
                 rosterSizeQuestionAsIntegerQuestion.MaxValue.HasValue &&
                 !Enumerable.Range(1, 16).Contains(rosterSizeQuestionAsIntegerQuestion.MaxValue.Value);
+        }
+
+        private static bool RosterGroupHasGroupInsideItself(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return IsRosterGroup(group) && questionnaire.Find<IGroup>(x => IsParentForGroup(x, group)).Any();
+        }
+
+        private static bool IsParentForGroup(IGroup group, IGroup parentGroup)
+        {
+            var parent = group.GetParent();
+            return parent != null && parent.PublicKey == parentGroup.PublicKey;
+        }
+
+        private static bool QuestionnaireHaveAutopropagatedQuestions(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<IAutoPropagateQuestion>(_ => true).Any();
+        }
+
+        private static bool QuestionnaireHaveAutopropagatedGroups(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
         }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestions(QuestionnaireDocument questionnaire)
@@ -192,7 +215,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     continue;
                 }
 
-                var isSourceQuestionInsidePropagatedGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsGroupRoster);
+                var isSourceQuestionInsidePropagatedGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsRosterGroup);
                 if (!isSourceQuestionInsidePropagatedGroup)
                 {
                     yield return LinkedQuestionReferenceQuestionNotUnderPropagatedGroup(linkedQuestion, sourceQuestion);
@@ -217,21 +240,21 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
                 var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
 
-                Guid[] vectorOfAutopropagatedQuestionsForQuestionWithSubstitution =
-                    GetAllRosterQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
+                Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
+                    GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
 
-                if (vectorOfAutopropagatedQuestionsForQuestionWithSubstitution != null)
+                if (vectorOfRosterSizeQuestionsForQuestionWithSubstitution != null)
                 {
                     VerifyEnumerableAndAccumulateErrorsToList(substitutionReferences, errorByAllQuestionsWithSubstitutions,
                         identifier => GetVerificationErrorBySubstitutionReferenceOrNull(
-                            questionWithSubstitution, identifier, vectorOfAutopropagatedQuestionsForQuestionWithSubstitution, questionnaire));
+                            questionWithSubstitution, identifier, vectorOfRosterSizeQuestionsForQuestionWithSubstitution, questionnaire));
                 }
             }
 
             return errorByAllQuestionsWithSubstitutions;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperPropagationLevel(
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel(
             QuestionnaireDocument questionnaire)
         {
             var questionsWithValidationExpression = questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.ValidationExpression));
@@ -243,14 +266,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 IEnumerable<string> identifiersUsedInExpression =
                     this.expressionProcessor.GetIdentifiersUsedInExpression(questionWithValidationExpression.ValidationExpression);
 
-                Guid[] vectorOfRosterQuestionsForQuestionWithCustomValidation =
-                    GetAllRosterQuestionsAsVectorOrNullIfSomeAreMissing(questionWithValidationExpression, questionnaire);
+                Guid[] vectorOfRosterSizeQuestionsForQuestionWithCustomValidation =
+                    GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithValidationExpression, questionnaire);
 
-                if (vectorOfRosterQuestionsForQuestionWithCustomValidation != null)
+                if (vectorOfRosterSizeQuestionsForQuestionWithCustomValidation != null)
                 {
                     VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
                         identifier => GetVerificationErrorByCustomValidationReferenceOrNull(
-                            questionWithValidationExpression, identifier, vectorOfRosterQuestionsForQuestionWithCustomValidation,
+                            questionWithValidationExpression, identifier, vectorOfRosterSizeQuestionsForQuestionWithCustomValidation,
                             questionnaire));
                 }
             }
@@ -327,7 +350,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static QuestionnaireVerificationError GetVerificationErrorByCustomValidationReferenceOrNull(
             IQuestion questionWithValidationExpression, string identifier,
-            Guid[] vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, QuestionnaireDocument questionnaire)
+            Guid[] vectorOfRosterQuestionsForQuestionWithCustomValidation, QuestionnaireDocument questionnaire)
         {
             if (IsSpecialThisIdentifier(identifier))
             {
@@ -350,8 +373,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return CustomValidationExpressionUsesNotRecognizedParameter(questionWithValidationExpression);
             }
 
-            if (QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(questionsReferencedInValidation,
-                vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, questionnaire))
+            if (QuestionHasDeeperRosterLevelThenVectorOfAutopropagatedQuestions(questionsReferencedInValidation,
+                vectorOfRosterQuestionsForQuestionWithCustomValidation, questionnaire))
             {
                 return CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel(
                     questionWithValidationExpression, questionsReferencedInValidation);
@@ -383,7 +406,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(questionWithSubstitution, questionSourceOfSubstitution);
             }
 
-            if (QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(questionSourceOfSubstitution,
+            if (QuestionHasDeeperRosterLevelThenVectorOfAutopropagatedQuestions(questionSourceOfSubstitution,
                 vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions, questionnaire))
             {
                 return
@@ -405,7 +428,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             IQuestion questionWithValidationExpression, IQuestion questionsReferencedInValidation)
         {
             return new QuestionnaireVerificationError("WB0014",
-                VerificationMessages.WB0014_CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel,
+                VerificationMessages.WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel,
                 CreateReference(questionWithValidationExpression),
                 CreateReference(questionsReferencedInValidation));
 
@@ -416,15 +439,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return new QuestionnaireVerificationError("WB0015",
                 VerificationMessages.WB0015_QuestionWithTitleSubstitutionCantBePrefilled,
                 CreateReference(questionsWithSubstitution));
-        }
-
-        private static QuestionnaireVerificationError PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt(IGroup propagatedGroup, IEnumerable<IQuestion> propagatingQuestionsPointingToPropagatedGroup)
-        {
-            return new QuestionnaireVerificationError("WB0010",
-                VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt,
-                Enumerable.Concat(
-                    new[] { CreateReference(propagatedGroup) },
-                    propagatingQuestionsPointingToPropagatedGroup.Select(CreateReference)));
         }
 
         private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
@@ -499,7 +513,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return group.Propagated == Propagate.AutoPropagated;
         }
 
-        private static bool IsGroupRoster(IGroup group)
+        private static bool IsRosterGroup(IGroup group)
         {
             return group.IsRoster;
         }
@@ -523,26 +537,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 : null;
         }
 
-        private static IEnumerable<IQuestion> GetRosterSizeQuestionsPointingToRosterGroup(Guid groupId, QuestionnaireDocument document)
-        {
-            var rosterGroups = document.Find<IGroup>(group => group.IsRoster && group.RosterSizeQuestionId.HasValue);
-            var rosterSizeQuestions =
-                document.Find<IQuestion>(
-                    question => rosterGroups.Any(group => group.RosterSizeQuestionId == question.PublicKey));
-
-            return rosterSizeQuestions;
-        }
-
         private static IEnumerable<IGroup> GetAllParentGroupsForQuestion(IQuestion question, QuestionnaireDocument document)
         {
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
         }
 
-        private static Guid[] GetAllRosterQuestionsAsVectorOrNullIfSomeAreMissing(IQuestion question, QuestionnaireDocument questionnaire)
+        private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IQuestion question, QuestionnaireDocument questionnaire)
         {
             Guid?[] rosterSizeQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), questionnaire)
-                    .Where(IsGroupRoster)
+                    .Where(IsRosterGroup)
                     .Select(g => g.RosterSizeQuestionId)
                     .ToArray();
 
@@ -564,17 +568,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return parentGroups;
         }
 
-        private static bool QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(IQuestion question,
-            Guid[] vectorOfAutopropagatedQuestions, QuestionnaireDocument questionnaire)
+        private static bool QuestionHasDeeperRosterLevelThenVectorOfAutopropagatedQuestions(IQuestion question,
+            Guid[] vectorOfRosterSizeQuestions, QuestionnaireDocument questionnaire)
         {
-            Guid[] autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution =
-                GetAllRosterQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
+            Guid[] rosterQuestionsAsVectorForQuestionSourceOfSubstitution =
+                GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
          
             return
-                autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution != null &&
-                autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Length > 0 &&
-                autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Except(
-                    vectorOfAutopropagatedQuestions).Any();
+                rosterQuestionsAsVectorForQuestionSourceOfSubstitution != null &&
+                rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length > 0 &&
+                rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Except(
+                    vectorOfRosterSizeQuestions).Any();
         }
 
         private static bool IsSpecialThisIdentifier(string identifier)
