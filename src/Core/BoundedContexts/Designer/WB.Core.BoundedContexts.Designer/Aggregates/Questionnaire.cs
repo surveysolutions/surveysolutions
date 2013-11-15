@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.UpdateGroup(e.GroupId, group => group.IsRoster = true);
         }
 
-        private void Apply(RosterChanged e)
+        internal void Apply(RosterChanged e)
         {
             this.innerDocument.UpdateGroup(e.GroupId, group => group.RosterSizeQuestionId = e.RosterSizeQuestionId);
         }
@@ -925,6 +925,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(questionId);
+            this.ThrowIfQuestionIsUsedAsRosterSize(questionId);
 
             this.ApplyEvent(new QuestionDeleted() {QuestionId = questionId, ResponsibleId = responsibleId});
         }
@@ -1922,6 +1923,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Roster size question {0} cannot be placed under another roster group", rosterSizeQuestionId));
         }
 
+        private void ThrowIfQuestionIsUsedAsRosterSize(Guid questionId)
+        {
+            var referencingRoster = this.innerDocument.Find<IGroup>(group => @group.RosterSizeQuestionId == questionId).FirstOrDefault();
+
+            if (referencingRoster != null)
+                throw new QuestionnaireException(
+                    string.Format("Question {0} is referenced as roster size question by group {1}.",
+                    questionId,
+                    FormatGroupForException(referencingRoster.PublicKey, this.innerDocument)));
+        }
+
 
         private IEnumerable<IGroup> GetAllParentGroups(IComposite entity)
         {
@@ -2006,6 +2018,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return conditionIds.Contains(questionId) || conditionIds.Contains(alias);
             }
             return false;
+        }
+
+
+        private static string FormatGroupForException(Guid groupId, QuestionnaireDocument questionnaireDocument)
+        {
+            return string.Format("'{0} ({1:N})'",
+                GetGroupTitleForException(groupId, questionnaireDocument),
+                groupId);
+        }
+
+        private static string GetGroupTitleForException(Guid groupId, QuestionnaireDocument questionnaireDocument)
+        {
+            var @group = questionnaireDocument.Find<IGroup>(groupId);
+
+            return @group != null
+                ? @group.Title ?? "<<NO GROUP TITLE>>"
+                : "<<MISSING GROUP>>";
         }
     }
 }
