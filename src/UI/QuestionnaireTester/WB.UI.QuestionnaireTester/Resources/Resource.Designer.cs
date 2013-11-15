@@ -186,8 +186,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040006
 			public const int ElementId = 2130968582;
 			
-			// aapt resource value: 0x7f040029
-			public const int ImageSwitcher01 = 2130968617;
+			// aapt resource value: 0x7f04002b
+			public const int ImageSwitcher01 = 2130968619;
 			
 			// aapt resource value: 0x7f040005
 			public const int Index = 2130968581;
@@ -207,17 +207,17 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f04002a
-			public const int btnAnswered = 2130968618;
+			// aapt resource value: 0x7f04002c
+			public const int btnAnswered = 2130968620;
 			
-			// aapt resource value: 0x7f04002e
-			public const int btnComplete = 2130968622;
+			// aapt resource value: 0x7f040030
+			public const int btnComplete = 2130968624;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f04002d
-			public const int btnInvalid = 2130968621;
+			// aapt resource value: 0x7f04002f
+			public const int btnInvalid = 2130968623;
 			
 			// aapt resource value: 0x7f040022
 			public const int btnLogin = 2130968610;
@@ -234,8 +234,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040018
 			public const int btnStart = 2130968600;
 			
-			// aapt resource value: 0x7f04002b
-			public const int btnUnanswered = 2130968619;
+			// aapt resource value: 0x7f04002d
+			public const int btnUnanswered = 2130968621;
 			
 			// aapt resource value: 0x7f04000e
 			public const int etComments = 2130968590;
@@ -252,14 +252,14 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040013
 			public const int lNavigationContainer = 2130968595;
 			
-			// aapt resource value: 0x7f040028
-			public const int llButtom = 2130968616;
+			// aapt resource value: 0x7f04002a
+			public const int llButtom = 2130968618;
 			
 			// aapt resource value: 0x7f040011
 			public const int llContainer = 2130968593;
 			
-			// aapt resource value: 0x7f040027
-			public const int llContent = 2130968615;
+			// aapt resource value: 0x7f040029
+			public const int llContent = 2130968617;
 			
 			// aapt resource value: 0x7f040023
 			public const int llDesignerPath = 2130968611;
@@ -270,8 +270,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040017
 			public const int llNavigationHolder = 2130968599;
 			
-			// aapt resource value: 0x7f04002f
-			public const int llQuestionnairie = 2130968623;
+			// aapt resource value: 0x7f040031
+			public const int llQuestionnairie = 2130968625;
 			
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
@@ -279,8 +279,11 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040015
 			public const int llSpaceFiller = 2130968597;
 			
+			// aapt resource value: 0x7f040028
+			public const int llTop = 2130968616;
+			
 			// aapt resource value: 0x7f040026
-			public const int llTop = 2130968614;
+			public const int llVersion = 2130968614;
 			
 			// aapt resource value: 0x7f040009
 			public const int llWrapper = 2130968585;
@@ -297,11 +300,14 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040024
 			public const int tePathToDesigner = 2130968612;
 			
+			// aapt resource value: 0x7f040027
+			public const int teVersion = 2130968615;
+			
 			// aapt resource value: 0x7f04001c
 			public const int topView = 2130968604;
 			
-			// aapt resource value: 0x7f040030
-			public const int tvArrow = 2130968624;
+			// aapt resource value: 0x7f040032
+			public const int tvArrow = 2130968626;
 			
 			// aapt resource value: 0x7f04000c
 			public const int tvComments = 2130968588;
@@ -315,8 +321,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04000a
 			public const int tvError = 2130968586;
 			
-			// aapt resource value: 0x7f04002c
-			public const int tvErrorWarning = 2130968620;
+			// aapt resource value: 0x7f04002e
+			public const int tvErrorWarning = 2130968622;
 			
 			// aapt resource value: 0x7f04001a
 			public const int tvITem = 2130968602;
