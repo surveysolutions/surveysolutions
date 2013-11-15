@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true"
-            android:id="@+id/topView">
+    android:id="@+id/topView">
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
@@ -13,8 +13,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingTop="5dip"
-            android:paddingBottom="5dip">
-        </LinearLayout>
+            android:paddingBottom="5dip" />
         <LinearLayout
             android:id="@+id/footer"
             android:layout_width="fill_parent"
@@ -58,9 +57,7 @@
                 android:layout_marginTop="10dip"
                 android:text="Login" />
         </LinearLayout>
-
-
-      <LinearLayout
+        <LinearLayout
             android:orientation="vertical"
             android:id="@+id/llDesignerPath"
             android:layout_width="match_parent"
@@ -68,23 +65,38 @@
             android:padding="10dip"
             android:visibility="gone"
             android:layout_below="@id/loginForm">
-        <TextView
-            android:layout_width="fill_parent"
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Path to designer" />
+            <EditText
+                android:layout_width="fill_parent"
+                android:id="@+id/tePathToDesigner"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="20dip"
+                android:singleLine="true" />
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="Save" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/llVersion"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Path to designer" />
-        <EditText
-            android:layout_width="fill_parent"
-            android:id="@+id/tePathToDesigner"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"
-            android:singleLine="true" />
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:text="Save" />
-      </LinearLayout>
+            android:padding="10dip"
+            android:layout_alignParentBottom="true">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:text="."
+                android:id="@+id/teVersion" />
+        </LinearLayout>
     </RelativeLayout>
 </ScrollView>

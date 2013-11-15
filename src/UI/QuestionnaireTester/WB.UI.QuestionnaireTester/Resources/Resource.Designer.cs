@@ -285,6 +285,7 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040028
 			public const int llTop = 2130968616;
 			
+			
 			// aapt resource value: 0x7f040009
 			public const int llWrapper = 2130968585;
 			
@@ -302,6 +303,7 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f04001e
 			public const int topView = 2130968606;
+			
 			
 			// aapt resource value: 0x7f040032
 			public const int tvArrow = 2130968626;
