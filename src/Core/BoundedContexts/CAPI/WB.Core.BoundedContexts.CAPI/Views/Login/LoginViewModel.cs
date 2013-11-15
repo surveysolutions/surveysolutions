@@ -1,9 +1,7 @@
 using System;
-using CAPI.Android.Core.Model.Authorization;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Capi;
 
-namespace CAPI.Android.Core.Model.ViewModel.Login
+namespace WB.Core.BoundedContexts.Capi.Views.Login
 {
     public class LoginViewModel : MvxViewModel
     {
@@ -14,12 +12,12 @@ namespace CAPI.Android.Core.Model.ViewModel.Login
         {
         }
 
-        public LoginViewModel(Guid publicKey, string login, string password, IAuthentication membership)
+        public LoginViewModel(Guid publicKey, string login, string password)
             : this()
         {
-            PublicKey = publicKey;
-            Login = login;
-            Password = password;
+            this.PublicKey = publicKey;
+            this.Login = login;
+            this.Password = password;
         }
        
     }

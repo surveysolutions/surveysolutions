@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.UI.Capi.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization.Pull
 {
@@ -25,7 +25,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             try
             {
                 var package = this.webExecutor.ExcecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
-                    new HttpBasicAuthenticator(login, password),
+                    new HttpBasicAuthenticator(login, password), null,
                      new KeyValuePair<string, string>("aRKey", id.ToString()),
                      new KeyValuePair<string, string>("aRSequence", sequence.ToString()),
                      new KeyValuePair<string, string>("clientRegistrationId", deviceId));
@@ -46,7 +46,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             {
                 var syncItemsMetaContainer = this.webExecutor.ExcecuteRestRequestAsync<SyncItemsMetaContainer>(
                                                                        getARKeysPath, ct, null,
-                                                                       new HttpBasicAuthenticator(login, password),
+                                                                       new HttpBasicAuthenticator(login, password), null,
                                                                        new KeyValuePair<string, string>("clientRegistrationId", deviceId),
                                                                        new KeyValuePair<string, string>("sequence", sequence)
                                                                        );

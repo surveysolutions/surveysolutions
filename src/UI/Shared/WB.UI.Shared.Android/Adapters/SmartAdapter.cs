@@ -8,11 +8,14 @@ namespace WB.UI.Shared.Android.Adapters
 {
     public abstract class SmartAdapter<T> : BaseAdapter<T>
     {
-        private readonly IList<T> items;
+        protected IList<T> items;
 
         protected SmartAdapter(IList<T> items)
         {
             this.items = items;
+        }
+        protected SmartAdapter()
+        {
         }
 
         public override View GetView(int position, View convertView, ViewGroup parent)

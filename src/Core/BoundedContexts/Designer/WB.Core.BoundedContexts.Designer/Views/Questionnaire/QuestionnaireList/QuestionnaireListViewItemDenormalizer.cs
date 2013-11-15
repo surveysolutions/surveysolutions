@@ -4,6 +4,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 
@@ -29,11 +30,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         /// </summary>
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
 
+        private readonly IQuestionnaireDocumentUpgrader upgrader;
+
         public QuestionnaireListViewItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage,
-            IReadSideRepositoryWriter<AccountDocument> accountStorage)
+            IReadSideRepositoryWriter<AccountDocument> accountStorage, IQuestionnaireDocumentUpgrader upgrader)
         {
             this.documentStorage = documentStorage;
             this.accountStorage = accountStorage;
+            this.upgrader = upgrader;
         }
 
         #endregion
@@ -89,7 +93,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source);
+            QuestionnaireDocument upgradedQuestionnaireDocument = upgrader.TranslatePropagatePropertiesToRosterProperties(evnt.Payload.Source);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(upgradedQuestionnaireDocument);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
