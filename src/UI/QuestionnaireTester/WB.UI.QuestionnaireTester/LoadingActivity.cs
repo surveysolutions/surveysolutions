@@ -44,23 +44,23 @@ namespace WB.UI.QuestionnaireTester
 
         protected void Restore(Guid publicKey)
         {
-            this.CheckAndRestoreFromSyncPackage(publicKey);
+            Guid interviewId = Guid.NewGuid();
+            this.LoadTemplateAndCreateInterview(publicKey, interviewId);
             
-            var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                new QuestionnaireScreenInput(publicKey));
+            /*var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+                    new QuestionnaireScreenInput(interviewId));
+
             if (questionnaire == null)
             {
-              //  this.RunOnUiThread(this.Finish);
+                this.RunOnUiThread(this.Finish);
                 return;
-            }
-
-
+            }*/
             var intent = new Intent(this, typeof(TesterDetailsActivity));
-            intent.PutExtra("publicKey", publicKey.ToString());
+            intent.PutExtra("publicKey", interviewId.ToString());
             this.StartActivity(intent);
         }
 
-        private void CheckAndRestoreFromSyncPackage(Guid itemKey)
+        private void LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId)
         {
             var token = new CancellationToken();
             var template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, token);
@@ -69,8 +69,7 @@ namespace WB.UI.QuestionnaireTester
             var interview = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
             NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(interview));
-
-            Guid interviewId = Guid.NewGuid();
+            
             Guid interviewUserId = Guid.NewGuid();
 
             NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
