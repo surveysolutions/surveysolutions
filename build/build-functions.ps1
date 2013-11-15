@@ -157,12 +157,16 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$FinalPackageName = "WBCapi.apk"
-	$TempPackageNamePrefix = "CAPI.Android"
 	
-	SignAndPackCapi $KeystorePassword $CapiProject $TempPackageNamePrefix $FinalPackageName | %{ if (-not $_) { Exit } }
+	SignAndPackCapi -KeystorePassword $KeystorePassword `
+					-CapiProject $CapiProject `
+					-TempPackageNamePrefix "CAPI.Android" `
+					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 	
-	CopyCapi $Project $CapiProject $FinalPackageName
-	
+	CopyCapi -Project $Project `
+			 -CapiProject $CapiProject `
+			 -FinalPackageName $FinalPackageName
+			
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
@@ -179,10 +183,15 @@ function BuildDesigner($Solution, $Project,  $CapiTesterProject, $BuildConfigura
 	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$FinalPackageName = "WBCapiTester.apk"
-	$TempPackageNamePrefix = "CAPI.Android.Tester"
 	
-	SignAndPackCapi $KeystorePassword $CapiTesterProject $FinalPackageName | %{ if (-not $_) { Exit } }
-	CopyCapi $Project $CapiTesterProject $FinalPackageName
+	SignAndPackCapi -KeystorePassword $KeystorePassword `
+					-CapiProject $CapiTesterProject `
+					-TempPackageNamePrefix "CAPI.Android.Tester" `
+					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
+	
+	CopyCapi -Project $Project 
+			 -CapiProject $CapiTesterProject `
+			 -FinalPackageName $FinalPackageName
 	
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }	
 	AddArtifacts $Project $BuildConfiguration
