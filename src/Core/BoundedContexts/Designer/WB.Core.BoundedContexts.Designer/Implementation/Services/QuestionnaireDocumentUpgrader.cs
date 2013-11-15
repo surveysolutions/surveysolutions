@@ -52,9 +52,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     @group.Title,
                     @group.Description,
                     Propagate.None,
-                    isRoster: true,
-                    rosterSizeQuestionId: rosterSizeQuestionId,
                     conditionExpression: @group.ConditionExpression);
+
+                document.UpdateGroup(@group.PublicKey, g =>
+                {
+                    g.IsRoster = true;
+                    g.RosterSizeQuestionId = rosterSizeQuestionId;
+                });
             }
         }
 

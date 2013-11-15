@@ -5,6 +5,11 @@
     /// </summary>
     public enum DomainExceptionType
     {
+        /// <summary>
+        /// This should be used when there are no business logic depending on exception type.
+        /// </summary>
+        Undefined,
+
         AutoPropagateGroupCantHaveChildGroups,
 
         /// <summary>

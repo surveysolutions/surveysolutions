@@ -19,8 +19,8 @@ using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Handshake;
 using WB.UI.Capi.Syncronization.Pull;
 using WB.UI.Capi.Syncronization.Push;
-using WB.UI.Capi.Syncronization.RestUtils;
 using WB.UI.Capi.Utils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization
 {

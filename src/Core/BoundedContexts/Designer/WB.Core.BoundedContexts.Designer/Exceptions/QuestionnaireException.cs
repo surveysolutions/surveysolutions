@@ -6,6 +6,9 @@ namespace WB.Core.BoundedContexts.Designer.Exceptions
     {
         public readonly DomainExceptionType ErrorType;
 
+        public QuestionnaireException(string message)
+            : this(DomainExceptionType.Undefined, message) {}
+
         public QuestionnaireException(DomainExceptionType errorType, string message)
             : base(message)
         {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.UI.Capi.Syncronization.RestUtils;
+using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization.Handshake
 {
@@ -18,15 +18,15 @@ namespace WB.UI.Capi.Syncronization.Handshake
 
         public string Execute(string login, string password, string androidId, string appID, string registrationKey)
         {
-            var package = this.webExecutor.ExcecuteRestRequest<HandshakePackage>(handshakePath, 
-                new HttpBasicAuthenticator(login, password),
+            var package = this.webExecutor.ExcecuteRestRequest<HandshakePackage>(handshakePath,
+                new HttpBasicAuthenticator(login, password), null,
                 new KeyValuePair<string, string>("clientId", appID),
                 new KeyValuePair<string, string>("clientRegistrationId", registrationKey),
                 new KeyValuePair<string, string>("androidId", androidId));
 
             if (package.IsErrorOccured)
             {
-                throw new SynchronizationException("Error occured during handshake. Message:" + package.ErrorMessage);
+                throw new SynchronizationException("Error occurred during handshake. Message:" + package.ErrorMessage);
             }
 
             return package.ClientRegistrationKey.ToString();
