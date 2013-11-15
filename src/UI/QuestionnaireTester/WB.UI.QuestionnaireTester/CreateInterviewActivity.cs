@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -69,5 +70,22 @@ namespace WB.UI.QuestionnaireTester
             intent.PutExtra("publicKey", QuestionnaireId.ToString());
             this.StartActivity(intent);
         }
+
+        public override void OnBackPressed()
+        {
+            if (isBackWasClickedRecently)
+                base.OnBackPressed();
+
+            Toast.MakeText(this, "Press again to exit", ToastLength.Short).Show();
+            
+            isBackWasClickedRecently = true;
+            Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(3000);
+                isBackWasClickedRecently = false;
+            });
+        }
+
+        private bool isBackWasClickedRecently = false;
     }
 }

@@ -20,6 +20,10 @@ namespace WB.UI.QuestionnaireTester
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            if (this.FinishIfNotLoggedIn())
+                return;
+
             this.listView = new ListView(this);
             this.listView.Adapter = new QuestionnaireListAdapter(this);
             this.listView.ChoiceMode = ChoiceMode.Single;

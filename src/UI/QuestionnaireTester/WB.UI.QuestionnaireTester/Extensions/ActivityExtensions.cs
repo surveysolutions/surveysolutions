@@ -26,5 +26,18 @@ namespace WB.UI.QuestionnaireTester.Extensions
             actionBar.SetCustomView(logoutButton,
                 new ActionBar.LayoutParams(ActionBar.LayoutParams.WrapContent, ActionBar.LayoutParams.FillParent, GravityFlags.Right));         
         }
+
+
+
+        public static bool FinishIfNotLoggedIn(this Activity activity)
+        {
+            if (!CapiTesterApplication.Membership.IsLoggedIn)
+            {
+                //  throw new AuthenticationException("invalid credentials");
+                activity.Finish();
+                return true;
+            }
+            return false;
+        }
     }
 }
