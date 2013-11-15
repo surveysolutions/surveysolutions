@@ -225,8 +225,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040016
 			public const int btnNavigation = 2130968598;
 			
-			// aapt resource value: 0x7f04000f
-			public const int btnNext = 2130968591;
+			// aapt resource value: 0x7f040010
+			public const int btnNext = 2130968592;
 			
 			// aapt resource value: 0x7f040025
 			public const int btnSave = 2130968613;
@@ -240,8 +240,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04000e
 			public const int etComments = 2130968590;
 			
-			// aapt resource value: 0x7f040010
-			public const int flFragmentHolder = 2130968592;
+			// aapt resource value: 0x7f04000f
+			public const int flFragmentHolder = 2130968591;
 			
 			// aapt resource value: 0x7f04001e
 			public const int footer = 2130968606;

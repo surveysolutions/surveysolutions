@@ -6,9 +6,11 @@ using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.QuestionnaireTester.Extensions;
 using WB.UI.QuestionnaireTester.Implementations.Adapters;
 using WB.UI.Shared.Android.Activities;
 using WB.UI.Shared.Android.Adapters;
+using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester.Implementations.Activities
 {
@@ -25,10 +27,15 @@ namespace WB.UI.QuestionnaireTester.Implementations.Activities
             return CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(new QuestionnaireScreenInput(interviewId));
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+            this.CreateActionBar();
+        }
+
         public override void Finish()
         {
             base.Finish();
-
             /*var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
             if (snapshotStore != null)
                 snapshotStore.PersistShapshot(this.QuestionnaireId);*/

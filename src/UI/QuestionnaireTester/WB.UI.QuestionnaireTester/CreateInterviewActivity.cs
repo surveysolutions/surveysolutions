@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Droid.Fragging;
+using WB.UI.QuestionnaireTester.Extensions;
 using WB.UI.QuestionnaireTester.Implementations.Activities;
 using WB.UI.QuestionnaireTester.Implementations.Fragments;
 using WB.UI.Shared.Android.Frames;
@@ -33,6 +34,12 @@ namespace WB.UI.QuestionnaireTester
         protected Button btnNext
         {
             get { return this.FindViewById<Button>(Resource.Id.btnNext); }
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            this.CreateActionBar();
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -58,6 +65,7 @@ namespace WB.UI.QuestionnaireTester
         void btnNext_Click(object sender, EventArgs e)
         {
             var intent = new Intent(this, typeof(TesterDetailsActivity));
+            intent.SetFlags(ActivityFlags.ReorderToFront);
             intent.PutExtra("publicKey", QuestionnaireId.ToString());
             this.StartActivity(intent);
         }
