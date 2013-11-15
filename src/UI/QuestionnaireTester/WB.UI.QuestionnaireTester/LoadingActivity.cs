@@ -55,7 +55,7 @@ namespace WB.UI.QuestionnaireTester
                 this.RunOnUiThread(this.Finish);
                 return;
             }*/
-            var intent = new Intent(this, typeof(TesterDetailsActivity));
+            var intent = new Intent(this, typeof(CreateInterviewActivity));
             intent.PutExtra("publicKey", interviewId.ToString());
             this.StartActivity(intent);
         }

@@ -349,7 +349,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> propagatedScreenPrototypes =
             new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
 
-        protected IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; set; }
+        public IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get;private set; }
 
         #endregion
 
@@ -443,7 +443,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void SetAnswer(InterviewItemId key, object answer)
         {
-            QuestionViewModel question = this.Questions[key];
+            QuestionViewModel question = null;
+            if (this.Questions.ContainsKey(key))
+                question = this.Questions[key];
+            else if (this.FeaturedQuestions.ContainsKey(key))
+                question = this.FeaturedQuestions[key];
+            else
+                return;
+
             question.SetAnswer(answer);
         }
 

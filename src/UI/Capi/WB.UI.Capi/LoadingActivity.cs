@@ -69,11 +69,8 @@ namespace WB.UI.Capi
                 var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
 
                 NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
-                
             }
             syncCacher.DeleteItem(itemKey);
-
-
         }
     }
 }
