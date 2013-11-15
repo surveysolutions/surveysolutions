@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
     {
         public List<Guid> Triggers { get; set; }
         public bool IsAutopropagating { get; set; }
-        public int MaxValue { get; set; }
+        public int? MaxValue { get; set; }
         public bool? IsInteger { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
     }
