@@ -9,7 +9,9 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -28,12 +30,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
-            IQuestionFactory questionFactory = null, ILogger logger = null)
+            IQuestionFactory questionFactory = null, ILogger logger = null, IQuestionnaireDocumentUpgrader updrader = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
                 questionFactory ?? Mock.Of<IQuestionFactory>(),
-                logger ?? Mock.Of<ILogger>());
+                logger ?? Mock.Of<ILogger>(),
+                updrader ?? Mock.Of<IQuestionnaireDocumentUpgrader>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] children)
@@ -54,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         }
 
         protected static Group CreateGroup(Guid? groupId = null, string title = "Group X",
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null, Action<Group> setup = null)
         {
             var group = new Group
             {
@@ -65,6 +68,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             if (children != null)
             {
                 group.Children.AddRange(children);
+            }
+
+            if (setup != null)
+            {
+                setup(group);
             }
 
             return group;
@@ -97,38 +105,32 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         }
 
         protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId,
-            string title = "New Group X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+            string title = "New Group X")
         {
             return ToPublishedEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
                 GroupText = title,
-                IsRoster = isRoster,
-                RosterSizeQuestionId = rosterSizeQuestionId,
             });
         }
 
         protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId,
-            string title = "New Cloned Group X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+            string title = "New Cloned Group X")
         {
             return ToPublishedEvent(new GroupCloned
             {
                 PublicKey = groupId,
                 GroupText = title,
-                IsRoster = isRoster,
-                RosterSizeQuestionId = rosterSizeQuestionId,
             });
         }
 
         protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId,
-            string title = "Updated Group Title X", bool isRoster = false, Guid? rosterSizeQuestionId = null)
+            string title = "Updated Group Title X")
         {
             return ToPublishedEvent(new GroupUpdated
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
-                IsRoster = isRoster,
-                RosterSizeQuestionId = rosterSizeQuestionId,
             });
         }
 
@@ -159,6 +161,21 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 PublicKey = itemId,
                 GroupKey = targetGroupId,
             });
+        }
+
+        protected static IPublishedEvent<GroupBecameARoster> CreateGroupBecameARosterEvent(Guid groupId)
+        {
+            return ToPublishedEvent(new GroupBecameARoster(Guid.NewGuid(), groupId));
+        }
+
+        protected static IPublishedEvent<GroupStoppedBeingARoster> CreateGroupStoppedBeingARosterEvent(Guid groupId)
+        {
+            return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
+        }
+
+        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId)
+        {
+            return ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId, rosterSizeQuestionId));
         }
     }
 }

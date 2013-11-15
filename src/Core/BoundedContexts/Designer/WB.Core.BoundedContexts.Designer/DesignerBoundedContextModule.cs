@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer
         public override void Load()
         {
             this.Bind<IJsonExportService>().To<JsonExportService>().InSingletonScope();
+            this.Bind<IQuestionnaireDocumentUpgrader>().To<QuestionnaireDocumentUpgrader>().InSingletonScope();
             this.Bind<IQuestionFactory>().To<QuestionFactory>().InSingletonScope();
 
             RegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
