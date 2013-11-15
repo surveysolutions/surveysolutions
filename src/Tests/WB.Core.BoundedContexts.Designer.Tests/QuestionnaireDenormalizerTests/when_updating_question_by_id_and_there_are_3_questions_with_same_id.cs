@@ -31,9 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 mainGroup = CreateGroup(children: new[]
                 {
-                    CreateQuestion(questionId: questionId, title: initialQuestionTitle),
-                    CreateQuestion(questionId: questionId, title: initialQuestionTitle),
-                    CreateQuestion(questionId: questionId, title: initialQuestionTitle),
+                    CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
+                    CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
+                    CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
                 }),
             });
 
