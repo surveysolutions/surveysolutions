@@ -96,11 +96,15 @@
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
+    <Compile Include="Events\Questionnaire\GroupEvent.cs" />
+    <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireCloned.cs" />
+    <Compile Include="Events\Questionnaire\RosterChanged.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonFromQuestionnaireRemoved.cs" />
     <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs" />
@@ -121,7 +125,7 @@
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
-    <Compile Include="Exceptions\DomainException.cs" />
+    <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
     <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionFactory.cs" />
