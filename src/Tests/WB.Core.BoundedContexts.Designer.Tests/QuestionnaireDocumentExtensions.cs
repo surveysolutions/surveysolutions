@@ -20,6 +20,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             return questionnaireDocument.Find<IGroup>(_ => true);
         }
 
+        public static TQuestion GetQuestion<TQuestion>(this QuestionnaireDocument questionnaireDocument, Guid questionId)
+            where TQuestion : class, IQuestion
+        {
+            return questionnaireDocument.GetAllQuestions<TQuestion>().Single(question => question.PublicKey == questionId);
+        }
+
         public static Group AddChapter(this QuestionnaireDocument document, Guid groupId)
         {
             var group = new Group(string.Format("Chapter {0}", groupId))
