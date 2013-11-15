@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 singleGroup = CreateGroup(groupId: singleGroupId, children: new[]
                 {
-                    existingQuestion = CreateQuestion(questionId: questionId, title: "Existing Question"),
+                    existingQuestion = CreateTextQuestion(questionId: questionId, title: "Existing Question"),
                 }),
             });
 
