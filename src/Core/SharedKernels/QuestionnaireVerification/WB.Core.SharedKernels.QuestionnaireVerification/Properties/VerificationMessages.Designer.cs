@@ -106,47 +106,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Propagating question references group which does not exists..
+        ///   Looks up a localized string similar to Roster group has no roster size question pointing to it..
         /// </summary>
-        internal static string WB0006_PropagatingQuestionReferencesNotExistingGroup {
+        internal static string WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt {
             get {
-                return ResourceManager.GetString("WB0006_PropagatingQuestionReferencesNotExistingGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Propagating question references group which is not propagated..
-        /// </summary>
-        internal static string WB0007_PropagatingQuestionReferencesNotPropagatableGroup {
-            get {
-                return ResourceManager.GetString("WB0007_PropagatingQuestionReferencesNotPropagatableGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Propagating question has no associated groups..
-        /// </summary>
-        internal static string WB0008_PropagatingQuestionHasNoAssociatedGroups {
-            get {
-                return ResourceManager.GetString("WB0008_PropagatingQuestionHasNoAssociatedGroups", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Propagated group has no propagating questions pointing to it..
-        /// </summary>
-        internal static string WB0009_PropagatedGroupHasNoPropagatingQuestionsPointingToIt {
-            get {
-                return ResourceManager.GetString("WB0009_PropagatedGroupHasNoPropagatingQuestionsPointingToIt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Propagated group has more than one propagating question pointing to it..
-        /// </summary>
-        internal static string WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt {
-            get {
-                return ResourceManager.GetString("WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt", resourceCulture);
+                return ResourceManager.GetString("WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt", resourceCulture);
             }
         }
         
@@ -178,11 +142,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has custom validation referencing question with deeper propagation level..
+        ///   Looks up a localized string similar to Question has custom validation referencing question with deeper roster level..
         /// </summary>
-        internal static string WB0014_CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel {
+        internal static string WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
-                return ResourceManager.GetString("WB0014_CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel", resourceCulture);
+                return ResourceManager.GetString("WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
             }
         }
         
@@ -283,6 +247,33 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         internal static string WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16 {
             get {
                 return ResourceManager.GetString("WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire have autopropagated groups.
+        /// </summary>
+        internal static string WB0027_QuestionnaireHaveAutopropagatedGroups {
+            get {
+                return ResourceManager.GetString("WB0027_QuestionnaireHaveAutopropagatedGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire have autopropagated questions.
+        /// </summary>
+        internal static string WB0028_QuestionnaireHaveAutopropagatedQuestions {
+            get {
+                return ResourceManager.GetString("WB0028_QuestionnaireHaveAutopropagatedQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster group could not have groups inside itself.
+        /// </summary>
+        internal static string WB0029_RosterGroupHasGroup {
+            get {
+                return ResourceManager.GetString("WB0029_RosterGroupHasGroup", resourceCulture);
             }
         }
     }

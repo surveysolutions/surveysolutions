@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -21,21 +19,21 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Establish context = () =>
         {
 
-            autoPropagatedGroupId = Guid.Parse("13333333333333333333333333333333");
+            rosterGroupId = Guid.Parse("13333333333333333333333333333333");
             questionWithSelfValidation = Guid.Parse("13333333333333333333333333333333");
             questionWithSelfValidationVariableName = "var";
             questionnaire = CreateQuestionnaireDocument();
             var chapter = new Group("chapter");
-            var autopropagatedGroup = new Group() { PublicKey = autoPropagatedGroupId, Propagated = Propagate.AutoPropagated };
+            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true};
 
-            autopropagatedGroup.Children.Add(new NumericQuestion()
+            rosterGroup.Children.Add(new NumericQuestion()
             {
                 PublicKey = questionWithSelfValidation,
                 StataExportCaption = questionWithSelfValidationVariableName,
                 ValidationExpression = "i'am validation expr"
             });
 
-            chapter.Children.Add(autopropagatedGroup);
+            chapter.Children.Add(rosterGroup);
             questionnaire.Children.Add(chapter);
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
@@ -63,6 +61,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
         private static Guid questionWithSelfValidation;
         private static string questionWithSelfValidationVariableName;
-        private static Guid autoPropagatedGroupId;
+        private static Guid rosterGroupId;
     }
 }
