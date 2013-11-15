@@ -33,7 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
-    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,7 +45,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cirrious.CrossCore">
@@ -155,9 +158,6 @@
     <Compile Include="Syncronization\Push\PushDataProcessor.cs" />
     <Compile Include="Syncronization\Push\RestPush.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
-    <Compile Include="Syncronization\RestUtils\AndroidRestUrils.cs" />
-    <Compile Include="Syncronization\RestUtils\IRestUrils.cs" />
-    <Compile Include="Syncronization\RestUtils\RestException.cs" />
     <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />

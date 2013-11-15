@@ -7,6 +7,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
@@ -31,14 +32,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>, IEventHandler
     {
+        private readonly IQuestionnaireDocumentUpgrader updrader;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
         private readonly ILogger logger;
 
         public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
-            IReadSideRepositoryWriter<AccountDocument> accounts)
+            IReadSideRepositoryWriter<AccountDocument> accounts,
+            IQuestionnaireDocumentUpgrader updrader)
         {
+            this.updrader = updrader;
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
             this.accounts = accounts;
@@ -338,7 +342,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            this.HandleUpdateEvent(evnt, handle: (@event, questionnaire) => this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(@event.Source));
+            this.HandleUpdateEvent(evnt, handle: (@event, questionnaire) => this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(updrader.TranslatePropagatePropertiesToRosterProperties(@event.Source)));
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)

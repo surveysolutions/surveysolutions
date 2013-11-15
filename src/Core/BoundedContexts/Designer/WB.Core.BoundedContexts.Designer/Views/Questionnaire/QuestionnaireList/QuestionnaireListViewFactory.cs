@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     /// <summary>
     /// The questionnaire browse view factory.
     /// </summary>
+    /// 
     internal class QuestionnaireListViewFactory : IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
