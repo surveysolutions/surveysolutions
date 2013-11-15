@@ -125,7 +125,7 @@
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
-    <Compile Include="Exceptions\DomainException.cs" />
+    <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
     <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionFactory.cs" />
