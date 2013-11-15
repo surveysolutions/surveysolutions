@@ -5,12 +5,12 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
-using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -28,7 +28,7 @@ namespace WB.UI.Capi
         {
             this.restore = this.Restore;
             base.OnCreate(bundle);
-            var pb=new ProgressBar(this);
+            var pb = new ProgressBar(this);
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
             this.ActionBar.SetDisplayShowHomeEnabled(false);
             this.restore.BeginInvoke(Guid.Parse(this.Intent.GetStringExtra("publicKey")), this.Callback, this.restore);

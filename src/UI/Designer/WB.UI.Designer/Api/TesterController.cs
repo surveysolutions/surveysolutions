@@ -1,75 +1,82 @@
-﻿using System.Collections.Generic;
-using Main.Core;
+﻿using Main.Core;
+using Main.Core.View;
+using System;
+using System.Linq;
+using System.Net;
+using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.UI.Designer.Code;
+using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.Controllers
+namespace WB.UI.Designer.Api
 {
-    using Main.Core.View;
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Web.Http;
-    using WB.Core.BoundedContexts.Designer.Services;
-    using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-    using WB.Core.GenericSubdomains.Logging;
-    using WB.Core.SharedKernel.Utils.Compression;
-    using WB.UI.Shared.Web.Exceptions;
-    using WB.UI.Shared.Web.Membership;
-
-
-    public class TestApiController : ApiController
+    public class TesterController : ApiController
     {
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
-        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> questionnaireListViewFactory;
         private readonly IMembershipUserService userHelper;
+        private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IJsonExportService exportService;
-        private readonly IStringCompressor zipUtils;
         private readonly ILogger logger;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
 
-        public TestApiController(IMembershipUserService userHelper, 
+        public TesterController(IMembershipUserService userHelper,
+            IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IJsonExportService exportService,
-            IStringCompressor zipUtils,
             ILogger logger)
         {
             this.userHelper = userHelper;
-            this.questionnaireListViewFactory = viewFactory;
             this.exportService = exportService;
-            this.zipUtils = zipUtils;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.logger = logger;
+            this.questionnaireHelper = questionnaireHelper;
         }
         
         [Authorize]
-        public IEnumerable<QuestionnaireListViewItem> GetAllTemplates()
+        [HttpGet]
+        public QuestionnaireListSyncPackage GetAllTemplates()
         {
-            // change to other return type
             var user = this.userHelper.WebUser;
 
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
-            var questionnaireList = this.questionnaireListViewFactory.Load(
-                        new QuestionnaireListInputModel
-                            {
-                                ViewerId = user.UserId,
-                                IsAdminMode = false,
-                            });
+            var questionnaireList = this.questionnaireHelper.GetQuestionnaires(
+                viewerId: user.UserId);
+            var questionnaireSyncPackage = new QuestionnaireListSyncPackage();
 
-            return questionnaireList.Items;
+            questionnaireSyncPackage.Items = 
+                questionnaireList.Select(q => new QuestionnaireListItem()
+                    {
+                        Id = q.Id, 
+                        Title = q.Title
+                    }).ToList();
+
+            return questionnaireSyncPackage;
         }
 
         [Authorize]
-        public string GetTemplate(Guid id)
+        [HttpPost]
+        public bool Authorize()
         {
-            // change to other return type 
+            if (this.userHelper.WebUser == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+            return true;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public QuestionnaireSyncPackage GetTemplate(Guid id)
+        {
             var user = this.userHelper.WebUser;
 
             if (user == null)
@@ -79,7 +86,8 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireView == null)
                 return null;
 
-            ValidateAccessPermissions(questionnaireView, user.UserId);
+            if (!ValidateAccessPermissions(questionnaireView, user.UserId))
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
 
             var templateInfo = this.exportService.GetQuestionnaireTemplate(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
@@ -89,21 +97,26 @@ namespace WB.UI.Designer.Controllers
 
             var template = PackageHelper.CompressString(templateInfo.Source);
 
-            return template;
+            var questionnaireSyncPackage = new QuestionnaireSyncPackage()
+                {
+                    Questionnaire = template
+                };
+
+            return questionnaireSyncPackage;
         }
 
-        private void ValidateAccessPermissions(QuestionnaireView questionnaireView, Guid currentPersonId)
+        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView, Guid currentPersonId)
         {
             if (questionnaireView.CreatedBy == currentPersonId)
-                return;
+                return true;
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
                 this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = questionnaireView.PublicKey });
             
             bool isQuestionnaireIsSharedWithThisPerson = (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == currentPersonId);
-            
-            if (!isQuestionnaireIsSharedWithThisPerson)
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            return isQuestionnaireIsSharedWithThisPerson;
+
         }
     }
 }

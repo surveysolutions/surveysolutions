@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using CAPI.Android.Core.Model.ModelUtils;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android.Core.Model.SnapshotStore
