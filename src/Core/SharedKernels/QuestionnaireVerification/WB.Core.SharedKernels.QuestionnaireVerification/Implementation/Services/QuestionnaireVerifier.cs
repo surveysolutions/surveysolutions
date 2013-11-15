@@ -75,6 +75,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
                     Verifier<IMultyOptionsQuestion>(this.CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
+                    Verifier<IGroup>(RosterGroupHasNotNumericRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_RosterGroupHasNotNumericRosterSizeQuestion),
+                    Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup),
+                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
+                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And16, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16)
                 };
             }
         }
@@ -148,6 +152,32 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return IsGroupPropagatable(group) &&
                 !GetPropagatingQuestionsPointingToPropagatedGroup(@group.PublicKey, questionnaire).Any();
+        }
+
+        private static bool RosterGroupHasNotNumericRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(group, questionnaire);
+            return rosterSizeQuestion != null && GetQuestionAsIntegerQuestion(rosterSizeQuestion) == null;
+        }
+
+        private static bool RosterSizeQuestionCannotBeInsideAnyRosterGroup(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return IsRosterSizeQuestion(question, questionnaire) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsGroupRoster);
+        }
+
+        private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            var rosterSizeQuestionAsIntegerQuestion = GetQuestionAsIntegerQuestion(question);
+            return IsRosterSizeQuestion(question, questionnaire) && rosterSizeQuestionAsIntegerQuestion != null &&
+                !rosterSizeQuestionAsIntegerQuestion.MaxValue.HasValue;
+        }
+
+        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And16(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            var rosterSizeQuestionAsIntegerQuestion = GetQuestionAsIntegerQuestion(question);
+            return IsRosterSizeQuestion(question, questionnaire) && rosterSizeQuestionAsIntegerQuestion != null &&
+                rosterSizeQuestionAsIntegerQuestion.MaxValue.HasValue &&
+                !Enumerable.Range(1, 16).Contains(rosterSizeQuestionAsIntegerQuestion.MaxValue.Value);
         }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(
@@ -522,6 +552,30 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static bool IsGroupPropagatable(IGroup group)
         {
             return group.Propagated == Propagate.AutoPropagated;
+        }
+
+        private static bool IsGroupRoster(IGroup group)
+        {
+            return group.IsRoster;
+        }
+
+        private static bool IsRosterSizeQuestion(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            var rosterSizeQuestionIds = questionnaire.Find<IGroup>(group => group.IsRoster && group.RosterSizeQuestionId.HasValue).Select(group => group.RosterSizeQuestionId);
+            return rosterSizeQuestionIds.Contains(question.PublicKey);
+        }
+
+        private static INumericQuestion GetQuestionAsIntegerQuestion(IQuestion question)
+        {
+            var integerQuestion = question as INumericQuestion;
+            return integerQuestion != null && integerQuestion.IsInteger ? integerQuestion : null;
+        }
+
+        private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return group.IsRoster && group.RosterSizeQuestionId.HasValue
+                ? questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == group.RosterSizeQuestionId.Value)
+                : null;
         }
 
         private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
