@@ -200,7 +200,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
-                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        QuestionType.Numeric,
                         e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
-                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        QuestionType.Numeric,
                         e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.questionFactory.CreateQuestion(
                     new QuestionData(
                         question.PublicKey,
-                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        QuestionType.Numeric,
                         e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
@@ -721,7 +721,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
-            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
+            var questionType = QuestionType.Numeric;
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
 
@@ -823,7 +823,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             title = title.Trim();
 
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
-            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
+            var questionType = QuestionType.Numeric;
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, 
                 alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
@@ -972,7 +972,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             title = title.Trim();
 
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
-            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
+            var questionType = QuestionType.Numeric;
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, 
                                                                          isHeaderOfPropagatableGroup, validationExpression, responsibleId);

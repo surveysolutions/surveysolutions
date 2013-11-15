@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     PublicId = @event.PublicKey,
                     Title = @event.QuestionText,
-                    QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating),
+                    QuestionType = QuestionType.Numeric,
                     Answers = new List<PdfAnswerView>(),
                     Variable = @event.StataExportCaption
                 };
@@ -229,7 +229,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     PublicId = @event.PublicKey,
                     Title = @event.QuestionText,
-                    QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating),
+                    QuestionType = QuestionType.Numeric,
                     Answers = new List<PdfAnswerView>(0),
                     Variable = @event.StataExportCaption
                 };
@@ -249,7 +249,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 existingQuestion.ValidationExpression = @event.ValidationExpression;
 
                 existingQuestion.Title = @event.QuestionText;
-                existingQuestion.QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating);
+                existingQuestion.QuestionType = QuestionType.Numeric;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
 
                 return questionnaire;

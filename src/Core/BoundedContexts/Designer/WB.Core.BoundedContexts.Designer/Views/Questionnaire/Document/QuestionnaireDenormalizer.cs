@@ -283,7 +283,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             AddQuestion(evnt, evnt.Payload.GroupPublicKey,
                 new QuestionData(
                     e.PublicKey,
-                    NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                    QuestionType.Numeric,
                     e.QuestionScope,
                     e.QuestionText,
                     e.StataExportCaption,
@@ -311,7 +311,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
                 new QuestionData(
                     e.PublicKey,
-                    NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                    QuestionType.Numeric,
                     e.QuestionScope,
                     e.QuestionText,
                     e.StataExportCaption,
@@ -338,7 +338,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             NumericQuestionChanged e = evnt.Payload;
             UpdateQuestion(evnt, new QuestionData(
                 e.PublicKey,
-                NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                QuestionType.Numeric,
                 e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
