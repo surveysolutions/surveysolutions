@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private AbstractQuestion CreateNumericQuestion(AbstractQuestion question, int? maxValue)
+        private IQuestion CreateNumericQuestion(AbstractQuestion question, int? maxValue)
         {
             return this._questionFactory.CreateQuestion(new QuestionData(
                     question.PublicKey,
