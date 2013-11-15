@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Triggers,
                 data.MaxValue,
                 data.LinkedToQuestionId,
-                data.IsInteger,
+                data.QuestionType == QuestionType.AutoPropagate? true : data.IsInteger,
                 data.CountOfDecimalPlaces,
                 data.AreAnswersOrdered,
                 data.MaxAllowedAnswers);

@@ -99,42 +99,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         }
 
         [Test]
-        public void HandleQuestionChanged_AutopropagateQuestionUpdateEventIsCome_TriggersAndMaxValueUpdated()
-        {
-            // Arrange
-            var questionnaireId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            var triggeredGroupId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-            var autoQuestionId = Guid.Parse("33333333-3333-3333-3333-333333333333");
-
-            var innerDocument = CreateQuestionnaireDocument(questionnaireId);
-
-            innerDocument
-                .AddChapter(Guid.NewGuid())
-                .AddGroup(triggeredGroupId, propagationKind: Propagate.AutoPropagated);
-
-            innerDocument
-                .AddChapter(Guid.NewGuid())
-                .AddQuestion(autoQuestionId, type: QuestionType.AutoPropagate, triggers: new List<Guid>(), maxValue: 8);
-
-            var storageStub = CreateQuestionnaireDenormalizerStorageStub(innerDocument);
-
-            var denormalizer = CreateQuestionnaireDenormalizer(storageStub);
-
-            var evnt = CreateQuestionChangedEvent(autoQuestionId, type: QuestionType.AutoPropagate, maxValue: 10, triggers: new List<Guid> { triggeredGroupId });
-
-            // Act
-            denormalizer.Handle(CreatePublishedEvent(innerDocument.PublicKey, evnt));
-
-            // Assert
-            #warning: updated question is a new entity, that's why we should search for it by it's id
-            var autoPropagateQuestion = innerDocument.Find<IQuestion>(autoQuestionId) as AutoPropagateQuestion;
-
-            Assert.That(autoPropagateQuestion.MaxValue, Is.EqualTo(evnt.MaxValue));
-            Assert.That(autoPropagateQuestion.Triggers.Count, Is.EqualTo(evnt.Triggers.Count));
-            Assert.That(autoPropagateQuestion.Triggers, Contains.Item(triggeredGroupId), "Triggers list is not updated");
-        }
-
-        [Test]
         public void HandleQuestionChanged_When_QuestionUpdate_event_is_come_Then_all_abstractQuestion_fields_are_updated()
         {
             // Arrange

@@ -254,8 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(data);
+            IQuestion newQuestion = this.questionFactory.CreateQuestion(data);
 
             item.ReplaceQuestionWithNew(question, newQuestion);
 

@@ -67,6 +67,7 @@
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\QuestionChangeEventTestContext.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTests.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_adding_a_group_and_there_already_is_one_group_with_same_id.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_group_updated_event_and_IsRoster_set_to_true_and_RosterSizeQuestionId_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_QuestionChangeEvent_with_Autopropagate_question_type_is_come.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
