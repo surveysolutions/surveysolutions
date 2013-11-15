@@ -153,7 +153,7 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	RunTests $BuildConfiguration
 	
 	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi\Properties\AndroidManifest.xml")	
-	UpdateAndroidManifest $VersionPrefix $BuildNumber $PahToManifest	
+	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest	
 	BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$FinalPackageName = "WBCapi.apk"
@@ -175,7 +175,7 @@ function BuildDesigner($Solution, $Project,  $CapiTesterProject, $BuildConfigura
 	RunTests $BuildConfiguration
 		
 	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\Properties\AndroidManifest.xml")	
-	UpdateAndroidManifest $VersionPrefix $BuildNumber $PahToManifest	
+	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest	
 	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$FinalPackageName = "WBCapiTester.apk"
