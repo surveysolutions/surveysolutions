@@ -115,7 +115,7 @@ function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefix, $F
 
 	if (-not $wasOperationSuccessfull) {
 		Write-Host "##teamcity[message status='ERROR' text='Failed to zipalign Android package']"
-		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to zipalign Android package']"		
+		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to zipalign Android package']"
 	}
 
 	Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Android package']"
@@ -151,22 +151,22 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
-	
-	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi\Properties\AndroidManifest.xml")	
-	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest	
+
+	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi\Properties\AndroidManifest.xml")
+	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest
 	BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
-	
+
 	$FinalPackageName = "WBCapi.apk"
-	
-	SignAndPackCapi -KeystorePassword $KeystorePassword `
+
+	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiProject `
 					-TempPackageNamePrefix "CAPI.Android" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
-	
+
 	CopyCapi -Project $Project `
 			 -CapiProject $CapiProject `
 			 -FinalPackageName $FinalPackageName
-			
+
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
@@ -177,22 +177,22 @@ function BuildDesigner($Solution, $Project, $CapiTesterProject, $BuildConfigurat
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
-	
-	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\Properties\AndroidManifest.xml")	
-	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest	
+
+	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\Properties\AndroidManifest.xml")
+	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest
 	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }
-	
-	$FinalPackageName = "WBCapiTester.apk"
-	
-	SignAndPackCapi -KeystorePassword $KeystorePassword `
+
+	$FinalPackageName = "WBCapiTester.apk" 
+
+	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiTesterProject `
 					-TempPackageNamePrefix "CAPI.Android.Tester" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
-	
+
 	CopyCapi -Project $Project `
 			 -CapiProject $CapiTesterProject `
 			 -FinalPackageName $FinalPackageName
-	
-	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }	
+
+	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }

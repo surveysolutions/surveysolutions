@@ -28,7 +28,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 try {
 	BuildDesigner `
 		-Solution 'src\Designer.sln' `
-		-Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `		
+		-Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
 		-CapiTesterProject 'src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\WB.UI.QuestionnaireTester.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-VersionPrefix $VersionPrefix `
