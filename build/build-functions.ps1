@@ -108,7 +108,7 @@ function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefixWith
 		return $wasOperationSuccessfull
 	}
 
-	$PathToFinalCapi = PathToFinalCapi $CapiProject $FinalPackageName
+	$PathToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
 	& (GetPathToZipalign) '-f' '-v' '4' "$PahToSigned" "$PathToFinalCapi" | Write-Host
 
 	$wasOperationSuccessfull = $LASTEXITCODE -eq 0
@@ -125,13 +125,14 @@ function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefixWith
 }
 
 function PathToFinalCapi($CapiProject, $FinalPackageName) {
+	
 	$file = get-childitem $CapiProject
 	$PathToFinalCapi = $file.directoryname + "\bin\" + $BuildConfiguration + "\$FinalPackageName"
 	return $PathToFinalCapi
 }
 
 function CopyCapi($Project, $CapiProject, $FinalPackageName) {
-	$PahToFinalCapi = PathToFinalCapi($CapiProject, $FinalPackageName)
+	$PahToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
 
 	$file = get-childitem $Project
 	$SourceFolder = $file.directoryname + "\Externals\Capi"
