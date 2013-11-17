@@ -83,13 +83,13 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration){
 	return $wasBuildSuccessfull
 }
 
-function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefix, $FinalPackageName){
+function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefixWithPath, $FinalPackageName){
 
 	Write-Host "##teamcity[blockOpened name='Signing and Zipaligning Android package']"
 	Write-Host "##teamcity[progressStart 'Signing and Zipaligning Android package']"
 
-	$PahToSigned = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/$TempPackageNamePrefix-signed.apk")
-	$PahToCreated = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/$TempPackageNamePrefix.apk")
+	$PahToSigned = (Join-Path (Get-Location).Path "$TempPackageNamePrefix-signed.apk")
+	$PahToCreated = (Join-Path (Get-Location).Path "$TempPackageNamePrefix.apk")
 	$PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/WBCapi.keystore")
 
 	& (GetPathToJarsigner)  '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
@@ -160,7 +160,7 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 
 	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiProject `
-					-TempPackageNamePrefix "CAPI.Android" `
+					-TempPackageNamePrefixWithPath "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 
 	CopyCapi -Project $Project `
@@ -186,7 +186,7 @@ function BuildDesigner($Solution, $Project, $CapiTesterProject, $BuildConfigurat
 
 	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiTesterProject `
-					-TempPackageNamePrefix "CAPI.Android.Tester" `
+					-TempPackageNamePrefixWithPath "src/UI/QuestionnaireTester/WB.UI.QuestionnaireTester/bin/$BuildConfiguration/CAPI.Android.Tester" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 
 	CopyCapi -Project $Project `
