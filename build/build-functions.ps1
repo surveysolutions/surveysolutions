@@ -172,12 +172,12 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 }
 
 
-function BuildDesigner($Solution, $Project,  $CapiTesterProject, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
+function BuildDesigner($Solution, $Project, $CapiTesterProject, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
 
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
-		
+	
 	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\Properties\AndroidManifest.xml")	
 	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest	
 	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }

@@ -5,7 +5,6 @@ param([string]$VersionPrefix,
 
 $ErrorActionPreference = "Stop"
 
-
 #do not allow empty prefix
 if([string]::IsNullOrWhiteSpace($VersionPrefix)){
 	Write-Host "##teamcity[buildStatus status='FAILURE' text='VersionPrefix param is not set']"
