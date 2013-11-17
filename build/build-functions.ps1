@@ -88,8 +88,8 @@ function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefixWith
 	Write-Host "##teamcity[blockOpened name='Signing and Zipaligning Android package']"
 	Write-Host "##teamcity[progressStart 'Signing and Zipaligning Android package']"
 
-	$PahToSigned = (Join-Path (Get-Location).Path "$TempPackageNamePrefix-signed.apk")
-	$PahToCreated = (Join-Path (Get-Location).Path "$TempPackageNamePrefix.apk")
+	$PahToSigned = (Join-Path (Get-Location).Path "$TempPackageNamePrefixWithPath-signed.apk")
+	$PahToCreated = (Join-Path (Get-Location).Path "$TempPackageNamePrefixWithPath.apk")
 	$PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/WBCapi.keystore")
 
 	& (GetPathToJarsigner)  '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
@@ -108,7 +108,7 @@ function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefixWith
 		return $wasOperationSuccessfull
 	}
 
-	$PathToFinalCapi = PathToFinalCapi($CapiProject, $FinalPackageName)
+	$PathToFinalCapi = PathToFinalCapi $CapiProject $FinalPackageName
 	& (GetPathToZipalign) '-f' '-v' '4' "$PahToSigned" "$PathToFinalCapi" | Write-Host
 
 	$wasOperationSuccessfull = $LASTEXITCODE -eq 0
