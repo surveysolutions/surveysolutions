@@ -1,7 +1,7 @@
 param([string]$VersionPrefix,
 [INT]$BuildNumber,
-[string]$KeystorePassword,
-[string]$BuildConfiguration='release')
+[string]$BuildConfiguration='release',
+[string]$KeystorePassword)
 
 $ErrorActionPreference = "Stop"
 
