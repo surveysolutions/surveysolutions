@@ -1,7 +1,6 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -198,13 +197,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
-            if (e.QuestionType == QuestionType.AutoPropagate)
-            {
-
-            }
-
             this.innerDocument.Add(question, e.GroupPublicKey, null);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
+
+       
 
         internal void Apply(NumericQuestionAdded e)
         {
@@ -232,12 +230,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CountOfDecimalPlaces,
                         null,
                         null));
+
             if (question == null)
             {
                 return;
             }
 
             this.innerDocument.Add(question, e.GroupPublicKey, null);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(QuestionCloned e)
@@ -272,6 +273,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(NumericQuestionCloned e)
@@ -307,6 +310,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(NewQuestionnaireCreated e)
@@ -346,7 +351,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers));
+
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(NumericQuestionChanged e)
@@ -377,6 +385,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(QuestionDeleted e)
