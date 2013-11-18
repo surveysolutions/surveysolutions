@@ -10,7 +10,9 @@ namespace Main.Core.Events.Questionnaire
     public class NewGroupAdded : FullGroupDataEvent
     {
         public Guid PublicKey { get; set; }
-        public Propagate Paropagateble { get; set; }
+
+        [Obsolete]
+        public Propagate? Paropagateble { get; set; }
 
         public Guid? ParentGroupPublicKey { get; set; }
     }

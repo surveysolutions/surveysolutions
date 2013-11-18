@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.UpdateGroup(groupId, responsibleId, "title", Propagate.None, rosterSizeQuestionId, null, null);
+            questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null);
 
         Cleanup stuff = () =>
         {
