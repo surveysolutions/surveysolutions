@@ -52,27 +52,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
 
         [Test]
-        public void NewAddQuestion_When_question_is_featured_but_inside_propagated_group_Then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            Guid autoGroupId = Guid.NewGuid();
-            bool isFeatured = true;
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupId, responsibleId: responsibleId);
-
-            // Act
-            TestDelegate act = () =>
-                               questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?", QuestionType.Text, "name", false,
-                                                            isFeatured,
-                                                            false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, 
-                                                            linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
-
-            // Assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup));
-        }
-
-        [Test]
         public void NewAddQuestion_When_question_is_featured_and_inside_non_propagated_group_Then_raised_NewQuestionAdded_event_contains_the_same_featured_field()
         {
             using (var eventContext = new EventContext())
@@ -265,6 +244,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("TLK KP-2834")]
         public void NewAddQuestion_When_question_is_head_of_propagated_group_but_inside_non_propagated_group_Then_DomainException_should_be_thrown()
         {
             // Arrange
@@ -1065,32 +1045,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // Assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TriggerLinksToNotPropagatedGroup));
-        }
-
-        [Test]
-        public void NewAddQuestion_When_question_is_AutoPropagate_and_list_of_triggers_contains_propagate_group_id_Then_rised_NewQuestionAdded_event_should_contains_that_group_id_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var autoPropagate = true;
-                var autoPropagateGroupId = Guid.NewGuid();
-                var groupId = Guid.NewGuid();
-                var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey: autoPropagateGroupId, secondGroup: groupId, responsibleId: responsibleId);
-
-                // Act
-                questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
-                                             false,
-                                             false, QuestionScope.Interviewer, string.Empty, string.Empty,
-                                             string.Empty,
-                                             string.Empty, null,
-                                             triggedGroupIdsWithAutoPropagateGroupId, responsibleId: responsibleId,isInteger: true, countOfDecimalPlaces: null);
-
-                // Assert
-                Assert.That(GetSingleEvent<NumericQuestionAdded>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
-            }
         }
 
         [Test]

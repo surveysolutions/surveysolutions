@@ -27,12 +27,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             {
                 Guid publicKey = Guid.NewGuid();
                 string text = "group 1";
-                var propagateble = Propagate.None;
                 Guid? parentGroupKey = null;
                 string conditionExpression = "1=1";
                 string description = "group desct";
 
-                questionnaire.AddGroup(publicKey, responsibleId: responsibleId, title: text, propagationKind: propagateble, rosterSizeQuestionId: null, description: description, condition: conditionExpression, parentGroupId: parentGroupKey);
+                questionnaire.AddGroup(publicKey, responsibleId: responsibleId, title: text, rosterSizeQuestionId: null, description: description, condition: conditionExpression, parentGroupId: parentGroupKey);
 
                 Assert.True(ctx.Events.Count() >= 1);
 
@@ -42,7 +41,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     if (evnt != null)
                     {
                         Assert.AreEqual(evnt.PublicKey, publicKey);
-                        Assert.AreEqual(evnt.Paropagateble, propagateble);
                         Assert.AreEqual(evnt.ParentGroupPublicKey, parentGroupKey);
                         Assert.AreEqual(evnt.GroupText, text);
                         Assert.AreEqual(evnt.Description, description);
@@ -65,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             Guid groupPublicKey = Guid.NewGuid();
 
-            questionnaire.AddGroup(groupPublicKey, responsibleId: responsibleId, title: "title", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: "description", condition: null, parentGroupId: null);
+            questionnaire.AddGroup(groupPublicKey, responsibleId: responsibleId, title: "title", rosterSizeQuestionId: null, description: "description", condition: null, parentGroupId: null);
 
             using (var ctx = new EventContext())
             {
