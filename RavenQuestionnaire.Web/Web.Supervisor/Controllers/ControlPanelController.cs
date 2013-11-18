@@ -1,6 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Synchronization;
 
 namespace Web.Supervisor.Controllers
 {
@@ -8,10 +10,11 @@ namespace Web.Supervisor.Controllers
     public class ControlPanelController : Controller
     {
         private readonly IServiceLocator serviceLocator;
-
-        public ControlPanelController(IServiceLocator serviceLocator)
+        private readonly IIncomePackagesRepository incomePackagesRepository;
+        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository)
         {
             this.serviceLocator = serviceLocator;
+            this.incomePackagesRepository = incomePackagesRepository;
         }
 
         /// <remarks>
@@ -26,6 +29,16 @@ namespace Web.Supervisor.Controllers
         public ActionResult NConfig()
         {
             return this.View();
+        }
+
+        public ActionResult IncomingDataWithErrors()
+        {
+            return this.View(incomePackagesRepository.GetListOfUnhandledPackages());
+        }
+
+        public FileResult GetIncomingDataWithError(Guid id)
+        {
+            return this.File(incomePackagesRepository.GetUnhandledPackagePath(id), System.Net.Mime.MediaTypeNames.Application.Octet);
         }
 
         public ActionResult ReadLayer()
