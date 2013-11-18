@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,16 +16,19 @@ using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Adapters
 {
-    public class QuestionnaireListAdapter : SmartAdapter<QuestionnaireListItem>
+    public class QuestionnaireListAdapter : BaseAdapter<QuestionnaireListItem>
     {
         private Activity activity;
         private CancellationToken cancellationToken;
         private ProgressBar progressDialog;
+        private IList<QuestionnaireListItem> unfilteredList;
+        protected IList<QuestionnaireListItem> items;
 
         public QuestionnaireListAdapter(Activity activity)
             : base()
         {
             this.items = new List<QuestionnaireListItem>();
+            this.unfilteredList=new List<QuestionnaireListItem>();
 
             this.activity = activity;
 
@@ -52,8 +56,10 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
         protected void UploadQuestionnairesFromDesigner()
         {
-            items =
+            unfilteredList = items =
                 CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(cancellationToken).Items;
+
+           
             activity.RunOnUiThread(() =>
             {
                 if (items == null)
@@ -66,7 +72,42 @@ namespace WB.UI.QuestionnaireTester.Adapters
             });
         }
 
-        protected override View BuildViewItem(QuestionnaireListItem dataItem, int position)
+        public void Query(string searchQuery)
+        {
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                items = unfilteredList.Where(i => CultureInfo.InvariantCulture.CompareInfo.IndexOf(i.Title, searchQuery, CompareOptions.IgnoreCase) >= 0).ToList();
+            }
+            else
+            {
+                items = unfilteredList;
+            }
+            this.NotifyDataSetChanged();
+        }
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+
+            var dataItem = this[position];
+            var view = this.BuildViewItem(dataItem, position);
+          /*  if (convertView == null)
+            {
+                convertView = this.CreateViewElement(dataItem, position);
+            }
+            else
+            {
+                var elementId = Convert.ToInt32(convertView.GetTag(Resource.Id.ElementId).ToString());
+                if (elementId != position)
+                {
+                    convertView.TryClearBindingsIfPossible();
+
+                    convertView = this.CreateViewElement(dataItem, position);
+                }
+            }*/
+
+            return view;
+        }
+        protected View BuildViewItem(QuestionnaireListItem dataItem, int position)
         {
             LayoutInflater layoutInflater =
                 (LayoutInflater) this.activity.GetSystemService(Context.LayoutInflaterService);
@@ -84,6 +125,21 @@ namespace WB.UI.QuestionnaireTester.Adapters
             tvArrow.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
             view.SetTag(Resource.Id.QuestionnaireId, dataItem.Id.ToString());
             return view;
+        }
+
+        public override long GetItemId(int position)
+        {
+            return position;
+        }
+
+        public override int Count
+        {
+            get { return this.items.Count; }
+        }
+
+        public override QuestionnaireListItem this[int position]
+        {
+            get { return this.items[position]; }
         }
     }
 }

@@ -29,7 +29,23 @@ namespace WB.UI.QuestionnaireTester.Extensions
             tvTitlte.Text = activity.Title;
         }
 
+        public static void CreateSearchebleActionBar(this Activity activity)
+        {
+            // Set up your ActionBar
+            ActionBar actionBar = activity.ActionBar;
+            actionBar.SetDisplayShowHomeEnabled(false);
+            actionBar.SetDisplayShowTitleEnabled(false);
+            actionBar.SetDisplayShowCustomEnabled(true);
+            actionBar.SetDisplayUseLogoEnabled(true);
+            actionBar.SetCustomView(Resource.Layout.ActionBarSearchable);
 
+
+            var logoutButton = (Button)actionBar.CustomView.FindViewById(Resource.Id.btnLogout);
+            logoutButton.Click += (s, e) =>
+            {
+                CapiTesterApplication.Membership.LogOff();
+            };
+        }
 
         public static bool FinishIfNotLoggedIn(this Activity activity)
         {
