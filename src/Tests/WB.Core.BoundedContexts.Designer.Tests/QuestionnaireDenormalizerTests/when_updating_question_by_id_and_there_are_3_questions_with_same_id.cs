@@ -24,12 +24,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             initialQuestionTitle = "Initial Title";
             updatedQuestionTitle = "Updated Title";
 
-            questionUpdatedEvent = CreateQuestionChangedEvent(questionId: questionId, title: updatedQuestionTitle);
+            Guid groupId  = Guid.NewGuid();
 
-            
+            questionUpdatedEvent = CreateQuestionChangedEvent(questionId: questionId, targetGroupId: groupId, title: updatedQuestionTitle);
+
             QuestionnaireDocument questionnaire = CreateQuestionnaireDocument(children: new[] 
             {
-                mainGroup = CreateGroup(children: new[]
+                mainGroup = CreateGroup(groupId: groupId, children: new[]
                 {
                     CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
                     CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
