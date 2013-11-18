@@ -10,7 +10,9 @@
     public class GroupCloned : FullGroupDataEvent
     {
         public Guid PublicKey { get; set; }
-        public Propagate Paropagateble { get; set; }
+
+        [Obsolete]
+        public Propagate? Paropagateble { get; set; }
 
         public Guid SourceGroupId { get; set; }
         public int TargetIndex { get; set; }
