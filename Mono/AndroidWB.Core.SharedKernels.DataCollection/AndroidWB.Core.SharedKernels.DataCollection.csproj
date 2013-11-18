@@ -112,6 +112,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\CreateInterviewCommand.cs">
       <Link>Commands\Interview\CreateInterviewCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\CreateInterviewForTestingCommand.cs">
+      <Link>Commands\Interview\CreateInterviewForTestingCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\DeleteInterviewCommand.cs">
       <Link>Commands\Interview\DeleteInterviewCommand.cs</Link>
     </Compile>
@@ -144,6 +147,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromDesigner.cs">
       <Link>Commands\Questionnaire\ImportFromDesigner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromDesignerForTester.cs">
+      <Link>Commands\Questionnaire\ImportFromDesignerForTester.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromSupervisor.cs">
       <Link>Commands\Questionnaire\ImportFromSupervisor.cs</Link>
@@ -249,6 +255,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewerAssigned.cs">
       <Link>Events\Interview\InterviewerAssigned.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewForTestingCreated.cs">
+      <Link>Events\Interview\InterviewForTestingCreated.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewRejected.cs">
       <Link>Events\Interview\InterviewRejected.cs</Link>
@@ -431,7 +440,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

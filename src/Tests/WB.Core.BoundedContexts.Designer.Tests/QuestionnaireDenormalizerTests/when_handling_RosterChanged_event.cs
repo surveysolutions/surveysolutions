@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
+using it = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
@@ -19,12 +20,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
             questionnaireDocument = CreateQuestionnaireDocument(
                 CreateGroup(groupId: groupId, setup: group => group.RosterSizeQuestionId = null)
-                );
+            );
 
             @event = CreateRosterChangedEvent(groupId: groupId, rosterSizeQuestionId: rosterSizeQuestionId);
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
-                => writer.GetById(Moq.It.IsAny<Guid>()) == questionnaireDocument);
+                => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
         };
@@ -32,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_set_group_RosterSizeQuestionId_property_to_specified_valued = () =>
+        It should_set_group_RosterSizeQuestionId_property_to_specified_value = () =>
             questionnaireDocument.GetGroup(groupId)
                 .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
 

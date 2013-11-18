@@ -13,24 +13,26 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_propagation_level : QuestionnaireVerifierTestsContext
+    class when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_roster_level : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
             questionWithCustomValidation = Guid.Parse("10000000000000000000000000000000");
-            underDeeperPropagationLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
-            var autoPropagatedGroup = Guid.Parse("13333333333333333333333333333333");
+            underDeeperRosterLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
+            var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
+            var rosterQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new AutoPropagateQuestion
+            questionnaire.Children.Add(new NumericQuestion
             {
-                PublicKey = Guid.NewGuid(),
-                Triggers = new List<Guid> { autoPropagatedGroup }
+                PublicKey = rosterGroupId,
+                IsInteger = true,
+                MaxValue = 5
             });
 
-            var autopropagatedGroup = new Group() { PublicKey = autoPropagatedGroup, Propagated = Propagate.AutoPropagated };
-            autopropagatedGroup.Children.Add(new NumericQuestion() { PublicKey = underDeeperPropagationLevelQuestionId });
-            questionnaire.Children.Add(autopropagatedGroup);
+            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterQuestionId };
+            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = underDeeperRosterLevelQuestionId });
+            questionnaire.Children.Add(rosterGroup);
             questionnaire.Children.Add(new SingleQuestion() { PublicKey = questionWithCustomValidation, ValidationExpression = "some random expression"});
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
@@ -38,7 +40,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             expressionProcessor.Setup(x => x.IsSyntaxValid(Moq.It.IsAny<string>())).Returns(true);
 
             expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))
-                .Returns(new string[] { underDeeperPropagationLevelQuestionId.ToString() });
+                .Returns(new string[] { underDeeperRosterLevelQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
@@ -65,13 +67,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
-            resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperPropagationLevelQuestionId);
+            resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
         private static Guid questionWithCustomValidation;
-        private static Guid underDeeperPropagationLevelQuestionId;
+        private static Guid underDeeperRosterLevelQuestionId;
     }
 }

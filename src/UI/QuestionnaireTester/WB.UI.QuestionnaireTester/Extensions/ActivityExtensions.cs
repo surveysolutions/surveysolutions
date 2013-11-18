@@ -16,15 +16,30 @@ namespace WB.UI.QuestionnaireTester.Extensions
             actionBar.SetDisplayShowTitleEnabled(false);
             actionBar.SetDisplayShowCustomEnabled(true);
             actionBar.SetDisplayUseLogoEnabled(true);
+            actionBar.SetCustomView(Resource.Layout.ActionBar);
 
-            var logoutButton = new Button(activity);
-            logoutButton.Text = "Log out";
+
+            var logoutButton = (Button) actionBar.CustomView.FindViewById(Resource.Id.btnLogout);
             logoutButton.Click += (s, e) =>
             {
                 CapiTesterApplication.Membership.LogOff();
             };
-            actionBar.SetCustomView(logoutButton,
-                new ActionBar.LayoutParams(ActionBar.LayoutParams.WrapContent, ActionBar.LayoutParams.FillParent, GravityFlags.Right));         
+
+            var tvTitlte = (TextView) actionBar.CustomView.FindViewById(Resource.Id.tvTitlte);
+            tvTitlte.Text = activity.Title;
+        }
+
+
+
+        public static bool FinishIfNotLoggedIn(this Activity activity)
+        {
+            if (!CapiTesterApplication.Membership.IsLoggedIn)
+            {
+                //  throw new AuthenticationException("invalid credentials");
+                activity.Finish();
+                return true;
+            }
+            return false;
         }
     }
 }

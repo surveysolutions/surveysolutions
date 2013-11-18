@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -5,15 +7,15 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Main.Core;
+using Main.Core.Documents;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ninject;
 using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.UI.QuestionnaireTester.Implementations.Activities;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -27,7 +29,7 @@ namespace WB.UI.QuestionnaireTester
         {
             this.restore = this.Restore;
             base.OnCreate(bundle);
-            var pb=new ProgressBar(this);
+            var pb = new ProgressBar(this);
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
             this.ActionBar.SetDisplayShowHomeEnabled(false);
             this.restore.BeginInvoke(Guid.Parse(this.Intent.GetStringExtra("publicKey")), this.Callback, this.restore);
@@ -40,40 +42,55 @@ namespace WB.UI.QuestionnaireTester
 
         protected void Restore(Guid publicKey)
         {
-            this.CheckAndRestoreFromSyncPackage(publicKey);
+            Guid interviewId = Guid.NewGuid();
+            if (!LoadTemplateAndCreateInterview(publicKey, interviewId))
+            {
+                this.RunOnUiThread(this.Finish);
+                return;
+            } 
             
             var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                new QuestionnaireScreenInput(publicKey));
+                    new QuestionnaireScreenInput(interviewId));
+
             if (questionnaire == null)
             {
-              //  this.RunOnUiThread(this.Finish);
+                this.RunOnUiThread(this.Finish);
                 return;
             }
 
-
-            var intent = new Intent(this, typeof(TesterDetailsActivity));
-            intent.PutExtra("publicKey", publicKey.ToString());
+            var intent = new Intent(this, typeof(CreateInterviewActivity));
+            intent.PutExtra("publicKey", interviewId.ToString());
             this.StartActivity(intent);
         }
 
-        private void CheckAndRestoreFromSyncPackage(Guid itemKey)
+        private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId)
         {
-          /*  var syncCacher = CapiTesterApplication.Kernel.Get<ISyncCacher>();
+            var token = new CancellationToken();
+            QuestionnaireSyncPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, token);
 
-            if (!syncCacher.DoesCachedItemExist(itemKey))
-                return;
-
-            var item = syncCacher.LoadItem(itemKey);
-            if (!string.IsNullOrWhiteSpace(item))
+            if (template == null)
             {
-                string content = PackageHelper.DecompressString(item);
-                var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
-
-                NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
-                //CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
+                return false;
             }
-            syncCacher.DeleteItem(itemKey);*/
 
+            if (template.IsErrorOccured)
+            {
+                this.RunOnUiThread(() => Toast.MakeText(this, template.ErrorMessage, ToastLength.Short).Show());
+
+                return false;
+            }
+
+            string content = PackageHelper.DecompressString(template.Questionnaire);
+            var interview = JsonUtils.GetObject<QuestionnaireDocument>(content);
+
+            NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(interview));
+            
+            Guid interviewUserId = Guid.NewGuid();
+
+            NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
+                    interview.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
+
+            return true;
         }
     }
 }

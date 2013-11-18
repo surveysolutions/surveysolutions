@@ -45,12 +45,10 @@ function GetPathToZipalign() {
 	return 'C:\Users\Administrator\AppData\Local\Android\android-sdk\tools\zipalign.exe'
 }
 
-function UpdateAndroidManifest( $VersionPrefix, $BuildNumber ){
-	Write-Host "##teamcity[blockOpened name='Updating Capi Manifest']"
-	Write-Host "##teamcity[progressStart 'Updating Capi Manifest']"
-
-	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi\Properties\AndroidManifest.xml")
-
+function UpdateAndroidAppManifest( $VersionPrefix, $BuildNumber , $PahToManifest){
+	Write-Host "##teamcity[blockOpened name='Updating Android App Manifest']"
+	Write-Host "##teamcity[progressStart 'Updating Android App Manifest']"
+	
 	[xml] $xam = Get-Content -Path ($PahToManifest)
 
 	$versionName = Select-Xml -xml $xam  -Xpath '/manifest/@android:versionName' -namespace @{android='http://schemas.android.com/apk/res/android'}
@@ -61,37 +59,37 @@ function UpdateAndroidManifest( $VersionPrefix, $BuildNumber ){
 
 	$xam.Save($PahToManifest)
 
-	Write-Host "##teamcity[progressFinish 'Updating Capi Manifest']"
-	Write-Host "##teamcity[blockClosed name='Updating Capi Manifest']"
+	Write-Host "##teamcity[progressFinish 'Updating Android App Manifest']"
+	Write-Host "##teamcity[blockClosed name='Updating Android App Manifest']"
 }
 
-function BuildCapi($CapiProject, $BuildConfiguration){
+function BuildAndroidApp($AndroidProject, $BuildConfiguration){
 
-	Write-Host "##teamcity[blockOpened name='Building Capi project']"
-	Write-Host "##teamcity[progressStart 'Building Capi project']"
+	Write-Host "##teamcity[blockOpened name='Building '$AndroidProject' project']"
+	Write-Host "##teamcity[progressStart 'Building '$AndroidProject' project']"
 
-	& (GetPathToMSBuild) $CapiProject '/t:PackageForAndroid' '/p:CodeContractsRunCodeAnalysis=false' "/p:Configuration=$BuildConfiguration" | Write-Host
+	& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/p:CodeContractsRunCodeAnalysis=false' "/p:Configuration=$BuildConfiguration" | Write-Host
 
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
 	if (-not $wasBuildSuccessfull) {
-		Write-Host "##teamcity[message status='ERROR' text='Failed to build Capi project']"
-		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build Capi project']"
+		Write-Host "##teamcity[message status='ERROR' text='Failed to build '$AndroidProject' project']"
+		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build '$AndroidProject' project']"
 	}
 
-	Write-Host "##teamcity[progressFinish 'Building Capi project']"
-	Write-Host "##teamcity[blockClosed name='Building Capi project']"
+	Write-Host "##teamcity[progressFinish 'Building '$AndroidProject' project']"
+	Write-Host "##teamcity[blockClosed name='Building Capi'$AndroidProject' project']"
 
 	return $wasBuildSuccessfull
 }
 
-function SignAndPackCapi($KeyStorePass, $CapiProject){
+function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefixWithPath, $FinalPackageName){
 
-	Write-Host "##teamcity[blockOpened name='Signing and Zipaligning Capi package']"
-	Write-Host "##teamcity[progressStart 'Signing and Zipaligning Capi package']"
+	Write-Host "##teamcity[blockOpened name='Signing and Zipaligning Android package']"
+	Write-Host "##teamcity[progressStart 'Signing and Zipaligning Android package']"
 
-	$PahToSigned = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android-signed.apk")
-	$PahToCreated = (Join-Path (Get-Location).Path "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android.apk")
+	$PahToSigned = (Join-Path (Get-Location).Path "$TempPackageNamePrefixWithPath-signed.apk")
+	$PahToCreated = (Join-Path (Get-Location).Path "$TempPackageNamePrefixWithPath.apk")
 	$PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/WBCapi.keystore")
 
 	& (GetPathToJarsigner)  '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
@@ -101,39 +99,40 @@ function SignAndPackCapi($KeyStorePass, $CapiProject){
 	$wasOperationSuccessfull = $LASTEXITCODE -eq 0
 
 	if (-not $wasOperationSuccessfull) {
-		Write-Host "##teamcity[message status='ERROR' text='Failed to sign Capi package']"
-		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to sign Capi package']"
+		Write-Host "##teamcity[message status='ERROR' text='Failed to sign Android package']"
+		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to sign Android package']"
 
-		Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Capi package']"
-		Write-Host "##teamcity[blockClosed name='Signing and Zipaligning Capi package']"
+		Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Android package']"
+		Write-Host "##teamcity[blockClosed name='Signing and Zipaligning Android package']"
 
 		return $wasOperationSuccessfull
 	}
 
-	$PathToFinalCapi = PathToFinalCapi($CapiProject)
+	$PathToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
 	& (GetPathToZipalign) '-f' '-v' '4' "$PahToSigned" "$PathToFinalCapi" | Write-Host
 
 	$wasOperationSuccessfull = $LASTEXITCODE -eq 0
 
 	if (-not $wasOperationSuccessfull) {
-		Write-Host "##teamcity[message status='ERROR' text='Failed to zipalign Capi package']"
-		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to zipalign Capi package']"		
+		Write-Host "##teamcity[message status='ERROR' text='Failed to zipalign Android package']"
+		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to zipalign Android package']"
 	}
 
-	Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Capi package']"
-	Write-Host "##teamcity[blockClosed name='Signing and Zipaligning Capi package']"
+	Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Android package']"
+	Write-Host "##teamcity[blockClosed name='Signing and Zipaligning Android package']"
 
 	return $wasOperationSuccessfull
 }
 
-function PathToFinalCapi($CapiProject) {
+function PathToFinalCapi($CapiProject, $FinalPackageName) {
+	
 	$file = get-childitem $CapiProject
-	$PathToFinalCapi = $file.directoryname + "\bin\" + $BuildConfiguration + "\WBCapi.apk"
+	$PathToFinalCapi = $file.directoryname + "\bin\" + $BuildConfiguration + "\$FinalPackageName"
 	return $PathToFinalCapi
 }
 
-function CopyCapi($Project, $CapiProject) {
-	$PahToFinalCapi = PathToFinalCapi($CapiProject)
+function CopyCapi($Project, $CapiProject, $FinalPackageName) {
+	$PahToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
 
 	$file = get-childitem $Project
 	$SourceFolder = $file.directoryname + "\Externals\Capi"
@@ -153,20 +152,48 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
-	UpdateAndroidManifest $VersionPrefix $BuildNumber 
-	BuildCapi $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
-	SignAndPackCapi $KeystorePassword	$CapiProject | %{ if (-not $_) { Exit } }
-	CopyCapi $Project $CapiProject
+
+	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\Capi\WB.UI.Capi\Properties\AndroidManifest.xml")
+	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest
+	BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
+
+	$FinalPackageName = "WBCapi.apk"
+
+	SignAndPackCapi -KeyStorePass $KeystorePassword `
+					-CapiProject $CapiProject `
+					-TempPackageNamePrefixWithPath "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android" `
+					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
+
+	CopyCapi -Project $Project `
+			 -CapiProject $CapiProject `
+			 -FinalPackageName $FinalPackageName
+
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
 
 
-function BuildDesigner($Solution, $Project, $BuildConfiguration) {
+function BuildDesigner($Solution, $Project, $CapiTesterProject, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
 
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
+
+	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\Properties\AndroidManifest.xml")
+	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest
+	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }
+
+	$FinalPackageName = "WBCapiTester.apk" 
+
+	SignAndPackCapi -KeyStorePass $KeystorePassword `
+					-CapiProject $CapiTesterProject `
+					-TempPackageNamePrefixWithPath "src/UI/QuestionnaireTester/WB.UI.QuestionnaireTester/bin/$BuildConfiguration/CAPI.Android.Tester" `
+					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
+
+	CopyCapi -Project $Project `
+			 -CapiProject $CapiTesterProject `
+			 -FinalPackageName $FinalPackageName
+
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
