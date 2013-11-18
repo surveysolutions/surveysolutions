@@ -6,7 +6,8 @@
     {
         public override void Load()
         {
-            this.Bind<ILogger>().To<FileLogger>();
+            var logger = new FileLogger("WBCapi");
+            this.Bind<ILogger>().ToConstant(logger);
         }
     }
 }
