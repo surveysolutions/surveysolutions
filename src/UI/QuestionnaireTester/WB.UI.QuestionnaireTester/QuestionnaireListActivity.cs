@@ -43,6 +43,13 @@ namespace WB.UI.QuestionnaireTester
             this.StartActivity(intent);
         }
 
+        protected override void OnRestart()
+        {
+            base.OnRestart();
+
+            this.listView.Adapter = adapter = new QuestionnaireListAdapter(this);
+        }
+
         protected override void OnStart()
         {
             base.OnStart();
@@ -51,7 +58,6 @@ namespace WB.UI.QuestionnaireTester
 
             var svQuery = (SearchView)this.ActionBar.CustomView.FindViewById(Resource.Id.svQuery);
             svQuery.QueryTextChange += searchView_QueryTextChange;
-            
         }
     }
 }
