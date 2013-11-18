@@ -933,6 +933,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(question.Featured, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1196,6 +1197,40 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
                 }
             }
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(bool isHeadOfGroup, IGroup group)
+        {
+            if (!isHeadOfGroup)
+                return;
+
+            if (group.Propagated == Propagate.None)
+            {
+                throw new QuestionnaireException(
+                     DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup,
+                     "Question inside propagated group can not be head of group");
+            }
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(bool isFeatured, IGroup group)
+        {
+            if (!isFeatured)
+                return;
+
+            if (group.Propagated != Propagate.None || group.IsRoster)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
+                    "Question inside roster group can not be pre-filled");
+            }
+        }
+
+        private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
+        {
+            if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
+                throw new QuestionnaireException(
+                    DomainExceptionType.NotSupportedPropagationGroup,
+                    string.Format("Group's propagation kind {0} is unsupported", propagationKind));
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
