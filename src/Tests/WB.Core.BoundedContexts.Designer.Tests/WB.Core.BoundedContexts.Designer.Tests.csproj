@@ -113,6 +113,8 @@
     <Compile Include="QuestionnaireTests\when_adding_group_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_adding_numeric_question_and_max_value_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_adding_numeric_question_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_prefilled_numeric_question_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_prefilled_question_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
@@ -122,8 +124,11 @@
     <Compile Include="QuestionnaireTests\when_cloning_group_targeting_it_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_prefilled_numeric_question_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_prefilled_question_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_size_question.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_prefilled_question_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
@@ -133,6 +138,8 @@
     <Compile Include="QuestionnaireTests\when_updating_group_which_has_a_subgroup_and_roster_size_question_id_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_numeric_question_under_roster_and_setting_it_prefilled.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="ShouldExtensions.cs" />
   </ItemGroup>
   <ItemGroup />

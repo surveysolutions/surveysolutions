@@ -1,7 +1,6 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -81,7 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(GroupUpdated e)
         {
             this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description,
-                e.Propagateble, e.ConditionExpression);
+                Propagate.None, e.ConditionExpression);
         }
 
         private void Apply(ImageDeleted e)
@@ -121,7 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var group = new Group();
             group.Title = e.GroupText;
-            group.Propagated = e.Paropagateble;
+            group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
@@ -144,7 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var group = new Group();
             group.Title = e.GroupText;
-            group.Propagated = e.Paropagateble;
+            group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
@@ -198,13 +197,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
-            if (e.QuestionType == QuestionType.AutoPropagate)
-            {
-
-            }
-
             this.innerDocument.Add(question, e.GroupPublicKey, null);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
+
+       
 
         internal void Apply(NumericQuestionAdded e)
         {
@@ -232,12 +230,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CountOfDecimalPlaces,
                         null,
                         null));
+
             if (question == null)
             {
                 return;
             }
 
             this.innerDocument.Add(question, e.GroupPublicKey, null);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(QuestionCloned e)
@@ -272,6 +273,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(NumericQuestionCloned e)
@@ -307,6 +310,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(NewQuestionnaireCreated e)
@@ -346,7 +351,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers));
+
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(NumericQuestionChanged e)
@@ -377,6 +385,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+
+            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
         }
 
         private void Apply(QuestionDeleted e)
@@ -545,7 +555,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
 
         public void AddGroup(Guid groupId, Guid responsibleId,
-            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition,
+            string title, Guid? rosterSizeQuestionId, string description, string condition,
             Guid? parentGroupId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -554,7 +564,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
-            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
             this.ThrowIfRosterInformationIsIncorrect(rosterSizeQuestionId);
@@ -565,7 +574,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = groupId,
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
-                Paropagateble = propagationKind,
+                Paropagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
@@ -583,7 +592,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void CloneGroupWithoutChildren(Guid groupId, Guid responsibleId,
-            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition,
+            string title, Guid? rosterSizeQuestionId, string description, string condition,
             Guid? parentGroupId, Guid sourceGroupId, int targetIndex)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -592,7 +601,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
-            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
             this.ThrowIfRosterInformationIsIncorrect(rosterSizeQuestionId);
@@ -603,7 +611,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = groupId,
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
-                Paropagateble = propagationKind,
+                Paropagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 SourceGroupId = sourceGroupId,
@@ -623,7 +631,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
-            string title, Propagate propagationKind, Guid? rosterSizeQuestionId, string description, string condition)
+            string title, Guid? rosterSizeQuestionId, string description, string condition)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -632,10 +640,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
-
-            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
-
-            this.ThrowDomainExceptionIfGroupsPropagationKindCannotBeChanged(groupId, propagationKind);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -646,7 +650,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
-                Propagateble = propagationKind,
+                Propagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
@@ -683,8 +687,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (targetGroupId.HasValue)
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
-
-                this.ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(targetGroupId.Value);
 
                 this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(targetGroupId.Value);
             }
@@ -904,20 +906,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
-            string alias, bool isFeatured, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
+            string alias, bool isPrefilled, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
-            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isPrefilled);
             this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
 
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
 
-            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, parentGroup);
-            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, parentGroup);
-
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
         }
 
         public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
@@ -943,6 +943,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1144,20 +1145,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
 
-        private void ThrowDomainExceptionIfGroupsPropagationKindCannotBeChanged(Guid groupId, Propagate newPropagationKind)
-        {
-            if (newPropagationKind == Propagate.None)
-                return;
-
-            var group = this.innerDocument.Find<Group>(groupId);
-
-            bool hasAnyChildGroup = group.Children.Any(g => g is Group);
-            if (hasAnyChildGroup)
-            {
-                throw new QuestionnaireException(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup, "Auto propagated groups can't have child groups");
-            }
-        }
-
         private void ThrowIfGroupsShouldBecomeARosterButCannot(Guid groupId, Guid? rosterSizeQuestionId)
         {
             bool groupShouldBecomeARoster = rosterSizeQuestionId.HasValue;
@@ -1169,15 +1156,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool hasAnyChildSubgroups = group.Children.Any(g => g is IGroup);
             if (hasAnyChildSubgroups)
                 throw new QuestionnaireException("Group cannot become a roster because it has child subgroups.");
-        }
-
-        private void ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(Guid groupId)
-        {
-            var group = this.innerDocument.Find<Group>(groupId);
-            if (group.Propagated == Propagate.AutoPropagated)
-            {
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
-            }
         }
 
         private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
@@ -1192,10 +1170,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(string.Format(
                     "Parent group {0} is a roster and therefore cannot have child groups.",
                     FormatGroupForException(parentGroupId.Value, this.innerDocument)));
-
-            if (parentGroup.Propagated == Propagate.AutoPropagated)
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups,
-                    "Auto propagated groups can't have child groups");
         }
 
 
@@ -1222,38 +1196,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(bool isHeadOfGroup, IGroup group)
+        private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
-            if (!isHeadOfGroup)
+            if (!isPrefilled)
                 return;
 
-            if (group.Propagated == Propagate.None)
-            {
-                throw new QuestionnaireException(
-                     DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup,
-                     "Question inside propagated group can not be head of group");
-            }
-        }
-
-        private void ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(bool isFeatured, IGroup group)
-        {
-            if (!isFeatured)
-                return;
-
-            if (group.Propagated != Propagate.None)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
-                    "Question inside propagated group can not be pre-filled");
-            }
-        }
-
-        private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
-        {
-            if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
-                throw new QuestionnaireException(
-                    DomainExceptionType.NotSupportedPropagationGroup,
-                    string.Format("Group's propagation kind {0} is unsupported", propagationKind));
+            if (parentGroup.IsRoster)
+                throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
@@ -1389,8 +1338,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var itemAsGroup = item as IGroup;
             if (itemAsGroup != null)
             {
-                if (itemAsGroup.Propagated == Propagate.AutoPropagated ||
-                    (itemAsGroup.IsRoster && itemAsGroup.RosterSizeQuestionId.HasValue))
+                if (itemAsGroup.IsRoster)
                     return itemAsGroup.PublicKey;
             }
 

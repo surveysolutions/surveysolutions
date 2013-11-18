@@ -52,9 +52,6 @@ namespace WB.UI.Designer.Tests.CommandDeserializerTests
         It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
             ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
-        It should_return_same_propagation_kind_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).PropagationKind.ShouldEqual(Enum.Parse(typeof(Propagate), propagationKind));
-
         It should_return_same_description_in_NewUpdateGroupCommand = () =>
             ((UpdateGroupCommand)result).Description.ShouldEqual(description);
 
