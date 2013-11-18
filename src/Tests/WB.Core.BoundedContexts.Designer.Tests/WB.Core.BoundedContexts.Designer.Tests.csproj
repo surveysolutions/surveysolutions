@@ -129,6 +129,7 @@
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_not_numeric.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_under_another_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_which_has_a_subgroup_and_roster_size_question_id_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_specified.cs" />
     <Compile Include="ShouldExtensions.cs" />
