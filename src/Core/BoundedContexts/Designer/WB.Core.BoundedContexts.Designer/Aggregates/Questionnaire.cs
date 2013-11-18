@@ -1378,10 +1378,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument.ConnectChildrenWithParent();
 
-            return this.GetFirstPropagatableParentGroupIdOrNull(item) != null;
+            return this.GetFirstRosterParentGroupIdOrNull(item) != null;
         }
 
-        private Guid? GetFirstPropagatableParentGroupIdOrNull(IComposite item)
+        private Guid? GetFirstRosterParentGroupIdOrNull(IComposite item)
         {
             if (item == null)
                 return null;
@@ -1389,11 +1389,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var itemAsGroup = item as IGroup;
             if (itemAsGroup != null)
             {
-                if (itemAsGroup.Propagated == Propagate.AutoPropagated)
+                if (itemAsGroup.Propagated == Propagate.AutoPropagated ||
+                    (itemAsGroup.IsRoster && itemAsGroup.RosterSizeQuestionId.HasValue))
                     return itemAsGroup.PublicKey;
             }
-            
-            return this.GetFirstPropagatableParentGroupIdOrNull(item.GetParent());
+
+            return this.GetFirstRosterParentGroupIdOrNull(item.GetParent());
         }
 
 
@@ -1584,7 +1585,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
-                    "Question that you are linked to is not in the propagated group");
+                    "Question that you are linked to is not in the roster group");
             }
         }
 

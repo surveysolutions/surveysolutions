@@ -126,6 +126,8 @@ namespace Main.Core.Entities.SubEntities
                     Propagated = this.Propagated,
                     PublicKey = this.PublicKey,
                     Title = this.Title,
+                    IsRoster = this.IsRoster,
+                    RosterSizeQuestionId = this.RosterSizeQuestionId
                 };
 
             foreach (var composite in this.Children)
