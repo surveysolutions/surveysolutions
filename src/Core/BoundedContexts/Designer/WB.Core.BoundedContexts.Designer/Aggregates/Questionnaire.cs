@@ -943,6 +943,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(question.Featured, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1240,11 +1241,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!isFeatured)
                 return;
 
-            if (group.Propagated != Propagate.None)
+            if (group.Propagated != Propagate.None || group.IsRoster)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
-                    "Question inside propagated group can not be pre-filled");
+                    "Question inside roster group can not be pre-filled");
             }
         }
 
