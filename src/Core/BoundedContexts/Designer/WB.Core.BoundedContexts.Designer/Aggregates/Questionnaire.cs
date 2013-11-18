@@ -898,16 +898,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
-            string alias, bool isFeatured, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
+            string alias, bool isPrefilled, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
-            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isPrefilled);
             this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
 
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
+
+            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
         }
 
         public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
@@ -933,7 +935,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
-            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(question.Featured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1199,38 +1201,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(bool isHeadOfGroup, IGroup group)
+        private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
-            if (!isHeadOfGroup)
+            if (!isPrefilled)
                 return;
 
-            if (group.Propagated == Propagate.None)
-            {
-                throw new QuestionnaireException(
-                     DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup,
-                     "Question inside propagated group can not be head of group");
-            }
-        }
-
-        private void ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(bool isFeatured, IGroup group)
-        {
-            if (!isFeatured)
-                return;
-
-            if (group.Propagated != Propagate.None || group.IsRoster)
+            if (parentGroup.IsRoster)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
                     "Question inside roster group can not be pre-filled");
             }
-        }
-
-        private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
-        {
-            if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
-                throw new QuestionnaireException(
-                    DomainExceptionType.NotSupportedPropagationGroup,
-                    string.Format("Group's propagation kind {0} is unsupported", propagationKind));
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
