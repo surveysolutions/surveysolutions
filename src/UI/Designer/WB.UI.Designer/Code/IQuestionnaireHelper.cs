@@ -2,7 +2,7 @@
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Models;
 
-namespace WB.UI.Designer
+namespace WB.UI.Designer.Code
 {
     public interface IQuestionnaireHelper
     {

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
-    public class QuestionnaireSharedPersonsDenormalizer :
+    internal class QuestionnaireSharedPersonsDenormalizer :
         IEventHandler<SharedPersonToQuestionnaireAdded>,
         IEventHandler<SharedPersonFromQuestionnaireRemoved>, IEventHandler
     {

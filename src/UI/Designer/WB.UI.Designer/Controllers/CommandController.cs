@@ -1,15 +1,17 @@
 ﻿using System.Web.Security;
-using Main.Core.Domain.Exceptions;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
-using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
@@ -56,7 +58,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                var domainEx = e.GetSelfOrInnerAs<DomainException>();
+                var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
                     logger.Error(string.Format("Error on command of type ({0}) handling ", type), e);
@@ -88,11 +90,8 @@ namespace WB.UI.Designer.Controllers
             var questionCommand = command as AbstractQuestionCommand;
             if (questionCommand != null)
             {
-                var expressionReplace = this.CreateExpressionReplace(questionCommand.QuestionnaireId);
-                questionCommand.Condition = expressionReplace.ReplaceStataCaptionsWithGuids(questionCommand.Condition,
-                    questionCommand.QuestionnaireId);
-                questionCommand.ValidationExpression = expressionReplace.ReplaceStataCaptionsWithGuids(
-                    questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
+                questionCommand.Condition = questionCommand.Condition;
+                questionCommand.ValidationExpression = questionCommand.ValidationExpression;
 
                 return;
             }
@@ -100,17 +99,8 @@ namespace WB.UI.Designer.Controllers
             var newGroupCommand = command as FullGroupDataCommand;
             if (newGroupCommand != null)
             {
-                var expressionReplace = this.CreateExpressionReplace(newGroupCommand.QuestionnaireId);
-                newGroupCommand.Condition = expressionReplace.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition,
-                    newGroupCommand.QuestionnaireId);
+                newGroupCommand.Condition = newGroupCommand.Condition;
             }
-        }
-
-        private IExpressionReplacer CreateExpressionReplace(Guid questionnaireId)
-        {
-            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(
-                new QuestionnaireViewInputModel(questionnaireId));
-            return new ExpressionReplacer(questionnaire.Source);
         }
 
         private void ValidateAddSharedPersonCommand(ICommand command)

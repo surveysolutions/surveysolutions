@@ -2,11 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 
@@ -16,14 +13,32 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
     {
         protected IDictionary<Guid, ExportedHeaderItem> container;
         private readonly ReferenceInfoForLinkedQuestions questionnaireReferences;
-        private readonly Dictionary<Guid, AutoPropagateQuestion> autoPropagatedQuestions;
+        private readonly Dictionary<Guid, int> maxValuesForRosterSizeQuestions;
 
         public ExportedHeaderCollection(ReferenceInfoForLinkedQuestions questionnaireReferences, QuestionnaireDocument document)
         {
             this.container = new Dictionary<Guid, ExportedHeaderItem>();
             this.questionnaireReferences = questionnaireReferences;
-            this.autoPropagatedQuestions =
-                document.Find<AutoPropagateQuestion>(question => true).ToDictionary(question => question.PublicKey, question => question);
+            this.maxValuesForRosterSizeQuestions =
+                document.Find<IAutoPropagateQuestion>(question => true)
+                    .ToDictionary(question => question.PublicKey, question => question.MaxValue);
+
+            var rosterSizeQuestionIds =
+                document.Find<IGroup>(group => group.IsRoster && group.RosterSizeQuestionId.HasValue)
+                    .Select(group => group.RosterSizeQuestionId.Value);
+
+            document.Find<IQuestion>(question => rosterSizeQuestionIds.Contains(question.PublicKey))
+                .ToList()
+                .ForEach(this.addMaxValueToMaxValuesForRosterSizeQuestionsIfQuestionIsRosterSizeQuestion);
+        }
+
+        private void addMaxValueToMaxValuesForRosterSizeQuestionsIfQuestionIsRosterSizeQuestion(IQuestion question)
+        {
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                this.maxValuesForRosterSizeQuestions.Add(question.PublicKey, numericQuestion.MaxValue.Value);
+            }
         }
 
         public void Add(IQuestion question)
@@ -63,7 +78,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private void AddHeadersForLinkedMultiOptions(IQuestion question)
         {
-            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, GetMaxAvailablePropagationCountForLinkedQuestion(question)));
+            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, this.GetRosterSizeForLinkedQuestion(question)));
         }
 
         protected void AddHeaderForNotMultiOptions(IQuestion question)
@@ -73,14 +88,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         protected void AddHeadersForMultiOptions(IQuestion question)
         {
-            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, question.Answers.Count));
+            var multiOptionQuestion = question as IMultyOptionsQuestion;
+            var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
+            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, maxCount));
         }
 
-        private int GetMaxAvailablePropagationCountForLinkedQuestion(IQuestion question)
+        private int GetRosterSizeForLinkedQuestion(IQuestion question)
         {
-            var questioIdnWhichTriggersPropagation =
+            var rosterSizeQuestionId =
                 questionnaireReferences.ReferencesOnLinkedQuestions[question.PublicKey].ScopeId;
-            return this.autoPropagatedQuestions[questioIdnWhichTriggersPropagation].MaxValue;
+            return this.maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
     }
 }

@@ -35,12 +35,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                                                         && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                                                         && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
-                                                        && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
 
                                                         && _.HasGroup(propagatedGroupId) == true
-                                                        && _.GetPropagationLevelForGroup(propagatedGroupId)==1
+                                                        && _.GetRosterLevelForGroup(propagatedGroupId)==1
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId });
+                                                        && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>())).Returns(false);

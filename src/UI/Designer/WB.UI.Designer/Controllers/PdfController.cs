@@ -1,27 +1,24 @@
-﻿using Main.Core.View;
-using System;
+﻿using System;
 using System.Configuration;
-using System.Globalization;
 using System.IO;
 using System.Web.Mvc;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using Main.Core.View;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Designer.Pdf;
-using WB.UI.Designer.Views.Questionnaire;
-using WB.UI.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
     public class PdfController : BaseController
     {
-        private readonly IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory;
+        private readonly IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> pdfViewFactory;
 
         public PdfController(
             IMembershipUserService userHelper,
-            IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory)
+            IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> viewFactory)
             : base(userHelper)
         {
-            this.viewFactory = viewFactory;
+            this.pdfViewFactory = viewFactory;
         }
 
         public ActionResult RenderQuestionnaire(Guid id)
@@ -84,7 +81,7 @@ namespace WB.UI.Designer.Controllers
 
         private PdfQuestionnaireView LoadQuestionnaire(Guid id)
         {
-            var result = this.viewFactory.GetById(id);
+            var result = this.pdfViewFactory.Load(new PdfQuestionnaireInputModel() {Id = id});
             result.ReconnectWithParent();
             return result;
         }

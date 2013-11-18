@@ -52,10 +52,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
+    <Compile Include="Aggregates\UserAR.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
+    <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
-    <Compile Include="EventHandler\QuestionnairePropagationStructureDenormalizer.cs" />
+    <Compile Include="Commands\User\ChangeUserCommand.cs" />
+    <Compile Include="Commands\User\CreateUserCommand.cs" />
+    <Compile Include="Commands\User\LockUserCommand.cs" />
+    <Compile Include="Commands\User\UnlockUserCommand.cs" />
+    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
+    <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
@@ -149,6 +158,7 @@
     <Compile Include="ReadSide\IVersionedView.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
+    <Compile Include="ValueObjects\Questionnaire\QuestionIdAndVariableName.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -165,7 +175,7 @@
     <Compile Include="Views\Questionnaire\QuestionnaireItemViewFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnairePropagationStructure.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
     {
         private IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> qestionnairePropagationStructure;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> qestionnairePropagationStructure;
         private IEventStore eventStore;
         private Dictionary<Guid, IntervieweWithSequence> memcache;
         private IIncomePackagesRepository incomePackages;
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         public InterviewDataRepositoryWriterWithCache(
             IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter,
             IReadSideRepositoryWriter<UserDocument> users,
-            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> qestionnairePropagationStructure,
+            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> qestionnairePropagationStructure,
             IIncomePackagesRepository incomePackages,
             IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {

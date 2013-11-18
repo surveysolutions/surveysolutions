@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Export;
-using Ninject.Modules;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Implementation;
+﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;

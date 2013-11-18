@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
-using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -9,6 +9,9 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -27,16 +30,21 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
-            IQuestionFactory questionFactory = null, ILogger logger = null)
+            IQuestionFactory questionFactory = null, ILogger logger = null, IQuestionnaireDocumentUpgrader updrader = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
                 questionFactory ?? Mock.Of<IQuestionFactory>(),
-                logger ?? Mock.Of<ILogger>());
+                logger ?? Mock.Of<ILogger>(),
+                updrader ?? Mock.Of<IQuestionnaireDocumentUpgrader>());
         }
 
-        protected static QuestionnaireDocument CreateQuestionnaireDocument(
-            IEnumerable<IComposite> children = null)
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] children)
+        {
+            return CreateQuestionnaireDocument(children.AsEnumerable());
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> children = null)
         {
             var questionnaire = new QuestionnaireDocument();
 
@@ -49,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         }
 
         protected static Group CreateGroup(Guid? groupId = null, string title = "Group X",
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null, Action<Group> setup = null)
         {
             var group = new Group
             {
@@ -62,16 +70,31 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 group.Children.AddRange(children);
             }
 
+            if (setup != null)
+            {
+                setup(group);
+            }
+
             return group;
         }
 
-        protected static AbstractQuestion CreateQuestion(Guid? questionId = null, string title = null)
+        protected static TextQuestion CreateTextQuestion(Guid? questionId = null, string title = null)
         {
             return new TextQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
                 QuestionType = QuestionType.Text,
+            };
+        }
+
+        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null)
+        {
+            return new NumericQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionText = title,
+                QuestionType = QuestionType.Numeric,
             };
         }
 
@@ -91,11 +114,32 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
         }
 
-        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, string title = "New Group X")
+        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId,
+            string title = "New Group X")
         {
             return ToPublishedEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
+                GroupText = title,
+            });
+        }
+
+        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId,
+            string title = "New Cloned Group X")
+        {
+            return ToPublishedEvent(new GroupCloned
+            {
+                PublicKey = groupId,
+                GroupText = title,
+            });
+        }
+
+        protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId,
+            string title = "Updated Group Title X")
+        {
+            return ToPublishedEvent(new GroupUpdated
+            {
+                GroupPublicKey = groupId,
                 GroupText = title,
             });
         }
@@ -108,15 +152,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 GroupPublicKey = groupId,
                 QuestionText = title,
                 QuestionType = QuestionType.Numeric,
-            });
-        }
-
-        protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId, string title)
-        {
-            return ToPublishedEvent(new GroupUpdated
-            {
-                GroupPublicKey = groupId,
-                GroupText = title,
             });
         }
 
@@ -135,6 +170,53 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 PublicKey = itemId,
                 GroupKey = targetGroupId,
+            });
+        }
+
+        protected static IPublishedEvent<GroupBecameARoster> CreateGroupBecameARosterEvent(Guid groupId)
+        {
+            return ToPublishedEvent(new GroupBecameARoster(Guid.NewGuid(), groupId));
+        }
+
+        protected static IPublishedEvent<GroupStoppedBeingARoster> CreateGroupStoppedBeingARosterEvent(Guid groupId)
+        {
+            return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
+        }
+
+        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId)
+        {
+            return ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId, rosterSizeQuestionId));
+        }
+
+        protected static IPublishedEvent<NumericQuestionAdded> CreateNumericQuestionAddedEvent(
+            Guid questionId, Guid? parentGroupId = null, int? maxValue = null)
+        {
+            return ToPublishedEvent(new NumericQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                MaxValue = maxValue
+            });
+        }
+
+        protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
+            Guid questionId, int? maxValue = null)
+        {
+            return ToPublishedEvent(new NumericQuestionChanged
+            {
+                PublicKey = questionId,
+                MaxValue = maxValue
+            });
+        }
+
+        protected static IPublishedEvent<NumericQuestionCloned> CreateNumericQuestionClonedEvent(
+            Guid questionId, Guid? parentGroupId = null, int? maxValue = null)
+        {
+            return ToPublishedEvent(new NumericQuestionCloned
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                MaxValue = maxValue
             });
         }
     }

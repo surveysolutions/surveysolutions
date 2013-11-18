@@ -1,5 +1,7 @@
 ﻿using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer.WebServices
 {
@@ -17,13 +19,13 @@ namespace WB.UI.Designer.WebServices
         private readonly IJsonExportService exportService;
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
-        private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory;
+        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
 
         public PublicService(
             IJsonExportService exportService,
             IStringCompressor zipUtils, 
             IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireListViewInputModel, WB.UI.Designer.Views.Questionnaire.QuestionnaireListView> viewFactory)
+            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
@@ -65,7 +67,7 @@ namespace WB.UI.Designer.WebServices
             return new QuestionnaireListViewMessage(
                 this.viewFactory.Load(
                     input:
-                        new QuestionnaireListViewInputModel
+                        new QuestionnaireListInputModel
                             {
 
                                 ViewerId = this.userHelper.WebServiceUser.UserId,
