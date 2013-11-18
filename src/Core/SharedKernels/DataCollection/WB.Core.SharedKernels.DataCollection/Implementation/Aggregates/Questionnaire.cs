@@ -338,7 +338,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //### old questionnaires supporting
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
+            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
             if (autoPropagatingQuestion != null)
             {
                 foreach (Guid groupId in autoPropagatingQuestion.Triggers)
@@ -359,13 +359,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
 
             //### old questionnaires supporting
-            var autoPropagatingQuestion = (IAutoPropagateQuestion)question;
+            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
             if (autoPropagatingQuestion != null)
                 return autoPropagatingQuestion.MaxValue;
 
             //### roster
-            var numericQuestion = (INumericQuestion) question;
-            return numericQuestion.MaxValue;
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+                return numericQuestion.MaxValue;
+
+            return null;
         }
 
         public IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId)
