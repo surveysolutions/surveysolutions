@@ -477,5 +477,30 @@ namespace Main.Core.Documents
 
             return doc;
         }
+
+        public void UpdateRosterGroupsIfNeeded(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
+        {
+            if (triggeredGroupIds != null && triggeredGroupIds.Count > 0)
+            {
+                this.MarkGroupsAsRosterAndSetRosterSizeQuestion(triggeredGroupIds, rosterSizeQuestionId);
+            }
+        }
+
+        public void MarkGroupsAsRosterAndSetRosterSizeQuestion(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
+        {
+            foreach (var triggeredGroupId in triggeredGroupIds)
+            {
+                var triggeredGroup = this.Find<IGroup>(group => group.PublicKey == triggeredGroupId).FirstOrDefault() as Group;
+
+                if (triggeredGroup == null)
+                {
+                    logger.Warn(string.Format("Failed to find group [{0}]. This groups was used in triggers in [{1}]s question", triggeredGroupId, rosterSizeQuestionId));
+                    continue;
+                }
+
+                triggeredGroup.IsRoster = true;
+                triggeredGroup.RosterSizeQuestionId = rosterSizeQuestionId;
+            }
+        }
     }
 }
