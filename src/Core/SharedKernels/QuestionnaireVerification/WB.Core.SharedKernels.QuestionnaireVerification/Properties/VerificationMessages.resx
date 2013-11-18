@@ -132,20 +132,8 @@
   <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Custom enablement condition references not existing question.</value>
   </data>
-  <data name="WB0006_PropagatingQuestionReferencesNotExistingGroup" xml:space="preserve">
-    <value>Propagating question references group which does not exists.</value>
-  </data>
-  <data name="WB0007_PropagatingQuestionReferencesNotPropagatableGroup" xml:space="preserve">
-    <value>Propagating question references group which is not propagated.</value>
-  </data>
-  <data name="WB0008_PropagatingQuestionHasNoAssociatedGroups" xml:space="preserve">
-    <value>Propagating question has no associated groups.</value>
-  </data>
-  <data name="WB0009_PropagatedGroupHasNoPropagatingQuestionsPointingToIt" xml:space="preserve">
-    <value>Propagated group has no propagating questions pointing to it.</value>
-  </data>
-  <data name="WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt" xml:space="preserve">
-    <value>Propagated group has more than one propagating question pointing to it.</value>
+  <data name="WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt" xml:space="preserve">
+    <value>Roster group has no roster size question pointing to it.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Linked question references not existing question.</value>
@@ -156,8 +144,8 @@
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup" xml:space="preserve">
     <value>Linked question references question not under propagated group.</value>
   </data>
-  <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question has custom validation referencing question with deeper propagation level.</value>
+  <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>Question has custom validation referencing question with deeper roster level.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Question with title substitution can't be marked as pre-filled.</value>
@@ -179,5 +167,26 @@
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be prefilled </value>
+  </data>
+  <data name="WB0023_RosterGroupHasNotNumericRosterSizeQuestion" xml:space="preserve">
+    <value>Only numeric question can be used as roster size question for group</value>
+  </data>
+  <data name="WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup" xml:space="preserve">
+    <value>Roster size question cannot be inside any roster group</value>
+  </data>
+  <data name="WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty" xml:space="preserve">
+    <value>Max value for roster size question could not be empty</value>
+  </data>
+  <data name="WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16" xml:space="preserve">
+    <value>Max value for roster size question could be in range [1, 16]</value>
+  </data>
+  <data name="WB0027_QuestionnaireHaveAutopropagatedGroups" xml:space="preserve">
+    <value>Questionnaire have autopropagated groups</value>
+  </data>
+  <data name="WB0028_QuestionnaireHaveAutopropagatedQuestions" xml:space="preserve">
+    <value>Questionnaire have autopropagated questions</value>
+  </data>
+  <data name="WB0029_RosterGroupHasGroup" xml:space="preserve">
+    <value>Roster group could not have groups inside itself</value>
   </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -11,18 +12,19 @@ using it = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
-    internal class when_handling_RosterChanged_event : QuestionnaireDenormalizerTestsContext
+    internal class when_handling_NumericQuestionAdded_event_and_max_value_is_specified : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>
         {
-            groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
+            var parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            questionId = Guid.Parse("11111111111111111111111111111111");
+            maxValue = 42;
 
             questionnaireDocument = CreateQuestionnaireDocument(
-                CreateGroup(groupId: groupId, setup: group => group.RosterSizeQuestionId = null)
+                CreateGroup(groupId: parentGroupId)
             );
 
-            @event = CreateRosterChangedEvent(groupId: groupId, rosterSizeQuestionId: rosterSizeQuestionId);
+            @event = CreateNumericQuestionAddedEvent(questionId: questionId, parentGroupId: parentGroupId, maxValue: maxValue);
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
@@ -33,14 +35,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_set_group_RosterSizeQuestionId_property_to_specified_value = () =>
-            questionnaireDocument.GetGroup(groupId)
-                .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
+        It should_set_question_MaxValue_property_to_specified_max_value = () =>
+            questionnaireDocument.GetQuestion<INumericQuestion>(questionId)
+                .MaxValue.ShouldEqual(maxValue);
 
         private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<RosterChanged> @event;
+        private static IPublishedEvent<NumericQuestionAdded> @event;
         private static QuestionnaireDocument questionnaireDocument;
-        private static Guid groupId;
-        private static Guid rosterSizeQuestionId;
+        private static Guid questionId;
+        private static int maxValue;
     }
 }

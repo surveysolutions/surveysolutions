@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.GetQuestionType(propagatingQuestionId) == QuestionType.AutoPropagate
                 && _.IsQuestionInteger(propagatingQuestionId) == true
                 && _.ShouldQuestionSpecifyRosterSize(propagatingQuestionId) == true
-                && _.GetMaxAnswerValueForRoserSizeQuestion(propagatingQuestionId) == 100
+                && _.GetMaxValueForNumericQuestion(propagatingQuestionId) == 100
                 && _.GetRosterGroupsByRosterSizeQuestion(propagatingQuestionId) == new[] { propagatedGroupId }
 
                 && _.HasGroup(propagatedGroupId) == true

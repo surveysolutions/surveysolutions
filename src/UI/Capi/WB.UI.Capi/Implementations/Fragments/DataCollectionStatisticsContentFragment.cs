@@ -34,6 +34,8 @@ namespace WB.UI.Capi.Implementations.Fragments
 
                 logManipulator.CloseDraftRecord(this.Model.QuestionnaireId);
             }
+
+            this.Activity.Finish();
         }
     }
 }

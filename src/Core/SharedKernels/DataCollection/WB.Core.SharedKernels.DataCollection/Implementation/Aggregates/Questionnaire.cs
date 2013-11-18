@@ -155,6 +155,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             this.ApplyEvent(new TemplateImported() { Source = document });
         }
+
+        public void ImportFromDesignerForTester(IQuestionnaireDocument source)
+        {
+            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            this.ApplyEvent(new TemplateImported() { Source = document });
+        }
+
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
@@ -346,7 +353,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId).Select(x => x.PublicKey);
         }
 
-        public int GetMaxAnswerValueForRoserSizeQuestion(Guid questionId)
+        public int? GetMaxValueForNumericQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
@@ -358,7 +365,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //### roster
             var numericQuestion = (INumericQuestion) question;
-            return numericQuestion.MaxValue.Value;
+            return numericQuestion.MaxValue;
         }
 
         public IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId)

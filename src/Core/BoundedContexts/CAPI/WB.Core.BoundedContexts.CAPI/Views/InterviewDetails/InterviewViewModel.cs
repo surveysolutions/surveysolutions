@@ -75,6 +75,42 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             #endregion
         }
 
+        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure)
+            : this(id)
+        {
+            //this.Status = interview.Status;
+
+            #region interview structure initialization
+
+            this.rosterStructure = rosterStructure;
+
+            this.BuildInterviewStructureFromTemplate(questionnaire);
+
+            this.BuildHeadQuestionsInsidePropagateGroupsStructure(questionnaire);
+
+            this.referencedQuestionToLinkedQuestionsMap = questionnaire
+                .Find<IQuestion>(question => question.LinkedToQuestionId != null)
+                .GroupBy(question => question.LinkedToQuestionId.Value)
+                .ToDictionary(
+                    keySelector: grouping => grouping.Key,
+                    elementSelector: grouping => grouping.Select(question => question.PublicKey).ToArray());
+
+            this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = new Dictionary<Guid, HashSet<InterviewItemId>>();
+
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(this.GetAllQuestionsWithSubstitution());
+
+            #endregion
+
+            #region interview data initialization
+            
+
+            this.CreateInterviewChapters(questionnaire);
+
+            this.CreateInterviewTitle(questionnaire);
+
+            #endregion
+        }
+
         private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
             new Dictionary<QuestionViewModel, IList<QuestionViewModel>>();
         
@@ -313,7 +349,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> propagatedScreenPrototypes =
             new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
 
-        protected IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; set; }
+        public IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get;private set; }
 
         #endregion
 
@@ -407,7 +443,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void SetAnswer(InterviewItemId key, object answer)
         {
-            QuestionViewModel question = this.Questions[key];
+            QuestionViewModel question = null;
+            if (this.Questions.ContainsKey(key))
+                question = this.Questions[key];
+            else if (this.FeaturedQuestions.ContainsKey(key))
+                question = this.FeaturedQuestions[key];
+            else
+                return;
+
             question.SetAnswer(answer);
         }
 
