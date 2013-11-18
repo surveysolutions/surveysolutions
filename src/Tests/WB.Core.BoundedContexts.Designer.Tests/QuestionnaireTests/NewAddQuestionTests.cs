@@ -52,28 +52,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
 
         [Test]
-        [Ignore("TLK KP-2834")]
-        public void NewAddQuestion_When_question_is_featured_but_inside_propagated_group_Then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            Guid autoGroupId = Guid.NewGuid();
-            bool isFeatured = true;
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupId, responsibleId: responsibleId);
-
-            // Act
-            TestDelegate act = () =>
-                               questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?", QuestionType.Text, "name", false,
-                                                            isFeatured,
-                                                            false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, 
-                                                            linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
-
-            // Assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup));
-        }
-
-        [Test]
         public void NewAddQuestion_When_question_is_featured_and_inside_non_propagated_group_Then_raised_NewQuestionAdded_event_contains_the_same_featured_field()
         {
             using (var eventContext = new EventContext())

@@ -21,27 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [Ignore("TLK KP-2834")]
-        public void MoveGroup_When_target_group_is_auto_propagateble_Then_throws_DomainException_with_type_AutoPropagateGroupCantHaveChildGroups()
-        {
-            // Arrange
-            var groupId = Guid.NewGuid();
-            var targetAutoPropagateGroupId = Guid.NewGuid();
-            Guid responsibleId = Guid.NewGuid();
-            var questionnaire =
-                CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
-                    rosterGroupId: targetAutoPropagateGroupId, regularGroupId: groupId,
-                    responsibleId: responsibleId);
-
-            // Act
-            TestDelegate act = () => questionnaire.MoveGroup(groupId, targetAutoPropagateGroupId, 0, responsibleId);
-
-            // Assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups));
-        }
-
-        [Test]
         public void MoveGroup_When_target_group_is_regular_Then_rised_QuestionnaireItemMoved_event_s()
         {
             using (var eventContext = new EventContext())

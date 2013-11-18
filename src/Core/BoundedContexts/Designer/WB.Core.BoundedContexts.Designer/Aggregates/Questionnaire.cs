@@ -688,8 +688,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
 
-                this.ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(targetGroupId.Value);
-
                 this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(targetGroupId.Value);
             }
 
@@ -908,16 +906,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
-            string alias, bool isFeatured, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
+            string alias, bool isPrefilled, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
-            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isPrefilled);
             this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
 
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
+
+            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
         }
 
         public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
@@ -943,6 +943,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1157,15 +1158,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException("Group cannot become a roster because it has child subgroups.");
         }
 
-        private void ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(Guid groupId)
-        {
-            var group = this.innerDocument.Find<Group>(groupId);
-            if (group.Propagated == Propagate.AutoPropagated)
-            {
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
-            }
-        }
-
         private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
         {
             bool isAddedGroupAChapter = !parentGroupId.HasValue;
@@ -1178,10 +1170,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(string.Format(
                     "Parent group {0} is a roster and therefore cannot have child groups.",
                     FormatGroupForException(parentGroupId.Value, this.innerDocument)));
-
-            if (parentGroup.Propagated == Propagate.AutoPropagated)
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups,
-                    "Auto propagated groups can't have child groups");
         }
 
 
@@ -1206,6 +1194,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
                 }
             }
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
+        {
+            if (!isPrefilled)
+                return;
+
+            if (parentGroup.IsRoster)
+                throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
