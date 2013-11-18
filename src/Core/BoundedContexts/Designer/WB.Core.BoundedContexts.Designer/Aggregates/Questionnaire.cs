@@ -678,8 +678,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
 
-                this.ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(targetGroupId.Value);
-
                 this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(targetGroupId.Value);
             }
 
@@ -1150,15 +1148,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException("Group cannot become a roster because it has child subgroups.");
         }
 
-        private void ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(Guid groupId)
-        {
-            var group = this.innerDocument.Find<Group>(groupId);
-            if (group.Propagated == Propagate.AutoPropagated)
-            {
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
-            }
-        }
-
         private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
         {
             bool isAddedGroupAChapter = !parentGroupId.HasValue;
@@ -1171,10 +1160,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(string.Format(
                     "Parent group {0} is a roster and therefore cannot have child groups.",
                     FormatGroupForException(parentGroupId.Value, this.innerDocument)));
-
-            if (parentGroup.Propagated == Propagate.AutoPropagated)
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups,
-                    "Auto propagated groups can't have child groups");
         }
 
 
@@ -1207,11 +1192,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
 
             if (parentGroup.IsRoster)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
-                    "Question inside roster group can not be pre-filled");
-            }
+                throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)

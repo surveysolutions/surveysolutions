@@ -21,45 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
 
-        [Test]
-        [Ignore("TLK KP-2834")]
-        public void NewUpdateGroup_When_new_propagation_kind_of_group_without_subgroups_is_AutoPropagate_Then_throws_DomainException_with_type_GroupCantBecomeAutoPropagateIfHasAnyChildGroup()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var groupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-                var newPropagationKind = Propagate.AutoPropagated;
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(
-                    questionId: Guid.NewGuid(), groupId: groupId, groupPropagationKind: Propagate.None,
-                    responsibleId: responsibleId);
-
-                // act
-                questionnaire.UpdateGroup(groupId, responsibleId: responsibleId, title: "New title", rosterSizeQuestionId: null, description: null, condition: null);
-
-                // assert
-                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Propagateble, Is.EqualTo(newPropagationKind));
-            }
-        }
-
-        [Test]
-        [Ignore("TLK KP-2834")]
-        public void NewUpdateGroup_When_new_propagation_kind_of_group_with_subgroups_is_AutoPropagate_Then_throws_DomainException_with_type_GroupCantBecomeAutoPropagateIfHasAnyChildGroup()
-        {
-            // arrange
-            Guid groupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithRegularGroupAndRegularGroupInIt(groupId: groupId, responsibleId: responsibleId);
-
-            // act
-            TestDelegate act = () => questionnaire.UpdateGroup(groupId, responsibleId: responsibleId, title: "New title", rosterSizeQuestionId: null, description: null, condition: null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup));
-        }
-
         [TestCase("")]
         [TestCase("   ")]
         [TestCase("\t")]
