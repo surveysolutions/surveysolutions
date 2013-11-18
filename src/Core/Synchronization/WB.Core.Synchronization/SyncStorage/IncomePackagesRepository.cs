@@ -18,7 +18,8 @@ namespace WB.Core.Synchronization.SyncStorage
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
         private readonly string path;
-        private const string FolderName = "IncomingData"; 
+        private const string FolderName = "IncomingData";
+        private const string ErrorFolderName = "IncomingDataWithErrors"; 
         private const string FileExtension = "sync";
 
         public IncomePackagesRepository(string folderPath)
@@ -26,6 +27,9 @@ namespace WB.Core.Synchronization.SyncStorage
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
+            var errorPath = Path.Combine(path, ErrorFolderName);
+            if (!Directory.Exists(errorPath))
+                Directory.CreateDirectory(errorPath);
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -33,21 +37,32 @@ namespace WB.Core.Synchronization.SyncStorage
             if (string.IsNullOrWhiteSpace(item.Content))
                 throw new ArgumentException("Sync Item is not set.");
 
+            try
+            {
+                var meta = GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
 
-            var meta = GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
+                NcqrsEnvironment.Get<ICommandService>()
+                    .Execute(new ApplySynchronizationMetadata(
+                        meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid));
 
-            File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
+                File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
+            }
+            catch
+            {
+                File.WriteAllText(GetItemFileNameForErrorStorage(item.Id), JsonConvert.SerializeObject(item));
+            }
 
-            NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new ApplySynchronizationMetadata(
-                                meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, 
-                                null, meta.Comments, meta.Valid));
         }
 
 
         private string GetItemFileName(Guid id)
         {
             return Path.Combine(path, string.Format("{0}.{1}", id, FileExtension));
+        }
+
+        private string GetItemFileNameForErrorStorage(Guid id)
+        {
+            return Path.Combine(path, ErrorFolderName, string.Format("{0}.{1}", id, FileExtension));
         }
 
         public void ProcessItem(Guid id, long sequence)
