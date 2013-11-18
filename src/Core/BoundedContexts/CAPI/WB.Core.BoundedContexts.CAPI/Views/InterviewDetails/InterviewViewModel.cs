@@ -608,7 +608,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var key = new InterviewItemId(group.PublicKey);
 
 
-            if (group.Propagated == Propagate.None)
+            if (group.Propagated == Propagate.None && !group.IsRoster)
             {
                 var screenItems = this.BuildItems(group, true);
                 var screen = new QuestionnaireScreenViewModel(this.PublicKey, group.Title, this.Title, true,
