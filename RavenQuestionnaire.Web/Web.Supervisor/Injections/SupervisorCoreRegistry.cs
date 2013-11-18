@@ -15,13 +15,8 @@ namespace Web.Supervisor.Injections
     using System.Web.Mvc;
 
     using Main.Core;
-    using Main.Core.Export;
-    using Main.Core.View.Export;
-
     using Ninject;
     using Ninject.Activation;
-
-    using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
     using WB.Core.SharedKernel.Utils.Compression;
     
@@ -78,8 +73,7 @@ namespace Web.Supervisor.Injections
         {
             base.Load();
 
-            this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
-            this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
+            RegisterViewFactories();
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();

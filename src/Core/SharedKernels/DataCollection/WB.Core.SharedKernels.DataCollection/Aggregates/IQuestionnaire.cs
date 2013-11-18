@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -33,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsCustomValidationDefined(Guid questionId);
 
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId);
+        IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomValidation(Guid questionId);
 
         string GetCustomValidationExpression(Guid questionId);
 
@@ -47,27 +48,27 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
 
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId);
+        IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId);
 
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId);
+        IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId);
 
         IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
 
         IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
 
-        bool ShouldQuestionPropagateGroups(Guid questionId);
+        bool ShouldQuestionSpecifyRosterSize(Guid questionId);
 
-        IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId);
+        IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
-        int GetMaxAnswerValueForPropagatingQuestion(Guid questionId);
+        int? GetMaxValueForNumericQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId);
+        IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId);
 
-        IEnumerable<Guid> GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(Guid groupId);
+        IEnumerable<Guid> GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(Guid groupId);
 
-        int GetPropagationLevelForQuestion(Guid questionId);
+        int GetRosterLevelForQuestion(Guid questionId);
 
-        int GetPropagationLevelForGroup(Guid groupId);
+        int GetRosterLevelForGroup(Guid groupId);
 
         IEnumerable<Guid> GetAllMandatoryQuestions();
 
@@ -75,7 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllGroupsWithNotEmptyCustomEnablementConditions();
 
-        bool IsGroupPropagatable(Guid groupId);
+        bool IsRosterGroup(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 

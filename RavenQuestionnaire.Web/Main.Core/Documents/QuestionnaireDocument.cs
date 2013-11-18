@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
@@ -12,10 +12,6 @@ namespace Main.Core.Documents
 {
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
-
-        private readonly List<Guid> triggers = new List<Guid>();
-        
-
         public QuestionnaireDocument()
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
@@ -79,16 +75,14 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
-        public List<Guid> Triggers
+        public bool IsRoster
         {
-            get
-            {
-                return this.triggers;
-            }
+            get { return false; }
+        }
 
-            set
-            {
-            }
+        public Guid? RosterSizeQuestionId
+        {
+            get { return null; }
         }
 
         public List<Guid> SharedPersons { get; set; }
@@ -216,17 +210,26 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string description, Propagate kindOfPropagation, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string description,
+            Propagate kindOfPropagation, string conditionExpression)
+        {
+            this.UpdateGroup(groupId, group =>
+            {
+                this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
+
+                @group.Propagated = kindOfPropagation;
+                @group.ConditionExpression = conditionExpression;
+                @group.Description = description;
+                @group.Update(title);
+            });
+        }
+
+        public void UpdateGroup(Guid groupId, Action<Group> update)
         {
             var group = this.Find<Group>(groupId);
-            if (@group == null) return;
 
-            this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
-
-            @group.Propagated = kindOfPropagation;
-            @group.ConditionExpression = conditionExpression;
-            @group.Description = description;
-            @group.Update(title);
+            if (@group != null)
+                update(@group);
         }
 
         private void UpdateAutoPropagateQuestionsTriggersIfNeeded(IGroup group, Propagate newPropagationKind = Propagate.None)
@@ -300,6 +303,32 @@ namespace Main.Core.Documents
             return this
                 .Find<IGroup>(group => ContainsChildQuestionWithSpecifiedId(group, questionId))
                 .SingleOrDefault();
+        }
+
+
+        public IEnumerable<T> GetAllQuestions<T>() where T : class, IComposite
+        {
+            var result = new List<T>();
+            var groups = new Queue<IComposite>();
+            groups.Enqueue(this);
+
+            while (groups.Count != 0)
+            {
+                IComposite queueItem = groups.Dequeue();
+                var question = queueItem as T;
+                if (question != null)
+                {
+                    result.Add(question);
+                    continue;
+                }
+
+                foreach (IComposite child in queueItem.Children)
+                {
+                    groups.Enqueue(child);
+                }
+            }
+
+            return result;
         }
 
         internal IEnumerable<IQuestion> GetAllQuestions()
@@ -429,11 +458,15 @@ namespace Main.Core.Documents
             return foundGroup;
         }
 
-        public IComposite Clone()
+        IComposite IComposite.Clone()
+        {
+            return this.Clone();
+        }
+
+        public QuestionnaireDocument Clone()
         {
             var doc = this.MemberwiseClone() as QuestionnaireDocument;
 
-            doc.Triggers = new List<Guid>(this.Triggers);
             doc.SetParent(null);
 
             doc.Children = new List<IComposite>();
@@ -443,6 +476,31 @@ namespace Main.Core.Documents
             }
 
             return doc;
+        }
+
+        public void UpdateRosterGroupsIfNeeded(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
+        {
+            if (triggeredGroupIds != null && triggeredGroupIds.Count > 0)
+            {
+                this.MarkGroupsAsRosterAndSetRosterSizeQuestion(triggeredGroupIds, rosterSizeQuestionId);
+            }
+        }
+
+        public void MarkGroupsAsRosterAndSetRosterSizeQuestion(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
+        {
+            foreach (var triggeredGroupId in triggeredGroupIds)
+            {
+                var triggeredGroup = this.Find<IGroup>(group => group.PublicKey == triggeredGroupId).FirstOrDefault() as Group;
+
+                if (triggeredGroup == null)
+                {
+                    logger.Warn(string.Format("Failed to find group [{0}]. This groups was used in triggers in [{1}]s question", triggeredGroupId, rosterSizeQuestionId));
+                    continue;
+                }
+
+                triggeredGroup.IsRoster = true;
+                triggeredGroup.RosterSizeQuestionId = rosterSizeQuestionId;
+            }
         }
     }
 }

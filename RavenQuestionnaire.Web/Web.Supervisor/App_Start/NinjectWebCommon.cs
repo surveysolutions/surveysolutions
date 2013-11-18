@@ -9,7 +9,6 @@ using Core.Supervisor.Views;
 using Main.Core;
 using Main.Core.Commands;
 using Main.Core.Documents;
-using Main.Core.Services;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -123,7 +122,7 @@ namespace Web.Supervisor.App_Start
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings),
-                new RavenReadSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
@@ -140,8 +139,6 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IDomainRepository>().ToConstant(repository);
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
 #warning dirty index registrations
-            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
-            indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }
@@ -152,7 +149,6 @@ namespace Web.Supervisor.App_Start
             NcqrsEnvironment.SetDefault(commandService);
             NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
             kernel.Bind<ICommandService>().ToConstant(commandService);
-            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 

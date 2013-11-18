@@ -14,7 +14,6 @@ using Main.Core;
 using Main.Core.Commands;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-using Main.Core.Services;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -35,6 +34,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -103,7 +103,6 @@ namespace CapiDataGenerator
             var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.SetDefault(commandService);
             NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), commandService);
-            NcqrsEnvironment.SetDefault(Kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             var snpshotStore = new InMemoryEventStore();

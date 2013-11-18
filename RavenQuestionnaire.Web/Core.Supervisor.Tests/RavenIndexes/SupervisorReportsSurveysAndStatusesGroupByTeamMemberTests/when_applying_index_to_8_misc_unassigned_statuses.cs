@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.Supervisor.DenormalizerStorageItem;
 using Machine.Specifications;
 using Raven.Client.Embedded;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;

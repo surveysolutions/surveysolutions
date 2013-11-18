@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View.Question;
-
 
 namespace Core.Supervisor.Views.TakeNew
 {
@@ -14,16 +12,17 @@ namespace Core.Supervisor.Views.TakeNew
             this.QuestionnaireTitle = questionnaire.Title;
             this.QuestionnaireId = questionnaire.PublicKey;
             this.QuestionnaireVersion = questionnaireVersion;
-            this.FeaturedQuestions = new List<QuestionView>();
+            this.FeaturedQuestions = new List<FeaturedQuestionView>();
             this.Supervisors = new List<UserDocument>();
+
             foreach (IQuestion q in questionnaire.GetFeaturedQuestions())
             {
-                var questionView = new QuestionView(q, null);
+                var questionView = new FeaturedQuestionView(q, null);
                 this.FeaturedQuestions.Add(questionView);
             }
         }
 
-        public List<QuestionView> FeaturedQuestions { get; set; }
+        public List<FeaturedQuestionView> FeaturedQuestions { get; set; }
 
         public string QuestionnaireTitle { get; set; }
 

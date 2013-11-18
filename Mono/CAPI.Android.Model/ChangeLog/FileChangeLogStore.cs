@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using Main.Core;
 using Main.Core.Events;
 using Main.Core.View;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Core.Model.ChangeLog

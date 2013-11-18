@@ -31,7 +31,7 @@ namespace Android.Tests.Runner
         }
         private TestAssemblyInfo AndroidAppTests()
         {
-            var assembly = typeof(CompleteQuestionnaireViewTests).Assembly;
+            var assembly = typeof(ChangeLogManipulatorTests).Assembly;
 
             return new TestAssemblyInfo(assembly);
         }

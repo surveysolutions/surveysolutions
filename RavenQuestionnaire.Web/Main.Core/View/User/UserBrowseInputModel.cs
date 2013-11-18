@@ -57,7 +57,7 @@ namespace Main.Core.View.User
                 if (this.LocationId != Guid.Empty)
                 {
                     var locatianOriginalId = this.LocationId;
-                    return e => !e.IsDeleted && e.Location.Id == locatianOriginalId;
+                    return e => !e.IsDeleted;
                 }
                 if (!this.Role.HasValue) 
                     return e => !e.IsDeleted;

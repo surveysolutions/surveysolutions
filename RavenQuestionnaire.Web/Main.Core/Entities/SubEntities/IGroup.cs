@@ -1,33 +1,20 @@
+using System;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Observers;
 
 namespace Main.Core.Entities.SubEntities
 {
-    /// <summary>
-    /// The Group interface.
-    /// </summary>
-    public interface IGroup : IComposite, ITriggerable, IConditional
+    public interface IGroup : IComposite, IConditional
     {
-        #region Public Properties
-        
-        /// <summary>
-        /// Gets or sets the propagated.
-        /// </summary>
+        [Obsolete("Left for backward compatibility with Saint Lucia and Marocco started before 11/8/2013.")]
         Propagate Propagated { get; set; }
 
-
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
         string Title { get; set; }
 
-        /// <summary>
-        /// Gets or sets Description.
-        /// </summary>
         string Description { get; set; }
 
-        #endregion
+        bool IsRoster { get; }
 
-        // bool Enabled { get; set; }
+        Guid? RosterSizeQuestionId { get; }
     }
 }

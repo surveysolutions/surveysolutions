@@ -14,21 +14,15 @@
 
                 self.type = ko.observable("GroupView"); // Object type
                 self.template = "GroupView"; // inner html template name
-                self.gtype = ko.observable("None"); // Group type
+
+                self.isRoster = ko.observable(false);
+                self.rosterSizeQuestion = ko.observable();
+                
+                self.integerQuestions = ko.observableArray([]);
 
                 self.level = ko.observable();
                 self.description = ko.observable('');
-                self.condition = ko.observable('').extend({
-                    validation: [{
-                        validator: function (val) {
-                            if (_.isUndefined(val) || _.isNull(val)) {
-                                return true;
-                            }
-                            return (val.indexOf("[this]") == -1);
-                        },
-                        message: 'You cannot use self-reference in conditions'
-                    }]
-                });;
+                self.condition = ko.observable('');
                 
                 self.children = ko.observableArray();
                 self.childrenID = ko.observableArray();
@@ -46,9 +40,8 @@
                 self.cloneSource = ko.observable();
                 self.isSelected = ko.observable();
                 self.isExpanded = ko.observable(true);
-                self.typeOptions = config.groupTypes;
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.gtype, self.description, self.condition]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition, self.isRoster, self.rosterSizeQuestion]);
                 self.dirtyFlag().reset();
                 
                 self.errors = ko.validation.group(self);
@@ -71,6 +64,15 @@
                                 return false;
                             },
                             message: 'Error'
+                        },
+                        {
+                            validator: function (val) {
+                                if (_.isUndefined(val) || _.isNull(val)) {
+                                    return true;
+                                }
+                                return (val.indexOf("[this]") == -1);
+                            },
+                            message: 'You cannot use self-reference in conditions'
                         }]
                     });
                 };
@@ -115,7 +117,6 @@
                     var item = new Group();
                     item.title(this.title());
                     item.type(this.type());
-                    item.gtype(this.gtype());
                     item.condition(this.condition());
                     item.level(this.level());
                     item.description(this.description());
@@ -123,6 +124,8 @@
                     item.id(Math.uuid());
                     item.isNew(true);
                     item.isClone(true);
+                    item.isRoster(this.isRoster());
+                    item.rosterSizeQuestion(this.rosterSizeQuestion());
 
                     item.childrenID(_.map(this.childrenID(), function (child) {
                         var clonedItem;
@@ -168,9 +171,10 @@
             update: function (data) {
                 
                 this.title(data.title);
-                this.gtype(data.gtype);
                 this.description(data.description);
                 this.condition(data.condition);
+                this.isRoster(data.isRoster);
+                this.rosterSizeQuestion(data.rosterSizeQuestion);
 
                 //save off the latest data for later use
                 this.cache.latestData = data;

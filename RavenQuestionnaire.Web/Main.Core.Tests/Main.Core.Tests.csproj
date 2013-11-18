@@ -154,18 +154,11 @@
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="Domain\TestDataConfigurator.cs" />
-    <Compile Include="Domain\UserARTests.cs" />
-    <Compile Include="Entities\CompleteGroupTest.cs" />
     <Compile Include="Entities\GroupTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
-    <Compile Include="Export\HeaderCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
-    <Compile Include="Export\HeaderItemTests.cs" />
-    <Compile Include="Export\StataSuplierTests.cs" />
-    <Compile Include="Export\ValueCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
-    <Compile Include="GroupWithRoutTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleObjectExtensionsTests.cs" />
     <Compile Include="Utils\RavenMockUtils.cs" />
@@ -202,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\SubEntities\" />
+    <Folder Include="Export\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
-using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard

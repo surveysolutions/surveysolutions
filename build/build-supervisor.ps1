@@ -1,7 +1,7 @@
 param([string]$VersionPrefix,
 [INT]$BuildNumber,
-[string]$KeystorePassword,
-[string]$BuildConfiguration='release')
+[string]$BuildConfiguration='release',
+[string]$KeystorePassword)
 
 $ErrorActionPreference = "Stop"
 
@@ -29,7 +29,7 @@ try {
 	BuildSupervisor `
 		-Solution 'src\Supervisor.sln' `
 		-Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
-		-CapiProject 'Mono\CAPI.Android\CAPI.Android.csproj' `
+		-CapiProject 'src\UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-VersionPrefix $VersionPrefix `
 		-BuildNumber $BuildNumber

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Main.Core.Export;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
@@ -16,12 +15,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     {
         private readonly IEnvironmentSupplier<InterviewDataExportView> supplier;
         private readonly IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireLevelStorage;
 
         public DataExportService(
             IEnvironmentSupplier<InterviewDataExportView> supplier, 
             IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory, 
-            IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage)
+            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireLevelStorage)
         {
             this.supplier = supplier;
             this.interviewDataExportViewFactory = interviewDataExportViewFactory;
@@ -54,7 +53,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         {
             var levels = new HashSet<Guid?> { null };
             var questionnarieLevelStructure = this.questionnaireLevelStorage.GetById(questionnarieid, version);
-            foreach (var levelId in questionnarieLevelStructure.PropagationScopes.Keys)
+            foreach (var levelId in questionnarieLevelStructure.RosterScopes.Keys)
             {
                 levels.Add(levelId);
             }

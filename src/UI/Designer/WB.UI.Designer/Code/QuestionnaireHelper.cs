@@ -1,21 +1,19 @@
-﻿namespace WB.UI.Designer
+﻿using System;
+using System.Linq;
+using Main.Core.View;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
+using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Membership;
+
+namespace WB.UI.Designer.Code
 {
-    using System;
-    using System.Linq;
-
-    using Main.Core.View;
-
-    using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
-    using WB.UI.Designer.Models;
-    using WB.UI.Designer.Views.Questionnaire;
-    using WB.UI.Shared.Web.Membership;
-
     public class QuestionnaireHelper : IQuestionnaireHelper
     {
         private readonly IMembershipUserService userService;
-        private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory;
+        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
 
-        public QuestionnaireHelper(IMembershipUserService userSevice, IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)
+        public QuestionnaireHelper(IMembershipUserService userSevice, IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory)
         {
             this.userService = userSevice;
             this.viewFactory = viewFactory;
@@ -121,7 +119,7 @@
             return
                 this.viewFactory.Load(
                     input:
-                        new QuestionnaireListViewInputModel
+                        new QuestionnaireListInputModel
                             {
                                 ViewerId = viewerId, 
                                 IsPublic = isPublic, 

@@ -52,6 +52,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\IQuestionnaire.cs">
       <Link>Aggregates\IQuestionnaire.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\UserAR.cs">
+      <Link>Aggregates\UserAR.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerDateTimeQuestionCommand.cs">
       <Link>Commands\Interview\AnswerDateTimeQuestionCommand.cs</Link>
     </Compile>
@@ -109,6 +112,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\CreateInterviewCommand.cs">
       <Link>Commands\Interview\CreateInterviewCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\CreateInterviewForTestingCommand.cs">
+      <Link>Commands\Interview\CreateInterviewForTestingCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\DeleteInterviewCommand.cs">
       <Link>Commands\Interview\DeleteInterviewCommand.cs</Link>
     </Compile>
@@ -142,8 +148,23 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromDesigner.cs">
       <Link>Commands\Questionnaire\ImportFromDesigner.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromDesignerForTester.cs">
+      <Link>Commands\Questionnaire\ImportFromDesignerForTester.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromSupervisor.cs">
       <Link>Commands\Questionnaire\ImportFromSupervisor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\User\ChangeUserCommand.cs">
+      <Link>Commands\User\ChangeUserCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\User\CreateUserCommand.cs">
+      <Link>Commands\User\CreateUserCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\User\LockUserCommand.cs">
+      <Link>Commands\User\LockUserCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\User\UnlockUserCommand.cs">
+      <Link>Commands\User\UnlockUserCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataCollectionSharedKernelModule.cs">
       <Link>DataCollectionSharedKernelModule.cs</Link>
@@ -157,8 +178,11 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\EventHandler\QuestionnaireBrowseItemDenormalizer.cs">
       <Link>EventHandler\QuestionnaireBrowseItemDenormalizer.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\EventHandler\QuestionnairePropagationStructureDenormalizer.cs">
-      <Link>EventHandler\QuestionnairePropagationStructureDenormalizer.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\EventHandler\QuestionnaireDenormalizer.cs">
+      <Link>EventHandler\QuestionnaireDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\EventHandler\QuestionnaireRosterStructureDenormalizer.cs">
+      <Link>EventHandler\QuestionnaireRosterStructureDenormalizer.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\AnswerCommented.cs">
       <Link>Events\Interview\AnswerCommented.cs</Link>
@@ -231,6 +255,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewerAssigned.cs">
       <Link>Events\Interview\InterviewerAssigned.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewForTestingCreated.cs">
+      <Link>Events\Interview\InterviewForTestingCreated.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewRejected.cs">
       <Link>Events\Interview\InterviewRejected.cs</Link>
@@ -340,6 +367,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewStatus.cs">
       <Link>ValueObjects\Interview\InterviewStatus.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Questionnaire\QuestionIdAndVariableName.cs">
+      <Link>ValueObjects\Questionnaire\QuestionIdAndVariableName.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\FeaturedQuestionItem.cs">
       <Link>Views\Questionnaire\FeaturedQuestionItem.cs</Link>
     </Compile>
@@ -364,8 +394,8 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireItemViewFactory.cs">
       <Link>Views\Questionnaire\QuestionnaireItemViewFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnairePropagationStructure.cs">
-      <Link>Views\Questionnaire\QuestionnairePropagationStructure.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireRosterStructure.cs">
+      <Link>Views\Questionnaire\QuestionnaireRosterStructure.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -410,7 +440,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

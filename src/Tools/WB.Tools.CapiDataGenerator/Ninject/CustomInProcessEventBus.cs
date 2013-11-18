@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;

@@ -1,75 +1,69 @@
-﻿using WB.UI.Shared.Web;
+﻿using System.Configuration;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer
 {
     using System.Collections.Specialized;
     using System.Web.Configuration;
 
-    /// <summary>
-    /// The membership provider settings.
-    /// </summary>
-    public class MembershipProviderSettings : WebConfigHelper
+    public class MembershipProviderSettings
     {
         private static MembershipProviderSettings instance;
 
         public static MembershipProviderSettings Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    var membershipSection = GetSection<MembershipSection>("system.web/membership");
-                    instance =
-                        new MembershipProviderSettings(
-                            membershipSection.Providers[membershipSection.DefaultProvider].Parameters);
-                }
-
-                return instance;
-            }
+            get { return instance ?? (instance = new MembershipProviderSettings()); }
         }
 
-        const string ENABLEPASSWORDRETRIEVAL = "enablePasswordRetrieval";
-        const string ENABLEPASSWORDRESET = "enablePasswordReset";
-        const string REQUIRESQUESTIONANDANSWER = "requiresQuestionAndAnswer";
-        const string MINREQUIREDPASSWORDLENGTH = "minRequiredPasswordLength";
-        const string MINREQUIREDNONALPHANUMERICCHARACTERS = "minRequiredNonalphanumericCharacters";
-        const string MAXINVALIDPASSWORDATTEMPTS = "maxInvalidPasswordAttempts";
-        const string PASSWORDATTEMPTWINDOW = "passwordAttemptWindow";
-        const string PASSWORDSTRENGTHREGULAREXPRESSION = "passwordStrengthRegularExpression";
-        private const string REQUIRESUNIQUEEMAIL = "requiresUniqueEmail";
-
-        public bool EnablePasswordRetrieval { get; private set; }
-        public bool EnablePasswordReset { get; private set; }
-        public bool RequiresQuestionAndAnswer { get; private set; }
-        public int MinRequiredPasswordLength { get; private set; }
-        public int MinRequiredNonalphanumericCharacters { get; private set; }
-        public int MaxInvalidPasswordAttempts { get; private set; }
-        public int PasswordAttemptWindow { get; private set; }
-        public string PasswordStrengthRegularExpression { get; private set; }
-        public bool RequiresUniqueEmail { get; private set; }
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MembershipProviderSettings"/> class.
-        /// </summary>
-        /// <param name="settingsCollection">
-        /// The settings Collection.
-        /// </param>
-        private MembershipProviderSettings(NameValueCollection settingsCollection)
-            : base(settingsCollection)
+        private static NameValueCollection GetSection()
         {
-            this.EnablePasswordRetrieval = GetBoolean(ENABLEPASSWORDRETRIEVAL, false);
-            this.EnablePasswordReset = GetBoolean(ENABLEPASSWORDRESET, true);
-            this.RequiresQuestionAndAnswer = GetBoolean(REQUIRESQUESTIONANDANSWER, false);
-            this.MinRequiredPasswordLength = GetInt(MINREQUIREDPASSWORDLENGTH, 6);
-            this.MinRequiredNonalphanumericCharacters = GetInt(MINREQUIREDNONALPHANUMERICCHARACTERS, 0);
-            this.MaxInvalidPasswordAttempts = GetInt(MAXINVALIDPASSWORDATTEMPTS, 5);
-            this.PasswordAttemptWindow = GetInt(PASSWORDATTEMPTWINDOW, 10);
-            this.PasswordStrengthRegularExpression = GetString(PASSWORDSTRENGTHREGULAREXPRESSION, string.Empty);
-            this.RequiresUniqueEmail = GetBoolean(REQUIRESUNIQUEEMAIL, true);
+            var membershipSection = (MembershipSection) ConfigurationManager.GetSection("system.web/membership");
+            return membershipSection.Providers[membershipSection.DefaultProvider].Parameters;
         }
 
-        #endregion
+        public bool EnablePasswordRetrieval
+        {
+            get { return GetSection().GetBool("enablePasswordRetrieval", false); }
+        }
+
+        public bool EnablePasswordReset
+        {
+            get { return GetSection().GetBool("enablePasswordReset", true); }
+        }
+
+        public bool RequiresQuestionAndAnswer
+        {
+            get { return GetSection().GetBool("requiresQuestionAndAnswer", false); }
+        }
+
+        public int MinRequiredPasswordLength
+        {
+            get { return GetSection().GetInt("minRequiredPasswordLength", 6); }
+        }
+
+        public int MinRequiredNonalphanumericCharacters
+        {
+            get { return GetSection().GetInt("minRequiredNonalphanumericCharacters", 0); }
+        }
+
+        public int MaxInvalidPasswordAttempts
+        {
+            get { return GetSection().GetInt("maxInvalidPasswordAttempts", 5); }
+        }
+
+        public int PasswordAttemptWindow
+        {
+            get { return GetSection().GetInt("passwordAttemptWindow", 10); }
+        }
+
+        public string PasswordStrengthRegularExpression
+        {
+            get { return GetSection().GetString("passwordStrengthRegularExpression", string.Empty); }
+        }
+
+        public bool RequiresUniqueEmail
+        {
+            get { return GetSection().GetBool("requiresUniqueEmail", true); }
+        }
     }
 }

@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Commands.User;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Commanding;
@@ -15,10 +14,8 @@ using Ncqrs.Commanding;
 namespace AndroidMain.Core.Tests.CommonTests
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
-    using Android.App;
     using Android.Content;
 
     using AndroidMain.Core.Tests.AndroidSpecificTests;
@@ -26,8 +23,6 @@ namespace AndroidMain.Core.Tests.CommonTests
     using AndroidNcqrs.Eventing.Storage.SQLite;
 
     using Main.Core;
-    using Main.Core.Documents;
-    using Main.Core.Services;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
@@ -48,8 +43,6 @@ namespace AndroidMain.Core.Tests.CommonTests
         [SetUp]
         public void SetUp()
         {
-           // Application.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
-
             var registry = new TestsRegistry();
 
             this._kernel = new StandardKernel();
@@ -60,23 +53,10 @@ namespace AndroidMain.Core.Tests.CommonTests
             var store = new MvvmCrossSqliteEventStore(_testEventStore);
             this._kernel.Bind<IEventStore>().ToConstant(store).InSingletonScope();
 
-            this._kernel.Bind<IFileStorageService>().To<FakeFileStorage>();
-
             this._kernel.Load(new FakeCore());
 
             NcqrsInit.Init(this._kernel);
         }
-
-        // [Test, Ignore]
-        // public void should_desirialize_event()
-        // {
-        // var storedEvent = StoredEvent.GetCreateTemplateEvent();
-
-        // Assert.NotNull(storedEvent);
-
-        // Assert.That(storedEvent.EventIdentifier, 
-        // Is.EqualTo(Guid.Parse("6de866ac-2a8d-4dc9-8a85-bf425b318caa")));
-        // }
 
         [Test]
         public void store_template_event_in_db()
@@ -129,25 +109,4 @@ namespace AndroidMain.Core.Tests.CommonTests
     public class TestsRegistry : CoreRegistry {}
 
     internal class FakeCore : CoreRegistry {}
-
-    public class FakeFileStorage : IFileStorageService
-    {
-        public void DeleteFile(string filename)
-        {
-        }
-
-        public FileDescription RetrieveFile(string filename)
-        {
-            return new FileDescription();
-        }
-
-        public FileDescription RetrieveThumb(string filename)
-        {
-            return new FileDescription();
-        }
-
-        public void StoreFile(FileDescription file)
-        {
-        }
-    }
 }

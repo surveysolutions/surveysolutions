@@ -1,4 +1,4 @@
-using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.Observers;
 
 namespace Main.Core.Entities.SubEntities.Question
 {

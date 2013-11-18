@@ -60,8 +60,7 @@ namespace Main.Core.View.User
                         input.PageSize);
 
                 // And enact this query
-                UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email,
-                    x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).ToArray();
+                UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLocked, x.Supervisor)).ToArray();
                 return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
             });
         }

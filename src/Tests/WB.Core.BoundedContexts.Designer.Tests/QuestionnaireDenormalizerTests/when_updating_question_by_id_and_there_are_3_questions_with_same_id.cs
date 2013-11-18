@@ -1,11 +1,11 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -31,9 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 mainGroup = CreateGroup(children: new[]
                 {
-                    CreateQuestion(questionId: questionId, title: initialQuestionTitle),
-                    CreateQuestion(questionId: questionId, title: initialQuestionTitle),
-                    CreateQuestion(questionId: questionId, title: initialQuestionTitle),
+                    CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
+                    CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
+                    CreateTextQuestion(questionId: questionId, title: initialQuestionTitle),
                 }),
             });
 

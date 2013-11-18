@@ -55,11 +55,8 @@ namespace Main.Core.View.User
         /// <param name="supervisor">
         /// The supervisor.
         /// </param>
-        /// <param name="locationId">
-        /// The location id.
-        /// </param>
         public UserView(Guid publicKey, string userName, string password, string email, DateTime creationDate, 
-            IEnumerable<UserRoles> roles, bool isLocked, UserLight supervisor, Guid locationId)
+            IEnumerable<UserRoles> roles, bool isLocked, UserLight supervisor)
         {
             this.PublicKey = publicKey;
             this.UserName = userName;
@@ -69,7 +66,6 @@ namespace Main.Core.View.User
             this.Roles = roles;
             this.IsLocked = isLocked;
             this.Supervisor = supervisor;
-            this.LocationId = locationId;
         }
 
         #endregion
@@ -90,11 +86,6 @@ namespace Main.Core.View.User
         /// Gets or sets a value indicating whether is locked.
         /// </summary>
         public bool IsLocked { get; set; }
-
-        /// <summary>
-        /// Gets or sets the location id.
-        /// </summary>
-        public Guid LocationId { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
@@ -154,7 +145,7 @@ namespace Main.Core.View.User
         public static UserView New()
         {
             return new UserView(
-                Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, null, Guid.Empty);
+                Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, null);
         }
 
         #endregion

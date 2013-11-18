@@ -1,35 +1,34 @@
-﻿using WB.UI.Shared.Web;
+﻿using System.Configuration;
+using WB.UI.Shared.Web;
 using System.Collections.Specialized;
+using WB.UI.Shared.Web.Extensions;
 
 namespace Web.Supervisor.Code
 {
-    public sealed class AppSettings : WebConfigHelper
+    public sealed class AppSettings
     {
-        public static readonly AppSettings Instance = new AppSettings(System.Configuration.ConfigurationManager.AppSettings);
+        public static readonly AppSettings Instance = new AppSettings();
 
         public static bool IsDebugBuilded
         {
             get
             {
 #if DEBUG
-            return true;
+                return true;
 #else
-            return false;
+                return false;
 #endif
             }
         }
 
-        const string ADMINEMAIL = "AdminEmail";
-        const string ACCEPTUNSIGNEDCERTIFICATE = "AcceptUnsignedCertificate";
-
-        public string AdminEmail { get; set; }
-        public bool AcceptUnsignedCertificate { get; set; }
-
-        private AppSettings(NameValueCollection settingsCollection)
-            : base(settingsCollection)
+        public string AdminEmail
         {
-            this.AdminEmail = this.GetString(ADMINEMAIL);
-            this.AcceptUnsignedCertificate = this.GetBoolean(ACCEPTUNSIGNEDCERTIFICATE, true);
+            get { return ConfigurationManager.AppSettings.GetString("AdminEmail"); }
+        }
+
+        public bool AcceptUnsignedCertificate
+        {
+            get { return ConfigurationManager.AppSettings.GetBool("AcceptUnsignedCertificate", true); }
         }
     }
 }
