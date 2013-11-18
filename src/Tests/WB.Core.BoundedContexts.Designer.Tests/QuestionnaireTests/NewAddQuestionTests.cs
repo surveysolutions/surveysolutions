@@ -244,26 +244,26 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [Ignore("TLK KP-2834")]
-        public void NewAddQuestion_When_question_is_head_of_propagated_group_but_inside_non_propagated_group_Then_DomainException_should_be_thrown()
+        public void NewAddQuestion_When_question_is_header_of_roster_but_inside_not_roster_Then_DomainException_should_be_thrown()
         {
             // Arrange
             Guid groupId = Guid.NewGuid();
-            bool isHeadOfPropagatedGroup = true;
+            bool isHeadOfRoster = true;
             Guid responsibleId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupId, responsibleId: responsibleId);
 
             // Act
             TestDelegate act = () =>
-                               questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
-                                                            "name", false, false,
-                                                            isHeadOfPropagatedGroup,
-                                                            QuestionScope.Interviewer, "", "", "", "",
-                                                            new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
+                    "name", false, false,
+                    isHeadOfRoster,
+                    QuestionScope.Interviewer, "", "", "", "",
+                    new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false,
+                    maxAllowedAnswers: null);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeaderOfRosterButNotInsideRoster));
         }
 
         [Test]
