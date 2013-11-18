@@ -96,11 +96,15 @@
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
+    <Compile Include="Events\Questionnaire\GroupEvent.cs" />
+    <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireCloned.cs" />
+    <Compile Include="Events\Questionnaire\RosterChanged.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonFromQuestionnaireRemoved.cs" />
     <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs" />
@@ -121,21 +125,115 @@
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Exceptions\QuestionnaireException.cs" />
+    <Compile Include="Exceptions\DomainExceptionType.cs" />
+    <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
+    <Compile Include="Implementation\Factories\QuestionFactory.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
+    <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItem.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseView.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsFactory.cs" />
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsInputModel.cs" />
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs" />
-    <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs" />
+    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItemDenormalizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseViewFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\EditAnswerView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\EditGroupView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\EditQuestionnaireView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityNode.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
+    <Compile Include="Views\Questionnaire\Indexes\DesignerReportQuestionnaireListViewItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\Extensions.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfAnswerView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfEntityView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfGroupView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireDenormalizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireFactory.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireInputModel.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItemDenormalizer.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItemSearchable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireStataMapView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireViewFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireViewInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\Edit\EditQuestionView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsDenormalizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
@@ -149,6 +247,14 @@
     <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
+      <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
+      <Name>WB.UI.Designer.Providers.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
@@ -172,6 +278,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

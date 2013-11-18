@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
@@ -30,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionaire = Mock.Of<IQuestionnaire>(_=>
                                                         _.HasGroup(conditionallyDisabledGroupId) == true
-                                                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDisabledGroupId) == new Guid[] { answeringQuestionId }
+                                                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDisabledGroupId) == new [] { new QuestionIdAndVariableName(answeringQuestionId, "var_name") }
 
                                                         && _.HasQuestion(answeringQuestionId) == true
                                                         && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric

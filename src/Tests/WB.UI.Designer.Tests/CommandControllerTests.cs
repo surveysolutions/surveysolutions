@@ -1,18 +1,16 @@
 ﻿using System;
 using Main.Core.Documents;
-using Main.Core.Domain;
-using Main.Core.Domain.Exceptions;
-using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Controllers;
-using WB.UI.Designer.Utils;
-using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Membership;
 
@@ -76,7 +74,7 @@ namespace WB.UI.Designer.Tests
 
         private Exception CreateTwoLevelException()
         {
-            return new Exception("message", new DomainException(DomainExceptionType.GroupNotFound, "exception message"));
+            return new Exception("message", new QuestionnaireException(DomainExceptionType.GroupNotFound, "exception message"));
         }
 
         private Exception CreateThreeLevelException()
@@ -88,7 +86,8 @@ namespace WB.UI.Designer.Tests
         {
             var qId = questionnaireId.HasValue ? questionnaireId.Value : Guid.NewGuid();
 
-            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty, responsibleId: responsibleId);
+            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), responsibleId: responsibleId,
+                title: string.Empty, rosterSizeQuestionId: null, description: string.Empty, condition: string.Empty);
 
             return command;
         }

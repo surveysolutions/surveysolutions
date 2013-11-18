@@ -4,10 +4,12 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Main.Core;
+using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Controllers;
+using WB.UI.Shared.Web.Elmah;
 
 namespace WB.UI.Designer
 {
@@ -23,6 +25,7 @@ namespace WB.UI.Designer
         static MvcApplication()
         {
             SetupNConfig();
+
         }
 
         protected void Application_Start()
@@ -106,5 +109,15 @@ namespace WB.UI.Designer
 
         #warning TLK: delete this when NCQRS initialization moved to Global.asax
         public static void Initialize() { }
+
+        void ErrorLog_Filtering(object sender, ExceptionFilterEventArgs e)
+        {
+            var ctx = e.Context as HttpContext;
+            if (ctx == null)
+            {
+                return;
+            }
+            ElmahDataFilter.Apply(e, ctx);
+        }
     }
 }

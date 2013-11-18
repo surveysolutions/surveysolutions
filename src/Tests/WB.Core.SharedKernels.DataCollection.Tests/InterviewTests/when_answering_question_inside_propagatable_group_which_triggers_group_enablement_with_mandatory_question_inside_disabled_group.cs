@@ -35,32 +35,32 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                    _.HasQuestion(questionWhichIsForcesPropagationId) == true
                    && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                    && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
-                   && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId, disabledPropagatedGroupId }
+                   && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId, disabledPropagatedGroupId }
                    && _.HasGroup(propagatedGroupId) == true
                    && _.HasGroup(disabledPropagatedGroupId) == true
-                   && _.GetPropagationLevelForGroup(propagatedGroupId) == 1
-                   && _.GetPropagationLevelForGroup(disabledPropagatedGroupId) == 1
+                   && _.GetRosterLevelForGroup(propagatedGroupId) == 1
+                   && _.GetRosterLevelForGroup(disabledPropagatedGroupId) == 1
                    && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
-                   && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                   && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
+                   && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                   && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
 
                    && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { disabledPropagatedGroupId }
                    && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new[] { mandatoryQuestionId }
 
 
                    && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
-                   && _.GetParentPropagatableGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
+                   && _.GetParentRosterGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
                    && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new Guid[] { mandatoryQuestionId }
 
                    
                    && _.IsQuestionMandatory(mandatoryQuestionId) == true
                    && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new[] { disabledPropagatedGroupId }
-                   && _.GetPropagationLevelForQuestion(mandatoryQuestionId)==1
+                   && _.GetRosterLevelForQuestion(mandatoryQuestionId)==1
 
                    && _.HasQuestion(answeringQuestionId) == true
-                   && _.GetParentPropagatableGroupsForQuestionStartingFromTop(answeringQuestionId) == new Guid[] { propagatedGroupId }
+                   && _.GetParentRosterGroupsForQuestionStartingFromTop(answeringQuestionId) == new Guid[] { propagatedGroupId }
                    && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric
-                   && _.GetPropagationLevelForQuestion(answeringQuestionId) == 1
+                   && _.GetRosterLevelForQuestion(answeringQuestionId) == 1
                 );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
