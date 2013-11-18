@@ -640,7 +640,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
             this.ThrowIfRosterInformationIsIncorrect(rosterSizeQuestionId);
-
+            this.ThrowIfGroupsShouldBecomeARosterButCannot(groupId, rosterSizeQuestionId);
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -685,6 +685,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
 
                 this.ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(targetGroupId.Value);
+
+                this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(targetGroupId.Value);
             }
 
             this.ApplyEvent(new QuestionnaireItemMoved
@@ -1154,6 +1156,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup, "Auto propagated groups can't have child groups");
             }
+        }
+
+        private void ThrowIfGroupsShouldBecomeARosterButCannot(Guid groupId, Guid? rosterSizeQuestionId)
+        {
+            bool groupShouldBecomeARoster = rosterSizeQuestionId.HasValue;
+            if (!groupShouldBecomeARoster)
+                return;
+
+            var group = this.innerDocument.Find<IGroup>(groupId);
+
+            bool hasAnyChildSubgroups = group.Children.Any(g => g is IGroup);
+            if (hasAnyChildSubgroups)
+                throw new QuestionnaireException("Group cannot become a roster because it has child subgroups.");
         }
 
         private void ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(Guid groupId)
