@@ -231,8 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result =
-                new QuestionFactory().CreateQuestion(data);
+            IQuestion result = new QuestionFactory().CreateQuestion(data);
 
             if (result == null)
             {
@@ -240,6 +239,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             }
 
             item.Add(result, groupId, null);
+
+            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -257,21 +259,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             item.ReplaceQuestionWithNew(question, newQuestion);
 
+            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result =
-                new QuestionFactory().CreateQuestion(data);
+            IQuestion result = new QuestionFactory().CreateQuestion(data);
 
             if (result == null)
             {
                 return;
             }
-#warning Slava: uncomment this line and get rig of read and write side objects
             item.Insert(index, result, groupId);
+
+            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
