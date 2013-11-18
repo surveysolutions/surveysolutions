@@ -65,18 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces
                     };
             }
-            #warning: remove this after QuestionnaireDenormalizer modifications
-            var autoQuestion = doc as AutoPropagateQuestion;
-            if (autoQuestion != null)
-            {
-                this.QuestionType = QuestionType.Numeric;
-                this.Settings = new NumericSettings
-                {
-                    MaxValue = autoQuestion.MaxValue,
-                    IsInteger = true,
-                    CountOfDecimalPlaces = 0
-                };
-            }
+
             var multyoptionQuestion = doc as IMultyOptionsQuestion;
             if (multyoptionQuestion != null)
             {
