@@ -1,9 +1,9 @@
 ﻿Mapper = function(model, config) {
     var question = {
-        getDtoId: function(dto) { return dto.Id + "_" + dto.PropagationVector; },
+        getDtoId: function(dto) { return dto.Id + "_" + dto.RosterVector; },
         fromDto: function(dto) {
             var item = {};
-            var uiId = dto.Id + "_" + dto.PropagationVector;
+            var uiId = dto.Id + "_" + dto.RosterVector;
             switch (dto.QuestionType) {
             case "SingleOption":
                 item = new model.SingleOptionQuestion();
@@ -85,7 +85,7 @@
             item.isEnabled(dto.IsEnabled);
             item.isFeatured(dto.IsFeatured);
             item.isMandatory(dto.IsMandatory);
-            item.propagationVector(dto.PropagationVector);
+            item.rosterVector(dto.RosterVector);
             item.isValid(dto.IsValid);
             item.validationMessage(dto.ValidationMessage);
             item.validationExpression(dto.ValidationExpression);
@@ -94,15 +94,15 @@
         }
     },
         group = {
-            getDtoId: function(dto) { return dto.Id + "_" + dto.PropagationVector; },
+            getDtoId: function(dto) { return dto.Id + "_" + dto.RosterVector; },
             fromDto: function(dto, questions) {
                 var item = new model.Group();
-                item.uiId(dto.Id + "_" + dto.PropagationVector);
+                item.uiId(dto.Id + "_" + dto.RosterVector);
                 item.id(dto.Id);
                 item.depth(dto.Depth);
-                var parentPropagationVector = _.first(dto.PropagationVector, dto.PropagationVector.length - 1);
-                item.parentId(dto.ParentId + "_" + parentPropagationVector);
-                item.propagationVector(dto.PropagationVector);
+                var parentRosterVector = _.first(dto.RosterVector, dto.RosterVector.length - 1);
+                item.parentId(dto.ParentId + "_" + parentRosterVector);
+                item.rosterVector(dto.RosterVector);
                 item.questions(_.map(dto.Questions, function(q) {
                     return questions.getLocalById(question.getDtoId(q));
                 }));
