@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Membership;
@@ -22,12 +23,14 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IJsonExportService exportService;
         private readonly ILogger logger;
+        IQuestionnaireVerifier questionnaireVerifier;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
 
         public TesterController(IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
+            IQuestionnaireVerifier questionnaireVerifier,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IJsonExportService exportService,
@@ -39,6 +42,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.logger = logger;
             this.questionnaireHelper = questionnaireHelper;
+            this.questionnaireVerifier = questionnaireVerifier;
         }
         
         [Authorize]
@@ -77,8 +81,9 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public QuestionnaireSyncPackage GetTemplate(Guid id)
         {
-            var user = this.userHelper.WebUser;
+            var questionnaireSyncPackage = new QuestionnaireSyncPackage();
 
+            var user = this.userHelper.WebUser;
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -89,18 +94,26 @@ namespace WB.UI.Designer.Api
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
+            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
+            if (questoinnaireErrors.Any())
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire contains errors. Please fix them.";
+
+                return questionnaireSyncPackage;
+            }
+
             var templateInfo = this.exportService.GetQuestionnaireTemplate(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                return null;
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
+
+                return questionnaireSyncPackage;
             }
 
             var template = PackageHelper.CompressString(templateInfo.Source);
-
-            var questionnaireSyncPackage = new QuestionnaireSyncPackage()
-                {
-                    Questionnaire = template
-                };
+            questionnaireSyncPackage.Questionnaire = template;
 
             return questionnaireSyncPackage;
         }
