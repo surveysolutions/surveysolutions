@@ -110,6 +110,7 @@
     <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_not_numeric.cs" />
     <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
     <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_under_another_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_adding_numeric_question_and_max_value_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_adding_numeric_question_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_not_specified.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_not_numeric.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_under_another_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_targeting_it_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_size_question.cs" />
