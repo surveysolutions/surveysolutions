@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
     internal class QuestionFactory : IQuestionFactory
     {
-        public AbstractQuestion CreateQuestion(QuestionData data)
+        public IQuestion CreateQuestion(QuestionData data)
         {
             AbstractQuestion q = CreateQuestion(data.QuestionType, data.PublicKey);
 

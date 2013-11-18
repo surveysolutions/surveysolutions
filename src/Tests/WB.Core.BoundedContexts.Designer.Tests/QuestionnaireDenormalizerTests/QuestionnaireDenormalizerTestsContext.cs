@@ -78,13 +78,23 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             return group;
         }
 
-        protected static AbstractQuestion CreateQuestion(Guid? questionId = null, string title = null)
+        protected static TextQuestion CreateTextQuestion(Guid? questionId = null, string title = null)
         {
             return new TextQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
                 QuestionType = QuestionType.Text,
+            };
+        }
+
+        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null)
+        {
+            return new NumericQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionText = title,
+                QuestionType = QuestionType.Numeric,
             };
         }
 
@@ -176,6 +186,38 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId)
         {
             return ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId, rosterSizeQuestionId));
+        }
+
+        protected static IPublishedEvent<NumericQuestionAdded> CreateNumericQuestionAddedEvent(
+            Guid questionId, Guid? parentGroupId = null, int? maxValue = null)
+        {
+            return ToPublishedEvent(new NumericQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                MaxValue = maxValue
+            });
+        }
+
+        protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
+            Guid questionId, int? maxValue = null)
+        {
+            return ToPublishedEvent(new NumericQuestionChanged
+            {
+                PublicKey = questionId,
+                MaxValue = maxValue
+            });
+        }
+
+        protected static IPublishedEvent<NumericQuestionCloned> CreateNumericQuestionClonedEvent(
+            Guid questionId, Guid? parentGroupId = null, int? maxValue = null)
+        {
+            return ToPublishedEvent(new NumericQuestionCloned
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                MaxValue = maxValue
+            });
         }
     }
 }

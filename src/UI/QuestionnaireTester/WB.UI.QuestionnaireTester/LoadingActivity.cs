@@ -10,14 +10,12 @@ using Main.Core;
 using Main.Core.Documents;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ninject;
 using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.UI.QuestionnaireTester.Implementations.Activities;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -45,25 +43,42 @@ namespace WB.UI.QuestionnaireTester
         protected void Restore(Guid publicKey)
         {
             Guid interviewId = Guid.NewGuid();
-            this.LoadTemplateAndCreateInterview(publicKey, interviewId);
+            if (!LoadTemplateAndCreateInterview(publicKey, interviewId))
+            {
+                this.RunOnUiThread(this.Finish);
+                return;
+            } 
             
-            /*var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+            var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                     new QuestionnaireScreenInput(interviewId));
 
             if (questionnaire == null)
             {
                 this.RunOnUiThread(this.Finish);
                 return;
-            }*/
-            var intent = new Intent(this, typeof(TesterDetailsActivity));
+            }
+
+            var intent = new Intent(this, typeof(CreateInterviewActivity));
             intent.PutExtra("publicKey", interviewId.ToString());
             this.StartActivity(intent);
         }
 
-        private void LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId)
+        private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId)
         {
             var token = new CancellationToken();
-            var template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, token);
+            QuestionnaireSyncPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, token);
+
+            if (template == null)
+            {
+                return false;
+            }
+
+            if (template.IsErrorOccured)
+            {
+                this.RunOnUiThread(() => Toast.MakeText(this, template.ErrorMessage, ToastLength.Short).Show());
+
+                return false;
+            }
 
             string content = PackageHelper.DecompressString(template.Questionnaire);
             var interview = JsonUtils.GetObject<QuestionnaireDocument>(content);
@@ -74,6 +89,8 @@ namespace WB.UI.QuestionnaireTester
 
             NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
                     interview.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
+
+            return true;
         }
     }
 }

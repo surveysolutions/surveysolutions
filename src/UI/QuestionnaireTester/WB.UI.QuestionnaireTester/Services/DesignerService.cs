@@ -56,13 +56,16 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             if (!CapiTesterApplication.Membership.IsLoggedIn)
                 return null;
+
             var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                return webExecutor.ExcecuteRestRequestAsync<QuestionnaireSyncPackage>(
+                var package = webExecutor.ExcecuteRestRequestAsync<QuestionnaireSyncPackage>(
                     "GetTemplate", cancellationToken, null,
                     new HttpBasicAuthenticator(CapiTesterApplication.Membership.RemoteUser.UserName,
                         CapiTesterApplication.Membership.RemoteUser.Password), "GET", new KeyValuePair<string, string>("id", id.ToString()));
+
+                return package;
             }
             catch (Exception e)
             {

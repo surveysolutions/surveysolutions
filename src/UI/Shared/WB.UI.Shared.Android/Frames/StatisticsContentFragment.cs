@@ -124,7 +124,6 @@ namespace WB.UI.Shared.Android.Frames
         void btnComplete_Click(object sender, EventArgs e)
         {
             this.PreCompleteAction();
-            this.Activity.Finish();
         }
 
         protected virtual void PreCompleteAction()

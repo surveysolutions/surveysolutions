@@ -3,6 +3,7 @@ using Ninject;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.BoundedContexts.Capi.Views.Statistics;
+using WB.UI.Shared.Android.Extensions;
 using WB.UI.Shared.Android.Frames;
 
 namespace WB.UI.QuestionnaireTester.Implementations.Fragments
@@ -17,6 +18,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
         {
             base.PreCompleteAction();
 
+            this.Activity.ClearAllBackStack<QuestionnaireListActivity>();
            /* var logManipulator = CapiTesterApplication.Kernel.Get<IChangeLogManipulator>();
 
             if (this.Model.Status == InterviewStatus.Completed)
