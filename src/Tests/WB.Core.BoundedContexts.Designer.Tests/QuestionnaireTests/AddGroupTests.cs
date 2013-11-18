@@ -57,24 +57,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [Ignore("TLK KP-2834")]
-        public void NewAddGroup_When_parent_group_is_roster_Then_throws_DomainException()
-        {
-            // arrange
-            var parentAutoPropagateGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            var rosterSizeQuestionId =       Guid.Parse("22222222-2222-2222-2222-222222222222");
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndQustion(rosterGroupId: parentAutoPropagateGroupId, rosterSizeQuestionId: rosterSizeQuestionId, responsibleId: responsibleId);
-
-            // act
-            TestDelegate act = () => questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: parentAutoPropagateGroupId);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups));
-        }
-
-        [Test]
         public void NewAddGroup_When_parent_group_is_non_propagated_Then_raised_NewAddGroup_event_contains_regular_group_id_as_parent()
         {
             using (var eventContext = new EventContext())
