@@ -33,9 +33,9 @@
                 item.settings(dto.Settings);
                 var isSettingsEmpty = _.isEmpty(dto.Settings);
                 var isInteger = isSettingsEmpty || dto.Settings.IsInteger;
-                item.selectedOption.extend({ number: true });
+                item.selectedOption.extend({ number: true, required: true });
                 if (isInteger) {
-                    item.selectedOption.extend({ digit: true });
+                    item.selectedOption.extend({ digit: true, required: true });
                 }
                 else if (!isSettingsEmpty && _.isNumber(dto.Settings.CountOfDecimalPlaces)) {
                     item.selectedOption.extend({ precision: dto.Settings.CountOfDecimalPlaces });
