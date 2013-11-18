@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.OS;
 using Android.Views;
@@ -16,7 +17,10 @@ namespace WB.UI.Shared.Android.Frames
     public abstract class ScreenContentFragment : AbstractScreenChangingFragment
     {
         protected abstract IQuestionViewFactory GetQuestionViewFactory();
-        protected abstract InterviewViewModel GetInterviewViewModel(Guid questionnaireId);
+
+        protected abstract QuestionnaireScreenViewModel GetScreenViewModel();
+        protected abstract List<IQuestionnaireViewModel> GetBreadcrumbs();
+        protected abstract InterviewStatus GetStatus();
 
         public const string SCREEN_ID = "screenId";
         public const string QUESTIONNAIRE_ID = "questionnaireId";
@@ -45,14 +49,14 @@ namespace WB.UI.Shared.Android.Frames
             this.llTop.AddView(previousBtn);
             //  top.Orientation = Orientation.Vertical;
             var breadcrumbs = new BreadcrumbsView(inflater.Context,
-                                                  this.questionnaire.RestoreBreadCrumbs(this.Model.Breadcrumbs).ToList(),
+                                                  GetBreadcrumbs(),
                                                   this.OnScreenChanged);
 
             breadcrumbs.SetPadding(0, 0, 0, 10);
             this.llTop.AddView(breadcrumbs);
 
             this.llContent.Adapter = new ScreenContentAdapter(this.Model, this.Activity, this.Model.QuestionnaireId,
-                this.questionnaire.Status, this.groupView_ScreenChanged, this.GetQuestionViewFactory());
+               GetStatus(), this.groupView_ScreenChanged, this.GetQuestionViewFactory());
             this.llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             this.llContent.ItemsCanFocus = true;
             this.llContent.ScrollingCacheEnabled = false;
@@ -111,24 +115,19 @@ namespace WB.UI.Shared.Android.Frames
             get {
                 if (this.model == null)
                 {
-                    this.model = this.Questionnaire.Screens[InterviewItemId.Parse(this.Arguments.GetString(SCREEN_ID))] as QuestionnaireScreenViewModel;
+                    this.model = GetScreenViewModel();
                 }
                 return this.model;
             }
         }
 
-        private InterviewViewModel questionnaire;
+        protected Guid QuestionnaireId {
+            get { return Guid.Parse(this.Arguments.GetString(QUESTIONNAIRE_ID)); }
+        }
 
-        protected InterviewViewModel Questionnaire
+        protected InterviewItemId ScreenId
         {
-            get
-            {
-                if (this.questionnaire == null)
-                {
-                    this.questionnaire = this.GetInterviewViewModel(Guid.Parse(this.Arguments.GetString(QUESTIONNAIRE_ID)));
-                }
-                return this.questionnaire;
-            }
+            get { return InterviewItemId.Parse(this.Arguments.GetString(SCREEN_ID)); }
         }
 
         protected QuestionnairePropagatedScreenViewModel PropagatedModel

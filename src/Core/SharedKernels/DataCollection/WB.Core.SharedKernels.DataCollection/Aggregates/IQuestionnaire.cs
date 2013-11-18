@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
-        int GetMaxAnswerValueForRoserSizeQuestion(Guid questionId);
+        int? GetMaxValueForNumericQuestion(Guid questionId);
 
         IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId);
 

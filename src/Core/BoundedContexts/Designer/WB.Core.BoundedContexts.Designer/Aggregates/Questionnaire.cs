@@ -1,6 +1,7 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
+using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -167,7 +168,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(NewQuestionAdded e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
@@ -207,7 +208,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(NumericQuestionAdded e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
@@ -241,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(QuestionCloned e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
@@ -275,7 +276,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(NumericQuestionCloned e)
         {
-            AbstractQuestion question =
+            IQuestion question =
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
@@ -639,7 +640,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
             this.ThrowIfRosterInformationIsIncorrect(rosterSizeQuestionId);
-
+            this.ThrowIfGroupsShouldBecomeARosterButCannot(groupId, rosterSizeQuestionId);
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -684,6 +685,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
 
                 this.ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(targetGroupId.Value);
+
+                this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(targetGroupId.Value);
             }
 
             this.ApplyEvent(new QuestionnaireItemMoved
@@ -1155,6 +1158,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
+        private void ThrowIfGroupsShouldBecomeARosterButCannot(Guid groupId, Guid? rosterSizeQuestionId)
+        {
+            bool groupShouldBecomeARoster = rosterSizeQuestionId.HasValue;
+            if (!groupShouldBecomeARoster)
+                return;
+
+            var group = this.innerDocument.Find<IGroup>(groupId);
+
+            bool hasAnyChildSubgroups = group.Children.Any(g => g is IGroup);
+            if (hasAnyChildSubgroups)
+                throw new QuestionnaireException("Group cannot become a roster because it has child subgroups.");
+        }
+
         private void ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(Guid groupId)
         {
             var group = this.innerDocument.Find<Group>(groupId);
@@ -1166,15 +1182,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
         {
-            bool isParentGroupAChapter = !parentGroupId.HasValue;
-            if (isParentGroupAChapter)
+            bool isAddedGroupAChapter = !parentGroupId.HasValue;
+            if (isAddedGroupAChapter)
                 return;
 
             var parentGroup = this.innerDocument.Find<Group>(parentGroupId.Value);
+
+            if (parentGroup.IsRoster)
+                throw new QuestionnaireException(string.Format(
+                    "Parent group {0} is a roster and therefore cannot have child groups.",
+                    FormatGroupForException(parentGroupId.Value, this.innerDocument)));
+
             if (parentGroup.Propagated == Propagate.AutoPropagated)
-            {
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
-            }
+                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups,
+                    "Auto propagated groups can't have child groups");
         }
 
 
