@@ -1,6 +1,7 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
+using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -1166,15 +1167,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
         {
-            bool isParentGroupAChapter = !parentGroupId.HasValue;
-            if (isParentGroupAChapter)
+            bool isAddedGroupAChapter = !parentGroupId.HasValue;
+            if (isAddedGroupAChapter)
                 return;
 
             var parentGroup = this.innerDocument.Find<Group>(parentGroupId.Value);
+
+            if (parentGroup.IsRoster)
+                throw new QuestionnaireException(string.Format(
+                    "Parent group {0} is a roster and therefore cannot have child groups.",
+                    FormatGroupForException(parentGroupId.Value, this.innerDocument)));
+
             if (parentGroup.Propagated == Propagate.AutoPropagated)
-            {
-                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
-            }
+                throw new QuestionnaireException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups,
+                    "Auto propagated groups can't have child groups");
         }
 
 
