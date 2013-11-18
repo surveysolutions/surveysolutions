@@ -79,17 +79,24 @@ namespace WB.UI.QuestionnaireTester
 
                 return false;
             }
+            try
+            {
+                string content = PackageHelper.DecompressString(template.Questionnaire);
+                var interview = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
-            string content = PackageHelper.DecompressString(template.Questionnaire);
-            var interview = JsonUtils.GetObject<QuestionnaireDocument>(content);
+                NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(interview));
 
-            NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(interview));
-            
-            Guid interviewUserId = Guid.NewGuid();
+                Guid interviewUserId = Guid.NewGuid();
 
-            NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
+                NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
                     interview.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
+            }
+            catch (Exception e)
+            {
+                this.RunOnUiThread(() => Toast.MakeText(this, "Template is invalid for current version of Tester . Please return to Designer and change it.", ToastLength.Short).Show());
 
+                return false;
+            }
             return true;
         }
     }
