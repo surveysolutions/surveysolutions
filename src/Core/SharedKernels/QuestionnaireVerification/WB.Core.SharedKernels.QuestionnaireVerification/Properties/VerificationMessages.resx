@@ -132,8 +132,8 @@
   <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Custom enablement condition references not existing question.</value>
   </data>
-  <data name="WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt" xml:space="preserve">
-    <value>Roster group has no roster size question pointing to it.</value>
+  <data name="WB0009_RosterGroupHasNoRosterSizeQuestion" xml:space="preserve">
+    <value>Roster group has no roster size question.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Linked question references not existing question.</value>
@@ -142,7 +142,7 @@
     <value>Linked question references question of not supported type.</value>
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup" xml:space="preserve">
-    <value>Linked question references question not under propagated group.</value>
+    <value>Linked question references question not under roster group.</value>
   </data>
   <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
     <value>Question has custom validation referencing question with deeper roster level.</value>
@@ -160,7 +160,7 @@
     <value>Question with title substitution references question of not supported type.</value>
   </data>
   <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question with title substitution can't have reference questions with deeper propagation level.</value>
+    <value>Question with title substitution can't have reference questions with deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
     <value>Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count.</value>

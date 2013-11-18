@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(QuestionnaireHaveAutopropagatedGroups, "WB0027", VerificationMessages.WB0027_QuestionnaireHaveAutopropagatedGroups),
                     Verifier<IQuestion>(QuestionnaireHaveAutopropagatedQuestions, "WB0028", VerificationMessages.WB0028_QuestionnaireHaveAutopropagatedQuestions),
                     Verifier<IGroup>(RosterGroupHasGroupInsideItself, "WB0029", VerificationMessages.WB0029_RosterGroupHasGroup),
-                    Verifier<IGroup>(RosterGroupHasNoRosterSizeQuestionPointingToIt, "WB0009", VerificationMessages.WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt),
+                    Verifier<IGroup>(RosterGroupHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_RosterGroupHasNoRosterSizeQuestion),
                     Verifier<IGroup>(RosterGroupHasNotNumericRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_RosterGroupHasNotNumericRosterSizeQuestion),
                     Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     (!question.LinkedToQuestionId.HasValue && question.MaxAllowedAnswers.Value > question.Answers.Count));
         }
 
-        private static bool RosterGroupHasNoRosterSizeQuestionPointingToIt(IGroup group, QuestionnaireDocument questionnaire)
+        private static bool RosterGroupHasNoRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
         {
             return IsRosterGroup(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
         }
