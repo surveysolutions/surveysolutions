@@ -305,7 +305,6 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-
         public IEnumerable<T> GetAllQuestions<T>() where T : class, IComposite
         {
             var result = new List<T>();
