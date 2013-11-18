@@ -10,33 +10,29 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_propagation_level : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_roster_level : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
             questionWithSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
-            underDeeperPropagationLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
-            var autoPropagatedGroup = Guid.Parse("13333333333333333333333333333333");
+            underDeeperRosterLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
+            var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
+            var rosterSizeQuestionId = Guid.Parse("11133333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new AutoPropagateQuestion
-            {
-                PublicKey = Guid.NewGuid(),
-                Triggers = new List<Guid> { autoPropagatedGroup }
-            });
+            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4});
+            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
 
-            var autopropagatedGroup = new Group() { PublicKey = autoPropagatedGroup, Propagated = Propagate.AutoPropagated };
-
-            autopropagatedGroup.Children.Add(new NumericQuestion()
+            rosterGroup.Children.Add(new NumericQuestion()
             {
-                PublicKey = underDeeperPropagationLevelQuestionId,
-                StataExportCaption = underDeeperPropagationLevelQuestionVariableName
+                PublicKey = underDeeperRosterLevelQuestionId,
+                StataExportCaption = underDeeperRosterLevelQuestionVariableName
             });
-            questionnaire.Children.Add(autopropagatedGroup);
+            questionnaire.Children.Add(rosterGroup);
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionWithSubstitutionsId,
-                QuestionText = string.Format("hello %{0}%", underDeeperPropagationLevelQuestionVariableName)
+                QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName)
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -64,14 +60,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
-            resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperPropagationLevelQuestionId);
+            resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
         private static Guid questionWithSubstitutionsId;
-        private static Guid underDeeperPropagationLevelQuestionId;
-        private const string underDeeperPropagationLevelQuestionVariableName = "i_am_deeper_ddddd_deeper";
+        private static Guid underDeeperRosterLevelQuestionId;
+        private const string underDeeperRosterLevelQuestionVariableName = "i_am_deeper_ddddd_deeper";
     }
 }

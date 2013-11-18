@@ -808,10 +808,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool DoesQuestionSupportRoster(IQuestion question)
         {
-                    //### roster
-            return (question.QuestionType == QuestionType.Numeric ||
-                    //### old questionnaires supporting
-                    question.QuestionType == QuestionType.AutoPropagate) && (question is IAutoPropagateQuestion);
+                   //### roster
+            return question.QuestionType == QuestionType.Numeric ||
+                   //### old questionnaires supporting
+                  (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
 
         }
 
