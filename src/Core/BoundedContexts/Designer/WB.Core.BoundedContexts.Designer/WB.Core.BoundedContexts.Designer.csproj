@@ -135,21 +135,6 @@
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItemDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
