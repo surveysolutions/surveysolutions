@@ -22,7 +22,6 @@ using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -100,16 +99,12 @@ namespace WB.UI.QuestionnaireTester
             }
         }
 
-
         #endregion
 
 
         protected CapiTesterApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-           
-           
-
         }
 
         private void InitInterviewStorage(InProcessEventBus bus)
@@ -168,33 +163,6 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
         }
 
-        
-
-       /* private void InitUserStorage(InProcessEventBus bus)
-        {
-            var usereventHandler =
-                new UserDenormalizer(this.kernel.Get<IReadSideRepositoryWriter<LoginDTO>>());
-            bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
-            bus.RegisterHandler(usereventHandler, typeof(UserChanged));
-        }
-
-        private void InitDashboard(InProcessEventBus bus)
-        {
-            var dashboardeventHandler =
-                new DashboardDenormalizer(this.kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                                          this.kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
-                                          this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredValid));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredInvalid));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
-            bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
-            
-        }*/
-
-
         public override void OnCreate()
         {
             base.OnCreate();
@@ -211,7 +179,7 @@ namespace WB.UI.QuestionnaireTester
                 new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
                 new AndroidTesterModelModule(),
-                new AndroidLoggingModule(),
+                new TesterLoggingModule(),
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule());
 
@@ -240,15 +208,9 @@ namespace WB.UI.QuestionnaireTester
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
-
-
             this.InitInterviewStorage(bus);
             this.InitTemplateStorage(bus);
-
-            /*this.InitUserStorage(bus);
-
-            this.InitDashboard(bus);
-*/
+            
 
             #endregion
         }
