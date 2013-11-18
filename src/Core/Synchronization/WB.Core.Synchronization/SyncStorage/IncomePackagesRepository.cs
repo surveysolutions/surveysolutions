@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -78,6 +79,27 @@ namespace WB.Core.Synchronization.SyncStorage
             StoreEvents(id, items, sequence);
 
             File.Delete(fileName);
+        }
+
+        public IEnumerable<Guid> GetListOfUnhandledPackages()
+        {
+            var errorPath = Path.Combine(path, ErrorFolderName);
+            if(!Directory.Exists(errorPath))
+                return Enumerable.Empty<Guid>();
+            var syncFiles = Directory.GetFiles(errorPath, string.Format("*.{0}", FileExtension));
+            var result = new List<Guid>();
+            foreach (var syncFile in syncFiles)
+            {
+                Guid packageId;
+                if (Guid.TryParse(Path.GetFileNameWithoutExtension(syncFile), out packageId))
+                    result.Add(packageId);
+            }
+            return result;
+        }
+
+        public string GetUnhandledPackagePath(Guid id)
+        {
+            return this.GetItemFileNameForErrorStorage(id);
         }
 
         private T GetContentAsItem<T>(string syncItemContent)
