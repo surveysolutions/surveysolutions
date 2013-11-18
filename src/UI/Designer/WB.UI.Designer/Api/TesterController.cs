@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Api
             
             var questionnaireItemList = new List<QuestionnaireListItem>();
 
-            int i = 0;
+            int i = 1;
             while (true)
             {
                 var questionnaireList = this.questionnaireHelper.GetQuestionnaires(
@@ -71,7 +71,7 @@ namespace WB.UI.Designer.Api
                 }).ToList());
 
                 i++;
-                if (i >= questionnaireList.TotalPages)
+                if (i > questionnaireList.TotalPages)
                     break;
             }
 
