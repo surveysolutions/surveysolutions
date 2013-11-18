@@ -906,7 +906,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
-            string alias, bool isPrefilled, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
+            string alias, bool isPrefilled, bool isHeaderOfRoster, string validationExpression, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -918,6 +918,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
 
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsHeaderOfRosterButParentGroupIsNotRoster(isHeaderOfRoster, parentGroup);
         }
 
         public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
@@ -944,6 +945,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsHeaderOfRosterButParentGroupIsNotRoster(question.Capital, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1198,11 +1200,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
-            if (!isPrefilled)
-                return;
-
-            if (parentGroup.IsRoster)
+            if (isPrefilled && parentGroup.IsRoster)
                 throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsHeaderOfRosterButParentGroupIsNotRoster(bool isHeaderOfRoster, IGroup parentGroup)
+        {
+            if (isHeaderOfRoster && !parentGroup.IsRoster)
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionIsHeaderOfRosterButNotInsideRoster,
+                    "Question marked as header of roster should be inside a roster.");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
@@ -1327,10 +1334,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument.ConnectChildrenWithParent();
 
-            return this.GetFirstPropagatableParentGroupIdOrNull(item) != null;
+            return this.GetFirstRosterParentGroupIdOrNull(item) != null;
         }
 
-        private Guid? GetFirstPropagatableParentGroupIdOrNull(IComposite item)
+        private Guid? GetFirstRosterParentGroupIdOrNull(IComposite item)
         {
             if (item == null)
                 return null;
@@ -1341,8 +1348,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (itemAsGroup.IsRoster)
                     return itemAsGroup.PublicKey;
             }
-            
-            return this.GetFirstPropagatableParentGroupIdOrNull(item.GetParent());
+
+            return this.GetFirstRosterParentGroupIdOrNull(item.GetParent());
         }
 
 
@@ -1533,7 +1540,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
-                    "Question that you are linked to is not in the propagated group");
+                    "Question that you are linked to is not in the roster group");
             }
         }
 
