@@ -1,4 +1,5 @@
-﻿using Main.Core;
+﻿using System.Collections.Generic;
+using Main.Core;
 using Main.Core.View;
 using System;
 using System.Linq;
@@ -53,17 +54,31 @@ namespace WB.UI.Designer.Api
 
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
+            
+            var questionnaireItemList = new List<QuestionnaireListItem>();
 
-            var questionnaireList = this.questionnaireHelper.GetQuestionnaires(
-                viewerId: user.UserId);
-            var questionnaireSyncPackage = new QuestionnaireListSyncPackage();
+            int i = 0;
+            while (true)
+            {
+                var questionnaireList = this.questionnaireHelper.GetQuestionnaires(
+                viewerId: user.UserId,
+                pageIndex: i);
 
-            questionnaireSyncPackage.Items = 
-                questionnaireList.Select(q => new QuestionnaireListItem()
-                    {
-                        Id = q.Id, 
-                        Title = q.Title
-                    }).ToList();
+                questionnaireItemList.AddRange(questionnaireList.Select(q => new QuestionnaireListItem()
+                {
+                    Id = q.Id,
+                    Title = q.Title
+                }).ToList());
+
+                i++;
+                if (i >= questionnaireList.TotalPages)
+                    break;
+            }
+
+            var questionnaireSyncPackage = new QuestionnaireListSyncPackage
+                {
+                    Items = questionnaireItemList
+                };
 
             return questionnaireSyncPackage;
         }
