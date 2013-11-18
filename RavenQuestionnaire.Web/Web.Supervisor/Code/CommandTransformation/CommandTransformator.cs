@@ -81,10 +81,9 @@ namespace Web.Supervisor.Code.CommandTransformation
                     try
                     {
                         if (answer.Settings != null && (bool) answer.Settings.IsInteger)
-                        {
-                             return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
-                        }
-                        return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
+                            answerValue = answerAsString.Parse<int>();
+                        else
+                            answerValue = answerAsString.Parse<decimal>();
                     }
                     catch (OverflowException)
                     {
