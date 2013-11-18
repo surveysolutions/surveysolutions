@@ -11,7 +11,7 @@
 
         TriggerLinksToNotPropagatedGroup, 
 
-        QuestionIsHeadOfGroupButNotInsidePropagateGroup, 
+        QuestionIsHeaderOfRosterButNotInsideRoster, 
 
         GroupTitleRequired, 
 

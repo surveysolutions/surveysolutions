@@ -194,44 +194,44 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [Ignore("TLK KP-2834")]
-        public void NewUpdateQuestion_When_question_is_head_of_propagated_group_but_inside_non_propagated_group_Then_DomainException_should_be_thrown()
+        public void NewUpdateQuestion_When_question_is_header_of_roster_but_inside_not_roster_Then_DomainException_should_be_thrown()
         {
             // Arrange
             Guid updatedQuestion = Guid.NewGuid();
-            bool isHeadOfPropagatedGroup = true;
+            bool isHeaderOfRoster = true;
             Guid responsibleId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: updatedQuestion, responsibleId: responsibleId);
 
             // Act
-            TestDelegate act = () => questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
-                                                                     isHeadOfPropagatedGroup, QuestionScope.Interviewer, "", "", "", "", new Option[0],
-                                                                     Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
+            TestDelegate act = () =>
+                questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
+                    isHeaderOfRoster, QuestionScope.Interviewer, "", "", "", "", new Option[0],
+                    Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeaderOfRosterButNotInsideRoster));
         }
 
         [Test]
-        [Ignore("TLK KP-2834")]
-        public void NewUpdateQuestion_When_question_is_head_of_propagated_group_and_inside_propagated_group_Then_raised_QuestionChanged_event_contains_the_same_header_field()
+        public void NewUpdateQuestion_When_question_is_header_of_roster_and_inside_roster_Then_raised_QuestionChanged_event_contains_the_same_header_field()
         {
             using (var eventContext = new EventContext())
             {
                 // Arrange
                 Guid updatedQuestion = Guid.NewGuid();
-                bool isHeadOfPropagatedGroup = true;
+                bool isHeaderOfRoster = true;
                 Guid responsibleId = Guid.NewGuid();
                 Questionnaire questionnaire = CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(questionId: updatedQuestion, responsibleId: responsibleId);
 
                 // Act
-                questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
-                                                isHeadOfPropagatedGroup, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 
-                                                responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
+                questionnaire.NewUpdateQuestion(
+                    updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
+                    isHeaderOfRoster, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs,
+                    responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
                 // Assert
-                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Capital, Is.EqualTo(isHeadOfPropagatedGroup));
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Capital, Is.EqualTo(isHeaderOfRoster));
             }
         }
 

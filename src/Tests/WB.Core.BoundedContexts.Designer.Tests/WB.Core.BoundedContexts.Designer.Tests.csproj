@@ -67,6 +67,10 @@
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionChanged_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionAdded_event_and_triggers_are_not_empty.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\QuestionChangeEventTestContext.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTests.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
@@ -77,8 +81,10 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionAdded_event_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionAdded_event_and_triggers_are_not_empty.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_and_triggers_are_not_empty.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
@@ -86,7 +92,10 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagate_properties_to_roster_properties.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\QuestionnaireDocumentUpgraderTestsContext.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_propagating_question_references_3_groups_by_3_triggers___.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_propagating_questions.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties.cs" />
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
