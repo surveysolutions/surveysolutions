@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\QuestionnaireListAdapter.cs" />
+    <Compile Include="TesterLoggingModule.cs" />
     <Compile Include="AndroidTesterModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Authentication\DesignerAuthentication.cs" />
