@@ -8,41 +8,42 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_updating_group_and_roster_size_question_is_numeric_but_not_integer : QuestionnaireTestsContext
+    internal class when_updating_question_under_roster_and_setting_it_prefilled : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
+            rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            questionId = Guid.Parse("11111111111111111111111111111111");
+            isPrefilled = true;
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded { PublicKey = rosterSizeQuestionId, IsInteger = false, GroupPublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.Apply(new NewQuestionAdded { PublicKey = questionId, QuestionType = QuestionType.Text, GroupPublicKey = rosterId });
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null));
+                questionnaire.NewUpdateQuestion(questionId, "title", QuestionType.Text, "var1", false, isPrefilled, false,
+                    QuestionScope.Interviewer, null, null, null, null, null, Order.AsIs, responsibleId, null, false, null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
 
+        It should_throw_exception_with_message_containting__prefilled__ = () =>
+            exception.Message.ToLower().ShouldContain("pre-filled");
+
         It should_throw_exception_with_message_containting__roster__ = () =>
             exception.Message.ToLower().ShouldContain("roster");
 
-        It should_throw_exception_with_message_containting__question__ = () =>
-            exception.Message.ToLower().ShouldContain("question");
-
-        It should_throw_exception_with_message_containting__integer__ = () =>
-            exception.Message.ToLower().ShouldContain("integer");
-
         private static Exception exception;
         private static Questionnaire questionnaire;
+        private static Guid questionId;
+        private static Guid rosterId;
         private static Guid responsibleId;
-        private static Guid groupId;
-        private static Guid rosterSizeQuestionId;
+        private static bool isPrefilled;
     }
 }

@@ -174,24 +174,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewUpdateQuestion_When_qustion_in_propagated_group_is_featured_Then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            Guid updatedQuestion = Guid.NewGuid();
-            bool isFeatured = true;
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(questionId: updatedQuestion, responsibleId: responsibleId);
-
-            // Act
-            TestDelegate act = () => questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false,
-                                                                     isFeatured, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup));
-        }
-
-        [Test]
         public void NewUpdateQuestion_When_question_inside_non_propagated_group_is_featured_Then_raised_QuestionChanged_event_contains_the_same_featured_field()
         {
             using (var eventContext = new EventContext())
@@ -212,6 +194,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("TLK KP-2834")]
         public void NewUpdateQuestion_When_question_is_head_of_propagated_group_but_inside_non_propagated_group_Then_DomainException_should_be_thrown()
         {
             // Arrange
@@ -231,6 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("TLK KP-2834")]
         public void NewUpdateQuestion_When_question_is_head_of_propagated_group_and_inside_propagated_group_Then_raised_QuestionChanged_event_contains_the_same_header_field()
         {
             using (var eventContext = new EventContext())
@@ -283,7 +267,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
-                var questionnaire = CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(questionId: targetQuestionPublicKey, responsibleId: responsibleId);
+                var questionnaire = CreateQuestionnaireWithRosterGroupAndQuestionAndQuestionInRoster(questionId: targetQuestionPublicKey, responsibleId: responsibleId);
 
                 bool capital = true;
 
@@ -1076,48 +1060,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewUpdateQuestion_When_question_is_AutoPropagate_and_list_of_triggers_contains_propagate_group_id_Then_rised_QuestionChanged_event_should_contains_that_group_id_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var autoPropagate = true;
-                var autoPropagateQuestionId = Guid.NewGuid();
-                var autoPropagateGroupId = Guid.NewGuid();
-                var groupId = Guid.NewGuid();
-                var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
-                var responsibleId = Guid.NewGuid();
-
-                Questionnaire questionnaire =
-                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionInIt(autoPropagateGroupId, groupId,
-                        autoPropagateQuestionId, responsibleId: responsibleId);
-
-                // Act
-                questionnaire.UpdateNumericQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
-                                                false, QuestionScope.Interviewer, "", "", "", "", 0,
-                                                triggedGroupIdsWithAutoPropagateGroupId, responsibleId, isInteger: true, countOfDecimalPlaces: null);
-
-                // Assert
-                Assert.That(GetSingleEvent<NumericQuestionChanged>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
-            }
-        }
-
-        [Test]
         public void NewUpdateQuestion_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            var autoPropagate = true;
-            var autoPropagateQuestionId = Guid.NewGuid();
-            var autoPropagateGroupId = Guid.NewGuid();
+            var rosterSizeQuestionId = Guid.NewGuid();
+            var rosterGroupId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
-            var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
+            var triggedGroupIdsWithAutoPropagateGroupId = new[] { rosterGroupId };
 
-            Questionnaire questionnaire =
-                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionInIt(autoPropagateGroupId, groupId,
-                    autoPropagateQuestionId, responsibleId: Guid.NewGuid());
+            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndQustion(rosterGroupId, rosterSizeQuestionId, responsibleId: Guid.NewGuid());
 
             // act
-            TestDelegate act = () => questionnaire.UpdateNumericQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
+            TestDelegate act = () => questionnaire.UpdateNumericQuestion(rosterSizeQuestionId, "What is your last name?", false, "name", false, false,
                                             false, QuestionScope.Interviewer, "", "", "", "", 0,
                                             triggedGroupIdsWithAutoPropagateGroupId, Guid.NewGuid(), isInteger: true, countOfDecimalPlaces: null);
             // assert
@@ -1174,7 +1128,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope(QuestionType questionType)
+        public void NewUpdateQuestion_When_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope_Then_question_changed_event_should_be_raised(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
@@ -1212,7 +1166,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     options: null,
                     optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, areAnswersOrdered: false, maxAllowedAnswers: null);
+                    linkedToQuestionId: autoQuestionId, 
+                    areAnswersOrdered: false, 
+                    maxAllowedAnswers: null);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.AreEqual(autoQuestionId, risedEvent.LinkedToQuestionId);
@@ -1281,15 +1237,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
                 Guid responsibleId = Guid.NewGuid();
 
-                Questionnaire questionnaire =
-                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-                        autoGroupPublicKey: autoGroupId,
-                        secondGroup: groupId,
+                Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndQuestionAndAndRegularGroupAndQuestionsInThem(
+                        rosterId: autoGroupId,
+                        nonRosterGroupId: groupId,
                         autoQuestionId: autoQuestionId,
                         questionId: questionId,
                         responsibleId: responsibleId,
-                        questionType: QuestionType.MultyOption,
-                        autoQuestionType: questionType);
+                        firstQuestionType: QuestionType.MultyOption,
+                        secondQuestionType: questionType);
 
 
                 // act
