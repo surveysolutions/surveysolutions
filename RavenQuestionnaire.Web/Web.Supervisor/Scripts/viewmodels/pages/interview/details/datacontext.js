@@ -40,9 +40,9 @@
                 $.extend(questionnaire, mapper.interview.fromDto(q));
                 var rawQuestions = [];
                 $.each(q.Groups, function(index, group) {
-                    var propagationVector = group.PropagationVector;
+                    var rosterVector = group.RosterVector;
                     $.each(group.Questions, function(index, question) {
-                        question.PropagationVector = propagationVector;
+                        question.RosterVector = rosterVector;
                         rawQuestions.push(question);
                     });
                 });
@@ -78,7 +78,7 @@
     var prepareQuestionCommand = function(question) {
         return {
             questionId: question.id(),
-            propagationVector: question.propagationVector(),
+            rosterVector: question.rosterVector(),
             interviewId: questionnaire.id(),
             answerTime: new Date()
         };
@@ -143,7 +143,7 @@
         var question = questions.getLocalById(args.questionId);
         return {
             questionId: question.id(),
-            propagationVector: question.propagationVector(),
+            rosterVector: question.rosterVector(),
             interviewId: questionnaire.id()
         };
     };
@@ -152,7 +152,7 @@
         var question = questions.getLocalById(args.questionId);
         return {
             questionId: question.id(),
-            propagationVector: question.propagationVector(),
+            rosterVector: question.rosterVector(),
             interviewId: questionnaire.id()
         };
     };
@@ -162,7 +162,7 @@
         return {
             interviewId: questionnaire.id(),
             questionId: question.id(),
-            propagationVector: question.propagationVector(),
+            rosterVector: question.rosterVector(),
             commentTime: new Date(),
             comment: args.comment
         };
