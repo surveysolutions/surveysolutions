@@ -106,11 +106,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster group has no roster size question pointing to it..
+        ///   Looks up a localized string similar to Roster group has no roster size question..
         /// </summary>
-        internal static string WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt {
+        internal static string WB0009_RosterGroupHasNoRosterSizeQuestion {
             get {
-                return ResourceManager.GetString("WB0009_RosterGroupHasNoRosterSizeQuestionPointingToIt", resourceCulture);
+                return ResourceManager.GetString("WB0009_RosterGroupHasNoRosterSizeQuestion", resourceCulture);
             }
         }
         
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references question not under propagated group..
+        ///   Looks up a localized string similar to Linked question references question not under roster group..
         /// </summary>
         internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution can&apos;t have reference questions with deeper propagation level..
+        ///   Looks up a localized string similar to Question with title substitution can&apos;t have reference questions with deeper roster level..
         /// </summary>
         internal static string WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel {
             get {
