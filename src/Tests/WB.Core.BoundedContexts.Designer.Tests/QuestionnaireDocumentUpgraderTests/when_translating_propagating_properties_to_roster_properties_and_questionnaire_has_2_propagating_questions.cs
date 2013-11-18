@@ -37,12 +37,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
             firstQuestionFromFactory = Mock.Of<IQuestion>();
             secondQuestionFromFactory = Mock.Of<IQuestion>();
 
-            Func<Guid, Expression<Func<QuestionData, bool>>> isNumericWithId =
-                id => data => data.PublicKey == id && data.QuestionType == QuestionType.Numeric;
+            Func<Guid, Expression<Func<QuestionData, bool>>> isNumericIntegerWithId = id => data
+                => data.PublicKey == id
+                && data.QuestionType == QuestionType.Numeric
+                && data.IsInteger == true;
 
             var questionFactory = Mock.Of<IQuestionFactory>(factory
-                => factory.CreateQuestion(it.Is(isNumericWithId(firstAutopropagatingQuestionId))) == firstQuestionFromFactory
-                && factory.CreateQuestion(it.Is(isNumericWithId(secondAutopropagatingQuestionId))) == secondQuestionFromFactory);
+                => factory.CreateQuestion(it.Is(isNumericIntegerWithId(firstAutopropagatingQuestionId))) == firstQuestionFromFactory
+                && factory.CreateQuestion(it.Is(isNumericIntegerWithId(secondAutopropagatingQuestionId))) == secondQuestionFromFactory);
             
             upgrader = CreateQuestionnaireDocumentUpgrader(questionFactory: questionFactory);
         };
@@ -53,10 +55,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
         It should_return_document_with_2_questions = () =>
             resultDocument.GetAllQuestions().Count().ShouldEqual(2);
 
-        It should_return_document_with_question_returned_by_question_factory_using_first_autopropagating_question_id_and_numeric_type = () =>
+        It should_return_document_with_question_returned_by_question_factory_using_first_autopropagating_question_id_and_numeric_integer_type = () =>
             resultDocument.GetAllQuestions().ShouldContain(firstQuestionFromFactory);
 
-        It should_return_document_with_question_returned_by_question_factory_using_second_autopropagating_question_id_and_numeric_type = () =>
+        It should_return_document_with_question_returned_by_question_factory_using_second_autopropagating_question_id_and_numeric_integer_type = () =>
             resultDocument.GetAllQuestions().ShouldContain(secondQuestionFromFactory);
 
         private static QuestionnaireDocument resultDocument;
