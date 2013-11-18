@@ -10,6 +10,8 @@
     public class GroupUpdated : FullGroupDataEvent
     {
         public Guid GroupPublicKey { get; set; }
-        public Propagate Propagateble { get; set; }
+        
+        [Obsolete]
+        public Propagate? Propagateble { get; set; }
     }
 }

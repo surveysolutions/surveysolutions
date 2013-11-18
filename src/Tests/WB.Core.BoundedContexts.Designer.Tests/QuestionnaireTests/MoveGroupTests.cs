@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("TLK KP-2834")]
         public void MoveGroup_When_target_group_is_auto_propagateble_Then_throws_DomainException_with_type_AutoPropagateGroupCantHaveChildGroups()
         {
             // Arrange
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid responsibleId = Guid.NewGuid();
             var questionnaire =
                 CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
-                    autoPropagateGroupId: targetAutoPropagateGroupId, regularGroupId: groupId,
+                    rosterGroupId: targetAutoPropagateGroupId, regularGroupId: groupId,
                     responsibleId: responsibleId);
 
             // Act
@@ -51,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid responsibleId = Guid.NewGuid();
                 var questionnaire =
                     CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
-                        autoPropagateGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
+                        rosterGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
                         responsibleId: responsibleId);
 
                 // Act
@@ -70,7 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var targetRegularGroupId = Guid.NewGuid();
             var questionnaire =
                 CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
-                    autoPropagateGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
+                    rosterGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
                     responsibleId: Guid.NewGuid());
             // act
             TestDelegate act = () => questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0, responsibleId: Guid.NewGuid());
@@ -79,15 +80,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
-        private Questionnaire CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(Guid autoPropagateGroupId, Guid regularGroupId, Guid responsibleId)
+        private Questionnaire CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(Guid rosterGroupId, Guid regularGroupId, Guid responsibleId)
         {
             var chapterId = Guid.NewGuid();
             
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: chapterId, responsibleId: responsibleId);
 
-            questionnaire.AddGroup(autoPropagateGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", propagationKind: Propagate.AutoPropagated, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: chapterId);
+            Guid rosterSizeQuestionId = Guid.NewGuid();
+            questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: chapterId);
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion", false, "rosterSizeQuestion", false, false, false, QuestionScope.Interviewer, "", "", "", "", 20, new Guid[0], responsibleId, true, null);
 
-            questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", propagationKind: Propagate.None, rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: chapterId);
+            questionnaire.AddGroup(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId);
 
             return questionnaire;
         }
