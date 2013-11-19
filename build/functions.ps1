@@ -87,8 +87,8 @@ function GetSolutionsToBuild() {
 }
 
 function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutions, $IndexOfSolution = 0, $CountOfSolutions = 1) {
-    $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution" } else { "Building solution $Solution" }
-    $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution" }
+    $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution in configuration '$BuildConfiguration'" } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
+    $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
 
     Write-Host "##teamcity[blockOpened name='$blockMessage']"
     Write-Host "##teamcity[progressStart '$progressMessage']"

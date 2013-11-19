@@ -1,9 +1,9 @@
 ﻿Mapper = function (model) {
     var question = {
-        getDtoId: function (dto) { return dto.PublicKey; },
+        getDtoId: function (dto) { return dto.Id; },
         fromDto: function (dto) {
             var item = new model.Question();
-            item.id(dto.PublicKey);
+            item.id(this.getDtoId(dto));
             item.title(dto.Title);
             item.type(dto.QuestionType);
             item.variable(dto.StataExportCaption);
@@ -33,9 +33,9 @@
                 item.settings(dto.Settings);
                 var isSettingsEmpty = _.isEmpty(dto.Settings);
                 var isInteger = isSettingsEmpty || dto.Settings.IsInteger;
-                item.selectedOption.extend({ number: true });
+                item.selectedOption.extend({ number: true, required: true });
                 if (isInteger) {
-                    item.selectedOption.extend({ digit: true });
+                    item.selectedOption.extend({ digit: true, required: true });
                 }
                 else if (!isSettingsEmpty && _.isNumber(dto.Settings.CountOfDecimalPlaces)) {
                     item.selectedOption.extend({ precision: dto.Settings.CountOfDecimalPlaces });
@@ -56,7 +56,7 @@
 
                 var item = new model.Option();
                 item.id(dto.AnswerValue);
-                item.questionId(dto.PublicKey);
+                item.questionId(dto.Id);
                 item.title(dto.Title);
                 item.value(dto.AnswerValue);
                 item.isSelected(dto.Selected || false);

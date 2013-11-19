@@ -13,13 +13,10 @@ namespace Main.Core.Commands.Sync
 
         public Guid ClientDeviceId { get; set; }
     
-        /*public Guid ClientInstanceKey;*/
-        
-        public CreateSyncActivityCommand(Guid id, Guid deviceId/*, Guid clientInstanceKey*/)
+        public CreateSyncActivityCommand(Guid id, Guid deviceId)
         {
             this.publicKey = id;
             this.ClientDeviceId = deviceId;
-            //this.ClientInstanceKey = clientInstanceKey;
         }
     }
 }

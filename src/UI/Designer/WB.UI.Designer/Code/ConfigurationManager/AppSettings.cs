@@ -1,8 +1,10 @@
-﻿using WB.UI.Shared.Web;
+﻿using System.Configuration;
+using WB.UI.Shared.Web;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer
 {
-    public sealed class AppSettings : WebConfigHelper
+    public sealed class AppSettings
     {
         public static bool IsDebugRelease
         {
@@ -20,42 +22,42 @@ namespace WB.UI.Designer
 
         public bool IsReCaptchaEnabled
         {
-            get { return this.GetBoolean("IsReCaptchaEnabled", true); }
+            get { return ConfigurationManager.AppSettings.GetBool("IsReCaptchaEnabled", true); }
         }
 
         public string RavenDocumentStore
         {
-            get { return this.GetString("Raven.DocumentStore"); }
+            get { return ConfigurationManager.AppSettings.GetString("Raven.DocumentStore"); }
         }
 
         public string RavenUserName
         {
-            get { return this.GetString("Raven.Username"); }
+            get { return ConfigurationManager.AppSettings.GetString("Raven.Username"); }
         }
 
         public string RavenUserPassword
         {
-            get { return this.GetString("Raven.Password"); }
+            get { return ConfigurationManager.AppSettings.GetString("Raven.Password"); }
         }
 
         public string WKHtmlToPdfExecutablePath
         {
-            get { return this.GetString("WKHtmlToPdfExecutablePath"); }
+            get { return ConfigurationManager.AppSettings.GetString("WKHtmlToPdfExecutablePath"); }
         }
 
         public bool IsTrackingEnabled
         {
-            get { return this.GetBoolean("IsTrackingEnabled", false); }
+            get { return ConfigurationManager.AppSettings.GetBool("IsTrackingEnabled", false); }
         }
 
         public int StorageLoadingChunkSize
         {
-            get { return this.GetInt("StorageLoadingChunkSize", 1024); }
+            get { return ConfigurationManager.AppSettings.GetInt("StorageLoadingChunkSize", 1024); }
         }
 
         public string SupportEmail
         {
-            get { return this.GetString("SupportEmail"); }
+            get { return ConfigurationManager.AppSettings.GetString("SupportEmail"); }
         }
     }
 }

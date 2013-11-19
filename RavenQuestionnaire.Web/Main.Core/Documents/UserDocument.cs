@@ -14,14 +14,12 @@ namespace Main.Core.Documents
             this.CreationDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
             this.Roles = new List<UserRoles>();
-            this.Location = new LocationDocument();
         }
 
         public DateTime CreationDate { get; set; }
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsLocked { get; set; }
-        public LocationDocument Location { get; set; }
         public string Password { get; set; }
         public Guid PublicKey { get; set; }
         public List<UserRoles> Roles { get; set; }

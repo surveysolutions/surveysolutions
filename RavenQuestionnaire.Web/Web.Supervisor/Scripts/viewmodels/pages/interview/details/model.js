@@ -11,7 +11,7 @@
         self.isFeatured = ko.observable();
         self.isFlagged = ko.observable();
         self.isMandatory = ko.observable();
-        self.propagationVector = ko.observable();
+        self.rosterVector = ko.observable();
         self.questionType = ko.observable();
         self.title = ko.observable();
         self.isValid = ko.observable(true);
@@ -238,7 +238,7 @@
             });
             self.title = ko.observable();
             self.parentId = ko.observable();
-            self.propagationVector = ko.observable();
+            self.rosterVector = ko.observable();
             self.questions = ko.observableArray();
             self.isVisible = ko.observable(true);
 

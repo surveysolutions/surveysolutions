@@ -1,15 +1,17 @@
 ﻿using System.Web.Security;
-using Main.Core.Domain.Exceptions;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
-using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
@@ -56,7 +58,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                var domainEx = e.GetSelfOrInnerAs<DomainException>();
+                var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
                     logger.Error(string.Format("Error on command of type ({0}) handling ", type), e);

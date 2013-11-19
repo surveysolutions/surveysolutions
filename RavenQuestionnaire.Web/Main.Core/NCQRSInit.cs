@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Commands;
-using Main.Core.Services;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.CommandExecution.Mapping;
@@ -54,7 +53,6 @@ namespace Main.Core
 
             InitializeCommandService(kernel.Get<ICommandListSupplier>(), new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>()));
 
-            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
 #endif
 
 

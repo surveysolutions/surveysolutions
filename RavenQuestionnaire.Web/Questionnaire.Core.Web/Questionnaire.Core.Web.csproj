@@ -186,7 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\GenericBinderResolver.cs" />
-    <Compile Include="Export\csv\CSVExporter.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />
     <Compile Include="Helpers\GlobalInfo.cs" />
@@ -198,7 +197,6 @@
     <Compile Include="Helpers\InputExtensions.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
     <Compile Include="Helpers\SuccessMarker.cs" />
-    <Compile Include="RegistrationController.cs" />
     <Compile Include="Helpers\ZipHelper.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
@@ -249,6 +247,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Export\csv\" />
     <Folder Include="Register\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -137,14 +137,14 @@
 
         groups.getPropagateableGroups = function () {
             var propagatable = _.filter(groups.getAllLocal(), function (item) {
-                return item.gtype() !== "None";
+                return item.isRoster();
             });
             return propagatable;
         };
 
         groups.getQuestionsFromPropagatableGroups = function () {
             return _.filter(questions.getAllLocal(), function (item) {
-                return !_.isUndefined(item.parent()) && !_.isNull(item.parent()) && item.parent().gtype() !== "None";
+                return !_.isUndefined(item.parent()) && !_.isNull(item.parent()) && item.parent().isRoster();
             });
         };
 
@@ -175,6 +175,17 @@
         questions.getAllVariables = function () {
             return _.map(questions.getAllLocal(), function (question) {
                 return question.alias();
+            });
+        };
+        
+        questions.getAllIntegerQuestionsForSelect = function () {
+            return _.filter(questions.getAllLocal(), function (question) {
+                if (question.parent().isRoster()) {
+                    return false;
+                }
+                return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
+            }).map(function (item) {
+                return { questionId: item.id(), title: item.alias() + ": " + item.title() };
             });
         };
 
@@ -213,22 +224,6 @@
             return command;
         };
 
-        commands[config.commands.createGroup] = function (group) {
-            var parent = group.parent();
-            if (!_.isNull(parent))
-                parent = parent.id();
-
-            return {
-                questionnaireId: questionnaire.id(),
-                groupId: group.id(),
-                title: group.title(),
-                propagationKind: group.gtype(),
-                description: group.description(),
-                condition: group.condition(),
-                parentGroupId: parent
-            };
-        };
-
         commands[config.commands.deleteGroup] = function (group) {
             return {
                 questionnaireId: questionnaire.id(),
@@ -236,14 +231,28 @@
             };
         };
 
+        commands[config.commands.createGroup] = function (group) {
+            var parent = group.parent();
+            if (!_.isNull(parent))
+                parent = parent.id();
+
+            var groupCommand = converGroupToCommand(group);
+            groupCommand.parentGroupId = parent;
+            return groupCommand;
+        };
+        
         commands[config.commands.updateGroup] = function (group) {
+            return converGroupToCommand(group);
+        };
+
+        var converGroupToCommand = function(group) {
             return {
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
-                propagationKind: group.gtype(),
                 description: group.description(),
-                condition: group.condition()
+                condition: group.condition(),
+                rosterSizeQuestionId: group.isRoster() ? group.rosterSizeQuestion() : null
             };
         };
 
@@ -334,7 +343,6 @@
                 case "YesNo":
                 case "DropDownList":
                 case "MultyOption":
-                    command.optionsOrder = question.answerOrder();
                     command.areAnswersOrdered = question.areAnswersOrdered();
                     command.maxAllowedAnswers = question.maxAllowedAnswers();
                     if (question.isLinked() == 1) {
@@ -353,17 +361,10 @@
                     command.isInteger = question.isInteger() == 1 ? true : false;
                     command.isAutopropagating = false;
                     command.countOfDecimalPlaces = command.isInteger == false ? question.countOfDecimalPlaces() : null;
+                    command.maxValue = question.maxValue();
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
-                    break;
-                case "AutoPropagate":
-                    command.isAutopropagating = true;
-                    command.isInteger = true;
-                    command.maxValue = question.maxValue();
-                    command.triggeredGroupIds = _.map(question.triggers(), function (trigger) {
-                    return trigger.key;
-                    });
                     break;
             }
             return command;

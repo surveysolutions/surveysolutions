@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Main.Core.AbstractFactories;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -21,19 +20,19 @@ namespace Core.Supervisor.Views.Interview
         private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnairePropagationStructures;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures;
         private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
 
         public InterviewDetailsViewFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
             IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore,
-            IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnairePropagationStructures,
+            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures,
             IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
             this.questionnaireStore = questionnaireStore;
-            this.questionnairePropagationStructures = questionnairePropagationStructures;
+            this.questionnaireRosterStructures = questionnaireRosterStructures;
             this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
         }
 
@@ -67,7 +66,7 @@ namespace Core.Supervisor.Views.Interview
             if (user == null)
                 throw new ArgumentException(string.Format("User with id {0} is not found.", interview.ResponsibleId));
 
-            var questionnairePropagation = this.questionnairePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnaireRosters = this.questionnaireRosterStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             var interviewDetails = new InterviewDetailsView()
                 {
@@ -87,23 +86,25 @@ namespace Core.Supervisor.Views.Interview
                 var currentGroup = groupStack.Pop();
 
                 var rootLevel = this.GetRootLevel(interview);
-
-                if (currentGroup.Key.Propagated == Propagate.AutoPropagated)
+                   //### old questionnaires supporting
+                if (currentGroup.Key.Propagated == Propagate.AutoPropagated ||
+                    //### roster
+                   (currentGroup.Key.IsRoster && currentGroup.Key.RosterSizeQuestionId.HasValue))
                 {
-                    var propagatedGroups = GetPropagatedLevels(currentGroup.Key.PublicKey, interview, questionnairePropagation).ToList();
+                    var rosterGroups = this.GetRosterLevels(currentGroup.Key.PublicKey, interview, questionnaireRosters).ToList();
 
-                    if (propagatedGroups.Any())
+                    if (rosterGroups.Any())
                     {
-                        //we have at least one completed propagated group
-                        //so for every layer we are creating propagated group
-                        foreach (var propagatedGroup in propagatedGroups)
+                        //we have at least one completed roster group
+                        //so for every layer we are creating roster group
+                        foreach (var rosterGroup in rosterGroups)
                         {
-                            var completedPropGroup =
+                            var completedRosterGroup =
                                 this.GetCompletedGroup(currentGroup.Key, currentGroup.Value,
-                                    propagatedGroup.Value, new [] { rootLevel },
+                                    rosterGroup.Value, new [] { rootLevel },
                                     idToVariableMap, variableToIdMap, getAvailableOptions, questionnaire.Questionnaire);
 
-                            interviewDetails.Groups.Add(completedPropGroup);
+                            interviewDetails.Groups.Add(completedRosterGroup);
                         }
                     }
                 }
@@ -130,27 +131,27 @@ namespace Core.Supervisor.Views.Interview
             return interview.Levels.FirstOrDefault(w => w.Value.ScopeIds.Count==1 && w.Value.ScopeIds.Contains(interview.InterviewId)).Value;
         }
 
-        private IEnumerable<KeyValuePair<string, InterviewLevel>> GetPropagatedLevels(Guid groupId, InterviewData interviewData,
-            QuestionnairePropagationStructure questionnairePropagation)
+        private IEnumerable<KeyValuePair<string, InterviewLevel>> GetRosterLevels(Guid groupId, InterviewData interviewData,
+            QuestionnaireRosterStructure questionnaireRoster)
         {
-            Guid? propagationScope = null;
+            Guid? rosterScope = null;
             //totally not efficient
-            foreach (var scopeId in questionnairePropagation.PropagationScopes.Keys)
+            foreach (var scopeId in questionnaireRoster.RosterScopes.Keys)
             {
-                foreach (var trigger in questionnairePropagation.PropagationScopes[scopeId])
+                foreach (var trigger in questionnaireRoster.RosterScopes[scopeId])
                 {
                     if (trigger == groupId)
                     {
-                        propagationScope = scopeId;
+                        rosterScope = scopeId;
                         break;
                     }
                 }
             }
-            if (!propagationScope.HasValue)
-                throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire", groupId));
+            if (!rosterScope.HasValue)
+                throw new ArgumentException(string.Format("group {0} is missing in any roster scope of questionnaire", groupId));
 
 
-            return interviewData.Levels.Where(w => w.Value.ScopeIds.Contains(propagationScope.Value));
+            return interviewData.Levels.Where(w => w.Value.ScopeIds.Contains(rosterScope.Value));
         }
 
 
@@ -162,7 +163,7 @@ namespace Core.Supervisor.Views.Interview
                 {
                     Depth = depth,
                     Title = currentGroup.Title,
-                    PropagationVector = interviewLevel.PropagationVector,
+                    RosterVector = interviewLevel.RosterVector,
                     ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
                 };
 
@@ -252,11 +253,11 @@ namespace Core.Supervisor.Views.Interview
                     }
                     else
                     {
-                        int[] selectedPropagationVector = ((IEnumerable) interviewQuestion.Answer).OfType<int>().ToArray();
+                        int[] selectedRosterVector = ((IEnumerable) interviewQuestion.Answer).OfType<int>().ToArray();
 
                         Dictionary<int[], string> availableOptions = getAvailableOptions(interviewQuestion.Id);
 
-                        KeyValuePair<int[], string> selectedOption = availableOptions.SingleOrDefault(option => option.Key.SequenceEqual(selectedPropagationVector));
+                        KeyValuePair<int[], string> selectedOption = availableOptions.SingleOrDefault(option => option.Key.SequenceEqual(selectedRosterVector));
 
                         return selectedOption.Value;
                     }
@@ -287,7 +288,7 @@ namespace Core.Supervisor.Views.Interview
             IEnumerable<InterviewLevel> allAvailableLevelsByScope = this.GetAllAvailableLevelsByScope(interview, optionsSource);
 
             IDictionary<int[], InterviewQuestion> allLinkedQuestions =
-                allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.PropagationVector,
+                allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
                     interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
 
             return allLinkedQuestions.Where(question => question.Value != null && question.Value.Enabled)

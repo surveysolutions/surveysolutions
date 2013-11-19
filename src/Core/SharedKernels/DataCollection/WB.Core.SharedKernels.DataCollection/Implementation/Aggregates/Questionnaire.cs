@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
@@ -156,6 +155,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             this.ApplyEvent(new TemplateImported() { Source = document });
         }
+
+        public void ImportFromDesignerForTester(IQuestionnaireDocument source)
+        {
+            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            this.ApplyEvent(new TemplateImported() { Source = document });
+        }
+
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
@@ -319,71 +325,86 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion[questionId];
         }
 
-        public bool ShouldQuestionPropagateGroups(Guid questionId)
+        public bool ShouldQuestionSpecifyRosterSize(Guid questionId)
         {
-            return this.DoesQuestionSupportPropagation(questionId)
-                && this.GetGroupsPropagatedByQuestion(questionId).Any();
+            return this.DoesQuestionSupportRoster(questionId)
+                && this.GetRosterGroupsByRosterSizeQuestion(questionId).Any();
         }
 
-        public IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId)
+        public IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId)
         {
-            if (!this.DoesQuestionSupportPropagation(questionId))
+            if (!this.DoesQuestionSupportRoster(questionId))
                 return Enumerable.Empty<Guid>();
 
+            //### old questionnaires supporting
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
-
-            foreach (Guid groupId in autoPropagatingQuestion.Triggers)
+            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
+            if (autoPropagatingQuestion != null)
             {
-                this.ThrowIfGroupDoesNotExist(groupId);
-            }
+                foreach (Guid groupId in autoPropagatingQuestion.Triggers)
+                {
+                    this.ThrowIfGroupDoesNotExist(groupId);
+                }
 
-            return autoPropagatingQuestion.Triggers.ToList();
+                return autoPropagatingQuestion.Triggers.ToList();
+            }
+            
+            //### roster
+            return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId).Select(x => x.PublicKey);
         }
 
-        public int GetMaxAnswerValueForPropagatingQuestion(Guid questionId)
+        public int? GetMaxValueForNumericQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            this.ThrowIfQuestionDoesNotSupportPropagation(question.PublicKey);
-            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
+            this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
 
-            return autoPropagatingQuestion.MaxValue;
+            //### old questionnaires supporting
+            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
+            if (autoPropagatingQuestion != null)
+                return autoPropagatingQuestion.MaxValue;
+
+            //### roster
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+                return numericQuestion.MaxValue;
+
+            return null;
         }
 
-        public IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId)
+        public IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId)
         {
             return this
                 .GetAllParentGroupsForQuestionStartingFromBottom(questionId)
-                .Where(this.IsGroupPropagatable)
+                .Where(this.IsRosterGroup)
                 .Reverse()
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(Guid groupId)
+        public IEnumerable<Guid> GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(Guid groupId)
         {
             IGroup group = this.GetGroupOrThrow(groupId);
 
             return this
                 .GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(@group)
-                .Where(this.IsGroupPropagatable)
+                .Where(this.IsRosterGroup)
                 .Reverse()
                 .ToList();
         }
 
-        public int GetPropagationLevelForQuestion(Guid questionId)
+        public int GetRosterLevelForQuestion(Guid questionId)
         {
             this.ThrowIfQuestionDoesNotExist(questionId);
 
-            return GetPropagationLevelForQuestion(questionId, this.GetAllParentGroupsForQuestion, this.IsGroupPropagatable);
+            return this.GetRosterLevelForQuestion(questionId, this.GetAllParentGroupsForQuestion, this.IsRosterGroup);
         }
 
-        public int GetPropagationLevelForGroup(Guid groupId)
+        public int GetRosterLevelForGroup(Guid groupId)
         {
             IGroup group = this.GetGroupOrThrow(groupId);
 
             return this
                 .GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(group)
-                .Count(this.IsGroupPropagatable);
+                .Count(this.IsRosterGroup);
         }
 
         public IEnumerable<Guid> GetAllMandatoryQuestions()
@@ -410,11 +431,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 select @group.PublicKey;
         }
 
-        public bool IsGroupPropagatable(Guid groupId)
+        public bool IsRosterGroup(Guid groupId)
         {
             IGroup @group = this.GetGroupOrThrow(groupId);
 
-            return IsGroupPropagatable(@group);
+            return IsRosterGroup(@group);
         }
 
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
@@ -473,10 +494,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
+            //### old questionnaires supporting
             var autoPropagateQuestion = question as IAutoPropagate;
             if (autoPropagateQuestion != null)
                 return true;
-            
+
+            //### roster
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
@@ -646,17 +669,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.QuestionCache.Values;
         }
 
-        private IEnumerable<IAutoPropagateQuestion> GetAllPropagatingQuestions()
+        private int GetRosterLevelForQuestion(Guid questionId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForQuestion, Func<Guid, bool> isRosterGroup)
         {
-            return this
-                .GetAllQuestions()
-                .Where(DoesQuestionSupportPropagation)
-                .Cast<IAutoPropagateQuestion>();
-        }
-
-        private int GetPropagationLevelForQuestion(Guid questionId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForQuestion, Func<Guid, bool> isGroupPropagatable)
-        {
-            return getAllParentGroupsForQuestion(questionId).Count(isGroupPropagatable);
+            return getAllParentGroupsForQuestion(questionId).Count(isRosterGroup);
         }
 
         private IEnumerable<Guid> GetAllParentGroupsForQuestionStartingFromBottom(Guid questionId)
@@ -787,28 +802,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return isSpecifiedQuestionInvolved;
         }
 
-        private bool DoesQuestionSupportPropagation(Guid questionId)
+        private bool DoesQuestionSupportRoster(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            return DoesQuestionSupportPropagation(question);
+            return DoesQuestionSupportRoster(question);
         }
 
-        private static bool DoesQuestionSupportPropagation(IQuestion question)
+        private static bool DoesQuestionSupportRoster(IQuestion question)
         {
-            return (question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate)
-                && (question is IAutoPropagateQuestion);
+                   //### roster
+            return question.QuestionType == QuestionType.Numeric ||
+                   //### old questionnaires supporting
+                  (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
+
         }
 
-        private static bool IsGroupPropagatable(IGroup group)
+        private static bool IsRosterGroup(IGroup group)
         {
-            return group.Propagated == Propagate.AutoPropagated;
+            //### old questionnaires supporting                    //### roster
+            return group.Propagated == Propagate.AutoPropagated || group.IsRoster;
         }
 
-        private void ThrowIfQuestionDoesNotSupportPropagation(Guid questionId)
+        private void ThrowIfQuestionDoesNotSupportRoster(Guid questionId)
         {
-            if (!this.DoesQuestionSupportPropagation(questionId))
-                throw new QuestionnaireException(string.Format("Question with id '{0}' is not a propagating question.", questionId));
+            if (!this.DoesQuestionSupportRoster(questionId))
+                throw new QuestionnaireException(string.Format("Question with id '{0}' is not a roster size question.", questionId));
         }
 
         private void ThrowIfGroupDoesNotExist(Guid groupId)

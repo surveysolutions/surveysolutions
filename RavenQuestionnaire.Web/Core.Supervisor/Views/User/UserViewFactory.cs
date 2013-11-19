@@ -54,7 +54,6 @@ namespace Core.Supervisor.Views.User
                             IsLocked = userDocument.IsLocked,
                             PublicKey = userDocument.PublicKey,
                             Roles = userDocument.Roles,
-                            Location = userDocument.Location,
                             Password = userDocument.Password,
                             Supervisor = userDocument.Supervisor,
                         }

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Security;
-using Main.Core.Commands.User;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers

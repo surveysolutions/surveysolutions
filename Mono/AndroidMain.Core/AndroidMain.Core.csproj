@@ -53,53 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\CompleteGroupFactory.cs">
-      <Link>AbstractFactories\CompleteGroupFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteAnswerFactory.cs">
-      <Link>AbstractFactories\ICompleteAnswerFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteGroupFactory.cs">
-      <Link>AbstractFactories\ICompleteGroupFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\IQuestionFactory.cs">
-      <Link>AbstractFactories\IQuestionFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\QuestionFactory.cs">
-      <Link>AbstractFactories\QuestionFactory.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CommandListSupplier.cs">
       <Link>CommandListSupplier.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\ConcurrencyResolveCommandService.cs">
       <Link>Commands\ConcurrencyResolveCommandService.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\DeleteFileCommand.cs">
-      <Link>Commands\File\DeleteFileCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UpdateFileMetaCommand.cs">
-      <Link>Commands\File\UpdateFileMetaCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UploadFileCommand.cs">
       <Link>Commands\File\UploadFileCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\ChangeEventStatusCommand.cs">
-      <Link>Commands\Synchronization\ChangeEventStatusCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs">
-      <Link>Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\EndProcessComand.cs">
-      <Link>Commands\Synchronization\EndProcessComand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\PushEventsCommand.cs">
-      <Link>Commands\Synchronization\PushEventsCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\PushStatisticsCommand.cs">
-      <Link>Commands\Synchronization\PushStatisticsCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterDeviceCommand.cs">
-      <Link>Commands\Synchronization\RegisterDeviceCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterNewDeviceCapiCommand.cs">
       <Link>Commands\Synchronization\RegisterNewDeviceCapiCommand.cs</Link>
@@ -110,68 +71,29 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\UpdateRegisterDeviceCommand.cs">
       <Link>Commands\Synchronization\UpdateRegisterDeviceCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\ChangeUserCommand.cs">
-      <Link>Commands\User\ChangeUserCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\CreateUserCommand.cs">
-      <Link>Commands\User\CreateUserCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Conventions\RegisterFirstInstanceOfInterface.cs">
       <Link>Conventions\RegisterFirstInstanceOfInterface.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CoreRegistry.cs">
       <Link>CoreRegistry.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\AbstractDocument.cs">
-      <Link>Documents\AbstractDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ChangeStatusDocument.cs">
-      <Link>Documents\ChangeStatusDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ClientDeviceDocument.cs">
       <Link>Documents\ClientDeviceDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CollectionDocument.cs">
-      <Link>Documents\CollectionDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CommentDocument.cs">
-      <Link>Documents\CommentDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\QuestionAnswer.cs">
       <Link>Documents\QuestionAnswer.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\EventState.cs">
-      <Link>Documents\EventState.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ExportSchemaDocument.cs">
-      <Link>Documents\ExportSchemaDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\FileDescription.cs">
       <Link>Documents\FileDescription.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\FlowGraphDocument.cs">
-      <Link>Documents\FlowGraphDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ICollectionDocument.cs">
-      <Link>Documents\ICollectionDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\IFlowGraphDocument.cs">
-      <Link>Documents\IFlowGraphDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\IQuestionnaireDocument.cs">
       <Link>Documents\IQuestionnaireDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\LocationDocument.cs">
-      <Link>Documents\LocationDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\ProcessedEventChunk.cs">
       <Link>Documents\ProcessedEventChunk.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\QuestionnaireDocument.cs">
       <Link>Documents\QuestionnaireDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\StatusDocument.cs">
-      <Link>Documents\StatusDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\SyncDeviceRegisterDocument.cs">
       <Link>Documents\SyncDeviceRegisterDocument.cs</Link>
@@ -182,38 +104,14 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\SynchronizationType.cs">
       <Link>Documents\SynchronizationType.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\SyncProcessDocument.cs">
-      <Link>Documents\SyncProcessDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\SyncProcessStatisticsDocument.cs">
-      <Link>Documents\SyncProcessStatisticsDocument.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\UserDocument.cs">
       <Link>Documents\UserDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\CollectionAR.cs">
-      <Link>Domain\CollectionAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\DeviceAR.cs">
       <Link>Domain\DeviceAR.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainException.cs">
-      <Link>Domain\Exceptions\DomainException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainExceptionType.cs">
-      <Link>Domain\Exceptions\DomainExceptionType.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\LocationAR.cs">
-      <Link>Domain\LocationAR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\SyncProcessAR.cs">
-      <Link>Domain\SyncProcessAR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\UserAR.cs">
-      <Link>Domain\UserAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Composite\CompositeException.cs">
       <Link>Entities\Composite\CompositeException.cs</Link>
@@ -221,20 +119,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Composite\IComposite.cs">
       <Link>Entities\Composite\IComposite.cs</Link>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\CompleteQuestionWrapper.cs">
-      <Link>Entities\Extensions\CompleteQuestionWrapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\CompositeWrapper.cs">
-      <Link>Entities\Extensions\CompositeWrapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\ICompleteGroupExtensions.cs">
-      <Link>Entities\Extensions\ICompleteGroupExtensions.cs</Link>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\ICompleteQuestionExtensions.cs">
-      <Link>Entities\Extensions\ICompleteQuestionExtensions.cs</Link>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Observers\ITriggerable.cs">
@@ -264,63 +148,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\AnswerType.cs">
       <Link>Entities\SubEntities\AnswerType.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\CollectionItem.cs">
-      <Link>Entities\SubEntities\CollectionItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\CompleteAnswer.cs">
-      <Link>Entities\SubEntities\Complete\CompleteAnswer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\CompleteGroup.cs">
-      <Link>Entities\SubEntities\Complete\CompleteGroup.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IAutoPropagate.cs">
-      <Link>Entities\SubEntities\Complete\IAutoPropagate.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompelteValueQuestion.cs">
-      <Link>Entities\SubEntities\Complete\ICompelteValueQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteAnswer.cs">
-      <Link>Entities\SubEntities\Complete\ICompleteAnswer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteGroup.cs">
-      <Link>Entities\SubEntities\Complete\ICompleteGroup.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteItem.cs">
-      <Link>Entities\SubEntities\Complete\ICompleteItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteQuestion.cs">
-      <Link>Entities\SubEntities\Complete\ICompleteQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IDateTimeQuestion.cs">
-      <Link>Entities\SubEntities\Complete\IDateTimeQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IGpsCoordinatesQuestion.cs">
-      <Link>Entities\SubEntities\Complete\IGpsCoordinatesQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IMultyOptionsQuestion.cs">
-      <Link>Entities\SubEntities\Complete\IMultyOptionsQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\INumericQuestion.cs">
-      <Link>Entities\SubEntities\Complete\INumericQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IPercentageQuestion.cs">
-      <Link>Entities\SubEntities\Complete\IPercentageQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ISingleQuestion.cs">
-      <Link>Entities\SubEntities\Complete\ISingleQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ITextCompleteQuestion.cs">
-      <Link>Entities\SubEntities\Complete\ITextCompleteQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\FlowBlock.cs">
-      <Link>Entities\SubEntities\FlowBlock.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\FlowConnection.cs">
-      <Link>Entities\SubEntities\FlowConnection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\FlowRule.cs">
-      <Link>Entities\SubEntities\FlowRule.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\GeoPosition.cs">
       <Link>Entities\SubEntities\GeoPosition.cs</Link>
     </Compile>
@@ -330,14 +157,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IAnswer.cs">
       <Link>Entities\SubEntities\IAnswer.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\ICollectionItem.cs">
-      <Link>Entities\SubEntities\ICollectionItem.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IConditional.cs">
       <Link>Entities\SubEntities\IConditional.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IFlowBlock.cs">
-      <Link>Entities\SubEntities\IFlowBlock.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IGroup.cs">
       <Link>Entities\SubEntities\IGroup.cs</Link>
@@ -347,12 +168,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IQuestion.cs">
       <Link>Entities\SubEntities\IQuestion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\LocationWithUserStatistic.cs">
-      <Link>Entities\SubEntities\LocationWithUserStatistic.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\NumericQuestionUtils.cs">
-      <Link>Entities\SubEntities\NumericQuestionUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Option.cs">
       <Link>Entities\SubEntities\Option.cs</Link>
@@ -378,8 +193,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <Link>Entities\SubEntities\Question\GpsCoordinateQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IAutoPropagate.cs">
+      <Link>Entities\SubEntities\Question\IAutoPropagate.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IAutoPropagateQuestion.cs">
       <Link>Entities\SubEntities\Question\IAutoPropagateQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IMultyOptionsQuestion.cs">
+      <Link>Entities\SubEntities\Question\IMultyOptionsQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\INumericQuestion.cs">
+      <Link>Entities\SubEntities\Question\INumericQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
@@ -393,23 +217,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\TextQuestion.cs">
       <Link>Entities\SubEntities\Question\TextQuestion.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\StatusesWithCompleteQuestionnaireStatistic.cs">
-      <Link>Entities\SubEntities\StatusesWithCompleteQuestionnaireStatistic.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\StatusItem.cs">
-      <Link>Entities\SubEntities\StatusItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\SurveyStatus.cs">
-      <Link>Entities\SubEntities\SurveyStatus.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\UserLight.cs">
       <Link>Entities\SubEntities\UserLight.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\UserRoles.cs">
       <Link>Entities\SubEntities\UserRoles.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\VisitedGroup.cs">
-      <Link>Entities\SubEntities\VisitedGroup.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\TemplateLight.cs">
       <Link>Entities\TemplateLight.cs</Link>
@@ -420,15 +232,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\AggregateRootEvent.cs">
       <Link>Events\AggregateRootEvent.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Collection\CollectionItemRemoved.cs">
-      <Link>Events\Collection\CollectionItemRemoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Collection\CollectionRemoved.cs">
-      <Link>Events\Collection\CollectionRemoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Collection\NewCollectionCreated.cs">
-      <Link>Events\Collection\NewCollectionCreated.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\File\FileDeleted.cs">
       <Link>Events\File\FileDeleted.cs</Link>
     </Compile>
@@ -438,65 +241,14 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\File\FileUploaded.cs">
       <Link>Events\File\FileUploaded.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Location\LocationDeleted.cs">
-      <Link>Events\Location\LocationDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Location\NewLocationCreated.cs">
-      <Link>Events\Location\NewLocationCreated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\AnswerSet.cs">
-      <Link>Events\Questionnaire\Completed\AnswerSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\CommentSeted.cs">
-      <Link>Events\Questionnaire\Completed\CommentSeted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ConditionalStatusChanged.cs">
-      <Link>Events\Questionnaire\Completed\ConditionalStatusChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs">
-      <Link>Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\FlagSet.cs">
-      <Link>Events\Questionnaire\Completed\FlagSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
-      <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\PropagatableGroupAdded.cs">
-      <Link>Events\Questionnaire\Completed\PropagatableGroupAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\PropagatableGroupDeleted.cs">
-      <Link>Events\Questionnaire\Completed\PropagatableGroupDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\PropagateGroupCreated.cs">
-      <Link>Events\Questionnaire\Completed\PropagateGroupCreated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs">
-      <Link>Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs">
-      <Link>Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ValidStatusChanged.cs">
-      <Link>Events\Questionnaire\Completed\ValidStatusChanged.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\AggregateRootEventStreamPushed.cs">
       <Link>Events\Synchronization\AggregateRootEventStreamPushed.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\AggregateRootStatusChanged.cs">
-      <Link>Events\Synchronization\AggregateRootStatusChanged.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\NewDeviceRegistered.cs">
       <Link>Events\Synchronization\NewDeviceRegistered.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\NewSynchronizationProcessCreated.cs">
       <Link>Events\Synchronization\NewSynchronizationProcessCreated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\ProcessEnded.cs">
-      <Link>Events\Synchronization\ProcessEnded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\ProcessStatisticsCalculated.cs">
-      <Link>Events\Synchronization\ProcessStatisticsCalculated.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\UpdateRegisteredDevice.cs">
       <Link>Events\Synchronization\UpdateRegisteredDevice.cs</Link>
@@ -519,30 +271,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\UserUnlocked.cs">
       <Link>Events\User\UserUnlocked.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\ExportManager.cs">
-      <Link>Export\ExportManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\FileType.cs">
-      <Link>Export\FileType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\IDataExport.cs">
-      <Link>Export\IDataExport.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\IEnvironmentSupplier.cs">
-      <Link>Export\IEnvironmentSupplier.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\IExportProvider.cs">
-      <Link>Export\IExportProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\StataSuplier.cs">
-      <Link>Export\StataSuplier.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
-      <Link>ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\IExpressionExecutor.cs">
-      <Link>ExpressionExecutors\IExpressionExecutor.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ICommandListSupplier.cs">
       <Link>ICommandListSupplier.cs</Link>
     </Compile>
@@ -555,47 +283,14 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\PackageHelper.cs">
       <Link>PackageHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Services\IFileStorageService.cs">
-      <Link>Services\IFileStorageService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\EnumerableExtensions.cs">
-      <Link>Utility\EnumerableExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\EventMergeUtils.cs">
       <Link>Utility\EventMergeUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\GroupWithRout.cs">
-      <Link>Utility\GroupWithRout.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\LINQExtensions.cs">
       <Link>Utility\LINQExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\NodeWithLevel.cs">
-      <Link>Utility\NodeWithLevel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\AsIsStrategy.cs">
-      <Link>Utility\OrderStrategy\AsIsStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\AZStrategy.cs">
-      <Link>Utility\OrderStrategy\AZStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\IOrderStrategy.cs">
-      <Link>Utility\OrderStrategy\IOrderStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\MaxMinStrategy.cs">
-      <Link>Utility\OrderStrategy\MaxMinStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\MinMaxStrategy.cs">
-      <Link>Utility\OrderStrategy\MinMaxStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\OrderStrategyFactory.cs">
-      <Link>Utility\OrderStrategy\OrderStrategyFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\RandomStrategy.cs">
-      <Link>Utility\OrderStrategy\RandomStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\OrderStrategy\ZAStrategy.cs">
-      <Link>Utility\OrderStrategy\ZAStrategy.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\RegistryHelper.cs">
+      <Link>Utility\RegistryHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\SimpleHash.cs">
       <Link>Utility\SimpleHash.cs</Link>
@@ -606,83 +301,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\StringUtil.cs">
       <Link>Utility\StringUtil.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Answer\AnswerView.cs">
-      <Link>View\Answer\AnswerView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Answer\CompleteAnswerView.cs">
-      <Link>View\Answer\CompleteAnswerView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs">
-      <Link>View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs">
-      <Link>View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\ScreenGroup\ScreenNavigationView.cs">
-      <Link>View\CompleteQuestionnaire\ScreenGroup\ScreenNavigationView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\Statistics\ChangeStatusHistoryView.cs">
-      <Link>View\CompleteQuestionnaire\Statistics\ChangeStatusHistoryView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs">
-      <Link>View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs">
-      <Link>View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportInputModel.cs">
-      <Link>View\Export\CompleteQuestionnaireExportInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportItem.cs">
-      <Link>View\Export\CompleteQuestionnaireExportItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\CompleteQuestionnaireExportView.cs">
-      <Link>View\Export\CompleteQuestionnaireExportView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\HeaderCollection.cs">
-      <Link>View\Export\HeaderCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\HeaderItem.cs">
-      <Link>View\Export\HeaderItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Export\ValueCollection.cs">
-      <Link>View\Export\ValueCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Group\CompleteGroupHeaders.cs">
-      <Link>View\Group\CompleteGroupHeaders.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Group\Counter.cs">
-      <Link>View\Group\Counter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Group\ScreenNavigation.cs">
-      <Link>View\Group\ScreenNavigation.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\ICompositeView.cs">
       <Link>View\ICompositeView.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewFactory.cs">
       <Link>View\IViewFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\QuestionView.cs">
-      <Link>View\Question\QuestionView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\CapiExportStatistics.cs">
-      <Link>View\SyncProcess\CapiExportStatistics.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessInputModel.cs">
-      <Link>View\SyncProcess\SyncProcessInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessView.cs">
-      <Link>View\SyncProcess\SyncProcessView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncProcessViewFactory.cs">
-      <Link>View\SyncProcess\SyncProcessViewFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\SyncStatisticInfo.cs">
-      <Link>View\SyncProcess\SyncStatisticInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\SyncProcess\UserSyncProcessStatistics.cs">
-      <Link>View\SyncProcess\UserSyncProcessStatistics.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\User\UserBrowseInputModel.cs">
       <Link>View\User\UserBrowseInputModel.cs</Link>
@@ -757,16 +380,11 @@
       <Name>AndroidNinject</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\Questionnaire\Completed\" />
-    <Folder Include="Documents\Statistics\" />
-    <Folder Include="Entities\SubEntities\Complete\Question\" />
-    <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
