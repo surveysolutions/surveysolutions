@@ -25,10 +25,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 initialGroup = CreateGroup(children: new[]
                 {
-                    firstQuestion = CreateQuestion(questionId: questionId, title: "Question 1"),
-                    secondQuestion = CreateQuestion(questionId: questionId, title: "Question 2"),
-                    thirdQuestion = CreateQuestion(questionId: questionId, title: "Question 3"),
-                    forthQuestion = CreateQuestion(questionId: questionId, title: "Question 4"),
+                    firstQuestion = CreateTextQuestion(questionId: questionId, title: "Question 1"),
+                    secondQuestion = CreateTextQuestion(questionId: questionId, title: "Question 2"),
+                    thirdQuestion = CreateTextQuestion(questionId: questionId, title: "Question 3"),
+                    forthQuestion = CreateTextQuestion(questionId: questionId, title: "Question 4"),
                 }),
 
                 anotherGroup = CreateGroup(groupId: anotherGroupId),

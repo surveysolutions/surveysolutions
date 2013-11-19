@@ -1,11 +1,13 @@
 using System;
-using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -13,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
     using Main.Core.Entities;
 
-    public class QuestionnaireDenormalizer :
+    internal class QuestionnaireDenormalizer :
         IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<NewGroupAdded>,
         IEventHandler<GroupCloned>,
@@ -30,18 +32,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<ImageDeleted>,
         IEventHandler<GroupDeleted>,
         IEventHandler<GroupUpdated>,
+        IEventHandler<GroupBecameARoster>,
+        IEventHandler<RosterChanged>,
+        IEventHandler<GroupStoppedBeingARoster>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>, IEventHandler
     {
+        private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly IQuestionFactory questionFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            IQuestionFactory questionFactory, ILogger logger)
+            IQuestionFactory questionFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
         {
+            this.upgrader = upgrader;
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
             this.logger = logger;
@@ -67,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
-            group.Propagated = evnt.Payload.Paropagateble;
+            group.Propagated = evnt.Payload.Paropagateble ?? Propagate.None;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -103,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
-            group.Propagated = evnt.Payload.Paropagateble;
+            group.Propagated = evnt.Payload.Paropagateble ?? Propagate.None;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -224,8 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            AbstractQuestion result =
-                new QuestionFactory().CreateQuestion(data);
+            IQuestion result = new QuestionFactory().CreateQuestion(data);
 
             if (result == null)
             {
@@ -233,6 +239,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             }
 
             item.Add(result, groupId, null);
+
+            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -246,10 +255,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(data);
+            IQuestion newQuestion = this.questionFactory.CreateQuestion(data);
 
             item.ReplaceQuestionWithNew(question, newQuestion);
+
+            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 
             this.UpdateQuestionnaire(evnt, item);
         }
@@ -257,15 +267,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            AbstractQuestion result =
-                new QuestionFactory().CreateQuestion(data);
+            IQuestion result = new QuestionFactory().CreateQuestion(data);
 
             if (result == null)
             {
                 return;
             }
-#warning Slava: uncomment this line and get rig of read and write side objects
             item.Insert(index, result, groupId);
+
+            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -275,7 +286,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             AddQuestion(evnt, evnt.Payload.GroupPublicKey,
                 new QuestionData(
                     e.PublicKey,
-                    NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                    QuestionType.Numeric,
                     e.QuestionScope,
                     e.QuestionText,
                     e.StataExportCaption,
@@ -303,7 +314,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
                 new QuestionData(
                     e.PublicKey,
-                    NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                    QuestionType.Numeric,
                     e.QuestionScope,
                     e.QuestionText,
                     e.StataExportCaption,
@@ -330,7 +341,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             NumericQuestionChanged e = evnt.Payload;
             UpdateQuestion(evnt, new QuestionData(
                 e.PublicKey,
-                NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                QuestionType.Numeric,
                 e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
@@ -400,10 +411,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupPublicKey,
                 evnt.Payload.GroupText,
                 evnt.Payload.Description,
-                evnt.Payload.Propagateble,
+                evnt.Payload.Propagateble ?? Propagate.None,
                 evnt.Payload.ConditionExpression);
 
             this.UpdateQuestionnaire(evnt, item);
+        }
+
+        public void Handle(IPublishedEvent<GroupBecameARoster> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId,  group => group.IsRoster = true);
+
+            this.UpdateQuestionnaire(@event, item);
+        }
+
+        public void Handle(IPublishedEvent<RosterChanged> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId, group => group.RosterSizeQuestionId = @event.Payload.RosterSizeQuestionId);
+
+            this.UpdateQuestionnaire(@event, item);
+        }
+
+        public void Handle(IPublishedEvent<GroupStoppedBeingARoster> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateGroup(@event.Payload.GroupId, group => group.IsRoster = false);
+
+            this.UpdateQuestionnaire(@event, item);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
@@ -432,8 +470,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var document = evnt.Payload.Source;
-            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
+            var document = upgrader.TranslatePropagatePropertiesToRosterProperties(evnt.Payload.Source);
+            this.documentStorage.Store(document, document.PublicKey);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)

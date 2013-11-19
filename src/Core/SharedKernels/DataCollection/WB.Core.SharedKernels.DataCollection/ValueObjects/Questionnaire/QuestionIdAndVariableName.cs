@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire
 {
-    public class QuestionIdAndVariableName
+    public struct QuestionIdAndVariableName
     {
         public QuestionIdAndVariableName(Guid id, string variableName)
         {
-            this.Id = id;
-            this.VariableName = variableName;
+            Id = id;
+            VariableName = variableName;
         }
 
-        public Guid Id { get; private set; }
-        public string VariableName { get; private set; }
+        public readonly Guid Id;
+        public readonly string VariableName;
     }
 }

@@ -63,20 +63,41 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionChanged_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionAdded_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\QuestionChangeEventTestContext.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTests.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_adding_a_group_and_there_already_is_one_group_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_adding_a_question_and_there_already_is_one_question_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_deleting_group_by_id_and_there_are_3_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_deleting_question_by_id_and_there_are_4_questions_with_same_id.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionAdded_event_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionAdded_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_QuestionChangeEvent_with_Autopropagate_question_type_is_come.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
-    <Compile Include="QuestionnaireDocumentExtentions.cs" />
+    <Compile Include="QuestionnaireDocumentExtensions.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\QuestionnaireDocumentUpgraderTestsContext.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_propagating_question_references_3_groups_by_3_triggers___.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_propagating_questions.cs" />
+    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties.cs" />
+    <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
+    <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteGroupTests.cs" />
@@ -84,14 +105,51 @@
     <Compile Include="QuestionnaireTests\DeleteQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\MoveGroupTests.cs" />
-    <Compile Include="QuestionnaireTests\NewAddGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\AddGroupTests.cs" />
     <Compile Include="QuestionnaireTests\NewAddQuestionTests.cs" />
-    <Compile Include="QuestionnaireTests\NewUpdateGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\UpdateGroupTests.cs" />
     <Compile Include="QuestionnaireTests\NewUpdateQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\MiscTests.cs" />
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_not_numeric.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_under_another_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_numeric_question_and_max_value_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_numeric_question_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_prefilled_numeric_question_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_prefilled_question_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_not_numeric.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_under_another_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_targeting_it_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_prefilled_numeric_question_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_prefilled_question_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_size_question.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_prefilled_question_under_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_id_points_to_not_existing_question.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_not_numeric.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_numeric_but_not_integer.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_under_another_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_which_has_a_subgroup_and_roster_size_question_id_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_not_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_numeric_question_under_roster_and_setting_it_prefilled.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
+    <Compile Include="ShouldExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -122,6 +180,14 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
+      <Project>{400CDE74-7407-4388-8D57-BF429E7C508D}</Project>
+      <Name>WB.UI.Designer.Providers.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

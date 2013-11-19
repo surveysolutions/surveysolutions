@@ -7,13 +7,15 @@ using Exception = System.Exception;
 
 namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
 {
-    internal class FileLogger : ILogger
+    public class FileLogger : ILogger
     {
-        private static readonly string LogFilename = Path.Combine(GetLogDirectory(), "WBCapi.log.txt");
         private static readonly ReaderWriterLockSlim rwl = new ReaderWriterLockSlim();
-        private const string Tag = "Android.WBCapi";
+        
+        private string Tag;
         private const string CapiFolderName = "CAPI";
         private const string LogFolderName = "Logs";
+
+        private string LogFilePath;
 
         private static string GetLogDirectory()
         {
@@ -38,8 +40,11 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
             return storageDirectory;
         }
 
-        public FileLogger()
+        public FileLogger(string appName) 
         {
+            Tag = appName;
+            LogFilePath = Path.Combine(GetLogDirectory(), appName + ".log.txt");
+        
 #if DEBUG
             this.IsDebugEnabled = true;
             this.IsInfoEnabled = true;
@@ -137,7 +142,7 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
         {
             WrapWithReadWriteLocker(() =>
                 {
-                    using (var s = File.AppendText(LogFilename))
+                    using (var s = File.AppendText(LogFilePath))
                     {
                         s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type, tag, message));
                     }
@@ -148,7 +153,7 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
         {
             WrapWithReadWriteLocker(() =>
                 {
-                    using (var s = File.AppendText(LogFilename))
+                    using (var s = File.AppendText(LogFilePath))
                     {
                         s.WriteLine(string.Format("{0} {1} {2} {3} {4}", DateTime.UtcNow, type, tag, message, exc));
                     }
@@ -159,7 +164,7 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
         {
             WrapWithReadWriteLocker(() =>
                 {
-                    using (var s = File.AppendText(LogFilename))
+                    using (var s = File.AppendText(LogFilePath))
                     {
                         s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type, tag,
                                                   string.Format(format, args)));

@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             Func<QuestionnaireDocument> templateCreationAction, 
             Func<InterviewData> interviewCreationAction,
             int interviewCount = 0,
-            Func<QuestionnairePropagationStructure> questionnairePropagationStructure = null)
+            Func<QuestionnaireRosterStructure> questionnairePropagationStructure = null)
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
@@ -40,9 +40,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
                     Questionnaire =  templateCreationAction()
                 });
 
-            var propagationStructureStorageMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure>>();
+            var propagationStructureStorageMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>();
             propagationStructureStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(questionnairePropagationStructure==null? new QuestionnairePropagationStructure() : questionnairePropagationStructure());
+                .Returns(questionnairePropagationStructure==null? new QuestionnaireRosterStructure() : questionnairePropagationStructure());
 
             var linkedQuestionStructureStorageMock = new Mock<IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions>>();
             linkedQuestionStructureStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))

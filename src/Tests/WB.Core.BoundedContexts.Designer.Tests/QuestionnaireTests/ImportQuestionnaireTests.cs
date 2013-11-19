@@ -1,13 +1,13 @@
 ﻿using System;
 using Main.Core.Documents;
 using Main.Core.Domain;
-using Main.Core.Domain.Exceptions;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     () =>
                     questionnaire.ImportQuestionnaire(Guid.NewGuid(), docMock.Object);
                 // assert
-                Assert.Throws<DomainException>(act);
+                Assert.Throws<QuestionnaireException>(act);
             }
         }
     }
