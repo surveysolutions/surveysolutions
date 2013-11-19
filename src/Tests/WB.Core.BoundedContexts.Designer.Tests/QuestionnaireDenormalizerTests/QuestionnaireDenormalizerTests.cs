@@ -150,8 +150,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         {
             return new GroupUpdated
                 {
-                    GroupPublicKey = groupId,
-                    Propagateble = propagationKind
+                    GroupPublicKey = groupId
                 };
         }
 

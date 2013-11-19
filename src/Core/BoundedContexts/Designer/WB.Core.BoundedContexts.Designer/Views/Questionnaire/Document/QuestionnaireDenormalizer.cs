@@ -74,7 +74,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
-            group.Propagated = evnt.Payload.Paropagateble ?? Propagate.None;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -110,7 +109,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
-            group.Propagated = evnt.Payload.Paropagateble ?? Propagate.None;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;

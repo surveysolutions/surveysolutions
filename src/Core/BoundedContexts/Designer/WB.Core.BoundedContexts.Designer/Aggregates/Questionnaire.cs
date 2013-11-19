@@ -573,7 +573,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = groupId,
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
-                Paropagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
@@ -610,7 +609,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = groupId,
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
-                Paropagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 SourceGroupId = sourceGroupId,
@@ -649,7 +647,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
-                Propagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
