@@ -27,59 +27,20 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         }
 
         public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interview)
-            : this(id)
+            : this(id, questionnaire, rosterStructure)
         {
-            this.Status = interview.Status;
-
-            #region interview structure initialization
-
-            this.rosterStructure = rosterStructure;
-
-            this.BuildInterviewStructureFromTemplate(questionnaire);
-
-            this.BuildHeadQuestionsInsidePropagateGroupsStructure(questionnaire);
-
-            this.referencedQuestionToLinkedQuestionsMap = questionnaire
-                .Find<IQuestion>(question => question.LinkedToQuestionId != null)
-                .GroupBy(question => question.LinkedToQuestionId.Value)
-                .ToDictionary(
-                    keySelector: grouping => grouping.Key,
-                    elementSelector: grouping => grouping.Select(question => question.PublicKey).ToArray());
-
-            this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = interview
-                .Answers
-                .Where(answer => this.IsQuestionReferencedByAnyLinkedQuestion(answer.Id))
-                .GroupBy(answer => answer.Id)
-                .ToDictionary(
-                    keySelector: grouping => grouping.Key,
-                    elementSelector: grouping => new HashSet<InterviewItemId>(grouping.Select(answer => new InterviewItemId(answer.Id, answer.PropagationVector))));
-
-            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(this.GetAllQuestionsWithSubstitution());
-
-            #endregion
-
             #region interview data initialization
-
+            this.Status = interview.Status;
             this.PropagateGroups(interview);
-
             this.SetAnswers(interview);
-
             this.DisableInterviewElements(interview);
-
             this.MarkAnswersAsInvalid(interview);
-
-            this.CreateInterviewChapters(questionnaire);
-
-            this.CreateInterviewTitle(questionnaire);
-
             #endregion
         }
 
         public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure)
             : this(id)
         {
-            //this.Status = interview.Status;
-
             #region interview structure initialization
 
             this.rosterStructure = rosterStructure;
@@ -110,7 +71,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             #endregion
         }
-
+        
         private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
             new Dictionary<QuestionViewModel, IList<QuestionViewModel>>();
         
