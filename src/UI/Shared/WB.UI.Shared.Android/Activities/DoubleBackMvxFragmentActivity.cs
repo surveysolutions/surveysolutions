@@ -20,10 +20,13 @@ namespace WB.UI.Shared.Android.Activities
         {
             if (isBackWasClickedRecently)
             {
+                pressAgainToast.Cancel();
                 base.OnBackPressed();
+                return;
             }
 
-            Toast.MakeText(this, "Press again to exit", ToastLength.Short).Show();
+            pressAgainToast = Toast.MakeText(this, "Press again to exit", ToastLength.Short);
+            pressAgainToast.Show();
 
             isBackWasClickedRecently = true;
             Task.Factory.StartNew(() =>
@@ -33,6 +36,7 @@ namespace WB.UI.Shared.Android.Activities
             });
         }
 
+        private Toast pressAgainToast;
         private bool isBackWasClickedRecently = false;
     }
 }
