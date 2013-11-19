@@ -34,15 +34,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                                                         && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                                                         && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
-                                                        && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
 
                                                         && _.HasGroup(propagatedGroupId) == true
-                                                        && _.GetPropagationLevelForGroup(propagatedGroupId) == 1
+                                                        && _.GetRosterLevelForGroup(propagatedGroupId) == 1
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
 
-                                                        && _.GetPropagationLevelForQuestion(mandatoryQuestionId)==1
-                                                        && _.GetParentPropagatableGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRosterLevelForQuestion(mandatoryQuestionId)==1
+                                                        && _.GetParentRosterGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
                                                         && _.GetUnderlyingMandatoryQuestions(propagatedGroupId) == new Guid[]{mandatoryQuestionId});
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

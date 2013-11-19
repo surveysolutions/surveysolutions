@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
-using Main.Core.View.Export;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -26,13 +25,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStorage;
 
-        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireLevelStorage;
 
         private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
 
         public InterviewDataExportFactory(IReadSideRepositoryReader<InterviewData> interviewStorage,IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
                                           IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStorage,
-                                          IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure>
+                                          IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>
                                               questionnaireLevelStorage, IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions)
         {
             this.interviewStorage = interviewStorage;
@@ -64,7 +63,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return exportedData;
         }
 
-        private string BuildLevelName(QuestionnaireDocument questionnaire, QuestionnairePropagationStructure questionnaireLevelStructure, Guid? levelId)
+        private string BuildLevelName(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid? levelId)
         {
             var rootGroups = GetRootGroupsForLevel(questionnaire, questionnaireLevelStructure, levelId);
             return rootGroups.First().Title;
@@ -153,9 +152,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private int? GetParentRecordIndex(InterviewLevel level)
         {
-            if (level.PropagationVector.Length < 2)
+            if (level.RosterVector.Length < 2)
                 return null;
-            return level.PropagationVector[level.PropagationVector.Length - 2];
+            return level.RosterVector[level.RosterVector.Length - 2];
         }
 
         private Dictionary<Guid, ExportedQuestion> BuildExportedQuestionsByLevel(InterviewLevel level,  ExportedHeaderCollection header)
@@ -184,7 +183,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return questionnaire;
         }
 
-        private QuestionnairePropagationStructure GetQuestionnaireLevelStructureOrThrow(Guid questionnaireId, long version)
+        private QuestionnaireRosterStructure GetQuestionnaireLevelStructureOrThrow(Guid questionnaireId, long version)
         {
             var questionnaireLevelStructure = questionnaireLevelStorage.GetById(questionnaireId, version);
             if (questionnaireLevelStructure == null)
@@ -200,7 +199,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return questionnaireLevelStructure;
         }
 
-        private ExportedHeaderCollection BuildHeaderByTemplate(QuestionnaireDocument questionnaire, QuestionnairePropagationStructure questionnaireLevelStructure, ReferenceInfoForLinkedQuestions questionnaireReferenceInfoForLinkedQuestions, Guid? levelId)
+        private ExportedHeaderCollection BuildHeaderByTemplate(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, ReferenceInfoForLinkedQuestions questionnaireReferenceInfoForLinkedQuestions, Guid? levelId)
         {
 
             var result = new ExportedHeaderCollection(questionnaireReferenceInfoForLinkedQuestions, questionnaire);
@@ -215,7 +214,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return result;
         }
 
-        private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnairePropagationStructure questionnaireLevelStructure, Guid? levelId)
+        private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid? levelId)
         {
             if (!levelId.HasValue)
             {
@@ -231,12 +230,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             }
         }
 
-        private HashSet<Guid> GetRootGroupsByLevelIdOrThrow(QuestionnairePropagationStructure questionnaireLevelStructure, Guid levelId)
+        private HashSet<Guid> GetRootGroupsByLevelIdOrThrow(QuestionnaireRosterStructure questionnaireLevelStructure, Guid levelId)
         {
-            if (!questionnaireLevelStructure.PropagationScopes.ContainsKey(levelId))
+            if (!questionnaireLevelStructure.RosterScopes.ContainsKey(levelId))
                 throw new InvalidOperationException("level is absent in template");
          
-            return questionnaireLevelStructure.PropagationScopes[levelId];
+            return questionnaireLevelStructure.RosterScopes[levelId];
         }
 
         private void FillHeaderWithQuestionsInsideGroup(ExportedHeaderCollection headerItems, IGroup @group)
@@ -252,7 +251,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                 var innerGroup = groupChild as IGroup;
                 if (innerGroup != null)
                 {
-                    if (innerGroup.Propagated != Propagate.None)
+                        //### old questionnaires supporting        //### roster
+                    if (innerGroup.Propagated != Propagate.None || innerGroup.IsRoster)
                         continue;
                     FillHeaderWithQuestionsInsideGroup(headerItems, innerGroup);
                 }

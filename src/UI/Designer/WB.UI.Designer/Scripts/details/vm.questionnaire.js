@@ -1,7 +1,7 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox', 'input'],
-    function (ko, _, config, utils, datacontext, router, model, bootbox, input) {
-        var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox'],
+    function (ko, _, config, utils, datacontext, router, model, bootbox) {
+        var filter = ko.observable(''),
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
             selectedQuestion = ko.observable(),
@@ -53,8 +53,6 @@
                 calcStatistics();
             },
             activate = function(routeData, callback) {
-
-
                 if (!isInitialized) {
                     getChapters();
                     questionnaire(datacontext.questionnaire);
@@ -95,18 +93,18 @@
                 openDetails("show-questionnaire");
             },
             editQuestion = function (id) {
-                if (!_.isEmpty(selectedQuestion())) {
-                    selectedQuestion().detachValidation();
-                }
+                //if (!_.isEmpty(selectedQuestion()) && selectedQuestion().id() !== id) {
+                //    selectedQuestion().detachValidation();
+                //}
 
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
                     return;
                 }
-                question.attachValidation();
+                //question.attachValidation();
                 
                 question.isSelected(true);
-                question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
+             
                 question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
                 selectedQuestion(question);
                 selectedQuestion.valueHasMutated();
@@ -118,7 +116,9 @@
                 if (_.isNull(group) || group.isNullo) {
                     return;
                 }
+                group.attachValidation();
                 group.isSelected(true);
+                group.integerQuestions(datacontext.questions.getAllIntegerQuestionsForSelect());
                 selectedGroup(group);
                 openDetails("show-group");
             },
@@ -202,7 +202,6 @@
                     _.each(datacontext.groups.getAllLocal(), function(group) {
                         group.fillChildren();
                     });
-                    //parent.fillChildren();
                     datacontext.questions.cleanTriggers(child);
                     router.navigateTo(parent.getHref());
                 } else {
@@ -426,7 +425,7 @@
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
-                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.gtype() == "AutoPropagated";
+                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.isRoster;
 
                 if (arg.item.isNew()) {
                     arg.cancelDrop = true;
@@ -448,7 +447,7 @@
                 var target = datacontext.groups.getLocalById(toId);
                 var source = datacontext.groups.getLocalById(fromId);
 
-                targetGroupIsAuto = target.gtype() == "AutoPropagated";
+                targetGroupIsAuto = target.isRoster();
 
                 if (target.isNew()) {
                     arg.cancelDrop = true;
@@ -474,13 +473,13 @@
                     return;
                 }
 
-                if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
+                if (isDropedInChapter && moveItemType == "group" && arg.item.isRoster()) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.propagatedGroupCantBecomeChapter);
                     return;
                 }
 
-                if (!isDropedInChapter && target.gtype() !== "None" && moveItemType == "group") {
+                if (!isDropedInChapter && target.isRoster() && moveItemType == "group") {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
                     return;

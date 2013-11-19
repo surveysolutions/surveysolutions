@@ -19,13 +19,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public TemplateInfo GetQuestionnaireTemplate(Guid templateId)
         {
             var template = questionnaireStorage.GetById(templateId);
-            if (template == null) return null;
+            return this.GetQuestionnaireTemplate(template);
+        }
+
+        public TemplateInfo GetQuestionnaireTemplate(QuestionnaireDocument template)
+        {
+            if (template == null) 
+                return null;
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             return new TemplateInfo()
-                       {
-                           Title = template.Title,
-                           Source = JsonConvert.SerializeObject(template, Formatting.Indented, settings)
-                       };
+            {
+                Title = template.Title,
+                Source = JsonConvert.SerializeObject(template, Formatting.Indented, settings)
+            };
 
         }
     }

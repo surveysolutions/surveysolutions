@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/llContainer">
+        <TextView
+            android:text="Synchronization Point"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:id="@+id/textSyncPoint" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="20dip"
+            android:id="@+id/editSettingsSyncPoint"
+            android:singleLine="true" />
+        <Button
+            android:id="@+id/btnSyncPoint"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:text="Save" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="25px" />
+        <Button
+            android:id="@+id/btnVersion"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:text="Version" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="25px" />
+        <Button
+            android:id="@+id/btnWhereAmI"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:text="Where Am I?" />
+        <TextView
+            android:text=""
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/textWhereAmI" />
+        <Button
+            android:id="@+id/btnCollect"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:visibility="gone"
+            android:text="Free Memory Light" />
+        <Button
+            android:id="@+id/btnCollectMajor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:visibility="gone"
+            android:text="Free Memory" />
+        <TextView
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:textSize="20dp"
+            android:visibility="gone"
+            android:id="@+id/textMem" />
+    </LinearLayout>
+</ScrollView>

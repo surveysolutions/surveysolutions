@@ -1,79 +1,69 @@
-﻿using WB.UI.Shared.Web;
+﻿using System.Configuration;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer
 {
     using System.Collections.Specialized;
     using System.Web.Configuration;
 
-    /// <summary>
-    /// The membership provider settings.
-    /// </summary>
-    public class MembershipProviderSettings : WebConfigHelper
+    public class MembershipProviderSettings
     {
         private static MembershipProviderSettings instance;
 
         public static MembershipProviderSettings Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    var membershipSection = GetSection<MembershipSection>("system.web/membership");
-                    instance =
-                        new MembershipProviderSettings(
-                            membershipSection.Providers[membershipSection.DefaultProvider].Parameters);
-                }
-
-                return instance;
-            }
+            get { return instance ?? (instance = new MembershipProviderSettings()); }
         }
 
-        private MembershipProviderSettings(NameValueCollection customSettingsSection)
-            : base(customSettingsSection) { }
+        private static NameValueCollection GetSection()
+        {
+            var membershipSection = (MembershipSection) ConfigurationManager.GetSection("system.web/membership");
+            return membershipSection.Providers[membershipSection.DefaultProvider].Parameters;
+        }
 
         public bool EnablePasswordRetrieval
         {
-            get { return this.GetBoolean("enablePasswordRetrieval", false); }
+            get { return GetSection().GetBool("enablePasswordRetrieval", false); }
         }
 
         public bool EnablePasswordReset
         {
-            get { return this.GetBoolean("enablePasswordReset", true); }
+            get { return GetSection().GetBool("enablePasswordReset", true); }
         }
 
         public bool RequiresQuestionAndAnswer
         {
-            get { return this.GetBoolean("requiresQuestionAndAnswer", false); }
+            get { return GetSection().GetBool("requiresQuestionAndAnswer", false); }
         }
 
         public int MinRequiredPasswordLength
         {
-            get { return this.GetInt("minRequiredPasswordLength", 6); }
+            get { return GetSection().GetInt("minRequiredPasswordLength", 6); }
         }
 
         public int MinRequiredNonalphanumericCharacters
         {
-            get { return this.GetInt("minRequiredNonalphanumericCharacters", 0); }
+            get { return GetSection().GetInt("minRequiredNonalphanumericCharacters", 0); }
         }
 
         public int MaxInvalidPasswordAttempts
         {
-            get { return this.GetInt("maxInvalidPasswordAttempts", 5); }
+            get { return GetSection().GetInt("maxInvalidPasswordAttempts", 5); }
         }
 
         public int PasswordAttemptWindow
         {
-            get { return this.GetInt("passwordAttemptWindow", 10); }
+            get { return GetSection().GetInt("passwordAttemptWindow", 10); }
         }
 
         public string PasswordStrengthRegularExpression
         {
-            get { return this.GetString("passwordStrengthRegularExpression", string.Empty); }
+            get { return GetSection().GetString("passwordStrengthRegularExpression", string.Empty); }
         }
 
         public bool RequiresUniqueEmail
         {
-            get { return this.GetBoolean("requiresUniqueEmail", true); }
+            get { return GetSection().GetBool("requiresUniqueEmail", true); }
         }
     }
 }
