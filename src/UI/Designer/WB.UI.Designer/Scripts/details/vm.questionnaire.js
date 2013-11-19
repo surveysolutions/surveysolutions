@@ -116,7 +116,6 @@
                 if (_.isNull(group) || group.isNullo) {
                     return;
                 }
-                group.attachValidation();
                 group.isSelected(true);
                 group.integerQuestions(datacontext.questions.getAllIntegerQuestionsForSelect());
                 selectedGroup(group);
@@ -557,11 +556,11 @@
                     _.each(datacontext.questions.getAllLocal(), function(question) {
                         question.attachValidation();
                     });
-
-                    _.each(datacontext.groups.getAllLocal(), function(group) {
-                        group.attachValidation();
-                    });
                 }
+                
+                _.each(datacontext.groups.getAllLocal(), function (group) {
+                    group.attachValidation();
+                });
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {
