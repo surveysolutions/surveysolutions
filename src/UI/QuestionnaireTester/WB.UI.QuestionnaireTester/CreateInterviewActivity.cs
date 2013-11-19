@@ -15,12 +15,13 @@ using Cirrious.MvvmCross.Droid.Fragging;
 using WB.UI.QuestionnaireTester.Extensions;
 using WB.UI.QuestionnaireTester.Implementations.Activities;
 using WB.UI.QuestionnaireTester.Implementations.Fragments;
+using WB.UI.Shared.Android.Activities;
 using WB.UI.Shared.Android.Frames;
 
 namespace WB.UI.QuestionnaireTester
 {
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class CreateInterviewActivity : MvxFragmentActivity
+    public class CreateInterviewActivity : DoubleBackMvxFragmentActivity
     {
         protected Guid QuestionnaireId
         {
@@ -71,24 +72,5 @@ namespace WB.UI.QuestionnaireTester
             intent.PutExtra("publicKey", QuestionnaireId.ToString());
             this.StartActivity(intent);
         }
-
-        public override void OnBackPressed()
-        {
-            if (isBackWasClickedRecently)
-            {
-                base.OnBackPressed();
-            }
-
-            Toast.MakeText(this, "Press again to exit", ToastLength.Short).Show();
-            
-            isBackWasClickedRecently = true;
-            Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(3000);
-                isBackWasClickedRecently = false;
-            });
-        }
-
-        private bool isBackWasClickedRecently = false;
     }
 }
