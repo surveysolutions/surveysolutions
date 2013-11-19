@@ -51,7 +51,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     @group.PublicKey,
                     @group.Title,
                     @group.Description,
-                    Propagate.None,
                     conditionExpression: @group.ConditionExpression);
 
                 document.UpdateGroup(@group.PublicKey, g =>
