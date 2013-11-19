@@ -79,8 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(GroupUpdated e)
         {
-            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description,
-                Propagate.None, e.ConditionExpression);
+            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description, e.ConditionExpression);
         }
 
         private void Apply(ImageDeleted e)

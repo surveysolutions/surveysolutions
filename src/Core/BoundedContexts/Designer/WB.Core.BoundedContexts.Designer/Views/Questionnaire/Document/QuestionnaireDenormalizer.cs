@@ -411,7 +411,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupPublicKey,
                 evnt.Payload.GroupText,
                 evnt.Payload.Description,
-                evnt.Payload.Propagateble ?? Propagate.None,
                 evnt.Payload.ConditionExpression);
 
             this.UpdateQuestionnaire(evnt, item);

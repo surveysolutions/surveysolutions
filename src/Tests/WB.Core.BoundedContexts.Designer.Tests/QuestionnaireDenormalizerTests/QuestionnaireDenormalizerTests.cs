@@ -27,42 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
-        [Test]
-        public void HandleGroupUpdated_When_group_propagation_kind_is_AutoPropagate_and_new_kind_is_None_Then_all_triggers_in_autoptopagate_questions_should_not_contains_this_group_id()
-        {
-            // Arrange
-            Guid questionnaireId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            Guid updatedGroupId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-            Guid autoQuestionId = Guid.Parse("33333333-3333-3333-3333-333333333333");
-
-            var document = CreateQuestionnaireDocument(questionnaireId);
-
-            const Propagate oldPropagationKind = Propagate.AutoPropagated;
-            const Propagate newPropagationKind = Propagate.None;
-
-            document
-                .AddChapter(Guid.NewGuid())
-                .AddGroup(updatedGroupId, propagationKind: oldPropagationKind);
-
-            var autoPropagateQuestion = document
-                .AddChapter(Guid.NewGuid())
-                .AddQuestion(autoQuestionId, type: QuestionType.AutoPropagate, triggers: new List<Guid> { updatedGroupId }) as AutoPropagateQuestion;
-
-            var storageStub = CreateQuestionnaireDenormalizerStorageStub(document);
-
-            var denormalizer = CreateQuestionnaireDenormalizer(storageStub);
-
-            var groupUpdatedEvent = CreateGroupUpdatedEvent(updatedGroupId, propagationKind: newPropagationKind);
-
-            var evnt = CreatePublishedEvent(questionnaireId, groupUpdatedEvent);
-
-            // Act
-            denormalizer.Handle(evnt);
-
-            // Assert
-            Assert.That(autoPropagateQuestion.Triggers, !Contains.Item(updatedGroupId));
-        }
-
         [TestCase(Propagate.AutoPropagated,Propagate.AutoPropagated)]
         [TestCase(Propagate.None, Propagate.AutoPropagated)]
         [TestCase(Propagate.None, Propagate.None)]
