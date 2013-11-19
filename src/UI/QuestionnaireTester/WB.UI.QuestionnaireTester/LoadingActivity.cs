@@ -75,7 +75,7 @@ namespace WB.UI.QuestionnaireTester
 
             if (template.IsErrorOccured)
             {
-                this.RunOnUiThread(() => Toast.MakeText(this, template.ErrorMessage, ToastLength.Short).Show());
+                this.RunOnUiThread(() => Toast.MakeText(this, template.ErrorMessage, ToastLength.Long).Show());
 
                 return false;
             }
@@ -93,7 +93,7 @@ namespace WB.UI.QuestionnaireTester
             }
             catch (Exception e)
             {
-                this.RunOnUiThread(() => Toast.MakeText(this, "Template is invalid for current version of Tester . Please return to Designer and change it.", ToastLength.Short).Show());
+                this.RunOnUiThread(() => Toast.MakeText(this, "Template is invalid for current version of Tester . Please return to Designer and change it.", ToastLength.Long).Show());
 
                 return false;
             }

@@ -61,7 +61,7 @@ namespace WB.UI.QuestionnaireTester
             SupportFragmentManager.BeginTransaction().Add(Resource.Id.flFragmentHolder, screen).Commit();
 
             btnNext.Click += btnNext_Click;
-            this.Title = string.Format("List of pre-filled questions");
+            this.Title = string.Format("Pre-filled questions");
         }
 
         void btnNext_Click(object sender, EventArgs e)
@@ -75,7 +75,9 @@ namespace WB.UI.QuestionnaireTester
         public override void OnBackPressed()
         {
             if (isBackWasClickedRecently)
+            {
                 base.OnBackPressed();
+            }
 
             Toast.MakeText(this, "Press again to exit", ToastLength.Short).Show();
             
