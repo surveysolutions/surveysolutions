@@ -12,6 +12,13 @@ function ($, ko, _) {
         return val.toString().replace(re, '$1$3');
     };
     
+    ko.validation.rules['digit'] = {
+        validator: function (value, validate) {
+            return _.isEmpty(value) || (validate && /^-?\d+$/.test(value));
+        },
+        message: 'Please enter a digit'
+    };
+    
     ko.subscribable.fn.trimmed = function () {
         return ko.computed({
             read: function () {
