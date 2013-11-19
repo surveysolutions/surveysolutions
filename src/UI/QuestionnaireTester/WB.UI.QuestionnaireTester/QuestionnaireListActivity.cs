@@ -11,7 +11,7 @@ using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester
 {
-    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize, LaunchMode = LaunchMode.SingleTop, Label = "questionnairelist")]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize, LaunchMode = LaunchMode.SingleTop)]
     public class QuestionnaireListActivity : Activity
     {
         protected ListView listView;

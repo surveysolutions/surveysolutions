@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace WB.UI.QuestionnaireTester
 {
-    [Activity(Label = "Loading", NoHistory = true, 
+    [Activity(NoHistory = true, 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : Activity
     {
