@@ -93,15 +93,10 @@
                 openDetails("show-questionnaire");
             },
             editQuestion = function (id) {
-                //if (!_.isEmpty(selectedQuestion()) && selectedQuestion().id() !== id) {
-                //    selectedQuestion().detachValidation();
-                //}
-
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
                     return;
                 }
-                //question.attachValidation();
                 
                 question.isSelected(true);
              
