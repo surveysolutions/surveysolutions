@@ -66,6 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         [TestCase(Propagate.AutoPropagated,Propagate.AutoPropagated)]
         [TestCase(Propagate.None, Propagate.AutoPropagated)]
         [TestCase(Propagate.None, Propagate.None)]
+        [Ignore("Will be removed after merge next branch on default")]
         public void HandleGroupUpdated_When_group_new_and_old_propagation_kind_do_not_imply_trigger_cleaning_Then_all_triggers_in_autoptopagate_questions_should_intact(Propagate oldPropagationKind, Propagate newPropagationKind)
         {
             // Arrange
