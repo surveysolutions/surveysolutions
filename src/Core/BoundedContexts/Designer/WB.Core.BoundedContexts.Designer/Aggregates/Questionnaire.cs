@@ -1366,12 +1366,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 IGroup @group = itemAsGroup as IGroup;
                 if (@group.Propagated == Propagate.AutoPropagated || @group.IsRoster)
                 {
-                    var autoPropagationQuestion =
-                        this.innerDocument.Find<AutoPropagateQuestion>(
-                            question => question.Triggers.Contains(@group.PublicKey)).FirstOrDefault();
+                    if (group.RosterSizeQuestionId.HasValue)
+                    {
+                        allQuestion.Add(group.RosterSizeQuestionId.Value);
+                    }
+                    else
+                    {
+                        var autoPropagationQuestion =
+                            this.innerDocument.Find<AutoPropagateQuestion>(
+                                question => question.Triggers.Contains(@group.PublicKey)).FirstOrDefault();
 
-                    if(autoPropagationQuestion != null)
-                        allQuestion.Add(autoPropagationQuestion.PublicKey);
+                        if(autoPropagationQuestion != null)
+                            allQuestion.Add(autoPropagationQuestion.PublicKey);
+                    }
                 }
 
                 itemAsGroup = itemAsGroup.GetParent();
