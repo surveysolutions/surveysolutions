@@ -24,11 +24,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         {
             documentStorage = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
 
-            templateImportedEvent = CreateTemplateImportedEvent(CreateQuestionnaireDocument());
+            var initialDocument = CreateQuestionnaireDocument();
 
-            upgradeResult = new QuestionnaireDocument();
+            templateImportedEvent = CreateTemplateImportedEvent(initialDocument);
 
-            var upgrader = Mock.Of<IQuestionnaireDocumentUpgrader>(u => u.TranslatePropagatePropertiesToRosterProperties(it.IsAny<QuestionnaireDocument>()) == upgradeResult);
+            upgradeResult = CreateQuestionnaireDocument();
+
+            var upgrader = Mock.Of<IQuestionnaireDocumentUpgrader>(u => u.TranslatePropagatePropertiesToRosterProperties(initialDocument) == upgradeResult);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, updrader: upgrader);
         };
