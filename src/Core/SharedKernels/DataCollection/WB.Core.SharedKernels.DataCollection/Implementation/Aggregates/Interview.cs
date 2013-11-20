@@ -543,13 +543,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewDeclaredInvalid());
         }
 
-        public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
+        public void AnswerTextQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, string answer)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
@@ -582,7 +582,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            this.ApplyEvent(new TextQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
+            this.ApplyEvent(new TextQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
@@ -595,13 +595,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
         }
 
-        public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int answer)
+        public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, int answer)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
             ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
@@ -619,7 +619,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             Func<Guid, int[], bool> isRosterGroup = (groupId, groupOuterScopePropagationVector)
                 => idsOfRosterGroups.Contains(groupId)
-                && AreEqualRosterVectors(groupOuterScopePropagationVector, propagationVector);
+                && AreEqualRosterVectors(groupOuterScopePropagationVector, rosterVector);
 
             Func<Guid, int[], int> getCountOfRosterGroupInstances = (groupId, groupOuterRosterVector)
                 => isRosterGroup(groupId, groupOuterRosterVector)
@@ -627,17 +627,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : this.GetCountOfRosterGroupInstances(groupId, groupOuterRosterVector);
 
             List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterSizeIsBeingDecreased(
-                idsOfRosterGroups, rosterSize, propagationVector, questionnaire);
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire);
             
             List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
             this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, propagationVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
                 out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
             this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, propagationVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
                 out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
             this.DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, propagationVector, questionnaire, getCountOfRosterGroupInstances, initializedGroupsToBeDisabled, initializedQuestionsToBeDisabled,
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getCountOfRosterGroupInstances, initializedGroupsToBeDisabled, initializedQuestionsToBeDisabled,
                 out initializedQuestionsToBeInvalid);
 
             List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
@@ -670,9 +670,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            this.ApplyEvent(new NumericIntegerQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
+            this.ApplyEvent(new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            idsOfRosterGroups.ForEach(groupId => this.ApplyEvent(new GroupPropagated(groupId, propagationVector, rosterSize)));
+            idsOfRosterGroups.ForEach(groupId => this.ApplyEvent(new GroupPropagated(groupId, rosterVector, rosterSize)));
 
             answersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -693,13 +693,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
         }
 
-        public void AnswerNumericRealQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal answer)
+        public void AnswerNumericRealQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, decimal answer)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
@@ -739,7 +739,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            this.ApplyEvent(new NumericRealQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
+            this.ApplyEvent(new NumericRealQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
@@ -752,13 +752,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
         }
 
-        public void AnswerDateTimeQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, DateTime answer)
+        public void AnswerDateTimeQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, DateTime answer)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
@@ -792,7 +792,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,groupsToBeEnabled,questionsToBeEnabled,out answersDeclaredValid, out answersDeclaredInvalid);
 
-            this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
+            this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
@@ -805,13 +805,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
         }
 
-        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal selectedValue)
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, decimal selectedValue)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
@@ -846,7 +846,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValue));
+            this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedValue));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
@@ -859,13 +859,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
         }
 
-        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal[] selectedValues)
+        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, decimal[] selectedValues)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
@@ -901,7 +901,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValues));
+            this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedValues));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
@@ -914,31 +914,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
         }
 
-        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, 
+        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, 
             double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
 
 
-            this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, propagationVector, answerTime, latitude, longitude, accuracy, timestamp));
+            this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, answerTime, latitude, longitude, accuracy, timestamp));
 
-            this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
+            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
         }
 
-        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[] selectedPropagationVector)
+        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, int[] selectedPropagationVector)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
@@ -952,18 +952,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVector));
+            this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedPropagationVector));
 
-            this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
+            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
         }
 
-        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
+        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, int[][] selectedPropagationVectors)
         {
-            var answeredQuestion = new Identity(questionId, propagationVector);
+            var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
             
@@ -977,9 +977,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedPropagationVectors.Length, questionnaire);
 
 
-            this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVectors));
+            this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedPropagationVectors));
 
-            this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
+            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
         }
 
         public void ReevaluateSynchronizedInterview()
@@ -1070,31 +1070,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
         }
 
-        public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime,string comment)
+        public void CommentAnswer(Guid userId, Guid questionId, int[] rosterVector, DateTime commentTime,string comment)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
 
-            this.ApplyEvent(new AnswerCommented(userId, questionId, propagationVector, commentTime, comment));
+            this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
 
-        public void SetFlagToAnswer(Guid userId, Guid questionId, int[] propagationVector)
+        public void SetFlagToAnswer(Guid userId, Guid questionId, int[] rosterVector)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
 
-            this.ApplyEvent(new FlagSetToAnswer(userId, questionId, propagationVector));
+            this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
 
-        public void RemoveFlagFromAnswer(Guid userId, Guid questionId, int[] propagationVector)
+        public void RemoveFlagFromAnswer(Guid userId, Guid questionId, int[] rosterVector)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
 
-            this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, propagationVector));
+            this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }
 
         public void AssignSupervisor(Guid userId, Guid supervisorId)
