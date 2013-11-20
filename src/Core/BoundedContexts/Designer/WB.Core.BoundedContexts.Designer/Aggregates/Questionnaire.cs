@@ -1364,7 +1364,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             while (itemAsGroup != null)
             {
                 IGroup @group = itemAsGroup as IGroup;
-                if (@group.Propagated == Propagate.AutoPropagated)
+                if (@group.Propagated == Propagate.AutoPropagated || @group.IsRoster)
                 {
                     var autoPropagationQuestion =
                         this.innerDocument.Find<AutoPropagateQuestion>(
