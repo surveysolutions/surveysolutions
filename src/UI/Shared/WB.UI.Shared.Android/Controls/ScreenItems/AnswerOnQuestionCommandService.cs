@@ -38,7 +38,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void UpdateExecutionFlow(CommandAndErrorCallback command)
         {
-            var key = new InterviewItemId(command.Command.QuestionId, command.Command.PropagationVector);
+            var key = new InterviewItemId(command.Command.QuestionId, command.Command.RosterVector);
 
             this.commandQueue.AddOrUpdate(key, command, (k, oldValue) => command);
 

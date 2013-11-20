@@ -13,9 +13,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public double Longitude { get; private set; }
         public double Accuracy { get; private set; }
 
-        public AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] propagationVector,
+        public AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector,
             DateTime answerTime, double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
-            : base(interviewId, userId, questionId, propagationVector, answerTime)
+            : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;
