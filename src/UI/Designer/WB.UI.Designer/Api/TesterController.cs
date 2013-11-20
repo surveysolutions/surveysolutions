@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IJsonExportService exportService;
         private readonly ILogger logger;
-        IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IQuestionnaireVerifier questionnaireVerifier;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
@@ -48,21 +48,25 @@ namespace WB.UI.Designer.Api
         
         [Authorize]
         [HttpGet]
-        public QuestionnaireListSyncPackage GetAllTemplates()
+        public QuestionnaireListCommunicationPackage GetAllTemplates()
         {
             var user = this.userHelper.WebUser;
 
             if (user == null)
+            {
+                logger.Error("Unauthorized request to the questionnaire list");
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
+            }
+            
             
             var questionnaireItemList = new List<QuestionnaireListItem>();
 
-            int i = 1;
+            int pageIndex = 1;
             while (true)
             {
                 var questionnaireList = this.questionnaireHelper.GetQuestionnaires(
-                viewerId: user.UserId,
-                pageIndex: i);
+                    viewerId: user.UserId,
+                    pageIndex: pageIndex);
 
                 questionnaireItemList.AddRange(questionnaireList.Select(q => new QuestionnaireListItem()
                 {
@@ -70,12 +74,12 @@ namespace WB.UI.Designer.Api
                     Title = q.Title
                 }).ToList());
 
-                i++;
-                if (i > questionnaireList.TotalPages)
+                pageIndex++;
+                if (pageIndex > questionnaireList.TotalPages)
                     break;
             }
 
-            var questionnaireSyncPackage = new QuestionnaireListSyncPackage
+            var questionnaireSyncPackage = new QuestionnaireListCommunicationPackage
                 {
                     Items = questionnaireItemList
                 };
@@ -94,26 +98,32 @@ namespace WB.UI.Designer.Api
 
         [Authorize]
         [HttpGet]
-        public QuestionnaireSyncPackage GetTemplate(Guid id)
+        public QuestionnaireCommunicationPackage GetTemplate(Guid id)
         {
-            var questionnaireSyncPackage = new QuestionnaireSyncPackage();
-
             var user = this.userHelper.WebUser;
             if (user == null)
+            {
+                logger.Error("Unauthorized request to the questionnaire " + id);
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
+            }
 
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
                 return null;
 
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
+            {
+                logger.Error(String.Format("Non permitted resource was requested by user [{0}]", user.UserId));
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
+            }
+
+            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
 
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
             if (questoinnaireErrors.Any())
             {
                 questionnaireSyncPackage.IsErrorOccured = true;
-                questionnaireSyncPackage.ErrorMessage = "Questionnaire contains errors. Please fix them.";
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire is invalid.";
 
                 return questionnaireSyncPackage;
             }
