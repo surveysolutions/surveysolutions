@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void BuildHeadQuestionsInsidePropagateGroupsStructure(IQuestionnaireDocument questionnaire)
         {
-            foreach (var propagatedGroup in questionnaire.Find<IGroup>(group => group.Propagated != Propagate.None))
+            foreach (var propagatedGroup in questionnaire.Find<IGroup>(group => group.Propagated != Propagate.None || group.IsRoster))
             {
                 var scopeOfPropagationId = this.GetScopeOfPropagatedScreen(propagatedGroup.PublicKey);
                 foreach (var headQuestion in propagatedGroup.Find<IQuestion>(question => question.Capital))

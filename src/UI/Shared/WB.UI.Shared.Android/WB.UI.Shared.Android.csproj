@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\DetailsActivity.cs" />
+    <Compile Include="Activities\DoubleBackMvxFragmentActivity.cs" />
     <Compile Include="Adapters\ContentFrameAdapter.cs" />
     <Compile Include="Adapters\GridContentAdapter.cs" />
     <Compile Include="Adapters\ScreenContentAdapter.cs" />
