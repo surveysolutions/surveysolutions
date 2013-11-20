@@ -239,5 +239,21 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 Triggers = triggers ?? new List<Guid>()
             });
         }
+
+        protected static IPublishedEvent<TemplateImported> CreateTemplateImportedEvent(QuestionnaireDocument questionnaireDocument = null)
+        {
+            return ToPublishedEvent(new TemplateImported
+            {
+                Source = questionnaireDocument ?? new QuestionnaireDocument()
+            });
+        }
+
+        protected static IPublishedEvent<QuestionnaireCloned> CreateQuestionnaireClonedEvent(QuestionnaireDocument questionnaireDocument = null)
+        {
+            return ToPublishedEvent(new QuestionnaireCloned
+            {
+                QuestionnaireDocument = questionnaireDocument ?? new QuestionnaireDocument()
+            });
+        }
     }
 }
