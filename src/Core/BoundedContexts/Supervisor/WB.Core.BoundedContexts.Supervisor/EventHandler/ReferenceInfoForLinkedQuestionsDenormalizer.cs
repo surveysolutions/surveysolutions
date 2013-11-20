@@ -85,6 +85,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private IDictionary<Guid, Guid> GetAllPropagatebleGroupsMappedOnPropagatableQuestion(QuestionnaireDocument template)
         {
             var result = new Dictionary<Guid, Guid>();
+
             foreach (var scope in template.Find<IAutoPropagateQuestion>(
                 question =>
                     question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate))
@@ -94,6 +95,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     result.Add(triggarableGroup, scope.PublicKey);
                 }   
             }
+
+            foreach (var roster in template.Find<IGroup>(group => group.IsRoster))
+            {
+                result.Add(roster.PublicKey, roster.RosterSizeQuestionId.Value);
+            }
+
             return result;
         }
 
