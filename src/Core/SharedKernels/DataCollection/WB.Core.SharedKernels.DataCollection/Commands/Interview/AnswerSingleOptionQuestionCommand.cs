@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public decimal SelectedValue { get; private set; }
 
-        public AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal selectedValue)
-            : base(interviewId, userId, questionId, propagationVector, answerTime)
+        public AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, decimal selectedValue)
+            : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
             this.SelectedValue = selectedValue;
         }
