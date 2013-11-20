@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             while (!(questionParent is IQuestionnaireDocument))
             {
                 var group = questionParent as IGroup;
-                if (group != null && group.Propagated!=Propagate.None)
+                if (group != null && (group.Propagated!=Propagate.None || group.IsRoster))
                 {
                     return groupsMappedOnPropagatableQuestion[group.PublicKey];
                 }
