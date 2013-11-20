@@ -11,8 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public string Comment { get; private set; }
 
-        public CommentAnswerCommand(Guid interviewId, Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime, string comment)
-            : base(interviewId, userId, questionId, propagationVector)
+        public CommentAnswerCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector, DateTime commentTime, string comment)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.Comment = comment;
             CommentTime = commentTime;
