@@ -58,7 +58,7 @@ namespace WB.UI.QuestionnaireTester
             get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
-        public static DesignerAuthentication Membership
+        public static DesignerAuthentication DesignerMembership
         {
             get { return Kernel.Get<DesignerAuthentication>(); }
         }

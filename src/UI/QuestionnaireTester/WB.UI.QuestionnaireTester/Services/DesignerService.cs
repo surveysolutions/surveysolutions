@@ -36,15 +36,15 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public QuestionnaireListSyncPackage  GetQuestionnaireListForCurrentUser(CancellationToken cancellationToken)
         {
-            if (!CapiTesterApplication.Membership.IsLoggedIn)
+            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return null;
             var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
                 return webExecutor.ExcecuteRestRequestAsync<QuestionnaireListSyncPackage>(
                     "GetAllTemplates", cancellationToken, null,
-                    new HttpBasicAuthenticator(CapiTesterApplication.Membership.RemoteUser.UserName,
-                        CapiTesterApplication.Membership.RemoteUser.Password), "GET");
+                    new HttpBasicAuthenticator(CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
+                        CapiTesterApplication.DesignerMembership.RemoteUser.Password), "GET");
             }
             catch (Exception e)
             {
@@ -54,7 +54,7 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public QuestionnaireSyncPackage GetTemplateForCurrentUser(Guid id, CancellationToken cancellationToken)
         {
-            if (!CapiTesterApplication.Membership.IsLoggedIn)
+            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return null;
 
             var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
@@ -62,8 +62,8 @@ namespace WB.UI.QuestionnaireTester.Services
             {
                 var package = webExecutor.ExcecuteRestRequestAsync<QuestionnaireSyncPackage>(
                     "GetTemplate", cancellationToken, null,
-                    new HttpBasicAuthenticator(CapiTesterApplication.Membership.RemoteUser.UserName,
-                        CapiTesterApplication.Membership.RemoteUser.Password), "GET", new KeyValuePair<string, string>("id", id.ToString()));
+                    new HttpBasicAuthenticator(CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
+                        CapiTesterApplication.DesignerMembership.RemoteUser.Password), "GET", new KeyValuePair<string, string>("id", id.ToString()));
 
                 return package;
             }

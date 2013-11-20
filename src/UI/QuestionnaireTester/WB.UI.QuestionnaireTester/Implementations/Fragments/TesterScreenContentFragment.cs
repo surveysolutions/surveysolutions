@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.OS;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -11,6 +12,18 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 {
     public class TesterScreenContentFragment : ScreenContentFragment
     {
+        public static TesterScreenContentFragment CreateTesterScreenContentFragment(Guid interviewId, InterviewItemId screenId)
+        {
+            var testerScreenContentFragment = new TesterScreenContentFragment();
+
+            Bundle args = new Bundle();
+            args.PutString(ScreenContentFragment.SCREEN_ID, screenId.ToString());
+            args.PutString(ScreenContentFragment.INTERVIEW_ID, interviewId.ToString());
+            testerScreenContentFragment.Arguments = args;
+
+            return testerScreenContentFragment;
+        }
+
         public TesterScreenContentFragment()
         {
         }
@@ -30,7 +43,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
             return Questionnaire.RestoreBreadCrumbs(this.GetScreenViewModel().Breadcrumbs).ToList();
         }
 
-        protected override InterviewStatus GetStatus()
+        protected override InterviewStatus GetInterviewStatus()
         {
             return Questionnaire.Status;
         }

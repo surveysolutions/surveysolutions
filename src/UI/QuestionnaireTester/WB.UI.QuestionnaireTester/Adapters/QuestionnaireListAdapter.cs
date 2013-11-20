@@ -64,7 +64,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
             {
                 if (items == null)
                 {
-                    CapiTesterApplication.Membership.LogOff();
+                    CapiTesterApplication.DesignerMembership.LogOff();
                 }
                 this.NotifyDataSetChanged();
                 progressDialog.Visibility = ViewStates.Gone;

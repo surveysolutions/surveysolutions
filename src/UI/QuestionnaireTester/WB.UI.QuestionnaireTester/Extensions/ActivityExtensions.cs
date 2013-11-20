@@ -22,7 +22,7 @@ namespace WB.UI.QuestionnaireTester.Extensions
             var logoutButton = (Button) actionBar.CustomView.FindViewById(Resource.Id.btnLogout);
             logoutButton.Click += (s, e) =>
             {
-                CapiTesterApplication.Membership.LogOff();
+                CapiTesterApplication.DesignerMembership.LogOff();
             };
 
             var tvTitlte = (TextView) actionBar.CustomView.FindViewById(Resource.Id.tvTitlte);
@@ -43,19 +43,8 @@ namespace WB.UI.QuestionnaireTester.Extensions
             var logoutButton = (Button)actionBar.CustomView.FindViewById(Resource.Id.btnLogout);
             logoutButton.Click += (s, e) =>
             {
-                CapiTesterApplication.Membership.LogOff();
+                CapiTesterApplication.DesignerMembership.LogOff();
             };
-        }
-
-        public static bool FinishIfNotLoggedIn(this Activity activity)
-        {
-            if (!CapiTesterApplication.Membership.IsLoggedIn)
-            {
-                //  throw new AuthenticationException("invalid credentials");
-                activity.Finish();
-                return true;
-            }
-            return false;
         }
     }
 }
