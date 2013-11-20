@@ -1357,14 +1357,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             while (itemAsGroup != null)
             {
                 IGroup @group = itemAsGroup as IGroup;
-                if (@group.Propagated == Propagate.AutoPropagated)
+                if (@group.Propagated == Propagate.AutoPropagated || @group.IsRoster)
                 {
-                    var autoPropagationQuestion =
-                        this.innerDocument.Find<AutoPropagateQuestion>(
-                            question => question.Triggers.Contains(@group.PublicKey)).FirstOrDefault();
+                    if (group.RosterSizeQuestionId.HasValue)
+                    {
+                        allQuestion.Add(group.RosterSizeQuestionId.Value);
+                    }
+                    else
+                    {
+                        var autoPropagationQuestion =
+                            this.innerDocument.Find<AutoPropagateQuestion>(
+                                question => question.Triggers.Contains(@group.PublicKey)).FirstOrDefault();
 
-                    if(autoPropagationQuestion != null)
-                        allQuestion.Add(autoPropagationQuestion.PublicKey);
+                        if(autoPropagationQuestion != null)
+                            allQuestion.Add(autoPropagationQuestion.PublicKey);
+                    }
                 }
 
                 itemAsGroup = itemAsGroup.GetParent();
