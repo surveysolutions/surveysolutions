@@ -62,7 +62,7 @@ namespace WB.UI.QuestionnaireTester
 
         private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId, CancellationToken ct)
         {
-            QuestionnaireSyncPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, ct);
+            QuestionnaireCommunicationPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, ct);
 
             if (template == null)
             {

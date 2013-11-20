@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
             var upgrader = Mock.Of<IQuestionnaireDocumentUpgrader>(u => u.TranslatePropagatePropertiesToRosterProperties(initialDocument) == upgradeResult);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, updrader: upgrader);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, upgrader: upgrader);
         };
 
         Because of = () =>
