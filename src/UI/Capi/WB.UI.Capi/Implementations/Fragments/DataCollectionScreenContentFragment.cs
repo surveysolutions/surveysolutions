@@ -32,16 +32,20 @@ namespace WB.UI.Capi.Implementations.Fragments
 
         protected override QuestionnaireScreenViewModel GetScreenViewModel()
         {
-            return this.Interview.Screens[ScreenId] as QuestionnaireScreenViewModel;
+            if (!this.Interview.Screens.ContainsKey(ScreenId))
+                throw new NullReferenceException("Screen is missing inside interview");
+
+            var questionnaireScreenViewModel = this.Interview.Screens[ScreenId] as QuestionnaireScreenViewModel;
+            if (questionnaireScreenViewModel == null)
+                throw new InvalidOperationException(string.Format("Screen with id {0} is {1}, but must be {2}",
+                    ScreenId,
+                    Interview.Screens[ScreenId].GetType().Name, typeof (QuestionnaireScreenViewModel).Name));
+            return questionnaireScreenViewModel;
         }
 
         protected override List<IQuestionnaireViewModel> GetBreadcrumbs()
         {
-            var currentScreen = this.GetScreenViewModel();
-            if (currentScreen == null)
-                throw new NullReferenceException("Screen is missing inside interview");
-
-            return this.Interview.RestoreBreadCrumbs(currentScreen.Breadcrumbs).ToList();
+            return this.Interview.RestoreBreadCrumbs(GetScreenViewModel().Breadcrumbs).ToList();
         }
 
         protected override InterviewStatus GetInterviewStatus()
