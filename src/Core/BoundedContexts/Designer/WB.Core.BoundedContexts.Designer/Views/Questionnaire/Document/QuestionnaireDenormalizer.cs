@@ -470,13 +470,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var document = upgrader.TranslatePropagatePropertiesToRosterProperties(evnt.Payload.Source);
-            this.documentStorage.Store(document, document.PublicKey);
+            this.AddNewQuestionnaire(evnt.Payload.Source);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            var document = evnt.Payload.QuestionnaireDocument;
+            this.AddNewQuestionnaire(evnt.Payload.QuestionnaireDocument);
+        }
+
+        private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
+        {
+            var document = this.upgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
             this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
         }
 
