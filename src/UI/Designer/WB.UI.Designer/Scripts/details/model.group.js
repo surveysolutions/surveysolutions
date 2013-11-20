@@ -16,7 +16,17 @@
                 self.template = "GroupView"; // inner html template name
 
                 self.isRoster = ko.observable(false);
-                self.rosterSizeQuestion = ko.observable();
+                self.rosterSizeQuestion = ko.observable().extend({
+                    required: {
+                        onlyIf: function () {
+                            if (self.isRoster()) {
+                                self.rosterSizeQuestion.valueHasMutated();
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                });
                 
                 self.integerQuestions = ko.observableArray([]);
 
