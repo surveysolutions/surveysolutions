@@ -136,7 +136,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(QuestionnaireCloned e)
         {
-            this.innerDocument = e.QuestionnaireDocument;
+            var upgrader = QuestionnaireDocumentUpgrader;
+            var document = upgrader.TranslatePropagatePropertiesToRosterProperties(e.QuestionnaireDocument);
+            this.innerDocument = document;
+
         }
 
         private void Apply(GroupCloned e)
