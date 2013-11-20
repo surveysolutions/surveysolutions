@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -18,48 +17,12 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
     [TestFixture]
-    // ReSharper disable RedundantArgumentName
     public class QuestionnaireDenormalizerTests
     {
         [SetUp]
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-        }
-
-        [TestCase(Propagate.AutoPropagated,Propagate.AutoPropagated)]
-        [TestCase(Propagate.None, Propagate.AutoPropagated)]
-        [TestCase(Propagate.None, Propagate.None)]
-        public void HandleGroupUpdated_When_group_new_and_old_propagation_kind_do_not_imply_trigger_cleaning_Then_all_triggers_in_autoptopagate_questions_should_intact(Propagate oldPropagationKind, Propagate newPropagationKind)
-        {
-            // Arrange
-            var questionnaireId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            var updatedGroupId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-            var autoQuestionId = Guid.Parse("33333333-3333-3333-3333-333333333333");
-
-            var document = CreateQuestionnaireDocument(questionnaireId);
-
-            document
-                .AddChapter(Guid.NewGuid())
-                .AddGroup(updatedGroupId, propagationKind: oldPropagationKind);
-
-            var autoPropagateQuestion = document
-                .AddChapter(Guid.NewGuid())
-                .AddQuestion(autoQuestionId, type: QuestionType.AutoPropagate, triggers: new List<Guid> { updatedGroupId }) as AutoPropagateQuestion;
-
-            var storageStub = CreateQuestionnaireDenormalizerStorageStub(document);
-
-            var denormalizer = CreateQuestionnaireDenormalizer(storageStub);
-
-            var groupUpdatedEvent = CreateGroupUpdatedEvent(updatedGroupId, propagationKind: newPropagationKind);
-
-            var evnt = CreatePublishedEvent(questionnaireId, groupUpdatedEvent);
-
-            // Act
-            denormalizer.Handle(evnt);
-
-            // Assert
-            Assert.That(autoPropagateQuestion.Triggers, Contains.Item(updatedGroupId));
         }
 
         [Test]
@@ -167,5 +130,4 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             return e;
         }
     }
-    // ReSharper restore RedundantArgumentName
 }
