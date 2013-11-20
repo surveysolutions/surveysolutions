@@ -13,8 +13,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public int[][] SelectedPropagationVectors { get; private set; }
 
-        public AnswerMultipleOptionsLinkedQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
-            : base(interviewId, userId, questionId, propagationVector, answerTime)
+        public AnswerMultipleOptionsLinkedQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, int[][] selectedPropagationVectors)
+            : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
             this.SelectedPropagationVectors = selectedPropagationVectors;
         }

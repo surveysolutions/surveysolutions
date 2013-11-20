@@ -25,7 +25,7 @@ namespace Core.Supervisor
                 {
                     if (child is IGroup)
                     {
-                        if (!skipPropagateGroups || ((IGroup) child).Propagated == Propagate.None)
+                        if (!skipPropagateGroups || ((IGroup) child).Propagated == Propagate.None && !((IGroup) child).IsRoster)
                         {
                             treeStack.Push(child);
                         }

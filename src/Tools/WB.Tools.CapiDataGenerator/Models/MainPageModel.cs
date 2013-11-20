@@ -491,7 +491,7 @@ namespace CapiDataGenerator
                     commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
                                                                     userId: interview.Value,
                                                                     questionId: question.PublicKey,
-                                                                    propagationVector: new int[0],
+                                                                    rosterVector: new int[0],
                                                                     commentTime: DateTime.UtcNow,
                                                                     comment: "auto comment"));
 
