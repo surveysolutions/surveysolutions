@@ -8,14 +8,17 @@ using Android.Views;
 using Android.Widget;
 using Main.Core;
 using Main.Core.Documents;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -23,27 +26,21 @@ namespace WB.UI.QuestionnaireTester
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : Activity
     {
-        private Action<Guid> restore; 
+        protected ILogger logger;
 
         protected override void OnCreate(Bundle bundle)
         {
-            this.restore = this.Restore;
             base.OnCreate(bundle);
-            var pb = new ProgressBar(this);
-            this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.restore.BeginInvoke(Guid.Parse(this.Intent.GetStringExtra("publicKey")), this.Callback, this.restore);
-        }
-        private void Callback(IAsyncResult asyncResult)
-        {
-            var asyncAction = (Action<Guid>)asyncResult.AsyncState;
-            asyncAction.EndInvoke(asyncResult);
+            this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
         }
 
-        protected void Restore(Guid publicKey)
+        protected void Restore(CancellationToken ct, Guid publicKey)
         {
             Guid interviewId = Guid.NewGuid();
-            if (!LoadTemplateAndCreateInterview(publicKey, interviewId))
+
+            if (!LoadTemplateAndCreateInterview(publicKey, interviewId, ct))
             {
                 this.RunOnUiThread(this.Finish);
                 return;
@@ -63,22 +60,22 @@ namespace WB.UI.QuestionnaireTester
             this.StartActivity(intent);
         }
 
-        private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId)
+        private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId, CancellationToken ct)
         {
-            var token = new CancellationToken();
-            QuestionnaireSyncPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, token);
+            QuestionnaireSyncPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, ct);
 
             if (template == null)
             {
+                ShowLongToastInUIThread("Template is missing.");
                 return false;
             }
 
             if (template.IsErrorOccured)
             {
-                this.RunOnUiThread(() => Toast.MakeText(this, template.ErrorMessage, ToastLength.Long).Show());
-
+                ShowLongToastInUIThread(template.ErrorMessage);
                 return false;
             }
+
             try
             {
                 string content = PackageHelper.DecompressString(template.Questionnaire);
@@ -93,11 +90,16 @@ namespace WB.UI.QuestionnaireTester
             }
             catch (Exception e)
             {
-                this.RunOnUiThread(() => Toast.MakeText(this, "Template is invalid for current version of Tester . Please return to Designer and change it.", ToastLength.Long).Show());
-
+                logger.Error(e.Message, e);
+                ShowLongToastInUIThread("Template is invalid for current version of Tester . Please return to Designer and change it.");
                 return false;
             }
             return true;
+        }
+
+        private void ShowLongToastInUIThread(string message)
+        {
+            this.RunOnUiThread(() => Toast.MakeText(this, message, ToastLength.Long).Show());
         }
     }
 }
