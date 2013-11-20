@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             Assert.That(autoPropagateQuestion.Triggers, !Contains.Item(updatedGroupId));
         }
 
-        [TestCase(Propagate.AutoPropagated,Propagate.AutoPropagated)]
+        [TestCase(Propagate.AutoPropagated, Propagate.AutoPropagated)]
         [TestCase(Propagate.None, Propagate.AutoPropagated)]
         [TestCase(Propagate.None, Propagate.None)]
         [Ignore("Will be removed after merge next branch on default")]
