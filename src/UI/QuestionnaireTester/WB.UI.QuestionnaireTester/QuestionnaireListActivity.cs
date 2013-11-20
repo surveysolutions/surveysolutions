@@ -11,7 +11,7 @@ using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester
 {
-    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize, LaunchMode = LaunchMode.SingleTop, Label = "questionnairelist")]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize, LaunchMode = LaunchMode.SingleTop)]
     public class QuestionnaireListActivity : Activity
     {
         protected ListView listView;
@@ -46,8 +46,8 @@ namespace WB.UI.QuestionnaireTester
         protected override void OnRestart()
         {
             base.OnRestart();
-
-            this.listView.Adapter = adapter = new QuestionnaireListAdapter(this);
+            svQuery.SetQuery(string.Empty, true);
+            adapter.Update();
         }
 
         protected override void OnStart()
@@ -55,9 +55,12 @@ namespace WB.UI.QuestionnaireTester
             base.OnStart();
             this.CreateSearchebleActionBar();
 
-
-            var svQuery = (SearchView)this.ActionBar.CustomView.FindViewById(Resource.Id.svQuery);
             svQuery.QueryTextChange += searchView_QueryTextChange;
+        }
+
+        protected SearchView svQuery
+        {
+            get { return this.ActionBar.CustomView.FindViewById<SearchView>(Resource.Id.svQuery); }
         }
     }
 }

@@ -14,7 +14,7 @@ using WB.UI.Shared.Android.Frames;
 
 namespace WB.UI.Shared.Android.Activities
 {
-    public abstract class DetailsActivity : MvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener, GestureDetector.IOnGestureListener
+    public abstract class DetailsActivity : DoubleBackMvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener, GestureDetector.IOnGestureListener
     {
         protected Guid QuestionnaireId
         {

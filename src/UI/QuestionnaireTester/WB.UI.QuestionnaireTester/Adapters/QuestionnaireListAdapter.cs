@@ -72,6 +72,11 @@ namespace WB.UI.QuestionnaireTester.Adapters
             });
         }
 
+        public void Update()
+        {
+            Task.Factory.StartNew(UploadQuestionnairesFromDesigner, this.cancellationToken);
+        }
+
         public void Query(string searchQuery)
         {
             if (!string.IsNullOrEmpty(searchQuery))

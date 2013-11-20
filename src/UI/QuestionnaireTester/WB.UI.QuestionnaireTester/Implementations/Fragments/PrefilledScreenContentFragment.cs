@@ -12,6 +12,7 @@ using Android.Widget;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.QuestionnaireTester.Implementations.Activities;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
 
@@ -31,8 +32,15 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
         protected override QuestionnaireScreenViewModel GetScreenViewModel()
         {
             var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-              new QuestionnaireScreenInput(QuestionnaireId));
+                new QuestionnaireScreenInput(QuestionnaireId));
 
+            if (questionnaire.FeaturedQuestions.Count == 0)
+            {
+                var intent = new Intent(this.Activity, typeof (TesterDetailsActivity));
+                intent.PutExtra("publicKey", QuestionnaireId.ToString());
+                this.StartActivity(intent);
+                this.Activity.Finish();
+            }
             return new QuestionnaireScreenViewModel(QuestionnaireId, "Pre-filled questions", "test", true, new InterviewItemId(Guid.Empty),
                 questionnaire.FeaturedQuestions.Values.Select(q => q as IQuestionnaireItemViewModel).ToList(),
                 new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), 0, 0);
