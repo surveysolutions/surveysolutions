@@ -152,7 +152,6 @@
     <Compile Include="Eventing\Storage\NoDB\EventStoreTests\NoDBEventStoreTests.cs" />
     <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_getting_all_events_for_an_event_source.cs" />
     <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_getting_the_events_since_a_specific_version.cs" />
-    <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_saving_a_new_event_source.cs" />
     <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_saving_events_based_on_stale_state.cs" />
     <Compile Include="Eventing\Storage\NoDB\Fakes\AccountTitleChangedEvent.cs" />
     <Compile Include="Eventing\Storage\NoDB\Fakes\CustomerCreatedEvent.cs" />
