@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 PublicKey = questionId,
                 GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggers ?? new List<Guid>()
             });
         }
@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             return ToPublishedEvent(new NumericQuestionChanged
             {
                 PublicKey = questionId,
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggers ?? new List<Guid>()
             });
         }
@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 PublicKey = questionId,
                 SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
                 GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggers ?? new List<Guid>()
             });
         }
