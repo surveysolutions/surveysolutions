@@ -45,7 +45,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
             if (handlers.Count() == 0)
             {
-                Log.WarnFormat("Did not found any handlers for event {0}.", eventMessageType.FullName);
+                Log.WarnFormat("No handler was found for event {0}.", eventMessage.EventSourceId);
             }
             else
             {
