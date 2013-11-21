@@ -399,6 +399,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             ThrowIfShouldStopViewsRebuilding();
 
+            logger.Info("Starting rebuild Read Layer");
+
             UpdateStatusMessage("Determining count of events to be republished.");
 
             int allEventsCount = this.eventStore.CountOfAllEvents();
@@ -442,6 +444,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                     "Acquiring next portion of events. "
                     + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
             }
+
+            logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
 
             UpdateStatusMessage(string.Format("All events were republished. "
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount)));
