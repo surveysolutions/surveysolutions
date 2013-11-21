@@ -23,10 +23,9 @@ namespace WB.UI.QuestionnaireTester.Services
             var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                webExecutor.ExcecuteRestRequestAsync<bool>(
-                    "Authorize",cancellationToken,null,
+                return webExecutor.ExcecuteRestRequestAsync<bool>(
+                    "ValidateCredentials", cancellationToken, null,
                     new HttpBasicAuthenticator(userName, password), "POST");
-                return true;
             }
             catch (Exception e)
             {

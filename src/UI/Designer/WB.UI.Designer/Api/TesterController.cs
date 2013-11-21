@@ -89,10 +89,14 @@ namespace WB.UI.Designer.Api
 
         [Authorize]
         [HttpPost]
-        public bool Authorize()
+        public bool ValidateCredentials()
         {
             if (this.userHelper.WebUser == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            if (this.userHelper.WebUser.MembershipUser.IsLockedOut)
+                return false;
+
             return true;
         }
 
@@ -123,7 +127,7 @@ namespace WB.UI.Designer.Api
             if (questoinnaireErrors.Any())
             {
                 questionnaireSyncPackage.IsErrorOccured = true;
-                questionnaireSyncPackage.ErrorMessage = "Questionnaire is invalid.";
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire is invalid. Please Verify it on Designer.";
 
                 return questionnaireSyncPackage;
             }
