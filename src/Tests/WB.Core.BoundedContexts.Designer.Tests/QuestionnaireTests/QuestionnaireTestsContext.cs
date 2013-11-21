@@ -218,7 +218,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Instructions = string.Empty,
                 Answers = null,
                 AnswerOrder = Order.AsIs,
-                MaxValue = 0,
                 Triggers = new List<Guid>(),
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = null
@@ -251,7 +250,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     Instructions = string.Empty,
                     Answers = null,
                     AnswerOrder = Order.AsIs,
-                    MaxValue = 0,
                     Triggers = new List<Guid>(),
                     ResponsibleId = responsibleId,
                     LinkedToQuestionId = null

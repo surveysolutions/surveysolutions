@@ -179,7 +179,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                     ValidationExpression = "[this]!=''",
                     ValidationMessage = "Empty names is invalid answer",
                     Triggers = triggers,
-                    MaxValue = maxValue
                 };
         }
 
