@@ -1189,7 +1189,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (@group.Propagated != Propagate.AutoPropagated)
                 {
                     throw new QuestionnaireException(DomainExceptionType.TriggerLinksToNotPropagatedGroup,
-                        string.Format("Group {0} cannot be triggered because it is not roster", group.Title));
+                        string.Format("Group {0} cannot be triggered because it is not a roster", group.Title));
                 }
             }
         }
