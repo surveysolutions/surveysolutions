@@ -419,7 +419,7 @@
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
-                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.isRoster;
+                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.isRoster();
 
                 if (arg.item.isNew()) {
                     arg.cancelDrop = true;
