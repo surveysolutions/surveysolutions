@@ -1189,7 +1189,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (@group.Propagated != Propagate.AutoPropagated)
                 {
                     throw new QuestionnaireException(DomainExceptionType.TriggerLinksToNotPropagatedGroup,
-                        string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
+                        string.Format("Group {0} cannot be triggered because it is not a roster", group.Title));
                 }
             }
         }
@@ -1637,7 +1637,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (!isInteger)
                     throw new QuestionnaireException(
                     DomainExceptionType.AutoPropagateQuestionCantBeReal,
-                    "AutoPropagate question can't be real");
+                    "Roster size question can't be real");
             }
         }
 
@@ -1645,9 +1645,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (isInteger && countOfDecimalPlaces.HasValue)
             {
-                    throw new QuestionnaireException(
+                throw new QuestionnaireException(
                     DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
-                    "AutoPropagate question can't have decimal places settings");
+                    "Roster size question can't have decimal places settings");
             }
         }
 
