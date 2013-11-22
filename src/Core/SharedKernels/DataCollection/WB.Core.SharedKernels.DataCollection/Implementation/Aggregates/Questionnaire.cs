@@ -343,7 +343,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 foreach (Guid groupId in autoPropagatingQuestion.Triggers)
                 {
-                    this.ThrowIfGroupDoesNotExist(groupId);
+                    this.ThrowIfGroupDoesNotExist(groupId,
+                        string.Format("Propagating question with id '{0}' references missing group.",
+                            FormatQuestionForException(autoPropagatingQuestion)));
                 }
 
                 return autoPropagatingQuestion.Triggers.ToList();
@@ -830,17 +832,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new QuestionnaireException(string.Format("Question with id '{0}' is not a roster size question.", questionId));
         }
 
-        private void ThrowIfGroupDoesNotExist(Guid groupId)
+        private void ThrowIfGroupDoesNotExist(Guid groupId, string customExceptionMessage = null)
         {
-            this.GetGroupOrThrow(groupId);
+            this.GetGroupOrThrow(groupId, customExceptionMessage);
         }
 
-        private IGroup GetGroupOrThrow(Guid groupId)
+        private IGroup GetGroupOrThrow(Guid groupId, string customExceptionMessage = null)
         {
             IGroup group = this.GetGroup(groupId);
 
             if (group == null)
-                throw new QuestionnaireException(string.Format("Group with id '{0}' is not found.", groupId));
+                throw new QuestionnaireException(customExceptionMessage ?? string.Format("Group with id '{0}' is not found.", groupId));
 
             return group;
         }
