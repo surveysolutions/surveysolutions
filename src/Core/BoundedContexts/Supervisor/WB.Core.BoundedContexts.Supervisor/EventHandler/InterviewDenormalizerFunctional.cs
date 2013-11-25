@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,33 +17,33 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    internal class InterviewDenormalizerFunctional : FunctionalDenormalizer<InterviewData>, ICreateHandler<InterviewData, InterviewCreated>,
-        IUpdateHandler<InterviewData, InterviewStatusChanged>,
-        IUpdateHandler<InterviewData, SupervisorAssigned>,
-        IUpdateHandler<InterviewData, InterviewerAssigned>,
-        IUpdateHandler<InterviewData, GroupPropagated>,
-        IUpdateHandler<InterviewData, AnswerCommented>,
-        IUpdateHandler<InterviewData, MultipleOptionsQuestionAnswered>,
-        IUpdateHandler<InterviewData, NumericRealQuestionAnswered>,
-        IUpdateHandler<InterviewData, NumericQuestionAnswered>,
-        IUpdateHandler<InterviewData, NumericIntegerQuestionAnswered>,
-        IUpdateHandler<InterviewData, TextQuestionAnswered>,
-        IUpdateHandler<InterviewData, SingleOptionQuestionAnswered>,
-        IUpdateHandler<InterviewData, SingleOptionLinkedQuestionAnswered>,
-        IUpdateHandler<InterviewData, MultipleOptionsLinkedQuestionAnswered>,
-        IUpdateHandler<InterviewData, DateTimeQuestionAnswered>,
-        IUpdateHandler<InterviewData, GeoLocationQuestionAnswered>,
-        IUpdateHandler<InterviewData, AnswerRemoved>,
-        IUpdateHandler<InterviewData, GroupDisabled>,
-        IUpdateHandler<InterviewData, GroupEnabled>,
-        IUpdateHandler<InterviewData, QuestionDisabled>,
-        IUpdateHandler<InterviewData, QuestionEnabled>,
-        IUpdateHandler<InterviewData, AnswerDeclaredInvalid>,
-        IUpdateHandler<InterviewData, AnswerDeclaredValid>,
-        IUpdateHandler<InterviewData, FlagRemovedFromAnswer>,
-        IUpdateHandler<InterviewData, FlagSetToAnswer>,
-        IUpdateHandler<InterviewData, InterviewDeclaredInvalid>,
-        IUpdateHandler<InterviewData, InterviewDeclaredValid>
+    public class InterviewDenormalizerFunctional : FunctionalDenormalizer<IntervieweWithSequence>, ICreateHandler<IntervieweWithSequence, InterviewCreated>,
+        IUpdateHandler<IntervieweWithSequence, InterviewStatusChanged>,
+        IUpdateHandler<IntervieweWithSequence, SupervisorAssigned>,
+        IUpdateHandler<IntervieweWithSequence, InterviewerAssigned>,
+        IUpdateHandler<IntervieweWithSequence, GroupPropagated>,
+        IUpdateHandler<IntervieweWithSequence, AnswerCommented>,
+        IUpdateHandler<IntervieweWithSequence, MultipleOptionsQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, NumericRealQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, NumericQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, NumericIntegerQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, TextQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, SingleOptionQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, SingleOptionLinkedQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, MultipleOptionsLinkedQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, DateTimeQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, GeoLocationQuestionAnswered>,
+        IUpdateHandler<IntervieweWithSequence, AnswerRemoved>,
+        IUpdateHandler<IntervieweWithSequence, GroupDisabled>,
+        IUpdateHandler<IntervieweWithSequence, GroupEnabled>,
+        IUpdateHandler<IntervieweWithSequence, QuestionDisabled>,
+        IUpdateHandler<IntervieweWithSequence, QuestionEnabled>,
+        IUpdateHandler<IntervieweWithSequence, AnswerDeclaredInvalid>,
+        IUpdateHandler<IntervieweWithSequence, AnswerDeclaredValid>,
+        IUpdateHandler<IntervieweWithSequence, FlagRemovedFromAnswer>,
+        IUpdateHandler<IntervieweWithSequence, FlagSetToAnswer>,
+        IUpdateHandler<IntervieweWithSequence, InterviewDeclaredInvalid>,
+        IUpdateHandler<IntervieweWithSequence, InterviewDeclaredValid>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
@@ -215,14 +216,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
 
         public InterviewDenormalizerFunctional(IReadSideRepositoryWriter<UserDocument> users, IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
-            IStorageStrategy<InterviewData> storageStrategy)
+            IStorageStrategy<IntervieweWithSequence> storageStrategy)
             : base(storageStrategy)
         {
             this.users = users;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
         }
 
-        public InterviewData Create(IPublishedEvent<InterviewCreated> evnt)
+        public IntervieweWithSequence Create(IPublishedEvent<InterviewCreated> evnt)
         {
             var responsible = this.users.GetById(evnt.Payload.UserId);
 
@@ -237,43 +238,46 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             };
             var emptyVector = new int[0];
             interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, emptyVector));
-            return interview;
+            return new IntervieweWithSequence(interview, evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewStatusChanged> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            currentState.Status = evnt.Payload.Status;
+            currentState.Document.Status = evnt.Payload.Status;
 
-            if (!currentState.WasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
+            if (!currentState.Document.WasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
             {
-                currentState.WasCompleted = true;
+                currentState.Document.WasCompleted = true;
             }
+            currentState.Sequence = evnt.EventSequence;
             return currentState;
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<SupervisorAssigned> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<SupervisorAssigned> evnt)
         {
-            currentState.ResponsibleId = evnt.Payload.SupervisorId;
-            currentState.ResponsibleRole = UserRoles.Supervisor;
+            currentState.Document.ResponsibleId = evnt.Payload.SupervisorId;
+            currentState.Document.ResponsibleRole = UserRoles.Supervisor;
+            currentState.Sequence = evnt.EventSequence;
             return currentState;
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewerAssigned> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<InterviewerAssigned> evnt)
         {
-            currentState.ResponsibleId = evnt.Payload.InterviewerId;
-            currentState.ResponsibleRole = UserRoles.Operator;
+            currentState.Document.ResponsibleId = evnt.Payload.InterviewerId;
+            currentState.Document.ResponsibleRole = UserRoles.Operator;
+            currentState.Sequence = evnt.EventSequence;
             return currentState;
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<GroupPropagated> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<GroupPropagated> evnt)
         {
-            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState,
+            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
             /*if (scopeOfCurrentGroup == null)
                 return;*/
 
             List<string> keysOfLevelsByScope =
-                GetLevelsByScopeFromInterview(interview: currentState, scopeId: scopeOfCurrentGroup);
+                GetLevelsByScopeFromInterview(interview: currentState.Document, scopeId: scopeOfCurrentGroup);
 
             int countOfLevelByScope = keysOfLevelsByScope.Count();
 
@@ -282,7 +286,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             if (countOfLevelByScope < evnt.Payload.Count)
             {
-                AddNewLevelsToInterview(currentState, startIndex: countOfLevelByScope,
+                AddNewLevelsToInterview(currentState.Document, startIndex: countOfLevelByScope,
                              count: evnt.Payload.Count - countOfLevelByScope,
                              outerVector: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
             }
@@ -290,153 +294,172 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 var keysOfLevelToBeDeleted =
                     keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(countOfLevelByScope - evnt.Payload.Count);
-                RemoveLevelsFromInterview(currentState, keysOfLevelToBeDeleted, scopeOfCurrentGroup);
+                RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup);
             }
+            currentState.Sequence = evnt.EventSequence;
             return currentState;
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<AnswerCommented> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<AnswerCommented> evnt)
         {
             var commenter = this.users.GetById(evnt.Payload.UserId);
             if (commenter == null)
                 return currentState;
-            return SaveComment(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                        evnt.Payload.Comment, evnt.Payload.UserId, commenter.UserName, evnt.Payload.CommentTime);
+
+            return new IntervieweWithSequence(SaveComment(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                evnt.Payload.Comment, evnt.Payload.UserId, commenter.UserName, evnt.Payload.CommentTime), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                     evnt.Payload.SelectedValues);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                evnt.Payload.SelectedValues), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                       evnt.Payload.Answer);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                evnt.Payload.Answer), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<NumericQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<NumericQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                     evnt.Payload.Answer);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                     evnt.Payload.Answer), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                    evnt.Payload.Answer);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                    evnt.Payload.Answer), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<TextQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                    evnt.Payload.Answer);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                    evnt.Payload.Answer), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                     evnt.Payload.SelectedValue);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                     evnt.Payload.SelectedValue), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                    evnt.Payload.SelectedPropagationVector);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                    evnt.Payload.SelectedPropagationVector), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                     evnt.Payload.SelectedPropagationVectors);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                     evnt.Payload.SelectedPropagationVectors), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                     evnt.Payload.Answer);
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                     evnt.Payload.Answer), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            return SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                    new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Timestamp));
+            return new IntervieweWithSequence(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                    new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Timestamp)), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<AnswerRemoved> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<AnswerRemoved> evnt)
         {
-            return this.UpdateQuestion(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
-            {
-                question.Answer = null;
-                question.IsAnswered = false;
-            });
+            return
+                new IntervieweWithSequence(
+                    this.UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+                    {
+                        question.Answer = null;
+                        question.IsAnswered = false;
+                    }), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<GroupDisabled> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<GroupDisabled> evnt)
         {
-            return PreformActionOnLevel(currentState, evnt.Payload.PropagationVector, (level) =>
-            {
-                if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+            return
+                new IntervieweWithSequence(PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, (level) =>
                 {
-                    level.DisabledGroups.Add(evnt.Payload.GroupId);
-                }
-            });
+                    if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    {
+                        level.DisabledGroups.Add(evnt.Payload.GroupId);
+                    }
+                }), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<GroupEnabled> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<GroupEnabled> evnt)
         {
-            return PreformActionOnLevel(currentState, evnt.Payload.PropagationVector, (level) =>
+            return
+                new IntervieweWithSequence(PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, (level) =>
             {
                 if (level.DisabledGroups.Contains(evnt.Payload.GroupId))
                 {
                     level.DisabledGroups.Remove(evnt.Payload.GroupId);
                 }
-            });
+            }),evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<QuestionDisabled> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<QuestionDisabled> evnt)
         {
-            return ChangeQuestionConditionState(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                false);
+            return
+                new IntervieweWithSequence(
+                    ChangeQuestionConditionState(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                        false), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<QuestionEnabled> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<QuestionEnabled> evnt)
         {
-            return ChangeQuestionConditionState(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-               true);
+            return
+                new IntervieweWithSequence(
+                    ChangeQuestionConditionState(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+               true), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<AnswerDeclaredInvalid> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<AnswerDeclaredInvalid> evnt)
         {
-            return ChangeQuestionConditionValidity(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-               false);
+            return
+                new IntervieweWithSequence(ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+               false), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<AnswerDeclaredValid> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<AnswerDeclaredValid> evnt)
         {
-            return ChangeQuestionConditionValidity(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-               true);
+            return
+                new IntervieweWithSequence(
+                    ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                        true), evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
         {
-            return SetFlagStateForQuestion(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false);
+            return
+                new IntervieweWithSequence(
+                    ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
+                    evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<FlagSetToAnswer> evnt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<FlagSetToAnswer> evnt)
         {
-            return SetFlagStateForQuestion(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true);
+            return
+                new IntervieweWithSequence(
+                    SetFlagStateForQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true),
+                    evnt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewDeclaredInvalid> evt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<InterviewDeclaredInvalid> evt)
         {
-            return this.SetInterviewValidity(currentState, false);
+            return new IntervieweWithSequence(this.SetInterviewValidity(currentState.Document, false), evt.EventSequence);
         }
 
-        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewDeclaredValid> evt)
+        public IntervieweWithSequence Update(IntervieweWithSequence currentState, IPublishedEvent<InterviewDeclaredValid> evt)
         {
-            return this.SetInterviewValidity(currentState, true);
+            return new IntervieweWithSequence(this.SetInterviewValidity(currentState.Document, true), evt.EventSequence);
         }
     }
 }

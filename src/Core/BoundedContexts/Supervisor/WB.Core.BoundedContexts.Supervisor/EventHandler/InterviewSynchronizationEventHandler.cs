@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -22,11 +23,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     IEventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
-        private readonly IReadSideRepositoryWriter<InterviewData> interviewDataWriter;
+        private readonly IReadSideRepositoryWriter<IntervieweWithSequence> interviewDataWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
 
         public InterviewSynchronizationEventHandler(ISynchronizationDataStorage syncStorage,
-            IReadSideRepositoryWriter<InterviewData> interviewDataWriter,
+            IReadSideRepositoryWriter<IntervieweWithSequence> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>
                 questionnriePropagationStructures)
         {
@@ -69,19 +70,19 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = interviewDataWriter.GetById(interviewId);
 
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, status);
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview.Document, interview.Document.ResponsibleId, status);
 
-            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+            syncStorage.SaveInterview(interviewSyncData, interview.Document.ResponsibleId);
         }
 
         public void ResendInterviewForPerson(Guid interviewId,  Guid responsibleId)
         {
             var interview = interviewDataWriter.GetById(interviewId);
 
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview,
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview.Document,
                 responsibleId, InterviewStatus.InterviewerAssigned);
 
-            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+            syncStorage.SaveInterview(interviewSyncData, interview.Document.ResponsibleId);
         }
 
         public void DeleteInterview(Guid interviewId)
