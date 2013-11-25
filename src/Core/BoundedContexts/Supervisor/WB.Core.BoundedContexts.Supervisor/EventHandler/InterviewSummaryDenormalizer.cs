@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewSummaryDenormalizer :
+    internal class InterviewSummaryDenormalizer :
         IEventHandler,
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewStatusChanged>,

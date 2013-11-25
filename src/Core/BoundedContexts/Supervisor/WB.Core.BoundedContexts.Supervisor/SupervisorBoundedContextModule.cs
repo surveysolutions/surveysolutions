@@ -1,4 +1,6 @@
-﻿using Ninject.Modules;
+﻿using Ncqrs;
+using Ninject.Modules;
+using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
@@ -21,7 +23,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IExportProvider<InterviewDataExportView>>().To<IterviewExporter>();
             this.Bind(typeof(ITemporaryDataStorage<>)).To(typeof(FileTemporaryDataStorage<>));
 
-            
+            this.Bind(typeof(IStorageStrategy<>)).To(typeof(ReadSideStorageStrategy<>));
+            this.Bind<IFunctionalDenormalizer>().To<InterviewSummaryDenormalizerFunctional>();
             this.Bind<IReadSideRepositoryWriter<InterviewData>, IReadSideRepositoryReader<InterviewData>>()
                 .To<InterviewDataRepositoryWriterWithCache>()
                 .InSingletonScope();
