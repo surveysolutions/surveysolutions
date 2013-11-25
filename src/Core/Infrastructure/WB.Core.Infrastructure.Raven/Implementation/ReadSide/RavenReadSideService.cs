@@ -149,19 +149,23 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 this.DeleteViews(viewTypes);
 
                 var writers = GetListOfWritersForEnableCache(viewTypes);
-                
+
+                string publishingDetails = "<<NO DETAILS>>";
+
                 try
                 {
                     this.DisableHandlersWhichAreNotInList(handlers);
 
                     this.EnableCacheInRepositoryWriters(writers);
 
-                    this.RepublishAllEvents();
+                    publishingDetails = this.RepublishAllEvents();
                 }
                 finally
                 {
                     this.DisableCacheInRepositoryWriters(writers);
                     this.EnableHandlerAllHandlers();
+
+                    UpdateStatusMessage("Rebuild specific views succeeded. Republishing details: " + publishingDetails);
                 }
             }
             catch (Exception exception)
@@ -224,15 +228,19 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 this.DeleteAllViews();
                 this.CleanUpAllWriters();
 
+                string publishingDetails = "<<NO DETAILS>>";
+
                 try
                 {
                     this.EnableCacheInAllRepositoryWriters();
 
-                    this.RepublishAllEvents();
+                    publishingDetails = this.RepublishAllEvents();
                 }
                 finally
                 {
                     this.DisableCacheInAllRepositoryWriters();
+
+                    UpdateStatusMessage("Rebuild all views succeeded. Republishing details: " + publishingDetails);
                 }
             }
             catch (Exception exception)
@@ -392,7 +400,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private void RepublishAllEvents()
+        private string RepublishAllEvents()
         {
             int processedEventsCount = 0;
             int failedEventsCount = 0;
@@ -449,6 +457,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             UpdateStatusMessage(string.Format("All events were republished. "
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount)));
+
+            return GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount);
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
