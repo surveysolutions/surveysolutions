@@ -641,10 +641,6 @@
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
       <Name>WB.UI.Designer.Providers.CQRS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.Views\WB.UI.Designer.Views.csproj">
-      <Project>{4489F996-D379-43D1-8932-3C48D59D9AB5}</Project>
-      <Name>WB.UI.Designer.Views</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
       <Project>{8263ca84-bfb5-4a7b-ae31-f5fc5b05e7c1}</Project>
       <Name>WB.UI.Designer.WebServices</Name>
@@ -673,7 +669,7 @@
       CustomCollectFiles;
       $(CopyAllFilesToSingleFolderForMsdeployDependsOn);
     </CopyAllFilesToSingleFolderForMsdeployDependsOn>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

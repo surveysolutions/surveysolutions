@@ -58,7 +58,7 @@ namespace WB.UI.QuestionnaireTester
             get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
-        public static DesignerAuthentication Membership
+        public static DesignerAuthentication DesignerMembership
         {
             get { return Kernel.Get<DesignerAuthentication>(); }
         }
@@ -169,7 +169,7 @@ namespace WB.UI.QuestionnaireTester
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Capi.Tester"));
-            this.RestoreAppState();
+            //this.RestoreAppState();
 
             // initialize app if necessary
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
@@ -195,7 +195,6 @@ namespace WB.UI.QuestionnaireTester
 
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());
-            //NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
             var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
             this.kernel.Bind<ICommandService>().ToConstant(CommandService);
@@ -213,32 +212,6 @@ namespace WB.UI.QuestionnaireTester
             
 
             #endregion
-        }
-
-        private void RestoreAppState()
-        {
-            AndroidEnvironment.UnhandledExceptionRaiser += this.AndroidEnvironmentUnhandledExceptionRaiser;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-
-                AndroidEnvironment.UnhandledExceptionRaiser -= this.AndroidEnvironmentUnhandledExceptionRaiser;
-            }
-
-            base.Dispose(disposing);
-        }
-        private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
-        {
-            /*this.ClearAllBackStack<SplashScreen>();
-
-            var questionnarieDenormalizer =
-                this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>() as
-                InMemoryReadSideRepositoryAccessor<InterviewViewModel>;
-            if (questionnarieDenormalizer != null)
-                questionnarieDenormalizer.Clear();*/
         }
 
         private IKernel kernel;

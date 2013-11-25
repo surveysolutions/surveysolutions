@@ -78,7 +78,7 @@ namespace WB.UI.QuestionnaireTester
             this.progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
             this.progressDialog.SetCancelable(false);
 
-            if (CapiTesterApplication.Membership.IsLoggedIn)
+            if (CapiTesterApplication.DesignerMembership.IsLoggedIn)
             {
                 this.StartActivity(typeof(QuestionnaireListActivity));
             }
@@ -128,7 +128,7 @@ namespace WB.UI.QuestionnaireTester
 
         private void LoginAsync()
         {
-            bool result = CapiTesterApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text, cancellationToken);
+            bool result = CapiTesterApplication.DesignerMembership.LogOn(this.teLogin.Text, this.tePassword.Text, cancellationToken);
             this.RunOnUiThread(() =>
             {
                 progressDialog.Hide();

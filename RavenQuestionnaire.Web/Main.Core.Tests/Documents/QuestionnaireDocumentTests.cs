@@ -21,37 +21,6 @@ namespace Main.Core.Tests.Documents
         }
 
         [Test]
-        public void RemoveGroup_when_AutoPropagate_group_that_was_trigged_by_AuotoPropagate_question_was_removed_then_list_of_triggers_should_be_one_less()
-        {
-            // Arrange
-            var autoGroupId = Guid.NewGuid();
-            AutoPropagateQuestion autoQuestion;
-            var doc = this.CreateQuestionnaireDocumentWithAutoPropagateGroupAndQuestion(autoGroupId, out autoQuestion);
-            var autoQuestionTriggersCount = autoQuestion.Triggers.Count;
-
-            // Act
-            doc.RemoveGroup(autoGroupId);
-
-            // Assert
-            Assert.That(autoQuestion.Triggers.Count, Is.EqualTo(autoQuestionTriggersCount - 1));
-        }
-
-        [Test]
-        public void RemoveGroup_when_AutoPropagate_group_removed_then_triggers_in_AutoPropagate_question_should_not_contains_id_of_deleted_group()
-        {
-            // Arrange
-            var autoPropagateGroupId = Guid.NewGuid();
-            AutoPropagateQuestion autoQuestion;
-            var doc = this.CreateQuestionnaireDocumentWithAutoPropagateGroupAndQuestion(autoPropagateGroupId, out autoQuestion);
-
-            // Act
-            doc.RemoveGroup(autoPropagateGroupId);
-
-            // Assert
-            Assert.That(autoQuestion.Triggers, !Contains.Item(autoPropagateGroupId));
-        }
-
-        [Test]
         public void RemoveGroup_when_not_AutoPropagate_group_removed_then_count_of_triggers_in_AutoPropagate_question_should_be_the_same()
         {
             // Arrange
