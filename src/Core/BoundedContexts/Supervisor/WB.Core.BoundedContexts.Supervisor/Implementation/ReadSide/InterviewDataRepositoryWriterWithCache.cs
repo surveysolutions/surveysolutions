@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -19,33 +20,31 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 {
-    public class InterviewDataRepositoryWriterWithCache : IReadSideRepositoryReader<InterviewData>,
-        IReadSideRepositoryWriter<InterviewData>,
-        IReadSideRepositoryCleaner
+    public class InterviewDataRepositoryWriterWithCache : IReadSideRepositoryReader<InterviewData>
     {
         private IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> qestionnairePropagationStructure;
+     /*   private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> qestionnairePropagationStructure;*/
         private IEventStore eventStore;
-        private Dictionary<Guid, IntervieweWithSequence> memcache;
+      //  private Dictionary<Guid, IntervieweWithSequence> memcache;
         private IIncomePackagesRepository incomePackages;
 
-        private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
+     //   private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
         public InterviewDataRepositoryWriterWithCache(
             IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter,
             IReadSideRepositoryWriter<UserDocument> users,
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> qestionnairePropagationStructure,
-            IIncomePackagesRepository incomePackages,
-            IReadSideRepositoryCleanerRegistry cleanerRegistry)
+            IIncomePackagesRepository incomePackages/*,
+            IReadSideRepositoryCleanerRegistry cleanerRegistry*/)
         {
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
             this.interviewWriter = interviewWriter;
             this.incomePackages = incomePackages;
-            this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
-            this.users = users;
-            this.qestionnairePropagationStructure = qestionnairePropagationStructure;
-            cleanerRegistry.Register(this);
+       //     this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
+          /*  this.users = users;
+            this.qestionnairePropagationStructure = qestionnairePropagationStructure;*/
+        //    cleanerRegistry.Register(this);
         }
 
         public int Count()
@@ -53,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             throw new NotImplementedException();
         }
 
-        InterviewData IReadSideRepositoryWriter<InterviewData>.GetById(Guid id)
+       /* InterviewData IReadSideRepositoryWriter<InterviewData>.GetById(Guid id)
         {
             if (!memcache.ContainsKey(id))
             {
@@ -68,18 +67,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
                 return null;
             }
 
-        }
+        }*/
 
         InterviewData IReadSideRepositoryReader<InterviewData>.GetById(Guid id)
         {
-            if (!memcache.ContainsKey(id))
+            /*if (!memcache.ContainsKey(id))
             {
                 ((IReadSideRepositoryWriter<InterviewData>)this).GetById(id);
-            }
-
-            var view = memcache[id];
-            UpdateViewFromEventStream(view);
-            return view.Document;
+            }*/
+            var view = interviewWriter.GetById(id);
+            //var view = memcache[id];
+            return UpdateViewFromEventStream(view).Document;
+            //return view.Document;
         }
 
         public void Remove(Guid id)
@@ -92,7 +91,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             throw new NotImplementedException();
         }
 
-        private void RestoreFromPersistantStorage(Guid id)
+    /*    private void RestoreFromPersistantStorage(Guid id)
         {
             var viewItem = interviewWriter.GetById(id);
 
@@ -105,67 +104,71 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 
             var maxSequence = viewItem == null ? events.Last().EventSequence : viewItem.Sequence;
 
-            ClearCacheIfLimitExcided();
+           // ClearCacheIfLimitExcided();
 
             var view = viewItem == null ? null : viewItem.Document;
             var updatedView = RestoreFromEventStream(events, view);
 
-            memcache.Add(id, new IntervieweWithSequence(updatedView, maxSequence));
-        }
+      //      memcache.Add(id, new IntervieweWithSequence(updatedView, maxSequence));
+        }*/
 
-        private void UpdateViewFromEventStream(IntervieweWithSequence viewItem)
+        private IntervieweWithSequence UpdateViewFromEventStream(IntervieweWithSequence viewItem)
         {
             incomePackages.ProcessItem(viewItem.Document.InterviewId, viewItem.Sequence);
 
             var events = eventStore.ReadFrom(viewItem.Document.InterviewId, viewItem.Sequence + 1, long.MaxValue);
             if (events.IsEmpty)
-                return;
+                return viewItem;
             var updatedView = RestoreFromEventStream(events, viewItem.Document);
 
-            memcache[updatedView.InterviewId] = new IntervieweWithSequence(updatedView,
-                                                                            events.Last().EventSequence);
+            return new IntervieweWithSequence(updatedView,
+                events.Last().EventSequence);
         }
 
-        private void ClearCacheIfLimitExcided()
+        /*  private void ClearCacheIfLimitExcided()
         {
             if (memcache.Count >= memcacheItemsSizeLimit)
             {
                 memcache.Clear();
             }
-        }
+        }*/
 
         private InterviewData RestoreFromEventStream(CommittedEventStream events, InterviewData view)
         {
             InterviewData updatedView = view;
             if (!events.IsEmpty)
             {
+                var bus = NcqrsEnvironment.Get<IEventBus>() as ViewConstructorEventBus;
+                if (bus == null)
+                    return view;
+                bus.PublishForSingleEventSource(events, view.InterviewId);
 
-                using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, this.users, this.qestionnairePropagationStructure))
+                /*     using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, this.users, this.qestionnairePropagationStructure))
                 {
                     entityWriter.PublishEvents(events);
 
                     updatedView = entityWriter.GetById(events.SourceId);
 
                     PersistItem(updatedView, events.SourceId, events.Last().EventSequence);
-                }
+                }*/
             }
             return updatedView;
         }
 
-        private void PersistItem(InterviewData view, Guid id, long sequence)
+        /* private void PersistItem(InterviewData view, Guid id, long sequence)
         {
             Task.Factory.StartNew(() =>
                 {
                     var interviewWithSequence = new IntervieweWithSequence(view, sequence);
                     interviewWriter.Store(interviewWithSequence, id);
                 });
-        }
+        }*/
 
 
-        public void Clear()
+      /*  public void Clear()
         {
             this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
-        }
+        }*/
     }
 
     public class IntervieweWithSequence : IView
