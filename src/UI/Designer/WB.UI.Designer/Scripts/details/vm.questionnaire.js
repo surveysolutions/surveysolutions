@@ -93,15 +93,10 @@
                 openDetails("show-questionnaire");
             },
             editQuestion = function (id) {
-                //if (!_.isEmpty(selectedQuestion()) && selectedQuestion().id() !== id) {
-                //    selectedQuestion().detachValidation();
-                //}
-
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
                     return;
                 }
-                //question.attachValidation();
                 
                 question.isSelected(true);
              
@@ -424,7 +419,7 @@
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
-                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.isRoster;
+                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.isRoster();
 
                 if (arg.item.isNew()) {
                     arg.cancelDrop = true;
