@@ -183,7 +183,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
                         null,
                         null,
                         e.IsInteger,
@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
                         null,
                         null,
                         e.IsInteger,
@@ -343,7 +343,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -376,7 +376,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
                         null,
                         null,
                         e.IsInteger,
@@ -418,6 +418,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
         {
             this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
+        }
+
+        private static int? DetermineActualMaxValueForGenericQuestion(QuestionType questionType, int legacyMaxValue)
+        {
+            return questionType == QuestionType.AutoPropagate ? legacyMaxValue as int? : null;
+        }
+
+        private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
+        {
+            return isAutopropagating ? legacyMaxValue : actualMaxValue;
         }
 
         #endregion
@@ -796,7 +806,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
@@ -894,7 +904,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
@@ -1043,7 +1053,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
@@ -1189,7 +1199,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (@group.Propagated != Propagate.AutoPropagated)
                 {
                     throw new QuestionnaireException(DomainExceptionType.TriggerLinksToNotPropagatedGroup,
-                        string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
+                        string.Format("Group {0} cannot be triggered because it is not a roster", group.Title));
                 }
             }
         }
@@ -1637,7 +1647,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (!isInteger)
                     throw new QuestionnaireException(
                     DomainExceptionType.AutoPropagateQuestionCantBeReal,
-                    "AutoPropagate question can't be real");
+                    "Roster size question can't be real");
             }
         }
 
@@ -1645,9 +1655,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (isInteger && countOfDecimalPlaces.HasValue)
             {
-                    throw new QuestionnaireException(
+                throw new QuestionnaireException(
                     DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
-                    "AutoPropagate question can't have decimal places settings");
+                    "Roster size question can't have decimal places settings");
             }
         }
 
