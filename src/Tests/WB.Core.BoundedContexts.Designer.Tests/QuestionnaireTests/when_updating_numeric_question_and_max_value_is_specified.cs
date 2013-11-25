@@ -42,9 +42,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext.GetSingleEvent<NumericQuestionChanged>()
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_NumericQuestionChanged_event_with_MaxValue_equal_to_specified_max_value = () =>
+        It should_raise_NumericQuestionChanged_event_with_MaxAllowedValue_equal_to_specified_max_value = () =>
             eventContext.GetSingleEvent<NumericQuestionChanged>()
-                .MaxValue.ShouldEqual(maxValue);
+                .MaxAllowedValue.ShouldEqual(maxValue);
 
         private static EventContext eventContext;
         private static int maxValue;

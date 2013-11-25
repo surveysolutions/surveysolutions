@@ -183,7 +183,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
                         null,
                         null,
                         e.IsInteger,
@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
                         null,
                         null,
                         e.IsInteger,
@@ -343,7 +343,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -376,7 +376,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Triggers,
-                        e.MaxValue,
+                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
                         null,
                         null,
                         e.IsInteger,
@@ -418,6 +418,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
         {
             this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
+        }
+
+        private static int? DetermineActualMaxValueForGenericQuestion(QuestionType questionType, int legacyMaxValue)
+        {
+            return questionType == QuestionType.AutoPropagate ? legacyMaxValue as int? : null;
+        }
+
+        private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
+        {
+            return isAutopropagating ? legacyMaxValue : actualMaxValue;
         }
 
         #endregion
@@ -796,7 +806,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
@@ -894,7 +904,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
@@ -1043,7 +1053,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
-                MaxValue = maxValue,
+                MaxAllowedValue = maxValue,
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
