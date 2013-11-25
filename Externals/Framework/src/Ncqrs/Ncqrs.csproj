@@ -164,6 +164,7 @@
     <Compile Include="Eventing\Storage\NullSnapshotStore.cs" />
     <Compile Include="Eventing\UncommittedEvent.cs" />
     <Compile Include="Eventing\UncommittedEventStream.cs" />
+    <Compile Include="IFunctionalDenormalizer.cs" />
     <Compile Include="GuidCombGenerator.cs" />
     <Compile Include="Commanding\CommandBase.cs" />
     <Compile Include="Commanding\CommandExecution\CommandExecutorWrapper.cs" />

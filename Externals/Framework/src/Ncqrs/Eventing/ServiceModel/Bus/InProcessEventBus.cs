@@ -138,7 +138,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             return evnt => handler.Handle((IPublishedEvent<TEvent>)evnt);
         }
 
-        private void RegisterHandler(Type eventDataType, Action<PublishedEvent> handler)
+        public void RegisterHandler(Type eventDataType, Action<PublishedEvent> handler)
         {
             List<Action<PublishedEvent>> handlers = null;
             if (!_handlerRegister.TryGetValue(eventDataType, out handlers))

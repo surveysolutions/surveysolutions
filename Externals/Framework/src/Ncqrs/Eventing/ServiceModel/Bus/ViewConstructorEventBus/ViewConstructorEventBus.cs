@@ -27,6 +27,25 @@ namespace Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus
             }
         }
 
+        public void PublishForSingleEventSource(IEnumerable<IPublishableEvent> eventMessages, Guid eventSourceId)
+        {
+            foreach (var handler in handlers.Values.Where(h => h.Enabled).ToList())
+            {
+                var functionalHandler = handler.Handler as IFunctionalDenormalizer;
+                if (functionalHandler != null)
+                {
+                    functionalHandler.ChangeForSingleEventSource(eventSourceId);
+                }
+
+                handler.Bus.Publish(eventMessages);
+
+                if (functionalHandler != null)
+                {
+                    functionalHandler.FlushDataToPersistentStorage(eventSourceId);
+                }
+            }
+        }
+
         public void DisableEventHandler(Type handlerType)
         {
             if (handlers.ContainsKey(handlerType))
@@ -50,6 +69,13 @@ namespace Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus
             {
                 inProcessBus.RegisterHandler(handler, ieventHandler.GetGenericArguments()[0]);
             }
+
+            var functionalDenormalizer = handler as IFunctionalDenormalizer;
+            if (functionalDenormalizer != null)
+            {
+                functionalDenormalizer.RegisterHandlersInOldFashionNcqrsBus(inProcessBus);
+            }
+
             handlers.Add(handler.GetType(), new EventHandlerWrapper(handler, inProcessBus));
         }
 

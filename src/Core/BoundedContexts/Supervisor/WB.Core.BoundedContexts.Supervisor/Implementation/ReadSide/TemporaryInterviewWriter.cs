@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
@@ -15,21 +16,19 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 {
-    internal class TemporaryInterviewWriter : IReadSideRepositoryWriter<InterviewData>, IDisposable
+    internal class TemporaryInterviewWriter : IStorageStrategy<InterviewData>, IDisposable
     {
         private readonly Guid tempViewId;
-        private readonly InterviewDenormalizer denormalizer;
-        private readonly InProcessEventBus eventBus = new InProcessEventBus(false);
+        private readonly InterviewDenormalizerFunctional denormalizer;
         private InterviewData tempView;
 
         public TemporaryInterviewWriter(Guid id, InterviewData view, IReadSideRepositoryWriter<UserDocument> users,
-                                        IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>
-                                            questionnaireRosterStructures)
+            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>
+                questionnaireRosterStructures)
         {
             this.tempViewId = id;
             this.tempView = view;
-            this.denormalizer = new InterviewDenormalizer(users, questionnaireRosterStructures, this);
-            RegisterInterviewDenormalizerAtProcessBus();
+            this.denormalizer = new InterviewDenormalizerFunctional(users, questionnaireRosterStructures, this);
         }
 
         public InterviewData GetById(Guid id)
@@ -39,38 +38,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             return tempView;
         }
 
-        public void Remove(Guid id)
-        {
-            tempView = null;
-        }
-
-        public void Store(InterviewData view, Guid id)
-        {
-            if (id != tempViewId)
-                return;
-            tempView = view;
-        }
-
         public void Dispose()
         {
             tempView = null;
-        }
-
-
-
-        private void RegisterInterviewDenormalizerAtProcessBus()
-        {
-            IEnumerable<Type> ieventHandlers =
-                denormalizer.GetType()
-                            .GetInterfaces()
-                            .Where(
-                                type =>
-                                type.IsInterface && type.IsGenericType &&
-                                type.GetGenericTypeDefinition() == typeof (IEventHandler<>));
-            foreach (Type ieventHandler in ieventHandlers)
-            {
-                eventBus.RegisterHandler(denormalizer, ieventHandler.GetGenericArguments()[0]);
-            }
         }
 
         public void PublishEvents(CommittedEventStream events)
@@ -79,12 +49,27 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             {
                 try
                 {
-                    eventBus.Publish(@event);
+                    denormalizer.Handle(@event);
                 }
                 catch
                 {
                 }
             }
+        }
+
+        public InterviewData Select(Guid id)
+        {
+            return tempView;
+        }
+
+        public void AddOrUpdate(InterviewData projection, Guid id)
+        {
+            tempView = projection;
+        }
+
+        public void Delete(InterviewData projection, Guid id)
+        {
+           
         }
     }
 }
