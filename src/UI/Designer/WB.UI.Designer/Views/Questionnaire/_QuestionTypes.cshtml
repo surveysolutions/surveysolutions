@@ -68,13 +68,13 @@
             <div class="control-group" data-bind="validationElement: countOfDecimalPlaces, visible: $data.isInteger() == 0 ">
                 <label class="control-label">Count Of Decimal Places</label>
                 <div class="controls">
-                    <input id="countOfDecimalPlaces" placeholder="" type="text" data-bind="value: countOfDecimalPlaces, valueUpdate: 'afterkeydown'" class="input-block-level" maxlength="32" />
+                    <input id="countOfDecimalPlaces" placeholder="" type="text" data-bind="value: countOfDecimalPlaces, valueUpdate: 'afterkeydown'" class="input-block-level" maxlength="9" />
                 </div>
             </div>
             <div class="control-group" data-bind="validationElement: maxValue, visible: $data.isInteger() == 1 ">
                 <label class="control-label">Max answer value</label>
                 <div class="controls">
-                    <input id="maxValue" placeholder="max value" type="text" data-bind="value: maxValue, valueUpdate: 'afterkeydown'" class="input-block-level" maxlength="32" />
+                    <input id="maxValue" placeholder="max value" type="text" data-bind="value: maxValue, valueUpdate: 'afterkeydown'" class="input-block-level" maxlength="9" />
                 </div>
             </div>
 
