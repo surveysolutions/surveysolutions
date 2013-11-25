@@ -23,28 +23,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
     public class InterviewDataRepositoryWriterWithCache : IReadSideRepositoryReader<InterviewData>
     {
         private IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter;
-     /*   private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> qestionnairePropagationStructure;*/
         private IEventStore eventStore;
-      //  private Dictionary<Guid, IntervieweWithSequence> memcache;
         private IIncomePackagesRepository incomePackages;
-
-     //   private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
         public InterviewDataRepositoryWriterWithCache(
             IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter,
-            IReadSideRepositoryWriter<UserDocument> users,
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> qestionnairePropagationStructure,
-            IIncomePackagesRepository incomePackages/*,
-            IReadSideRepositoryCleanerRegistry cleanerRegistry*/)
+            IIncomePackagesRepository incomePackages)
         {
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
             this.interviewWriter = interviewWriter;
             this.incomePackages = incomePackages;
-       //     this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
-          /*  this.users = users;
-            this.qestionnairePropagationStructure = qestionnairePropagationStructure;*/
-        //    cleanerRegistry.Register(this);
         }
 
         public int Count()
@@ -52,33 +40,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             throw new NotImplementedException();
         }
 
-       /* InterviewData IReadSideRepositoryWriter<InterviewData>.GetById(Guid id)
+        public InterviewData GetById(Guid id)
         {
-            if (!memcache.ContainsKey(id))
-            {
-                RestoreFromPersistantStorage(id);
-            }
-            try
-            {
-                return memcache[id].Document;
-            }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
-
-        }*/
-
-        InterviewData IReadSideRepositoryReader<InterviewData>.GetById(Guid id)
-        {
-            /*if (!memcache.ContainsKey(id))
-            {
-                ((IReadSideRepositoryWriter<InterviewData>)this).GetById(id);
-            }*/
             var view = interviewWriter.GetById(id);
-            //var view = memcache[id];
-            return UpdateViewFromEventStream(view).Document;
-            //return view.Document;
+
+            if (this.IsViewWasUpdatedFromEventStream(id, view == null ? 0 : view.Sequence))
+            {
+                view = interviewWriter.GetById(id);
+                if (view == null)
+                    return null;
+            }
+
+            return view.Document;
         }
 
         public void Remove(Guid id)
@@ -91,84 +64,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             throw new NotImplementedException();
         }
 
-    /*    private void RestoreFromPersistantStorage(Guid id)
+        private bool IsViewWasUpdatedFromEventStream(Guid interviewId, long sequence)
         {
-            var viewItem = interviewWriter.GetById(id);
+            incomePackages.ProcessItem(interviewId, sequence);
 
-            long start = viewItem == null ? 0 : viewItem.Sequence + 1;
+            var events = eventStore.ReadFrom(interviewId, sequence + 1, long.MaxValue);
 
-            var events = eventStore.ReadFrom(id, start, long.MaxValue);
-
-            if (viewItem == null && events.IsEmpty)
-                return;
-
-            var maxSequence = viewItem == null ? events.Last().EventSequence : viewItem.Sequence;
-
-           // ClearCacheIfLimitExcided();
-
-            var view = viewItem == null ? null : viewItem.Document;
-            var updatedView = RestoreFromEventStream(events, view);
-
-      //      memcache.Add(id, new IntervieweWithSequence(updatedView, maxSequence));
-        }*/
-
-        private IntervieweWithSequence UpdateViewFromEventStream(IntervieweWithSequence viewItem)
-        {
-            incomePackages.ProcessItem(viewItem.Document.InterviewId, viewItem.Sequence);
-
-            var events = eventStore.ReadFrom(viewItem.Document.InterviewId, viewItem.Sequence + 1, long.MaxValue);
             if (events.IsEmpty)
-                return viewItem;
-            var updatedView = RestoreFromEventStream(events, viewItem.Document);
+                return false;
 
-            return new IntervieweWithSequence(updatedView,
-                events.Last().EventSequence);
+            var bus = NcqrsEnvironment.Get<IEventBus>() as ViewConstructorEventBus;
+            if (bus == null)
+                return false;
+
+            bus.PublishForSingleEventSource(events, interviewId);
+            return true;
         }
-
-        /*  private void ClearCacheIfLimitExcided()
-        {
-            if (memcache.Count >= memcacheItemsSizeLimit)
-            {
-                memcache.Clear();
-            }
-        }*/
-
-        private InterviewData RestoreFromEventStream(CommittedEventStream events, InterviewData view)
-        {
-            InterviewData updatedView = view;
-            if (!events.IsEmpty)
-            {
-                var bus = NcqrsEnvironment.Get<IEventBus>() as ViewConstructorEventBus;
-                if (bus == null)
-                    return view;
-                bus.PublishForSingleEventSource(events, view.InterviewId);
-
-                /*     using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, this.users, this.qestionnairePropagationStructure))
-                {
-                    entityWriter.PublishEvents(events);
-
-                    updatedView = entityWriter.GetById(events.SourceId);
-
-                    PersistItem(updatedView, events.SourceId, events.Last().EventSequence);
-                }*/
-            }
-            return updatedView;
-        }
-
-        /* private void PersistItem(InterviewData view, Guid id, long sequence)
-        {
-            Task.Factory.StartNew(() =>
-                {
-                    var interviewWithSequence = new IntervieweWithSequence(view, sequence);
-                    interviewWriter.Store(interviewWithSequence, id);
-                });
-        }*/
-
-
-      /*  public void Clear()
-        {
-            this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
-        }*/
     }
 
     public class IntervieweWithSequence : IView
@@ -180,7 +91,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         }
 
         public InterviewData Document { get; private set; }
-        public long Sequence { get; private set; }
+        public long Sequence { get; set; }
     }
-
 }
+

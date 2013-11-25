@@ -62,7 +62,6 @@
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
     <Compile Include="Implementation\ReadSide\InterviewDataRepositoryWriterWithCache.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideStorageStrategy.cs" />
-    <Compile Include="Implementation\ReadSide\TemporaryInterviewWriter.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\DataExport\DataExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
