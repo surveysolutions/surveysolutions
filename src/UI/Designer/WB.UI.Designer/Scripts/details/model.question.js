@@ -124,35 +124,6 @@
                 });
 
                 self.wasValidationAttached = false;
-
-                self.detachValidation = function () {
-                    if (self.wasValidationAttached == false)
-                        return;
-
-                    // need this try-catch, because only release scripts fire exception here
-                    // additional research should be done or this code should be removed
-                    try {
-                        self.alias.extend({ validatable: false });
-
-                        self.qtype.extend({ validatable: false });
-
-                        self.selectedLinkTo.extend({ validatable: false });
-
-                        self.answerOptions.extend({ validatable: false });
-
-                        self.validationExpression.extend({ validatable: false });
-
-                        self.condition.extend({ validatable: false });
-
-                        self.title.extend({ validatable: false });
-
-                        self.errors = ko.validation.group(self);
-
-                        self.wasValidationAttached = false;
-                    } catch(e) {
-                        
-                    }
-                },
                 
                 self.attachValidation = function () {
                     if (self.wasValidationAttached)
