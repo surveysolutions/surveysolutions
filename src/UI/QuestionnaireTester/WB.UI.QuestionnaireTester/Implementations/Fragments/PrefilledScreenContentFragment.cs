@@ -20,6 +20,18 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 {
     public class PrefilledScreenContentFragment : ScreenContentFragment
     {
+        public static PrefilledScreenContentFragment CreatePrefilledScreenContentFragment(Guid questionnaireTemplateId)
+        {
+            var screen = new PrefilledScreenContentFragment();
+
+            Bundle args = new Bundle();
+            args.PutString(SCREEN_ID, Guid.Empty.ToString());
+            args.PutString(INTERVIEW_ID, questionnaireTemplateId.ToString());
+            screen.Arguments = args;
+
+            return screen;
+        }
+
         public PrefilledScreenContentFragment()
         {
         }
@@ -51,7 +63,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
             return new List<IQuestionnaireViewModel>();
         }
 
-        protected override InterviewStatus GetStatus()
+        protected override InterviewStatus GetInterviewStatus()
         {
             return InterviewStatus.InterviewerAssigned;
         }

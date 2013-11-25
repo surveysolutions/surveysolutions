@@ -18,25 +18,36 @@ namespace WB.UI.Shared.Android.Activities
     {
         public override void OnBackPressed()
         {
-            if (isBackWasClickedRecently)
+            if (this.isPressAgaingMessageVisible)
             {
-                pressAgainToast.Cancel();
+                this.HidePressAgainMessage();
                 base.OnBackPressed();
-                return;
             }
+            else
+            {
+                this.ShowPressAgainMessage();
+            }
+        }
 
-            pressAgainToast = Toast.MakeText(this, "Press again to exit", ToastLength.Short);
-            pressAgainToast.Show();
+        private void HidePressAgainMessage()
+        {
+            this.pressAgainToast.Cancel();
+        }
 
-            isBackWasClickedRecently = true;
+        private void ShowPressAgainMessage()
+        {
+            this.pressAgainToast = Toast.MakeText(this, "Press again to exit", ToastLength.Short);
+            this.pressAgainToast.Show();
+
+            this.isPressAgaingMessageVisible = true;
             Task.Factory.StartNew(() =>
             {
                 Thread.Sleep(3000);
-                isBackWasClickedRecently = false;
+                this.isPressAgaingMessageVisible = false;
             });
         }
 
         private Toast pressAgainToast;
-        private bool isBackWasClickedRecently = false;
+        private bool isPressAgaingMessageVisible = false;
     }
 }

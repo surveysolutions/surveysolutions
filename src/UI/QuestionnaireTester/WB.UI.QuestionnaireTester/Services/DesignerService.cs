@@ -23,10 +23,9 @@ namespace WB.UI.QuestionnaireTester.Services
             var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                webExecutor.ExcecuteRestRequestAsync<bool>(
-                    "Authorize",cancellationToken,null,
+                return webExecutor.ExcecuteRestRequestAsync<bool>(
+                    "ValidateCredentials", cancellationToken, null,
                     new HttpBasicAuthenticator(userName, password), "POST");
-                return true;
             }
             catch (Exception e)
             {
@@ -34,17 +33,17 @@ namespace WB.UI.QuestionnaireTester.Services
             }
         }
 
-        public QuestionnaireListSyncPackage  GetQuestionnaireListForCurrentUser(CancellationToken cancellationToken)
+        public QuestionnaireListCommunicationPackage  GetQuestionnaireListForCurrentUser(CancellationToken cancellationToken)
         {
-            if (!CapiTesterApplication.Membership.IsLoggedIn)
+            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return null;
             var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                return webExecutor.ExcecuteRestRequestAsync<QuestionnaireListSyncPackage>(
+                return webExecutor.ExcecuteRestRequestAsync<QuestionnaireListCommunicationPackage>(
                     "GetAllTemplates", cancellationToken, null,
-                    new HttpBasicAuthenticator(CapiTesterApplication.Membership.RemoteUser.UserName,
-                        CapiTesterApplication.Membership.RemoteUser.Password), "GET");
+                    new HttpBasicAuthenticator(CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
+                        CapiTesterApplication.DesignerMembership.RemoteUser.Password), "GET");
             }
             catch (Exception e)
             {
@@ -52,18 +51,18 @@ namespace WB.UI.QuestionnaireTester.Services
             }
         }
 
-        public QuestionnaireSyncPackage GetTemplateForCurrentUser(Guid id, CancellationToken cancellationToken)
+        public QuestionnaireCommunicationPackage GetTemplateForCurrentUser(Guid id, CancellationToken cancellationToken)
         {
-            if (!CapiTesterApplication.Membership.IsLoggedIn)
+            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return null;
 
             var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                var package = webExecutor.ExcecuteRestRequestAsync<QuestionnaireSyncPackage>(
+                var package = webExecutor.ExcecuteRestRequestAsync<QuestionnaireCommunicationPackage>(
                     "GetTemplate", cancellationToken, null,
-                    new HttpBasicAuthenticator(CapiTesterApplication.Membership.RemoteUser.UserName,
-                        CapiTesterApplication.Membership.RemoteUser.Password), "GET", new KeyValuePair<string, string>("id", id.ToString()));
+                    new HttpBasicAuthenticator(CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
+                        CapiTesterApplication.DesignerMembership.RemoteUser.Password), "GET", new KeyValuePair<string, string>("id", id.ToString()));
 
                 return package;
             }

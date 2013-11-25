@@ -20,9 +20,13 @@ namespace WB.UI.QuestionnaireTester
         {
             base.OnCreate(bundle);
 
-            if (this.FinishIfNotLoggedIn())
+            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
+            {
+                this.Finish();
                 return;
-            this.Title = string.Format("List of {0}'s questionnaires", CapiTesterApplication.Membership.RemoteUser.UserName);
+            }
+
+            this.Title = string.Format("List of {0}'s questionnaires", CapiTesterApplication.DesignerMembership.RemoteUser.UserName);
             
             this.listView = new ListView(this);
             this.listView.Adapter = adapter = new QuestionnaireListAdapter(this);

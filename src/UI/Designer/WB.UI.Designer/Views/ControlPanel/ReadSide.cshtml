@@ -40,8 +40,8 @@ Requesting status...
       
     </ul>
    
-    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn " })
-    <button class="btn" type="submit">Rebuild Selected</button>
+    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn ", onclick="return confirmAction()" })
+    <button class="btn" type="submit" onclick="return confirmAction()">Rebuild Selected</button>
     @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn " })
 }
 
@@ -82,7 +82,11 @@ Requesting status...
         $(function () {
             updateReadSideStatusNeverending();
         });
-
+        
+        function confirmAction() {
+            var confirmed = confirm("Are you sure you want to rebuild read layer at " + window.location.host + " ?");
+            return confirmed;
+        }
     </script>
 
 }

@@ -79,8 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(GroupUpdated e)
         {
-            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description,
-                Propagate.None, e.ConditionExpression);
+            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description, e.ConditionExpression);
         }
 
         private void Apply(ImageDeleted e)
@@ -129,17 +128,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(TemplateImported e)
         {
-            var upgrader = QuestionnaireDocumentUpgrader;
-            var document = upgrader.TranslatePropagatePropertiesToRosterProperties(e.Source);
-            this.innerDocument = document;
+            var upgradedDocument = QuestionnaireDocumentUpgrader.TranslatePropagatePropertiesToRosterProperties(e.Source);
+            this.innerDocument = upgradedDocument;
         }
 
         private void Apply(QuestionnaireCloned e)
         {
-            var upgrader = QuestionnaireDocumentUpgrader;
-            var document = upgrader.TranslatePropagatePropertiesToRosterProperties(e.QuestionnaireDocument);
-            this.innerDocument = document;
-
+            var upgradedDocument = QuestionnaireDocumentUpgrader.TranslatePropagatePropertiesToRosterProperties(e.QuestionnaireDocument);
+            this.innerDocument = upgradedDocument;
         }
 
         private void Apply(GroupCloned e)
@@ -587,7 +583,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = groupId,
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
-                Paropagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
@@ -624,7 +619,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = groupId,
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
-                Paropagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 SourceGroupId = sourceGroupId,
@@ -663,7 +657,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
-                Propagateble = null,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId
@@ -1206,7 +1199,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (@group.Propagated != Propagate.AutoPropagated)
                 {
                     throw new QuestionnaireException(DomainExceptionType.TriggerLinksToNotPropagatedGroup,
-                        string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
+                        string.Format("Group {0} cannot be triggered because it is not a roster", group.Title));
                 }
             }
         }
@@ -1654,7 +1647,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (!isInteger)
                     throw new QuestionnaireException(
                     DomainExceptionType.AutoPropagateQuestionCantBeReal,
-                    "AutoPropagate question can't be real");
+                    "Roster size question can't be real");
             }
         }
 
@@ -1662,9 +1655,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (isInteger && countOfDecimalPlaces.HasValue)
             {
-                    throw new QuestionnaireException(
+                throw new QuestionnaireException(
                     DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
-                    "AutoPropagate question can't have decimal places settings");
+                    "Roster size question can't have decimal places settings");
             }
         }
 
