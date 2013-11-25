@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 
             UpdateQuestion(
                 q,
-                data.QuestionType,
+                data.QuestionType == QuestionType.AutoPropagate ? QuestionType.Numeric : data.QuestionType,
                 data.QuestionScope,
                 data.QuestionText,
                 data.StataExportCaption,
@@ -142,6 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 numericQuestion.IsInteger = isInteger ?? false;
                 numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
                 numericQuestion.MaxValue = maxValue;
+                numericQuestion.QuestionType = QuestionType.Numeric;
             }
 
             var multioptionQuestion = question as IMultyOptionsQuestion;
