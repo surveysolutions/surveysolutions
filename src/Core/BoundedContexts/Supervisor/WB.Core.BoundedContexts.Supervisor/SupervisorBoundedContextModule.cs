@@ -25,7 +25,9 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             this.Bind(typeof(IStorageStrategy<>)).To(typeof(ReadSideStorageStrategy<>));
             this.Bind<IFunctionalDenormalizer>().To<InterviewSummaryDenormalizerFunctional>();
-            this.Bind<IReadSideRepositoryWriter<InterviewData>, IReadSideRepositoryReader<InterviewData>>()
+            this.Bind<IFunctionalDenormalizer>().To<InterviewDenormalizerFunctional>();
+
+            this.Bind<IReadSideRepositoryReader<InterviewData>>()
                 .To<InterviewDataRepositoryWriterWithCache>()
                 .InSingletonScope();
         }

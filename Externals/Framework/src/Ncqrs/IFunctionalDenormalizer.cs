@@ -25,7 +25,7 @@ namespace Ncqrs
 
     public abstract class FunctionalDenormalizer<T> : IFunctionalDenormalizer where T : class
     {
-        private  IStorageStrategy<T> storageStrategy;
+        private IStorageStrategy<T> storageStrategy;
         private IStorageStrategy<T> percistantStorageStrategy;
         protected FunctionalDenormalizer(IStorageStrategy<T> storageStrategy)
         {
@@ -103,7 +103,7 @@ namespace Ncqrs
 
         public void FlushDataToPersistentStorage(Guid eventSourceId)
         {
-            storageStrategy.AddOrUpdate(storageStrategy.Select(eventSourceId),eventSourceId);
+            percistantStorageStrategy.AddOrUpdate(storageStrategy.Select(eventSourceId), eventSourceId);
             storageStrategy = percistantStorageStrategy;
         }
 

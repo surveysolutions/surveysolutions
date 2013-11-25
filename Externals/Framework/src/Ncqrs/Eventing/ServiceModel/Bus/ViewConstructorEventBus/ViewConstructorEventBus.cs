@@ -29,20 +29,33 @@ namespace Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus
 
         public void PublishForSingleEventSource(IEnumerable<IPublishableEvent> eventMessages, Guid eventSourceId)
         {
-            foreach (var handler in handlers.Values.Where(h => h.Enabled).ToList())
+            var functionalDenormalizers = handlers.Values.Where(h => h.Handler is IFunctionalDenormalizer).ToList();
+            foreach (var handler in functionalDenormalizers)
             {
                 var functionalHandler = handler.Handler as IFunctionalDenormalizer;
                 if (functionalHandler != null)
                 {
                     functionalHandler.ChangeForSingleEventSource(eventSourceId);
                 }
+              
+            }
 
-                handler.Bus.Publish(eventMessages);
+            foreach (var publishableEvent in eventMessages)
+            {
+                foreach (var handler in functionalDenormalizers)
+                {
+                    handler.Bus.Publish(publishableEvent);
+                }
+            }
 
+            foreach (var handler in functionalDenormalizers)
+            {
+                var functionalHandler = handler.Handler as IFunctionalDenormalizer;
                 if (functionalHandler != null)
                 {
                     functionalHandler.FlushDataToPersistentStorage(eventSourceId);
                 }
+
             }
         }
 
