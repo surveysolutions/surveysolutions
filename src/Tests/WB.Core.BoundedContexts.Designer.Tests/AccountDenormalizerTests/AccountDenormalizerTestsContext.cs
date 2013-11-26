@@ -40,11 +40,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
             }, eventSourceId: userId);
         }
 
-        public static IPublishedEvent<AccountRegistered> CreateCreateAccountRegisteredEventEvent(Guid userId, string userName)
+        public static IPublishedEvent<AccountRegistered> CreateAccountRegisteredEvent(Guid userId, string userName)
         {
             return ToPublishedEvent(new AccountRegistered
             {
-                ProviderUserKey = userId,
                 UserName = userName
             }, eventSourceId: userId);
         }
