@@ -93,20 +93,6 @@
     <Compile Include="Accounts\Events\AccountOnlineUpdated.cs" />
     <Compile Include="Accounts\Events\AccountLocked.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Roles\Commands\RemoveRoleCommand.cs" />
-    <Compile Include="Roles\Commands\CreateRoleCommand.cs" />
-    <Compile Include="Roles\Events\RoleCreated.cs" />
-    <Compile Include="Roles\Events\RoleRemoved.cs" />
-    <Compile Include="Roles\RoleAR.cs" />
-    <Compile Include="Roles\RoleDenormalizer.cs" />
-    <Compile Include="Roles\RoleDocument.cs" />
-    <Compile Include="Roles\RoleListViewFactory.cs" />
-    <Compile Include="Roles\RoleViewFactory.cs" />
-    <Compile Include="Roles\View\RoleListItem.cs" />
-    <Compile Include="Roles\View\RoleListView.cs" />
-    <Compile Include="Roles\View\RoleListViewInputModel.cs" />
-    <Compile Include="Roles\View\RoleView.cs" />
-    <Compile Include="Roles\View\RoleViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
