@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
         {
             accountStorage = new Mock<IReadSideRepositoryWriter<AccountDocument>>();
 
-            accountRegisteredEvent = CreateCreateAccountRegisteredEventEvent(userId: userId, userName: "ADMIN");
+            accountRegisteredEvent = CreateAccountRegisteredEvent(userId: userId, userName: "ADMIN");
 
             denormalizer = CreateAccountDenormalizer(accounts: accountStorage.Object);
         };
