@@ -24,14 +24,14 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
             if (this.Model.Status == InterviewStatus.Completed)
             {
                 CapiTesterApplication.CommandService.Execute(
-                    new RestartInterviewCommand(this.Model.QuestionnaireId, CapiTesterApplication.Membership.CurrentUser.Id, this.etComments.Text));
+                    new RestartInterviewCommand(this.Model.QuestionnaireId, CapiTesterApplication.DesignerMembership.CurrentUser.Id, this.etComments.Text));
 
                 logManipulator.CreateOrReopenDraftRecord(this.Model.QuestionnaireId);
             }
             else
             {
                 CapiTesterApplication.CommandService.Execute(
-                    new CompleteInterviewCommand(this.Model.QuestionnaireId, CapiTesterApplication.Membership.CurrentUser.Id, this.etComments.Text));
+                    new CompleteInterviewCommand(this.Model.QuestionnaireId, CapiTesterApplication.DesignerMembership.CurrentUser.Id, this.etComments.Text));
 
                 logManipulator.CloseDraftRecord(this.Model.QuestionnaireId);
             }*/

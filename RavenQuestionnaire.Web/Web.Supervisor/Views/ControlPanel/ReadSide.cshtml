@@ -39,9 +39,9 @@ Requesting status...
       
     </ul>
    
-    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn " })
-    <button class="btn" type="submit">Rebuild Selected</button>
-    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn " })
+    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn ", onclick="return confirmAction()" })
+    <button class="btn" type="submit"  onclick="return confirmAction()" >Rebuild Selected</button>
+    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn "})
 }
 
 @functions{
@@ -60,7 +60,10 @@ Requesting status...
 
 
     <script type="text/javascript">
-
+        function confirmAction() {
+            var confirmed = confirm("Are you sure you want to rebuild read layer at " + window.location.host+ " ?");
+            return confirmed;
+        }
         function updateReadSideStatus() {
             return $.ajax({
                 url: '@Url.Action("GetReadSideStatus")',

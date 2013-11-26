@@ -19,26 +19,32 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             this.container = new Dictionary<Guid, ExportedHeaderItem>();
             this.questionnaireReferences = questionnaireReferences;
-            this.maxValuesForRosterSizeQuestions =
-                document.Find<IAutoPropagateQuestion>(question => true)
-                    .ToDictionary(question => question.PublicKey, question => question.MaxValue);
-
-            var rosterSizeQuestionIds =
-                document.Find<IGroup>(group => group.IsRoster && group.RosterSizeQuestionId.HasValue)
-                    .Select(group => group.RosterSizeQuestionId.Value);
-
-            document.Find<IQuestion>(question => rosterSizeQuestionIds.Contains(question.PublicKey))
-                .ToList()
-                .ForEach(this.addMaxValueToMaxValuesForRosterSizeQuestionsIfQuestionIsRosterSizeQuestion);
+            this.maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(document);
         }
 
-        private void addMaxValueToMaxValuesForRosterSizeQuestionsIfQuestionIsRosterSizeQuestion(IQuestion question)
+        private static Dictionary<Guid, int> GetMaxValuesForRosterSizeQuestions(QuestionnaireDocument document)
         {
-            var numericQuestion = question as INumericQuestion;
-            if (numericQuestion != null)
+            IEnumerable<IAutoPropagateQuestion> autoPropagateQuestions = document.Find<IAutoPropagateQuestion>(question => true);
+
+            IEnumerable<INumericQuestion> rosterSizeQuestions =
+                document
+                    .Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeQuestionId.HasValue)
+                    .Select(@group => document.Find<INumericQuestion>(@group.RosterSizeQuestionId.Value))
+                    .Where(question => question != null && question.MaxValue.HasValue);
+
+            var collectedMaxValues = new Dictionary<Guid, int>();
+
+            foreach (IAutoPropagateQuestion autoPropagateQuestion in autoPropagateQuestions)
             {
-                this.maxValuesForRosterSizeQuestions.Add(question.PublicKey, numericQuestion.MaxValue.Value);
+                collectedMaxValues.Add(autoPropagateQuestion.PublicKey, autoPropagateQuestion.MaxValue);
             }
+
+            foreach (INumericQuestion rosterSizeQuestion in rosterSizeQuestions)
+            {
+                collectedMaxValues.Add(rosterSizeQuestion.PublicKey, rosterSizeQuestion.MaxValue.Value);
+            }
+
+            return collectedMaxValues;
         }
 
         public void Add(IQuestion question)

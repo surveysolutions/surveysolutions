@@ -12,6 +12,7 @@ using Main.Core.Utility;
 using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Shared.Android.Adapters;
+using WB.UI.Shared.Android.Helpers;
 using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Adapters
@@ -19,8 +20,6 @@ namespace WB.UI.QuestionnaireTester.Adapters
     public class QuestionnaireListAdapter : BaseAdapter<QuestionnaireListItem>
     {
         private Activity activity;
-        private CancellationToken cancellationToken;
-        private ProgressBar progressDialog;
         private IList<QuestionnaireListItem> unfilteredList;
         protected IList<QuestionnaireListItem> items;
 
@@ -32,49 +31,31 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
             this.activity = activity;
 
-            this.AddLoader();
-            
-            var tokenSource2 = new CancellationTokenSource();
-            this.cancellationToken = tokenSource2.Token;
-            Task.Factory.StartNew(UploadQuestionnairesFromDesigner, this.cancellationToken);
+            activity.WaitForLongOperation(UploadQuestionnairesFromDesigner);
         }
 
-        private void AddLoader()
+        protected void UploadQuestionnairesFromDesigner(CancellationToken cancellationToken)
         {
-            this.progressDialog = new ProgressBar(activity);
+            var questionnaireListPackage = CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(cancellationToken);
 
-            activity.AddContentView(this.progressDialog,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent));
-
-            Display display = activity.WindowManager.DefaultDisplay;
-            Point size = new Point();
-            display.GetSize(size);
-
-            this.progressDialog.SetX(size.X/2);
-            this.progressDialog.SetY(size.Y/2);
-        }
-
-        protected void UploadQuestionnairesFromDesigner()
-        {
             unfilteredList = items =
-                CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(cancellationToken).Items;
-
+                questionnaireListPackage == null
+                    ? new List<QuestionnaireListItem>()
+                    : questionnaireListPackage.Items;
            
             activity.RunOnUiThread(() =>
             {
                 if (items == null)
                 {
-                    CapiTesterApplication.Membership.LogOff();
+                    CapiTesterApplication.DesignerMembership.LogOff();
                 }
                 this.NotifyDataSetChanged();
-                progressDialog.Visibility = ViewStates.Gone;
-                
             });
         }
 
         public void Update()
         {
-            Task.Factory.StartNew(UploadQuestionnairesFromDesigner, this.cancellationToken);
+            activity.WaitForLongOperation(UploadQuestionnairesFromDesigner, false);
         }
 
         public void Query(string searchQuery)

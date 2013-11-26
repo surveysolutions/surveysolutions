@@ -40,6 +40,9 @@
                 else if (!isSettingsEmpty && _.isNumber(dto.Settings.CountOfDecimalPlaces)) {
                     item.selectedOption.extend({ precision: dto.Settings.CountOfDecimalPlaces });
                 }
+                if (!isSettingsEmpty && _.isNumber(dto.Settings.MaxValue)) {
+                    item.selectedOption.extend({ max: dto.Settings.MaxValue });
+                }
                 break;
             case "DateTime":
                 item.selectedOption(new Date());

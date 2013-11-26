@@ -28,14 +28,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Adapters
 
         protected override ScreenContentFragment CreateContentScreen(InterviewItemId screenId, Guid questionnaireId)
         {
-            ScreenContentFragment myFragment = new TesterScreenContentFragment();
-
-            Bundle args = new Bundle();
-            args.PutString(ScreenContentFragment.SCREEN_ID, screenId.ToString());
-            args.PutString(ScreenContentFragment.QUESTIONNAIRE_ID, questionnaireId.ToString());
-            myFragment.Arguments = args;
-
-            return myFragment;
+            return TesterScreenContentFragment.CreateTesterScreenContentFragment(questionnaireId, screenId);
         }
 
         protected override StatisticsContentFragment CreateStatisticsScreen(Guid questionnaireId)
