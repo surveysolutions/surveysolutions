@@ -158,7 +158,7 @@ namespace Web.Supervisor.App_Start
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var bus = new ViewConstructorEventBus();
+            var bus = new ViewConstructorEventBus(NcqrsEnvironment.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IViewConstructorEventBus>().ToConstant(bus);

@@ -118,7 +118,7 @@ namespace WB.UI.Designer.App_Start
 
         private static ViewConstructorEventBus CreateEventBus(StandardKernel kernel)
         {
-            var bus = new ViewConstructorEventBus();
+            var bus = new ViewConstructorEventBus(NcqrsEnvironment.Get<IEventStore>());
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

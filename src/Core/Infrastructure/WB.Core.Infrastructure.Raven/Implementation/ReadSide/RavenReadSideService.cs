@@ -154,16 +154,13 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 try
                 {
-                    this.DisableHandlersWhichAreNotInList(handlers);
-
                     this.EnableCacheInRepositoryWriters(writers);
 
-                    republishDetails = this.RepublishAllEvents();
+                    republishDetails = this.RepublishAllEvents(handlers);
                 }
                 finally
                 {
                     this.DisableCacheInRepositoryWriters(writers);
-                    this.EnableHandlerAllHandlers();
 
                     UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
                 }
@@ -201,19 +198,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             return result.ToArray();
         }
 
-        private void EnableHandlerAllHandlers()
-        {
-          this.eventBus.EnableAllHandlers();
-        }
-
-        private void DisableHandlersWhichAreNotInList(IEventHandler[] handlers)
-        {
-            foreach (var eventHandler in handlers)
-            {
-                this.eventBus.DisableEventHandler(eventHandler.GetType());    
-            }
-        }
-
         private IEnumerable<IRavenReadSideRepositoryWriter> GetListOfWritersForEnableCache(Type[] viewTypes)
         {
             return this.writerRegistry.GetAll().Where(w => viewTypes.Contains(w.ViewType)).ToArray();
@@ -234,7 +218,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 {
                     this.EnableCacheInAllRepositoryWriters();
 
-                    republishDetails = this.RepublishAllEvents();
+                    republishDetails = this.RepublishAllEvents(eventBus.GetAllRegistredEventHandlers());
                 }
                 finally
                 {
@@ -400,7 +384,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private string RepublishAllEvents()
+        private string RepublishAllEvents(IEnumerable<IEventHandler> handlers)
         {
             int processedEventsCount = 0;
             int failedEventsCount = 0;
@@ -430,7 +414,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                     try
                     {
-                        this.eventBus.Publish(@event);
+                        this.eventBus.PublishEventsToHandlers(@event, handlers);
                     }
                     catch (Exception exception)
                     {

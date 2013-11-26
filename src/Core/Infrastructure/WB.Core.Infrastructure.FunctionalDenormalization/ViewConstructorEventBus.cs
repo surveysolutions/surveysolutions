@@ -3,16 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using Ncqrs.Eventing.Storage;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization
 {
     public class ViewConstructorEventBus : IViewConstructorEventBus
     {
         private readonly Dictionary<Type, EventHandlerWrapper> handlers = new Dictionary<Type, EventHandlerWrapper>();
+        private readonly IEventStore eventStore;
+
+        public ViewConstructorEventBus(IEventStore eventStore)
+        {
+            this.eventStore = eventStore;
+        }
 
         public void Publish(IPublishableEvent eventMessage)
         {
-            foreach (var handler in this.handlers.Values.Where(h => h.Enabled).ToList())
+            foreach (var handler in this.handlers.Values.ToList())
             {
                 handler.Bus.Publish(eventMessage);
             }
@@ -20,14 +27,19 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
 
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
-            foreach (var handler in this.handlers.Values.Where(h=>h.Enabled).ToList())
+            foreach (var handler in this.handlers.Values.ToList())
             {
                 handler.Bus.Publish(eventMessages);
             }
         }
 
-        public void PublishForSingleEventSource(IEnumerable<IPublishableEvent> eventMessages, Guid eventSourceId)
+        public void PublishForSingleEventSource(Guid eventSourceId, long sequence = 0)
         {
+            var eventMessages = this.eventStore.ReadFrom(eventSourceId, sequence + 1, long.MaxValue);
+
+            if (eventMessages.IsEmpty)
+                return;
+
             var functionalDenormalizers = this.handlers.Values.Where(h => h.Handler is IFunctionalDenormalizer).ToList();
             foreach (var handler in functionalDenormalizers)
             {
@@ -36,7 +48,6 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
                 {
                     functionalHandler.ChangeForSingleEventSource(eventSourceId);
                 }
-              
             }
 
             foreach (var publishableEvent in eventMessages)
@@ -54,23 +65,21 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
                 {
                     functionalHandler.FlushDataToPersistentStorage(eventSourceId);
                 }
-
             }
         }
 
-        public void DisableEventHandler(Type handlerType)
-        {
-            if (this.handlers.ContainsKey(handlerType))
-                return;
-            this.handlers[handlerType].DisableBus();
-        }
 
-        public void EnableAllHandlers()
+        public void PublishEventsToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlersForPublish)
         {
-            foreach (var handler in this.handlers.Values)
+            foreach (var bus in this.GetListOfBusesForRebuild(handlersForPublish))
             {
-                handler.EnableBus();
+                bus.Publish(eventMessage);
             }
+        }
+
+        private IEnumerable<InProcessEventBus> GetListOfBusesForRebuild(IEnumerable<IEventHandler> enabledHandlers)
+        {
+            return this.handlers.Values.Where(h => enabledHandlers.Contains(h.Handler)).Select(h=>h.Bus).ToList();
         }
 
         public void AddHandler(IEventHandler handler)
