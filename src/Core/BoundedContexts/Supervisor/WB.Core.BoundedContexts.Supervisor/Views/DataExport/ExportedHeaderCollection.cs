@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                 document
                     .Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeQuestionId.HasValue)
                     .Select(@group => document.Find<INumericQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null && question.MaxValue.HasValue);
+                    .Where(question => question != null && question.MaxValue.HasValue).Distinct();
 
             var collectedMaxValues = new Dictionary<Guid, int>();
 
