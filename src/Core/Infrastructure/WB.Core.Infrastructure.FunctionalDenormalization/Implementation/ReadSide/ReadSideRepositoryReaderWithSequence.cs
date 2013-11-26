@@ -1,6 +1,7 @@
 using System;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -43,16 +44,12 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
         private bool IsViewWasUpdatedFromEventStream(Guid interviewId, long sequence)
         {
             this.additionalEventChecker(interviewId,sequence);
-            var events = this.eventStore.ReadFrom(interviewId, sequence + 1, long.MaxValue);
 
-            if (events.IsEmpty)
-                return false;
-
-            var bus = NcqrsEnvironment.Get<IEventBus>() as ViewConstructorEventBus;
+            var bus = NcqrsEnvironment.Get<IEventBus>() as IViewConstructorEventBus;
             if (bus == null)
                 return false;
 
-            bus.PublishForSingleEventSource(events, interviewId);
+            bus.PublishForSingleEventSource(interviewId, sequence);
             return true;
         }
     }
