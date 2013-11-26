@@ -25,14 +25,9 @@ namespace WB.UI.Shared.Android.RestUtils
 
         public void ExcecuteRestRequest(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams)
         {
-            var restClient = new RestClient(this.baseAddress);
+            var restClient = BuildRestClient(authenticator);
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-            var request = this.BuildRequest(url, additionalParams, null, GetRequestMethod(method));
-
-            if (authenticator != null)
-                restClient.Authenticator = authenticator;
+            var request = BuildRequest(url, additionalParams, null, GetRequestMethod(method));
 
             var response = restClient.Execute(request);
 
@@ -51,14 +46,9 @@ namespace WB.UI.Shared.Android.RestUtils
 
         public T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams)
         {
-            var restClient = new RestClient(this.baseAddress);
+            var restClient = BuildRestClient(authenticator);
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-            var request = this.BuildRequest(url, additionalParams, null, GetRequestMethod(method));
-
-            if (authenticator != null)
-                restClient.Authenticator = authenticator;
+            var request = BuildRequest(url, additionalParams, null, GetRequestMethod(method));
 
             var response = restClient.Execute(request);
 
@@ -68,14 +58,9 @@ namespace WB.UI.Shared.Android.RestUtils
         public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator, string method,
             params KeyValuePair<string, string>[] additionalParams)
         {
-            var restClient = new RestClient(this.baseAddress);
+            var restClient = BuildRestClient(authenticator);
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-            var request = this.BuildRequest(url, additionalParams, requestBody, GetRequestMethod(method));
-
-            if (authenticator != null)
-                restClient.Authenticator = authenticator;
+            var request = BuildRequest(url, additionalParams, requestBody, GetRequestMethod(method));
             
             IRestResponse response = null;
 
@@ -91,6 +76,17 @@ namespace WB.UI.Shared.Android.RestUtils
             }
 
             return this.HandlerResponse<T>(response);
+        }
+
+        private RestClient BuildRestClient(IAuthenticator authenticator)
+        {
+            var restClient = new RestClient(this.baseAddress);
+
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+            if (authenticator != null)
+                restClient.Authenticator = authenticator;
+            return restClient;
         }
 
         private Method GetRequestMethod(string method)

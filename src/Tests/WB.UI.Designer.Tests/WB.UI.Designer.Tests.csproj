@@ -162,10 +162,6 @@
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Views\WB.UI.Designer.Views.csproj">
-      <Project>{4489F996-D379-43D1-8932-3C48D59D9AB5}</Project>
-      <Name>WB.UI.Designer.Views</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
       <Name>WB.UI.Designer</Name>

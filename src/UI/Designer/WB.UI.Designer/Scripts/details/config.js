@@ -100,7 +100,7 @@
             warnings = {
                 propagatedGroupCantBecomeChapter: {
                     title: "Can't move",
-                    text: "AutoPropagate group can't become a chapter"
+                    text: "Roster can't become a chapter"
                 },
                 cantMoveQuestionOutsideGroup: {
                     title: "Can't move",
@@ -108,7 +108,7 @@
                 },
                 cantMoveGroupIntoPropagatedGroup: {
                     title: "Can't move",
-                    text: "You can't move a group into a propagated group"
+                    text: "You can't move a group into a roster"
                 },
                 cantMoveUnsavedItem: {
                     title: "Can't move",
@@ -124,21 +124,19 @@
                 },
                 cantMoveAutoPropagatedGroupOutsideGroup: {
                     title: "Can't move group",
-                    text: "You can't move an AutoPropagate group outside any chapter"
+                    text: "You can't move a roster outside any chapter"
                 },
                 cantMoveFeaturedQuestionIntoAutoGroup: {
                     title: "Can't move question",
-                    text: "You can't move a pre-filled question into a propagated group"
+                    text: "You can't move a pre-filled question into a roster"
                 },
                 cantMoveAutoQuestionIntoAutoGroup: {
                     title: "Can't move question",
-
-                    text: "You can't move an AutoPropagate question into a propagated group"
+                    text: "You can't move an roster size question into a roster"
                 },
                 cantMoveHeadQuestionOutsideAutoGroup: {
                     title: "Can't move question",
-
-                    text: "You can't move a head question outside of any propagated group"
+                    text: "You can't move a head question outside of any roster"
                 },
                 savedData: 'Data saved successfully',
                 weWillClearCondition: {

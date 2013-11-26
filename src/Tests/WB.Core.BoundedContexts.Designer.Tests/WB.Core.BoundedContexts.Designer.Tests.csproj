@@ -62,6 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountDenormalizerTests\AccountDenormalizerTestsContext.cs" />
+    <Compile Include="AccountDenormalizerTests\when_handling_AccountUpdated_event_and_user_name_equals__ADMIN__.cs" />
+    <Compile Include="AccountDenormalizerTests\when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
@@ -85,7 +88,9 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_and_triggers_are_not_empty.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionnaireCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_TemplateImported_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_QuestionChangeEvent_with_Autopropagate_question_type_is_come.cs" />
