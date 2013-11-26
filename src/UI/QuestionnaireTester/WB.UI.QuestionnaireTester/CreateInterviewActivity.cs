@@ -52,12 +52,7 @@ namespace WB.UI.QuestionnaireTester
 
             SetContentView(Resource.Layout.CreateInterview);
 
-            var screen = new PrefilledScreenContentFragment();
-
-            Bundle args = new Bundle();
-            args.PutString(ScreenContentFragment.SCREEN_ID, Guid.Empty.ToString());
-            args.PutString(ScreenContentFragment.QUESTIONNAIRE_ID, QuestionnaireId.ToString());
-            screen.Arguments = args;
+            var screen = PrefilledScreenContentFragment.CreatePrefilledScreenContentFragment(QuestionnaireId);
 
             SupportFragmentManager.BeginTransaction().Add(Resource.Id.flFragmentHolder, screen).Commit();
 

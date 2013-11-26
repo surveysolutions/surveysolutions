@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -15,6 +16,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.UI.Capi.Implementations.Activities;
+using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.Capi
 {
@@ -22,24 +24,15 @@ namespace WB.UI.Capi
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : Activity
     {
-        private Action<Guid> restore; 
 
         protected override void OnCreate(Bundle bundle)
         {
-            this.restore = this.Restore;
             base.OnCreate(bundle);
-            var pb = new ProgressBar(this);
-            this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.restore.BeginInvoke(Guid.Parse(this.Intent.GetStringExtra("publicKey")), this.Callback, this.restore);
-        }
-        private void Callback(IAsyncResult asyncResult)
-        {
-            var asyncAction = (Action<Guid>)asyncResult.AsyncState;
-            asyncAction.EndInvoke(asyncResult);
+            this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
         }
 
-        protected void Restore(Guid publicKey)
+        protected void Restore(CancellationToken ct, Guid publicKey)
         {
             this.CheckAndRestoreFromSyncPackage(publicKey);
             

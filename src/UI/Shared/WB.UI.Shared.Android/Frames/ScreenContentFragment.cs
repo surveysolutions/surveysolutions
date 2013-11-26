@@ -20,10 +20,10 @@ namespace WB.UI.Shared.Android.Frames
 
         protected abstract QuestionnaireScreenViewModel GetScreenViewModel();
         protected abstract List<IQuestionnaireViewModel> GetBreadcrumbs();
-        protected abstract InterviewStatus GetStatus();
+        protected abstract InterviewStatus GetInterviewStatus();
 
         public const string SCREEN_ID = "screenId";
-        public const string QUESTIONNAIRE_ID = "questionnaireId";
+        public const string INTERVIEW_ID = "interviewId";
         protected View top;
 
         public ScreenContentFragment()
@@ -37,6 +37,16 @@ namespace WB.UI.Shared.Android.Frames
                 // Currently in a layout without a container, so no
                 // reason to create our view.
                 return null;
+            }
+
+            if (!this.Arguments.ContainsKey(INTERVIEW_ID))
+            {
+                throw new ArgumentException("Interview id is missing");
+            }
+
+            if (!this.Arguments.ContainsKey(SCREEN_ID))
+            {
+                throw new ArgumentException("Screen id is missing");
             }
 
             this.top = inflater.Inflate(Resource.Layout.ScreenContentFragment, null);
@@ -56,7 +66,7 @@ namespace WB.UI.Shared.Android.Frames
             this.llTop.AddView(breadcrumbs);
 
             this.llContent.Adapter = new ScreenContentAdapter(this.Model, this.Activity, this.Model.QuestionnaireId,
-               GetStatus(), this.groupView_ScreenChanged, this.GetQuestionViewFactory());
+               this.GetInterviewStatus(), this.groupView_ScreenChanged, this.GetQuestionViewFactory());
             this.llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             this.llContent.ItemsCanFocus = true;
             this.llContent.ScrollingCacheEnabled = false;
@@ -122,7 +132,7 @@ namespace WB.UI.Shared.Android.Frames
         }
 
         protected Guid QuestionnaireId {
-            get { return Guid.Parse(this.Arguments.GetString(QUESTIONNAIRE_ID)); }
+            get { return Guid.Parse(this.Arguments.GetString(INTERVIEW_ID)); }
         }
 
         protected InterviewItemId ScreenId

@@ -202,7 +202,6 @@ namespace Main.Core.Documents
             {
                 var group = groupParent.Children.First(child => IsGroupWithSpecifiedId(child, groupId)) as IGroup;
                 RemoveChildGroupBySpecifiedId(groupParent, groupId);
-                this.UpdateAutoPropagateQuestionsTriggersIfNeeded(group);
             }
             else
             {
@@ -210,14 +209,10 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string description,
-            Propagate kindOfPropagation, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string description, string conditionExpression)
         {
             this.UpdateGroup(groupId, group =>
             {
-                this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
-
-                @group.Propagated = kindOfPropagation;
                 @group.ConditionExpression = conditionExpression;
                 @group.Description = description;
                 @group.Update(title);
@@ -230,18 +225,6 @@ namespace Main.Core.Documents
 
             if (@group != null)
                 update(@group);
-        }
-
-        private void UpdateAutoPropagateQuestionsTriggersIfNeeded(IGroup group, Propagate newPropagationKind = Propagate.None)
-        {
-            if (group.Propagated == Propagate.AutoPropagated && newPropagationKind == Propagate.None)
-            {
-                var questions = this.GetAllQuestions().Where(question => question is IAutoPropagate).Cast<IAutoPropagate>().ToList();
-                foreach (var question in questions.Where(question => question.Triggers.Contains(group.PublicKey)))
-                {
-                    question.Triggers.Remove(group.PublicKey);
-                }
-            }
         }
 
         public void RemoveQuestion(Guid questionId)

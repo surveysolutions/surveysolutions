@@ -51,7 +51,8 @@ namespace Core.Supervisor.Views.TakeNew
                 this.Settings = new
                 {
                     numericQuestion.IsInteger,
-                    numericQuestion.CountOfDecimalPlaces
+                    numericQuestion.CountOfDecimalPlaces,
+                    numericQuestion.MaxValue
                 };
             }
 
