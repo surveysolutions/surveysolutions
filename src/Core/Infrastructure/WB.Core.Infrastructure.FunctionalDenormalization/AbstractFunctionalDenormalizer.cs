@@ -1,63 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
+using WB.Core.Infrastructure.ReadSide.Repository;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Ncqrs
+namespace WB.Core.Infrastructure.FunctionalDenormalization
 {
-    public interface IFunctionalDenormalizer : IEventHandler
-    {
-        void Handle(IPublishableEvent evt);
-        void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus);
-        void ChangeForSingleEventSource(Guid eventSourceId);
-        void FlushDataToPersistentStorage(Guid eventSourceId);
-    }
-
-    public interface IStorageStrategy<T> where T : class
-    {
-        T Select(Guid id);
-        void AddOrUpdate(T projection, Guid id);
-        void Delete(T projection, Guid id);
-    }
-
-    public abstract class FunctionalDenormalizer<T> : IFunctionalDenormalizer where T : class
+    public abstract class AbstractFunctionalDenormalizer<T> : IFunctionalDenormalizer where T : class, IReadSideRepositoryEntity
     {
         private IStorageStrategy<T> storageStrategy;
         private IStorageStrategy<T> percistantStorageStrategy;
-        protected FunctionalDenormalizer(IStorageStrategy<T> storageStrategy)
+        protected AbstractFunctionalDenormalizer(IReadSideRepositoryWriter<T> readsideRepositoryWriter)
         {
-            this.storageStrategy = storageStrategy;
+            this.storageStrategy = new ReadSideStorageStrategy<T>(readsideRepositoryWriter);
         }
 
         public void Handle(IPublishableEvent evt)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-            if (IsUpgrader(evt))
+            if (this.IsUpgrader(evt))
             {
-                T currentState = storageStrategy.Select(evt.EventSourceId);
-                var newState = (T)this.GetType().GetMethod("Update", new Type[] { typeof(T), eventType }).Invoke(this, new object[] { currentState, CreatePublishedEvent(evt) });
-                storageStrategy.AddOrUpdate(newState, evt.EventSourceId);
+                T currentState = this.storageStrategy.Select(evt.EventSourceId);
+                var newState = (T)this.GetType().GetMethod("Update", new Type[] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                this.storageStrategy.AddOrUpdate(newState, evt.EventSourceId);
                 return;
             }
 
-            if (IsCreator(evt))
+            if (this.IsCreator(evt))
             {
                 var newObject =
                     (T)this.GetType()
-                            .GetMethod("Create", new Type[] { eventType })
-                            .Invoke(this, new object[] { CreatePublishedEvent(evt) });
-                storageStrategy.AddOrUpdate(newObject, evt.EventSourceId);
+                        .GetMethod("Create", new Type[] { eventType })
+                        .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
+                this.storageStrategy.AddOrUpdate(newObject, evt.EventSourceId);
                 return;
             }
 
-            if (IsDeleter(evt))
+            if (this.IsDeleter(evt))
             {
-                T currentState = storageStrategy.Select(evt.EventSourceId);
-                this.GetType().GetMethod("Delete", new Type[] { eventType }).Invoke(this, new object[] { currentState, CreatePublishedEvent(evt) });
-                storageStrategy.AddOrUpdate(currentState, evt.EventSourceId);
+                T currentState = this.storageStrategy.Select(evt.EventSourceId);
+                this.GetType().GetMethod("Delete", new Type[] { eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                this.storageStrategy.AddOrUpdate(currentState, evt.EventSourceId);
             }
         }
 
@@ -96,15 +82,15 @@ namespace Ncqrs
 
         public void ChangeForSingleEventSource(Guid eventSourceId)
         {
-            var single = new SingleEventSourceStorageStrategy<T>(storageStrategy.Select(eventSourceId));
-            percistantStorageStrategy = storageStrategy;
-            storageStrategy = single;
+            var single = new SingleEventSourceStorageStrategy<T>(this.storageStrategy.Select(eventSourceId));
+            this.percistantStorageStrategy = this.storageStrategy;
+            this.storageStrategy = single;
         }
 
         public void FlushDataToPersistentStorage(Guid eventSourceId)
         {
-            percistantStorageStrategy.AddOrUpdate(storageStrategy.Select(eventSourceId), eventSourceId);
-            storageStrategy = percistantStorageStrategy;
+            this.percistantStorageStrategy.AddOrUpdate(this.storageStrategy.Select(eventSourceId), eventSourceId);
+            this.storageStrategy = this.percistantStorageStrategy;
         }
 
         protected PublishedEvent CreatePublishedEvent(IPublishableEvent evt)
@@ -137,45 +123,6 @@ namespace Ncqrs
         public Type[] BuildsViews
         {
             get { return new[] { typeof(T) }; }
-        }
-    }
-
-    public interface IUpdateHandler<T, TEvt>
-    {
-        T Update(T currentState, IPublishedEvent<TEvt> evnt);
-    }
-
-    public interface ICreateHandler<T, TEvt>
-    {
-        T Create(IPublishedEvent<TEvt> evnt);
-    }
-
-    public interface IDeleteHandler<T, TEvt>
-    {
-        void Delete(T currentState, IPublishedEvent<TEvt> evnt);
-    }
-
-    internal class SingleEventSourceStorageStrategy<T> : IStorageStrategy<T> where T : class
-    {
-        private  T view;
-        public SingleEventSourceStorageStrategy(T view)
-        {
-            this.view = view;
-        }
-
-        public T Select(Guid id)
-        {
-            return view;
-        }
-
-        public void AddOrUpdate(T projection, Guid id)
-        {
-            view = projection;
-        }
-
-        public void Delete(T projection, Guid id)
-        {
-            view = null;
         }
     }
 }

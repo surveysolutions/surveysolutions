@@ -319,9 +319,6 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\ServiceModel\Bus\ViewConstructorEventBus\IViewConstructorEventBus.cs">
       <Link>Eventing\ServiceModel\Bus\ViewConstructorEventBus\IViewConstructorEventBus.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\ServiceModel\Bus\ViewConstructorEventBus\ViewConstructorEventBus.cs">
-      <Link>Eventing\ServiceModel\Bus\ViewConstructorEventBus\ViewConstructorEventBus.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\EntitySourcedEventBase.cs">
       <Link>Eventing\Sourcing\EntitySourcedEventBase.cs</Link>
     </Compile>
@@ -499,9 +496,6 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\IClock.cs">
       <Link>IClock.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\IFunctionalDenormalizer.cs">
-      <Link>IFunctionalDenormalizer.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\InternalExtensions.cs">
       <Link>InternalExtensions.cs</Link>
     </Compile>
@@ -548,7 +542,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" />
+      <UserProperties ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

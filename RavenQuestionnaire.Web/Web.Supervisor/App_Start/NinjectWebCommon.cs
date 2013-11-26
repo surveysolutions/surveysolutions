@@ -25,6 +25,7 @@ using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
