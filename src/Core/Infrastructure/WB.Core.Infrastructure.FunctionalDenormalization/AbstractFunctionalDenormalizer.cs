@@ -77,7 +77,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
                 var evntType = eventParameter.GetGenericArguments()[0];
                 NcqrsEnvironment.RegisterEventDataType(evntType);
                 oldEventBus.RegisterHandler(evntType, this.Handle);
-            }
+            } 
         }
 
         public void ChangeForSingleEventSource(Guid eventSourceId)
