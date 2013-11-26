@@ -50,14 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountAR.cs" />
-    <Compile Include="Accounts\Commands\AddRoleToAccountCommnad.cs" />
+    <Compile Include="Accounts\Commands\AccountCommandBase.cs" />
+    <Compile Include="Accounts\Commands\AddRoleToAccountCommand.cs" />
     <Compile Include="Accounts\Commands\ChangePasswordResetTokenCommand.cs" />
     <Compile Include="Accounts\Commands\ConfirmAccountCommand.cs" />
     <Compile Include="Accounts\Commands\ChangeOnlineAccountCommand.cs" />
     <Compile Include="Accounts\Commands\ChangePasswordAccountCommand.cs" />
     <Compile Include="Accounts\Commands\ChangePasswordQuestionAndAnswerAccountCommand.cs" />
     <Compile Include="Accounts\Commands\LoginFailedAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\RemoveRoleFromAccountCommnad.cs" />
+    <Compile Include="Accounts\Commands\RemoveRoleFromAccountCommand.cs" />
     <Compile Include="Accounts\Commands\ValidateAccountCommand.cs" />
     <Compile Include="Accounts\Commands\UpdateAccountCommand.cs" />
     <Compile Include="Accounts\Commands\RegisterAccountCommand.cs" />

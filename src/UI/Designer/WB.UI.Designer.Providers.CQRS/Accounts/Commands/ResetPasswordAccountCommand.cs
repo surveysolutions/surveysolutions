@@ -1,26 +1,20 @@
-﻿using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+﻿using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using System;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(AccountAR), "ResetPassword")]
-    public class ResetPasswordAccountCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof (AccountAR), "ResetPassword")]
+    public class ResetPasswordAccountCommand : AccountCommandBase
     {
-        public ResetPasswordAccountCommand() {}
-
-        public ResetPasswordAccountCommand(Guid publicKey, string password, string passwordSalt)
+        public ResetPasswordAccountCommand(Guid accountId, string password, string passwordSalt)
+            : base(accountId)
         {
-            PublicKey = publicKey;
             Password = password;
             PasswordSalt = passwordSalt;
         }
 
-        [AggregateRootId]
-        public Guid PublicKey { get; set; }
-
-        public string Password { get; set; }
-        public string PasswordSalt { get; set; }
+        public string Password { get; private set; }
+        public string PasswordSalt { get; private set; }
     }
 }

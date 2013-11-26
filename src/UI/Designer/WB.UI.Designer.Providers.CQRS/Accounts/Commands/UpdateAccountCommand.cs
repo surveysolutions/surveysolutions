@@ -1,19 +1,16 @@
-﻿using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+﻿using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using System;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(AccountAR), "Update")]
-    public class UpdateAccountCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof (AccountAR), "Update")]
+    public class UpdateAccountCommand : AccountCommandBase
     {
-        public UpdateAccountCommand() {}
-
-        public UpdateAccountCommand(Guid publicKey, string userName, bool isLockedOut, string passwordQuestion,
+        public UpdateAccountCommand(Guid accountId, string userName, bool isLockedOut, string passwordQuestion,
             string email, bool isConfirmed, string comment)
+            : base(accountId)
         {
-            PublicKey = publicKey;
             UserName = userName;
             IsLockedOut = isLockedOut;
             PasswordQuestion = passwordQuestion;
@@ -22,14 +19,11 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
             Comment = comment;
         }
 
-        [AggregateRootId]
-        public Guid PublicKey { get; set; }
-
-        public string UserName { get; set; }
-        public bool IsLockedOut { get; set; }
-        public string PasswordQuestion { get; set; }
-        public string Email { get; set; }
-        public bool IsConfirmed { get; set; }
-        public string Comment { get; set; }
+        public string UserName { get; private set; }
+        public bool IsLockedOut { get; private set; }
+        public string PasswordQuestion { get; private set; }
+        public string Email { get; private set; }
+        public bool IsConfirmed { get; private set; }
+        public string Comment { get; private set; }
     }
 }
