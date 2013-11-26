@@ -135,6 +135,7 @@
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
+    <Compile Include="Views\Account\AccountDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
