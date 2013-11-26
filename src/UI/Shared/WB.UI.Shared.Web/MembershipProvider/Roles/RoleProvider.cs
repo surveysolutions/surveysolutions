@@ -166,17 +166,17 @@
         }
 
         /// <summary>
-        /// Adds the specified user names to the specified roles for the configured applicationName.
+        /// Adds the specified user ids to the specified roles for the configured applicationName.
         /// </summary>
-        /// <param name="usernames">A string array of user names to be added to the specified roles. </param><param name="roleNames">A string array of the role names to add the specified user names to.</param>
-        public override void AddUsersToRoles(string[] usernames, string[] roleNames)
+        /// <param name="userids">A string array of user ids to be added to the specified roles. </param><param name="roleNames">A string array of the role names to add the specified user names to.</param>
+        public override void AddUsersToRoles(string[] userids, string[] roleNames)
         {
             foreach (var roleName in roleNames.Where(roleName => !this.RoleExists(roleName)))
             {
                 throw new ProviderException("Role '" + roleName + "' do not exist.");
             }
 
-            foreach (var username in usernames.Where(username => username.Contains(",")))
+            foreach (var username in userids.Where(username => username.Contains(",")))
             {
                 throw new ProviderException("User '" + username + "' contains commas.");
             }
@@ -184,9 +184,15 @@
 
             foreach (var roleName in roleNames)
             {
-                foreach (var username in usernames)
+                foreach (var userid in userids)
                 {
-                    this.Repository.AddUserToRole(this.ApplicationName, roleName, username);
+                    Guid userId;
+                    if(!Guid.TryParse(userid, out userId))
+                    {
+                        throw new ProviderException(string.Format("Could not parse user id: '{0}'", userid));
+                    }
+
+                    this.Repository.AddUserToRole(this.ApplicationName, roleName, userId);
                 }
             }
         }
