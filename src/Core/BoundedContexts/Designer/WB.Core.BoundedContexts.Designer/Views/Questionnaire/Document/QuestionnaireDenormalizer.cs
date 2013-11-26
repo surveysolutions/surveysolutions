@@ -74,7 +74,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
-            group.Propagated = Propagate.None;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -110,7 +109,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
-            group.Propagated = Propagate.None;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -411,7 +409,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupPublicKey,
                 evnt.Payload.GroupText,
                 evnt.Payload.Description,
-                Propagate.None,
                 evnt.Payload.ConditionExpression);
 
             this.UpdateQuestionnaire(evnt, item);
@@ -481,7 +478,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
         {
             var document = this.upgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
-            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
+            this.documentStorage.Store(document, document.PublicKey);
         }
 
         public string Name
