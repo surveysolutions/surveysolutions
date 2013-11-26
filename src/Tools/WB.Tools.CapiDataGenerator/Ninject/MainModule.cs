@@ -82,7 +82,7 @@ namespace CapiDataGenerator
 
             this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
 
-            this.Bind<IReadSideRepositoryWriter<InterviewData>, IReadSideRepositoryReader<InterviewData>>().To<InterviewDataRepositoryWriterWithCache>().InSingletonScope();
+            this.Bind<IReadSideRepositoryReader<InterviewData>>().To<InterviewDataRepositoryWriterWithCache>().InSingletonScope();
             
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
