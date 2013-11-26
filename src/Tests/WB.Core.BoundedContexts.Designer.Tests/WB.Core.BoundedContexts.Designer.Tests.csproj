@@ -62,11 +62,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountDenormalizerTests\AccountDenormalizerTestsContext.cs" />
+    <Compile Include="AccountDenormalizerTests\when_handling_AccountUpdated_event_and_user_name_equals__ADMIN__.cs" />
+    <Compile Include="AccountDenormalizerTests\when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionFactoryTests\QuestionFactoryTestContext.cs" />
+    <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__Text__.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_triggers_are_not_empty.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_triggers_are_not_empty.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionChanged_event_and_triggers_are_not_empty.cs" />
@@ -152,6 +157,7 @@
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="ShouldExtensions.cs" />
+    <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
