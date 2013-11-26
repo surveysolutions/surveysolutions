@@ -1,58 +1,23 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
     using System;
     using System.Linq;
 
-    using Main.Core.Utility;
     using Main.Core.View;
-    using Main.DenormalizerStorage;
 
     using WB.UI.Designer.Providers.CQRS.Accounts.View;
 
-    /// <summary>
-    ///     The account view factory.
-    /// </summary>
     public class AccountViewFactory : IViewFactory<AccountViewInputModel, AccountView>
     {
-        #region Fields
-
-        /// <summary>
-        ///     The accounts.
-        /// </summary>
         private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AccountViewFactory"/> class.
-        /// </summary>
-        /// <param name="accounts">
-        /// The accounts.
-        /// </param>
         public AccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
         {
             this.accounts = accounts;
         }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The WB.UI.Designer.Providers.CQRS.AccountView.
-        /// </returns>
+        
         public AccountView Load(AccountViewInputModel input)
         {
             Func<AccountDocument, bool> query = (x) => false;
@@ -62,7 +27,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             }
             else if (!string.IsNullOrEmpty(input.AccountName))
             {
-                query = (x) => x.UserName == input.AccountName;
+                query = (x) => x.UserName == input.AccountName.ToLower();
             }
             else if (!string.IsNullOrEmpty(input.AccountEmail))
             {
@@ -113,7 +78,5 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                             })
                     .FirstOrDefault());
         }
-
-        #endregion
     }
 }
