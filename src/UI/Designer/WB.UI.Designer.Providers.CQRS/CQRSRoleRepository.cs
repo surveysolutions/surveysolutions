@@ -38,17 +38,16 @@ namespace WB.UI.Designer.Providers.CQRS
             throw new System.NotImplementedException();
         }
 
-        public void AddUserToRole(string applicationName, string roleName, string username)
+        public void AddUserToRole(string applicationName, string roleName, Guid userid)
         {
-            var user = GetUser(username);
-            this.commandService.Execute(new AddRoleToAccountCommnad(accountPublicKey: user.GetPublicKey(),
+            this.commandService.Execute(new AddRoleToAccountCommand(accountId: userid,
                                                                 role: GetRoleByRoleName(roleName)));
         }
 
         public void RemoveUserFromRole(string applicationName, string roleName, string username)
         {
             var user = GetUser(username);
-            this.commandService.Execute(new RemoveRoleFromAccountCommnad(accountPublicKey: user.GetPublicKey(),
+            this.commandService.Execute(new RemoveRoleFromAccountCommand(accountId: user.GetPublicKey(),
                                                                      role: GetRoleByRoleName(roleName)));
         }
 

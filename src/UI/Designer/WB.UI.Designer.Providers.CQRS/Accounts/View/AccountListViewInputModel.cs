@@ -28,6 +28,11 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.View
         }
 
         /// <summary>
+        /// Get accounts by name
+        /// </summary>
+        public string Name = string.Empty;
+
+        /// <summary>
         /// Gets or sets the orders.
         /// </summary>
         public List<OrderRequestItem> Orders = new List<OrderRequestItem>();
@@ -52,10 +57,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.View
         /// </summary>
         public bool IsNewOnly = false;
 
-        /// <summary>
-        /// Get accounts by name
-        /// </summary>
-        public string Name = string.Empty;
+    
 
         /// <summary>
         /// Get accounts by email
