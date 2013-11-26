@@ -1,7 +1,8 @@
-﻿using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using System;
+﻿using System;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
+namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof (AccountAR), "ChangePassword")]
@@ -10,7 +11,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
         public ChangePasswordAccountCommand(Guid accountId, string password)
             : base(accountId)
         {
-            Password = password;
+            this.Password = password;
         }
 
         public string Password { get; private set; }

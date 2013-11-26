@@ -1,11 +1,10 @@
-﻿namespace WB.UI.Designer.Providers.CQRS.Accounts
+﻿using System;
+using Ncqrs.Domain;
+using WB.UI.Designer.Providers.CQRS.Accounts.Events;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
+
+namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    using System;
-    using Ncqrs.Domain;
-
-    using WB.UI.Designer.Providers.CQRS.Accounts.Events;
-    using WB.UI.Shared.Web.MembershipProvider.Roles;
-
     public class AccountAR : AggregateRootMappedByConvention
     {
         #region [Constants]
@@ -19,11 +18,11 @@
         public void Apply(AccountDeleted @event) {}
         public void Apply(AccountLocked @event)
         {
-            isLockOut = true;
+            this.isLockOut = true;
         }
         public void Apply(AccountUnlocked @event)
         {
-            isLockOut = false;
+            this.isLockOut = false;
         }
         public void Apply(AccountLoginFailed @event) { }
         public void Apply(AccountOnlineUpdated @event) { }

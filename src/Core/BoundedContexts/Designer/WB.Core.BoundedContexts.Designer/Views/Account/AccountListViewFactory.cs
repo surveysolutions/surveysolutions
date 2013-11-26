@@ -1,19 +1,12 @@
-﻿using Main.Core.Utility;
-using Main.Core.View;
-using Main.DenormalizerStorage;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Raven.Client.Linq;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using Main.Core.Utility;
+using Main.Core.View;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts
+namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    using WB.UI.Designer.Providers.CQRS.Accounts.View;
-    using WB.UI.Shared.Web.MembershipProvider.Roles;
-
     /// <summary>
     /// The account view factory.
     /// </summary>
@@ -38,7 +31,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public AccountListViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
         {
-            _accounts = accounts;
+            this._accounts = accounts;
         }
 
         #endregion
@@ -50,7 +43,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             var count =
                 this._accounts.Query(_ => this.FilterAccounts(_, input).Count());
 
-            var queryResult = _accounts.Query(_ => FilterAccounts(_, input).OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
+            var queryResult = this._accounts.Query(_ => this.FilterAccounts(_, input).OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
 
             retVal = queryResult
                               .Select(x => new AccountListItem()

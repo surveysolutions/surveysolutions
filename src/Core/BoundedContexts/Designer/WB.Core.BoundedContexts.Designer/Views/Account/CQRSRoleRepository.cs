@@ -1,15 +1,13 @@
-﻿using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContexts.Designer.Commands.Account;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-namespace WB.UI.Designer.Providers.CQRS
+namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
-    using WB.UI.Designer.Providers.CQRS.Accounts.View;
-    using WB.UI.Shared.Web.MembershipProvider.Roles;
-
     public class CQRSRoleRepository : IRoleRepository
     {
         private readonly ICommandService commandService;
@@ -25,7 +23,7 @@ namespace WB.UI.Designer.Providers.CQRS
 
         public IUserWithRoles GetUser(string applicationName, string username)
         {
-            return GetUser(username);
+            return this.GetUser(username);
         }
 
         public void CreateRole(string applicationName, string roleName)
@@ -41,14 +39,14 @@ namespace WB.UI.Designer.Providers.CQRS
         public void AddUserToRole(string applicationName, string roleName, Guid userid)
         {
             this.commandService.Execute(new AddRoleToAccountCommand(accountId: userid,
-                                                                role: GetRoleByRoleName(roleName)));
+                                                                role: this.GetRoleByRoleName(roleName)));
         }
 
         public void RemoveUserFromRole(string applicationName, string roleName, string username)
         {
-            var user = GetUser(username);
+            var user = this.GetUser(username);
             this.commandService.Execute(new RemoveRoleFromAccountCommand(accountId: user.GetPublicKey(),
-                                                                     role: GetRoleByRoleName(roleName)));
+                                                                     role: this.GetRoleByRoleName(roleName)));
         }
 
         public IEnumerable<string> GetRoleNames(string applicationName)
@@ -64,7 +62,7 @@ namespace WB.UI.Designer.Providers.CQRS
 
         public int GetNumberOfUsersInRole(string applicationName, string roleName)
         {
-            return GetUsersInRole(applicationName, roleName).Count();
+            return this.GetUsersInRole(applicationName, roleName).Count();
         }
 
         public IEnumerable<string> FindUsersInRole(string applicationName, string roleName, string userNameToMatch)
@@ -72,7 +70,7 @@ namespace WB.UI.Designer.Providers.CQRS
             var accounts =
                 this.accountListViewFactory.Load(new AccountListViewInputModel()
                 {
-                    Role = GetRoleByRoleName(roleName),
+                    Role = this.GetRoleByRoleName(roleName),
                     Name = userNameToMatch
                 });
             return accounts.Items.Select(x => x.UserName);
@@ -83,7 +81,7 @@ namespace WB.UI.Designer.Providers.CQRS
             var accounts =
                 this.accountListViewFactory.Load(new AccountListViewInputModel()
                     {
-                        Role = GetRoleByRoleName(roleName)
+                        Role = this.GetRoleByRoleName(roleName)
                     });
             return accounts.Items.Select(x => x.UserName);
         }

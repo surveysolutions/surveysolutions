@@ -1,11 +1,10 @@
-﻿using Main.Core.Entities;
+﻿using System.Collections.Generic;
+using Main.Core.Entities;
 using Main.Core.Utility;
-using System.Collections.Generic;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts.View
+namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    using WB.UI.Shared.Web.MembershipProvider.Roles;
-
     /// <summary>
     /// The account list input model.
     /// </summary>
@@ -18,12 +17,12 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.View
         {
             get
             {
-                return StringUtil.GetOrderRequestString(Orders);
+                return StringUtil.GetOrderRequestString(this.Orders);
             }
 
             set
             {
-                Orders = StringUtil.ParseOrderRequestString(value);
+                this.Orders = StringUtil.ParseOrderRequestString(value);
             }
         }
 

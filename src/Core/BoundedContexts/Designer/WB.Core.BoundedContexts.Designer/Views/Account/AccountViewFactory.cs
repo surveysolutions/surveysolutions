@@ -1,14 +1,10 @@
-﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using System;
+using System.Linq;
+using Main.Core.View;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts
+namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    using System;
-    using System.Linq;
-
-    using Main.Core.View;
-
-    using WB.UI.Designer.Providers.CQRS.Accounts.View;
-
     public class AccountViewFactory : IViewFactory<AccountViewInputModel, AccountView>
     {
         private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;

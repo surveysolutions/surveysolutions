@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Designer.Providers.CQRS.Accounts.View
+﻿namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
     public class AccountViewInputModel
     {
