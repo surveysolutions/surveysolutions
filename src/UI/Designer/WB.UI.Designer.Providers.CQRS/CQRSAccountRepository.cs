@@ -59,7 +59,7 @@
         {
             var account = new AccountView
                               {
-                                  ProviderUserKey = Guid.NewGuid(), 
+                                  ProviderUserKey = providerUserKey, 
                                   ApplicationName = applicationName, 
                                   UserName = username, 
                                   Email = email
@@ -333,7 +333,7 @@
                     applicationName: account.ApplicationName, 
                     userName: account.UserName, 
                     email: account.Email, 
-                    providerUserKey: account.ProviderUserKey, 
+                    accountId: Guid.Parse(account.ProviderUserKey.ToString()), 
                     password: account.Password, 
                     passwordSalt: account.PasswordSalt, 
                     isConfirmed: account.IsConfirmed, 
@@ -362,11 +362,11 @@
                     command = new ConfirmAccountCommand(accountPublicKey);
                     break;
                 case MembershipEventType.ChangePassword:
-                    command = new ChangePasswordAccountCommand(publicKey: accountPublicKey, password: account.Password);
+                    command = new ChangePasswordAccountCommand(accountId: accountPublicKey, password: account.Password);
                     break;
                 case MembershipEventType.ChangePasswordQuestionAndAnswer:
                     command = new ChangePasswordQuestionAndAnswerAccountCommand(
-                        publicKey: accountPublicKey, 
+                        accountId: accountPublicKey, 
                         passwordQuestion: account.PasswordQuestion, 
                         passwordAnswer: account.PasswordAnswer);
                     break;
@@ -375,14 +375,14 @@
                     break;
                 case MembershipEventType.ResetPassword:
                     command = new ResetPasswordAccountCommand(
-                        publicKey: accountPublicKey, password: account.Password, passwordSalt: account.PasswordSalt);
+                        accountId: accountPublicKey, password: account.Password, passwordSalt: account.PasswordSalt);
                     break;
                 case MembershipEventType.UnlockUser:
                     command = new UnlockAccountCommand(accountPublicKey);
                     break;
                 case MembershipEventType.Update:
                     command = new UpdateAccountCommand(
-                        publicKey: accountPublicKey, 
+                        accountId: accountPublicKey, 
                         userName: account.UserName, 
                         isLockedOut: account.IsLockedOut, 
                         passwordQuestion: account.PasswordQuestion, 
@@ -401,7 +401,7 @@
                     break;
                     case MembershipEventType.ChangePasswordResetToken:
                     command = new ChangePasswordResetTokenCommand(
-                        publicKey: accountPublicKey,
+                        accountId: accountPublicKey,
                         passwordResetToken: account.PasswordResetToken,
                         passwordResetExpirationDate: account.PasswordResetExpirationDate);
                     break;

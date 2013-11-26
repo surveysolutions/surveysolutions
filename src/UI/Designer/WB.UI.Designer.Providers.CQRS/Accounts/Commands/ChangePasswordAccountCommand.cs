@@ -1,24 +1,18 @@
-﻿using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+﻿using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using System;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(AccountAR), "ChangePassword")]
-    public class ChangePasswordAccountCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof (AccountAR), "ChangePassword")]
+    public class ChangePasswordAccountCommand : AccountCommandBase
     {
-        public ChangePasswordAccountCommand() {}
-
-        public ChangePasswordAccountCommand(Guid publicKey, string password)
+        public ChangePasswordAccountCommand(Guid accountId, string password)
+            : base(accountId)
         {
-            PublicKey = publicKey;
             Password = password;
         }
 
-        [AggregateRootId]
-        public Guid PublicKey { get; set; }
-
-        public string Password { get; set; }
+        public string Password { get; private set; }
     }
 }
