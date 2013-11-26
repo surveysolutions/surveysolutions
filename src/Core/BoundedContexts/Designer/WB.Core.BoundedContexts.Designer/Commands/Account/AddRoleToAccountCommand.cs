@@ -1,10 +1,10 @@
-﻿using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using System;
+﻿using System;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
+namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
-    using WB.UI.Shared.Web.MembershipProvider.Roles;
-
     [Serializable]
     [MapsToAggregateRootMethod(typeof (AccountAR), "AddRole")]
     public class AddRoleToAccountCommand : AccountCommandBase
@@ -12,7 +12,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
         public AddRoleToAccountCommand(Guid accountId, SimpleRoleEnum role)
             : base(accountId)
         {
-            Role = role;
+            this.Role = role;
         }
 
         public SimpleRoleEnum Role { get; private set; }

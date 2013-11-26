@@ -2,13 +2,13 @@
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
+namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     public class AccountCommandBase : CommandBase
     {
         public AccountCommandBase(Guid accountId)
         {
-            AccountId = accountId;
+            this.AccountId = accountId;
         }
 
         [AggregateRootId]

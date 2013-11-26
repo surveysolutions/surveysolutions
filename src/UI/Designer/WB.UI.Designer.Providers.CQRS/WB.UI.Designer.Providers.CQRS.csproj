@@ -49,23 +49,6 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accounts\AccountAR.cs" />
-    <Compile Include="Accounts\Commands\AccountCommandBase.cs" />
-    <Compile Include="Accounts\Commands\AddRoleToAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\ChangePasswordResetTokenCommand.cs" />
-    <Compile Include="Accounts\Commands\ConfirmAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\ChangeOnlineAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\ChangePasswordAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\ChangePasswordQuestionAndAnswerAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\LoginFailedAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\RemoveRoleFromAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\ValidateAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\UpdateAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\RegisterAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\ResetPasswordAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\DeleteAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\UnlockAccountCommand.cs" />
-    <Compile Include="Accounts\Commands\LockAccountCommand.cs" />
     <Compile Include="Accounts\Events\AccountConfirmed.cs" />
     <Compile Include="Accounts\Events\AccountLoginFailed.cs" />
     <Compile Include="Accounts\Events\AccountPasswordResetTokenChanged.cs" />
@@ -74,18 +57,8 @@
     <Compile Include="Accounts\Events\AccountUpdated.cs" />
     <Compile Include="Accounts\Events\AccountDeleted.cs" />
     <Compile Include="Accounts\Events\AccountValidated.cs" />
-    <Compile Include="Accounts\View\AccountListItem.cs" />
     <Compile Include="Accounts\Events\AccountRegistered.cs" />
     <Compile Include="Accounts\Events\AccountUnlocked.cs" />
-    <Compile Include="Accounts\View\AccountView.cs" />
-    <Compile Include="Accounts\AccountViewFactory.cs" />
-    <Compile Include="Accounts\View\AccountViewInputModel.cs" />
-    <Compile Include="Accounts\View\AccountListView.cs" />
-    <Compile Include="Accounts\AccountListViewFactory.cs" />
-    <Compile Include="Accounts\View\AccountListViewInputModel.cs" />
-    <Compile Include="Accounts\AccountDocument.cs" />
-    <Compile Include="CQRSAccountRepository.cs" />
-    <Compile Include="CQRSRoleRepository.cs" />
     <Compile Include="Accounts\Events\AccountPasswordChanged.cs" />
     <Compile Include="Accounts\Events\AccountPasswordQuestionAndAnswerChanged.cs" />
     <Compile Include="Accounts\Events\AccountPasswordReset.cs" />
@@ -119,6 +92,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

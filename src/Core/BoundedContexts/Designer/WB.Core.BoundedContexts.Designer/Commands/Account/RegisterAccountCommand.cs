@@ -1,8 +1,9 @@
-﻿using Ncqrs.Commanding;
+﻿using System;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using System;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
+namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
     [MapsToAggregateRootConstructor(typeof (AccountAR))]
@@ -13,14 +14,14 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
             string passwordSalt, bool isConfirmed, string confirmationToken)
             : base(accountId)
         {
-            ApplicationName = applicationName;
-            UserName = userName;
-            Email = email;
-            AccountId = accountId;
-            Password = password;
-            PasswordSalt = passwordSalt;
-            IsConfirmed = isConfirmed;
-            ConfirmationToken = confirmationToken;
+            this.ApplicationName = applicationName;
+            this.UserName = userName;
+            this.Email = email;
+            this.AccountId = accountId;
+            this.Password = password;
+            this.PasswordSalt = passwordSalt;
+            this.IsConfirmed = isConfirmed;
+            this.ConfirmationToken = confirmationToken;
         }
 
         public string ApplicationName { private set; get; }
