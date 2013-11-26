@@ -1,15 +1,12 @@
-﻿using WB.Core.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using WB.Core.Infrastructure.ReadSide;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts
+namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using WB.UI.Shared.Web.MembershipProvider.Accounts;
-    using WB.UI.Shared.Web.MembershipProvider.Roles;
-
     /// <summary>
     /// The account document.
     /// </summary>

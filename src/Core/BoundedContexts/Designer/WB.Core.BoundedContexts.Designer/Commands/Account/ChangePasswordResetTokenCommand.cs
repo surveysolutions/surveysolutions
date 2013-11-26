@@ -1,8 +1,9 @@
-﻿namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
-{
-    using System;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+﻿using System;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
+namespace WB.Core.BoundedContexts.Designer.Commands.Account
+{
     [Serializable]
     [MapsToAggregateRootMethod(typeof (AccountAR), "ChangePasswordResetToken")]
     public class ChangePasswordResetTokenCommand : AccountCommandBase
@@ -11,8 +12,8 @@
             Guid accountId, string passwordResetToken, DateTime passwordResetExpirationDate)
             : base(accountId)
         {
-            PasswordResetToken = passwordResetToken;
-            PasswordResetExpirationDate = passwordResetExpirationDate;
+            this.PasswordResetToken = passwordResetToken;
+            this.PasswordResetExpirationDate = passwordResetExpirationDate;
         }
 
         public DateTime PasswordResetExpirationDate { get; private set; }

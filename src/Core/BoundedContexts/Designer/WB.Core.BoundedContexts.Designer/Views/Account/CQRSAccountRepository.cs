@@ -1,18 +1,14 @@
-﻿namespace WB.UI.Designer.Providers.CQRS
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Security;
+using Main.Core.View;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContexts.Designer.Commands.Account;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+
+namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Security;
-
-    using Main.Core.View;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.ServiceModel;
-
-    using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
-    using WB.UI.Designer.Providers.CQRS.Accounts.View;
-    using WB.UI.Shared.Web.MembershipProvider.Accounts;
-
     public class CQRSAccountRepository : IAccountRepository
     {
         private readonly ICommandService commandService;
@@ -324,7 +320,7 @@
         /// The account.
         /// </param>
         /// <returns>
-        /// The <see cref="MembershipCreateStatus"/>.
+        /// The <see cref="System.Web.Security.MembershipCreateStatus"/>.
         /// </returns>
         public MembershipCreateStatus Register(IMembershipAccount account)
         {
@@ -433,7 +429,7 @@
         /// The reset password token.
         /// </param>
         /// <returns>
-        /// The <see cref="AccountView"/>.
+        /// The <see cref="WB.Core.BoundedContexts.Designer.Views.Account.AccountView"/>.
         /// </returns>
         private AccountView GetUser(
             string accountName = null, 

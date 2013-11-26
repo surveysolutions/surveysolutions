@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    public class AccountDenormalizer : IEventHandler<AccountConfirmed>, 
+    internal class AccountDenormalizer : IEventHandler<AccountConfirmed>, 
                                        IEventHandler<AccountDeleted>, 
                                        IEventHandler<AccountLocked>, 
                                        IEventHandler<AccountOnlineUpdated>, 
@@ -23,7 +22,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                                        IEventHandler<AccountRoleAdded>, 
                                        IEventHandler<AccountRoleRemoved>, 
                                        IEventHandler<AccountLoginFailed>, 
-                                       IEventHandler<AccountPasswordResetTokenChanged>, IEventHandler
+                                       IEventHandler<AccountPasswordResetTokenChanged>, 
+                                       IEventHandler
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> _accounts;
 

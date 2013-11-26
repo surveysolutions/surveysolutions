@@ -1,7 +1,8 @@
-﻿using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using System;
+﻿using System;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
+namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof (AccountAR), "Update")]
@@ -11,12 +12,12 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
             string email, bool isConfirmed, string comment)
             : base(accountId)
         {
-            UserName = userName;
-            IsLockedOut = isLockedOut;
-            PasswordQuestion = passwordQuestion;
-            Email = email;
-            IsConfirmed = isConfirmed;
-            Comment = comment;
+            this.UserName = userName;
+            this.IsLockedOut = isLockedOut;
+            this.PasswordQuestion = passwordQuestion;
+            this.Email = email;
+            this.IsConfirmed = isConfirmed;
+            this.Comment = comment;
         }
 
         public string UserName { get; private set; }
