@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ncqrs;
-using WB.Core.Infrastructure.ReadSide;
+using System;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
+namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy
 {
-    public class ReadSideStorageStrategy<T> : IStorageStrategy<T> where T : class, IReadSideRepositoryEntity
+    internal class ReadSideStorageStrategy<T> : IStorageStrategy<T> where T : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideRepositoryWriter<T> writer;
 
@@ -21,17 +15,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 
         public T Select(Guid id)
         {
-            return writer.GetById(id);
+            return this.writer.GetById(id);
         }
 
         public void AddOrUpdate(T projection, Guid id)
         {
-            writer.Store(projection, id);
+            this.writer.Store(projection, id);
         }
 
         public void Delete(T projection, Guid id)
         {
-            writer.Remove(id);
+            this.writer.Remove(id);
         }
     }
 }
