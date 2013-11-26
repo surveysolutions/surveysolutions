@@ -495,11 +495,21 @@
         {
             string token = string.Empty;
 
-            string email = values == null ? string.Empty : (string)values["Email"];
+            const string emailParameterName = "Email";
+            const string providerUserKeyParameterName = "ProviderUserKey";
+
+            string email = string.Empty;
+            Guid? providerUserKey = null;
+
+            if (values.ContainsKey(emailParameterName))
+                email = values["Email"] as string;
+
+            if (values.ContainsKey(providerUserKeyParameterName))
+                providerUserKey = values["ProviderUserKey"] as Guid?;
 
             MembershipCreateStatus status;
             IMembershipAccount account = this.InternalCreateAccount(
-                userName, password, email, null, !requireConfirmation, out status);
+                userName, password, email, providerUserKey, !requireConfirmation, out status);
             if (status == MembershipCreateStatus.Success)
             {
                 token = account.ConfirmationToken;
