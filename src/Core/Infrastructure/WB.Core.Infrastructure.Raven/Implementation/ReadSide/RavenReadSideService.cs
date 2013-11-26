@@ -150,7 +150,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 var writers = GetListOfWritersForEnableCache(viewTypes);
 
-                string publishingDetails = "<<NO DETAILS>>";
+                string republishDetails = "<<NO DETAILS>>";
 
                 try
                 {
@@ -158,14 +158,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                     this.EnableCacheInRepositoryWriters(writers);
 
-                    publishingDetails = this.RepublishAllEvents();
+                    republishDetails = this.RepublishAllEvents();
                 }
                 finally
                 {
                     this.DisableCacheInRepositoryWriters(writers);
                     this.EnableHandlerAllHandlers();
 
-                    UpdateStatusMessage("Rebuild specific views succeeded. Republishing details: " + publishingDetails);
+                    UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
                 }
             }
             catch (Exception exception)
@@ -228,19 +228,19 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 this.DeleteAllViews();
                 this.CleanUpAllWriters();
 
-                string publishingDetails = "<<NO DETAILS>>";
+                string republishDetails = "<<NO DETAILS>>";
 
                 try
                 {
                     this.EnableCacheInAllRepositoryWriters();
 
-                    publishingDetails = this.RepublishAllEvents();
+                    republishDetails = this.RepublishAllEvents();
                 }
                 finally
                 {
                     this.DisableCacheInAllRepositoryWriters();
 
-                    UpdateStatusMessage("Rebuild all views succeeded. Republishing details: " + publishingDetails);
+                    UpdateStatusMessage("Rebuild all views succeeded." + Environment.NewLine + republishDetails);
                 }
             }
             catch (Exception exception)
