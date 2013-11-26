@@ -1,6 +1,4 @@
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts
@@ -8,16 +6,11 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
     using System;
     using System.Collections.Generic;
 
-    using Main.DenormalizerStorage;
-
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using WB.UI.Designer.Providers.CQRS.Accounts.Events;
     using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-    /// <summary>
-    ///     The user denormalizer.
-    /// </summary>
     public class AccountDenormalizer : IEventHandler<AccountConfirmed>, 
                                        IEventHandler<AccountDeleted>, 
                                        IEventHandler<AccountLocked>, 
@@ -34,38 +27,13 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                                        IEventHandler<AccountLoginFailed>, 
                                        IEventHandler<AccountPasswordResetTokenChanged>, IEventHandler
     {
-        #region Fields
-
-        /// <summary>
-        ///     The accounts.
-        /// </summary>
         private readonly IReadSideRepositoryWriter<AccountDocument> _accounts;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AccountDenormalizer"/> class.
-        /// </summary>
-        /// <param name="accounts">
-        /// The users.
-        /// </param>
         public AccountDenormalizer(IReadSideRepositoryWriter<AccountDocument> accounts)
         {
             this._accounts = accounts;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountConfirmed> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -74,23 +42,11 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountDeleted> @event)
         {
             this._accounts.Remove(@event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountLocked> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -100,12 +56,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountOnlineUpdated> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -114,12 +64,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountPasswordChanged> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -129,12 +73,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountPasswordQuestionAndAnswerChanged> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -144,12 +82,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountPasswordReset> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -159,19 +91,13 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountRegistered> @event)
         {
             this._accounts.Store(
                 new AccountDocument
                     {
                         ProviderUserKey = @event.EventSourceId, 
-                        UserName = @event.Payload.UserName, 
+                        UserName = GetLowercaseUserName(@event.Payload.UserName), 
                         Email = @event.Payload.Email, 
                         ConfirmationToken = @event.Payload.ConfirmationToken, 
                         ApplicationName = @event.Payload.ApplicationName, 
@@ -183,12 +109,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                 @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountUnlocked> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -201,12 +121,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountUpdated> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -214,16 +128,10 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             item.Comment = @event.Payload.Comment;
             item.Email = @event.Payload.Email;
             item.PasswordQuestion = @event.Payload.PasswordQuestion;
-            item.UserName = @event.Payload.UserName;
+            item.UserName = GetLowercaseUserName(@event.Payload.UserName);
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<UserLoggedIn> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -234,12 +142,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountRoleAdded> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -248,12 +150,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountRoleRemoved> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -261,12 +157,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             item.SimpleRoles.Remove(@event.Payload.Role);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountLoginFailed> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -276,12 +166,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="event">
-        /// The event.
-        /// </param>
         public void Handle(IPublishedEvent<AccountPasswordResetTokenChanged> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
@@ -291,7 +175,10 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        #endregion
+        private static string GetLowercaseUserName(string userName)
+        {
+            return userName.ToLower();
+        }
 
         public string Name
         {
