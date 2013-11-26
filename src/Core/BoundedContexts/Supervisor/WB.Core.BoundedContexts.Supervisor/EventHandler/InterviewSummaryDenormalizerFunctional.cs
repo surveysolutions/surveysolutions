@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -16,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewSummaryDenormalizerFunctional : FunctionalDenormalizer<InterviewSummary>, 
+    public class InterviewSummaryDenormalizerFunctional : AbstractFunctionalDenormalizer<InterviewSummary>, 
         ICreateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
@@ -43,9 +44,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireBrowseItem) }; }
         }
 
-        public InterviewSummaryDenormalizerFunctional(IStorageStrategy<InterviewSummary> storageStrategy,
+        public InterviewSummaryDenormalizerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
             IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
-            : base(storageStrategy)
+            : base(interviewSummary)
         {
             this.questionnaires = questionnaires;
             this.users = users;
