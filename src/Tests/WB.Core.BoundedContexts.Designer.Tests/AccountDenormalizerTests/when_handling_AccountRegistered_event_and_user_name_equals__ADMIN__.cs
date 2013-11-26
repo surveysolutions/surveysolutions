@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
 {
-    public class when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__ : AccountDenormalizerTestsContext
+    internal class when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__ : AccountDenormalizerTestsContext
     {
         Establish context = () =>
         {
