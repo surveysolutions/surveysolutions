@@ -59,11 +59,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="ServiceTests\SampleImportServiceTests.cs" />
-    <Compile Include="Views\ExportedHeaderCollection\when_questionnarie_template_contains_autopropagated_groups_max_2_with_multy_option_linked_question.cs" />
-    <Compile Include="Views\ExportedHeaderCollection\when_questionnarie_template_contains_roster_max_2_rows_with_multy_option_linked_question.cs" />
+    <Compile Include="Views\ExportedHeaderCollectionTests\ExportedHeaderCollectionTestsContext.cs" />
+    <Compile Include="Views\ExportedHeaderCollectionTests\when_questionnarie_template_contains_2_autopropagated_groups_with_one_trigger_max_2_rows_and_multy_option_linked_question.cs" />
+    <Compile Include="Views\ExportedHeaderCollectionTests\when_questionnarie_template_contains_roster_max_2_rows_with_multy_option_linked_question.cs" />
     <Compile Include="Views\InterviewDataExportFactoryTestContext.cs" />
     <Compile Include="Views\when_requesing_data_by_top_level_1_approved_not_empty_interviews_and_template_contains_1_answerd_questions_and_1_unananswered.cs" />
     <Compile Include="Views\when_requesing_data_by_top_level_of_interview_with_2_approved_empty_interviews_and_template_contains_2_questions.cs" />
