@@ -57,6 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     g.IsRoster = true;
                     g.RosterSizeQuestionId = rosterSizeQuestionId;
+                    g.Propagated = Propagate.None;
                 });
             }
         }
