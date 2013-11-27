@@ -39,7 +39,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
             }
 
+            MarkAllNonReferencedAutoPropagatedGroupsAsNotPropagated(document);
+
             return document;
+        }
+
+        private static void MarkAllNonReferencedAutoPropagatedGroupsAsNotPropagated(QuestionnaireDocument document)
+        {
+            var autoGroups = document.Find<Group>(q => q.Propagated == Propagate.AutoPropagated).ToList();
+            foreach (var autoGroup in autoGroups)
+            {
+                document.UpdateGroup(autoGroup.PublicKey, g => { g.Propagated = Propagate.None; });
+            }
         }
 
         private static void FindGroupAndUpdateItToRoster(QuestionnaireDocument document, Guid groupId, Guid rosterSizeQuestionId)
