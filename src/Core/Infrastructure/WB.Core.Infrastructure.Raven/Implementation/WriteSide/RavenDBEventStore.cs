@@ -42,6 +42,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                 };
             this.pageSize = pageSize;
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
+
+            IndexCreation.CreateIndexes(typeof(EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 
         public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
@@ -54,6 +56,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                 };
             this.pageSize = pageSize;
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
+
+            IndexCreation.CreateIndexes(typeof(EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
@@ -228,6 +232,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
         {
+            return GetAllEventsStream(bulkSize);
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEventsInternal(int bulkSize)
+        {
             int returnedEventCount = 0;
 
             while (true)
@@ -236,7 +245,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                 {
                     StoredEvent[] storedEventsBulk =
                         QueryAllEvents(session)
-                        .OrderBy(y => y.EventTimeStamp).ThenBy(y=>y.EventSequence)
+                        .OrderBy(y => y.EventTimeStamp).ThenBy(y => y.EventSequence)
                         .Skip(returnedEventCount)
                         .Take(bulkSize)
                         .ToArray();
@@ -250,6 +259,23 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     returnedEventCount += bulkSize;
                 }
             }
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEventsStream(int bulkSize)
+        {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
+                        .OrderBy(y => y.EventTimeStamp)
+                        .ThenBy(y => y.EventSequence);
+
+                    var enumerator = session.Advanced.Stream(query);
+
+                    while (enumerator.MoveNext())
+                    {
+                        yield return  new CommittedEvent[]{ ToCommittedEvent(enumerator.Current.Document)};
+                    }
+                }
         }
     }
 }
