@@ -27,11 +27,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
                 }),
 
                 CreateGroup(groupId: firstReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; }),
-                CreateGroup(groupId: secondReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; }),
+                CreateGroup(groupId: secondReferencedGroupId, setup: g => { g.Propagated = Propagate.Propagated; }),
                 CreateGroup(groupId: thirdReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; }),
 
                 CreateGroup(groupId: firstNotReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; }),
-                CreateGroup(groupId: secondNotReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; })
+                CreateGroup(groupId: secondNotReferencedGroupId, setup: g => { g.Propagated = Propagate.Propagated; })
             );
 
             upgrader = CreateQuestionnaireDocumentUpgrader();

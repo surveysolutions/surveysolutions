@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static void MarkAllNonReferencedAutoPropagatedGroupsAsNotPropagated(QuestionnaireDocument document)
         {
-            var autoGroups = document.Find<Group>(q => q.Propagated == Propagate.AutoPropagated).ToList();
+            var autoGroups = document.Find<Group>(q => q.Propagated != Propagate.None).ToList();
             foreach (var autoGroup in autoGroups)
             {
                 document.UpdateGroup(autoGroup.PublicKey, g => { g.Propagated = Propagate.None; });
