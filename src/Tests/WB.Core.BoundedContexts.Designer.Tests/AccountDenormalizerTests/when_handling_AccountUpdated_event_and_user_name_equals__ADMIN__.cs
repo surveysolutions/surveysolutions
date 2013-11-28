@@ -14,28 +14,28 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
     {
         Establish context = () =>
         {
-            accountStorage = new Mock<IReadSideRepositoryWriter<AccountDocument>>();
+            accountStorageMock = new Mock<IReadSideRepositoryWriter<AccountDocument>>();
 
             AccountDocument account = CreateAccountDocument(userId);
 
-            accountStorage.Setup(x => x.GetById(userId)).Returns(account);
+            accountStorageMock.Setup(x => x.GetById(userId)).Returns(account);
 
             accountUpdatedEvent = CreateAccountUpdatedEvent(userId: userId, userName: "ADMIN");
 
-            denormalizer = CreateAccountDenormalizer(accounts: accountStorage.Object);
+            denormalizer = CreateAccountDenormalizer(accounts: accountStorageMock.Object);
         };
 
         Because of = () =>
             denormalizer.Handle(accountUpdatedEvent);
 
         It should_pass__admin__user_name_to_document_storages_Store_method = () =>
-            accountStorage.Verify(s => s.Store(
+            accountStorageMock.Verify(s => s.Store(
                 Moq.It.Is<AccountDocument>(d => d.UserName == "admin"),
                 Moq.It.Is<Guid>(g => g == userId)));
 
         private static Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         private static AccountDenormalizer denormalizer;
         private static IPublishedEvent<AccountUpdated> accountUpdatedEvent;
-        private static Mock<IReadSideRepositoryWriter<AccountDocument>> accountStorage;
+        private static Mock<IReadSideRepositoryWriter<AccountDocument>> accountStorageMock;
     }
 }
