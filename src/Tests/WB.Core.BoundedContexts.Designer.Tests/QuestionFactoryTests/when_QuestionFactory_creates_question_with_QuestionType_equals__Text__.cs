@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
     {
         Establish context = () =>
         {
-            textQuestionData = CreateQuestionData(QuestionType: QuestionType.Text);
+            textQuestionData = CreateQuestionData(questionType: QuestionType.Text);
 
             factory = CreateQuestionFactory();
         };
@@ -18,10 +18,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
         Because of = () =>
             resultQuestion = factory.CreateQuestion(textQuestionData);
 
-        private It should_create_text_question = () =>
+        It should_create_text_question = () =>
             resultQuestion.ShouldBeOfType<TextQuestion>();
 
-        private It should_create_question_with_QuestionType_field_equals__Text__ = () =>
+        It should_create_question_with_QuestionType_field_equals__Text__ = () =>
             resultQuestion.QuestionType.ShouldEqual(QuestionType.Text);
 
         private static QuestionFactory factory;
