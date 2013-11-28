@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void DeleteQuestion_When_Question_involved_in_the_condition_of_other_question_Then_DomainException_should_be_thrown()
+        public void DeleteQuestion_When_Question_Variable_involved_in_the_condition_of_other_question_Then_DomainException_should_be_thrown()
         {
             // arrange
             Guid question1Id = Guid.NewGuid();
@@ -101,7 +101,35 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void DeleteQuestion_When_Question_involved_in_the_validation_of_other_question_Then_DomainException_should_be_thrown()
+        public void DeleteQuestion_When_Question_Id_involved_in_the_condition_of_other_question_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+
+            string expression = string.Format("[{0}] > 0", question1Id);
+
+            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString() });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
+            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2",
+                condition: expression);
+
+
+            // act
+            TestDelegate act = () => questionnaire.NewDeleteQuestion(question1Id, responsibleId);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion));
+        }
+
+        [Test]
+        public void DeleteQuestion_When_Question_Variable_involved_in_the_validation_of_other_question_Then_DomainException_should_be_thrown()
         {
             // arrange
             Guid question1Id = Guid.NewGuid();
@@ -115,6 +143,32 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             RegisterExpressionProcessorMock(expression, new[] { aliasForDeletedQuestion });
 
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, aliasForDeletedQuestion);
+            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2",
+                validation: expression);
+
+            // act
+            TestDelegate act = () => questionnaire.NewDeleteQuestion(question1Id, responsibleId);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion));
+        }
+
+        [Test]
+        public void DeleteQuestion_When_Question_Id_involved_in_the_validation_of_other_question_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+
+            string expression = string.Format("[{0}] > 0", question1Id);
+
+            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString() });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2",
                 validation: expression);
 
