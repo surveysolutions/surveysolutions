@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                 new AccountDocument
                     {
                         ProviderUserKey = @event.EventSourceId, 
-                        UserName = GetLowercaseUserName(@event.Payload.UserName), 
+                        UserName = GetNormalizedUserName(@event.Payload.UserName), 
                         Email = @event.Payload.Email, 
                         ConfirmationToken = @event.Payload.ConfirmationToken, 
                         ApplicationName = @event.Payload.ApplicationName, 
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             item.Comment = @event.Payload.Comment;
             item.Email = @event.Payload.Email;
             item.PasswordQuestion = @event.Payload.PasswordQuestion;
-            item.UserName = GetLowercaseUserName(@event.Payload.UserName);
+            item.UserName = GetNormalizedUserName(@event.Payload.UserName);
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        private static string GetLowercaseUserName(string userName)
+        private static string GetNormalizedUserName(string userName)
         {
             return userName.ToLower();
         }
