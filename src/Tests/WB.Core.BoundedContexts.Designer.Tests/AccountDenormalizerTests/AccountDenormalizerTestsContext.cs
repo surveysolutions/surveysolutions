@@ -9,7 +9,7 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
 {
-    public class AccountDenormalizerTestsContext
+    internal class AccountDenormalizerTestsContext
     {
         public static AccountDenormalizer CreateAccountDenormalizer(IReadSideRepositoryWriter<AccountDocument> accounts)
         {
