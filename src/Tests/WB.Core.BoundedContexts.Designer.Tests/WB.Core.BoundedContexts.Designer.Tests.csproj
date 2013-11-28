@@ -65,6 +65,8 @@
     <Compile Include="AccountDenormalizerTests\AccountDenormalizerTestsContext.cs" />
     <Compile Include="AccountDenormalizerTests\when_handling_AccountUpdated_event_and_user_name_equals__ADMIN__.cs" />
     <Compile Include="AccountDenormalizerTests\when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__.cs" />
+    <Compile Include="AccountViewFactoryTrests\AccountFactoryTestsContext.cs" />
+    <Compile Include="AccountViewFactoryTrests\when_loading_view_filtered_by_account_name_equals__ADMIN__and_repository_has_account_with_name__admin__.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
