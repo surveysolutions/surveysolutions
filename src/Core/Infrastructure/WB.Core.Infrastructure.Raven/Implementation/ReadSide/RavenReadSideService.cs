@@ -4,25 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Storage;
 
 using Raven.Abstractions.Data;
-using Raven.Abstractions.Indexing;
-using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Extensions;
-using Raven.Client.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 {
     internal class RavenReadSideService : IReadSideStatusService, IReadSideAdministrationService
     {
         private const int MaxAllowedFailedEvents = 100;
+        private const string ViewsDatabaseName = "Views";
 
         private static readonly object RebuildAllViewsLockObject = new object();
         private static readonly object ErrorsLockObject = new object();
@@ -283,58 +278,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         {
             ThrowIfShouldStopViewsRebuilding();
 
-            UpdateStatusMessage("Determining count of views to be deleted.");
+            UpdateStatusMessage(string.Format("Delete database {0}", ViewsDatabaseName));
 
-            this.ravenStore
-                .DatabaseCommands
-                .EnsureDatabaseExists("Views");
-
-            this.ravenStore
-                .DatabaseCommands
-                .ForDatabase("Views")
-                .PutIndex(
-                    "AllViews",
-                    new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
-                    overwrite: true);
-
-            int initialViewCount;
-            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
-            {
-                // this will also materialize index if it is out of date or was just created
-                initialViewCount = session
-                    .Query<object>("AllViews")
-                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
-                    .Count();
-            }
+            this.ravenStore.DeleteDatabase(ViewsDatabaseName, true);
 
             ThrowIfShouldStopViewsRebuilding();
 
-            UpdateStatusMessage(string.Format("Deleting {0} views.", initialViewCount));
+            UpdateStatusMessage(string.Format("Create database {0}", ViewsDatabaseName));
 
-            this.ravenStore
-                .DatabaseCommands
-                .ForDatabase("Views")
-                .DeleteByIndex("AllViews", new IndexQuery());
-
-            UpdateStatusMessage("Checking remaining views count.");
-
-            int resultViewCount;
-            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
-            {
-                resultViewCount = session
-                    .Query<object>("AllViews")
-                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
-                    .Count();
-            }
-
-            if (resultViewCount > 0)
-                throw new Exception(string.Format(
-                    "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
-                    initialViewCount, resultViewCount));
-
-            UpdateStatusMessage(string.Format("{0} views were deleted.", initialViewCount));
+            this.ravenStore.CreateDatabase(ViewsDatabaseName);
         }
-        
 
         private void EnableCacheInRepositoryWriters(IEnumerable<IRavenReadSideRepositoryWriter> writers)
         {
