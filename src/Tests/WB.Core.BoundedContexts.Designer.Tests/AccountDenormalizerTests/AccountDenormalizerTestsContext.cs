@@ -9,14 +9,14 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
 {
-    public class AccountDenormalizerTestsContext
+    internal class AccountDenormalizerTestsContext
     {
-        public static AccountDenormalizer CreateAccountDenormalizer(IReadSideRepositoryWriter<AccountDocument> accounts)
+        protected static AccountDenormalizer CreateAccountDenormalizer(IReadSideRepositoryWriter<AccountDocument> accounts)
         {
             return new AccountDenormalizer(accounts ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>());
         }
 
-        public static AccountDocument CreateAccountDocument(Guid userId)
+        protected static AccountDocument CreateAccountDocument(Guid userId)
         {
             return  new AccountDocument
             {
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
                 && publishedEvent.EventSourceId == eventSourceId);
         }
 
-        public static IPublishedEvent<AccountUpdated> CreateAccountUpdatedEvent(Guid userId, string userName)
+        protected static IPublishedEvent<AccountUpdated> CreateAccountUpdatedEvent(Guid userId, string userName)
         {
             return ToPublishedEvent(new AccountUpdated
             {
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
             }, eventSourceId: userId);
         }
 
-        public static IPublishedEvent<AccountRegistered> CreateAccountRegisteredEvent(Guid userId, string userName)
+        protected static IPublishedEvent<AccountRegistered> CreateAccountRegisteredEvent(Guid userId, string userName)
         {
             return ToPublishedEvent(new AccountRegistered
             {

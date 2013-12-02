@@ -29,11 +29,10 @@ namespace WB.UI.Designer.Code
                 base.GetAssembliesForRegistration()
                     .Concat(new[]
                     {
-                        typeof(QuestionnaireView).Assembly, 
                         typeof(DesignerRegistry).Assembly,
-                        typeof(AccountAR).Assembly,
                         typeof(PublicService).Assembly,
-                        typeof(Questionnaire).Assembly,
+                        typeof(Questionnaire).Assembly
+
                     });
         }
 

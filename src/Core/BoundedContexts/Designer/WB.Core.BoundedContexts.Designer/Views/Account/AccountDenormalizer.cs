@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    public class AccountDenormalizer : IEventHandler<AccountConfirmed>, 
+    internal class AccountDenormalizer : IEventHandler<AccountConfirmed>, 
                                        IEventHandler<AccountDeleted>, 
                                        IEventHandler<AccountLocked>, 
                                        IEventHandler<AccountOnlineUpdated>, 
@@ -23,7 +22,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                                        IEventHandler<AccountRoleAdded>, 
                                        IEventHandler<AccountRoleRemoved>, 
                                        IEventHandler<AccountLoginFailed>, 
-                                       IEventHandler<AccountPasswordResetTokenChanged>, IEventHandler
+                                       IEventHandler<AccountPasswordResetTokenChanged>, 
+                                       IEventHandler
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> _accounts;
 
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                 new AccountDocument
                     {
                         ProviderUserKey = @event.EventSourceId, 
-                        UserName = GetLowercaseUserName(@event.Payload.UserName), 
+                        UserName = GetNormalizedUserName(@event.Payload.UserName), 
                         Email = @event.Payload.Email, 
                         ConfirmationToken = @event.Payload.ConfirmationToken, 
                         ApplicationName = @event.Payload.ApplicationName, 
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             item.Comment = @event.Payload.Comment;
             item.Email = @event.Payload.Email;
             item.PasswordQuestion = @event.Payload.PasswordQuestion;
-            item.UserName = GetLowercaseUserName(@event.Payload.UserName);
+            item.UserName = GetNormalizedUserName(@event.Payload.UserName);
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             this._accounts.Store(item, @event.EventSourceId);
         }
 
-        private static string GetLowercaseUserName(string userName)
+        private static string GetNormalizedUserName(string userName)
         {
             return userName.ToLower();
         }
