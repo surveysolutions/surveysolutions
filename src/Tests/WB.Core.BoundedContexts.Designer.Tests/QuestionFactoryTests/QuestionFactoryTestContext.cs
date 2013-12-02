@@ -8,14 +8,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
 {
     internal class QuestionFactoryTestContext
     {
-        public static QuestionFactory CreateQuestionFactory()
+        protected static QuestionFactory CreateQuestionFactory()
         {
             return new QuestionFactory();
         }
 
-        public static QuestionData CreateQuestionData(QuestionType QuestionType)
+        protected static QuestionData CreateQuestionData(QuestionType questionType)
         {
-            return new QuestionData(Guid.NewGuid(), QuestionType, QuestionScope.Interviewer, "title", "var", "", "", "",
+            return new QuestionData(Guid.NewGuid(), questionType, QuestionScope.Interviewer, "title", "var", "", "", "",
                 Order.AsIs, false, false, false, "", new List<Guid>(), null, new Answer[0], null, null, null, null, null);
         }
     }
