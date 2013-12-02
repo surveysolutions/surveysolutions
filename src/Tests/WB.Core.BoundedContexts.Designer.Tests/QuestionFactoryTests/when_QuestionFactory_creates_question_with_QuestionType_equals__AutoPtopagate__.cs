@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
     {
         Establish context = () =>
         {
-            autoPropagateQuestionData = CreateQuestionData(QuestionType: QuestionType.AutoPropagate);
+            autoPropagateQuestionData = CreateQuestionData(questionType: QuestionType.AutoPropagate);
 
             factory = CreateQuestionFactory();
         };
@@ -18,10 +18,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
         Because of = () =>
             resultQuestion = factory.CreateQuestion(autoPropagateQuestionData);
 
-        private It should_create_numeric_question = () =>
+        It should_create_numeric_question = () =>
             resultQuestion.ShouldBeOfType<NumericQuestion>();
 
-        private It should_create_question_with_QuestionType_field_equals__Numeric__ = () =>
+        It should_create_question_with_QuestionType_field_equals__Numeric__ = () =>
            resultQuestion.QuestionType.ShouldEqual(QuestionType.Numeric);
 
         private static QuestionFactory factory;
