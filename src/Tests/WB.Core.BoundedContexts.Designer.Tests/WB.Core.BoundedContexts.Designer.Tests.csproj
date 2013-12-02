@@ -169,7 +169,7 @@
     <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="RoleProviderTests\when_adding_roles_to_users_with_non_Guid_userId.cs" />
     <Compile Include="RoleProviderTests\RoleProviderTestsContext.cs" />
-    <Compile Include="RoleRepositoryTests\AddUserToRole_should_execute_AddRoleToAccountCommand_with_userid_and_type_of_role.cs" />
+    <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
     <Compile Include="RoleRepositoryTests\RoleRepositoryTestsContext.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
