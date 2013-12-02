@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation;
@@ -21,11 +22,12 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
         public void Handle(IPublishableEvent evt)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+
             if (this.IsUpgrader(evt))
             {
-                T currentState = this.storageStrategy.Select(evt.EventSourceId);
+                T currentState = this.GetViewById(evt.EventSourceId);
                 var newState = (T)this.GetType().GetMethod("Update", new Type[] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.storageStrategy.AddOrUpdate(newState, evt.EventSourceId);
+                this.SaveView(evt.EventSourceId, newState);
                 return;
             }
 
@@ -35,49 +37,49 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
                     (T)this.GetType()
                         .GetMethod("Create", new Type[] { eventType })
                         .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
-                this.storageStrategy.AddOrUpdate(newObject, evt.EventSourceId);
+                this.SaveView(evt.EventSourceId, newObject);
                 return;
             }
 
             if (this.IsDeleter(evt))
             {
-                T currentState = this.storageStrategy.Select(evt.EventSourceId);
+                T currentState = this.GetViewById(evt.EventSourceId);
                 this.GetType().GetMethod("Delete", new Type[] { eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.storageStrategy.AddOrUpdate(currentState, evt.EventSourceId);
+                this.SaveView(evt.EventSourceId, currentState);
             }
         }
 
         public void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
         {
-            var createMethods = this.GetType().GetMethods().Where(m => m.Name == "Create");
-            foreach (var createMethod in createMethods)
-            {
-                var parameters = createMethod.GetParameters();
-                var eventParameter = parameters[0].ParameterType;
-                var evntType = eventParameter.GetGenericArguments()[0];
-                NcqrsEnvironment.RegisterEventDataType(evntType);
-                oldEventBus.RegisterHandler(evntType, this.Handle);
-            }
+            var handlerMethodNames = new string[] { "Create", "Update", "Delete" };
 
-            var updateMethods = this.GetType().GetMethods().Where(m => m.Name == "Update");
-            foreach (var updateMethod in updateMethods)
-            {
-                var parameters = updateMethod.GetParameters();
-                var eventParameter = parameters[1].ParameterType;
-                var evntType = eventParameter.GetGenericArguments()[0];
-                NcqrsEnvironment.RegisterEventDataType(evntType);
-                oldEventBus.RegisterHandler(evntType, this.Handle);
-            }
+            var handlers = this.GetType().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)).ToList();
 
-            var deleteMethods = this.GetType().GetMethods().Where(m => m.Name == "Delete");
-            foreach (var deleteMethod in deleteMethods)
-            {
-                var parameters = deleteMethod.GetParameters();
-                var eventParameter = parameters[1].ParameterType;
-                var evntType = eventParameter.GetGenericArguments()[0];
-                NcqrsEnvironment.RegisterEventDataType(evntType);
-                oldEventBus.RegisterHandler(evntType, this.Handle);
-            } 
+            handlers.ForEach((handler) => RegisterOldFashionHandler(oldEventBus, handler));
+        }
+
+        private Type ExtractEventType(MethodInfo method)
+        {
+            var parameters = method.GetParameters();
+            var eventParameter = parameters.Last().ParameterType;
+            return eventParameter.GetGenericArguments()[0];
+        }
+
+        private void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
+        {
+            var evntType = ExtractEventType(method);
+            NcqrsEnvironment.RegisterEventDataType(evntType);
+            oldEventBus.RegisterHandler(evntType, this.Handle);
+        }
+
+        private void SaveView(Guid id, T newState)
+        {
+            this.storageStrategy.AddOrUpdate(newState, id);
+        }
+
+        private T GetViewById(Guid id)
+        {
+            return this.storageStrategy.Select(id);
         }
 
         public void ChangeForSingleEventSource(Guid eventSourceId)
@@ -118,6 +120,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
         }
 
         public string Name { get { return this.GetType().Name; } }
+
         public abstract Type[] UsesViews { get; }
 
         public Type[] BuildsViews
