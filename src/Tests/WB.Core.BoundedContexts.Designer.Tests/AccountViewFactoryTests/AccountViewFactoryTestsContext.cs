@@ -2,21 +2,21 @@
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.AccountViewFactoryTrests
+namespace WB.Core.BoundedContexts.Designer.Tests.AccountViewFactoryTests
 {
-    public class AccountFactoryTestsContext
+    internal class AccountViewFactoryTestsContext
     {
-        public static AccountDocument CreateAccountDocument(string userName)
+        protected static AccountDocument CreateAccountDocument(string userName)
         {
             return new AccountDocument { UserName = userName };
         }
 
-        public static AccountViewInputModel CreateAccountViewInputModel(string accountName)
+        protected static AccountViewInputModel CreateAccountViewInputModel(string accountName)
         {
             return new AccountViewInputModel(accountName, null, null, null);
         }
 
-        public static AccountViewFactory CreateAccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accountsRepositoryMock = null)
+        protected static AccountViewFactory CreateAccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accountsRepositoryMock = null)
         {
             return new AccountViewFactory(accountsRepositoryMock ?? Mock.Of<IQueryableReadSideRepositoryReader<AccountDocument>>());
         }
