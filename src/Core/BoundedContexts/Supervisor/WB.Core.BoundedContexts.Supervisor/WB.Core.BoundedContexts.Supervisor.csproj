@@ -52,14 +52,12 @@
   <ItemGroup>
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
-    <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewDenormalizerFunctional.cs" />
+    <Compile Include="EventHandler\InterviewSummaryDenormalizerFunctional.cs" />
     <Compile Include="EventHandler\InterviewSynchronizationEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
-    <Compile Include="Implementation\ReadSide\InterviewDataRepositoryWriterWithCache.cs" />
-    <Compile Include="Implementation\ReadSide\TemporaryInterviewWriter.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\DataExport\DataExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
@@ -109,6 +107,10 @@
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -129,7 +131,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Implementation\ReadSide\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
