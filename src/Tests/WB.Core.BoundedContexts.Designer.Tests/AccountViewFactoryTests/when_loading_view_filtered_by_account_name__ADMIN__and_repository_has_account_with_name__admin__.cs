@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountViewFactoryTests
                 .Setup(x => x.Query<AccountView>(it.IsAny<Func<IQueryable<AccountDocument>, AccountView>>()))
                 .Returns<Func<IQueryable<AccountDocument>, AccountView>>(func => func.Invoke(repositoryDocuments.AsQueryable()));
 
-            accountFactory = CreateAccountViewFactory(accountsRepositoryMock: accountsRepositoryMock.Object);
+            accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepositoryMock.Object);
         };
 
         Because of = () =>
