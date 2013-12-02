@@ -7,10 +7,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-
-namespace WB.Core.BoundedContexts.Designer.Tests.AccountViewFactoryTrests
+namespace WB.Core.BoundedContexts.Designer.Tests.AccountViewFactoryTests
 {
-    public class when_loading_view_filtered_by_account_name_equals__ADMIN__and_repository_has_account_with_name__admin__ : AccountFactoryTestsContext
+    internal class when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__ : AccountViewFactoryTestsContext
     {
         Establish context = () =>
         {
