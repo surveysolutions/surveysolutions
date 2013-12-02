@@ -319,9 +319,6 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\ServiceModel\Bus\ViewConstructorEventBus\IViewConstructorEventBus.cs">
       <Link>Eventing\ServiceModel\Bus\ViewConstructorEventBus\IViewConstructorEventBus.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\ServiceModel\Bus\ViewConstructorEventBus\ViewConstructorEventBus.cs">
-      <Link>Eventing\ServiceModel\Bus\ViewConstructorEventBus\ViewConstructorEventBus.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\EntitySourcedEventBase.cs">
       <Link>Eventing\Sourcing\EntitySourcedEventBase.cs</Link>
     </Compile>

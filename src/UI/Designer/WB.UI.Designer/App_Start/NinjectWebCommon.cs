@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
@@ -117,7 +118,7 @@ namespace WB.UI.Designer.App_Start
 
         private static ViewConstructorEventBus CreateEventBus(StandardKernel kernel)
         {
-            var bus = new ViewConstructorEventBus();
+            var bus = new ViewConstructorEventBus(NcqrsEnvironment.Get<IEventStore>());
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

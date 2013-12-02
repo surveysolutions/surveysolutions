@@ -601,6 +601,10 @@
       <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
       <Name>WB.Core.Infrastructure.Raven</Name>

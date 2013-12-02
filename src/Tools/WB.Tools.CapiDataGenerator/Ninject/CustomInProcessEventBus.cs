@@ -42,6 +42,16 @@ namespace CapiDataGenerator
             throw new NotImplementedException();
         }
 
+        public void PublishEventsToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlersForPublish)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PublishForSingleEventSource(Guid eventSourceId, long sequence = 0)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IEventHandler> GetAllRegistredEventHandlers()
         {
             throw new NotImplementedException();
