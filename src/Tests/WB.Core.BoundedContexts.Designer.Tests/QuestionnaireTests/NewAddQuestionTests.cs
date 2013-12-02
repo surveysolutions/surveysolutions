@@ -1861,7 +1861,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewAddQuestion_When_Question_Have_Condition_With_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
+        public void NewAddQuestion_When_Question_Have_Condition_With_Reference_To_Existing_Question_Variable_Then_DomainException_should_NOT_be_thrown()
         {
             // arrange
             Guid question1Id = Guid.NewGuid();
@@ -1903,7 +1903,49 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewAddQuestion_When_Question_Have_Validation_With_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
+        public void NewAddQuestion_When_Question_Have_Condition_With_Reference_To_Existing_Question_Id_Then_DomainException_should_NOT_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+
+            string expression = string.Format("[{0}] > 0", question1Id);
+
+            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString() });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddQuestion(
+                questionId: Guid.NewGuid(),
+                groupId: groupId,
+                title: "Question",
+                type: QuestionType.Text,
+                alias: "test",
+                isMandatory: false,
+                isFeatured: false,
+                isHeaderOfPropagatableGroup: false,
+                scope: QuestionScope.Interviewer,
+                condition: expression,
+                validationExpression: string.Empty,
+                validationMessage: string.Empty,
+                instructions: string.Empty,
+                options: null,
+                optionsOrder: Order.AZ,
+                responsibleId: responsibleId,
+                linkedToQuestionId: null,
+                areAnswersOrdered: false,
+                maxAllowedAnswers: null);
+
+            // assert
+            Assert.DoesNotThrow(act);
+        }
+
+        [Test]
+        public void NewAddQuestion_When_Question_Have_Validation_With_Reference_To_Existing_Question_Variable_Then_DomainException_should_NOT_be_thrown()
         {
             // arrange
             Guid question1Id = Guid.NewGuid();
@@ -1917,6 +1959,48 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             RegisterExpressionProcessorMock(expression, new[] { aliasForExistingQuestion });
 
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, aliasForExistingQuestion);
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddQuestion(
+                questionId: Guid.NewGuid(),
+                groupId: groupId,
+                title: "Question",
+                type: QuestionType.Text,
+                alias: "test",
+                isMandatory: false,
+                isFeatured: false,
+                isHeaderOfPropagatableGroup: false,
+                scope: QuestionScope.Interviewer,
+                condition: string.Empty,
+                validationExpression: expression,
+                validationMessage: string.Empty,
+                instructions: string.Empty,
+                options: null,
+                optionsOrder: Order.AZ,
+                responsibleId: responsibleId,
+                linkedToQuestionId: null,
+                areAnswersOrdered: false,
+                maxAllowedAnswers: null);
+
+            // assert
+            Assert.DoesNotThrow(act);
+        }
+
+        [Test]
+        public void NewAddQuestion_When_Question_Have_Validation_With_Reference_To_Existing_Question_Id_Then_DomainException_should_NOT_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+
+            string expression = string.Format("[{0}] > 0", question1Id);
+
+            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString() });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
 
             // act
             TestDelegate act = () => questionnaire.NewAddQuestion(
@@ -1988,6 +2072,51 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        public void NewAddQuestion_When_Question_Have_Condition_With_2_References_And_Second_Of_Them_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid question2Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string aliasForFirstQuestion = "q1";
+            string aliasForNotExistingQuestion = "q2";
+            string expression = string.Format("[{0}] > 0 AND [{1}] > 1", aliasForFirstQuestion, aliasForNotExistingQuestion);
+
+            RegisterExpressionProcessorMock(expression, new[] { aliasForFirstQuestion, aliasForNotExistingQuestion });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, aliasForFirstQuestion);
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddQuestion(
+                questionId: Guid.NewGuid(),
+                groupId: groupId,
+                title: "Question",
+                type: QuestionType.Text,
+                alias: "test",
+                isMandatory: false,
+                isFeatured: false,
+                isHeaderOfPropagatableGroup: false,
+                scope: QuestionScope.Interviewer,
+                condition: expression,
+                validationExpression: string.Empty,
+                validationMessage: string.Empty,
+                instructions: string.Empty,
+                options: null,
+                optionsOrder: Order.AZ,
+                responsibleId: responsibleId,
+                linkedToQuestionId: null,
+                areAnswersOrdered: false,
+                maxAllowedAnswers: null);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
+        }
+
+        [Test]
         public void NewAddQuestion_When_Question_Have_Validation_With_Reference_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
         {
             // arrange
@@ -2002,6 +2131,50 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             RegisterExpressionProcessorMock(expression, new[] { aliasForNotExistingQuestion });
 
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddQuestion(
+                questionId: Guid.NewGuid(),
+                groupId: groupId,
+                title: "Question",
+                type: QuestionType.Text,
+                alias: "test",
+                isMandatory: false,
+                isFeatured: false,
+                isHeaderOfPropagatableGroup: false,
+                scope: QuestionScope.Interviewer,
+                condition: string.Empty,
+                validationExpression: expression,
+                validationMessage: string.Empty,
+                instructions: string.Empty,
+                options: null,
+                optionsOrder: Order.AZ,
+                responsibleId: responsibleId,
+                linkedToQuestionId: null,
+                areAnswersOrdered: false,
+                maxAllowedAnswers: null);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
+        }
+
+        [Test]
+        public void NewAddQuestion_When_Question_Have_Validation_With_2_References_And_Second_Of_Them_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string aliasForFirstQuestion = "q1";
+            string aliasForNotExistingQuestion = "q2";
+            string expression = string.Format("[{0}] > 0 AND [{1}] > 1", aliasForFirstQuestion, aliasForNotExistingQuestion);
+
+            RegisterExpressionProcessorMock(expression, new[] { aliasForFirstQuestion, aliasForNotExistingQuestion });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, aliasForFirstQuestion);
 
             // act
             TestDelegate act = () => questionnaire.NewAddQuestion(
