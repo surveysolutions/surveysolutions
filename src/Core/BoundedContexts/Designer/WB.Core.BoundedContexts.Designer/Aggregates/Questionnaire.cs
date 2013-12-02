@@ -463,7 +463,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
-
         public Questionnaire(Guid publicKey)
             : base(publicKey)
         {
@@ -529,7 +528,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
 
@@ -540,7 +538,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ApplyEvent(new TemplateImported() { Source = document });
 
         }
-
 
         public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId)
 #warning CRUD
@@ -556,14 +553,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
-
         public void DeleteImage(Guid questionKey, Guid imageKey, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey, ResponsibleId = responsibleId });
         }
-
 
         public void AddGroup(Guid groupId, Guid responsibleId,
             string title, Guid? rosterSizeQuestionId, string description, string condition,
@@ -680,8 +675,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-
-
         public void DeleteGroup(Guid groupId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -714,7 +707,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
         }
-
 
         public void CloneQuestion(Guid questionId,
             Guid groupId, string title, QuestionType type, string alias,
@@ -1137,7 +1129,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-
         private static Answer[] ConvertOptionsToAnswers(Option[] options)
         {
             if (options == null)
@@ -1188,7 +1179,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Parent group {0} is a roster and therefore cannot have child groups.",
                     FormatGroupForException(parentGroupId.Value, this.innerDocument)));
         }
-
 
         private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(bool isAutopropagating, Guid[] triggeredGroupIds)
         {
@@ -1367,7 +1357,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return this.GetFirstRosterParentGroupIdOrNull(item.GetParent());
         }
 
-
         private List<Guid> GetAllAutopropagationQuestionsAsVector(IComposite item)
         {
             var allQuestion = new List<Guid>();
@@ -1447,7 +1436,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             return !string.IsNullOrWhiteSpace(expression);
         }
-
 
         private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
         {
@@ -2075,7 +2063,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             return false;
         }
-
 
         private static string FormatGroupForException(Guid groupId, QuestionnaireDocument questionnaireDocument)
         {

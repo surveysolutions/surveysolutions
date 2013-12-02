@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_non_roster_group_that_contains_head_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_prefilled_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_group.cs" />
