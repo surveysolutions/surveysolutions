@@ -1873,7 +1873,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
                     string.Join(Environment.NewLine,
                         referencedQuestions.Select(x => string.Format("One or more questions/groups depend on {0}:{1}{2}",
-                            x.Key,
+                            FormatQuestionForException(x.Key, this.innerDocument),
                             Environment.NewLine,
                             string.Join(Environment.NewLine, x.Value)))));
 
@@ -1891,22 +1891,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
 
             if (question == null)
+                // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} is missing in questionnaire.", rosterSizeQuestionId));
+                    "Roster size question {0} is missing in questionnaire.",
+                    rosterSizeQuestionId));
 
             if (question.QuestionType != QuestionType.Numeric)
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should have Numeric type.", rosterSizeQuestionId));
+                    "Roster size question {0} should have Numeric type.",
+                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             var numericQuestion = (INumericQuestion) question;
 
             if (!numericQuestion.IsInteger)
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should be Integer.", rosterSizeQuestionId));
+                    "Roster size question {0} should be Integer.",
+                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (GetAllParentGroups(numericQuestion).Any(group => group.IsRoster))
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} cannot be placed under another roster group", rosterSizeQuestionId));
+                    "Roster size question {0} cannot be placed under another roster group", 
+                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument) ));
         }
 
         private void ThrowIfQuestionIsUsedAsRosterSize(Guid questionId)
@@ -1916,10 +1921,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (referencingRoster != null)
                 throw new QuestionnaireException(
                     string.Format("Question {0} is referenced as roster size question by group {1}.",
-                    questionId,
+                    FormatQuestionForException(questionId, this.innerDocument),
                     FormatGroupForException(referencingRoster.PublicKey, this.innerDocument)));
         }
 
+
+        private string FormatQuestionForException(Guid questionId, QuestionnaireDocument document)
+        {
+            var question = document.Find<IQuestion>(questionId);
+
+            return string.Format("'{0}', [{1}]", question.QuestionText, question.StataExportCaption);
+        }
 
         private IEnumerable<IGroup> GetAllParentGroups(IComposite entity)
         {
@@ -2009,9 +2021,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static string FormatGroupForException(Guid groupId, QuestionnaireDocument questionnaireDocument)
         {
-            return string.Format("'{0} ({1:N})'",
-                GetGroupTitleForException(groupId, questionnaireDocument),
-                groupId);
+            return string.Format("'{0}'", GetGroupTitleForException(groupId, questionnaireDocument));
         }
 
         private static string GetGroupTitleForException(Guid groupId, QuestionnaireDocument questionnaireDocument)

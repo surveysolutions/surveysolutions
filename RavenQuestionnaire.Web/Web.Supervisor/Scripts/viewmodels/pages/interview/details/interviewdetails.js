@@ -45,7 +45,7 @@ Supervisor.VM.InterviewDetails = function(commandExecutionUrl, inputQuestionnair
     });
     self.invalidCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isValid() ? 0 : 1);
+            return count + (question.isInvalid() ? 1 : 0);
         }, 0);
     });
     self.editableCount = ko.computed(function() {
