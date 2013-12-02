@@ -189,4 +189,10 @@
   <data name="WB0029_RosterGroupHasGroup" xml:space="preserve">
     <value>Roster group could not have groups inside itself</value>
   </data>
+  <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+    <value>Pre-filled questions can't be inside of roster</value>
+  </data>
+  <data name="WB0031_HeadQuestionCantBeInsideOfNonRoster" xml:space="preserve">
+    <value>Head question can't be inside of non-roster</value>
+  </data>
 </root>
