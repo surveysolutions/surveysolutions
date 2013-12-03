@@ -117,6 +117,8 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_non_roster_group_that_contains_prefilled_question.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_roster_group_that_contains_head_question.cs" />
     <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteGroupTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteImageTests.cs" />
