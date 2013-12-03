@@ -9,8 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.RoleRepositoryTests
 {
-
-    internal class AddUserToRole_should_execute_AddRoleToAccountCommand_with_userid_and_type_of_role : RoleRepositoryTestsContext
+    internal class when_adding_role_to_user_with_role_repository : RoleRepositoryTestsContext
     {
         Establish context = () =>
         {
@@ -23,9 +22,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.RoleRepositoryTests
         Because of = () =>
             roleRepository.AddUserToRole(null, validatedRole.ToString(), validatedUserId);
 
-        It should_execute_AddRoleToAccountCommand_with_validatedUserId_and_validatedRole = () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<AddRoleToAccountCommand>(cp => cp.AccountId == validatedUserId &&
-                cp.Role == validatedRole)));
+        It should_execute_AddRoleToAccountCommand_with_specified_UserId = () =>
+            commandService.Verify(command => command.Execute(Moq.It.Is<AddRoleToAccountCommand>(cp => cp.AccountId == validatedUserId)));
+
+        It should_execute_AddRoleToAccountCommand_with_specified_role = () =>
+            commandService.Verify(command => command.Execute(Moq.It.Is<AddRoleToAccountCommand>(cp => cp.Role == validatedRole)));
 
         private static CQRSRoleRepository roleRepository;
         private static Mock<ICommandService> commandService;
