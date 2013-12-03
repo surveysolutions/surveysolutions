@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Tools.CapiDataGenerator;
 
 namespace CapiDataGenerator
 {
-    public class CustomInProcessEventBus : InProcessEventBus, IViewConstructorEventBus
+    public class CustomInProcessEventDispatcher : InProcessEventBus, IEventDispatcher
     {
-        public CustomInProcessEventBus(bool useTransactionScope)
+        public CustomInProcessEventDispatcher(bool useTransactionScope)
             : base(useTransactionScope) {}
 
         protected override Action<PublishedEvent> DoActionForHandler<TEvent>(IEventHandler<TEvent> handler)
@@ -42,12 +42,12 @@ namespace CapiDataGenerator
             throw new NotImplementedException();
         }
 
-        public void PublishEventsToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlersForPublish)
+        public void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers)
         {
             throw new NotImplementedException();
         }
 
-        public void PublishForSingleEventSource(Guid eventSourceId, long sequence = 0)
+        public void PublishByEventSource(Guid eventSourceId, long sequence = 0)
         {
             throw new NotImplementedException();
         }
@@ -57,12 +57,12 @@ namespace CapiDataGenerator
             throw new NotImplementedException();
         }
 
-        public void AddHandler(IEventHandler handler)
+        public void Register(IEventHandler handler)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveHandler(IEventHandler handler)
+        public void Unregister(IEventHandler handler)
         {
             throw new NotImplementedException();
         }

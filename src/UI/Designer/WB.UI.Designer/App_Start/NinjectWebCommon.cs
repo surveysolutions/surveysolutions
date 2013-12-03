@@ -9,7 +9,6 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -37,7 +36,7 @@ namespace WB.UI.Designer.App_Start
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
-        private static ViewConstructorEventBus eventBus;
+        private static EventDispatcher eventDispatcher;
 
         /// <summary>
         ///     Starts the application
@@ -108,21 +107,21 @@ namespace WB.UI.Designer.App_Start
         {
             NcqrsEnvironment.SetGetter<IEventBus>(() => GetEventBus(kernel));
             kernel.Bind<IEventBus>().ToMethod(_ => GetEventBus(kernel));
-            kernel.Bind<IViewConstructorEventBus>().ToMethod(_ => GetEventBus(kernel));
+            kernel.Bind<IEventDispatcher>().ToMethod(_ => GetEventBus(kernel));
         }
 
-        private static ViewConstructorEventBus GetEventBus(StandardKernel kernel)
+        private static EventDispatcher GetEventBus(StandardKernel kernel)
         {
-            return eventBus ?? (eventBus = CreateEventBus(kernel));
+            return eventDispatcher ?? (eventDispatcher = CreateEventBus(kernel));
         }
 
-        private static ViewConstructorEventBus CreateEventBus(StandardKernel kernel)
+        private static EventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var bus = new ViewConstructorEventBus(NcqrsEnvironment.Get<IEventStore>());
+            var bus = new EventDispatcher(NcqrsEnvironment.Get<IEventStore>());
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {
-                bus.AddHandler(handler as IEventHandler);
+                bus.Register(handler as IEventHandler);
             }
 
             return bus;

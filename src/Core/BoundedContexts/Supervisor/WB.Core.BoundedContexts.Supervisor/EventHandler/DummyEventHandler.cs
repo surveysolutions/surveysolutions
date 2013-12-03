@@ -1,6 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler

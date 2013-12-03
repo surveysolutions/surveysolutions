@@ -1,6 +1,5 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization
 {
