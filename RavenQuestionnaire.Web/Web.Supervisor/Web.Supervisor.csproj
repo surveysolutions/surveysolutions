@@ -311,6 +311,8 @@
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
+    <Compile Include="Code\ValidateFileAttribute.cs" />
+    <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
