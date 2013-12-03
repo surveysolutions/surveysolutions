@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Storage;
 
 using Raven.Abstractions.Data;
 using Raven.Client.Document;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
@@ -29,7 +29,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime,string,Exception>>();
 
         private readonly IStreamableEventStore eventStore;
-        private readonly IViewConstructorEventBus eventBus;
+        private readonly IEventDispatcher eventDispatcher;
         private readonly DocumentStore ravenStore;
         private readonly ILogger logger;
         private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
@@ -40,11 +40,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IViewConstructorEventBus eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventDispatcher, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
         IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = eventStore;
-            this.eventBus = eventBus;
+            this.eventDispatcher = eventDispatcher;
             this.ravenStore = ravenStore;
             this.logger = logger;
             this.writerRegistry = writerRegistry;
@@ -93,7 +93,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         public IEnumerable<EventHandlerDescription> GetAllAvailableHandlers()
         {
             return
-                this.eventBus.GetAllRegistredEventHandlers()
+                this.eventDispatcher.GetAllRegistredEventHandlers()
                     .Select(
                         h =>
                         new EventHandlerDescription(h.Name, h.UsesViews.Select(u => u.Name).ToArray(),
@@ -183,7 +183,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
         private IEventHandler[] GetListOfEventHandlersForRebuild(string[] handlerNames)
         {
-            var allHandlers = this.eventBus.GetAllRegistredEventHandlers();
+            var allHandlers = this.eventDispatcher.GetAllRegistredEventHandlers();
             var result = new List<IEventHandler>();
             foreach (var eventHandler in allHandlers)
             {
@@ -213,7 +213,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 {
                     this.EnableCacheInAllRepositoryWriters();
 
-                    republishDetails = this.RepublishAllEvents(eventBus.GetAllRegistredEventHandlers());
+                    republishDetails = this.RepublishAllEvents(this.eventDispatcher.GetAllRegistredEventHandlers());
                 }
                 finally
                 {
@@ -367,7 +367,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                     try
                     {
-                        this.eventBus.PublishEventsToHandlers(@event, handlers);
+                        this.eventDispatcher.PublishEventToHandlers(@event, handlers);
                     }
                     catch (Exception exception)
                     {

@@ -1,6 +1,6 @@
-﻿using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus;
 
-namespace WB.Core.Infrastructure.FunctionalDenormalization
+namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 {
     public interface IUpdateHandler<T, TEvt>
     {
