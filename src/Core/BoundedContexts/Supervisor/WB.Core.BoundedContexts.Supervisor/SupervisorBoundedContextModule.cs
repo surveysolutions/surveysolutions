@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
@@ -29,8 +30,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IExportProvider<InterviewDataExportView>>().To<IterviewExporter>();
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
-            this.Bind<IFunctionalDenormalizer>().To<InterviewSummaryDenormalizerFunctional>();
-            this.Bind<IFunctionalDenormalizer>().To<InterviewDenormalizerFunctional>();
+            this.Bind<IFunctionalEventHandler>().To<InterviewSummaryEventHandlerFunctional>();
+            this.Bind<IFunctionalEventHandler>().To<InterviewEventHandlerFunctional>();
 
             Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;
 

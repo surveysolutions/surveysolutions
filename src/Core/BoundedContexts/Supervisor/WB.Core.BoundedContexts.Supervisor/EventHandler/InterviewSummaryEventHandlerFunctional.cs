@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewSummaryDenormalizerFunctional : AbstractFunctionalDenormalizer<InterviewSummary>, 
+    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary>, 
         ICreateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireBrowseItem) }; }
         }
 
-        public InterviewSummaryDenormalizerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
+        public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
             IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
             : base(interviewSummary)
         {

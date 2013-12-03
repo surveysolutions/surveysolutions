@@ -14,10 +14,10 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class QuestionnaireBrowseItemDenormalizer : AbstractFunctionalDenormalizer<QuestionnaireBrowseItem>,
+    public class QuestionnaireBrowseItemEventHandler : AbstractFunctionalEventHandler<QuestionnaireBrowseItem>,
         ICreateHandler<QuestionnaireBrowseItem, TemplateImported>
     {
-        public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter)
+        public QuestionnaireBrowseItemEventHandler(IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter)
             : base(readsideRepositoryWriter) {}
 
         public override Type[] UsesViews

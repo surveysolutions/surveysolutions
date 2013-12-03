@@ -52,12 +52,12 @@
   <ItemGroup>
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
-    <Compile Include="EventHandler\InterviewDenormalizerFunctional.cs" />
-    <Compile Include="EventHandler\InterviewSummaryDenormalizerFunctional.cs" />
+    <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
+    <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewSynchronizationEventHandler.cs" />
-    <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
     <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />

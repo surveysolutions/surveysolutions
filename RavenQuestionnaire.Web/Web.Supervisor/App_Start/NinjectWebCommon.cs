@@ -25,6 +25,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
@@ -157,7 +158,7 @@ namespace Web.Supervisor.App_Start
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var bus = new EventDispatcher(NcqrsEnvironment.Get<IEventStore>());
+            var bus = new NcqrCompatibleEventDispatcher(NcqrsEnvironment.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
