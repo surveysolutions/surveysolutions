@@ -13,6 +13,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes
                              select
                                  new
                                      {
+                                         sEvent.EventSourceId,
                                          sEvent.EventTimeStamp,
                                          sEvent.EventSequence,
                                          sEvent.EventIdentifier
