@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTests
@@ -25,12 +26,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
                     thirdReferencedGroupId,
                 }),
 
-                CreateGroup(groupId: firstReferencedGroupId),
-                CreateGroup(groupId: secondReferencedGroupId),
-                CreateGroup(groupId: thirdReferencedGroupId),
+                CreateGroup(groupId: firstReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; }),
+                CreateGroup(groupId: secondReferencedGroupId, setup: g => { g.Propagated = Propagate.Propagated; }),
+                CreateGroup(groupId: thirdReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; }),
 
-                CreateGroup(groupId: firstNotReferencedGroupId),
-                CreateGroup(groupId: secondNotReferencedGroupId)
+                CreateGroup(groupId: firstNotReferencedGroupId, setup: g => { g.Propagated = Propagate.AutoPropagated; }),
+                CreateGroup(groupId: secondNotReferencedGroupId, setup: g => { g.Propagated = Propagate.Propagated; })
             );
 
             upgrader = CreateQuestionnaireDocumentUpgrader();
@@ -59,6 +60,22 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
 
         It should_make_second_not_referenced_group_not_roster = () =>
             resultDocument.GetGroup(secondNotReferencedGroupId).IsRoster.ShouldBeFalse();
+
+        It should_mark_first_roster_group_as_not_propagated = () =>
+            resultDocument.GetGroup(firstReferencedGroupId).Propagated.ShouldEqual(Propagate.None);
+
+        It should_make_second_roster_group_as_not_propagated = () =>
+            resultDocument.GetGroup(secondReferencedGroupId).Propagated.ShouldEqual(Propagate.None);
+
+        It should_make_third_roster_group_as_not_propagated = () =>
+            resultDocument.GetGroup(thirdReferencedGroupId).Propagated.ShouldEqual(Propagate.None);
+
+        It should_make_first_not_referenced_group_as_not_propagated = () =>
+            resultDocument.GetGroup(firstNotReferencedGroupId).Propagated.ShouldEqual(Propagate.None);
+
+        It should_make_second_not_referenced_group_as_not_propagated = () =>
+            resultDocument.GetGroup(secondNotReferencedGroupId).Propagated.ShouldEqual(Propagate.None);
+
 
         private static QuestionnaireDocument resultDocument;
         private static QuestionnaireDocumentUpgrader upgrader;

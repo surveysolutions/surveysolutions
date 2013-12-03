@@ -63,7 +63,6 @@
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="Commands\Questionnaire\ImportFromDesigner.cs" />
     <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
-    <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />

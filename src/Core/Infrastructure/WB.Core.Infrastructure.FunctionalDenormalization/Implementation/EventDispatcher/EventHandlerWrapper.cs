@@ -1,7 +1,6 @@
-﻿using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using Ncqrs.Eventing.ServiceModel.Bus;
 
-namespace WB.Core.Infrastructure.FunctionalDenormalization
+namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher
 {
     public class EventHandlerWrapper
     {
