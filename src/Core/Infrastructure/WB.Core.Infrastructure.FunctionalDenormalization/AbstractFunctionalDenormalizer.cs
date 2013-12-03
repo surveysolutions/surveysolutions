@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository;
