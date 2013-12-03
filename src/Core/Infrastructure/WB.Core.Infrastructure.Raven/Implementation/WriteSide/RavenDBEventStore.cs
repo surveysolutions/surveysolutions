@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
@@ -26,7 +27,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
         /// </summary>
         private readonly int pageSize = 1024;
 
-        private readonly int timeout = 120;
+        private readonly int timeout = 180;
 
         public RavenDBEventStore(string ravenUrl, int pageSize)
         {
@@ -35,7 +36,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     Url = ravenUrl, 
                     Conventions = CreateStoreConventions(CollectionName)
                 }.Initialize();
-
+            
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 30 * 60 * 1000; /*ms*/
@@ -50,6 +51,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
         {
             externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             this.DocumentStore = externalDocumentStore;
+
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 30 * 60 * 1000; /*ms*/
@@ -259,10 +261,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
         {
-            return GetAllEventsStream(bulkSize);
+            return GetAllEventsWithStream(bulkSize);
         }
 
-        private IEnumerable<CommittedEvent[]> GetAllEventsInternal(int bulkSize)
+        private IEnumerable<CommittedEvent[]> GetAllEventsWithPaging(int bulkSize)
         {
             int returnedEventCount = 0;
 
@@ -288,7 +290,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
             }
         }
 
-        private IEnumerable<CommittedEvent[]> GetAllEventsStream(int bulkSize)
+        private IEnumerable<CommittedEvent[]> GetAllEventsWithStream(int bulkSize)
         {
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
@@ -300,9 +302,24 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
                     while (enumerator.MoveNext())
                     {
-                        yield return  new CommittedEvent[]{ ToCommittedEvent(enumerator.Current.Document)};
+                        yield return ToCommittedEvent(enumerator.Current.Document);
                     }
                 }
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEventsWithStreamByEtag(int bulkSize)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                using (var enumerator = session.Advanced.Stream<StoredEvent>(fromEtag: Etag.Empty,
+                    start: 0, pageSize: int.MaxValue))
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        yield return new CommittedEvent[] { ToCommittedEvent(enumerator.Current.Document) };
+                    }
+                }
+            }
         }
     }
 }
