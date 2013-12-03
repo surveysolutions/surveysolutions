@@ -435,6 +435,8 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="NLog.Debug.config" />
+    <Content Include="NLog.common.config" />
     <None Include="Properties\PublishProfiles\t1.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\director.js" />
