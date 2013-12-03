@@ -19,7 +19,6 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -110,8 +109,8 @@ namespace CapiDataGenerator
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            var bus = new CustomInProcessEventBus(true);
-            this.Bind<IViewConstructorEventBus>().ToConstant(bus);
+            var bus = new CustomInProcessEventDispatcher(true);
+            this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             this.Bind<IEventBus>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);

@@ -14,7 +14,7 @@
         self.rosterVector = ko.observable();
         self.questionType = ko.observable();
         self.title = ko.observable();
-        self.isValid = ko.observable(true);
+        self.isInvalid = ko.observable(true);
         self.isVisible = ko.observable(true);
         self.isSelected = ko.observable(false);
         self.isAnswered = ko.observable(false);
@@ -22,7 +22,7 @@
         self.validationExpression = ko.observable('');
         self.scope = ko.observable();
         self.markerStyle = ko.computed(function () {
-            if (self.isValid() == false) {
+            if (self.isInvalid()) {
                 return "invalid";
             }
             if (self.scope() == "Supervisor") {
@@ -45,7 +45,7 @@
                     self.isVisible(self.isAnswered());
                     break;
                 case "invalid":
-                    self.isVisible(self.isValid() == false);
+                    self.isVisible(self.isInvalid());
                     break;
                 case "supervisor":
                     self.isVisible(self.scope() == "Supervisor");
@@ -89,7 +89,6 @@
             self.answer = ko.observable().extend({ required: true });
             self.errors = ko.validation.group(self);
             self.isValid = ko.observable(true);
-            return self;
         },
         NumericQuestion: function (isInteger, countOfDecimalPlaces) {
             var self = this;
@@ -106,7 +105,6 @@
             }
 
             self.errors = ko.validation.group(self);
-            self.isValid = ko.observable(true);
             return self;
         },
         DateTimeQuestion: function () {
@@ -136,7 +134,6 @@
                 return _.isEmpty(o) ? "" : o.label;
             });
             self.errors = ko.validation.group(self);
-            self.isValid = ko.observable(true);
             return self;
         },
         MultyOptionQuestion: function(areAnswersOrdered, maxAllowedAnswers) {
@@ -219,7 +216,6 @@
                 return a;
             });
             self.errors = ko.validation.group(self);
-            self.isValid = ko.observable(true);
             return self;
         },
         Group: function () {

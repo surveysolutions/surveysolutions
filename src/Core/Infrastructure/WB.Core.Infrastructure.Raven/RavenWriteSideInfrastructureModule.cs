@@ -29,8 +29,6 @@ namespace WB.Core.Infrastructure.Raven
             NcqrsEnvironment.SetGetter<IEventStore>(this.GetEventStore);
             this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore());
             this.Kernel.Bind<IEventStore>().ToMethod(_ => this.GetEventStore());
-
-            this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
         }
 
         private IStreamableEventStore GetEventStore()

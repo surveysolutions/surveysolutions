@@ -1,7 +1,6 @@
 using System;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -11,13 +10,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
     public class ReadSideRepositoryReaderWithSequence<T> : IReadSideRepositoryReader<T> where T : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideRepositoryReader<ViewWithSequence<T>> interviewReader;
-        private IEventStore eventStore;
         private Action<Guid, long> additionalEventChecker;
 
         public ReadSideRepositoryReaderWithSequence(
             IReadSideRepositoryReader<ViewWithSequence<T>> interviewReader, Action<Guid, long> additionalEventChecker)
         {
-            this.eventStore = NcqrsEnvironment.Get<IEventStore>();
             this.interviewReader = interviewReader;
             this.additionalEventChecker = additionalEventChecker;
         }
@@ -45,11 +42,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
         {
             this.additionalEventChecker(interviewId,sequence);
 
-            var bus = NcqrsEnvironment.Get<IEventBus>() as IViewConstructorEventBus;
+            var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
             if (bus == null)
                 return false;
 
-            bus.PublishForSingleEventSource(interviewId, sequence);
+            bus.PublishByEventSource(interviewId, sequence);
             return true;
         }
     }

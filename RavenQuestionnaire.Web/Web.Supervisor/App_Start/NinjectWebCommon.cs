@@ -14,7 +14,6 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -26,6 +25,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
@@ -158,13 +158,13 @@ namespace Web.Supervisor.App_Start
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var bus = new ViewConstructorEventBus(NcqrsEnvironment.Get<IEventStore>());
+            var bus = new NcqrCompatibleEventDispatcher(NcqrsEnvironment.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
-            kernel.Bind<IViewConstructorEventBus>().ToConstant(bus);
+            kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {
-                bus.AddHandler(handler as IEventHandler);
+                bus.Register(handler as IEventHandler);
             }
         }
 

@@ -115,7 +115,7 @@
     <Compile Include="MVVMCross\DebugTrace.cs" />
     <Compile Include="Converters\ElapsedTimeConverter.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Ninject\CustomInProcessEventBus.cs" />
+    <Compile Include="Ninject\CustomInProcessEventDispatcher.cs" />
     <Compile Include="Services\DefaultBackup.cs" />
     <Compile Include="Services\IOpenFileService.cs" />
     <Compile Include="Models\MainPageModel.cs" />

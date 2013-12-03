@@ -179,11 +179,11 @@
                 <div class="innerLR ">
                     <!-- ko foreach: groups -->
                     <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
-                        <h2 data-bind="text: title" class="heading"></h2>
+                        <h2 data-bind="html: title" class="heading"></h2>
                         <div class="questions">
                             <table class="table table-bordered table-hover">
                                 <tbody data-bind="foreach: questions">
-                                    <tr data-bind="visible : isVisible,css: {success: isSelected, error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
+                                    <tr data-bind="visible : isVisible,css: {success: isSelected, error : isInvalid() && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
                                         <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
                                             <div class="cell-content" data-bind="css: {featured : isFeatured}">
                                                 <span class="icon-star"></span>
@@ -195,8 +195,8 @@
                                                 <div class="question-clickable">
                                                     <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                     <span data-bind="template: { name: questionType() }"></span>
-                                                    <small class="text-error" data-bind="html:validationExpression, visible: isValid()==false"></small>
-                                                    <small class="text-error" data-bind="html:validationMessage, visible: isValid()==false"></small>
+                                                    <small class="text-error" data-bind="html:validationExpression, visible: isInvalid"></small>
+                                                    <small class="text-error" data-bind="html:validationMessage, visible: isInvalid"></small>
                                                 </div>
                                             </div>
                                         </td>

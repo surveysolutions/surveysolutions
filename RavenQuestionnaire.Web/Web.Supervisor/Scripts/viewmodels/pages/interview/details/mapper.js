@@ -86,7 +86,7 @@
             item.isFeatured(dto.IsFeatured);
             item.isMandatory(dto.IsMandatory);
             item.rosterVector(dto.RosterVector);
-            item.isValid(dto.IsValid);
+            item.isInvalid(_.isBoolean(dto.IsValid) ? dto.IsValid == false : null);
             item.validationMessage(dto.ValidationMessage);
             item.validationExpression(dto.ValidationExpression);
                 

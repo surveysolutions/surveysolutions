@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 
-namespace WB.Core.Infrastructure.FunctionalDenormalization
+namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 {
-    public interface IFunctionalDenormalizer : IEventHandler
+    public interface IFunctionalEventHandler : IEventHandler
     {
         void Handle(IPublishableEvent evt);
         void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus);
