@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 namespace WB.Core.BoundedContexts.Designer.Tests.RoleProviderTests
 {
 
-    internal class AddUsersToRoles_should_throw_provider_exception_if_user_id_is_not_be_parsed_as_guid : RoleProviderTestsContext
+    internal class when_adding_roles_to_users_with_non_Guid_userId : RoleProviderTestsContext
     {
         Establish context = () =>
         {
@@ -20,19 +20,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.RoleProviderTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => roleProvider.AddUsersToRoles(new[] { validatedUserId }, new[] { roleName }));
+            exception = Catch.Exception(() => roleProvider.AddUsersToRoles(new[] { nonGuidAccountId }, new[] { roleName }));
 
         It should_throw_ProviderException = () =>
             exception.ShouldBeOfType<ProviderException>();
 
-        It should_throw_exception_with_message_containting__parse__ = () =>
+        It should_throw_exception_with_message_containing__parse__ = () =>
             exception.Message.ToLower().ShouldContain("parse");
 
-        It should_throw_exception_with_message_containting_not_guid_user_id = () =>
-            exception.Message.ShouldContain(validatedUserId);    
+        It should_throw_exception_with_message_containing_not_guid_user_id = () =>
+            exception.Message.ShouldContain(nonGuidAccountId);    
 
         private static RoleProvider roleProvider;
-        private static string validatedUserId = "not guid user id";
+        private static string nonGuidAccountId = "not guid user id";
         private static string roleName = SimpleRoleEnum.User.ToString();
         private static Exception exception;
     }
