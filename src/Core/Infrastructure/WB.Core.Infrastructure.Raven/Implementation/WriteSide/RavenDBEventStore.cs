@@ -302,7 +302,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
                     while (enumerator.MoveNext())
                     {
-                        yield return ToCommittedEvent(enumerator.Current.Document);
+                        yield return new CommittedEvent[]{ToCommittedEvent(enumerator.Current.Document)};
                     }
                 }
         }
