@@ -30,9 +30,6 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IExportProvider<InterviewDataExportView>>().To<IterviewExporter>();
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
-            this.Bind<IFunctionalEventHandler>().To<InterviewSummaryEventHandlerFunctional>();
-            this.Bind<IFunctionalEventHandler>().To<InterviewEventHandlerFunctional>();
-
             Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;
 
             this.Bind<IReadSideRepositoryReader<InterviewData>>()
