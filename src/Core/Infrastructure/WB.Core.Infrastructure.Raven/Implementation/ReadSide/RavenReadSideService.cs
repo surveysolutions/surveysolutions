@@ -7,9 +7,11 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 
 using Raven.Abstractions.Data;
+using Raven.Abstractions.Indexing;
+using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
@@ -17,7 +19,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
     internal class RavenReadSideService : IReadSideStatusService, IReadSideAdministrationService
     {
         private const int MaxAllowedFailedEvents = 100;
-        private const string ViewsDatabaseName = "Views";
 
         private static readonly object RebuildAllViewsLockObject = new object();
         private static readonly object ErrorsLockObject = new object();
@@ -26,10 +27,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         private static bool shouldStopViewsRebuilding = false;
 
         private static string statusMessage;
-        private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime,string,Exception>>();
+        private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime, string, Exception>>();
 
         private readonly IStreamableEventStore eventStore;
-        private readonly IEventDispatcher eventDispatcher;
+        private readonly IViewConstructorEventBus eventBus;
         private readonly DocumentStore ravenStore;
         private readonly ILogger logger;
         private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
@@ -40,11 +41,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventDispatcher, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
+        public RavenReadSideService(IStreamableEventStore eventStore, IViewConstructorEventBus eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
         IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = eventStore;
-            this.eventDispatcher = eventDispatcher;
+            this.eventBus = eventBus;
             this.ravenStore = ravenStore;
             this.logger = logger;
             this.writerRegistry = writerRegistry;
@@ -93,7 +94,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         public IEnumerable<EventHandlerDescription> GetAllAvailableHandlers()
         {
             return
-                this.eventDispatcher.GetAllRegistredEventHandlers()
+                this.eventBus.GetAllRegistredEventHandlers()
                     .Select(
                         h =>
                         new EventHandlerDescription(h.Name, h.UsesViews.Select(u => u.Name).ToArray(),
@@ -138,7 +139,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 areViewsBeingRebuiltNow = true;
 
                 var handlers = GetListOfEventHandlersForRebuild(handlerNames);
-                
+
                 var viewTypes = GetAllViewsBuildByHandlers(handlers);
 
                 this.DeleteViews(viewTypes);
@@ -149,13 +150,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 try
                 {
+                    this.DisableHandlersWhichAreNotInList(handlers);
+
                     this.EnableCacheInRepositoryWriters(writers);
 
-                    republishDetails = this.RepublishAllEvents(handlers);
+                    republishDetails = this.RepublishAllEvents();
                 }
                 finally
                 {
                     this.DisableCacheInRepositoryWriters(writers);
+                    this.EnableHandlerAllHandlers();
 
                     UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
                 }
@@ -183,14 +187,27 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
         private IEventHandler[] GetListOfEventHandlersForRebuild(string[] handlerNames)
         {
-            var allHandlers = this.eventDispatcher.GetAllRegistredEventHandlers();
+            var allHandlers = this.eventBus.GetAllRegistredEventHandlers();
             var result = new List<IEventHandler>();
             foreach (var eventHandler in allHandlers)
             {
-                if(handlerNames.Contains(eventHandler.Name))
+                if (handlerNames.Contains(eventHandler.Name))
                     result.Add(eventHandler);
             }
             return result.ToArray();
+        }
+
+        private void EnableHandlerAllHandlers()
+        {
+            this.eventBus.EnableAllHandlers();
+        }
+
+        private void DisableHandlersWhichAreNotInList(IEventHandler[] handlers)
+        {
+            foreach (var eventHandler in handlers)
+            {
+                this.eventBus.DisableEventHandler(eventHandler.GetType());
+            }
         }
 
         private IEnumerable<IRavenReadSideRepositoryWriter> GetListOfWritersForEnableCache(Type[] viewTypes)
@@ -213,7 +230,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 {
                     this.EnableCacheInAllRepositoryWriters();
 
-                    republishDetails = this.RepublishAllEvents(this.eventDispatcher.GetAllRegistredEventHandlers());
+                    republishDetails = this.RepublishAllEvents();
                 }
                 finally
                 {
@@ -255,18 +272,18 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                     .DatabaseCommands
                     .ForDatabase("Views")
                     .DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery
-                        {
-                            Query = query
-                        });
-                    UpdateStatusMessage(string.Format("{0} view was deleted.", viewType.Name));
+                    {
+                        Query = query
+                    });
+                UpdateStatusMessage(string.Format("{0} view was deleted.", viewType.Name));
 
 
                 int resultViewCount = this.ravenStore
                                           .DatabaseCommands
                                           .ForDatabase("Views").Query("Raven/DocumentsByEntityName", new IndexQuery
-                                              {
-                                                  Query = query
-                                              }, new string[0]).Results.Count;
+                                          {
+                                              Query = query
+                                          }, new string[0]).Results.Count;
 
                 if (resultViewCount > 0)
                     throw new Exception(string.Format(
@@ -278,16 +295,58 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         {
             ThrowIfShouldStopViewsRebuilding();
 
-            UpdateStatusMessage(string.Format("Delete database {0}", ViewsDatabaseName));
+            UpdateStatusMessage("Determining count of views to be deleted.");
 
-            this.ravenStore.DeleteDatabase(ViewsDatabaseName, true);
+            this.ravenStore
+                .DatabaseCommands
+                .EnsureDatabaseExists("Views");
+
+            this.ravenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .PutIndex(
+                    "AllViews",
+                    new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
+                    overwrite: true);
+
+            int initialViewCount;
+            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
+            {
+                // this will also materialize index if it is out of date or was just created
+                initialViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
 
             ThrowIfShouldStopViewsRebuilding();
 
-            UpdateStatusMessage(string.Format("Create database {0}", ViewsDatabaseName));
+            UpdateStatusMessage(string.Format("Deleting {0} views.", initialViewCount));
 
-            this.ravenStore.CreateDatabase(ViewsDatabaseName);
+            this.ravenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .DeleteByIndex("AllViews", new IndexQuery());
+
+            UpdateStatusMessage("Checking remaining views count.");
+
+            int resultViewCount;
+            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
+            {
+                resultViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+
+            if (resultViewCount > 0)
+                throw new Exception(string.Format(
+                    "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
+                    initialViewCount, resultViewCount));
+
+            UpdateStatusMessage(string.Format("{0} views were deleted.", initialViewCount));
         }
+
 
         private void EnableCacheInRepositoryWriters(IEnumerable<IRavenReadSideRepositoryWriter> writers)
         {
@@ -337,7 +396,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private string RepublishAllEvents(IEnumerable<IEventHandler> handlers)
+        private string RepublishAllEvents()
         {
             int processedEventsCount = 0;
             int failedEventsCount = 0;
@@ -367,7 +426,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                     try
                     {
-                        this.eventDispatcher.PublishEventToHandlers(@event, handlers);
+                        this.eventBus.Publish(@event);
                     }
                     catch (Exception exception)
                     {
@@ -439,7 +498,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             List<IRavenReadSideRepositoryWriter> writers = this.writerRegistry.GetAll().ToList();
 
             bool areThereNoWriters = writers.Count == 0;
-            #warning to Tolik: calls to dictionary (writer cache) from other thread rais exceptions because Dictionary is not thread safe
+#warning to Tolik: calls to dictionary (writer cache) from other thread rais exceptions because Dictionary is not thread safe
             return areThereNoWriters
                 ? "Registered writers: None"
                 : string.Format(
