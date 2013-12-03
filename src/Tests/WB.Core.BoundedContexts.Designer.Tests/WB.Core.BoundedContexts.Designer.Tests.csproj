@@ -70,13 +70,13 @@
     <Compile Include="AccountDenormalizerTests\when_handling_AccountUpdated_event_and_user_name_equals__ADMIN__.cs" />
     <Compile Include="AccountDenormalizerTests\when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__.cs" />
     <Compile Include="AccountRepositoryTests\AccountRepositoryTestsContext.cs" />
-    <Compile Include="AccountRepositoryTests\Register_should_execute_RegisterAccountCommand_with_account_id.cs" />
-    <Compile Include="AccountRepositoryTests\Create_should_return_membership_account__with_id_the_same_as_input_account_id.cs" />
+    <Compile Include="AccountRepositoryTests\when_registering_new_user_with_account_repository.cs" />
+    <Compile Include="AccountRepositoryTests\when_account_repository_creating_new_user.cs" />
     <Compile Include="AccountViewFactoryTests\AccountViewFactoryTestsContext.cs" />
     <Compile Include="AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventContextExtenstions.cs" />
-    <Compile Include="MembershipProviderTests\CreateUserAndAccount_should_create_membership_account_with_input_account_id.cs" />
+    <Compile Include="MembershipProviderTests\when_creating_user_and_account_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\MembershipProviderTestsContext.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
@@ -117,6 +117,8 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_non_roster_group_that_contains_prefilled_question.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_roster_group_that_contains_head_question.cs" />
     <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteGroupTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteImageTests.cs" />
@@ -167,9 +169,9 @@
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
-    <Compile Include="RoleProviderTests\AddUsersToRoles_should_throw_provider_exception_if_user_id_is_not_a_guid.cs" />
+    <Compile Include="RoleProviderTests\when_adding_roles_to_users_with_non_Guid_userId.cs" />
     <Compile Include="RoleProviderTests\RoleProviderTestsContext.cs" />
-    <Compile Include="RoleRepositoryTests\AddUserToRole_should_execute_AddRoleToAccountCommand_with_userid_and_type_of_role.cs" />
+    <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
     <Compile Include="RoleRepositoryTests\RoleRepositoryTestsContext.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
