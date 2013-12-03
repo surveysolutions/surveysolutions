@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
-                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                    e.Request.Timeout = 30 * 60 * 1000; /*ms*/
                 };
             this.pageSize = pageSize;
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
@@ -52,7 +52,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
             this.DocumentStore = externalDocumentStore;
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
-                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                    e.Request.Timeout = 30 * 60 * 1000; /*ms*/
                 };
             this.pageSize = pageSize;
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
@@ -108,10 +108,37 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
+            return ReadFromInternalWithPaging(id, minVersion, maxVersion);
+        }
+
+        private CommittedEventStream ReadFromInternalWithPaging(Guid id, long minVersion, long maxVersion)
+        {
             IEnumerable<StoredEvent> storedEvents =
                 this.AccumulateEvents(
                     x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
+
+        }
+
+        private CommittedEventStream ReadFromInternalWithStreaming(Guid id, long minVersion, long maxVersion)
+        {
+            List<CommittedEvent> storedEvents = new List<CommittedEvent>();
+
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
+                    .Where(x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
+                    .OrderBy(y => y.EventSequence);
+
+                var enumerator = session.Advanced.Stream(query);
+
+                while (enumerator.MoveNext())
+                {
+                    storedEvents.Add (ToCommittedEvent(enumerator.Current.Document));
+                }
+            }
+
+            return new CommittedEventStream(id, storedEvents);
         }
 
         public void Store(UncommittedEventStream eventStream)
