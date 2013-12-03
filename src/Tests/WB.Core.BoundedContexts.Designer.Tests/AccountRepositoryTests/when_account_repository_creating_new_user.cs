@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 namespace WB.Core.BoundedContexts.Designer.Tests.AccountRepositoryTests
 {
 
-    internal class Create_should_return_membership_account__with_id_the_same_as_input_account_id : AccountRepositoryTestsContext
+    internal class when_account_repository_creating_new_user: AccountRepositoryTestsContext
     {
         Establish context = () =>
         {
@@ -21,13 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountRepositoryTests
         Because of = () =>
             validatedAccount = accountRepository.Create(validatedUserId, null, string.Empty, string.Empty);
 
-        It should_validated_account_provider_user_key_not_be_null = () =>
-            validatedAccount.ProviderUserKey.ShouldNotBeNull();
-
-        It should_validated_acount_provider_user_key_be_type_of_guid = () =>
-            validatedAccount.ProviderUserKey.ShouldBeOfType<Guid>();
-
-        It should_validated_acount_provider_user_key_be_the_same_as_validated_user_id = () =>
+        It should_set_returned_account_provider_user_key_to_user_id = () =>
             validatedAccount.ProviderUserKey.ShouldEqual(validatedUserId);
 
         private static CQRSAccountRepository accountRepository;

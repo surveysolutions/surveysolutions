@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 namespace WB.Core.BoundedContexts.Designer.Tests.AccountRepositoryTests
 {
 
-    internal class Register_should_execute_RegisterAccountCommand_with_account_id_the_same_as_input_membership_account_id : AccountRepositoryTestsContext
+    internal class when_registering_new_user_with_account_repository : AccountRepositoryTestsContext
     {
         Establish context = () =>
         {
@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountRepositoryTests
         Because of = () =>
             accountRepository.Register(new AccountView() { ProviderUserKey = validatedUserId });
 
-        It should_execute_RegisterAccountCommand_with_account_id_the_same_as_validatedUserId = () =>
+        It should_execute_RegisterAccountCommand_with_specified_validatedUserId = () =>
             commandService.Verify(command => command.Execute(Moq.It.Is<RegisterAccountCommand>(cp => cp.AccountId == validatedUserId)));
 
         private static CQRSAccountRepository accountRepository;
