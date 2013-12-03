@@ -1,21 +1,19 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.Infrastructure.FunctionalDenormalization
+namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 {
-    public abstract class AbstractFunctionalDenormalizer<T> : IFunctionalDenormalizer where T : class, IReadSideRepositoryEntity
+    public abstract class AbstractFunctionalEventHandler<T> : IFunctionalEventHandler where T : class, IReadSideRepositoryEntity
     {
         private IStorageStrategy<T> storageStrategy;
         private IStorageStrategy<T> percistantStorageStrategy;
-        protected AbstractFunctionalDenormalizer(IReadSideRepositoryWriter<T> readsideRepositoryWriter)
+        protected AbstractFunctionalEventHandler(IReadSideRepositoryWriter<T> readsideRepositoryWriter)
         {
             this.storageStrategy = new ReadSideStorageStrategy<T>(readsideRepositoryWriter);
         }
@@ -56,7 +54,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
 
             var handlers = this.GetType().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)).ToList();
 
-            handlers.ForEach((handler) => RegisterOldFashionHandler(oldEventBus, handler));
+            handlers.ForEach((handler) => this.RegisterOldFashionHandler(oldEventBus, handler));
         }
 
         private Type ExtractEventType(MethodInfo method)
@@ -68,7 +66,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
 
         private void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
         {
-            var evntType = ExtractEventType(method);
+            var evntType = this.ExtractEventType(method);
             NcqrsEnvironment.RegisterEventDataType(evntType);
             oldEventBus.RegisterHandler(evntType, this.Handle);
         }

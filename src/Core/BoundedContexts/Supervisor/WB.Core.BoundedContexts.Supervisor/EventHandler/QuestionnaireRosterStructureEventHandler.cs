@@ -12,10 +12,10 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class QuestionnaireRosterStructureDenormalizer : AbstractFunctionalDenormalizer<QuestionnaireRosterStructure>,
+    public class QuestionnaireRosterStructureEventHandler : AbstractFunctionalEventHandler<QuestionnaireRosterStructure>,
         ICreateHandler<QuestionnaireRosterStructure, TemplateImported>
     {
-        public QuestionnaireRosterStructureDenormalizer(IReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter)
+        public QuestionnaireRosterStructureEventHandler(IReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter)
             : base(readsideRepositoryWriter) {}
 
         public override Type[] UsesViews
