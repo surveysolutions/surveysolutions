@@ -9,6 +9,8 @@ using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -17,8 +19,8 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewDenormalizerFunctional : 
-        AbstractFunctionalDenormalizer<ViewWithSequence<InterviewData>>, 
+    public class InterviewEventHandlerFunctional : 
+        AbstractFunctionalEventHandler<ViewWithSequence<InterviewData>>, 
         ICreateHandler<ViewWithSequence<InterviewData>, InterviewCreated>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewStatusChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, SupervisorAssigned>,
@@ -217,7 +219,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        public InterviewDenormalizerFunctional(IReadSideRepositoryWriter<UserDocument> users, IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
+        public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users, IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewData)
             : base(interviewData)
         {

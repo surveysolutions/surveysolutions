@@ -97,6 +97,7 @@
     <Compile Include="Implementation\WriteSide\Indexes\Event_ByEventSource.cs" />
     <Compile Include="Implementation\WriteSide\Indexes\UniqueEventsIndex.cs" />
     <Compile Include="Implementation\WriteSide\RavenWriteSideStore.cs" />
+    <Compile Include="RavenExtensions.cs" />
     <Compile Include="RavenInfrastructureModule.cs" />
     <Compile Include="RavenReadSideInfrastructureModule.cs" />
     <Compile Include="Implementation\ReadSide\RavenReadSideService.cs" />
@@ -129,6 +130,10 @@
     <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

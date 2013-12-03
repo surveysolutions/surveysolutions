@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             }
             else if (!string.IsNullOrEmpty(input.AccountName))
             {
-                query = (x) => x.UserName == input.AccountName.ToLower();
+                query = (x) => x.UserName == NormalizeAccountName(input.AccountName);
             }
             else if (!string.IsNullOrEmpty(input.AccountEmail))
             {
@@ -73,6 +73,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                                 SimpleRoles = x.SimpleRoles
                             })
                     .FirstOrDefault());
+        }
+
+        private string NormalizeAccountName(string accountName)
+        {
+            return accountName.ToLower();
         }
     }
 }
