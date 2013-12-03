@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
@@ -36,7 +37,7 @@ namespace WB.UI.Designer.App_Start
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
-        private static EventDispatcher eventDispatcher;
+        private static NcqrCompatibleEventDispatcher eventDispatcher;
 
         /// <summary>
         ///     Starts the application
@@ -110,14 +111,14 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IEventDispatcher>().ToMethod(_ => GetEventBus(kernel));
         }
 
-        private static EventDispatcher GetEventBus(StandardKernel kernel)
+        private static NcqrCompatibleEventDispatcher GetEventBus(StandardKernel kernel)
         {
             return eventDispatcher ?? (eventDispatcher = CreateEventBus(kernel));
         }
 
-        private static EventDispatcher CreateEventBus(StandardKernel kernel)
+        private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var bus = new EventDispatcher(NcqrsEnvironment.Get<IEventStore>());
+            var bus = new NcqrCompatibleEventDispatcher(NcqrsEnvironment.Get<IEventStore>());
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

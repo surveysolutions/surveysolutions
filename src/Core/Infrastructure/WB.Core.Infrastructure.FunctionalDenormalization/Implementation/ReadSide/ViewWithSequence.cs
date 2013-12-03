@@ -1,6 +1,6 @@
-﻿using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.Core.Infrastructure.FunctionalDenormalization
+namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide
 {
     public class ViewWithSequence<T> : IView
     {

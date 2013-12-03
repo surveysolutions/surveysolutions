@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 
-namespace WB.Core.Infrastructure.FunctionalDenormalization
+namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher
 {
-    public class EventDispatcher : IEventDispatcher
+    public class NcqrCompatibleEventDispatcher : IEventDispatcher
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly IEventStore eventStore;
 
-        public EventDispatcher(IEventStore eventStore)
+        public NcqrCompatibleEventDispatcher(IEventStore eventStore)
         {
             this.eventStore = eventStore;
         }
@@ -39,10 +40,10 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
             if (eventMessages.IsEmpty)
                 return;
 
-            var functionalDenormalizers = this.registredHandlers.Values.Where(h => h.Handler is IFunctionalDenormalizer).ToList();
+            var functionalDenormalizers = this.registredHandlers.Values.Where(h => h.Handler is IFunctionalEventHandler).ToList();
             foreach (var handler in functionalDenormalizers)
             {
-                var functionalHandler = handler.Handler as IFunctionalDenormalizer;
+                var functionalHandler = handler.Handler as IFunctionalEventHandler;
                 if (functionalHandler != null)
                 {
                     functionalHandler.ChangeForSingleEventSource(eventSourceId);
@@ -59,7 +60,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
 
             foreach (var handler in functionalDenormalizers)
             {
-                var functionalHandler = handler.Handler as IFunctionalDenormalizer;
+                var functionalHandler = handler.Handler as IFunctionalEventHandler;
                 if (functionalHandler != null)
                 {
                     functionalHandler.FlushDataToPersistentStorage(eventSourceId);
@@ -85,7 +86,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
                 inProcessBus.RegisterHandler(handler, ieventHandler.GetGenericArguments()[0]);
             }
 
-            var functionalDenormalizer = handler as IFunctionalDenormalizer;
+            var functionalDenormalizer = handler as IFunctionalEventHandler;
             if (functionalDenormalizer != null)
             {
                 functionalDenormalizer.RegisterHandlersInOldFashionNcqrsBus(inProcessBus);
