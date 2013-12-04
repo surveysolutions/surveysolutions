@@ -563,6 +563,7 @@
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
+    <Content Include="Views\ControlPanel\Designer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
