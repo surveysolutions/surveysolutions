@@ -417,7 +417,7 @@
                 }
 
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
-                var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
+                var isDropedInQuestionnaire = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
                 var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.isRoster();
 
@@ -438,47 +438,51 @@
                     config.logger(config.warnings.cantMoveQuestionOutsideGroup);
                     return;
                 }
-                var target = datacontext.groups.getLocalById(toId);
                 var source = datacontext.groups.getLocalById(fromId);
+                
+                if (isDropedInQuestionnaire) {
+                    toId = null;
+                } else {
+                    var target = datacontext.groups.getLocalById(toId);
 
-                targetGroupIsAuto = target.isRoster();
+                    targetGroupIsAuto = target.isRoster();
 
-                if (target.isNew()) {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveIntoUnsavedItem);
-                    return;
+                    if (target.isNew()) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveIntoUnsavedItem);
+                        return;
+                    }
+
+                    if (isItemFeaturedQuestion && targetGroupIsAuto) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveFeaturedQuestionIntoAutoGroup);
+                        return;
+                    }
+
+                    if (isItemAutoQuestion && targetGroupIsAuto) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveAutoQuestionIntoAutoGroup);
+                        return;
+                    }
+
+                    if (isItemHeadQuestion && targetGroupIsAuto == false) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveHeadQuestionOutsideAutoGroup);
+                        return;
+                    }
+
+                    if (isDropedInQuestionnaire && moveItemType == "group" && arg.item.isRoster()) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.propagatedGroupCantBecomeChapter);
+                        return;
+                    }
+
+                    if (!isDropedInQuestionnaire && targetGroupIsAuto && moveItemType == "group") {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
+                        return;
+                    }
                 }
-
-                if (isItemFeaturedQuestion && targetGroupIsAuto) {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveFeaturedQuestionIntoAutoGroup);
-                    return;
-                }
-
-                if (isItemAutoQuestion && targetGroupIsAuto) {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveAutoQuestionIntoAutoGroup);
-                    return;
-                }
-
-                if (isItemHeadQuestion && targetGroupIsAuto == false) {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveHeadQuestionOutsideAutoGroup);
-                    return;
-                }
-
-                if (isDropedInChapter && moveItemType == "group" && arg.item.isRoster()) {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.propagatedGroupCantBecomeChapter);
-                    return;
-                }
-
-                if (!isDropedInChapter && target.isRoster() && moveItemType == "group") {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
-                    return;
-                }
-
                 var item = arg.item;
 
                 var moveCommand = {
@@ -503,7 +507,7 @@
                                 source.fillChildren();
                             }
 
-                            if (isDropedInChapter) {
+                            if (isDropedInQuestionnaire) {
                                 item.level(0);
                                 datacontext.questionnaire.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
                                 chapters(datacontext.groups.getChapters());
