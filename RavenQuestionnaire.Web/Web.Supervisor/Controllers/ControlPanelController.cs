@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
@@ -111,8 +112,26 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception exception)
             {
-                return string.Format("Login to {1} failed.{0}{0}{2}", Environment.NewLine, service.Endpoint.Address.Uri, exception);
+                return string.Format("Login to {1} failed.{0}{0}{2}", Environment.NewLine,
+                    service.Endpoint.Address.Uri,
+                    FormatDesignerConnectionException(exception));
             }
+        }
+
+        private static string FormatDesignerConnectionException(Exception exception)
+        {
+            var faultException = exception.InnerException as FaultException;
+
+            if (faultException != null)
+                return string.Format("Fault code: [ predefined: {1}, sender: {2}, receiver: {3}, subcode: {4}, name: {5} ]{0}{0}{6}", Environment.NewLine,
+                    faultException.Code.IsPredefinedFault,
+                    faultException.Code.IsSenderFault,
+                    faultException.Code.IsReceiverFault,
+                    faultException.Code.SubCode,
+                    faultException.Code.Name,
+                    exception);
+
+            return exception.ToString();
         }
     }
 }
