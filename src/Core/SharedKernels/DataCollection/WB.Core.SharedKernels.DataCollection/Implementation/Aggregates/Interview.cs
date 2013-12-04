@@ -1558,6 +1558,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (!questionnaire.IsCustomValidationDefined(question.Id))
                 return true;
+            
+            if (getAnswer(question) == null)
+                return true;
 
             bool? questionChangedState = getNewQuestionState(question);
 
