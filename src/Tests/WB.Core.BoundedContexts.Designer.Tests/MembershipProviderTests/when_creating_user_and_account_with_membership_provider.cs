@@ -5,11 +5,12 @@ using Machine.Specifications;
 using Moq;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
+using it = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.MembershipProviderTests
 {
 
-    internal class CreateUserAndAccount_should_create_membership_account_with_input_account_id : MembershipProviderTestsContext
+    internal class when_creating_user_and_account_with_membership_provider : MembershipProviderTestsContext
     {
         Establish context = () =>
         {
@@ -21,12 +22,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.MembershipProviderTests
             accountRepositoryMock = new Mock<IAccountRepository>();
             accountRepositoryMock.Setup(
                 x =>
-                    x.Create(Moq.It.IsAny<object>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                    x.Create(it.IsAny<object>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>()))
                     .Returns(Mock.Of<IMembershipAccount>());
 
             var passwordPolicy = Mock.Of<IPasswordPolicy>();
             var passwordStrategy =
-                Mock.Of<IPasswordStrategy>(x => x.IsValid(Moq.It.IsAny<string>(), Moq.It.IsAny<IPasswordPolicy>()) == true);
+                Mock.Of<IPasswordStrategy>(x => x.IsValid(it.IsAny<string>(), it.IsAny<IPasswordPolicy>()) == true);
             
             var dependencyResolver =
                 Mock.Of<IDependencyResolver>(x => x.GetService(typeof (IAccountRepository)) == accountRepositoryMock.Object &&
@@ -40,11 +41,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.MembershipProviderTests
         Because of = () =>
             membershipProvider.CreateUserAndAccount(string.Empty, string.Empty, false, customParametersWithUserId);
 
-        private It should_execute_AccountRepository_Create_with_validatedUserId = () =>
+        It should_pass_specified_provided_user_key_to_account_repository = () =>
             accountRepositoryMock.Verify(
-                x =>
-                    x.Create(Moq.It.Is<Guid>(userId => userId == validatedUserId), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(),
-                        Moq.It.IsAny<string>()));
+                x => x.Create(
+                    it.Is<Guid>(userId => userId == validatedUserId),
+                    it.IsAny<string>(),
+                    it.IsAny<string>(),
+                    it.IsAny<string>()));
 
         private static MembershipProvider membershipProvider;
         private static Guid validatedUserId;

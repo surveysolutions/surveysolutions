@@ -413,6 +413,8 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="NLog.Debug.config" />
+    <Content Include="NLog.common.config" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />

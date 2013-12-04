@@ -1,12 +1,12 @@
-﻿@model WB.Core.SharedKernels.DataCollection.Views.Questionnaire.QuestionnaireBrowseItem
+﻿@model Web.Supervisor.Models.BatchUploadModel
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
 }
 <div class="row-fluid">
-   
-    
-    <h3>Example of CSV layout for @Model.Title</h3>
+
+
+    <h3>Example of CSV layout for @Model.QuestionnaireTitle</h3>
     <div id="resultField">
         <table class="table table-striped table-bordered table-condensed table-break-words">
             <thead>
@@ -30,14 +30,25 @@
             </tbody>
         </table>
     </div>
-     <h3>Upload sample</h3>
-     <div>
-        @using (Html.BeginForm("ImportSample", "HQ", new { id = Model.QuestionnaireId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    <h3>Upload sample</h3>
+    <div>
+        @using (Html.BeginForm("BatchUpload", "HQ", new { id = Model.QuestionnaireId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <input type="file" name="uploadFile" />
-            <input type="submit" name="Submit" value="Upload" />
+            
+            @Html.HiddenFor(x => x.QuestionnaireId)
 
+            <div class="control-group">
+                @Html.LabelFor(x => x.File, new { @class = "control-label" })
+                <div class="controls">
+                    <input type="file" class="input-large" name="file" />
+                    @Html.ValidationMessageFor(x => x.File)
+                </div>
+            </div>
+            <div class="form-actions">
+                <input type="submit" class="btn btn-primary" name="Submit" value="Upload" />
+            </div> 
+            
+           
         }
-
     </div>
 </div>

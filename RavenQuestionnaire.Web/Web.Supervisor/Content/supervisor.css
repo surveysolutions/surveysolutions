@@ -4570,3 +4570,7 @@ a.pseudo-link:hover {
     font-weight: bold;
     font-size: 14px;
  }
+
+ .field-validation-error {
+     color: red;
+ }

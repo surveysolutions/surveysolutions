@@ -327,6 +327,8 @@
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
+    <Compile Include="Code\ValidateFileAttribute.cs" />
+    <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
@@ -449,6 +451,8 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="NLog.Debug.config" />
+    <Content Include="NLog.common.config" />
     <None Include="Properties\PublishProfiles\t1.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\director.js" />
@@ -678,6 +682,7 @@
   <ItemGroup>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
