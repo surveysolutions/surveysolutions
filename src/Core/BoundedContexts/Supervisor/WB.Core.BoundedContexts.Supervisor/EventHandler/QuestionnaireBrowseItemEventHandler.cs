@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     public class QuestionnaireBrowseItemEventHandler : AbstractFunctionalEventHandler<QuestionnaireBrowseItem>,
         ICreateHandler<QuestionnaireBrowseItem, TemplateImported>
     {
-        public QuestionnaireBrowseItemEventHandler(IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter)
+        public QuestionnaireBrowseItemEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter)
             : base(readsideRepositoryWriter) {}
 
         public override Type[] UsesViews

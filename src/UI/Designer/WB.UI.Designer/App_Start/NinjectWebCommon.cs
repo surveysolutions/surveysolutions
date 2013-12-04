@@ -70,7 +70,7 @@ namespace WB.UI.Designer.App_Start
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
-                new NLogLoggingModule(),
+                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenWriteSideInfrastructureModule(ravenSettings),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
