@@ -46,10 +46,13 @@
                 self.getHref = function () {
                     return utils.groupUrl(self.id());
                 };
-
+                self.isExpanded = ko.observable(true);
+                self.allowDrop = ko.computed(function() {
+                    if (self.isExpanded()) return true;
+                    return false;
+                });
                 self.cloneSource = ko.observable();
                 self.isSelected = ko.observable();
-                self.isExpanded = ko.observable(true);
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition, self.isRoster, self.rosterSizeQuestion]);
                 self.dirtyFlag().reset();
