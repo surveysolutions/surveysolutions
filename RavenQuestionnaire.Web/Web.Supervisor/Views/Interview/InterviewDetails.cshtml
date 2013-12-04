@@ -142,9 +142,9 @@
         </div>
     </div>
     <div id="content">
-        <div class="sinle-line-header" data-bind="with: questionnaire">
-            <h3 class="span" data-bind="html: title"></h3>
-            <h3 class="span"><span data-bind="text: status"></span></h3>
+        <div class="row-fluid" data-bind="with: questionnaire">
+            <h3 class="span10 text-overflow-ellipsis pad-left10" data-bind="html: title"></h3>
+            <h3 class="span2 nowrap pad-right5 text-right-gray-italic" data-bind="text: status"></h3>
         </div>
         <div class="menubar">
             <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
@@ -234,7 +234,7 @@
                 <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
                     <dt data-bind="text: userName"></dt>
                     <dd>
-                        <span data-bind="text: text"></span>
+                        <span data-bind="html: text"></span>
                         <span class="text-block comment-date " data-bind="text: moment(date()).fromNow()"></span>
                     </dd>
                 </dl>
