@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
@@ -15,7 +16,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     public class QuestionnaireRosterStructureEventHandler : AbstractFunctionalEventHandler<QuestionnaireRosterStructure>,
         ICreateHandler<QuestionnaireRosterStructure, TemplateImported>
     {
-        public QuestionnaireRosterStructureEventHandler(IReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter)
+        public QuestionnaireRosterStructureEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter)
             : base(readsideRepositoryWriter) {}
 
         public override Type[] UsesViews
