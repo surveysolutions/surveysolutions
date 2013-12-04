@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog;
+using NLog.Config;
 
 namespace WB.Core.GenericSubdomains.Logging.NLog
 {
