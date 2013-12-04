@@ -115,7 +115,7 @@ namespace Web.Supervisor.App_Start
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
                 new ServiceLocationModule(),
-                new NLogLoggingModule(),
+                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),

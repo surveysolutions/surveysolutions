@@ -142,10 +142,10 @@
         </div>
     </div>
     <div id="content">
-        <h3 class="sinle-line-header" data-bind="with: questionnaire">
-            <!-- ko text: title -->
-            <!-- /ko -->
-            <span data-bind="text: status"></span></h3>
+        <div class="sinle-line-header" data-bind="with: questionnaire">
+            <h3 class="span" data-bind="html: title"></h3>
+            <h3 class="span"><span data-bind="text: status"></span></h3>
+        </div>
         <div class="menubar">
             <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
             @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
