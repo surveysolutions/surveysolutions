@@ -99,21 +99,21 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void DeleteGroup_When_Some_Question_Of_Group_involved_in_the_validation_of_another_question_outside_the_group_Then_DomainException_should_be_thrown()
+        public void DeleteGroup_When_Some_Groups_Variable_Of_Question_involved_in_the_validation_of_another_question_outside_the_group_Then_DomainException_should_be_thrown()
         {
             // arrange
             Guid firstGroupId = Guid.NewGuid();
-            Guid secondGroup = Guid.NewGuid();
+            Guid secondGroupId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaireWithTwoGroups(responsibleId: responsibleId,
-                firstGroup: firstGroupId, secondGroup: secondGroup);
+                firstGroup: firstGroupId, secondGroup: secondGroupId);
             string aliasForQuestionInGroup = "q1";
             string expression = string.Format("[{0}] > 0", aliasForQuestionInGroup);
 
             RegisterExpressionProcessorMock(expression, new[] { aliasForQuestionInGroup });
 
             AddQuestion(questionnaire, Guid.NewGuid(), firstGroupId, responsibleId, QuestionType.Text, aliasForQuestionInGroup);
-            AddQuestion(questionnaire, Guid.NewGuid(), secondGroup, responsibleId, QuestionType.Text, "q2",
+            AddQuestion(questionnaire, Guid.NewGuid(), secondGroupId, responsibleId, QuestionType.Text, "q2",
                 validation: expression);
 
             // act
@@ -125,7 +125,34 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void DeleteGroup_When_Some_Question_Of_Group_involved_in_the_condition_of_another_group_outside_the_group_Then_DomainException_should_be_thrown()
+        public void DeleteGroup_When_Some_Groups_Id_Of_Question_involved_in_the_validation_of_another_question_outside_the_group_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid firstGroupId = Guid.NewGuid();
+            Guid secondGroupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Guid questionId1 = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithTwoGroups(responsibleId: responsibleId,
+                firstGroup: firstGroupId, secondGroup: secondGroupId);
+
+            string expression = string.Format("[{0}] > 0", questionId1);
+
+            RegisterExpressionProcessorMock(expression, new[] { questionId1.ToString() });
+
+            AddQuestion(questionnaire, questionId1, firstGroupId, responsibleId, QuestionType.Text, "q1");
+            AddQuestion(questionnaire, Guid.NewGuid(), secondGroupId, responsibleId, QuestionType.Text, "q2",
+                validation: expression);
+
+            // act
+            TestDelegate act = () => questionnaire.DeleteGroup(firstGroupId, responsibleId: responsibleId);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion));
+        }
+
+        [Test]
+        public void DeleteGroup_When_Some_Groups_Variable_Of_Question_involved_in_the_condition_of_another_question_outside_the_group_Then_DomainException_should_be_thrown()
         {
             // arrange
             Guid firstGroupId = Guid.NewGuid();
@@ -142,6 +169,32 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddGroup(questionnaire: questionnaire, groupId: secondGroupId, parentGroupId: null, responsibleId: responsibleId,
                 condition: expression);
             
+            // act
+            TestDelegate act = () => questionnaire.DeleteGroup(firstGroupId, responsibleId: responsibleId);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion));
+        }
+
+        [Test]
+        public void DeleteGroup_When_Some_Groups_Id_Of_Question_involved_in_the_condition_of_another_question_outside_the_group_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid firstGroupId = Guid.NewGuid();
+            Guid secondGroupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Guid questionId1 = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: firstGroupId);
+            string expression = string.Format("[{0}] > 0", questionId1);
+
+            RegisterExpressionProcessorMock(expression, new[] { questionId1.ToString() });
+
+            AddQuestion(questionnaire, questionId1, firstGroupId, responsibleId, QuestionType.Text, "q1");
+            AddGroup(questionnaire: questionnaire, groupId: secondGroupId, parentGroupId: null, responsibleId: responsibleId,
+                condition: expression);
+
             // act
             TestDelegate act = () => questionnaire.DeleteGroup(firstGroupId, responsibleId: responsibleId);
 

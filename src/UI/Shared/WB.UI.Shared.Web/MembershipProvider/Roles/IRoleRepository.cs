@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Shared.Web.MembershipProvider.Roles
+﻿using System;
+
+namespace WB.UI.Shared.Web.MembershipProvider.Roles
 {
     using System.Collections.Generic;
 
@@ -37,8 +39,8 @@
         /// </summary>
         /// <param name="applicationName">Application that the request is for.</param>
         /// <param name="roleName">Role that the user is going to be added to</param>
-        /// <param name="username">User name</param>
-        void AddUserToRole(string applicationName, string roleName, string username);
+        /// <param name="userid">User name</param>
+        void AddUserToRole(string applicationName, string roleName, Guid userid);
 
         /// <summary>
         /// Remove an user from a role.
