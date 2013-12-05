@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Storage;
 
 using Raven.Abstractions.Data;
@@ -13,6 +12,8 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
@@ -31,7 +32,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime, string, Exception>>();
 
         private readonly IStreamableEventStore eventStore;
-        private readonly IViewConstructorEventBus eventBus;
+        private readonly IEventDispatcher eventBus;
         private readonly DocumentStore ravenStore;
         private readonly ILogger logger;
         private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
@@ -42,7 +43,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IViewConstructorEventBus eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
         IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = eventStore;
@@ -151,8 +152,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 try
                 {
-                    this.DisableHandlersWhichAreNotInList(handlers);
-
                     this.EnableCacheInRepositoryWriters(writers);
 
                     republishDetails = this.RepublishAllEvents();
@@ -160,7 +159,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 finally
                 {
                     this.DisableCacheInRepositoryWriters(writers);
-                    this.EnableHandlerAllHandlers();
 
                     UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
                 }
@@ -196,19 +194,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                     result.Add(eventHandler);
             }
             return result.ToArray();
-        }
-
-        private void EnableHandlerAllHandlers()
-        {
-            this.eventBus.EnableAllHandlers();
-        }
-
-        private void DisableHandlersWhichAreNotInList(IEventHandler[] handlers)
-        {
-            foreach (var eventHandler in handlers)
-            {
-                this.eventBus.DisableEventHandler(eventHandler.GetType());
-            }
         }
 
         private IEnumerable<IRavenReadSideRepositoryWriter> GetListOfWritersForEnableCache(Type[] viewTypes)
