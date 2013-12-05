@@ -12,7 +12,7 @@ namespace Core.Supervisor.Views.Interview
     public class InterviewQuestionView
     {
         public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
-            Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution)
+            Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution, bool isParentGroupDisabled)
         {
             this.Id = question.PublicKey;
             this.Title = GetTitleWithSubstitutedVariables(question, answersForTitleSubstitution);
@@ -24,7 +24,8 @@ namespace Core.Supervisor.Views.Interview
             this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
             this.IsValid = true;
-            this.IsEnabled = question.QuestionScope == QuestionScope.Supervisor;
+            this.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) && !isParentGroupDisabled;
+            this.IsReadOnly = !this.IsEnabled;
             this.Scope = question.QuestionScope;
 
             if (question.Answers != null)
@@ -124,6 +125,7 @@ namespace Core.Supervisor.Views.Interview
         public bool IsCapital { get; set; }
         public bool IsValid { get; set; }
         public bool IsEnabled { get; set; }
+        public bool IsReadOnly { get; set; }
         public bool IsFlagged { get; set; }
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }

@@ -71,7 +71,7 @@
                 c.userId(comment.CommenterId);
                 return c;
             });
-            item.isReadonly(dto.Scope != "Supervisor");
+            item.isReadonly(dto.IsReadOnly);
             item.variable(dto.Variable);
             item.comments(comments);
             item.scope(dto.Scope);

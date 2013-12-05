@@ -166,7 +166,7 @@ namespace Core.Supervisor.Views.Interview
                     RosterVector = interviewLevel.RosterVector,
                     ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
                 };
-
+            
             foreach (var question in currentGroup.Children.OfType<IQuestion>())
             {
                 InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
@@ -174,9 +174,12 @@ namespace Core.Supervisor.Views.Interview
                 Dictionary<string, string> answersForTitleSubstitution =
                     GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions);
 
+                bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null && interviewLevel.DisabledGroups.Contains(currentGroup.PublicKey);
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
-                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions)
-                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution);
+                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution,
+                        getAvailableOptions, isQustionsParentGroupDisabled)
+                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution,
+                        isQustionsParentGroupDisabled);
 
                 completedGroup.Questions.Add(interviewQuestion);
             }
