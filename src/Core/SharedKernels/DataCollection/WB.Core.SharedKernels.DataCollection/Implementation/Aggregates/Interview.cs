@@ -893,7 +893,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     return null;
                 };
 
-            Func<Identity, object> getAnswerConcerningDisabling = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question, getNewQuestionState);
+            Func<Identity, object> getAnswerConcerningDisabling =
+                question =>
+                    AreEqual(question, answeredQuestion)
+                        ?  selectedValues.Any() ? selectedValues : null
+                        : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question, getNewQuestionState);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
@@ -1557,6 +1561,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             if (!questionnaire.IsCustomValidationDefined(question.Id))
+                return true;
+            
+            if (getAnswer(question) == null)
                 return true;
 
             bool? questionChangedState = getNewQuestionState(question);

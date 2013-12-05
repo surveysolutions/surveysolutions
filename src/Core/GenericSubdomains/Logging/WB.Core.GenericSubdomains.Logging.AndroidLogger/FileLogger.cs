@@ -100,12 +100,6 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
             
         }
 
-        public void WarnFormat(string format, params object[] args)
-        {
-            if (this.IsWarnEnabled)
-                this.WriteLogMessage(Tag, LogMessageType.Warning, format, args);
-        }
-
         public void Error(string message, Exception exception = null)
         {
             if (exception==null)

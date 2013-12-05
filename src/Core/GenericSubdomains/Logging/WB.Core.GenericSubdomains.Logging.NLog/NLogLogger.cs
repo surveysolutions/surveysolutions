@@ -8,9 +8,9 @@ namespace WB.Core.GenericSubdomains.Logging.NLog
     {
         private readonly Logger logger;
 
-        public NLogLogger(string type)
+        public NLogLogger()
         {
-            this.logger = LogManager.GetLogger(type);
+            this.logger = LogManager.GetLogger("");
         }
 
         public void Debug(string message, Exception exception = null)
