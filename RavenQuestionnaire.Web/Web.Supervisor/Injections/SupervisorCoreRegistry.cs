@@ -1,6 +1,7 @@
 using System.Web.Configuration;
 using Core.Supervisor.Views.User;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -63,7 +64,12 @@ namespace Web.Supervisor.Injections
 
             return base.GetTypesForRegistration().Concat(supervisorSpecificTypes);
         }
+        protected override void RegisterEventHandlers()
+        {
+            base.RegisterEventHandlers();
 
+            BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler), (c) => this.Kernel);
+        }
         private static bool ShouldUsePersistentReadLayer()
         {
             return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
