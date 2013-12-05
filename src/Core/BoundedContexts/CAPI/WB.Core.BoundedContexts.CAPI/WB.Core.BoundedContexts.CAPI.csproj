@@ -76,6 +76,8 @@
     <Compile Include="CapiBoundedContextModule.cs" />
     <Compile Include="EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewViewModelDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
     <Compile Include="IAuthentication.cs" />
     <Compile Include="ModelUtils\JsonUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

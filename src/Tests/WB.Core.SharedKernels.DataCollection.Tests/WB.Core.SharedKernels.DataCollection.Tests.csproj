@@ -88,6 +88,7 @@
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_marked_as_mandatory_inside_initially_disabled_group.cs" />
     <Compile Include="InterviewTests\when_propagated_group_is_conditionally_disabled.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_group_with_custom_enablement_condition.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_mandatory_date_and_gps_question.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
