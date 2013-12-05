@@ -336,6 +336,7 @@
     <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
+    <Compile Include="Models\RevalidateModel.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
@@ -568,6 +569,8 @@
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
+    <Content Include="Views\Interview\Revalidate.cshtml" />
+    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
