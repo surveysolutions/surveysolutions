@@ -25,7 +25,13 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         private static string ViewName
         {
-            get { return typeof(TEntity).Name; }
+            get
+            {
+                var viewType = typeof (TEntity);
+                if(!viewType.IsGenericType)
+                    return viewType.Name;
+                return viewType.GetGenericArguments()[0].Name;
+            }
         }
 
         protected IDocumentSession OpenSession()

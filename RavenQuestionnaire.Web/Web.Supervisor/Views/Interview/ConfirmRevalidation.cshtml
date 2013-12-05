@@ -1,0 +1,68 @@
+﻿@model Core.Supervisor.Views.Revalidate.RevalidatInterviewView
+
+@{
+    ViewBag.Title = "ConfirmRevalidation";
+}
+
+<h3>@Model.Title <small>(ver. @Model.Status)</small></h3>
+<h4>Responsible: @Model.Responsible.Name</h4>
+<div class="row-fluid">
+    <div class="span6">
+        <h4>Featured questions</h4>
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var question in Model.FeaturedQuestions)
+                {
+                    <tr class="@(question.IsValid ? "" : "error")">
+                        <td>
+                            @question.Title
+                        </td>
+                        <td>
+                            @question.Answer
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <h4>Mandatory questions</h4>
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var question in Model.MandatoryQuestions)
+                {
+                    <tr class="@(question.IsValid ? "" : "error")">
+                        <td>
+                            @question.Title
+                        </td>
+                        <td>
+                            @question.Answer
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.InterviewId)
+            @Html.HiddenFor(x => x.QuestionnairePublicKey)
+            <button class="btn btn-large btn-primary" type="submit">Revalidate</button>
+        }
+    </div>
+</div>

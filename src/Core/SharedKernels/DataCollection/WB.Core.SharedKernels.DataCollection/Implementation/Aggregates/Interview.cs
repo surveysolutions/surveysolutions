@@ -163,7 +163,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
-        private void Apply(GeoLocationQuestionAnswered @event)
+        internal void Apply(GeoLocationQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -1061,6 +1061,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             questionsDeclaredInvalid.Add(questionIdAtInterview);
                             break;
                     }
+                }
+            }
+
+            foreach (var mandatoryQuestion in questionnaire.GetAllMandatoryQuestions())
+            {
+                var availableRosterLevels = this.AvailableRosterLevelsForQuestion(questionnaire, mandatoryQuestion);
+
+                foreach (var availableRosterLevel in availableRosterLevels)
+                {
+                    Identity questionIdAtInterview = new Identity(mandatoryQuestion, availableRosterLevel);
+
+                    if (questionsDeclaredInvalid.Contains(questionIdAtInterview) || questionsDeclaredInvalid.Contains(questionIdAtInterview))
+                        continue;
+
+                    string questionKey = ConvertIdAndRosterVectorToString(questionIdAtInterview.Id, questionIdAtInterview.RosterVector);
+
+                    if (!this.answeredQuestions.Contains(questionKey))
+                        continue;
+
+                    questionsDeclaredValid.Add(questionIdAtInterview);
                 }
             }
 

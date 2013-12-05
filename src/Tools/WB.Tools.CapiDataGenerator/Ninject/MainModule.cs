@@ -19,7 +19,6 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -27,6 +26,8 @@ using Ninject.Modules;
 using NinjectAdapter;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
@@ -43,7 +44,6 @@ using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CapiDataGenerator
 {
-    using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
     using WB.Core.BoundedContexts.Supervisor.Views.Interview;
     using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 
@@ -82,7 +82,7 @@ namespace CapiDataGenerator
 
             this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
 
-            this.Bind<IReadSideRepositoryWriter<InterviewData>, IReadSideRepositoryReader<InterviewData>>().To<InterviewDataRepositoryWriterWithCache>().InSingletonScope();
+            this.Bind<IReadSideRepositoryReader<InterviewData>>().To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope();
             
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
@@ -109,8 +109,8 @@ namespace CapiDataGenerator
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            var bus = new CustomInProcessEventBus(true);
-            this.Bind<IViewConstructorEventBus>().ToConstant(bus);
+            var bus = new CustomInProcessEventDispatcher(true);
+            this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             this.Bind<IEventBus>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
