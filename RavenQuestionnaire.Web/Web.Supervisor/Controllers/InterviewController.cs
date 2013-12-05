@@ -94,15 +94,7 @@ namespace Web.Supervisor.Controllers
             {
                 return new HttpForbiddenResult("Only supervisors have access to page for interview change state");
             }
-#warning this is done in order to update ReadSideRepositoryReaderWithSequence
-            this.interviewDetailsFactory.Load(
-                new InterviewDetailsInputModel()
-                {
-                    CompleteQuestionnaireId = id,
-                    CurrentGroupPublicKey = null,
-                    PropagationKey = null,
-                    User = this.GlobalInfo.GetCurrentUser()
-                });
+
             ChangeStatusView model = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
 
             if (model.Status != InterviewStatus.Completed)
