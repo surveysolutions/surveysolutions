@@ -21,7 +21,7 @@ namespace WB.Core.GenericSubdomains.Logging.NLog
             if (File.Exists(filePath))
                 LogManager.Configuration = new XmlLoggingConfiguration(filePath);
 #endif
-            this.Bind<ILogger>().ToConstant(new NLogLogger());
+            this.Bind<ILogger>().To<NLogLogger>();
         }
     }
 }
