@@ -38,6 +38,9 @@
                         <li class="@(page == MenuItem.Teams ? "active" : "")">
                             <a href="@Url.Action("Index", "Team")"><i class="icon-user"></i>Supervisors</a>
                         </li>
+                        <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
+                            <a href="@Url.Action("Index", "HQ")"><i class="icon-list"></i>Questionnaries</a>
+                        </li>
                     </ul>
                     <ul class="nav pull-right" role="menu">
                         <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
