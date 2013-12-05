@@ -62,7 +62,7 @@ namespace Web.Supervisor.Controllers
             {
                 return new HttpForbiddenResult("Only supervisors have access to page for interview change state");
             }
-#warning this is done in order to update InterviewDataRepositoryWriterWithCache
+#warning this is done in order to update ReadSideRepositoryReaderWithSequence
             this.interviewDetailsFactory.Load(
                 new InterviewDetailsInputModel()
                 {
