@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         private static string ViewName
         {
-            get { return typeof(TEntity).FullName; }
+            get { return typeof(TEntity).Name; }
         }
 
         protected IDocumentSession OpenSession()

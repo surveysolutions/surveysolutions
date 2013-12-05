@@ -23,14 +23,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         }
 
         private static Dictionary<Guid, int> GetMaxValuesForRosterSizeQuestions(QuestionnaireDocument document)
-        {
+        { 
             IEnumerable<IAutoPropagateQuestion> autoPropagateQuestions = document.Find<IAutoPropagateQuestion>(question => true);
 
             IEnumerable<INumericQuestion> rosterSizeQuestions =
                 document
                     .Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeQuestionId.HasValue)
                     .Select(@group => document.Find<INumericQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null && question.MaxValue.HasValue);
+                    .Where(question => question != null && question.MaxValue.HasValue).Distinct();
 
             var collectedMaxValues = new Dictionary<Guid, int>();
 
