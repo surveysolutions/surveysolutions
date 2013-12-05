@@ -56,6 +56,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,8 +64,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\AccountAR.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
+    <Compile Include="Commands\Account\AccountCommandBase.cs" />
+    <Compile Include="Commands\Account\AddRoleToAccountCommand.cs" />
+    <Compile Include="Commands\Account\ChangeOnlineAccountCommand.cs" />
+    <Compile Include="Commands\Account\ChangePasswordAccountCommand.cs" />
+    <Compile Include="Commands\Account\ChangePasswordQuestionAndAnswerAccountCommand.cs" />
+    <Compile Include="Commands\Account\ChangePasswordResetTokenCommand.cs" />
+    <Compile Include="Commands\Account\ConfirmAccountCommand.cs" />
+    <Compile Include="Commands\Account\DeleteAccountCommand.cs" />
+    <Compile Include="Commands\Account\LockAccountCommand.cs" />
+    <Compile Include="Commands\Account\LoginFailedAccountCommand.cs" />
+    <Compile Include="Commands\Account\RegisterAccountCommand.cs" />
+    <Compile Include="Commands\Account\RemoveRoleFromAccountCommand.cs" />
+    <Compile Include="Commands\Account\ResetPasswordAccountCommand.cs" />
+    <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
+    <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
+    <Compile Include="Commands\Account\ValidateAccountCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
@@ -135,6 +153,17 @@
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
+    <Compile Include="Views\Account\AccountDenormalizer.cs" />
+    <Compile Include="Views\Account\AccountDocument.cs" />
+    <Compile Include="Views\Account\AccountListItem.cs" />
+    <Compile Include="Views\Account\AccountListView.cs" />
+    <Compile Include="Views\Account\AccountListViewFactory.cs" />
+    <Compile Include="Views\Account\AccountListViewInputModel.cs" />
+    <Compile Include="Views\Account\AccountView.cs" />
+    <Compile Include="Views\Account\AccountViewFactory.cs" />
+    <Compile Include="Views\Account\AccountViewInputModel.cs" />
+    <Compile Include="Views\Account\CQRSAccountRepository.cs" />
+    <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>

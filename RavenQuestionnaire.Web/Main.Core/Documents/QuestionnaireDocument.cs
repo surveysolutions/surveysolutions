@@ -288,11 +288,11 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        public IEnumerable<T> GetAllQuestions<T>() where T : class, IComposite
+        public IEnumerable<T> GetAllQuestions<T>(IGroup startGroup = null) where T : class, IComposite
         {
             var result = new List<T>();
             var groups = new Queue<IComposite>();
-            groups.Enqueue(this);
+            groups.Enqueue(startGroup ?? this);
 
             while (groups.Count != 0)
             {

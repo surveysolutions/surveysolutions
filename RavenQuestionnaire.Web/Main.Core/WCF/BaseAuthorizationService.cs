@@ -79,7 +79,6 @@ namespace Main.Core.WCF
         /// <summary>
         /// Marks repective packets as authorized to check this by CAPI later
         /// </summary>
-        /// <param name="tabletId"></param>
         /// <remarks>Perhaps this functionality should be replaced by checking respective event by CAPI in database directly</remarks>
         public static bool ConfirmAuthorizedRequest(RegisterData data)
         {

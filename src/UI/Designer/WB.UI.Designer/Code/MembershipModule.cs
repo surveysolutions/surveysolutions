@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer
+﻿using WB.Core.BoundedContexts.Designer.Views.Account;
+
+namespace WB.UI.Designer
 {
     using Ninject.Modules;
 

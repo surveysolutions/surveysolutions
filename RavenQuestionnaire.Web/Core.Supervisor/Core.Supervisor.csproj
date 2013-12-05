@@ -194,6 +194,8 @@
     <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
+    <Compile Include="Views\InterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\Interview\InterviewGroupView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
@@ -217,6 +219,9 @@
     <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
+    <Compile Include="Views\Revalidate\RevalidateInterviewFactory.cs" />
+    <Compile Include="Views\Revalidate\RevalidateInterviewInputModel.cs" />
+    <Compile Include="Views\Revalidate\RevalidatInterviewView.cs" />
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />

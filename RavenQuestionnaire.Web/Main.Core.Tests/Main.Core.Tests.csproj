@@ -150,7 +150,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractFactories\QuestionFactoryTest.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="Domain\TestDataConfigurator.cs" />
@@ -194,6 +193,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AbstractFactories\" />
     <Folder Include="Entities\SubEntities\" />
     <Folder Include="Export\" />
   </ItemGroup>
