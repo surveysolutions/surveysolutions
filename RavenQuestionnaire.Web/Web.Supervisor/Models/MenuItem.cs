@@ -50,6 +50,8 @@
         /// </summary>
         Teams = 9,
 
-        Summary = 10
+        Summary = 10,
+
+        Questionnaires = 11
     }
 }
