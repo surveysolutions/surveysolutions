@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             {
                 // arrange
                 Questionnaire questionnaire = CreateQuestionnaire();
-                var newState = new QuestionnaireDocument();
+                var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
                 questionnaire.ImportFromDesigner(Guid.NewGuid(),newState);
@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             {
                 // arrange
                 Questionnaire questionnaire = CreateQuestionnaire();
-                var newState = new QuestionnaireDocument();
+                var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
                 questionnaire.ImportFromSupervisor(newState);
