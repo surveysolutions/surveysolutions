@@ -42,7 +42,7 @@
             case "AutoPropagate":
                 item = new model.NumericQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger, _.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
-                if (!_.isNumber(dto.Answer)) {
+                if (_.isNumber(dto.Answer)) {
                     item.answer(dto.Answer);
                 } else {
                     item.answer(parseFloat(dto.Answer));
