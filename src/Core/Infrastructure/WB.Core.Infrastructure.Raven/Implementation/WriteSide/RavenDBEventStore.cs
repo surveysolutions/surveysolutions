@@ -22,6 +22,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
 
+        private bool useStreamingForAllEvents = true;
+
+        private bool useStreamingForEntity = false;
+
         /// <summary>
         /// PageSize for loading by chunk
         /// </summary>
@@ -110,7 +114,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            return ReadFromInternalWithPaging(id, minVersion, maxVersion);
+            if (useStreamingForEntity)
+                return ReadFromInternalWithStreaming(id, minVersion, maxVersion);
+            else
+                return ReadFromInternalWithPaging(id, minVersion, maxVersion);
         }
 
         private CommittedEventStream ReadFromInternalWithPaging(Guid id, long minVersion, long maxVersion)
@@ -261,7 +268,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
         {
-            return GetAllEventsWithStream(bulkSize);
+            if (useStreamingForAllEvents)
+                return GetAllEventsWithStream(bulkSize);
+            else
+                return GetAllEventsWithPaging(bulkSize);
+            
         }
 
         private IEnumerable<CommittedEvent[]> GetAllEventsWithPaging(int bulkSize)
@@ -305,21 +316,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                         yield return new CommittedEvent[]{ToCommittedEvent(enumerator.Current.Document)};
                     }
                 }
-        }
-
-        private IEnumerable<CommittedEvent[]> GetAllEventsWithStreamByEtag(int bulkSize)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                using (var enumerator = session.Advanced.Stream<StoredEvent>(fromEtag: Etag.Empty,
-                    start: 0, pageSize: int.MaxValue))
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        yield return new CommittedEvent[] { ToCommittedEvent(enumerator.Current.Document) };
-                    }
-                }
-            }
         }
     }
 }
