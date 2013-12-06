@@ -7,7 +7,6 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -71,7 +70,6 @@ namespace Main.Core
         protected virtual void RegisterEventHandlers()
         {
             BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler<>), (c) => this.Kernel);
-            BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()

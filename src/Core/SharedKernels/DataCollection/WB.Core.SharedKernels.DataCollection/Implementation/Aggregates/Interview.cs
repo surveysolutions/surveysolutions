@@ -895,9 +895,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             Func<Identity, object> getAnswerConcerningDisabling =
                 question =>
-                    AreEqual(question, answeredQuestion)
-                        ?  selectedValues.Any() ? selectedValues : null
-                        : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question, getNewQuestionState);
+                {
+                    if (AreEqual(question, answeredQuestion))
+                    {
+                        return selectedValues.Any() ? selectedValues : null;
+                    }
+                    else
+                    {
+                        return this.GetAnswerSupportedInExpressionsForEnabledOrNull(question, getNewQuestionState);
+                    }
+                };
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(

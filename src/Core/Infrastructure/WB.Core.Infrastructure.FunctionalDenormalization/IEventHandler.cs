@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus
+namespace WB.Core.Infrastructure.FunctionalDenormalization
 {
     public interface IEventHandler
     {

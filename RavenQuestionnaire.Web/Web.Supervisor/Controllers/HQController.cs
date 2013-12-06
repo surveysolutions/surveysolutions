@@ -59,11 +59,12 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Index()
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
             var model = new HQDashboardModel
                 {
                     Questionnaires = this.questionnaireBrowseViewFactory.Load(
-                            new QuestionnaireBrowseInputModel() { PageSize = 1024 }),
-                    Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = 1024 })
+                            new QuestionnaireBrowseInputModel() { PageSize = 1024 })
                 };
             return this.View(model);
         }
@@ -85,6 +86,8 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult BatchUpload(Guid id)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
             var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
 
             var viewModel = new BatchUploadModel()
@@ -100,6 +103,8 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult BatchUpload(BatchUploadModel model)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
             if (!ModelState.IsValid)
             {
                 var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
@@ -117,6 +122,8 @@ namespace Web.Supervisor.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult ImportResult(Guid id)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
             ImportResult result = this.sampleImportService.GetImportStatus(id);
             if (result.IsCompleted && result.IsSuccessed)
             {

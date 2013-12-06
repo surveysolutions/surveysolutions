@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Core.Supervisor.Views.User;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+﻿using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Web.Supervisor.Models
 {
@@ -12,6 +6,6 @@ namespace Web.Supervisor.Models
     {
         public QuestionnaireBrowseView Questionnaires { get; set; }
 
-        public UserListView Teams { get; set; }
+        /*public UserListView Teams { get; set; }*/
     }
 }

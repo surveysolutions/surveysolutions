@@ -80,13 +80,11 @@
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -117,7 +115,7 @@
     <Compile Include="MVVMCross\DebugTrace.cs" />
     <Compile Include="Converters\ElapsedTimeConverter.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Ninject\CustomInProcessEventBus.cs" />
+    <Compile Include="Ninject\CustomInProcessEventDispatcher.cs" />
     <Compile Include="Services\DefaultBackup.cs" />
     <Compile Include="Services\IOpenFileService.cs" />
     <Compile Include="Models\MainPageModel.cs" />
@@ -243,6 +241,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>

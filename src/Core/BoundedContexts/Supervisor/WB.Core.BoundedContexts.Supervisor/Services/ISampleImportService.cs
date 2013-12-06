@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
     {
         Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor);
         ImportResult GetImportStatus(Guid id);
-        void CreateSample(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId);
+        void CreateSample(Guid id, Guid responsibleHeadquarterId, Guid responsibleSupervisorId);
         SampleCreationStatus GetSampleCreationStatus(Guid id);
     }
 }
