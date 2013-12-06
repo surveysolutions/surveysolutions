@@ -90,7 +90,17 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 
         public void FlushDataToPersistentStorage(Guid eventSourceId)
         {
-            this.percistantStorageStrategy.AddOrUpdate(this.storageStrategy.Select(eventSourceId), eventSourceId);
+            var view = this.storageStrategy.Select(eventSourceId);
+
+            if (view != null)
+                this.percistantStorageStrategy.AddOrUpdate(view, eventSourceId);
+            else
+            {
+                view = this.percistantStorageStrategy.Select(eventSourceId);
+                if(view!=null)
+                    this.percistantStorageStrategy.Delete(view, eventSourceId);
+            }
+
             this.storageStrategy = this.percistantStorageStrategy;
         }
 
