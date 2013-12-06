@@ -1,8 +1,8 @@
 ﻿using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.UI.Designer.Providers.CQRS;
-using WB.UI.Designer.Providers.CQRS.Accounts.View;
 
 namespace WB.UI.Designer
 {
