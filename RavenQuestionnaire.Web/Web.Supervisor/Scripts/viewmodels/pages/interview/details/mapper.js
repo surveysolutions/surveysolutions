@@ -42,8 +42,10 @@
             case "AutoPropagate":
                 item = new model.NumericQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger, _.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
-                if (!_.isNull(dto.Answer)) {
-                    item.answer(dto.Answer * 1);
+                if (_.isNumber(dto.Answer)) {
+                    item.answer(dto.Answer);
+                } else {
+                    item.answer(parseFloat(dto.Answer));
                 }
                 
                 break;
@@ -86,7 +88,7 @@
             item.isFeatured(dto.IsFeatured);
             item.isMandatory(dto.IsMandatory);
             item.rosterVector(dto.RosterVector);
-            item.isValid(dto.IsValid);
+            item.isInvalid(_.isBoolean(dto.IsValid) ? dto.IsValid == false : null);
             item.validationMessage(dto.ValidationMessage);
             item.validationExpression(dto.ValidationExpression);
                 

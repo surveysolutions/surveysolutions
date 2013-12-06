@@ -69,7 +69,9 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewTests\when_answering_integer_question_with_14400_and_max_value_is_3600.cs" />
+    <Compile Include="InterviewTests\when_answering_mandatory_multy_option_question_with_empty_list_of_options.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_with_1000_and_max_value_is_567.cs" />
+    <Compile Include="InterviewTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_more_than_max_for_selected_answer_options_for_multiquestion_throw_interview_exception.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_marked_as_mandatory_inside_initially_disabled_group.cs" />
     <Compile Include="InterviewTests\when_propagated_group_is_conditionally_disabled.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_group_with_custom_enablement_condition.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_mandatory_date_and_gps_question.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />

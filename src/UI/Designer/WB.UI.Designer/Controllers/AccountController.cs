@@ -201,12 +201,15 @@ namespace WB.UI.Designer.Controllers
                     // Attempt to register the user
                     try
                     {
+                        Guid providerUserKey = Guid.NewGuid();
+
+                        string userName = model.UserName.ToLower();
                         string confirmationToken = WebSecurity.CreateUserAndAccount(
-                            model.UserName, model.Password, new { model.Email }, true);
+                            userName, model.Password, new { Email = model.Email, ProviderUserKey = providerUserKey }, true);
 
                         if (!string.IsNullOrEmpty(confirmationToken))
                         {
-                            Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { this.UserHelper.USERROLENAME });
+                            Roles.Provider.AddUsersToRoles(new[] { providerUserKey.ToString() }, new[] { this.UserHelper.USERROLENAME });
 
                             isUserRegisterSuccessfully = true;
 
@@ -214,7 +217,7 @@ namespace WB.UI.Designer.Controllers
                                 new EmailConfirmationModel()
                                     {
                                         Email = model.Email.ToWBEmailAddress(),
-                                        UserName = model.UserName,
+                                        UserName = userName,
                                         ConfirmationToken = confirmationToken
                                     }).SendAsync();
                         }
@@ -225,7 +228,8 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (Exception e)
                     {
-                        logger.Error("Unexpected error occurred", e);
+                        logger.Error("Register user error", e);
+                        this.Error("Unexpected error occurred. Please, try again later");
                     }
                 }
             }

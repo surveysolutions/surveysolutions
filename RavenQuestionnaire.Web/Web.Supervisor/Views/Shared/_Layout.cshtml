@@ -24,7 +24,7 @@
             <div class="navbar-inner">
                 @if (User.IsInRole("Headquarter"))
                 {
-                    <a class="brand" href="@Url.Action("Index", "HQ")"><span>Dashboard<span>headquarter</span></span></a>
+                    <a class="brand" href="@Url.Action("Index", "HQ")"><span>Dashboard<span>headquarters</span></span></a>
                     <ul class="nav" role="menu">
                         <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>

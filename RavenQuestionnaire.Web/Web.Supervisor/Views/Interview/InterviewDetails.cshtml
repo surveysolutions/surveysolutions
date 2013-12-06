@@ -142,10 +142,10 @@
         </div>
     </div>
     <div id="content">
-        <h3 class="sinle-line-header" data-bind="with: questionnaire">
-            <!-- ko text: title -->
-            <!-- /ko -->
-            <span data-bind="text: status"></span></h3>
+        <div class="row-fluid" data-bind="with: questionnaire">
+            <h3 class="span10 text-overflow-ellipsis pad-left10" data-bind="html: title"></h3>
+            <h3 class="span2 nowrap pad-right5 text-right-gray-italic" data-bind="text: status"></h3>
+        </div>
         <div class="menubar">
             <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
             @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
@@ -179,11 +179,11 @@
                 <div class="innerLR ">
                     <!-- ko foreach: groups -->
                     <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
-                        <h2 data-bind="text: title" class="heading"></h2>
+                        <h2 data-bind="html: title" class="heading"></h2>
                         <div class="questions">
                             <table class="table table-bordered table-hover">
                                 <tbody data-bind="foreach: questions">
-                                    <tr data-bind="visible : isVisible,css: {success: isSelected, error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
+                                    <tr data-bind="visible : isVisible,css: {success: isSelected, error : isInvalid() && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
                                         <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
                                             <div class="cell-content" data-bind="css: {featured : isFeatured}">
                                                 <span class="icon-star"></span>
@@ -195,8 +195,8 @@
                                                 <div class="question-clickable">
                                                     <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                     <span data-bind="template: { name: questionType() }"></span>
-                                                    <small class="text-error" data-bind="html:validationExpression, visible: isValid()==false"></small>
-                                                    <small class="text-error" data-bind="html:validationMessage, visible: isValid()==false"></small>
+                                                    <small class="text-error" data-bind="html:validationExpression, visible: isInvalid"></small>
+                                                    <small class="text-error" data-bind="html:validationMessage, visible: isInvalid"></small>
                                                 </div>
                                             </div>
                                         </td>
@@ -234,7 +234,7 @@
                 <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
                     <dt data-bind="text: userName"></dt>
                     <dd>
-                        <span data-bind="text: text"></span>
+                        <span data-bind="html: text"></span>
                         <span class="text-block comment-date " data-bind="text: moment(date()).fromNow()"></span>
                     </dd>
                 </dl>

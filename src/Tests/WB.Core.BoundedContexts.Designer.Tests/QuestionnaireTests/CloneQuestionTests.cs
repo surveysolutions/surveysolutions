@@ -751,7 +751,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void CloneQuestion_When_Question_Have_Condition_With_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
+        public void CloneQuestion_When_Question_Have_Condition_With_Variable_Name_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
         {
             // arrange
             Guid question1Id = Guid.NewGuid();
@@ -796,7 +796,52 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void CloneQuestion_When_Question_Have_Validation_With_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
+        public void CloneQuestion_When_Question_Have_Condition_With_Question_Id_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid question2Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string expression = string.Format("[{0}] > 0", question2Id);
+
+            RegisterExpressionProcessorMock(expression, new[] { question2Id.ToString() });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
+            AddQuestion(questionnaire, question2Id, groupId, responsibleId, QuestionType.Text, "q2");
+
+            // act
+            TestDelegate act = () => questionnaire.CloneQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: QuestionType.Text,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: expression,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: null,
+                    areAnswersOrdered: false,
+                    maxAllowedAnswers: null,
+                    sourceQuestionId: question1Id,
+                    targetIndex: 1);
+
+            // assert
+            Assert.DoesNotThrow(act);
+        }
+
+        [Test]
+        public void CloneQuestion_When_Question_Have_Validation_With_Variable_Name_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
         {
             // arrange
             Guid question1Id = Guid.NewGuid();
@@ -811,6 +856,51 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, aliasForExistingQuestion);
+
+            // act
+            TestDelegate act = () => questionnaire.CloneQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: QuestionType.Text,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: expression,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: null,
+                    areAnswersOrdered: false,
+                    maxAllowedAnswers: null,
+                    sourceQuestionId: question1Id,
+                    targetIndex: 1);
+
+            // assert
+            Assert.DoesNotThrow(act);
+        }
+
+        [Test]
+        public void CloneQuestion_When_Question_Have_Validation_With_Question_Id_Reference_To_Existing_Question_Then_DomainException_should_NOT_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid question2Id = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string expression = string.Format("[{0}] > 0", question2Id);
+
+            RegisterExpressionProcessorMock(expression, new[] { question2Id.ToString() });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
+            AddQuestion(questionnaire, question2Id, groupId, responsibleId, QuestionType.Text, "q2");
 
             // act
             TestDelegate act = () => questionnaire.CloneQuestion(
@@ -887,6 +977,55 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        public void CloneQuestion_When_Question_Have_Condition_With_2_References_And_Second_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid question12d = Guid.NewGuid();
+            Guid idForNotExistingQuestion = Guid.NewGuid();
+            string idForNotExistingQuestionAsString = idForNotExistingQuestion.ToString();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string expression = string.Format("[{0}] > 0 AND [{1}] > 1", question1Id, question12d);
+
+            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString(), idForNotExistingQuestionAsString });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
+            AddQuestion(questionnaire, question12d, groupId, responsibleId, QuestionType.Text, "q2");
+
+            // act
+            TestDelegate act = () => questionnaire.CloneQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: QuestionType.Text,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: expression,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: null,
+                    areAnswersOrdered: false,
+                    maxAllowedAnswers: null,
+                    sourceQuestionId: question1Id,
+                    targetIndex: 1);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
+            Assert.That(domainException.Message, Is.StringContaining(idForNotExistingQuestionAsString));
+        }
+
+        [Test]
         public void CloneQuestion_When_Question_Have_Validation_With_Reference_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
         {
             // arrange
@@ -930,6 +1069,55 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
+        }
+
+        [Test]
+        public void CloneQuestion_When_Question_Have_Validation_With_2_References_And_Second_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid question1Id = Guid.NewGuid();
+            Guid question2d = Guid.NewGuid();
+            Guid idForNotExistingQuestion = Guid.NewGuid();
+            string idForNotExistingQuestionAsString = idForNotExistingQuestion.ToString();
+            Guid groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId);
+            string expression = string.Format("[{0}] > 0 AND [{1}] > 1", question1Id, question2d);
+
+            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString(), idForNotExistingQuestion.ToString() });
+
+            AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
+            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2");
+
+            // act
+            TestDelegate act = () => questionnaire.CloneQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: QuestionType.Text,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: expression,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: null,
+                    areAnswersOrdered: false,
+                    maxAllowedAnswers: null,
+                    sourceQuestionId: question1Id,
+                    targetIndex: 1);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
+            Assert.That(domainException.Message, Is.StringContaining(idForNotExistingQuestionAsString));
         }
 
 #warning following tests are commented because they were copy pasted from add command tests but Slava had not enough time to uncomment them and make them test for Clone feature (when he wrote such tests in his spare time)

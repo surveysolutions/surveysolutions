@@ -22,7 +22,7 @@
         $(function() {
             var questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                                   {
-                                      TypeNameHandling = TypeNameHandling.Objects,
+                                      TypeNameHandling = TypeNameHandling.None,
                                       TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
                                   }));
             var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';

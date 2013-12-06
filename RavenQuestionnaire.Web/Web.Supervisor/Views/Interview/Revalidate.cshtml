@@ -1,0 +1,21 @@
+﻿@model Web.Supervisor.Models.RevalidateModel
+@{
+    ViewBag.Title = "Revalidate";
+}
+<h2>Enter interview identificator to revalidate <small>(you can find it in Url of interview details page)</small></h2>
+@using (Html.BeginForm())
+{
+    <fieldset class="form-horizontal">
+        <div class="control-group">
+            @Html.LabelFor(x => x.InterviewId, new {@class="control-label"})
+            <div class="controls">
+                @Html.TextBoxFor(x => x.InterviewId, new {@class="span6"})
+            </div>
+        </div>
+         <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+        </div>
+    </fieldset>
+}

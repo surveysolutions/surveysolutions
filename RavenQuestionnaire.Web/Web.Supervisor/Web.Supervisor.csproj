@@ -311,6 +311,8 @@
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
+    <Compile Include="Code\ValidateFileAttribute.cs" />
+    <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
@@ -334,6 +336,7 @@
     <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
+    <Compile Include="Models\RevalidateModel.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
@@ -433,6 +436,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="NLog.Debug.config" />
+    <Content Include="NLog.common.config" />
+    <Content Include="Configuration\Pakistan.Supervisor.Web.config" />
     <None Include="Properties\PublishProfiles\t1.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\director.js" />
@@ -562,6 +568,9 @@
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
+    <Content Include="Views\ControlPanel\Designer.cshtml" />
+    <Content Include="Views\Interview\Revalidate.cshtml" />
+    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

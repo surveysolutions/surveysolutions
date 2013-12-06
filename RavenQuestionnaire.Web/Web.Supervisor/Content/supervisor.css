@@ -877,7 +877,6 @@ hr.separator {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd;
   background: #f5f5f5;
-  margin: -9px 0 10px;
   padding: 0 10px 0 10px;
   line-height: 30px;
 }
@@ -4570,3 +4569,33 @@ a.pseudo-link:hover {
     font-weight: bold;
     font-size: 14px;
  }
+
+ .field-validation-error {
+     color: red;
+ }
+
+ .nowrap {
+     white-space: nowrap;
+ }
+
+.text-overflow-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pad-left10 {
+    padding-left: 10px;
+}
+
+.pad-right5 {
+    padding-right: 5px;
+}
+
+.text-right-gray-italic {
+    color: #dadada;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 18px;
+    text-align: right;
+}

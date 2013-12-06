@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
@@ -61,7 +62,7 @@ namespace Web.Supervisor.Controllers
             var model = new HQDashboardModel
                 {
                     Questionnaires = this.questionnaireBrowseViewFactory.Load(
-                            new QuestionnaireBrowseInputModel(){PageSize = 1024}),
+                            new QuestionnaireBrowseInputModel() { PageSize = 1024 }),
                     Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = 1024 })
                 };
             return this.View(model);
@@ -74,26 +75,43 @@ namespace Web.Supervisor.Controllers
                 this.Success(
                     string.Format(
                         @"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>",
-                        this.Url.Action("TakeNew", "HQ", new {id = questionnaireId.Value})));
+                        this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
             UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
+            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(this.Filters());
         }
 
         public ActionResult BatchUpload(Guid id)
         {
-            QuestionnaireBrowseItem model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
-            return this.View(model);
+            var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
+
+            var viewModel = new BatchUploadModel()
+            {
+                FeaturedQuestions =  questionnaireBrowseItem.FeaturedQuestions,
+                QuestionnaireId = questionnaireBrowseItem.QuestionnaireId,
+                QuestionnaireTitle = questionnaireBrowseItem.Title
+            };
+
+            return this.View(viewModel);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult ImportSample(Guid id, HttpPostedFileBase uploadFile)
+        [HttpPost]
+        public ActionResult BatchUpload(BatchUploadModel model)
         {
-            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(id, new CsvSampleRecordsAccessor(uploadFile.InputStream));
-            QuestionnaireBrowseItem model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
-            return this.View(model);
+            if (!ModelState.IsValid)
+            {
+                var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
+                model.FeaturedQuestions = questionnaireBrowseItem.FeaturedQuestions;
+                model.QuestionnaireTitle = questionnaireBrowseItem.Title;
+
+                return View(model);
+            }
+
+            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId, new CsvSampleRecordsAccessor(model.File.InputStream));
+            var questionnaireBrowsemodel = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
+            return this.View("ImportSample", questionnaireBrowsemodel);
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
@@ -103,7 +121,7 @@ namespace Web.Supervisor.Controllers
             if (result.IsCompleted && result.IsSuccessed)
             {
                 this.ViewBag.SupervisorList =
-                    this.supervisorsFactory.Load(new UserListViewInputModel {Role = UserRoles.Supervisor, PageSize = int.MaxValue}).Items;
+                    this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
             }
             return this.PartialView(result);
         }
@@ -111,7 +129,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult CreateSample(Guid id, Guid responsibleSupervisor)
         {
             this.sampleImportService.CreateSample(id, this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
-            return this.RedirectToAction("SampleCreationResult", new {id});
+            return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
         public ActionResult SampleCreationResult(Guid id)
@@ -169,7 +187,7 @@ namespace Web.Supervisor.Controllers
             return new DocumentFilter
                 {
                     Users =
-                        this.supervisorsFactory.Load(new UserListViewInputModel {PageSize = int.MaxValue})
+                        this.supervisorsFactory.Load(new UserListViewInputModel { PageSize = int.MaxValue })
                             .Items.Where(u => !u.IsLocked)
                             .Select(u => new UsersViewItem
                                 {
