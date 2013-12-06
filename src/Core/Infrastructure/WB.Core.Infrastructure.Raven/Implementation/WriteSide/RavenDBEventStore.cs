@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
@@ -21,12 +22,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
 
+        private bool useStreamingForAllEvents = true;
+
+        private bool useStreamingForEntity = false;
+
         /// <summary>
         /// PageSize for loading by chunk
         /// </summary>
         private readonly int pageSize = 1024;
 
-        private readonly int timeout = 120;
+        private readonly int timeout = 180;
 
         public RavenDBEventStore(string ravenUrl, int pageSize)
         {
@@ -35,25 +40,30 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     Url = ravenUrl, 
                     Conventions = CreateStoreConventions(CollectionName)
                 }.Initialize();
-
+            
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
-                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                    e.Request.Timeout = 30 * 60 * 1000; /*ms*/
                 };
             this.pageSize = pageSize;
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
+
+            IndexCreation.CreateIndexes(typeof(EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 
         public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
         {
             externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             this.DocumentStore = externalDocumentStore;
+
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
-                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                    e.Request.Timeout = 30 * 60 * 1000; /*ms*/
                 };
             this.pageSize = pageSize;
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
+
+            IndexCreation.CreateIndexes(typeof(EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
@@ -104,10 +114,40 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
+            if (useStreamingForEntity)
+                return ReadFromInternalWithStreaming(id, minVersion, maxVersion);
+            else
+                return ReadFromInternalWithPaging(id, minVersion, maxVersion);
+        }
+
+        private CommittedEventStream ReadFromInternalWithPaging(Guid id, long minVersion, long maxVersion)
+        {
             IEnumerable<StoredEvent> storedEvents =
                 this.AccumulateEvents(
                     x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
+
+        }
+
+        private CommittedEventStream ReadFromInternalWithStreaming(Guid id, long minVersion, long maxVersion)
+        {
+            List<CommittedEvent> storedEvents = new List<CommittedEvent>();
+
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
+                    .Where(x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
+                    .OrderBy(y => y.EventSequence);
+
+                var enumerator = session.Advanced.Stream(query);
+
+                while (enumerator.MoveNext())
+                {
+                    storedEvents.Add (ToCommittedEvent(enumerator.Current.Document));
+                }
+            }
+
+            return new CommittedEventStream(id, storedEvents);
         }
 
         public void Store(UncommittedEventStream eventStream)
@@ -228,6 +268,15 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
         {
+            if (useStreamingForAllEvents)
+                return GetAllEventsWithStream(bulkSize);
+            else
+                return GetAllEventsWithPaging(bulkSize);
+            
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEventsWithPaging(int bulkSize)
+        {
             int returnedEventCount = 0;
 
             while (true)
@@ -236,7 +285,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                 {
                     StoredEvent[] storedEventsBulk =
                         QueryAllEvents(session)
-                        .OrderBy(y => y.EventTimeStamp).ThenBy(y=>y.EventSequence)
+                        .OrderBy(y => y.EventTimeStamp).ThenBy(y => y.EventSequence)
                         .Skip(returnedEventCount)
                         .Take(bulkSize)
                         .ToArray();
@@ -250,6 +299,23 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     returnedEventCount += bulkSize;
                 }
             }
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEventsWithStream(int bulkSize)
+        {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
+                        .OrderBy(y => y.EventTimeStamp)
+                        .ThenBy(y => y.EventSequence);
+
+                    var enumerator = session.Advanced.Stream(query);
+
+                    while (enumerator.MoveNext())
+                    {
+                        yield return new CommittedEvent[]{ToCommittedEvent(enumerator.Current.Document)};
+                    }
+                }
         }
     }
 }
