@@ -45,9 +45,12 @@
                 if (_.isNumber(dto.Answer)) {
                     item.answer(dto.Answer);
                 } else {
-                    item.answer(parseFloat(dto.Answer));
+                    var iAnswer = parseFloat(dto.Answer);
+                    if (!isNaN(iAnswer)) {
+                        item.answer(iAnswer);
+                    }
                 }
-                
+
                 break;
             case "DateTime":
                 item = new model.DateTimeQuestion();

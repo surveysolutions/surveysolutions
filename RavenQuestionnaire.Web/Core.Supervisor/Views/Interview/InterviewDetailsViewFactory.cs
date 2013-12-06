@@ -54,9 +54,6 @@ namespace Core.Supervisor.Views.Interview
                 throw new ArgumentException(string.Format("User with id {0} is not found.", interview.ResponsibleId));
 
             return merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
-                bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null && interviewLevel.DisabledGroups.Contains(currentGroup.PublicKey);
-                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution,
-                        isQustionsParentGroupDisabled);
         }
     }
 }
