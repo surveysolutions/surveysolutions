@@ -518,6 +518,7 @@
                                 target.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
                                 target.fillChildren();
                             }
+                            item.parent(target);
                         },
                         error: function(d) {
                             _.each(datacontext.groups.getAllLocal(), function(group) {
