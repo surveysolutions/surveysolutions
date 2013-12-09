@@ -284,7 +284,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                     case QuestionType.Numeric:
                         var numericQuestion = question as INumericQuestion;
                         if (numericQuestion == null)
-                            break;
+                            throw new ArgumentException(string.Format("Question with id {0} has Type Numeric, but for real is {1}",
+                                question.PublicKey, question.GetType().Name));
+
                         // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
                         if (numericQuestion.IsInteger)
                             featuredAnswers.Add(question.PublicKey, int.Parse(values[i]));
@@ -314,8 +316,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
                     case QuestionType.GpsCoordinates:
                     case QuestionType.MultyOption:
-                        //throw new Exception("Unsupported pre-filled question type in sample");
-                        break;
+                        throw new ArgumentException("Unsupported pre-filled question type in sample");
                 }
             }
             return featuredAnswers;
