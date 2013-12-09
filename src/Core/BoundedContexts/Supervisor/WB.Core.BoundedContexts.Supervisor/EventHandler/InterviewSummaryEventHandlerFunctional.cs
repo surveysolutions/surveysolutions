@@ -37,16 +37,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-
+         
         public override Type[] UsesViews
         {
             get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireBrowseItem) }; }
         }
 
         public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
+            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
             : base(interviewSummary)
         {
             this.questionnaires = questionnaires;
@@ -72,20 +72,35 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
+        private InterviewSummary AnswerFeaturedQuestionWithOptions(InterviewSummary interviewSummary, Guid questionId, DateTime updateDate,
+            params decimal[] answers)
+        {
+            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
+            {
+                if (interview.AnswersToFeaturedQuestions.ContainsKey(questionId))
+                {
+                    var featuredQuestion = interview.AnswersToFeaturedQuestions[questionId] as QuestionAnswerWithOptions;
+                    if (featuredQuestion == null)
+                        return;
+
+                    featuredQuestion.SetAnswerAsAnswerValues(answers);
+                }
+            });
+        }
+
         public InterviewSummary Create(IPublishedEvent<InterviewCreated> evnt)
         {
             UserDocument responsible = this.users.GetById(evnt.Payload.UserId);
-            return 
-                new InterviewSummary(this.questionnaires.GetById(evnt.Payload.QuestionnaireId,
-                                                                 evnt.Payload.QuestionnaireVersion))
+            var questionnarie = this.questionnaires.GetById(evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion);
+            return
+                new InterviewSummary(questionnarie.Questionnaire)
                 {
                     InterviewId = evnt.EventSourceId,
                     UpdateDate = evnt.EventTimeStamp,
                     QuestionnaireId = evnt.Payload.QuestionnaireId,
                     QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
-                    QuestionnaireTitle =
-                        questionnaires.GetById(
-                            evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion).Title,
+                    QuestionnaireTitle = questionnarie.Questionnaire.Title,
                     ResponsibleId = evnt.Payload.UserId, // Creator is responsible
                     ResponsibleName = this.users.GetById(evnt.Payload.UserId).UserName,
                     ResponsibleRole = responsible.Roles.FirstOrDefault()
@@ -128,13 +143,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId,
-                              string.Join(",", evnt.Payload.SelectedValues.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray()), evnt.EventTimeStamp);
+            return this.AnswerFeaturedQuestionWithOptions(currentState, evnt.Payload.QuestionId, evnt.EventTimeStamp, evnt.Payload.SelectedValues);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.SelectedValue.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+            return this.AnswerFeaturedQuestionWithOptions(currentState, evnt.Payload.QuestionId, evnt.EventTimeStamp,evnt.Payload.SelectedValue);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
