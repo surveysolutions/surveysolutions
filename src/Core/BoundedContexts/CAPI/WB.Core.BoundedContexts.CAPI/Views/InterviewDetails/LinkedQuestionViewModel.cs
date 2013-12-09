@@ -87,22 +87,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private int[][] CastAnswer(object answer)
         {
             if (this.IsAnswerNull(answer))
-            {
                 return null;
-            }
+
+            var selectedAnswer = this.CastAnswerToSingleDimensionalArray(answer);
+            if (selectedAnswer != null)
+                return new int[][] { selectedAnswer };
 
             int[][] typedAnswers = this.CastAnswerTo2DimensionalArray(answer);
-
-            if (typedAnswers == null)
-            {
-                var selectedAnswer = this.CastAnswerToSingleDimensionalArray(answer);
-
-                if (selectedAnswer == null)
-                    return null;
-
-                return new int[][] { selectedAnswer };
-            }
-            return typedAnswers;
+            if (typedAnswers != null)
+                return typedAnswers;
+        
+            return new int[0][];
         }
 
         private int[] CastAnswerToSingleDimensionalArray(object answer)
@@ -140,9 +135,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return intCast.ToArray();
 
             var objectCast = answer as IEnumerable<object>;
-            if (objectCast == null)
+            if (objectCast == null || !objectCast.Any())
                 return null;
-            return objectCast.Select(this.CastAnswerFormObjectToIntArray).ToArray();
+
+            var result = objectCast.Select(this.CastAnswerFormObjectToIntArray).Where(i => i != null).ToArray();
+            if (result.Length == 0)
+                return null;
+            return result;
         }
 
         private int[] CastAnswerFormObjectToIntArray(object answer)
@@ -150,7 +149,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var objectCast = answer as IEnumerable<object>;
             if (objectCast == null)
                 return null;
-            return objectCast.Select(this.ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();
+            
+            var result = objectCast.Select(this.ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();
+            if (result.Length == 0)
+                return null;
+            
+            return result;
         }
 
         private int? ConvertObjectToAnswer(object answer)
