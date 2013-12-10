@@ -64,7 +64,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_group.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_16.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_20.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_without_max_value.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_has_roster_group_parent.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_has_not_numeric_integer_roster_size_question.cs" />
