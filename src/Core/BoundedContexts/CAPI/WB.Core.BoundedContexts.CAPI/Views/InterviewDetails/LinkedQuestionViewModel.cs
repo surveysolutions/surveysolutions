@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -55,9 +56,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            int[][] typedAnswers = this.CastAnswer(answer);
+            int[][] typedAnswers = QuestionUtils.ExtractSelectedOptionsOfLinkedQuestion(answer);
 
-            if (this.IsAnswerNull(typedAnswers))
+            if (typedAnswers==null)
             {
                 return;
             }
@@ -82,90 +83,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 this.RemoveAnsweredFromStatus();
             }
-        }
-
-        private int[][] CastAnswer(object answer)
-        {
-            if (this.IsAnswerNull(answer))
-            {
-                return null;
-            }
-
-            int[][] typedAnswers = this.CastAnswerTo2DimensionalArray(answer);
-
-            if (typedAnswers == null)
-            {
-                var selectedAnswer = this.CastAnswerToSingleDimensionalArray(answer);
-
-                if (selectedAnswer == null)
-                    return null;
-
-                return new int[][] { selectedAnswer };
-            }
-            return typedAnswers;
-        }
-
-        private int[] CastAnswerToSingleDimensionalArray(object answer)
-        {
-            var intCast = answer as IEnumerable<int>;
-            if (intCast != null)
-                return intCast.ToArray();
-
-            var objectCast = this.CastAnswerFormObjectToIntArray(answer);
-            if (objectCast != null)
-                return objectCast;
-            
-            var jArrayCast = this.GetValueFromJArray<int>(answer);
-            if (jArrayCast.Length > 0)
-                return jArrayCast;
-            return null;
-        }
-
-        private int[][] CastAnswerTo2DimensionalArray(object answer)
-        {
-            var objectCast = this.CastAnswerFormObject2DimensionalToIntArray(answer);
-            if (objectCast != null)
-                return objectCast;
-
-            var jArrayCast = this.GetValueFromJArray<int[]>(answer);
-            if (jArrayCast.Length > 0)
-                return jArrayCast;
-            return null;
-        }
-
-        private int[][] CastAnswerFormObject2DimensionalToIntArray(object answer)
-        {
-            var intCast = answer as IEnumerable<int[]>;
-            if (intCast != null)
-                return intCast.ToArray();
-
-            var objectCast = answer as IEnumerable<object>;
-            if (objectCast == null)
-                return null;
-            return objectCast.Select(this.CastAnswerFormObjectToIntArray).ToArray();
-        }
-
-        private int[] CastAnswerFormObjectToIntArray(object answer)
-        {
-            var objectCast = answer as IEnumerable<object>;
-            if (objectCast == null)
-                return null;
-            return objectCast.Select(this.ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();
-        }
-
-        private int? ConvertObjectToAnswer(object answer)
-        {
-            if (answer == null)
-                return null;
-            int value;
-            if (int.TryParse(answer.ToString(), out value))
-                return value;
-            return null;
-        }
-
-        private bool IsAnswerNull(object answer)
-        {
-            return answer == null;
         }
         
         public void HandleAnswerListChange()

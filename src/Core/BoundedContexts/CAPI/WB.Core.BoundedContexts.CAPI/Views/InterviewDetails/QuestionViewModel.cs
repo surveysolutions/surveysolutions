@@ -170,18 +170,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Status &= ~QuestionStatus.ParentEnabled;
             RaisePropertyChanged("Status");
         }
-
-        protected T[] GetValueFromJArray<T>(object answer)
-        {
-            try
-            {
-                return ((JArray)answer).ToObject<T[]>();
-            }
-            catch (Exception)
-            {
-                return new T[0];
-            }
-        }
     }
 
     [Flags]
