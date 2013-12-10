@@ -45,9 +45,12 @@
                 if (_.isNumber(dto.Answer)) {
                     item.answer(dto.Answer);
                 } else {
-                    item.answer(parseFloat(dto.Answer));
+                    var iAnswer = parseFloat(dto.Answer);
+                    if (!isNaN(iAnswer)) {
+                        item.answer(iAnswer);
+                    }
                 }
-                
+
                 break;
             case "DateTime":
                 item = new model.DateTimeQuestion();
@@ -73,7 +76,7 @@
                 c.userId(comment.CommenterId);
                 return c;
             });
-            item.isReadonly(dto.Scope != "Supervisor");
+            item.isReadonly(dto.IsReadOnly);
             item.variable(dto.Variable);
             item.comments(comments);
             item.scope(dto.Scope);
