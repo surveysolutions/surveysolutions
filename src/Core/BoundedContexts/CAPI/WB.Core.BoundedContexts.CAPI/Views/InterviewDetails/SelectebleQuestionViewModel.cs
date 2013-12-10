@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -67,7 +68,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
             }
 
-            var typedAnswers = this.CastAnswerToSingleDimensionalArray(answer) ?? this.CastAnswerToDecimal(answer);
+            var typedAnswers = QuestionUtils.ExtractSelectedOptions(answer);
 
             if (typedAnswers == null)
             {
@@ -104,40 +105,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Status &= ~QuestionStatus.Answered;
                 this.RaisePropertyChanged("Status");
             }
-        }
-
-        private decimal[] CastAnswerToSingleDimensionalArray(object answer)
-        {
-            var decimalCast = answer as IEnumerable<decimal>;
-            if (decimalCast != null)
-                return decimalCast.ToArray();
-
-            var objectCast = answer as IEnumerable<object>;
-            if (objectCast != null)
-                return objectCast.Select(this.ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();
-
-            var jArrayCast = this.GetValueFromJArray<decimal>(answer);
-            if (jArrayCast.Length > 0)
-                return jArrayCast;
-            return null;
-        }
-
-        private decimal? ConvertObjectToAnswer(object answer)
-        {
-            if (answer == null)
-                return null;
-            decimal value;
-            if (decimal.TryParse(answer.ToString(), out value))
-                return value;
-            return null;
-        }
-
-        private decimal[] CastAnswerToDecimal(object answer)
-        {
-            var decimalAnswer = this.ConvertObjectToAnswer(answer);
-            if (decimalAnswer.HasValue)
-                return new decimal[] { decimalAnswer.Value };
-            return null;
         }
     }
 }
