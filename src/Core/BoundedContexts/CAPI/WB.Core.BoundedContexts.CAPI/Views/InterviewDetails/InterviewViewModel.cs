@@ -63,7 +63,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             #endregion
 
             #region interview data initialization
-            
 
             this.CreateInterviewChapters(questionnaire);
 
@@ -180,6 +179,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     question.SetAnswer(answeredQuestion.Answer);
                 }
 
+                if (!IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
+                    continue;
+                AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(answeredQuestion.Id, answeredQuestion.PropagationVector);
             }
         }
 
