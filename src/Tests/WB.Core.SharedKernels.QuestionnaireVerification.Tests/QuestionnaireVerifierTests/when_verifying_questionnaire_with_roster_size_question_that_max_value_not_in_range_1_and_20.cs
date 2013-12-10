@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_16 : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_20 : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = rosterSizeQuestionId,
                 IsInteger = true,
-                MaxValue = 99
+                MaxValue = 21
             });
             questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId});
 
