@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterGroupHasNotNumericRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_RosterGroupHasNotNumericRosterSizeQuestion),
                     Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
-                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And16, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16),
+                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And20, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
                     Verifier<IQuestion>(HeadQuestionCantBeInsideOfNonRoster, "WB0031", VerificationMessages.WB0031_HeadQuestionCantBeInsideOfNonRoster),
 
@@ -166,12 +166,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 !rosterSizeQuestionAsIntegerQuestion.MaxValue.HasValue;
         }
 
-        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And16(IQuestion question, QuestionnaireDocument questionnaire)
+        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And20(IQuestion question, QuestionnaireDocument questionnaire)
         {
             var rosterSizeQuestionAsIntegerQuestion = GetQuestionAsIntegerQuestion(question);
             return IsRosterSizeQuestion(question, questionnaire) && rosterSizeQuestionAsIntegerQuestion != null &&
                 rosterSizeQuestionAsIntegerQuestion.MaxValue.HasValue &&
-                !Enumerable.Range(1, 16).Contains(rosterSizeQuestionAsIntegerQuestion.MaxValue.Value);
+                !Enumerable.Range(1, 20).Contains(rosterSizeQuestionAsIntegerQuestion.MaxValue.Value);
         }
 
         private static bool HeadQuestionCantBeInsideOfNonRoster(IQuestion question, QuestionnaireDocument questionnaire)
