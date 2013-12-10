@@ -1,3 +1,5 @@
+using System.Configuration.Provider;
+using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
@@ -21,13 +23,16 @@ namespace WB.UI.Designer.Controllers
     public class AdminController : BaseController
     {
         private readonly IQuestionnaireHelper questionnaireHelper;
+        private readonly ILogger logger;
 
         public AdminController(
             IMembershipUserService userHelper,
-            IQuestionnaireHelper questionnaireHelper)
+            IQuestionnaireHelper questionnaireHelper,
+            ILogger logger)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
+            this.logger = logger;
         }
 
         public ActionResult Create()
@@ -135,29 +140,39 @@ namespace WB.UI.Designer.Controllers
                 MembershipUser intUser = this.GetUser(user.Id);
                 if (intUser != null)
                 {
-                    Membership.UpdateUser(
-                        new MembershipUser(
-                            providerName: intUser.ProviderName, 
-                            name: intUser.UserName, 
-                            providerUserKey: intUser.ProviderUserKey, 
-                            email: user.Email, 
-                            passwordQuestion: intUser.PasswordQuestion, 
-                            comment: user.Comment, 
-                            isApproved: user.IsApproved, 
-                            isLockedOut: user.IsLockedOut, 
-                            creationDate: intUser.CreationDate, 
-                            lastLoginDate: intUser.LastLoginDate, 
-                            lastActivityDate: intUser.LastActivityDate, 
-                            lastPasswordChangedDate: intUser.LastPasswordChangedDate, 
-                            lastLockoutDate: intUser.LastLockoutDate));
-                }
+                    try
+                    {
+                        Membership.UpdateUser(
+                            new MembershipUser(
+                                providerName: intUser.ProviderName,
+                                name: intUser.UserName,
+                                providerUserKey: intUser.ProviderUserKey,
+                                email: user.Email,
+                                passwordQuestion: intUser.PasswordQuestion,
+                                comment: user.Comment,
+                                isApproved: user.IsApproved,
+                                isLockedOut: user.IsLockedOut,
+                                creationDate: intUser.CreationDate,
+                                lastLoginDate: intUser.LastLoginDate,
+                                lastActivityDate: intUser.LastActivityDate,
+                                lastPasswordChangedDate: intUser.LastPasswordChangedDate,
+                                lastLockoutDate: intUser.LastLockoutDate));
 
-                return this.RedirectToAction("Index");
+                        return this.RedirectToAction("Index");
+                    }
+                    catch (ProviderException e)
+                    {
+                        this.Error(e.Message);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error("User update exception", e);
+                        this.Error("Could not update user information. Please, try again later.");
+                    }
+                }
             }
-            else
-            {
-                return this.View();
-            }
+
+            return this.View(user);
         }
 
         public ViewResult Index(int? p, string sb, int? so, string f)
