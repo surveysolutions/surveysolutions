@@ -18,17 +18,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
-            refferencedQuestionId = Guid.Parse("12222222222222222222222222222222");
+            referencedQuestionId = Guid.Parse("12222222222222222222222222222222");
             questionnaire = CreateQuestionnaireDocument();
 
             questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
-                LinkedToQuestionId = refferencedQuestionId,
+                LinkedToQuestionId = referencedQuestionId,
                 QuestionType = QuestionType.MultyOption
             });
             var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
-            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = refferencedQuestionId, QuestionType = QuestionType.Numeric });
+            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric });
             questionnaire.Children.Add(rosterGroup);
             verifier = CreateQuestionnaireVerifier();
         };
@@ -56,6 +56,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterGroupId;
         private static Guid rosterSizeQuestionId;
-        private static Guid refferencedQuestionId;
+        private static Guid referencedQuestionId;
     }
 }
