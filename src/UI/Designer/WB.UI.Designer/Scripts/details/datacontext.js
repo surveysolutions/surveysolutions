@@ -178,17 +178,24 @@
             });
         };
         
-        questions.getAllIntegerQuestionsForSelect = function () {
+        questions.getAllAllowedQuestionsForSelect = function () {
             return _.filter(questions.getAllLocal(), function (question) {
                 if (question.parent().isRoster()) {
                     return false;
                 }
-                return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
+                return isNumericInteger(question) || isNotLinkedMultyCategorical(question);
             }).map(function (item) {
                 return { questionId: item.id(), title: item.alias() + ": " + item.title() };
             });
         };
 
+        var isNumericInteger = function(question) {
+            return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
+        };
+
+        var isNotLinkedMultyCategorical = function (question) {
+            return question.qtype() == config.questionTypes.MultyOption && !question.isLinked();
+        };
 
         var getChildItemByIdAndType = function (item) {
             if (item.type === "GroupView")
