@@ -215,11 +215,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only numeric question can be used as roster size question for group.
+        ///   Looks up a localized string similar to Only numeric or categorical with multiple answers question can be used as roster size question for group.
         /// </summary>
-        internal static string WB0023_RosterGroupHasNotNumericRosterSizeQuestion {
+        internal static string WB0023_RosterGroupHasInvalidRosterSizeQuestion {
             get {
-                return ResourceManager.GetString("WB0023_RosterGroupHasNotNumericRosterSizeQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0023_RosterGroupHasInvalidRosterSizeQuestion", resourceCulture);
             }
         }
         

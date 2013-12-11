@@ -168,8 +168,8 @@
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be prefilled </value>
   </data>
-  <data name="WB0023_RosterGroupHasNotNumericRosterSizeQuestion" xml:space="preserve">
-    <value>Only numeric question can be used as roster size question for group</value>
+  <data name="WB0023_RosterGroupHasInvalidRosterSizeQuestion" xml:space="preserve">
+    <value>Only numeric or categorical with multiple answers question can be used as roster size question for group</value>
   </data>
   <data name="WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup" xml:space="preserve">
     <value>Roster size question cannot be inside any roster group</value>

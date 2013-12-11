@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -10,15 +12,24 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_roster_group_that_has_not_numeric_integer_roster_size_question : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_group_that_has_linked_multy_option_roster_size_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
+            refferencedQuestionId = Guid.Parse("12222222222222222222222222222222");
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new TextQuestion("question 1") { PublicKey = rosterSizeQuestionId });
-            questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId});
+
+            questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
+            {
+                PublicKey = rosterSizeQuestionId,
+                LinkedToQuestionId = refferencedQuestionId,
+                QuestionType = QuestionType.MultyOption
+            });
+            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
+            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = refferencedQuestionId, QuestionType = QuestionType.Numeric });
+            questionnaire.Children.Add(rosterGroup);
             verifier = CreateQuestionnaireVerifier();
         };
 
@@ -45,5 +56,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterGroupId;
         private static Guid rosterSizeQuestionId;
+        private static Guid refferencedQuestionId;
     }
 }
