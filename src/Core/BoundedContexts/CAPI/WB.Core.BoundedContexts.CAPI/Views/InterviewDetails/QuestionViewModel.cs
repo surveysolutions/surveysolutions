@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public QuestionStatus Status { get; protected set; }
         public string ValidationMessage { get; private set; }
 
-        public abstract IQuestionnaireItemViewModel Clone(int[] propagationVector);
+        public abstract IQuestionnaireItemViewModel Clone(decimal[] propagationVector);
 
         public virtual void SetAnswer(object answer)
         {

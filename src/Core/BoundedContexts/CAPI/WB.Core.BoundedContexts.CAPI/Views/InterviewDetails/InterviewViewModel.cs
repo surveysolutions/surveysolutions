@@ -316,7 +316,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         #endregion
 
-        public void UpdatePropagateGroupsByTemplate(Guid publicKey, int[] outerScopePropagationVector, int count)
+        public void UpdatePropagateGroupsByTemplate(Guid publicKey, decimal[] outerScopePropagationVector, int count)
         {
             var propagatedGroupsCount = this.Screens.Keys.Count(id => id.Id == publicKey) - 1;
             if (propagatedGroupsCount == count)
@@ -335,15 +335,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        private int[] BuildPropagationVectorForGroup(int[] outerScopePropagationVector, int index)
+        private decimal[] BuildPropagationVectorForGroup(decimal[] outerScopePropagationVector, int index)
         {
-            var newGroupVector = new int[outerScopePropagationVector.Length + 1];
+            var newGroupVector = new decimal[outerScopePropagationVector.Length + 1];
             outerScopePropagationVector.CopyTo(newGroupVector, 0);
             newGroupVector[newGroupVector.Length - 1] = index;
             return newGroupVector;
         }
 
-        private void AddPropagateScreen(Guid screenId, int[] outerScopePropagationVector, int index)
+        private void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, int index)
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
@@ -365,7 +365,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.UpdateGrid(screenId);
         }
 
-        private void RemovePropagatedScreen(Guid screenId, int[] outerScopePropagationVector, int index)
+        private void RemovePropagatedScreen(Guid screenId, decimal[] outerScopePropagationVector, int index)
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
@@ -479,7 +479,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return this.Questions.Select(q => q.Value).Where(filter);
         }
 
-        public void AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(Guid questionId, int[] propagationVector)
+        public void AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(Guid questionId, decimal[] propagationVector)
         {
             if (!this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(questionId))
                 this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.Add(questionId, new HashSet<InterviewItemId>());
@@ -491,7 +491,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.NotifyAffectedLinkedQuestions(questionId);
         }
 
-        public void RemoveInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(Guid questionId, int[] propagationVector)
+        public void RemoveInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(Guid questionId, decimal[] propagationVector)
         {
             if (!this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(questionId))
                 return;
@@ -527,7 +527,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 question.PublicKey.PropagationVector);
         }
 
-        private void UpdatePropagationScopeTitleForVector(Guid scopeId, int[] propagationVector)
+        private void UpdatePropagationScopeTitleForVector(Guid scopeId, decimal[] propagationVector)
         {
             var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId];
 
@@ -543,7 +543,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        private string BuildPropagationScopeTitleBasedOnAnswersToCapitalQuestions(int[] propagationVector, Guid scopeId)
+        private string BuildPropagationScopeTitleBasedOnAnswersToCapitalQuestions(decimal[] propagationVector, Guid scopeId)
         {
             return string.Concat(
                 this.Questions.Where(

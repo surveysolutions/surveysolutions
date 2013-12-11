@@ -208,19 +208,19 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             return doc;
         }
 
-        private void SetSelectableAnswer(Guid interviewId, Guid questionId, int[] protagationVector, decimal[] answers)
+        private void SetSelectableAnswer(Guid interviewId, Guid questionId, decimal[] protagationVector, decimal[] answers)
         {
             var doc = this.GetStoredViewModel(interviewId);
             doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answers);
         }
 
-        private void SetValueAnswer(Guid interviewId, Guid questionId, int[] protagationVector, object answer)
+        private void SetValueAnswer(Guid interviewId, Guid questionId, decimal[] protagationVector, object answer)
         {
             var doc = this.GetStoredViewModel(interviewId);
             doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answer);
         }
 
-        private void RemoveAnswer(Guid interviewId, Guid questionId, int[] propagationVector)
+        private void RemoveAnswer(Guid interviewId, Guid questionId, decimal[] propagationVector)
         {
             InterviewViewModel viewModel = this.GetStoredViewModel(interviewId);
 

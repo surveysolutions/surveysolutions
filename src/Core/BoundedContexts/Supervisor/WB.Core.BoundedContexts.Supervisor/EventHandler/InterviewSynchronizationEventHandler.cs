@@ -171,9 +171,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private int[] CreateOuterVector(InterviewLevel interviewLevel)
+        private decimal[] CreateOuterVector(InterviewLevel interviewLevel)
         {
-            var outerVector = new int[interviewLevel.RosterVector.Length - 1];
+            var outerVector = new decimal[interviewLevel.RosterVector.Length - 1];
             for (int i = 0; i < interviewLevel.RosterVector.Length - 1; i++)
             {
                 outerVector[i] = interviewLevel.RosterVector[i];

@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        public QuestionnairePropagatedScreenViewModel Clone(int[] propagationVector,
+        public QuestionnairePropagatedScreenViewModel Clone(decimal[] propagationVector,
                                                             IList<IQuestionnaireItemViewModel> items)
         {
             if (!this.ScreenId.IsTopLevel())
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                                                                   : null);
         }
 
-        public QuestionnairePropagatedScreenViewModel Clone(int[] propagationVector)
+        public QuestionnairePropagatedScreenViewModel Clone(decimal[] propagationVector)
         {
 
             IList<IQuestionnaireItemViewModel> items = this.Items.Select(questionnaireItemViewModel => questionnaireItemViewModel.Clone(propagationVector)).ToList();
