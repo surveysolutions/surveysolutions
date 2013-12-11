@@ -1902,7 +1902,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             if (!RosterSizeQuestionTypes.Contains(question.QuestionType))
                 throw new QuestionnaireException(string.Format(
-                "Roster size question {0} should have Numeric type.",
+                "Roster size question {0} should have Numeric or Categorical Multy Answers type.",
                 FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (GetAllParentGroups(question).Any(group => group.IsRoster))
