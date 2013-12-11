@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             //give an answer which would disable conditionallyDisabledQuestion at first
-            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new int[] {}, DateTime.Now, 5);
+            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new decimal[] { }, DateTime.Now, 5);
 
             //setup expression processor throw exception
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>())).Throws(new Exception());
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new int[] { }, DateTime.Now, 0);
+            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new decimal[] { }, DateTime.Now, 0);
 
         It should_not_raise_QuestionDisabled_event_with_QuestionId_equal_to_conditionallyDisabledQuestionId = () =>
             eventContext.ShouldNotContainEvent<QuestionDisabled>(@event

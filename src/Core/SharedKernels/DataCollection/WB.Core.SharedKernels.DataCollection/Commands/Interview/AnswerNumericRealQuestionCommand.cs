@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public decimal Answer { get; private set; }
 
-        public AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime, decimal answer)
+        public AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal answer)
             : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
             this.Answer = answer;

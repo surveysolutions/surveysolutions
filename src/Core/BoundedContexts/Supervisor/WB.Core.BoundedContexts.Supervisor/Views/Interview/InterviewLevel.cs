@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
     public class InterviewLevel
     {
-        public InterviewLevel(Guid scopeId, int[] vector)
+        public InterviewLevel(Guid scopeId, decimal[] vector)
         {
             this.ScopeIds = new HashSet<Guid>(new[] {scopeId});
             this.RosterVector = vector;
@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
             this.DisabledGroups = new HashSet<Guid>();
         }
 
-        public int[] RosterVector { get; private set; }
+        public decimal[] RosterVector { get; private set; }
         public HashSet<Guid> ScopeIds { get; private set; }
         private List<InterviewQuestion> Questions { get; set; }
         public HashSet<Guid> DisabledGroups { get; private set; }

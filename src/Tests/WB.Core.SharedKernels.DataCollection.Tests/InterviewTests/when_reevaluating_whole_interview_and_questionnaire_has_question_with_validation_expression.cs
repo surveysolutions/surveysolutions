@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.AnswerTextQuestion(userId, conditionallyInvalidQuestionId, new int[0], DateTime.Now, "answer");
+            interview.AnswerTextQuestion(userId, conditionallyInvalidQuestionId, new decimal[0], DateTime.Now, "answer");
 
             eventContext = new EventContext();
         };

@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireRosterStructure) }; }
         }
 
-        private string CreateLevelIdFromPropagationVector(int[] vector)
+        private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
             if (vector.Length == 0)
                 return "#";
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, int[] outerVector, Guid scopeId)
+        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, Guid scopeId)
         {
             for (int i = startIndex; i < startIndex + count; i++)
             {
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddLevelToInterview(InterviewData interview, int[] vector, int index, Guid scopeId)
+        private void AddLevelToInterview(InterviewData interview, decimal[] vector, int index, Guid scopeId)
         {
             var newVector = CreateNewVector(vector, index);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
@@ -123,9 +123,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private int[] CreateNewVector(int[] outerScopePropagationVector, int indexInScope)
+        private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, int indexInScope)
         {
-            var scopeVecor = new int[outerScopePropagationVector.Length + 1];
+            var scopeVecor = new decimal[outerScopePropagationVector.Length + 1];
             outerScopePropagationVector.CopyTo(scopeVecor, 0);
             scopeVecor[scopeVecor.Length - 1] = indexInScope;
             return scopeVecor;
@@ -137,7 +137,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                             .Select(level => level.Key).ToList();
         }
 
-        private InterviewData PreformActionOnLevel(InterviewData interview, int[] vector, Action<InterviewLevel> action)
+        private InterviewData PreformActionOnLevel(InterviewData interview, decimal[] vector, Action<InterviewLevel> action)
         {
             var levelId = CreateLevelIdFromPropagationVector(vector);
 
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return interview;
         }
 
-        private InterviewData UpdateQuestion(InterviewData interview, int[] vector, Guid questionId, Action<InterviewQuestion> update)
+        private InterviewData UpdateQuestion(InterviewData interview, decimal[] vector, Guid questionId, Action<InterviewQuestion> update)
         {
             return PreformActionOnLevel(interview, vector, (questionsAtTheLevel) =>
             {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
 
 
-        private InterviewData ChangeQuestionConditionState(InterviewData interview, int[] vector, Guid questionId, bool newState)
+        private InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool newState)
         {
             return this.UpdateQuestion(interview, vector, questionId, (question) =>
             {
@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        private InterviewData ChangeQuestionConditionValidity(InterviewData interview, int[] vector, Guid questionId, bool valid)
+        private InterviewData ChangeQuestionConditionValidity(InterviewData interview, decimal[] vector, Guid questionId, bool valid)
         {
             return this.UpdateQuestion(interview, vector, questionId, (question) =>
             {
@@ -176,7 +176,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        private InterviewData SaveAnswer(InterviewData interview, int[] vector, Guid questionId, object answer)
+        private InterviewData SaveAnswer(InterviewData interview, decimal[] vector, Guid questionId, object answer)
          {
             return this.UpdateQuestion(interview, vector, questionId, (question) =>
                  {
@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                  });
          }
 
-        private InterviewData SetFlagStateForQuestion(InterviewData interview, int[] vector, Guid questionId, bool isFlagged)
+        private InterviewData SetFlagStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId, bool isFlagged)
         {
             return this.UpdateQuestion(interview, vector, questionId, (question) =>
             {
@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return interview;
         }
 
-        private InterviewData SaveComment(InterviewData interview, int[] vector, Guid questionId, string comment, Guid userId, string userName,
+        private InterviewData SaveComment(InterviewData interview, decimal[] vector, Guid questionId, string comment, Guid userId, string userName,
             DateTime commentTime)
         {
             var interviewQuestionComment = new InterviewQuestionComment()
@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 ResponsibleId = evnt.Payload.UserId, // Creator is responsible
                 ResponsibleRole = responsible.Roles.FirstOrDefault()
             };
-            var emptyVector = new int[0];
+            var emptyVector = new decimal[0];
             interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, emptyVector));
             return new ViewWithSequence<InterviewData>(interview, evnt.EventSequence);
         }
