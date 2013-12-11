@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 publicKey, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences)
         {
             this.getAnswerOptions = getAnswerOptions;
-            this.SelectedAnswers = new int[0][];
+            this.SelectedAnswers = new decimal[0][];
             this.AreAnswersOrdered = areAnsewrsOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
         }
@@ -29,11 +29,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             get { return this.getAnswerOptions(); }
         }
 
-        public int[][] SelectedAnswers { get; private set; }
+        public decimal[][] SelectedAnswers { get; private set; }
         public bool? AreAnswersOrdered { get; private set; }
         public int? MaxAllowedAnswers { get; private set; }
 
-        public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
+        public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
             return new LinkedQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
                 this.SourceText, this.QuestionType,
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            int[][] typedAnswers = QuestionUtils.ExtractSelectedOptionsOfLinkedQuestion(answer);
+            decimal[][] typedAnswers = QuestionUtils.ExtractSelectedOptionsOfLinkedQuestion(answer);
 
             if (typedAnswers==null)
             {
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void RemoveAnswer()
         {
-            this.SelectedAnswers = new int[][]{};
+            this.SelectedAnswers = new decimal[][] { };
 
             base.RemoveAnswer();
 
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.RaisePropertyChanged("AnswerOptions");
         }
 
-        public static bool IsVectorsEqual(int[] vector1, int[] vector2)
+        public static bool IsVectorsEqual(decimal[] vector1, decimal[] vector2)
         {
             if (vector1.Length != vector2.Length)
                 return false;

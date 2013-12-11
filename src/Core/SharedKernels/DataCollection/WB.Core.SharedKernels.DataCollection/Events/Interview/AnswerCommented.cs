@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public string Comment { get; private set; }
 
-        public AnswerCommented(Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime, string comment)
+        public AnswerCommented(Guid userId, Guid questionId, decimal[] propagationVector, DateTime commentTime, string comment)
             : base(userId, questionId, propagationVector)
         {
             this.Comment = comment;

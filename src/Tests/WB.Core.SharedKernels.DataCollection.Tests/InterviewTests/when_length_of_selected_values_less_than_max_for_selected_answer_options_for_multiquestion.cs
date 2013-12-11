@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         private Because of =
-            () => interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new int[] { }, DateTime.Now, selectedValues);
+            () => interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, selectedValues);
 
         It should_raise_MultipleOptionsQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>(@event

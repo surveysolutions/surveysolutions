@@ -5,19 +5,19 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public struct InterviewItemId
     {
-        public InterviewItemId(Guid id, int[] propagationVector)
+        public InterviewItemId(Guid id, decimal[] propagationVector)
         {
             Id = id;
-            PropagationVector = propagationVector ?? new int[0];
+            PropagationVector = propagationVector ?? new decimal[0];
         }
 
         public InterviewItemId(Guid id)
-            : this(id, new int[0]) {}
+            : this(id, new decimal[0]) { }
 
         public Guid Id;
-        public int[] PropagationVector;
+        public decimal[] PropagationVector;
 
-        public bool CompareWithVector(int[] vector)
+        public bool CompareWithVector(decimal[] vector)
         {
             if (PropagationVector.Length != vector.Length)
                 return false;
@@ -72,10 +72,10 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             if (value.Contains(','))
             {
                 var items = value.Split(',');
-                var vector = new int[items.Length - 1];
+                var vector = new decimal[items.Length - 1];
                 for (int i = 0; i < items.Length - 1; i++)
                 {
-                    vector[i] = int.Parse(items[i]);
+                    vector[i] = decimal.Parse(items[i]);
                 }
                 return new InterviewItemId(Guid.Parse(items[items.Length - 1]), vector);
             }

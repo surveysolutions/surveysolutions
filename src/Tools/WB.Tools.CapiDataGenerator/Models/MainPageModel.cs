@@ -491,7 +491,7 @@ namespace CapiDataGenerator
                     commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
                                                                     userId: interview.Value,
                                                                     questionId: question.PublicKey,
-                                                                    rosterVector: new int[0],
+                                                                    rosterVector: new decimal[0],
                                                                     commentTime: DateTime.UtcNow,
                                                                     comment: "auto comment"));
 
@@ -662,7 +662,7 @@ namespace CapiDataGenerator
         {
             ICommand command = null;
 
-            int[] emptyPropagationVector = {};
+            decimal[] emptyPropagationVector = { };
             Guid questionId = question.PublicKey;
             Guid userId = responsibleId;
             DateTime answersTime = DateTime.UtcNow;
@@ -704,7 +704,7 @@ namespace CapiDataGenerator
         }
 
         private ICommand CreateAnswerCommandForAnswerNumericQuestion(IQuestion question, Guid interviewId, Guid userId,
-            int[] emptyPropagationVector,
+            decimal[] emptyPropagationVector,
             DateTime answersTime, object answer)
         {
             var isInteger = true;
