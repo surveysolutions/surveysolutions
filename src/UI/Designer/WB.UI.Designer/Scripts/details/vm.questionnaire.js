@@ -112,7 +112,7 @@
                     return;
                 }
                 group.isSelected(true);
-                group.integerQuestions(datacontext.questions.getAllIntegerQuestionsForSelect());
+                group.integerQuestions(datacontext.questions.getAllAllowedQuestionsForSelect());
                 selectedGroup(group);
                 openDetails("show-group");
             },
