@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Raven.Client.Linq.Indexing;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Synchronization;
+using Web.Supervisor.Code;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
 
@@ -29,6 +30,11 @@ namespace Web.Supervisor.Controllers
         private IReadSideAdministrationService ReadSideAdministrationService
         {
             get { return this.serviceLocator.GetInstance<IReadSideAdministrationService>(); }
+        }
+
+        private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
+        {
+            get { return this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>(); }
         }
 
         public ActionResult NConfig()
@@ -93,7 +99,7 @@ namespace Web.Supervisor.Controllers
 
             return this.RedirectToAction("ReadSide");
         }
-
+   
         private string DiagnoseDesignerConnection(string login, string password)
         {
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
@@ -133,5 +139,34 @@ namespace Web.Supervisor.Controllers
 
             return exception.ToString();
         }
+
+        #region interview ravalidationg
+
+        public ActionResult RevalidateInterviews()
+        {
+            return View();
+        }
+
+        public ActionResult RevalidateAllInterviewsWithErrors()
+        {
+            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync();
+
+            return this.RedirectToAction("RevalidateInterviews");
+        }
+
+        public ActionResult StopInterviewRevalidating()
+        {
+            this.RevalidateInterviewsAdministrationService.StopInterviewsRevalidating();
+
+            return this.RedirectToAction("RevalidateInterviews");
+        }
+
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public string GetRevalidateInterviewStatus()
+        {
+            return this.RevalidateInterviewsAdministrationService.GetReadableStatus();
+        }
+
+        #endregion
     }
 }

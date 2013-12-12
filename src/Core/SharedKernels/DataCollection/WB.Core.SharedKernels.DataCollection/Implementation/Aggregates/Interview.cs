@@ -1091,6 +1091,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
+            bool isInterviewInvalid = this.HasInvalidAnswers();
+
             questionsDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             questionsDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
@@ -1099,6 +1101,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+
+            if (!isInterviewInvalid)
+            {
+                this.ApplyEvent(new InterviewDeclaredValid());
+            }
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, int[] rosterVector, DateTime commentTime,string comment)

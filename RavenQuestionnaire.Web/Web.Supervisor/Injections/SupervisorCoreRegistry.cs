@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.Filters;
+using Web.Supervisor.Code;
 
 namespace Web.Supervisor.Injections
 {
@@ -83,6 +84,7 @@ namespace Web.Supervisor.Injections
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
         }
     }
 }

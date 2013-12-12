@@ -322,6 +322,7 @@
     <Compile Include="Code\EnumToStringConverter.cs" />
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
+    <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
@@ -389,6 +390,7 @@
     <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -540,7 +542,7 @@
     <Content Include="Configuration\Stacy.Supervisor.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
+    <Content Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
@@ -587,6 +589,7 @@
     <Content Include="Views\ControlPanel\Designer.cshtml" />
     <Content Include="Views\Interview\Revalidate.cshtml" />
     <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
+    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
