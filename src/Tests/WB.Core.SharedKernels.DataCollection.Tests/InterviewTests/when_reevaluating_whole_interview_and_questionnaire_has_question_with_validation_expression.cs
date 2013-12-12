@@ -43,19 +43,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-                .Returns(expressionProcessor.Object);
+            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
+            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.AnswerTextQuestion(userId, conditionallyInvalidQuestionId, new int[0], DateTime.Now, "answer");
 
             eventContext = new EventContext();
         };
+
 
         Cleanup stuff = () =>
         {
