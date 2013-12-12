@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var disabledQuestions = new HashSet<InterviewItemId>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
-            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, HashSet<decimal>>();
+            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, List<decimal>>();
 
             var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
             QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
-            Dictionary<InterviewItemId, HashSet<decimal>> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, List<decimal>> propagatedGroupInstanceCounts)
         {
             if (interviewLevel.RosterVector.Length == 0)
                 return;
@@ -158,7 +158,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, HashSet<decimal>> propagatedGroupInstanceCounts,
+        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, List<decimal>> propagatedGroupInstanceCounts,
             InterviewItemId groupKey)
         {
             if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
@@ -170,7 +170,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
             else
             {
-                propagatedGroupInstanceCounts.Add(groupKey, new HashSet<decimal> { 0 });
+                propagatedGroupInstanceCounts.Add(groupKey, new List<decimal> { 0 });
             }
         }
 

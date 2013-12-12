@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                                            HashSet<InterviewItemId> disabledQuestions,
                                            HashSet<InterviewItemId> validAnsweredQuestions,
                                            HashSet<InterviewItemId> invalidAnsweredQuestions,
-                                           Dictionary<InterviewItemId, HashSet<decimal>> propagatedGroupInstanceCounts,
+                                           Dictionary<InterviewItemId, List<decimal>> propagatedGroupInstanceCounts,
                                            bool wasCompleted)
         {
             Id = id;
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
-        public Dictionary<InterviewItemId, HashSet<decimal>> PropagatedGroupInstanceCounts { get; set; }
+        public Dictionary<InterviewItemId, List<decimal>> PropagatedGroupInstanceCounts { get; set; }
         public bool WasCompleted { get; set; }
     }
 }
