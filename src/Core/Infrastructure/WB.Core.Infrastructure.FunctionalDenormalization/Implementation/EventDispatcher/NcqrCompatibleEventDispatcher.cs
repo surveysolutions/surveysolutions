@@ -33,37 +33,26 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
             }
         }
 
+        public InMemoryTransaction InMemoryTransaction(Guid eventSourceId)
+        {
+            return
+                new InMemoryTransaction(
+                    this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList(),
+                    eventSourceId);
+        }
+
         public void PublishByEventSource(Guid eventSourceId, long sequence = 0)
         {
             var eventMessages = this.eventStore.ReadFrom(eventSourceId, sequence + 1, long.MaxValue);
 
-            if (eventMessages.IsEmpty)
-                return;
-
-            var functionalDenormalizers = this.registredHandlers.Values.Where(h => h.Handler is IFunctionalEventHandler).ToList();
-            foreach (var handler in functionalDenormalizers)
-            {
-                var functionalHandler = handler.Handler as IFunctionalEventHandler;
-                if (functionalHandler != null)
-                {
-                    functionalHandler.ChangeForSingleEventSource(eventSourceId);
-                }
-            }
+            var busesWithFunctionalHandlers =
+                this.registredHandlers.Values.Where(h => h.Handler is IFunctionalEventHandler).Select(h => h.Bus).ToList();
 
             foreach (var publishableEvent in eventMessages)
             {
-                foreach (var handler in functionalDenormalizers)
+                foreach (var bus in busesWithFunctionalHandlers)
                 {
-                    handler.Bus.Publish(publishableEvent);
-                }
-            }
-
-            foreach (var handler in functionalDenormalizers)
-            {
-                var functionalHandler = handler.Handler as IFunctionalEventHandler;
-                if (functionalHandler != null)
-                {
-                    functionalHandler.FlushDataToPersistentStorage(eventSourceId);
+                        bus.Publish(publishableEvent);
                 }
             }
         }
