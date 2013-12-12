@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.rosterGroupInstanceCounts = @event.InterviewData.PropagatedGroupInstanceCounts.ToDictionary(
                 pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.PropagationVector),
-                pair => pair.Value);
+                pair => new HashSet<decimal>(pair.Value));
 
             this.validAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.ValidAnsweredQuestions);
             this.invalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);

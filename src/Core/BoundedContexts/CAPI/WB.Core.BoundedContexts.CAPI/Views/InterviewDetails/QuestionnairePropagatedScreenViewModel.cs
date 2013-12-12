@@ -24,8 +24,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                                                       InterviewItemId screenId,
                                                       IList<IQuestionnaireItemViewModel> items,
                                                       Func<Guid, IEnumerable<InterviewItemId>> sibligs,
-                                                      IEnumerable<InterviewItemId> breadcrumbs)
-            : this(questionnaireId,  title, enabled, screenId, items,sibligs, breadcrumbs, null, null)
+                                                      IEnumerable<InterviewItemId> breadcrumbs, int rowIndex)
+            : this(questionnaireId, title, enabled, screenId, items, sibligs, breadcrumbs, null, null, rowIndex)
         {
         }
         protected QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                                                      InterviewItemId screenId,
                                                      IList<IQuestionnaireItemViewModel> items,
                                                      Func<Guid, IEnumerable<InterviewItemId>> sibligs,
-                                                     IEnumerable<InterviewItemId> breadcrumbs, IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
+                                                     IEnumerable<InterviewItemId> breadcrumbs, IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous, int rowIndex)
             : this(questionnaireId, title, title, enabled, screenId, items, breadcrumbs, 0, 0, next, previous)
         {
             this.sibligsValue = sibligs;
@@ -42,31 +42,29 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
                 this.ScreenName = string.Empty;
             }
+            this.RowIndex = rowIndex;
         }
 
-        public QuestionnairePropagatedScreenViewModel Clone(decimal[] propagationVector,
-                                                            IList<IQuestionnaireItemViewModel> items)
-        {
-            if (!this.ScreenId.IsTopLevel())
-                throw new InvalidOperationException("only template can mutate in that way");
-            var key = new InterviewItemId(this.ScreenId.Id, propagationVector);
-            var bradCrumbs = this.Breadcrumbs.ToList();
-            return new QuestionnairePropagatedScreenViewModel(this.QuestionnaireId,
-                                                              this.Title, true,
-                                                              key, items,
-                                                              this.sibligsValue, bradCrumbs,
-                                                              this.Next != null
-                                                                  ? this.Next.Clone(propagationVector)
-                                                                  : null,
-                                                              this.Previous != null
-                                                                  ? this.Previous.Clone(propagationVector)
-                                                                  : null);
-        }
-
-        public QuestionnairePropagatedScreenViewModel Clone(decimal[] propagationVector)
+        public QuestionnairePropagatedScreenViewModel Clone(decimal[] propagationVector, int rowIndex)
         {
             IList<IQuestionnaireItemViewModel> items = this.Items.Select(questionnaireItemViewModel => questionnaireItemViewModel.Clone(propagationVector)).ToList();
-            return this.Clone(propagationVector, items);
+
+            if (!this.ScreenId.IsTopLevel())
+                throw new InvalidOperationException("only template can mutate in that way");
+
+            var key = new InterviewItemId(this.ScreenId.Id, propagationVector);
+            var bradCrumbs = this.Breadcrumbs.ToList();
+
+            return new QuestionnairePropagatedScreenViewModel(this.QuestionnaireId,
+                this.Title, true,
+                key, items,
+                this.sibligsValue, bradCrumbs,
+                this.Next != null
+                    ? this.Next.Clone(propagationVector)
+                    : null,
+                this.Previous != null
+                    ? this.Previous.Clone(propagationVector)
+                    : null, rowIndex);
         }
 
         public void AddNextPrevious(IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
@@ -91,5 +89,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public IQuestionnaireItemViewModel Next { get; private set; }
         public IQuestionnaireItemViewModel Previous { get; private set; }
+        public int RowIndex { get; private set; }
     }
 }
