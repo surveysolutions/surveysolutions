@@ -210,10 +210,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var propagatedGroupInstanceCount in interview.PropagatedGroupInstanceCounts)
             {
-                for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
+                foreach (var rosterInstanceId in propagatedGroupInstanceCount.Value)
                 {
                     this.AddPropagateScreen(propagatedGroupInstanceCount.Key.Id,
-                        propagatedGroupInstanceCount.Key.PropagationVector, i);
+                       propagatedGroupInstanceCount.Key.PropagationVector, rosterInstanceId);
                 }
             }
         }
@@ -335,7 +335,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        private decimal[] BuildPropagationVectorForGroup(decimal[] outerScopePropagationVector, int index)
+        private decimal[] BuildPropagationVectorForGroup(decimal[] outerScopePropagationVector, decimal index)
         {
             var newGroupVector = new decimal[outerScopePropagationVector.Length + 1];
             outerScopePropagationVector.CopyTo(newGroupVector, 0);
@@ -343,7 +343,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return newGroupVector;
         }
 
-        private void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, int index)
+        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal index)
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
@@ -365,7 +365,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.UpdateGrid(screenId);
         }
 
-        private void RemovePropagatedScreen(Guid screenId, decimal[] outerScopePropagationVector, int index)
+        public void RemovePropagatedScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal index)
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
