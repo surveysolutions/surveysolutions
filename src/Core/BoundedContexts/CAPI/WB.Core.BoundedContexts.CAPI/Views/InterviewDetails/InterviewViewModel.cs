@@ -210,10 +210,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var propagatedGroupInstanceCount in interview.PropagatedGroupInstanceCounts)
             {
+                int index = 0;
                 foreach (var rosterInstanceId in propagatedGroupInstanceCount.Value)
                 {
                     this.AddPropagateScreen(propagatedGroupInstanceCount.Key.Id,
-                       propagatedGroupInstanceCount.Key.PropagationVector, rosterInstanceId);
+                       propagatedGroupInstanceCount.Key.PropagationVector, rosterInstanceId, index);
+                    index++;
                 }
             }
         }
@@ -326,7 +328,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 if (propagatedGroupsCount < count)
                 {
-                    this.AddPropagateScreen(publicKey, outerScopePropagationVector, propagatedGroupsCount + i);
+                    var rosterInstanceId = propagatedGroupsCount + i;
+                    this.AddPropagateScreen(publicKey, outerScopePropagationVector, rosterInstanceId, rosterInstanceId);
                 }
                 else
                 {
@@ -343,10 +346,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return newGroupVector;
         }
 
-        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal index)
+        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int index)
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
-                index);
+                rosterInstanceId);
 
             var screenPrototype = this.propagatedScreenPrototypes[screenId];
             var screen = screenPrototype.Clone(propagationVector);
