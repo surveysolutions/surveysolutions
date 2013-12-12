@@ -13,6 +13,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
     public class InterviewViewModelDenormalizer :
         IEventHandler<InterviewSynchronized>,
         IEventHandler<GroupPropagated>,
+        IEventHandler<RosterRowAdded>,
+        IEventHandler<RosterRowDeleted>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<AnswerCommented>,
@@ -234,12 +236,22 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
                                                 evnt.Payload.Count);
         }
 
+        public void Handle(IPublishedEvent<RosterRowAdded> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+            doc.AddPropagateScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+        }
+
+        public void Handle(IPublishedEvent<RosterRowDeleted> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+            doc.RemovePropagatedScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+        }
+
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
             this.interviewStorage.Remove(evnt.EventSourceId);
         }
-
-
 
         public void Handle(IPublishedEvent<InterviewForTestingCreated> evnt)
         {
@@ -255,6 +267,5 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             this.interviewStorage.Store(view, evnt.EventSourceId);
             
         }
-
     }
 }

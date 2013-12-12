@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private HashSet<string> answeredQuestions = new HashSet<string>();
         private HashSet<string> disabledGroups = new HashSet<string>();
         private HashSet<string> disabledQuestions = new HashSet<string>();
-        private Dictionary<string, int> rosterGroupInstanceCounts = new Dictionary<string, int>();
+        private Dictionary<string, HashSet<decimal>> rosterGroupInstanceCounts = new Dictionary<string, HashSet<decimal>>();
         private HashSet<string> validAnsweredQuestions = new HashSet<string>();
         private HashSet<string> invalidAnsweredQuestions = new HashSet<string>();
 
@@ -239,8 +239,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(GroupPropagated @event)
         {
             string rosterGroupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterScopePropagationVector);
+            var rosterRowInstances = new HashSet<decimal>();
 
-            this.rosterGroupInstanceCounts[rosterGroupKey] = @event.Count;
+            for (int i = 0; i < @event.Count; i++)
+            {
+                rosterRowInstances.Add(i);
+            }
+
+            this.rosterGroupInstanceCounts[rosterGroupKey] = rosterRowInstances;
+        }
+
+        private void Apply(RosterRowAdded @event)
+        {
+            string rosterGroupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
+            var rosterRowInstances = this.rosterGroupInstanceCounts.ContainsKey(rosterGroupKey)
+                ? this.rosterGroupInstanceCounts[rosterGroupKey]
+                : new HashSet<decimal>();
+
+            rosterRowInstances.Add(@event.RosterInstanceId);
+
+            this.rosterGroupInstanceCounts[rosterGroupKey] = rosterRowInstances;
+        }
+
+        private void Apply(RosterRowDeleted @event)
+        {
+            string rosterGroupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
+            this.rosterGroupInstanceCounts[rosterGroupKey].Remove(@event.RosterInstanceId);
         }
 
         private void Apply(InterviewStatusChanged @event)
@@ -668,11 +692,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState, dependentGroupsToBeEnabled, dependentQuestionsToBeEnabled, out answersDeclaredValid, out answersDeclaredInvalid);
 
-
+            Dictionary<Guid, List<int>> rosterRowIdsForDelete, rosterRowIdsForAdd;
+            this.PerformRosterSizeChange(idsOfRosterGroups, rosterVector, rosterSize, out rosterRowIdsForDelete, out rosterRowIdsForAdd);
 
             this.ApplyEvent(new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            idsOfRosterGroups.ForEach(groupId => this.ApplyEvent(new GroupPropagated(groupId, rosterVector, rosterSize)));
+
+            foreach (var row in rosterRowIdsForAdd)
+            {
+                row.Value.ForEach(i => this.ApplyEvent(new RosterRowAdded(row.Key, rosterVector, i, i)));
+            }
+
+            foreach (var row in rosterRowIdsForDelete)
+            {
+                row.Value.ForEach(i => this.ApplyEvent(new RosterRowDeleted(row.Key, rosterVector, i)));
+            }
 
             answersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -691,6 +725,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             dependentQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+        }
+
+        private void PerformRosterSizeChange(List<Guid> idsOfRosterGroups, decimal[] rosterVector, int rosterSize,
+            out Dictionary<Guid, List<int>> rosterRowIdsForDelete, out Dictionary<Guid, List<int>> rosterRowIdsForAdd)
+        {
+            rosterRowIdsForAdd = new Dictionary<Guid, List<int>>();
+            rosterRowIdsForDelete = new Dictionary<Guid, List<int>>();
+
+            foreach (var idsOfRosterGroup in idsOfRosterGroups)
+            {
+                var rosterKey = ConvertIdAndRosterVectorToString(idsOfRosterGroup, rosterVector);
+                var roster = rosterGroupInstanceCounts.ContainsKey(rosterKey)
+                    ? rosterGroupInstanceCounts[rosterKey]
+                    : new HashSet<decimal>();
+
+                if (roster.Count == rosterSize)
+                    continue;
+
+                if (roster.Count < rosterSize)
+                {
+                    rosterRowIdsForAdd[idsOfRosterGroup] = new List<int>();
+                    for (int i = roster.Count; i < rosterSize; i++)
+                    {
+                        rosterRowIdsForAdd[idsOfRosterGroup].Add(i);
+                    }
+                }
+                else
+                {
+                    rosterRowIdsForDelete[idsOfRosterGroup] = new List<int>();
+                    for (int i = rosterSize; i < roster.Count; i++)
+                    {
+                        rosterRowIdsForDelete[idsOfRosterGroup].Add(i);
+                    }
+                }
+            }
         }
 
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal answer)
@@ -2157,7 +2226,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string rosterGroupKey = ConvertIdAndRosterVectorToString(rosterGroupId, outerScopeRosterVector);
 
             return this.rosterGroupInstanceCounts.ContainsKey(rosterGroupKey)
-                ? this.rosterGroupInstanceCounts[rosterGroupKey]
+                ? this.rosterGroupInstanceCounts[rosterGroupKey].Count
                 : 0;
         }
 

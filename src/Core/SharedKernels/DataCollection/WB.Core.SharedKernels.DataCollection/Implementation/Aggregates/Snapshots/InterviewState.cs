@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             Dictionary<string, object> answersSupportedInExpressions, Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswers,
             Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, HashSet<string> answeredQuestions,
-            HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, int> propagatedGroupInstanceCounts,
+            HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, HashSet<decimal>> propagatedGroupInstanceCounts,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
         {
             this.QuestionnaireId = questionnaireId;
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public HashSet<string> AnsweredQuestions { get; private set; }
         public HashSet<string> DisabledGroups { get; private set; }
         public HashSet<string> DisabledQuestions { get; private set; }
-        public Dictionary<string, int> PropagatedGroupInstanceCounts { get; private set; }
+        public Dictionary<string, HashSet<decimal>> PropagatedGroupInstanceCounts { get; private set; }
         public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
         public bool WasCompleted { get; private set; }
