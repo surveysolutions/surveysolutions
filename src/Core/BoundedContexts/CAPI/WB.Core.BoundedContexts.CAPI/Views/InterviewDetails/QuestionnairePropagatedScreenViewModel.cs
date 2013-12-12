@@ -65,7 +65,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public QuestionnairePropagatedScreenViewModel Clone(decimal[] propagationVector)
         {
-
             IList<IQuestionnaireItemViewModel> items = this.Items.Select(questionnaireItemViewModel => questionnaireItemViewModel.Clone(propagationVector)).ToList();
             return this.Clone(propagationVector, items);
         }

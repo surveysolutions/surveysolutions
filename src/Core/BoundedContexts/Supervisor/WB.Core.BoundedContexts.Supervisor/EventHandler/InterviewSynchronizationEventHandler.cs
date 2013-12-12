@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var disabledQuestions = new HashSet<InterviewItemId>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
-            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, int>();
+            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, HashSet<decimal>>();
 
             var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
             QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
-            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, HashSet<decimal>> propagatedGroupInstanceCounts)
         {
             if (interviewLevel.RosterVector.Length == 0)
                 return;
@@ -158,16 +158,19 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
+        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, HashSet<decimal>> propagatedGroupInstanceCounts,
             InterviewItemId groupKey)
         {
             if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
             {
-                propagatedGroupInstanceCounts[groupKey] = propagatedGroupInstanceCounts[groupKey] + 1;
+                var currentRosterInstances = propagatedGroupInstanceCounts[groupKey];
+                var lastInstance = currentRosterInstances.Max();
+                currentRosterInstances.Add(lastInstance);
+                propagatedGroupInstanceCounts[groupKey] = currentRosterInstances;
             }
             else
             {
-                propagatedGroupInstanceCounts.Add(groupKey, 1);
+                propagatedGroupInstanceCounts.Add(groupKey, new HashSet<decimal> { 0 });
             }
         }
 

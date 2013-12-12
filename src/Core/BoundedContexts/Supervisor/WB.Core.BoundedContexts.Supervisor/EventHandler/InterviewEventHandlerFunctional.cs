@@ -26,6 +26,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, SupervisorAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewerAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupPropagated>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowDeleted>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericRealQuestionAnswered>,
@@ -123,7 +125,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, int indexInScope)
+        private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, decimal indexInScope)
         {
             var scopeVecor = new decimal[outerScopePropagationVector.Length + 1];
             outerScopePropagationVector.CopyTo(scopeVecor, 0);
@@ -273,13 +275,36 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return currentState;
         }
 
+
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowAdded> evnt)
+        {
+            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+                                                          evnt.Payload.GroupId);
+
+            AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.TargetIndex, scopeOfCurrentGroup);
+
+            currentState.Sequence = evnt.EventSequence;
+            return currentState;
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowDeleted> evnt)
+        {
+            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+                                                         evnt.Payload.GroupId);
+
+            var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+            var levelKey = CreateLevelIdFromPropagationVector(newVector);
+            this.RemoveLevelFromInterview(currentState.Document, levelKey, scopeOfCurrentGroup);
+
+            currentState.Sequence = evnt.EventSequence;
+            return currentState;
+        }
+
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupPropagated> evnt)
         {
             Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
-            /*if (scopeOfCurrentGroup == null)
-                return;*/
-
             List<string> keysOfLevelsByScope =
                 GetLevelsByScopeFromInterview(interview: currentState.Document, scopeId: scopeOfCurrentGroup);
 
