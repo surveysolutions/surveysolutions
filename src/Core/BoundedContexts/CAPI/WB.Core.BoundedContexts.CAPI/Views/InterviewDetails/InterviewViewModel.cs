@@ -352,7 +352,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 rosterInstanceId);
 
             var screenPrototype = this.propagatedScreenPrototypes[screenId];
-            var screen = screenPrototype.Clone(propagationVector);
+            var screen = screenPrototype.Clone(propagationVector, index);
 
             var questions = screen.Items.OfType<QuestionViewModel>().ToList();
 
@@ -632,7 +632,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var screenPrototype = new QuestionnairePropagatedScreenViewModel(this.PublicKey, group.Title, true,
                 rosterKey, screenItems,
                 this.GetSiblings,
-                breadcrumbs);
+                breadcrumbs, -1);
 
             this.propagatedScreenPrototypes.Add(rosterKey.Id, screenPrototype);
 
@@ -676,7 +676,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Screens.Select(
                     s => s.Value)
                     .OfType<QuestionnairePropagatedScreenViewModel>()
-                    .Where(s => s.ScreenId.Id == publicKey)
+                    .Where(s => s.ScreenId.Id == publicKey).OrderBy(x => x.RowIndex)
                     .ToList();
         }
 

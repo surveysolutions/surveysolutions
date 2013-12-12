@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         }
 
         protected static InterviewSynchronizationDto CreateInterviewSynchronizationDto(AnsweredQuestionSynchronizationDto[] answers,
-            Dictionary<InterviewItemId, HashSet<decimal>> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, List<decimal>> propagatedGroupInstanceCounts)
         {
             return new InterviewSynchronizationDto(id: Guid.NewGuid(), status: InterviewStatus.InterviewerAssigned,
                 userId: Guid.NewGuid(), questionnaireId: Guid.NewGuid(), questionnaireVersion: 1,

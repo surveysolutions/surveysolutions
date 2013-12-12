@@ -570,8 +570,8 @@ namespace CapiDataGenerator
                                                                            disabledGroups: new HashSet<InterviewItemId>(), 
                                                                            disabledQuestions: new HashSet<InterviewItemId>(), 
                                                                            validAnsweredQuestions: new HashSet<InterviewItemId>(), 
-                                                                           invalidAnsweredQuestions: new HashSet<InterviewItemId>(), 
-                                                                           propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, HashSet<decimal>>(),
+                                                                           invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
+                                                                           propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, List<decimal>>(),
                                                                            wasCompleted: false)));
                 changeLogManipulator.CreateOrReopenDraftRecord(interview.Key);
                 UpdateProgress();
