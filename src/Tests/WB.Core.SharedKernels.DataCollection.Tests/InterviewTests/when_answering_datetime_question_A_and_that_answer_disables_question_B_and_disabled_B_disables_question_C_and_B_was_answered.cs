@@ -15,7 +15,7 @@ using it = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answering_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : InterviewTestsContext
+    internal class when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>
             (_
                 => _.HasQuestion(it.Is(abcQuestionId)) == true
-                && _.GetQuestionType(it.Is(abcQuestionId)) == QuestionType.Text
+                && _.GetQuestionType(it.Is(abcQuestionId)) == QuestionType.DateTime
                 && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new [] { questionBId }
                 && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new [] { questionCId }
                 && _.GetCustomEnablementConditionForQuestion(questionBId) == questionBEnablementCondition
@@ -66,13 +66,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.Apply(new TextQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, "answer to B"));
+            interview.Apply(new DateTimeQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, new DateTime(2012, 1, 1)));
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.AnswerTextQuestion(userId, questionAId, emptyRosterVector, DateTime.Now, "disable B please");
+            interview.AnswerDateTimeQuestion(userId, questionAId, emptyRosterVector, DateTime.Now, new DateTime(2014, 11, 11));
 
         Cleanup stuff = () =>
         {

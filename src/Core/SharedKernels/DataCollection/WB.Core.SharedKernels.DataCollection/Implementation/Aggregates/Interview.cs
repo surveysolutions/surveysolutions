@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
-        private void Apply(NumericRealQuestionAnswered @event)
+        internal void Apply(NumericRealQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
-        private void Apply(NumericIntegerQuestionAnswered @event)
+        internal void Apply(NumericIntegerQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
-        private void Apply(DateTimeQuestionAnswered @event)
+        internal void Apply(DateTimeQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
