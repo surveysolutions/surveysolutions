@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
+using WB.Core.Infrastructure.ReadSide.Repository;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher
 {
@@ -33,30 +36,19 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
             }
         }
 
-        public InMemoryTransaction InMemoryTransaction(Guid eventSourceId)
+        public void PublishByEventSource<T>(CommittedEventStream eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
         {
-            return
-                new InMemoryTransaction(
-                    this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList(),
-                    eventSourceId);
-        }
+            var functionalHandlers =
+                this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler<T>).Where(h => h != null).ToList();
 
-        public void PublishByEventSource(Guid eventSourceId, long sequence = 0)
-        {
-            var eventMessages = this.eventStore.ReadFrom(eventSourceId, sequence + 1, long.MaxValue);
-
-            var busesWithFunctionalHandlers =
-                this.registredHandlers.Values.Where(h => h.Handler is IFunctionalEventHandler).Select(h => h.Bus).ToList();
-
-            foreach (var publishableEvent in eventMessages)
+            foreach (var publishableEvent in eventStream)
             {
-                foreach (var bus in busesWithFunctionalHandlers)
+                foreach (var handler in functionalHandlers)
                 {
-                        bus.Publish(publishableEvent);
+                    handler.Handle(publishableEvent, storage);
                 }
             }
         }
-
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers)
         {

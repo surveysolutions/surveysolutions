@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Tools.CapiDataGenerator;
 
 namespace CapiDataGenerator
@@ -48,12 +50,7 @@ namespace CapiDataGenerator
             throw new NotImplementedException();
         }
 
-        public void PublishByEventSource(Guid eventSourceId, long sequence = 0)
-        {
-            throw new NotImplementedException();
-        }
-
-        public InMemoryTransaction InMemoryTransaction(Guid eventSourceId)
+        public void PublishByEventSource<T>(CommittedEventStream eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
         {
             throw new NotImplementedException();
         }
