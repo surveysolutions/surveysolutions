@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
     {
         Establish context = () =>
         {
-            emptyRosterVector = new int[]{};
+            emptyRosterVector = new decimal[]{};
             userId = Guid.Parse("11111111111111111111111111111111");
             Guid questionnaireId = Guid.Parse("77778888000000000000000000000000");
 
@@ -81,6 +81,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Guid questionCId;
         private static Interview interview;
         private static Guid userId;
-        private static int[] emptyRosterVector;
+        private static decimal[] emptyRosterVector;
     }
 }

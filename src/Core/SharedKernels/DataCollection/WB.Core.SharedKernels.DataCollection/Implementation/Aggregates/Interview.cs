@@ -1708,15 +1708,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeDisabled = new List<Identity>();
             questionsToBeEnabled = new List<Identity>();
 
-            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(question.Id);
-            IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                dependentQuestionIds, question.RosterVector, questionnaire, getCountOfRosterGroupInstances);
+            var processedQuestionKeys = new HashSet<string> { ConvertIdAndRosterVectorToString(question.Id, question.RosterVector) };
+            var affectingQuestions = new Queue<Identity>(new [] { question });
 
-            foreach (Identity dependentQuestion in dependentQuestions)
+            while (affectingQuestions.Count > 0)
             {
-                PutToCorrespondingListAccordingToEnablementStateChange(dependentQuestion, questionsToBeEnabled, questionsToBeDisabled,
-                    isNewStateEnabled: this.ShouldQuestionBeEnabledByCustomEnablementCondition(dependentQuestion, questionnaire, getAnswer),
-                    isOldStateEnabled: !this.IsQuestionDisabled(dependentQuestion));
+                Identity affectingQuestion = affectingQuestions.Dequeue();
+
+                IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(
+                    affectingQuestion.Id);
+                IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                    dependentQuestionIds, affectingQuestion.RosterVector, questionnaire, getCountOfRosterGroupInstances);
+
+                foreach (Identity dependentQuestion in dependentQuestions)
+                {
+                    bool isNewStateEnabled = this.ShouldQuestionBeEnabledByCustomEnablementCondition(dependentQuestion, questionnaire, getAnswer);
+                    bool isOldStateEnabled = !this.IsQuestionDisabled(dependentQuestion);
+
+                    PutToCorrespondingListAccordingToEnablementStateChange(dependentQuestion,
+                        questionsToBeEnabled, questionsToBeDisabled, isNewStateEnabled, isOldStateEnabled);
+
+                    processedQuestionKeys.Add(ConvertIdAndRosterVectorToString(dependentQuestion.Id, dependentQuestion.RosterVector));
+
+                    if (isNewStateEnabled != isOldStateEnabled)
+                        affectingQuestions.Enqueue(dependentQuestion);
+                }
             }
         }
 
