@@ -579,7 +579,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             
-            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -637,7 +637,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
             }
 
-            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Guid> idsOfRosterGroups = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
             int rosterSize = idsOfRosterGroups.Any() ? ToRosterSize(answer) : 0;
@@ -777,7 +777,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
 
 
-            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -834,7 +834,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
             
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -889,7 +889,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             
 
-            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValue : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValue : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
             
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -945,7 +945,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
             
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -1089,7 +1089,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(groupIdAtInterview, questionnaire,
-                            GetAnswerSupportedInExpressionsForEnabledOrNull),
+                            this.GetEnabledQuestionAnswerSupportedInExpressions),
                         isOldStateEnabled: !this.IsGroupDisabled(groupIdAtInterview));
                 }
             }
@@ -1106,7 +1106,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         questionsToBeDisabled,
                         isNewStateEnabled:
                             this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionIdAtInterview, questionnaire,
-                                GetAnswerSupportedInExpressionsForEnabledOrNull),
+                                this.GetEnabledQuestionAnswerSupportedInExpressions),
                         isOldStateEnabled: !this.IsQuestionDisabled(questionIdAtInterview));
                 }
             }
@@ -1130,7 +1130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         continue;
 
                     bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(questionIdAtInterview, questionnaire,
-                        GetAnswerSupportedInExpressionsForEnabledOrNull, a => null);
+                        this.GetEnabledQuestionAnswerSupportedInExpressions, a => null);
 
                     switch (dependentQuestionValidationResult)
                     {
@@ -2362,7 +2362,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
-        private object GetAnswerSupportedInExpressionsForEnabledOrNull(Identity question)
+        private object GetEnabledQuestionAnswerSupportedInExpressions(Identity question)
         {
             return this.GetEnabledQuestionAnswerSupportedInExpressions(question, this.IsQuestionDisabled);
         }
