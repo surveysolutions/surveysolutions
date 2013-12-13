@@ -64,10 +64,11 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_group.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_16.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_has_linked_multy_option_roster_size_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_20.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_without_max_value.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_has_roster_group_parent.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_has_not_numeric_integer_roster_size_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_has_text_roster_size_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_1_orphan_auto_propagated_group_and_question_referencing_himself_inside.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_featured_question_of_illegal_types.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_orphan_roster_groups_they_must_be_treated_as_grops_with_separate_roster_levels.cs" />

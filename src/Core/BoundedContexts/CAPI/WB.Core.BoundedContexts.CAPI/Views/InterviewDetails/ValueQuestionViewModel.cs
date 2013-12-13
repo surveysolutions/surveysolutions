@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         #region Overrides of QuestionViewModel
 
-        public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
+        public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
             return new ValueQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
                                                    this.SourceText, this.QuestionType, this.AnswerObject,

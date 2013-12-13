@@ -10,8 +10,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewItemIdTests
         {
             var id = Guid.Parse("33332222111100000000111122223333");
 
-            itemId1 = CreateInterviewItemId(id, new[] {1, 2});
-            itemId2 = CreateInterviewItemId(id, new[] {2, 1});
+            itemId1 = CreateInterviewItemId(id, new decimal[] { 1, 2 });
+            itemId2 = CreateInterviewItemId(id, new decimal[] { 2, 1 });
         };
 
         Because of = () =>

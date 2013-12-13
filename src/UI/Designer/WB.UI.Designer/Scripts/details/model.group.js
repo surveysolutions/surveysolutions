@@ -28,7 +28,7 @@
                     }
                 });
                 
-                self.integerQuestions = ko.observableArray([]);
+                self.allowedQuestions = ko.observableArray([]);
 
                 self.level = ko.observable();
                 self.description = ko.observable('');
