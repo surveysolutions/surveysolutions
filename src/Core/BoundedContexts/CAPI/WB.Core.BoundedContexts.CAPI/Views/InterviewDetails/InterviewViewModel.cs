@@ -477,6 +477,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
+        public void UpdateRosterTitle(Guid questionId, decimal[] propagationVector, string rosterTitle)
+        {
+            if (this.listOfHeadQuestionsMappedOnScope.ContainsKey(questionId))
+            {
+                this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[questionId],
+                propagationVector);
+            }
+        }
+
         public IEnumerable<QuestionViewModel> FindQuestion(Func<QuestionViewModel, bool> filter)
         {
             return this.Questions.Select(q => q.Value).Where(filter);
@@ -604,12 +613,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        protected void CreateGrid(IGroup group, List<IGroup> rout)
+        protected void CreateGrid(IGroup group, List<IGroup> root)
         {
             InterviewItemId rosterKey = new InterviewItemId(group.PublicKey);
-            var siblings = this.BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
+            var siblings = this.BuildSiblingsForNonPropagatedGroups(root, rosterKey);
             var screenItems = this.BuildItems(group, false);
-            var breadcrumbs = this.BuildBreadCrumbs(rout, rosterKey);
+            var breadcrumbs = this.BuildBreadCrumbs(root, rosterKey);
 
             var roster = new QuestionnaireGridViewModel(this.PublicKey, group.Title, this.Title,
                 rosterKey, true,

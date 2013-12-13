@@ -91,5 +91,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public IQuestionnaireItemViewModel Next { get; private set; }
         public IQuestionnaireItemViewModel Previous { get; private set; }
+        
     }
 }
