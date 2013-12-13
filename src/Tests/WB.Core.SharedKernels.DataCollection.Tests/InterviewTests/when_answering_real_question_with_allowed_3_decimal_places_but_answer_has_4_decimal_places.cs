@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () => expectedException = Catch.Exception(() =>
-            interview.AnswerNumericRealQuestion(userId, realQuestionId, new int[] { }, DateTime.Now, (decimal) 0.1234));
+            interview.AnswerNumericRealQuestion(userId, realQuestionId, new decimal[] { }, DateTime.Now, (decimal)0.1234));
 
         It should_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_mandatoryQuestionId = () =>
             expectedException.ShouldBeOfType(typeof (InterviewException));

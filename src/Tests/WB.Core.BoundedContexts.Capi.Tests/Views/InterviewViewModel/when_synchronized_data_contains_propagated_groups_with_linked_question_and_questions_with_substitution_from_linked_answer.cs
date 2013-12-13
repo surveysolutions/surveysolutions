@@ -51,12 +51,12 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
             interviewSynchronizationDto = CreateInterviewSynchronizationDto(
                 answers: new[]
                 {
-                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new int[] { 0 }, 1, string.Empty),
-                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new int[] { 1 }, 2, string.Empty)
+                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 0 }, 1, string.Empty),
+                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 1 }, 2, string.Empty)
                 },
-                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>()
+                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, List<decimal>>()
                 {
-                    { new InterviewItemId(propagatedGroupId, new int[0]), 2 }
+                    { new InterviewItemId(propagatedGroupId, new decimal[0]),new List<decimal>{ 0, 1 }}
                 });
         };
 
@@ -72,13 +72,13 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 
         It should_answer_on_first_question_in_first_row_of_roster_equals_to_1 = () =>
             interviewViewModel.FindQuestion(
-                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new int[] { 0 }))
+                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new decimal[] { 0 }))
                 .FirstOrDefault()
                 .AnswerObject.ShouldEqual(1);
 
         It should_answer_on_first_question_in_second_row_of_roster_equals_to_2 = () =>
             interviewViewModel.FindQuestion(
-                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new int[] { 1 }))
+                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new decimal[] { 1 }))
                 .FirstOrDefault()
                 .AnswerObject.ShouldEqual(2);
 

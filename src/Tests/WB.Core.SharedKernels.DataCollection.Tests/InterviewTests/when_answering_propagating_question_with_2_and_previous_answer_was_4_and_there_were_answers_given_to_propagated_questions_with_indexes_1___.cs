@@ -51,35 +51,35 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.AnswerNumericIntegerQuestion(userId, propagatingQuestionId, new int[]{}, DateTime.Now, 4);
-            interview.AnswerTextQuestion(userId, propagatedQuestionId, new [] { 1 }, DateTime.Now, "Answer for index 1");
-            interview.AnswerTextQuestion(userId, propagatedQuestionId, new [] { 2 }, DateTime.Now, "Answer for index 2");
+            interview.AnswerNumericIntegerQuestion(userId, propagatingQuestionId, new decimal[] { }, DateTime.Now, 4);
+            interview.AnswerTextQuestion(userId, propagatedQuestionId, new decimal[] { 1 }, DateTime.Now, "Answer for index 1");
+            interview.AnswerTextQuestion(userId, propagatedQuestionId, new decimal[] { 2 }, DateTime.Now, "Answer for index 2");
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.AnswerNumericIntegerQuestion(userId, propagatingQuestionId, new int[]{}, DateTime.Now, 2);
+            interview.AnswerNumericIntegerQuestion(userId, propagatingQuestionId, new decimal[] { }, DateTime.Now, 2);
 
         It should_not_raise_AnswerRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_0 = () =>
             eventContext.ShouldNotContainEvent<AnswerRemoved>(@event
                 => @event.QuestionId == propagatedQuestionId
-                && @event.PropagationVector.SequenceEqual(new[] { 0 }));
+                && @event.PropagationVector.SequenceEqual(new decimal[] { 0 }));
 
         It should_not_raise_AnswerRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_1 = () =>
             eventContext.ShouldNotContainEvent<AnswerRemoved>(@event
                 => @event.QuestionId == propagatedQuestionId
-                && @event.PropagationVector.SequenceEqual(new[] { 1 }));
+                && @event.PropagationVector.SequenceEqual(new decimal[] { 1 }));
 
         It should_raise_AnswerRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_2 = () =>
             eventContext.ShouldContainEvent<AnswerRemoved>(@event
                 => @event.QuestionId == propagatedQuestionId
-                && @event.PropagationVector.SequenceEqual(new[] { 2 }));
+                && @event.PropagationVector.SequenceEqual(new decimal[] { 2 }));
 
         It should_not_raise_AnswerRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_3 = () =>
             eventContext.ShouldNotContainEvent<AnswerRemoved>(@event
                 => @event.QuestionId == propagatedQuestionId
-                && @event.PropagationVector.SequenceEqual(new[] { 3 }));
+                && @event.PropagationVector.SequenceEqual(new decimal[] { 3 }));
 
         Cleanup stuff = () =>
         {
