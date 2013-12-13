@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswerRemoved : QuestionPassiveEvent
     {
-        public AnswerRemoved(Guid questionId, int[] propagationVector)
+        public AnswerRemoved(Guid questionId, decimal[] propagationVector)
             : base(questionId, propagationVector) {}
     }
 }

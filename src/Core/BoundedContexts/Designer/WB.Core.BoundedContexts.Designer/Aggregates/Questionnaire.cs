@@ -39,6 +39,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.GpsCoordinates
         };
 
+        private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
+        {
+            QuestionType.Numeric,
+            QuestionType.MultyOption
+        };
+
         private static readonly HashSet<QuestionType> ReroutedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
@@ -1893,23 +1899,31 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} is missing in questionnaire.",
                     rosterSizeQuestionId));
-
-            if (question.QuestionType != QuestionType.Numeric)
+            
+            if (!RosterSizeQuestionTypes.Contains(question.QuestionType))
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should have Numeric type.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                "Roster size question {0} should have Numeric or Categorical Multy Answers type.",
+                FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
-            var numericQuestion = (INumericQuestion)question;
-
-            if (!numericQuestion.IsInteger)
-                throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should be Integer.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
-
-            if (GetAllParentGroups(numericQuestion).Any(group => group.IsRoster))
+            if (GetAllParentGroups(question).Any(group => group.IsRoster))
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} cannot be placed under another roster group",
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+
+            if (question.QuestionType == QuestionType.MultyOption && question.LinkedToQuestionId.HasValue)
+                throw new QuestionnaireException(string.Format(
+                    "Roster size question {0} should not be linked.",
+                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+
+            if (question.QuestionType == QuestionType.Numeric)
+            {
+                var numericQuestion = (INumericQuestion) question;
+
+                if (!numericQuestion.IsInteger)
+                    throw new QuestionnaireException(string.Format(
+                        "Roster size question {0} should be Integer.",
+                        FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+            }
         }
 
         private void ThrowIfQuestionIsUsedAsRosterSize(Guid questionId)
