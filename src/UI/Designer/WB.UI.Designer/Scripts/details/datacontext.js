@@ -185,7 +185,7 @@
                 }
                 return isNumericInteger(question) || isNotLinkedMultyCategorical(question);
             }).map(function (item) {
-                return { questionId: item.id(), title: item.alias() + ": " + item.title() };
+                return { questionId: item.id(), title: item.alias() + ": " + item.title(), isNumeric: isNumericInteger(item), isCategorical: isNotLinkedMultyCategorical(item) };
             });
         };
 
@@ -259,7 +259,10 @@
                 title: group.title(),
                 description: group.description(),
                 condition: group.condition(),
-                rosterSizeQuestionId: group.isRoster() ? group.rosterSizeQuestion() : null
+                isRoster : group.isRoster(),
+                rosterSizeQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterSizeQuestion() : null,
+                rosterSizeSource: group.rosterSizeSource(),
+                rosterFixedTitles: group.isRosterSizeSourceFixedTitles() ? group.rosterFixedTitles().split("\n") : null
             };
         };
 

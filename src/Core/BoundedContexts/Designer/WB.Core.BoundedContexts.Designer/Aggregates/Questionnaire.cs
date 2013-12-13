@@ -162,7 +162,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(RosterChanged e)
         {
-            this.innerDocument.UpdateGroup(e.GroupId, group => group.RosterSizeQuestionId = e.RosterSizeQuestionId);
+            this.innerDocument.UpdateGroup(e.GroupId, group =>
+            {
+                group.RosterSizeQuestionId = e.RosterSizeQuestionId;
+                group.RosterSizeSource = e.RosterSizeSource;
+                group.RosterFixedTitles = e.RosterFixedTitles;
+            });
         }
 
         private void Apply(GroupStoppedBeingARoster e)
@@ -568,7 +573,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddGroup(Guid groupId, Guid responsibleId,
             string title, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId)
+            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -591,10 +596,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
 
-            if (rosterSizeQuestionId.HasValue)
+            if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles));
             }
             else
             {
@@ -604,7 +609,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void CloneGroupWithoutChildren(Guid groupId, Guid responsibleId,
             string title, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId, Guid sourceGroupId, int targetIndex)
+            Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -629,10 +634,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
 
-            if (rosterSizeQuestionId.HasValue)
+            if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles));
             }
             else
             {
@@ -641,7 +646,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
-            string title, Guid? rosterSizeQuestionId, string description, string condition)
+            string title, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
+            RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -670,10 +676,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
 
-            if (rosterSizeQuestionId.HasValue)
+            if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles));
             }
             else
             {

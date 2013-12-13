@@ -25,9 +25,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NewGroupAdded { PublicKey = subGroupId, ParentGroupPublicKey = groupId });
         };
 
-        Because of = () =>
+        private Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null));
+                questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, isRoster: true,
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();

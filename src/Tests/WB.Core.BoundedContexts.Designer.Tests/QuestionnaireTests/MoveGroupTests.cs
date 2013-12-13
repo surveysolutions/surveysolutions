@@ -66,10 +66,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: chapterId, responsibleId: responsibleId);
 
             Guid rosterSizeQuestionId = Guid.NewGuid();
-            questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: chapterId);
+            questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", rosterSizeQuestionId: null,
+                description: null, condition: null, parentGroupId: chapterId, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion", false, "rosterSizeQuestion", false, false, false, QuestionScope.Interviewer, "", "", "", "", 20, new Guid[0], responsibleId, true, null);
 
-            questionnaire.AddGroup(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId);
+            questionnaire.AddGroup(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup",
+                rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId, isRoster: true,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
 
             return questionnaire;
         }
