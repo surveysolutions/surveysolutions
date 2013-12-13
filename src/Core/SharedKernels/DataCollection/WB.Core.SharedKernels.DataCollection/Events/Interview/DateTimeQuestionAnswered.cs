@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public DateTime Answer { get; private set; }
 
-        public DateTimeQuestionAnswered(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, DateTime answer)
+        public DateTimeQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime, DateTime answer)
             : base(userId, questionId, propagationVector, answerTime)
         {
             this.Answer = answer;

@@ -64,21 +64,21 @@ namespace WB.Tests.Integration.InterviewTests
             };
 
             interview = CreateInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(questionnaireDocument);
-            interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new int[] { }, answerTime, 3);
-            interview.AnswerTextQuestion(userId, referencedQuestionId, new[] { 0 }, answerTime, "A");
-            interview.AnswerTextQuestion(userId, referencedQuestionId, new[] { 2 }, answerTime, "C");
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, new int[] { }, answerTime, new[] { new[] { 0 }, new[] { 2 } });
+            interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 3);
+            interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 0 }, answerTime, "A");
+            interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 2 }, answerTime, "C");
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, new decimal[] { }, answerTime, new decimal[][] { new decimal[] { 0 }, new decimal[] { 2 } });
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new int[] { }, answerTime, 2);
+            interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 2);
 
         It should_raise_AnswerRemoved_event_with_linked_multiple_options_question_id_and_propagation_vector = () =>
             eventContext.ShouldContainEvent<AnswerRemoved>(@event
                 => @event.QuestionId == linkedQuestionId
-                && @event.PropagationVector.SequenceEqual(new int[] { }));
+                && @event.PropagationVector.SequenceEqual(new decimal[] { }));
 
         Cleanup stuff = () =>
         {

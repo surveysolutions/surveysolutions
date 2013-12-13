@@ -47,12 +47,12 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
             interviewSynchronizationDto = CreateInterviewSynchronizationDto(
                answers: new[]
                 {
-                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new int[] { 0 }, 1, string.Empty),
-                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new int[] { 1 }, 2, string.Empty)
+                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 0 }, 1, string.Empty),
+                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 1 }, 2, string.Empty)
                 },
-               propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>()
+               propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, List<decimal>>()
                 {
-                    { new InterviewItemId(propagatedGroupId, new int[0]), 2 }
+                    { new InterviewItemId(propagatedGroupId, new decimal[0]), new List<decimal>{ 0, 1 } }
                 });
         };
 
@@ -62,17 +62,17 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 
         It should_linked_question_outside_roster_has_2_options = () =>
             ((LinkedQuestionViewModel) interviewViewModel.FindQuestion(
-                question => question.PublicKey == new InterviewItemId(linkedQuestionId, new int[0]))
+                question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[0]))
                 .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(2);
 
         It should_first_linked_question_inside_roster_has_2_options = () =>
            ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-               question => question.PublicKey == new InterviewItemId(linkedQuestionInRosterId, new int[] { 0 }))
+               question => question.PublicKey == new InterviewItemId(linkedQuestionInRosterId, new decimal[] { 0 }))
                .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(2);
 
         It should_second_linked_question_inside_roster_has_2_options = () =>
           ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-              question => question.PublicKey == new InterviewItemId(linkedQuestionInRosterId, new int[] { 1 }))
+              question => question.PublicKey == new InterviewItemId(linkedQuestionInRosterId, new decimal[] { 1 }))
               .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(2);
 
         private static WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel interviewViewModel;

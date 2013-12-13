@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewSummar
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
-                    CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new int[0], DateTime.Now, 1)));
+                    CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(answerText));
         }
 
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewSummar
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
-                    CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new int[0], DateTime.Now,
+                    CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
                         new decimal[] { 1, 3, 8 })));
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo("1,3,8"));
         }
@@ -103,14 +103,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewSummar
             switch (type)
             {
                 case QuestionType.DateTime:
-                    return new DateTimeQuestionAnswered(Guid.NewGuid(), questionId, new int[0], DateTime.Now,
+                    return new DateTimeQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
                         DateTime.Parse(answer.ToString()));
                 case QuestionType.Numeric:
                     if (answer is int)
-                        return new NumericIntegerQuestionAnswered(Guid.NewGuid(), questionId, new int[0], DateTime.Now, (int) answer);
-                    return new NumericRealQuestionAnswered(Guid.NewGuid(), questionId, new int[0], DateTime.Now, Convert.ToDecimal(answer));
+                        return new NumericIntegerQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (int)answer);
+                    return new NumericRealQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, Convert.ToDecimal(answer));
                 case QuestionType.Text:
-                    return new TextQuestionAnswered(Guid.NewGuid(), questionId, new int[0], DateTime.Now, (string) answer);
+                    return new TextQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (string)answer);
             }
             return null;
         }
