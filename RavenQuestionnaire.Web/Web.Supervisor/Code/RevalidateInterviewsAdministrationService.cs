@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -85,6 +88,13 @@ namespace Web.Supervisor.Code
         {
             try
             {
+                var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
+                if (bus == null)
+                {
+                    UpdateStatusMessage("Environments setup problems.");
+                    return;
+                }
+
                 areInterviewsBeingRevalidatingNow = true;
 
                 string indexName = typeof(CompleteInterviewsWithErrorsIndex).Name;
@@ -121,7 +131,10 @@ namespace Web.Supervisor.Code
 
                             UpdateStatusMessage(string.Format("Revalidated interviews {0}. ", processedInterviewsCount + 1) + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
 
-                            this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
+                            using (bus.InMemoryTransaction(interviewItemId.InterviewId))
+                            {
+                                this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
+                            }
 
                             processedInterviewsCount++;
                         }
