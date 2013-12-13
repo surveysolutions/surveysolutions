@@ -9,21 +9,21 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_updating_group_and_roster_size_question_id_is_not_specified : QuestionnaireTestsContext
+    internal class when_updating_group_and_roster_group_changed_to_simple_group : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            rosterSizeQuestionId = null;
 
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, groupId: groupId);
 
             eventContext = new EventContext();
         };
 
-        Because of = () =>
-            questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null);
+        private Because of = () =>
+            questionnaire.UpdateGroup(groupId, responsibleId, "title", null, null, null, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
 
         Cleanup stuff = () =>
         {
@@ -42,6 +42,5 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
-        private static Guid? rosterSizeQuestionId;
     }
 }

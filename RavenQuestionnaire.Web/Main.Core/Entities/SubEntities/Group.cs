@@ -36,6 +36,9 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid? RosterSizeQuestionId { get; set; }
 
+        public RosterSizeSourceType RosterSizeSource { get; set; }
+        public string[] RosterFixedTitles { get; set; }
+
         private IComposite parent;
         
         public Propagate Propagated { get; set; }
