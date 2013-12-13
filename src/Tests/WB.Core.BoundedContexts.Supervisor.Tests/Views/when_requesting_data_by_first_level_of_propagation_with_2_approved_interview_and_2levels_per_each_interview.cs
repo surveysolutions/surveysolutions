@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             InterviewData interview =  CreateInterviewData();
             for (int i = 0; i < levelCount; i++)
             {
-                var vector = new int[1] { i };
+                var vector = new decimal[1] { i };
                 var interviewLevel = new InterviewLevel(propagationScopeKey, vector);
 
                 foreach (var question in variableNameAndQuestionId)
