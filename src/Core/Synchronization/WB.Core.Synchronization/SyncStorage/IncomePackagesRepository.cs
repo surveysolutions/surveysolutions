@@ -9,6 +9,7 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Ncqrs.Spec;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -118,8 +119,16 @@ namespace WB.Core.Synchronization.SyncStorage
             var events = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
             var latestEventSequence = events.IsEmpty ? sequence : events.Last().EventSequence;
             var incomeEvents = this.BuildEventStreams(stream, latestEventSequence);
+            
+            if (!incomeEvents.Any())
+                return;
+
             eventStore.Store(incomeEvents);
-            commandService.Execute(new ReevaluateSynchronizedInterview(id));
+
+            using (new EventContext())
+            {
+                commandService.Execute(new ReevaluateSynchronizedInterview(id));
+            }
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
