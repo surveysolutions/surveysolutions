@@ -70,7 +70,7 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewTests\when_answering_integer_question_with_14400_and_max_value_is_3600.cs" />
     <Compile Include="InterviewTests\when_answering_mandatory_multy_option_question_with_empty_list_of_options.cs" />
-    <Compile Include="InterviewTests\when_answering_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C.cs" />
+    <Compile Include="InterviewTests\when_answering_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_with_1000_and_max_value_is_567.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_decreases_roster_size.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size.cs" />
