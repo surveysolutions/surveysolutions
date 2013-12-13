@@ -2,7 +2,7 @@ using System;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy
 {
-    internal class SingleEventSourceStorageStrategy<T> : IStorageStrategy<T> where T : class
+    public class SingleEventSourceStorageStrategy<T> : IStorageStrategy<T> where T : class
     {
         private  T view;
         public SingleEventSourceStorageStrategy(T view)
