@@ -12,6 +12,10 @@
                 "Text": "Text",
                 "GpsCoordinates": "GpsCoordinates"
             },
+            rosterSizeSourceTypes = {
+                "FixedTitles": "FixedTitles",
+                "Question": "Question"
+            },
             verificationReferenceType = {
                 question: 1,
                 group: 10,
@@ -196,6 +200,7 @@
             commands: commands,
             tips: tips,
             verificationReferenceType: verificationReferenceType,
-            messageTabs: messageTabs
+            messageTabs: messageTabs,
+            rosterSizeSourceTypes: rosterSizeSourceTypes
         };
     });

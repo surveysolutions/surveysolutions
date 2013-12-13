@@ -18,6 +18,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.Title = group.Title;
             this.IsRoster = group.IsRoster;
             this.RosterSizeQuestionId = group.RosterSizeQuestionId;
+            this.RosterSizeSource = group.RosterSizeSource;
+            this.RosterFixedTitles = group.RosterFixedTitles;
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
             this.Children = @group.Children.Select(composite => new QuestionnaireEntityNode
@@ -34,6 +36,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool IsRoster { get; set; }
 
         public Guid? RosterSizeQuestionId { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public RosterSizeSourceType RosterSizeSource { get; set; }
+
+        public string[] RosterFixedTitles { get; set; }
 
         public string Description { get; set; }
 

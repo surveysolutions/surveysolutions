@@ -25,9 +25,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NumericQuestionAdded { PublicKey = rosterSizeQuestionId, IsInteger = true, GroupPublicKey = anotherRosterId });
         };
 
-        Because of = () =>
+        private Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, null));
+                questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, null, true,
+                    RosterSizeSourceType.Question, rosterFixedTitles: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
