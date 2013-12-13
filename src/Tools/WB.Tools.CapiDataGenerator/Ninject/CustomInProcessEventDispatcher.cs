@@ -4,6 +4,7 @@ using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Tools.CapiDataGenerator;
 
 namespace CapiDataGenerator
@@ -48,6 +49,11 @@ namespace CapiDataGenerator
         }
 
         public void PublishByEventSource(Guid eventSourceId, long sequence = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public InMemoryTransaction InMemoryTransaction(Guid eventSourceId)
         {
             throw new NotImplementedException();
         }

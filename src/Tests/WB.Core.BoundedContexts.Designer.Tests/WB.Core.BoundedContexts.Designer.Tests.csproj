@@ -76,6 +76,7 @@
     <Compile Include="AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventContextExtenstions.cs" />
+    <Compile Include="MembershipProviderTests\when_updating_user_with_email_that_used_by_another_user_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\when_creating_user_and_account_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\MembershipProviderTestsContext.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
@@ -117,6 +118,9 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_and_roster_size_question_is_multy_categorical_but_linked.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_group_and_roster_size_question_is_multy_categorical_but_linked.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_and_roster_size_question_is_multy_categorical_but_linked.cs" />
     <Compile Include="QuestionnaireTests\when_updating_non_roster_group_that_contains_prefilled_question.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_that_contains_head_question.cs" />
     <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />

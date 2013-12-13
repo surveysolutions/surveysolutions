@@ -215,11 +215,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only numeric question can be used as roster size question for group.
+        ///   Looks up a localized string similar to Only numeric or categorical with multiple answers question can be used as roster size question for group.
         /// </summary>
-        internal static string WB0023_RosterGroupHasNotNumericRosterSizeQuestion {
+        internal static string WB0023_RosterGroupHasInvalidRosterSizeQuestion {
             get {
-                return ResourceManager.GetString("WB0023_RosterGroupHasNotNumericRosterSizeQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0023_RosterGroupHasInvalidRosterSizeQuestion", resourceCulture);
             }
         }
         
@@ -242,11 +242,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max value for roster size question could be in range [1, 16].
+        ///   Looks up a localized string similar to Max value for roster size question could be in range [1, 20].
         /// </summary>
-        internal static string WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16 {
+        internal static string WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20 {
             get {
-                return ResourceManager.GetString("WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16", resourceCulture);
+                return ResourceManager.GetString("WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20", resourceCulture);
             }
         }
         
