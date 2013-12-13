@@ -40,13 +40,17 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
 
         private bool IsViewWasUpdatedFromEventStream(Guid interviewId, long sequence)
         {
-            this.additionalEventChecker(interviewId,sequence);
-
             var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
             if (bus == null)
                 return false;
 
-            bus.PublishByEventSource(interviewId, sequence);
+            using (bus.InMemoryTransaction(interviewId))
+            {
+                this.additionalEventChecker(interviewId, sequence);
+
+                bus.PublishByEventSource(interviewId, sequence);
+            }
+
             return true;
         }
     }
