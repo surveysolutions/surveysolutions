@@ -60,7 +60,7 @@
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />
     <Compile Include="Implementation\ReadSide\ViewWithSequence.cs" />
     <Compile Include="Implementation\StorageStrategy\ReadSideStorageStrategy.cs" />
-    <Compile Include="Implementation\StorageStrategy\SingleEventSourceStorageStrategy.cs" />
+    <Compile Include="Implementation\StorageStrategy\InMemoryViewStorage.cs" />
     <Compile Include="IStorageStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
