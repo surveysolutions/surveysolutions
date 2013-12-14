@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
@@ -12,6 +15,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
     {
         private readonly IReadSideRepositoryReader<ViewWithSequence<T>> interviewReader;
         private readonly IReadSideRepositoryWriter<ViewWithSequence<T>> interviewWriter;
+        private static ConcurrentDictionary<Guid, bool> packagesInProcess = new ConcurrentDictionary<Guid, bool>();
         private Action<Guid, long> additionalEventChecker;
 
         public ReadSideRepositoryReaderWithSequence(
@@ -50,6 +54,8 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             if (eventStore == null)
                 return false;
 
+            this.WaitUntilViewCanBeProcessed(id);
+
             this.additionalEventChecker(id, sequence);
 
             var eventStream = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
@@ -69,8 +75,22 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
                 if (view != null)
                     interviewWriter.Remove(id);
             }
-
+            this.ReleaseSpotForOtherThread(id);
             return true;
+        }
+
+        private void ReleaseSpotForOtherThread(Guid id)
+        {
+            bool dummyBool;
+            packagesInProcess.TryRemove(id, out dummyBool);
+        }
+
+        private void WaitUntilViewCanBeProcessed(Guid id)
+        {
+            while (!packagesInProcess.TryAdd(id,true))
+            {
+                Thread.Sleep(1000);
+            }
         }
     }
 }
