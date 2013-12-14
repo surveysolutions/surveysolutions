@@ -54,6 +54,7 @@
     <Compile Include="EventHandlers\IUpdateHandler.cs" />
     <Compile Include="IEventDispatcher.cs" />
     <Compile Include="IEventHandler.cs" />
+    <Compile Include="Implementation\EventDispatcher\EventContext.cs" />
     <Compile Include="Implementation\EventDispatcher\EventHandlerWrapper.cs" />
     <Compile Include="Implementation\EventDispatcher\NcqrCompatibleEventDispatcher.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />

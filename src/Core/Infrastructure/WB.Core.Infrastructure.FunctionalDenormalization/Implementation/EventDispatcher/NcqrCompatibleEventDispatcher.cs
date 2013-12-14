@@ -20,8 +20,21 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
             this.eventStore = eventStore;
         }
 
+        private bool IsEventNeedToBeIgnored(Guid id)
+        {
+            if (this.eventsToBeIgnored.Contains(id))
+            {
+                this.eventsToBeIgnored.Remove(id);
+                return true;
+            }
+            return false;
+        }
+
         public void Publish(IPublishableEvent eventMessage)
         {
+            if(this.IsEventNeedToBeIgnored(eventMessage.EventIdentifier))
+                return;
+
             foreach (var handler in this.registredHandlers.Values.ToList())
             {
                 handler.Bus.Publish(eventMessage);
@@ -30,9 +43,15 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
-            foreach (var handler in this.registredHandlers.Values.ToList())
+            foreach (var publishableEvent in eventMessages)
             {
-                handler.Bus.Publish(eventMessages);
+                if (this.IsEventNeedToBeIgnored(publishableEvent.EventIdentifier))
+                    continue;
+
+                foreach (var handler in this.registredHandlers.Values.ToList())
+                {
+                    handler.Bus.Publish(publishableEvent);
+                }
             }
         }
 
@@ -95,5 +114,12 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
         {
             return this.registredHandlers.Values.Where(h => enabledHandlers.Contains(h.Handler)).Select(h => h.Bus).ToList();
         }
+
+        public void IgnoreEventWithId(Guid eventIdentifier)
+        {
+            eventsToBeIgnored.Add(eventIdentifier);
+        }
+
+        private readonly HashSet<Guid> eventsToBeIgnored=new HashSet<Guid>();
     }
 }
