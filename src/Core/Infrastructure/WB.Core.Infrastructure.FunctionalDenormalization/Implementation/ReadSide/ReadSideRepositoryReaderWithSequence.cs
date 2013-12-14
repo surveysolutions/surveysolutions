@@ -13,31 +13,31 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
 {
     public class ReadSideRepositoryReaderWithSequence<T> : IReadSideRepositoryReader<T> where T : class, IReadSideRepositoryEntity
     {
-        private readonly IReadSideRepositoryReader<ViewWithSequence<T>> interviewReader;
-        private readonly IReadSideRepositoryWriter<ViewWithSequence<T>> interviewWriter;
+        private readonly IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader;
+        private readonly IReadSideRepositoryWriter<ViewWithSequence<T>> readsideWriter;
         private static ConcurrentDictionary<Guid, bool> packagesInProcess = new ConcurrentDictionary<Guid, bool>();
         private Action<Guid, long> additionalEventChecker;
 
         public ReadSideRepositoryReaderWithSequence(
-            IReadSideRepositoryReader<ViewWithSequence<T>> interviewReader, Action<Guid, long> additionalEventChecker, IReadSideRepositoryWriter<ViewWithSequence<T>> interviewWriter)
+            IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader, Action<Guid, long> additionalEventChecker, IReadSideRepositoryWriter<ViewWithSequence<T>> readsideWriter)
         {
-            this.interviewReader = interviewReader;
+            this.readsideReader = readsideReader;
             this.additionalEventChecker = additionalEventChecker;
-            this.interviewWriter = interviewWriter;
+            this.readsideWriter = readsideWriter;
         }
 
         public int Count()
         {
-            return this.interviewReader.Count();
+            return this.readsideReader.Count();
         }
 
         public T GetById(Guid id)
         {
-            var view = this.interviewReader.GetById(id);
+            var view = this.readsideReader.GetById(id);
 
             if (this.IsViewWasUpdatedFromEventStream(id, view == null ? 0 : view.Sequence, view))
             {
-                view = this.interviewReader.GetById(id);
+                view = this.readsideReader.GetById(id);
                 if (view == null)
                     return null;
             }
@@ -63,18 +63,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             if (eventStream.IsEmpty)
                 return false;
 
-            var inMemoryStorage = new SingleEventSourceStorageStrategy<ViewWithSequence<T>>(view);
-
-            bus.PublishByEventSource(eventStream, inMemoryStorage);
-
-            if (view != null)
-                interviewWriter.Store(view, id);
-            else
+            using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<T>>(this.readsideWriter,id))
             {
-                view = interviewWriter.GetById(id);
-                if (view != null)
-                    interviewWriter.Remove(id);
+                bus.PublishByEventSource(eventStream, inMemoryStorage);
             }
+
             this.ReleaseSpotForOtherThread(id);
             return true;
         }
