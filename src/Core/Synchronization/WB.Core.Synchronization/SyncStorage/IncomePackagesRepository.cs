@@ -6,11 +6,12 @@ using System.Linq;
 using Main.Core;
 using Main.Core.Events;
 using Ncqrs;
+using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Spec;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -125,7 +126,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             eventStore.Store(incomeEvents);
 
-            using (new EventContext())
+            using (new UnpublishedEventContext())
             {
                 commandService.Execute(new ReevaluateSynchronizedInterview(id));
             }
