@@ -17,6 +17,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
         private readonly IReadSideRepositoryWriter<ViewWithSequence<T>> readsideWriter;
         private static ConcurrentDictionary<Guid, bool> packagesInProcess = new ConcurrentDictionary<Guid, bool>();
         private Action<Guid, long> additionalEventChecker;
+        private const int CountOfAttempt = 60;
 
         public ReadSideRepositoryReaderWithSequence(
             IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader, Action<Guid, long> additionalEventChecker, IReadSideRepositoryWriter<ViewWithSequence<T>> readsideWriter)
@@ -53,23 +54,33 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             if (eventStore == null)
                 return false;
-
-            this.WaitUntilViewCanBeProcessed(id);
-
-            this.additionalEventChecker(id, sequence);
-
-            var eventStream = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
-
-            if (eventStream.IsEmpty)
+            if (!this.WaitUntilViewCanBeProcessed(id))
                 return false;
 
-            using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<T>>(this.readsideWriter,id))
+            var result = false;
+
+            try
             {
-                bus.PublishByEventSource(eventStream, inMemoryStorage);
+                this.additionalEventChecker(id, sequence);
+
+                var eventStream = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
+
+                if (!eventStream.IsEmpty)
+                {
+                    using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<T>>(this.readsideWriter, id))
+                    {
+                        bus.PublishByEventSource(eventStream, inMemoryStorage);
+                    }
+
+                    result = true;
+                }
+            }
+            finally
+            {
+                this.ReleaseSpotForOtherThread(id);
             }
 
-            this.ReleaseSpotForOtherThread(id);
-            return true;
+            return result;
         }
 
         private void ReleaseSpotForOtherThread(Guid id)
@@ -78,12 +89,19 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             packagesInProcess.TryRemove(id, out dummyBool);
         }
 
-        private void WaitUntilViewCanBeProcessed(Guid id)
+        private bool WaitUntilViewCanBeProcessed(Guid id)
         {
+            int i = 0;
             while (!packagesInProcess.TryAdd(id,true))
             {
+                if (i > CountOfAttempt)
+                {
+                    return false;
+                }
                 Thread.Sleep(1000);
+                i++;
             }
+            return true;
         }
     }
 }
