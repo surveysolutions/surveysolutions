@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : @event.InterviewData.Answers
                     .Where(question => !(question.Answer is GeoPosition || question.Answer is decimal[] || question.Answer is decimal[][]))
                     .ToDictionary(
-                        question => ConvertIdAndRosterVectorToString(question.Id, question.PropagationVector),
+                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => question.Answer);
 
             this.linkedSingleOptionAnswers = @event.InterviewData.Answers == null
@@ -76,19 +76,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[])
                     .ToDictionary(
-                        question => ConvertIdAndRosterVectorToString(question.Id, question.PropagationVector),
-                        question => Tuple.Create(question.Id, question.PropagationVector, (decimal[])question.Answer));
+                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
+                        question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[])question.Answer));
 
             this.linkedMultipleOptionsAnswers = @event.InterviewData.Answers == null
                 ? new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[][])
                     .ToDictionary(
-                        question => ConvertIdAndRosterVectorToString(question.Id, question.PropagationVector),
-                        question => Tuple.Create(question.Id, question.PropagationVector, (decimal[][])question.Answer));
+                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
+                        question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[][])question.Answer));
 
             this.answeredQuestions = new HashSet<string>(
-                @event.InterviewData.Answers.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.PropagationVector)));
+                @event.InterviewData.Answers.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector)));
 
             this.disabledGroups = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledGroups);
             this.disabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
@@ -104,13 +104,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (synchronizationDto.RosterGroupInstances != null)
             {
                 return synchronizationDto.RosterGroupInstances.ToDictionary(
-                    pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.PropagationVector),
+                    pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
                     pair => new HashSet<decimal>(pair.Value.Keys));
             }
             if (synchronizationDto.PropagatedGroupInstanceCounts != null)
             {
                 return synchronizationDto.PropagatedGroupInstanceCounts.ToDictionary(
-                  pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.PropagationVector),
+                  pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
                   pair => CreateHashSetForRosterFromCount(pair.Value));
             }
             return null;
@@ -2621,7 +2621,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static HashSet<string> ToHashSetOfIdAndRosterVectorStrings(IEnumerable<InterviewItemId> synchronizationIdentities)
         {
             return new HashSet<string>(
-                synchronizationIdentities.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.PropagationVector)));
+                synchronizationIdentities.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemPropagationVector)));
         }
 
         /// <remarks>

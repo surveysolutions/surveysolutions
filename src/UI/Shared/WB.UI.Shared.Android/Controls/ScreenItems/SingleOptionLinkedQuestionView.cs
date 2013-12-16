@@ -67,7 +67,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
         {
             return new AnswerSingleOptionLinkedQuestionCommand(this.QuestionnairePublicKey,
                  this.Membership.CurrentUser.Id,
-                 this.Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
+                 this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow,
                  selectedAnswer.PropagationVector);
         }
 

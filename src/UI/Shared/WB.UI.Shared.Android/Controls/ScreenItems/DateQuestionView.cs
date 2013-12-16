@@ -61,7 +61,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.SaveAnswer(
                     newValue,
                     new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, this.Membership.CurrentUser.Id,
-                        this.Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow, e.Date));
+                        this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, e.Date));
             }
         }
 

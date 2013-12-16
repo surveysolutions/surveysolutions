@@ -131,7 +131,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                         positionAsText,
                         new AnswerGeoLocationQuestionCommand(
                             this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
-                            this.Model.PublicKey.PropagationVector, DateTime.UtcNow, t.Result.Latitude, t.Result.Longitude,
+                            this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, t.Result.Latitude, t.Result.Longitude,
                             t.Result.Accuracy, t.Result.Timestamp));
                 }
             }));
