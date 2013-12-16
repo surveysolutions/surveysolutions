@@ -723,100 +723,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
         }
 
-        private void ApplyRosterEvents(
-            List<RosterIdentity> rosterInstancesToAdd, List<RosterIdentity> rosterInstancesToDelete,
-            List<Identity> answersToRemoveByDecreasedRosterSize,
-            List<Identity> initializedGroupsToBeDisabled, List<Identity> initializedGroupsToBeEnabled,
-            List<Identity> initializedQuestionsToBeDisabled, List<Identity> initializedQuestionsToBeEnabled,
-            List<Identity> initializedQuestionsToBeInvalid)
-        {
-            rosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
-            rosterInstancesToDelete.ForEach(roster => this.ApplyEvent(new RosterRowDeleted(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId)));
-
-            answersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
-
-            initializedGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            initializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            initializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            initializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
-            initializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-        }
-
-        private void CalculateRosterData(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], int> getCountOfRosterGroupInstances, out List<Identity> answersToRemoveByDecreasedRosterSize,
-            out List<Identity> initializedGroupsToBeDisabled, out List<Identity> initializedGroupsToBeEnabled, out List<Identity> initializedQuestionsToBeDisabled,
-            out List<Identity> initializedQuestionsToBeEnabled, out List<Identity> initializedQuestionsToBeInvalid, out List<RosterIdentity> rosterInstancesToAdd,
-            out List<RosterIdentity> rosterInstancesToDelete)
-        {
-            answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterSizeIsBeingDecreased(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire);
-
-            this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
-                out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
-                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
-            this.DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getCountOfRosterGroupInstances, initializedGroupsToBeDisabled,
-                initializedQuestionsToBeDisabled, out initializedQuestionsToBeInvalid);
-
-            this.PerformRosterSizeChange(rosterVector, idsOfRosterGroups, rosterSize,
-                out rosterInstancesToAdd, out rosterInstancesToDelete);
-        }
-
-        private void PerformRosterSizeChange(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, out List<RosterIdentity> rosterInstancesToAdd,
-            out List<RosterIdentity> rosterInstancesToDelete)
-        {
-            Dictionary<Guid, List<int>> rosterRowIdsForDelete, rosterRowIdsForAdd;
-            this.PerformRosterSizeChange(idsOfRosterGroups, rosterVector, rosterSize, out rosterRowIdsForDelete, out rosterRowIdsForAdd);
-
-            // nested rosters bug: rosterVector cannot be used as outerRosterVector when answered question has roster level 0 but roster has roster level 2
-
-            rosterInstancesToAdd = rosterRowIdsForAdd
-                .SelectMany(pair => pair.Value.Select(rosterInstanceId => new RosterIdentity(pair.Key, rosterVector, rosterInstanceId, sortIndex: null)))
-                .ToList();
-
-            rosterInstancesToDelete = rosterRowIdsForDelete
-                .SelectMany(pair => pair.Value.Select(rosterInstanceId => new RosterIdentity(pair.Key, rosterVector, rosterInstanceId)))
-                .ToList();
-        }
-
-        private void PerformRosterSizeChange(List<Guid> idsOfRosterGroups, decimal[] rosterVector, int rosterSize,
-            out Dictionary<Guid, List<int>> rosterRowIdsForDelete, out Dictionary<Guid, List<int>> rosterRowIdsForAdd)
-        {
-            rosterRowIdsForAdd = new Dictionary<Guid, List<int>>();
-            rosterRowIdsForDelete = new Dictionary<Guid, List<int>>();
-
-            foreach (var idsOfRosterGroup in idsOfRosterGroups)
-            {
-                var rosterKey = ConvertIdAndRosterVectorToString(idsOfRosterGroup, rosterVector);
-                var roster = rosterGroupInstanceCounts.ContainsKey(rosterKey)
-                    ? rosterGroupInstanceCounts[rosterKey]
-                    : new HashSet<decimal>();
-
-                if (roster.Count == rosterSize)
-                    continue;
-
-                if (roster.Count < rosterSize)
-                {
-                    rosterRowIdsForAdd[idsOfRosterGroup] = new List<int>();
-                    for (int i = roster.Count; i < rosterSize; i++)
-                    {
-                        rosterRowIdsForAdd[idsOfRosterGroup].Add(i);
-                    }
-                }
-                else
-                {
-                    rosterRowIdsForDelete[idsOfRosterGroup] = new List<int>();
-                    for (int i = rosterSize; i < roster.Count; i++)
-                    {
-                        rosterRowIdsForDelete[idsOfRosterGroup].Add(i);
-                    }
-                }
-            }
-        }
-
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal answer)
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
@@ -1341,6 +1247,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
+
+        private void ApplyRosterEvents(
+            List<RosterIdentity> rosterInstancesToAdd, List<RosterIdentity> rosterInstancesToDelete,
+            List<Identity> answersToRemoveByDecreasedRosterSize,
+            List<Identity> initializedGroupsToBeDisabled, List<Identity> initializedGroupsToBeEnabled,
+            List<Identity> initializedQuestionsToBeDisabled, List<Identity> initializedQuestionsToBeEnabled,
+            List<Identity> initializedQuestionsToBeInvalid)
+        {
+            rosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
+            rosterInstancesToDelete.ForEach(roster => this.ApplyEvent(new RosterRowDeleted(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId)));
+
+            answersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+
+            initializedGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
+            initializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
+            initializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
+            initializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            initializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+        }
+
+
+
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
             IQuestionnaire questionnaire = this.QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
@@ -1617,6 +1545,83 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             throw new InterviewException(string.Format(
                 "Status {0} not allowed to be changed with ApplySynchronizationMetadata command",
                 interviewStatus));
+        }
+
+
+
+        private void CalculateRosterData(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], int> getCountOfRosterGroupInstances, out List<Identity> answersToRemoveByDecreasedRosterSize,
+            out List<Identity> initializedGroupsToBeDisabled, out List<Identity> initializedGroupsToBeEnabled, out List<Identity> initializedQuestionsToBeDisabled,
+            out List<Identity> initializedQuestionsToBeEnabled, out List<Identity> initializedQuestionsToBeInvalid, out List<RosterIdentity> rosterInstancesToAdd,
+            out List<RosterIdentity> rosterInstancesToDelete)
+        {
+            answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterSizeIsBeingDecreased(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire);
+
+            this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
+                out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
+                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
+            this.DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getCountOfRosterGroupInstances, initializedGroupsToBeDisabled,
+                initializedQuestionsToBeDisabled, out initializedQuestionsToBeInvalid);
+
+            this.PerformRosterSizeChange(rosterVector, idsOfRosterGroups, rosterSize,
+                out rosterInstancesToAdd, out rosterInstancesToDelete);
+        }
+
+        private void PerformRosterSizeChange(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, out List<RosterIdentity> rosterInstancesToAdd,
+            out List<RosterIdentity> rosterInstancesToDelete)
+        {
+            Dictionary<Guid, List<int>> rosterRowIdsForDelete, rosterRowIdsForAdd;
+            this.PerformRosterSizeChange(idsOfRosterGroups, rosterVector, rosterSize, out rosterRowIdsForDelete, out rosterRowIdsForAdd);
+
+            // nested rosters bug: rosterVector cannot be used as outerRosterVector when answered question has roster level 0 but roster has roster level 2
+
+            rosterInstancesToAdd = rosterRowIdsForAdd
+                .SelectMany(pair => pair.Value.Select(rosterInstanceId => new RosterIdentity(pair.Key, rosterVector, rosterInstanceId, sortIndex: null)))
+                .ToList();
+
+            rosterInstancesToDelete = rosterRowIdsForDelete
+                .SelectMany(pair => pair.Value.Select(rosterInstanceId => new RosterIdentity(pair.Key, rosterVector, rosterInstanceId)))
+                .ToList();
+        }
+
+        private void PerformRosterSizeChange(List<Guid> idsOfRosterGroups, decimal[] rosterVector, int rosterSize,
+            out Dictionary<Guid, List<int>> rosterRowIdsForDelete, out Dictionary<Guid, List<int>> rosterRowIdsForAdd)
+        {
+            rosterRowIdsForAdd = new Dictionary<Guid, List<int>>();
+            rosterRowIdsForDelete = new Dictionary<Guid, List<int>>();
+
+            foreach (var idsOfRosterGroup in idsOfRosterGroups)
+            {
+                var rosterKey = ConvertIdAndRosterVectorToString(idsOfRosterGroup, rosterVector);
+                var roster = rosterGroupInstanceCounts.ContainsKey(rosterKey)
+                    ? rosterGroupInstanceCounts[rosterKey]
+                    : new HashSet<decimal>();
+
+                if (roster.Count == rosterSize)
+                    continue;
+
+                if (roster.Count < rosterSize)
+                {
+                    rosterRowIdsForAdd[idsOfRosterGroup] = new List<int>();
+                    for (int i = roster.Count; i < rosterSize; i++)
+                    {
+                        rosterRowIdsForAdd[idsOfRosterGroup].Add(i);
+                    }
+                }
+                else
+                {
+                    rosterRowIdsForDelete[idsOfRosterGroup] = new List<int>();
+                    for (int i = rosterSize; i < roster.Count; i++)
+                    {
+                        rosterRowIdsForDelete[idsOfRosterGroup].Add(i);
+                    }
+                }
+            }
         }
 
 
