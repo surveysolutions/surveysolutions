@@ -346,13 +346,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return newGroupVector;
         }
 
-        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int index)
+        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int? sortIndex)
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 rosterInstanceId);
 
             var screenPrototype = this.propagatedScreenPrototypes[screenId];
-            var screen = screenPrototype.Clone(propagationVector, index);
+            var screen = screenPrototype.Clone(propagationVector, sortIndex);
 
             var questions = screen.Items.OfType<QuestionViewModel>().ToList();
 
@@ -474,6 +474,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 {
                     question.SetParentEnabled(enabled);
                 }
+            }
+        }
+
+        public void UpdateRosterTitle(Guid questionId, decimal[] propagationVector, string rosterTitle)
+        {
+            if (this.listOfHeadQuestionsMappedOnScope.ContainsKey(questionId))
+            {
+                this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[questionId],
+                propagationVector);
             }
         }
 
@@ -604,12 +613,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        protected void CreateGrid(IGroup group, List<IGroup> rout)
+        protected void CreateGrid(IGroup group, List<IGroup> root)
         {
             InterviewItemId rosterKey = new InterviewItemId(group.PublicKey);
-            var siblings = this.BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
+            var siblings = this.BuildSiblingsForNonPropagatedGroups(root, rosterKey);
             var screenItems = this.BuildItems(group, false);
-            var breadcrumbs = this.BuildBreadCrumbs(rout, rosterKey);
+            var breadcrumbs = this.BuildBreadCrumbs(root, rosterKey);
 
             var roster = new QuestionnaireGridViewModel(this.PublicKey, group.Title, this.Title,
                 rosterKey, true,
@@ -672,12 +681,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected IEnumerable<QuestionnairePropagatedScreenViewModel> CollectPropagatedScreen(Guid publicKey)
         {
-            return
-                this.Screens.Select(
-                    s => s.Value)
-                    .OfType<QuestionnairePropagatedScreenViewModel>()
-                    .Where(s => s.ScreenId.Id == publicKey).OrderBy(x => x.RowIndex)
-                    .ToList();
+            return this.Screens
+                .Select(s => s.Value)
+                .OfType<QuestionnairePropagatedScreenViewModel>()
+                .Where(s => s.ScreenId.Id == publicKey)
+                .OrderBy(x => x.SortIndex)
+                .ToList();
         }
 
         protected IList<InterviewItemId> BuildBreadCrumbs(IList<IGroup> rout, InterviewItemId key)
