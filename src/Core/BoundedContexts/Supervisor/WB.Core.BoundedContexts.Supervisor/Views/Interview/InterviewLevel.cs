@@ -6,16 +6,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
     public class InterviewLevel
     {
-        public InterviewLevel(Guid scopeId, decimal[] vector)
+        public InterviewLevel(Guid scopeId, int? sortIndex, decimal[] vector)
         {
-            this.ScopeIds = new HashSet<Guid>(new[] {scopeId});
+            this.ScopeIds = new Dictionary<Guid, int?> { { scopeId, sortIndex } };
             this.RosterVector = vector;
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
         }
 
         public decimal[] RosterVector { get; private set; }
-        public HashSet<Guid> ScopeIds { get; private set; }
+        public Dictionary<Guid, int?> ScopeIds { get; private set; }
         private List<InterviewQuestion> Questions { get; set; }
         public HashSet<Guid> DisabledGroups { get; private set; }
 
