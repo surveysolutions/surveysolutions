@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.RosterSizeQuestionId = group.RosterSizeQuestionId;
             this.RosterSizeSource = group.RosterSizeSource;
             this.RosterFixedTitles = group.RosterFixedTitles;
+            this.RosterTitleQuestionId = group.RosterTitleQuestionId;
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
             this.Children = @group.Children.Select(composite => new QuestionnaireEntityNode
@@ -41,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
         public string[] RosterFixedTitles { get; set; }
+        public Guid? RosterTitleQuestionId { get; set; }
 
         public string Description { get; set; }
 
