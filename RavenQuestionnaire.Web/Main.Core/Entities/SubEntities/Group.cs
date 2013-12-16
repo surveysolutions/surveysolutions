@@ -34,6 +34,8 @@ namespace Main.Core.Entities.SubEntities
 
         public bool IsRoster { get; set; }
 
+        public string RosterTitle { get; set; }
+
         public Guid? RosterSizeQuestionId { get; set; }
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
@@ -131,7 +133,10 @@ namespace Main.Core.Entities.SubEntities
                     PublicKey = this.PublicKey,
                     Title = this.Title,
                     IsRoster = this.IsRoster,
-                    RosterSizeQuestionId = this.RosterSizeQuestionId
+                    RosterSizeQuestionId = this.RosterSizeQuestionId,
+                    RosterSizeSource =  this.RosterSizeSource,
+                    RosterTitleQuestionId = this.RosterTitleQuestionId,
+                    RosterFixedTitles = this.RosterFixedTitles
                 };
 
             foreach (var composite in this.Children)
