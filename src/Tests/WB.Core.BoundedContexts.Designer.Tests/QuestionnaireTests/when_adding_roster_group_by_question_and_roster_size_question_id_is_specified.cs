@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_adding_group_and_roster_size_question_id_is_specified : QuestionnaireTestsContext
+    internal class when_adding_roster_group_by_question_and_roster_size_question_id_is_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -19,14 +19,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded { PublicKey = rosterSizeQuestionId, IsInteger = true, GroupPublicKey = chapterId });
+            questionnaire.Apply(new NewQuestionAdded
+            {
+                PublicKey = rosterSizeQuestionId,
+                QuestionType = QuestionType.MultyOption,
+                GroupPublicKey = chapterId
+            });
 
             eventContext = new EventContext();
         };
 
         private Because of = () =>
             questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, null, isRoster: true,
-                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         Cleanup stuff = () =>
         {

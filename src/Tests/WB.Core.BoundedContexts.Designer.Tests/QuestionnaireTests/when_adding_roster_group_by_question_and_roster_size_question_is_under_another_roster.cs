@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -12,25 +8,27 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_updating_group_and_roster_size_question_is_multy_categorical_but_linked : QuestionnaireTestsContext
+    internal class when_adding_roster_group_by_question_and_roster_size_question_is_under_another_roster : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var anotherRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.MultyOption, LinkedToQuestionId = Guid.NewGuid(), GroupPublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId });
+            questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
+            questionnaire.Apply(new NumericQuestionAdded { PublicKey = rosterSizeQuestionId, IsInteger = true, GroupPublicKey = anotherRosterId });
         };
 
         private Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, isRoster: true,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null));
+                questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, null, true,
+                    RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
@@ -41,13 +39,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_exception_with_message_containting__question__ = () =>
             exception.Message.ToLower().ShouldContain("question");
 
-        It should_throw_exception_with_message_containting__integer__ = () =>
-            exception.Message.ToLower().ShouldContain("linked");
+        It should_throw_exception_with_message_containting__under__ = () =>
+            exception.Message.ToLower().ShouldContain("under");
 
         private static Exception exception;
-        private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid rosterSizeQuestionId;
+        private static Questionnaire questionnaire;
     }
 }
