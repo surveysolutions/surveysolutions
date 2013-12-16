@@ -189,6 +189,15 @@
             });
         };
 
+        questions.getRosterTitleQuestionsForSelect = function (rosterSizeQuestionId) {
+            return _.filter(groups.getQuestionsFromPropagatableGroups(), function (question) {
+                var groupRosterSizeQuestionId = question.parent().rosterSizeQuestion();
+                return !_.isUndefined(groupRosterSizeQuestionId) && (groupRosterSizeQuestionId == rosterSizeQuestionId);
+            }).map(function (item) {
+                return { questionId: item.id(), title: item.alias() + ": " + item.title() };
+            });
+        };
+
         var isNumericInteger = function(question) {
             return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
         };
@@ -262,7 +271,8 @@
                 isRoster : group.isRoster(),
                 rosterSizeQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterSizeQuestion() : null,
                 rosterSizeSource: group.rosterSizeSource(),
-                rosterFixedTitles: group.isRosterSizeSourceFixedTitles() ? group.rosterFixedTitles().split("\n") : null
+                rosterFixedTitles: group.isRosterSizeSourceFixedTitles() ? group.rosterFixedTitles().split("\n") : null,
+                rosterTitleQuestionId: group.isNumericRosterSizeQuestion() ? group.rosterTitleQuestion() : null
             };
         };
 

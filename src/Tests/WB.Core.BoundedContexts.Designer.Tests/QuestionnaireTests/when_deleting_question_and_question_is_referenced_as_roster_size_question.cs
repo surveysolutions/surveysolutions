@@ -20,11 +20,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded { PublicKey = rosterSizeQuestionId, IsInteger = true, GroupPublicKey = chapterId });
+            questionnaire.Apply(new NewQuestionAdded
+            {
+                PublicKey = rosterSizeQuestionId,
+                QuestionType = QuestionType.MultyOption,
+                GroupPublicKey = chapterId
+            });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
             questionnaire.Apply(new RosterChanged(responsibleId, rosterId, rosterSizeQuestionId, RosterSizeSourceType.Question,
-                rosterFixedTitles: null));
+                rosterFixedTitles: null, rosterTitleQuestionId: null));
         };
 
         Because of = () =>

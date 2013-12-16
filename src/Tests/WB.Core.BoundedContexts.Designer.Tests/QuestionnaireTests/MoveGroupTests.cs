@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 var targetRegularGroupId = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
                 var questionnaire =
-                    CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
+                    this.CreateQuestionnaireWithChapterWithRegularAndRosterGroup(
                         rosterGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
                         responsibleId: responsibleId);
 
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var moveAutoPropagateGroupId = Guid.NewGuid();
             var targetRegularGroupId = Guid.NewGuid();
             var questionnaire =
-                CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
+                this.CreateQuestionnaireWithChapterWithRegularAndRosterGroup(
                     rosterGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
                     responsibleId: Guid.NewGuid());
             // act
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
-        private Questionnaire CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(Guid rosterGroupId, Guid regularGroupId, Guid responsibleId)
+        private Questionnaire CreateQuestionnaireWithChapterWithRegularAndRosterGroup(Guid rosterGroupId, Guid regularGroupId, Guid responsibleId)
         {
             var chapterId = Guid.NewGuid();
             
@@ -68,12 +68,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid rosterSizeQuestionId = Guid.NewGuid();
             questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", rosterSizeQuestionId: null,
                 description: null, condition: null, parentGroupId: chapterId, isRoster: false,
-                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
-            questionnaire.AddNumericQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion", false, "rosterSizeQuestion", false, false, false, QuestionScope.Interviewer, "", "", "", "", 20, new Guid[0], responsibleId, true, null);
-
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            questionnaire.NewAddQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion", QuestionType.MultyOption,
+                "rosterSizeQuestion", false, false, false, QuestionScope.Interviewer, "", "", "", "",
+                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, Order.AsIs, responsibleId, null,
+                false, null);
             questionnaire.AddGroup(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup",
                 rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId, isRoster: true,
-                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            
 
             return questionnaire;
         }
