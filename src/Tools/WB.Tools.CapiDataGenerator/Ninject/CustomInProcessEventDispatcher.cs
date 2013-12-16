@@ -50,7 +50,7 @@ namespace CapiDataGenerator
             throw new NotImplementedException();
         }
 
-        public void PublishByEventSource<T>(CommittedEventStream eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
+        public void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
         {
             throw new NotImplementedException();
         }

@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             dataRecords.Add(record);
         }
 
-        private int? GetParentRecordIndex(InterviewLevel level)
+        private decimal? GetParentRecordIndex(InterviewLevel level)
         {
             if (level.RosterVector.Length < 2)
                 return null;

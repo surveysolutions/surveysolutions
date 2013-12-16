@@ -1,6 +1,5 @@
 using System;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.Observers;
 
 namespace Main.Core.Entities.SubEntities
 {
@@ -16,5 +15,9 @@ namespace Main.Core.Entities.SubEntities
         bool IsRoster { get; }
 
         Guid? RosterSizeQuestionId { get; }
+
+        RosterSizeSourceType RosterSizeSource { get; }
+
+        string[] RosterFixedTitles { get; }
     }
 }

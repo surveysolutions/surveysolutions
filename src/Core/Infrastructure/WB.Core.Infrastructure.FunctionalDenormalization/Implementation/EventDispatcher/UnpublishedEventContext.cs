@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
@@ -15,9 +16,16 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
         private readonly List<UncommittedEvent> _events = new List<UncommittedEvent>();
         private Action<AggregateRoot, UncommittedEvent> _eventAppliedCallback;
 
-        public IEnumerable<UncommittedEvent> Events
+        public IEnumerable<CommittedEvent> Events
         {
-            get { return this._events; }
+            get
+            {
+                return
+                    this._events.Select(
+                        e =>
+                            new CommittedEvent(e.CommitId, e.EventIdentifier, e.EventSourceId, e.EventSequence, e.EventTimeStamp, e.Payload,
+                                e.EventVersion)).ToList();
+            }
         }
 
         public static UnpublishedEventContext Current

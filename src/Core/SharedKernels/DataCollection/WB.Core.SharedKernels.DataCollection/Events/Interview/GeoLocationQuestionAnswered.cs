@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public double Longitude { get; private set; }
         public double Accuracy { get; private set; }
 
-        public GeoLocationQuestionAnswered(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime,
+        public GeoLocationQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime,
             double latitude, double longitude, double accuracy, DateTimeOffset timestamp) 
             : base(userId, questionId, propagationVector, answerTime)
         {

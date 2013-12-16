@@ -55,7 +55,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
             }
         }
 
-        public void PublishByEventSource<T>(CommittedEventStream eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
+        public void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
         {
             var functionalHandlers =
                 this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler<T>).Where(h => h != null).ToList();
