@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Catch.Exception(
                     () =>
                         questionnaire.UpdateGroup(rosterId, responsibleId, "title", rosterSizeQuestionId, null, null, isRoster: true,
-                            rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null));
+                            rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         Cleanup stuff = () =>
         {

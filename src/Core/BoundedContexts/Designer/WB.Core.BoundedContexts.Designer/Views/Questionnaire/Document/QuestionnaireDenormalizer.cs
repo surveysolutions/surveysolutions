@@ -432,6 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 group.RosterSizeQuestionId = @event.Payload.RosterSizeQuestionId;
                 group.RosterSizeSource = @event.Payload.RosterSizeSource;
                 group.RosterFixedTitles = @event.Payload.RosterFixedTitles;
+                group.RosterTitleQuestionId = @event.Payload.RosterTitleQuestionId;
             });
 
             this.UpdateQuestionnaire(@event, item);

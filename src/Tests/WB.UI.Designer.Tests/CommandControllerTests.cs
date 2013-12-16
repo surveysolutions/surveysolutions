@@ -89,7 +89,7 @@ namespace WB.UI.Designer.Tests
 
             var command = new UpdateGroupCommand(qId, Guid.NewGuid(), responsibleId: responsibleId,
                 title: string.Empty, rosterSizeQuestionId: null, description: string.Empty, condition: string.Empty, isRoster: false,
-                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return command;
         }
