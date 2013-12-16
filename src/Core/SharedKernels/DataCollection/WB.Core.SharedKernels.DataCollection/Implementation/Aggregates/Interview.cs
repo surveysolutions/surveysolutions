@@ -697,29 +697,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Dictionary<Guid, List<int>> rosterRowIdsForDelete, rosterRowIdsForAdd;
             this.PerformRosterSizeChange(idsOfRosterGroups, rosterVector, rosterSize, out rosterRowIdsForDelete, out rosterRowIdsForAdd);
 
+
             this.ApplyEvent(new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-
-            foreach (var row in rosterRowIdsForAdd)
-            {
-                row.Value.ForEach(i => this.ApplyEvent(new RosterRowAdded(row.Key, rosterVector, i, i)));
-            }
-
-            foreach (var row in rosterRowIdsForDelete)
-            {
-                row.Value.ForEach(i => this.ApplyEvent(new RosterRowDeleted(row.Key, rosterVector, i)));
-            }
-
-            answersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyRosterEvents(rosterVector, rosterRowIdsForAdd, rosterRowIdsForDelete, answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid);
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
-            initializedGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            initializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            initializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            initializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
-            initializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
             dependentGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
             dependentGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
@@ -727,6 +711,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             dependentQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+        }
+
+        private void ApplyRosterEvents(decimal[] rosterVector,
+            Dictionary<Guid, List<int>> rosterRowIdsForAdd, Dictionary<Guid, List<int>> rosterRowIdsForDelete,
+            List<Identity> answersToRemoveByDecreasedRosterSize,
+            List<Identity> initializedGroupsToBeDisabled, List<Identity> initializedGroupsToBeEnabled,
+            List<Identity> initializedQuestionsToBeDisabled, List<Identity> initializedQuestionsToBeEnabled,
+            List<Identity> initializedQuestionsToBeInvalid)
+        {
+            // nested rosters bug: rosterVector cannot be used as outerRosterVector when answered question has roster level 0 but roster has roster level 2
+
+            foreach (var row in rosterRowIdsForAdd)
+            {
+                row.Value.ForEach(rosterInstanceId => this.ApplyEvent(new RosterRowAdded(row.Key, rosterVector, rosterInstanceId, rosterInstanceId)));
+            }
+
+            foreach (var row in rosterRowIdsForDelete)
+            {
+                row.Value.ForEach(rosterInstanceId => this.ApplyEvent(new RosterRowDeleted(row.Key, rosterVector, rosterInstanceId)));
+            }
+
+            answersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+
+            initializedGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
+            initializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
+            initializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
+            initializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            initializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
         }
 
         private void PerformRosterSizeChange(List<Guid> idsOfRosterGroups, decimal[] rosterVector, int rosterSize,
