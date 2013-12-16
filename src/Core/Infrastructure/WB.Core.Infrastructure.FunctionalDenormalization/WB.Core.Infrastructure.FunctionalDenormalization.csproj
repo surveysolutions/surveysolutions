@@ -54,13 +54,13 @@
     <Compile Include="EventHandlers\IUpdateHandler.cs" />
     <Compile Include="IEventDispatcher.cs" />
     <Compile Include="IEventHandler.cs" />
+    <Compile Include="Implementation\EventDispatcher\EventContext.cs" />
     <Compile Include="Implementation\EventDispatcher\EventHandlerWrapper.cs" />
-    <Compile Include="Implementation\EventDispatcher\InMemoryTransaction.cs" />
     <Compile Include="Implementation\EventDispatcher\NcqrCompatibleEventDispatcher.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />
     <Compile Include="Implementation\ReadSide\ViewWithSequence.cs" />
     <Compile Include="Implementation\StorageStrategy\ReadSideStorageStrategy.cs" />
-    <Compile Include="Implementation\StorageStrategy\SingleEventSourceStorageStrategy.cs" />
+    <Compile Include="Implementation\StorageStrategy\InMemoryViewStorage.cs" />
     <Compile Include="IStorageStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
