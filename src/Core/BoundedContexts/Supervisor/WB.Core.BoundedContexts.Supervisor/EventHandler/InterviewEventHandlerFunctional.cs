@@ -91,11 +91,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, Guid scopeId)
+        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, int? sortIndex, Guid scopeId)
         {
             for (int rosterInstanceId = startIndex; rosterInstanceId < startIndex + count; rosterInstanceId++)
             {
-                this.AddLevelToInterview(interview, outerVector, rosterInstanceId, scopeId);
+                this.AddLevelToInterview(interview, outerVector, rosterInstanceId, sortIndex, scopeId);
             }
         }
 
@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             if (interview.Levels.ContainsKey(levelKey))
             {
                 var level = interview.Levels[levelKey];
-                if (!level.ScopeIds.Contains(scopeId))
+                if (!level.ScopeIds.ContainsKey(scopeId))
                     return;
                 if (level.ScopeIds.Count == 1)
                     interview.Levels.Remove(levelKey);
@@ -113,16 +113,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, Guid scopeId)
+        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, int? sortIndex, Guid scopeId)
         {
             var newVector = CreateNewVector(vector, rosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
             if (!interview.Levels.ContainsKey(levelKey))
-                interview.Levels[levelKey] = new InterviewLevel(scopeId, newVector);
+                interview.Levels[levelKey] = new InterviewLevel(scopeId, sortIndex, newVector);
             else
-            {
-                interview.Levels[levelKey].ScopeIds.Add(scopeId);
-            }
+                interview.Levels[levelKey].ScopeIds[scopeId] = sortIndex;
         }
 
         private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, decimal indexInScope)
@@ -135,7 +133,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private List<string> GetLevelsByScopeFromInterview(InterviewData interview, Guid scopeId)
         {
-            return interview.Levels.Where(level => level.Value.ScopeIds.Contains(scopeId))
+            return interview.Levels.Where(level => level.Value.ScopeIds.ContainsKey(scopeId))
                             .Select(level => level.Key).ToList();
         }
 
@@ -243,7 +241,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 ResponsibleRole = responsible.Roles.FirstOrDefault()
             };
             var emptyVector = new decimal[0];
-            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, emptyVector));
+            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, null, emptyVector));
             return new ViewWithSequence<InterviewData>(interview, evnt.EventSequence);
         }
 
@@ -282,7 +280,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
 
-            this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, scopeOfCurrentGroup);
+            this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex, scopeOfCurrentGroup);
 
             currentState.Sequence = evnt.EventSequence;
             return currentState;
@@ -316,8 +314,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             if (countOfLevelByScope < evnt.Payload.Count)
             {
                 AddNewLevelsToInterview(currentState.Document, startIndex: countOfLevelByScope,
-                             count: evnt.Payload.Count - countOfLevelByScope,
-                             outerVector: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
+                    count: evnt.Payload.Count - countOfLevelByScope,
+                    outerVector: evnt.Payload.OuterScopePropagationVector, sortIndex: null, scopeId: scopeOfCurrentGroup);
             }
             else
             {
