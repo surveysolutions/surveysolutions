@@ -113,6 +113,7 @@
                 }
                 group.isSelected(true);
                 group.allowedQuestions(datacontext.questions.getAllAllowedQuestionsForSelect());
+                group.rosterTitlesForNumericRosterSizeQuestion(datacontext.questions.getRosterTitleQuestionsForSelect(group.rosterSizeQuestion()));
                 selectedGroup(group);
                 openDetails("show-group");
             },
