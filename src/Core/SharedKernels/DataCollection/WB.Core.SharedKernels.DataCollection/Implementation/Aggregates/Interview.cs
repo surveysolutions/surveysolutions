@@ -668,19 +668,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? rosterSize
                     : this.GetCountOfRosterGroupInstances(groupId, groupOuterRosterVector);
 
-            List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterSizeIsBeingDecreased(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire);
-            
-            List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
-            this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
-                out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
-                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
-            this.DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
-                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getCountOfRosterGroupInstances, initializedGroupsToBeDisabled, initializedQuestionsToBeDisabled,
-                out initializedQuestionsToBeInvalid);
+            List<Identity> answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
+                initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
+            List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToDelete;
+            this.CalculateRosterData(rosterVector, idsOfRosterGroups, rosterSize, questionnaire, getAnswer, getCountOfRosterGroupInstances,
+                out answersToRemoveByDecreasedRosterSize, out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled,
+                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled, out initializedQuestionsToBeInvalid,
+                out rosterInstancesToAdd, out rosterInstancesToDelete);
 
             List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -710,13 +704,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState, dependentGroupsToBeEnabled, dependentQuestionsToBeEnabled, out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToDelete;
-            this.PerformRosterSizeChange(rosterVector, idsOfRosterGroups, rosterSize, out rosterInstancesToAdd, out rosterInstancesToDelete);
-
 
             this.ApplyEvent(new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            this.ApplyRosterEvents(rosterInstancesToAdd, rosterInstancesToDelete, answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid);
+            this.ApplyRosterEvents(rosterInstancesToAdd, rosterInstancesToDelete, answersToRemoveByDecreasedRosterSize,
+                initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
+                initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled,
+                initializedQuestionsToBeInvalid);
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
@@ -746,6 +740,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             initializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
             initializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
             initializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+        }
+
+        private void CalculateRosterData(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], int> getCountOfRosterGroupInstances, out List<Identity> answersToRemoveByDecreasedRosterSize,
+            out List<Identity> initializedGroupsToBeDisabled, out List<Identity> initializedGroupsToBeEnabled, out List<Identity> initializedQuestionsToBeDisabled,
+            out List<Identity> initializedQuestionsToBeEnabled, out List<Identity> initializedQuestionsToBeInvalid, out List<RosterIdentity> rosterInstancesToAdd,
+            out List<RosterIdentity> rosterInstancesToDelete)
+        {
+            answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterSizeIsBeingDecreased(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire);
+
+            this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
+                out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getCountOfRosterGroupInstances,
+                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
+            this.DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
+                idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getCountOfRosterGroupInstances, initializedGroupsToBeDisabled,
+                initializedQuestionsToBeDisabled, out initializedQuestionsToBeInvalid);
+
+            this.PerformRosterSizeChange(rosterVector, idsOfRosterGroups, rosterSize,
+                out rosterInstancesToAdd, out rosterInstancesToDelete);
         }
 
         private void PerformRosterSizeChange(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, out List<RosterIdentity> rosterInstancesToAdd,
