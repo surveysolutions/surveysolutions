@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<RosterRowAdded> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.AddPropagateScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.TargetIndex);
+            doc.AddPropagateScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex);
         }
 
         public void Handle(IPublishedEvent<RosterRowDeleted> evnt)
