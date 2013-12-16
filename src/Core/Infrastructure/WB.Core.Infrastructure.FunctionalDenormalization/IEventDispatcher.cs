@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.ReadSide.Repository;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization
 {
     public interface IEventDispatcher : IEventBus
     {
         void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers);
-        void PublishByEventSource(Guid eventSourceId, long sequence = 0);
-        InMemoryTransaction InMemoryTransaction(Guid eventSourceId);
+        void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity;
 
         IEnumerable<IEventHandler> GetAllRegistredEventHandlers();
 

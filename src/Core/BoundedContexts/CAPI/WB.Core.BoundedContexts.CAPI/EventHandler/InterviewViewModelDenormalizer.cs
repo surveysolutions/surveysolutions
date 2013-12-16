@@ -36,7 +36,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<AnswerRemoved>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        IEventHandler<InterviewForTestingCreated>
+        IEventHandler<InterviewForTestingCreated>,
+        IEventHandler<RosterTitleChanged>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -239,13 +240,19 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<RosterRowAdded> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.AddPropagateScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.TargetIndex);
+            doc.AddPropagateScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex);
         }
 
         public void Handle(IPublishedEvent<RosterRowDeleted> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.RemovePropagatedScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+        }
+
+        public void Handle(IPublishedEvent<RosterTitleChanged> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+            doc.UpdateRosterTitle(evnt.Payload.QuestionId, evnt.Payload.PropagationVector, evnt.Payload.RosterTitle);
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
