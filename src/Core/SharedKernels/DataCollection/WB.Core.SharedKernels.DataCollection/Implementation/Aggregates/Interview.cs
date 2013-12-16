@@ -699,14 +699,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds = (groupId, outerRosterVector)
                 => GetRosterInstanceIds(groupId, outerRosterVector, getCountOfRosterGroupInstances);
 
-            List<Identity> answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
-                initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
-            List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToDelete;
-            this.CalculateRosterData(rosterVector, idsOfRosterGroups, rosterSize, questionnaire, getAnswer, getRosterInstanceIds,
-                out answersToRemoveByDecreasedRosterSize, out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled,
-                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled, out initializedQuestionsToBeInvalid,
-                out rosterInstancesToAdd, out rosterInstancesToDelete);
-            var rosterCalculationData = new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToDelete, answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid);
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(
+                rosterVector, idsOfRosterGroups, rosterSize, questionnaire, getAnswer, getRosterInstanceIds);
 
             List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -718,15 +712,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    Enumerable.Concat(initializedGroupsToBeDisabled, dependentGroupsToBeDisabled),
-                    Enumerable.Concat(initializedQuestionsToBeDisabled, dependentQuestionsToBeDisabled),
+                    Enumerable.Concat(rosterCalculationData.InitializedGroupsToBeDisabled, dependentGroupsToBeDisabled),
+                    Enumerable.Concat(rosterCalculationData.InitializedQuestionsToBeDisabled, dependentQuestionsToBeDisabled),
                     questionnaire, getRosterInstanceIds);
 
             Func<Identity, bool?> getNewQuestionState =
                 question =>
                 {
-                    if (initializedQuestionsToBeDisabled.Any(q => AreEqual(q, question)) || dependentQuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (initializedQuestionsToBeEnabled.Any(q => AreEqual(q, question)) || dependentQuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
+                    if (rosterCalculationData.InitializedQuestionsToBeDisabled.Any(q => AreEqual(q, question)) || dependentQuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
+                    if (rosterCalculationData.InitializedQuestionsToBeEnabled.Any(q => AreEqual(q, question)) || dependentQuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
                     return null;
                 };
 
@@ -1573,13 +1567,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
-        private void CalculateRosterData(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds, out List<Identity> answersToRemoveByDecreasedRosterSize,
-            out List<Identity> initializedGroupsToBeDisabled, out List<Identity> initializedGroupsToBeEnabled, out List<Identity> initializedQuestionsToBeDisabled,
-            out List<Identity> initializedQuestionsToBeEnabled, out List<Identity> initializedQuestionsToBeInvalid, out List<RosterIdentity> rosterInstancesToAdd,
-            out List<RosterIdentity> rosterInstancesToDelete)
+        private RosterCalculationData CalculateRosterData(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize,
+            IQuestionnaire questionnaire, Func<Identity, object> getAnswer, Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds)
         {
-            answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterSizeIsBeingDecreased(
+            List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToDelete;
+            List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled,
+                initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
+
+            List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterSizeIsBeingDecreased(
                 idsOfRosterGroups, rosterSize, rosterVector, questionnaire);
 
             this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
@@ -1594,6 +1589,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.PerformRosterSizeChange(rosterVector, idsOfRosterGroups, rosterSize,
                 out rosterInstancesToAdd, out rosterInstancesToDelete);
+
+            return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToDelete,
+                answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
+                initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid);
         }
 
         private void PerformRosterSizeChange(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, out List<RosterIdentity> rosterInstancesToAdd,
