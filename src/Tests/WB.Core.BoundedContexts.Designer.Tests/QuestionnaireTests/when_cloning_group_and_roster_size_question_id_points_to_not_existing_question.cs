@@ -18,9 +18,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
         };
 
-        Because of = () =>
+        private Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title", rosterSizeQuestionId, null, null, null, sourceGroupId, 0));
+                questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title", rosterSizeQuestionId, null, null, null,
+                    sourceGroupId, 0, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();

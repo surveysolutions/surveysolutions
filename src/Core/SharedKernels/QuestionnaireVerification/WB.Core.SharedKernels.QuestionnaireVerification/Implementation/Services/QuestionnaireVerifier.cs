@@ -66,10 +66,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(QuestionnaireHaveAutopropagatedQuestions, "WB0028", VerificationMessages.WB0028_QuestionnaireHaveAutopropagatedQuestions),
                     Verifier<IGroup>(RosterGroupHasGroupInsideItself, "WB0029", VerificationMessages.WB0029_RosterGroupHasGroup),
                     Verifier<IGroup>(RosterGroupHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_RosterGroupHasNoRosterSizeQuestion),
-                    Verifier<IGroup>(RosterGroupHasNotNumericRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_RosterGroupHasNotNumericRosterSizeQuestion),
+                    Verifier<IGroup>(RosterGroupHasInvalidRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_RosterGroupHasInvalidRosterSizeQuestion),
                     Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
-                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And16, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16),
+                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And20, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
                     Verifier<IQuestion>(HeadQuestionCantBeInsideOfNonRoster, "WB0031", VerificationMessages.WB0031_HeadQuestionCantBeInsideOfNonRoster),
 
@@ -148,10 +148,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsRosterGroup(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
         }
 
-        private static bool RosterGroupHasNotNumericRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
+        private static bool RosterGroupHasInvalidRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
         {
             var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(group, questionnaire);
-            return rosterSizeQuestion != null && GetQuestionAsIntegerQuestion(rosterSizeQuestion) == null;
+            if (rosterSizeQuestion == null)
+                return false;
+
+            return !IsQuestionAllowedToBeRosterSize(rosterSizeQuestion);
         }
 
         private static bool RosterSizeQuestionCannotBeInsideAnyRosterGroup(IQuestion question, QuestionnaireDocument questionnaire)
@@ -161,17 +164,36 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            var rosterSizeQuestionAsIntegerQuestion = GetQuestionAsIntegerQuestion(question);
-            return IsRosterSizeQuestion(question, questionnaire) && rosterSizeQuestionAsIntegerQuestion != null &&
-                !rosterSizeQuestionAsIntegerQuestion.MaxValue.HasValue;
+            if (!IsRosterSizeQuestion(question, questionnaire))
+                return false;
+            if (!IsQuestionAllowedToBeRosterSize(question))
+                return false;
+            return !GetRosterSizeQuestionMaxValue(question).HasValue;
         }
 
-        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And16(IQuestion question, QuestionnaireDocument questionnaire)
+        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And20(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            var rosterSizeQuestionAsIntegerQuestion = GetQuestionAsIntegerQuestion(question);
-            return IsRosterSizeQuestion(question, questionnaire) && rosterSizeQuestionAsIntegerQuestion != null &&
-                rosterSizeQuestionAsIntegerQuestion.MaxValue.HasValue &&
-                !Enumerable.Range(1, 16).Contains(rosterSizeQuestionAsIntegerQuestion.MaxValue.Value);
+            if (!IsRosterSizeQuestion(question, questionnaire))
+                return false;
+            if (!IsQuestionAllowedToBeRosterSize(question))
+                return false;
+            var rosterSizeQuestionMaxValue = GetRosterSizeQuestionMaxValue(question);
+            if (!rosterSizeQuestionMaxValue.HasValue)
+                return false;
+            return !Enumerable.Range(1, 20).Contains(rosterSizeQuestionMaxValue.Value);
+        }
+
+        private static bool IsQuestionAllowedToBeRosterSize(IQuestion question)
+        {
+            var numericQuestion = question as NumericQuestion;
+            if (numericQuestion != null)
+                return numericQuestion.IsInteger;
+
+            var multiOptionQuestion = question as MultyOptionsQuestion;
+            if (multiOptionQuestion != null)
+                return !multiOptionQuestion.LinkedToQuestionId.HasValue;
+            
+            return false;
         }
 
         private static bool HeadQuestionCantBeInsideOfNonRoster(IQuestion question, QuestionnaireDocument questionnaire)
@@ -536,10 +558,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return rosterSizeQuestionIds.Contains(question.PublicKey);
         }
 
-        private static INumericQuestion GetQuestionAsIntegerQuestion(IQuestion question)
+        private static int? GetRosterSizeQuestionMaxValue(IQuestion question)
         {
             var integerQuestion = question as INumericQuestion;
-            return integerQuestion != null && integerQuestion.IsInteger ? integerQuestion : null;
+            if (integerQuestion != null)
+                return integerQuestion.IsInteger ? integerQuestion.MaxValue : null;
+            
+            var multiOptionsQuestion = question as IMultyOptionsQuestion;
+            if (multiOptionsQuestion != null)
+                return question.LinkedToQuestionId.HasValue ? (int?)null : question.Answers.Count;
+            return null;
         }
 
         private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)

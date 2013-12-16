@@ -23,13 +23,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NumericQuestionAdded { PublicKey = headQuestionId, IsInteger = true, GroupPublicKey = rosterId, Capital = true});
 
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId, rosterId, rosterSizeQuestionId));
+            questionnaire.Apply(new RosterChanged(responsibleId, rosterId, rosterSizeQuestionId, RosterSizeSourceType.Question, null));
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>questionnaire.UpdateGroup(rosterId, responsibleId, "title", null, null, null));
+            exception = Catch.Exception(() => questionnaire.UpdateGroup(rosterId, responsibleId, "title", null, null, null, false, RosterSizeSourceType.Question, rosterFixedTitles: null));
 
         Cleanup stuff = () =>
         {

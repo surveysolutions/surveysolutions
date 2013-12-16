@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public int Answer { get; private set; }
 
-        public NumericIntegerQuestionAnswered(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int answer)
+        public NumericIntegerQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime, int answer)
             : base(userId, questionId, propagationVector, answerTime)
         {
             this.Answer = answer;

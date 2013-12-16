@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -24,8 +25,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        Because of = () =>
-            exception = Catch.Exception(() => questionnaire.UpdateGroup(rosterId, responsibleId, "title", rosterSizeQuestionId, null, null));
+        private Because of = () =>
+            exception =
+                Catch.Exception(
+                    () =>
+                        questionnaire.UpdateGroup(rosterId, responsibleId, "title", rosterSizeQuestionId, null, null, isRoster: true,
+                            rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null));
 
         Cleanup stuff = () =>
         {
