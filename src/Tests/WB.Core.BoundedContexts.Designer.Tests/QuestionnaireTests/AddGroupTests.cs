@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: emptyTitle, rosterSizeQuestionId: null,
                         description: null, condition: null, parentGroupId: null, isRoster: false,
-                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, rosterSizeQuestionId: null,
                     description: null, condition: null, parentGroupId: null, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
                 Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
@@ -63,19 +63,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewAddGroup_When_parent_group_is_non_propagated_Then_raised_NewAddGroup_event_contains_regular_group_id_as_parent()
+        public void NewAddGroup_When_parent_group_is_not_roster_Then_raised_NewAddGroup_event_contains_regular_group_id_as_parent()
         {
             using (var eventContext = new EventContext())
             {
                 // arrange
                 var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
 
                 // act
                 questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null,
                     description: null, condition: null, parentGroupId: parentRegularGroupId, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
                 Assert.That(GetLastEvent<NewGroupAdded>(eventContext).ParentGroupPublicKey, Is.EqualTo(parentRegularGroupId));
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(Guid.NewGuid(), responsibleId: Guid.NewGuid(), title: "Title", rosterSizeQuestionId: null,
                         description: null, condition: null, parentGroupId: null, isRoster: false,
-                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
                         responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
-                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
             Assert.DoesNotThrow(act);
@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
                         responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
-                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
             Assert.DoesNotThrow(act);
@@ -176,7 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
                         responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
-                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
                         responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
-                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);

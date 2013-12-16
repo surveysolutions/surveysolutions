@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         {
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
+            rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
             rosterSizeSource = RosterSizeSourceType.FixedTitles;
             rosterFixedTitles = new[] { rosterFixedTitle1, rosterFixedTitle2 };
 
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             );
 
             @event = CreateRosterChangedEvent(groupId: groupId, rosterSizeQuestionId: rosterSizeQuestionId,
-                rosterSizeSource: rosterSizeSource, rosterFixedTitles: rosterFixedTitles);
+                rosterSizeSource: rosterSizeSource, rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: rosterTitleQuestionId);
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
@@ -61,6 +62,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             questionnaireDocument.GetGroup(groupId)
                 .RosterFixedTitles[1].ShouldEqual(rosterFixedTitle2);
 
+        It should_set_group_RosterTitleQuestionId_property_to_specified_value = () =>
+            questionnaireDocument.GetGroup(groupId)
+                .RosterTitleQuestionId.ShouldEqual(rosterTitleQuestionId);
+
+
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<RosterChanged> @event;
         private static QuestionnaireDocument questionnaireDocument;
@@ -70,5 +76,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         private static string[] rosterFixedTitles;
         private static string rosterFixedTitle1 = "title1";
         private static string rosterFixedTitle2 = "title2";
+        private static Guid rosterTitleQuestionId;
     }
 }

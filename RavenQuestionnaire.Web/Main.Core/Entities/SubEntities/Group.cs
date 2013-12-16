@@ -38,6 +38,7 @@ namespace Main.Core.Entities.SubEntities
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
         public string[] RosterFixedTitles { get; set; }
+        public Guid? RosterTitleQuestionId { get; set; }
 
         private IComposite parent;
         

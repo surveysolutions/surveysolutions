@@ -45,6 +45,7 @@
                     item.rosterSizeSource(dto.RosterSizeSource);
                     var rosterFixedTitles = (!_.isUndefined(dto.RosterFixedTitles) && !_.isNull(dto.RosterFixedTitles)) ? dto.RosterFixedTitles.join("\n") : '';
                     item.rosterFixedTitles(rosterFixedTitles);
+                    item.rosterTitleQuestion(dto.RosterTitleQuestionId);
 
                     item.childrenID(_.map(dto.Children, function (c) {
                         return { type: getType(c.Type), id: c.Id };

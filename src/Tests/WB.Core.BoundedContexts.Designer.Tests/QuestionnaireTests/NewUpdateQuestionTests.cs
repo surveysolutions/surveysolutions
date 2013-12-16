@@ -1068,7 +1068,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var groupId = Guid.NewGuid();
             var triggedGroupIdsWithAutoPropagateGroupId = new[] { rosterGroupId };
 
-            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndQustion(rosterGroupId, rosterSizeQuestionId, responsibleId: Guid.NewGuid());
+            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndQuestion(rosterGroupId, rosterSizeQuestionId, responsibleId: Guid.NewGuid());
 
             // act
             TestDelegate act = () => questionnaire.UpdateNumericQuestion(rosterSizeQuestionId, "What is your last name?", false, "name", false, false,
@@ -1473,7 +1473,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid responsibleId = Guid.NewGuid();
 
             Questionnaire questionnaire =
-                CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupId, groupId, responsibleId);
+                CreateQuestionnaireWithRosterGroupAndRegularGroup(autoGroupId, groupId, responsibleId);
 
             AddQuestion(questionnaire, autoQuestionId, autoGroupId, responsibleId, QuestionType.Text, "manual");
             AddQuestion(questionnaire, questionId, autoGroupId, responsibleId, QuestionType.Text, "manual_under_test");

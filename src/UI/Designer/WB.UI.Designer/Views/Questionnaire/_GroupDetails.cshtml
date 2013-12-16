@@ -34,9 +34,14 @@
                 <div class="control-group" data-bind="validationElement: rosterSizeQuestion, visible: isRosterSizeSourceQuestion">
                     <div class="controls">
                         <label class="control-label">Roster size</label>
-                         <select class="input-block-level" data-bind="options: allowedQuestions, optionsValue: 'questionId', optionsText: 'title', value: rosterSizeQuestion, optionsCaption: 'Choose roster size question'"></select>
-                        <blockquote class="text-info" data-bind="visible: isNumericRosterSizeQuestion">*Roster title should be taken from question</blockquote>
-                        <blockquote class="text-info" data-bind="visible: isCategoricalRosterSizeQuestion">*Option names to be used as titles of roaster</blockquote>
+                        <select class="input-block-level" data-bind="options: allowedQuestions, optionsValue: 'questionId', optionsText: 'title', value: rosterSizeQuestion, optionsCaption: 'Choose roster size question'"></select>
+                        <blockquote class="text-info" data-bind="visible: isCategoricalRosterSizeQuestion">*Option names to be used as titles of roster</blockquote>
+                    </div>
+                </div>
+                <div class="control-group" data-bind="validationElement: rosterTitleQuestion, visible: isNumericRosterSizeQuestion">
+                    <div class="controls">
+                        <label class="control-label">Roster title should be taken from question</label>
+                        <select class="input-block-level" data-bind="options: rosterTitlesForNumericRosterSizeQuestion, optionsValue: 'questionId', optionsText: 'title', value: rosterTitleQuestion, optionsCaption: 'Choose roster title question'"></select>
                     </div>
                 </div>
                 <div class="control-group" data-bind="validationElement: rosterFixedTitles, visible: isRosterSizeSourceFixedTitles">
