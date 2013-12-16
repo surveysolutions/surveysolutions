@@ -88,7 +88,7 @@ namespace Core.Supervisor.Views
 
         private InterviewLevel GetRootLevel(InterviewData interview)
         {
-            return interview.Levels.FirstOrDefault(w => w.Value.ScopeIds.Count==1 && w.Value.ScopeIds.Contains(interview.InterviewId)).Value;
+            return interview.Levels.FirstOrDefault(w => w.Value.ScopeIds.Count==1 && w.Value.ScopeIds.ContainsKey(interview.InterviewId)).Value;
         }
 
         private IEnumerable<KeyValuePair<string, InterviewLevel>> GetRosterLevels(Guid groupId, InterviewData interviewData,
@@ -111,7 +111,7 @@ namespace Core.Supervisor.Views
                 throw new ArgumentException(string.Format("group {0} is missing in any roster scope of questionnaire", groupId));
 
 
-            return interviewData.Levels.Where(w => w.Value.ScopeIds.Contains(rosterScope.Value));
+            return interviewData.Levels.Where(w => w.Value.ScopeIds.ContainsKey(rosterScope.Value));
         }
 
 
@@ -259,7 +259,7 @@ namespace Core.Supervisor.Views
 
         private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, ReferenceInfoByQuestion optionsSource)
         {
-            return interview.Levels.Values.Where(level => level.ScopeIds.Contains(optionsSource.ScopeId));
+            return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(optionsSource.ScopeId));
         }
 
         private ReferenceInfoByQuestion GetQuestionReferencedQuestion(Guid questionId, ReferenceInfoForLinkedQuestions referenceQuestions)

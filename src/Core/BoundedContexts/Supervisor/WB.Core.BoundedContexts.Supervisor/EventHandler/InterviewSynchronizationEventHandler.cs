@@ -149,28 +149,29 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var scopeId in interviewLevel.ScopeIds)
             {
-                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId])
+                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key])
                 {
                     var groupKey = new InterviewItemId(groupId, outerVector);
 
-                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, groupKey);
+                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, scopeId.Value, groupKey);
                 }
             }
         }
 
         private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, Dictionary<decimal, int?>> propagatedGroupInstanceCounts,
+            int? sortIndex,
             InterviewItemId groupKey)
         {
             if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
             {
                 var currentRosterInstances = propagatedGroupInstanceCounts[groupKey];
                 var lastInstance = currentRosterInstances.Keys.Max();
-                currentRosterInstances.Add(lastInstance, null);
+                currentRosterInstances[lastInstance + 1] = sortIndex;
                 propagatedGroupInstanceCounts[groupKey] = currentRosterInstances;
             }
             else
             {
-                propagatedGroupInstanceCounts.Add(groupKey, new Dictionary<decimal, int?> { { 0, null } });
+                propagatedGroupInstanceCounts.Add(groupKey, new Dictionary<decimal, int?> { { 0, sortIndex } });
             }
         }
 
