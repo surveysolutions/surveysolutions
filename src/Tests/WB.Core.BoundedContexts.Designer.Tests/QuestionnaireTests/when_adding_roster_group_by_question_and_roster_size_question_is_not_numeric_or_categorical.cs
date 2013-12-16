@@ -7,14 +7,13 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_cloning_group_and_roster_size_question_is_not_numeric : QuestionnaireTestsContext
+    internal class when_adding_roster_group_by_question_and_roster_size_question_is_not_numeric_or_categorical : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            sourceGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -24,8 +23,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         private Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title", rosterSizeQuestionId, null, null, null,
-                    sourceGroupId, 0, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null));
+                questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, null, false,
+                    RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
@@ -39,11 +38,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_exception_with_message_containting__numeric__ = () =>
             exception.Message.ToLower().ShouldContain("numeric");
 
+        It should_throw_exception_with_message_containting__categorical__ = () =>
+            exception.Message.ToLower().ShouldContain("categorical");
+
         private static Exception exception;
-        private static Questionnaire questionnaire;
         private static Guid responsibleId;
-        private static Guid sourceGroupId;
+        private static Guid groupId;
         private static Guid rosterSizeQuestionId;
-        private static Guid targetGroupId;
+        private static Questionnaire questionnaire;
     }
 }
