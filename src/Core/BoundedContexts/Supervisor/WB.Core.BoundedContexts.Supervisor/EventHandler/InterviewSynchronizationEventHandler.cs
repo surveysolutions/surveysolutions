@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var disabledQuestions = new HashSet<InterviewItemId>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
-            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, List<decimal>>();
+            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, Dictionary<decimal, int?>>();
 
             var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
@@ -135,12 +135,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 status,
                 userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
                 answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
-                validQuestions, invalidQuestions, propagatedGroupInstanceCounts, interview.WasCompleted);
+                validQuestions, invalidQuestions,null, propagatedGroupInstanceCounts, interview.WasCompleted);
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
             QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
-            Dictionary<InterviewItemId, List<decimal>> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, Dictionary<decimal, int?>> propagatedGroupInstanceCounts)
         {
             if (interviewLevel.RosterVector.Length == 0)
                 return;
@@ -158,19 +158,19 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, List<decimal>> propagatedGroupInstanceCounts,
+        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, Dictionary<decimal, int?>> propagatedGroupInstanceCounts,
             InterviewItemId groupKey)
         {
             if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
             {
                 var currentRosterInstances = propagatedGroupInstanceCounts[groupKey];
-                var lastInstance = currentRosterInstances.Max();
-                currentRosterInstances.Add(lastInstance);
+                var lastInstance = currentRosterInstances.Keys.Max();
+                currentRosterInstances.Add(lastInstance, null);
                 propagatedGroupInstanceCounts[groupKey] = currentRosterInstances;
             }
             else
             {
-                propagatedGroupInstanceCounts.Add(groupKey, new List<decimal> { 0 });
+                propagatedGroupInstanceCounts.Add(groupKey, new Dictionary<decimal, int?> { { 0, null } });
             }
         }
 

@@ -93,12 +93,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledGroups = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledGroups);
             this.disabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
 
-            this.rosterGroupInstanceCounts = @event.InterviewData.PropagatedGroupInstanceCounts.ToDictionary(
-                pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.PropagationVector),
-                pair => new HashSet<decimal>(pair.Value));
+            this.rosterGroupInstanceCounts = BuildRosterGroupInstancesFromSynchronizationDto(@event.InterviewData);
 
             this.validAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.ValidAnsweredQuestions);
             this.invalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
+        }
+
+        private Dictionary<string, HashSet<decimal>> BuildRosterGroupInstancesFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
+        {
+            if (synchronizationDto.RosterGroupInstances != null)
+            {
+                return synchronizationDto.RosterGroupInstances.ToDictionary(
+                    pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.PropagationVector),
+                    pair => new HashSet<decimal>(pair.Value.Keys));
+            }
+            if (synchronizationDto.PropagatedGroupInstanceCounts != null)
+            {
+                return synchronizationDto.PropagatedGroupInstanceCounts.ToDictionary(
+                  pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.PropagationVector),
+                  pair => CreateHashSetForRosterFromCount(pair.Value));
+            }
+            return null;
+        }
+
+        private HashSet<decimal> CreateHashSetForRosterFromCount(int count)
+        {
+            var result = new HashSet<decimal>();
+            for (int i = 0; i < count; i++)
+            {
+                result.Add(i);
+            }
+            return result;
         }
 
         private void Apply(SynchronizationMetadataApplied @event)
