@@ -605,9 +605,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            /*var questionToCheck = questionnaire.GetQuestionByStataCaption(questionnaire.GetQuestionVariableName(questionId));
-
-            if (questionToCheck != null && questionToCheck.Capital)
+            /*if (questionnaire.IsQuestionHeadOfRoster(questionId))
             {
                 this.ApplyEvent(new RosterTitleChanged(questionId, rosterVector, answer));
             }*/
