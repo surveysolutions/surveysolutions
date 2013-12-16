@@ -51,7 +51,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 if (Guid.TryParse(match.Groups[1].Value, out matchId))
                 {
                     var question = GetRoot().Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.PublicId == matchId);
-                    return "[question " + question.ItemNumber +"]";
+                    if (question != null)
+                        return "[question " + question.ItemNumber +"]";
+                    else
+                    {
+                        return "[unknown question]";
+                    }
                 }
 
                 return match.Value;

@@ -10,7 +10,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
     public interface IEventDispatcher : IEventBus
     {
         void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers);
-        void PublishByEventSource<T>(CommittedEventStream eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity;
+        void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity;
 
         IEnumerable<IEventHandler> GetAllRegistredEventHandlers();
 

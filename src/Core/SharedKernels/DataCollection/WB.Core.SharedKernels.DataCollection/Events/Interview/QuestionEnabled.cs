@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class QuestionEnabled : QuestionPassiveEvent
     {
-        public QuestionEnabled(Guid questionId, int[] propagationVector)
+        public QuestionEnabled(Guid questionId, decimal[] propagationVector)
             : base(questionId, propagationVector) {}
     }
 }

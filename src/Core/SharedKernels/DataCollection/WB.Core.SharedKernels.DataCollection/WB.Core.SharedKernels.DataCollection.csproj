@@ -67,6 +67,9 @@
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\RosterRowAdded.cs" />
+    <Compile Include="Events\Interview\RosterRowDeleted.cs" />
+    <Compile Include="Events\Interview\RosterTitleChanged.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />

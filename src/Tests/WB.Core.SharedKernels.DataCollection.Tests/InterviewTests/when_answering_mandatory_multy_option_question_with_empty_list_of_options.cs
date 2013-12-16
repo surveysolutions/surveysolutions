@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerMultipleOptionsQuestion(userId, answeredQuestionId, new int[] { }, DateTime.Now, new decimal[0]);
+            interview.AnswerMultipleOptionsQuestion(userId, answeredQuestionId, new decimal[] { }, DateTime.Now, new decimal[0]);
 
         It should_not_raise_AnswerDeclaredValid_event = () =>
              eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event

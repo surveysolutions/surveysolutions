@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
         }
 
-        public AnsweredQuestionSynchronizationDto(Guid id, int[] vector, object answer, string comments)
+        public AnsweredQuestionSynchronizationDto(Guid id, decimal[] vector, object answer, string comments)
         {
             Id = id;
             PropagationVector = vector;
@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         }
 
         public Guid Id { get;  set; }
-        public int[] PropagationVector { get;  set; }
+        public decimal[] PropagationVector { get; set; }
         public object Answer { get;  set; }
         public string Comments { get;  set; }
     }
