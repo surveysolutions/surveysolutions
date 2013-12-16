@@ -8,13 +8,15 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public RosterSizeSourceType RosterSizeSource { get; private set; }
         public Guid? RosterSizeQuestionId { get; private set; }
         public string[] RosterFixedTitles { get; private set; }
+        public Guid? RosterTitleQuestionId { get; private set; }
 
-        public RosterChanged(Guid responsibleId, Guid groupId, Guid? rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles)
+        public RosterChanged(Guid responsibleId, Guid groupId, Guid? rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
             : base(responsibleId, groupId)
         {
             this.RosterSizeQuestionId = rosterSizeQuestionId;
             this.RosterSizeSource = rosterSizeSource;
             this.RosterFixedTitles = rosterFixedTitles;
+            this.RosterTitleQuestionId = rosterTitleQuestionId;
         }
     }
 }

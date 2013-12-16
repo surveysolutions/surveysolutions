@@ -94,6 +94,10 @@ namespace Main.Core.Documents
             get { return new string[0]; }
         }
 
+        public Guid? RosterTitleQuestionId {
+            get { return null; }
+        }
+
         public List<Guid> SharedPersons { get; set; }
 
         public long LastEventSequence { get; set; }

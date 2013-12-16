@@ -12,10 +12,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     {
         public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles)
+            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
             : base(
                 questionnaireId, groupId, responsibleId, title, rosterSizeQuestionId, description, condition, isRoster, rosterSizeSource,
-                rosterFixedTitles)
+                rosterFixedTitles, rosterTitleQuestionId)
         {
             this.ParentGroupId = parentGroupId;
         }

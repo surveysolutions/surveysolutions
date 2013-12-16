@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 questionnaire.AddGroup(publicKey, responsibleId: responsibleId, title: text, rosterSizeQuestionId: null,
                     description: description, condition: conditionExpression, parentGroupId: parentGroupKey, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 Assert.True(ctx.Events.Count() >= 1);
 
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire.AddGroup(groupPublicKey, responsibleId: responsibleId, title: "title", rosterSizeQuestionId: null,
                 description: "description", condition: null, parentGroupId: null, isRoster: false,
-                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null);
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             using (var ctx = new EventContext())
             {

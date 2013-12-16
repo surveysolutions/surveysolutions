@@ -132,8 +132,8 @@
   <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Custom enablement condition references not existing question.</value>
   </data>
-  <data name="WB0009_RosterGroupHasNoRosterSizeQuestion" xml:space="preserve">
-    <value>Roster group has no roster size question.</value>
+  <data name="WB0009_GroupRosteredByQuestionHasNoRosterSizeQuestion" xml:space="preserve">
+    <value>Group rostered by question has no roster size question.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Linked question references not existing question.</value>
@@ -141,7 +141,7 @@
   <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
     <value>Linked question references question of not supported type.</value>
   </data>
-  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup" xml:space="preserve">
+  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
     <value>Linked question references question not under roster group.</value>
   </data>
   <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
@@ -168,10 +168,10 @@
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be prefilled </value>
   </data>
-  <data name="WB0023_RosterGroupHasInvalidRosterSizeQuestion" xml:space="preserve">
-    <value>Only numeric or categorical with multiple answers question can be used as roster size question for group</value>
+  <data name="WB0023_GroupRosteredByQuestionHasInvalidRosterSizeQuestion" xml:space="preserve">
+    <value>Group rostered by question can be used as roster size question only numeric or categorical with multiple answers question.</value>
   </data>
-  <data name="WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup" xml:space="preserve">
+  <data name="WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup" xml:space="preserve">
     <value>Roster size question cannot be inside any roster group</value>
   </data>
   <data name="WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty" xml:space="preserve">
@@ -194,5 +194,11 @@
   </data>
   <data name="WB0031_HeadQuestionCantBeInsideOfNonRoster" xml:space="preserve">
     <value>Head question can't be inside of non-roster</value>
+  </data>
+  <data name="WB0032_GroupRosteredByQuestionHaveFixedTitles" xml:space="preserve">
+    <value>Group rostered by question could not have fixed titles</value>
+  </data>
+  <data name="WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+    <value>Group rostered by fixed titles could not have roster size question</value>
   </data>
 </root>

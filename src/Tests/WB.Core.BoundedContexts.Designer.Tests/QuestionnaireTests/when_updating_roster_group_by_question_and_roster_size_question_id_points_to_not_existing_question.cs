@@ -1,27 +1,28 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_cloning_group_and_roster_size_question_id_points_to_not_existing_question : QuestionnaireTestsContext
+    internal class when_updating_roster_group_by_question_and_roster_size_question_id_points_to_not_existing_question : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-            sourceGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
         };
 
         private Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title", rosterSizeQuestionId, null, null, null,
-                    sourceGroupId, 0, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null));
+                questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, isRoster: true,
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
@@ -38,8 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static Exception exception;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
-        private static Guid sourceGroupId;
+        private static Guid groupId;
         private static Guid rosterSizeQuestionId;
-        private static Guid targetGroupId;
     }
 }
