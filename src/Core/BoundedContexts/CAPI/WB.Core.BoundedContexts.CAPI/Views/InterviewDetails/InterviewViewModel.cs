@@ -346,13 +346,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return newGroupVector;
         }
 
-        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int index)
+        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int? sortIndex)
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 rosterInstanceId);
 
             var screenPrototype = this.propagatedScreenPrototypes[screenId];
-            var screen = screenPrototype.Clone(propagationVector, index);
+            var screen = screenPrototype.Clone(propagationVector, sortIndex);
 
             var questions = screen.Items.OfType<QuestionViewModel>().ToList();
 
@@ -681,12 +681,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected IEnumerable<QuestionnairePropagatedScreenViewModel> CollectPropagatedScreen(Guid publicKey)
         {
-            return
-                this.Screens.Select(
-                    s => s.Value)
-                    .OfType<QuestionnairePropagatedScreenViewModel>()
-                    .Where(s => s.ScreenId.Id == publicKey).OrderBy(x => x.RowIndex)
-                    .ToList();
+            return this.Screens
+                .Select(s => s.Value)
+                .OfType<QuestionnairePropagatedScreenViewModel>()
+                .Where(s => s.ScreenId.Id == publicKey)
+                .OrderBy(x => x.SortIndex)
+                .ToList();
         }
 
         protected IList<InterviewItemId> BuildBreadCrumbs(IList<IGroup> rout, InterviewItemId key)
