@@ -93,9 +93,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, Guid scopeId)
         {
-            for (int i = startIndex; i < startIndex + count; i++)
+            for (int rosterInstanceId = startIndex; rosterInstanceId < startIndex + count; rosterInstanceId++)
             {
-                AddLevelToInterview(interview, outerVector, i, scopeId);
+                this.AddLevelToInterview(interview, outerVector, rosterInstanceId, scopeId);
             }
         }
 
@@ -113,9 +113,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddLevelToInterview(InterviewData interview, decimal[] vector, int index, Guid scopeId)
+        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, Guid scopeId)
         {
-            var newVector = CreateNewVector(vector, index);
+            var newVector = CreateNewVector(vector, rosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
             if (!interview.Levels.ContainsKey(levelKey))
                 interview.Levels[levelKey] = new InterviewLevel(scopeId, newVector);
@@ -282,7 +282,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
 
-            AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.TargetIndex, scopeOfCurrentGroup);
+            this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, scopeOfCurrentGroup);
 
             currentState.Sequence = evnt.EventSequence;
             return currentState;
