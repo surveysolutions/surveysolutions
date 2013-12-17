@@ -339,5 +339,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by fixed titles could not have empty titles.
+        /// </summary>
+        internal static string WB0037_GroupRosteredByFixedTitlesHaveEmptyTitles {
+            get {
+                return ResourceManager.GetString("WB0037_GroupRosteredByFixedTitlesHaveEmptyTitles", resourceCulture);
+            }
+        }
     }
 }
