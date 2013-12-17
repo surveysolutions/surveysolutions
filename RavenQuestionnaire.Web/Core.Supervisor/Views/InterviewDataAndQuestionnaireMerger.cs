@@ -37,7 +37,7 @@ namespace Core.Supervisor.Views
                 PublicKey = interview.InterviewId,
                 Status = interview.Status
             };
-            Func<Guid, Dictionary<int[], string>> getAvailableOptions = (questionId) => this.GetAvailableOptions(questionId, interview, questionnaireReferenceInfo);
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions = (questionId) => this.GetAvailableOptions(questionId, interview, questionnaireReferenceInfo);
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();
 
             groupStack.Push(new KeyValuePair<IGroup, int>(questionnaire.Questionnaire, 0));
@@ -88,7 +88,7 @@ namespace Core.Supervisor.Views
 
         private InterviewLevel GetRootLevel(InterviewData interview)
         {
-            return interview.Levels.FirstOrDefault(w => w.Value.ScopeIds.Count==1 && w.Value.ScopeIds.Contains(interview.InterviewId)).Value;
+            return interview.Levels.FirstOrDefault(w => w.Value.ScopeIds.Count==1 && w.Value.ScopeIds.ContainsKey(interview.InterviewId)).Value;
         }
 
         private IEnumerable<KeyValuePair<string, InterviewLevel>> GetRosterLevels(Guid groupId, InterviewData interviewData,
@@ -111,12 +111,12 @@ namespace Core.Supervisor.Views
                 throw new ArgumentException(string.Format("group {0} is missing in any roster scope of questionnaire", groupId));
 
 
-            return interviewData.Levels.Where(w => w.Value.ScopeIds.Contains(rosterScope.Value));
+            return interviewData.Levels.Where(w => w.Value.ScopeIds.ContainsKey(rosterScope.Value));
         }
 
 
         private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels,
-            Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, Dictionary<int[], string>> getAvailableOptions,
+            Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, Dictionary<decimal[], string>> getAvailableOptions,
             IQuestionnaireDocument questionnaire)
         {
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
@@ -134,9 +134,11 @@ namespace Core.Supervisor.Views
                 Dictionary<string, string> answersForTitleSubstitution =
                     GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions);
 
+                bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null && interviewLevel.DisabledGroups.Contains(currentGroup.PublicKey);
+
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
-                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions)
-                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution);
+                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions, isQustionsParentGroupDisabled)
+                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, isQustionsParentGroupDisabled);
 
                 completedGroup.Questions.Add(interviewQuestion);
             }
@@ -146,7 +148,7 @@ namespace Core.Supervisor.Views
 
         private static Dictionary<string, string> GetAnswersForTitleSubstitution(IQuestion question, Dictionary<string, Guid> variableToIdMap,
             InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
-            Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions)
         {
             return question
                 .GetVariablesUsedInTitle()
@@ -163,7 +165,7 @@ namespace Core.Supervisor.Views
 
         private static string GetAnswerForTitleSubstitution(string variableName, Dictionary<string, Guid> variableToIdMap,
             InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
-            Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions)
         {
             if (!variableToIdMap.ContainsKey(variableName))
                 return null;
@@ -182,7 +184,7 @@ namespace Core.Supervisor.Views
         }
 
         private static string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, IQuestionnaireDocument questionnaire,
-            Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions)
         {
             if (interviewQuestion.Answer == null)
                 return null;
@@ -213,11 +215,11 @@ namespace Core.Supervisor.Views
                     }
                     else
                     {
-                        int[] selectedRosterVector = ((IEnumerable) interviewQuestion.Answer).OfType<int>().ToArray();
+                        decimal[] selectedRosterVector = ((IEnumerable)interviewQuestion.Answer).OfType<decimal>().ToArray();
 
-                        Dictionary<int[], string> availableOptions = getAvailableOptions(interviewQuestion.Id);
+                        Dictionary<decimal[], string> availableOptions = getAvailableOptions(interviewQuestion.Id);
 
-                        KeyValuePair<int[], string> selectedOption = availableOptions.SingleOrDefault(option => option.Key.SequenceEqual(selectedRosterVector));
+                        KeyValuePair<decimal[], string> selectedOption = availableOptions.SingleOrDefault(option => option.Key.SequenceEqual(selectedRosterVector));
 
                         return selectedOption.Value;
                     }
@@ -238,7 +240,7 @@ namespace Core.Supervisor.Views
             return currentInterviewLevel.GetQuestion(questionId);
         }
 
-        private Dictionary<int[], string> GetAvailableOptions(Guid questionId, InterviewData interview,
+        private Dictionary<decimal[], string> GetAvailableOptions(Guid questionId, InterviewData interview,
             ReferenceInfoForLinkedQuestions referenceQuestions)
         {
             var optionsSource = this.GetQuestionReferencedQuestion(questionId, referenceQuestions);
@@ -247,7 +249,7 @@ namespace Core.Supervisor.Views
 
             IEnumerable<InterviewLevel> allAvailableLevelsByScope = this.GetAllAvailableLevelsByScope(interview, optionsSource);
 
-            IDictionary<int[], InterviewQuestion> allLinkedQuestions =
+            IDictionary<decimal[], InterviewQuestion> allLinkedQuestions =
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
                     interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
 
@@ -257,7 +259,7 @@ namespace Core.Supervisor.Views
 
         private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, ReferenceInfoByQuestion optionsSource)
         {
-            return interview.Levels.Values.Where(level => level.ScopeIds.Contains(optionsSource.ScopeId));
+            return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(optionsSource.ScopeId));
         }
 
         private ReferenceInfoByQuestion GetQuestionReferencedQuestion(Guid questionId, ReferenceInfoForLinkedQuestions referenceQuestions)
@@ -267,8 +269,9 @@ namespace Core.Supervisor.Views
             return referenceQuestions.ReferencesOnLinkedQuestions[questionId];
         }
 
-        private Dictionary<int[], string> EmptyOptions {
-            get { return new Dictionary<int[], string>(); }
+        private Dictionary<decimal[], string> EmptyOptions
+        {
+            get { return new Dictionary<decimal[], string>(); }
         }
     }
 }

@@ -221,15 +221,68 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             var importId = Guid.NewGuid();
             var templateId = Guid.NewGuid();
 
-            var tempFileImportData =
-                new TempFileImportData()
-                {
-                    PublicKey = importId,
-                    IsCompleted = true,
-                    TemplateId = templateId,
-                    Header = new string[] { "var_name" },
-                    Values = new List<string[]> { new string[] { answer } }
-                };
+            var tempFileImportData = CreateCompletedTempFileImportData(importId, new Dictionary<string, string> { { "var_name", answer } });
+            
+            var questionnarieMock =
+                Mock.Of<IQuestionnaire>(
+                    _ =>
+                        _.GetQuestionByStataCaption("var_name") == CreateQuestionByType(type) &&
+                        _.GetAnswerOptionsAsValues(It.IsAny<Guid>()) == new decimal[0]);
+
+            SampleImportService target = CreateSampleImportService(tempFileImportData, new QuestionnaireDocument() { PublicKey = templateId }, questionnarieMock);
+
+            //act
+
+            target.CreateSample(importId, Guid.NewGuid(), Guid.NewGuid());
+
+            var status = this.WaitForSampleCreation(target, importId);
+
+            //assert
+            Assert.False(status.IsSuccessed);
+        }
+
+        [Test]
+        [TestCase(QuestionType.DateTime, "02/02/2012")]
+        [TestCase(QuestionType.Numeric, "2")]
+        [TestCase(QuestionType.Text, "valid text")]
+        [TestCase(QuestionType.SingleOption, "10")]
+        [TestCase(QuestionType.AutoPropagate,"3")]
+        public void CreateSample_When_Batch_data_contains_valida_values_Then_import_result_contains_no_error(QuestionType type, string answer)
+        {
+            //arrange
+            var importId = Guid.NewGuid();
+            var templateId = Guid.NewGuid();
+
+            var tempFileImportData = CreateCompletedTempFileImportData(importId, new Dictionary<string, string> { { "var_name", answer } });
+
+            var questionnarieMock =
+                Mock.Of<IQuestionnaire>(
+                    _ =>
+                        _.GetQuestionByStataCaption("var_name") == CreateQuestionByType(type) &&
+                            _.GetAnswerOptionsAsValues(It.IsAny<Guid>()) == new decimal[] { 10 });
+
+            SampleImportService target = CreateSampleImportService(tempFileImportData, new QuestionnaireDocument() { PublicKey = templateId }, questionnarieMock);
+
+            //act
+
+            target.CreateSample(importId, Guid.NewGuid(), Guid.NewGuid());
+
+            var status = this.WaitForSampleCreation(target, importId);
+
+            //assert
+            Assert.True(status.IsSuccessed);
+        }
+
+        [Test]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CreateSample_When_Batch_data_contains_answers_on_invalid_question_types_Then_import_result_contains_error(QuestionType type)
+        {
+            //arrange
+            var importId = Guid.NewGuid();
+            var templateId = Guid.NewGuid();
+
+            var tempFileImportData = CreateCompletedTempFileImportData(importId, new Dictionary<string, string> { { "var_name", "test" } });
 
             var questionnarieMock =
                 Mock.Of<IQuestionnaire>(
@@ -247,6 +300,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
 
             //assert
             Assert.False(status.IsSuccessed);
+        }
+
+        private TempFileImportData CreateCompletedTempFileImportData(Guid importId, Dictionary<string, string> data)
+        {
+            var header = data.Select(d => d.Key).ToArray();
+            var row = data.Select(d => d.Value).ToArray();
+
+            return new TempFileImportData()
+            {
+                PublicKey = importId,
+                IsCompleted = true,
+                TemplateId = Guid.NewGuid(),
+                Header = header,
+                Values = new List<string[]> { row }
+            };
         }
 
         private ISampleRecordsAccessor CreateSampleRecordsAccessor(IEnumerable<string[]> values)

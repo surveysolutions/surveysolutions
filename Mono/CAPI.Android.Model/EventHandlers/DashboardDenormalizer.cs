@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -26,6 +27,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtOdocumentStorage;
+        private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
                                      IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
@@ -49,15 +51,35 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId);
             if (questionnaireTemplate == null)
                 return;
+
             var items =
                 FilterNonFeaturedQuestionsByTemplate(questionnaireTemplate.Questionnaire, answeredQuestions).Select(
-                    q =>
-                    new FeaturedItem(q.Id, questionnaireTemplate.Questionnaire.Find<IQuestion>(q.Id).QuestionText,
-                                     q.Answer.ToString()))
-                                                                                                            .ToList();
+                    q => CreateFeaturedItem(q, questionnaireTemplate)).ToList();
+
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
                                      items), interviewId);
+        }
+
+        private FeaturedItem CreateFeaturedItem(AnsweredQuestionSynchronizationDto q, QuestionnaireDocumentVersioned questionnaireTemplate)
+        {
+            var featuredQuestion = questionnaireTemplate.Questionnaire.Find<IQuestion>(q.Id);
+            if (featuredQuestion == null)
+                return null;
+            
+            var answerString = q.Answer.ToString();
+
+            if (questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
+            {
+                var answerValues = QuestionUtils.ExtractSelectedOptions(answerString);
+
+                var options =
+                    featuredQuestion.Answers.Where(o => answerValues.Contains(decimal.Parse(o.AnswerValue))).Select(o => o.AnswerText);
+                
+                answerString = string.Join(",", options);
+            }
+
+            return new FeaturedItem(q.Id, featuredQuestion.QuestionText, answerString);
         }
 
         private IEnumerable<AnsweredQuestionSynchronizationDto> FilterNonFeaturedQuestionsByTemplate(

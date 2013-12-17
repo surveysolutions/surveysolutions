@@ -257,6 +257,7 @@
     <Compile Include="Entities\SubEntities\Question\TextQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\RosterSizeSourceType.cs" />
     <Compile Include="Entities\SubEntities\UserLight.cs">
       <SubType>Code</SubType>
     </Compile>

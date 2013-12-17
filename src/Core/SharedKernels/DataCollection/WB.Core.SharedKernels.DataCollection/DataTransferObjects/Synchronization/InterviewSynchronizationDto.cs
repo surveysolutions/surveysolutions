@@ -11,13 +11,14 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         }
 
         public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId, long questionnaireVersion,
-                                           AnsweredQuestionSynchronizationDto[] answers,
-                                           HashSet<InterviewItemId> disabledGroups,
-                                           HashSet<InterviewItemId> disabledQuestions,
-                                           HashSet<InterviewItemId> validAnsweredQuestions,
-                                           HashSet<InterviewItemId> invalidAnsweredQuestions,
-                                           Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
-                                           bool wasCompleted)
+            AnsweredQuestionSynchronizationDto[] answers,
+            HashSet<InterviewItemId> disabledGroups,
+            HashSet<InterviewItemId> disabledQuestions,
+            HashSet<InterviewItemId> validAnsweredQuestions,
+            HashSet<InterviewItemId> invalidAnsweredQuestions,
+            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
+            Dictionary<InterviewItemId, Dictionary<decimal, int?>> rosterGroupInstances,
+            bool wasCompleted)
         {
             Id = id;
             Status = status;
@@ -30,6 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
+            RosterGroupInstances = rosterGroupInstances;
             this.WasCompleted = wasCompleted;
         }
 
@@ -43,7 +45,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
-        public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get;  set; }
+        public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get; set; }
+        public Dictionary<InterviewItemId, Dictionary<decimal, int?>> RosterGroupInstances { get; set; }
         public bool WasCompleted { get; set; }
     }
 }

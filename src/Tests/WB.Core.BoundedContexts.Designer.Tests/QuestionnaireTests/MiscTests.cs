@@ -31,7 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string conditionExpression = "1=1";
                 string description = "group desct";
 
-                questionnaire.AddGroup(publicKey, responsibleId: responsibleId, title: text, rosterSizeQuestionId: null, description: description, condition: conditionExpression, parentGroupId: parentGroupKey);
+                questionnaire.AddGroup(publicKey, responsibleId: responsibleId, title: text, rosterSizeQuestionId: null,
+                    description: description, condition: conditionExpression, parentGroupId: parentGroupKey, isRoster: false,
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 Assert.True(ctx.Events.Count() >= 1);
 
@@ -63,7 +65,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             Guid groupPublicKey = Guid.NewGuid();
 
-            questionnaire.AddGroup(groupPublicKey, responsibleId: responsibleId, title: "title", rosterSizeQuestionId: null, description: "description", condition: null, parentGroupId: null);
+            questionnaire.AddGroup(groupPublicKey, responsibleId: responsibleId, title: "title", rosterSizeQuestionId: null,
+                description: "description", condition: null, parentGroupId: null, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             using (var ctx = new EventContext())
             {

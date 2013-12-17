@@ -69,21 +69,21 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override LinkedAnswerViewModel FindAnswerInModelByCheckBoxTag(string tag)
         {
-            var vector = tag.Split(Separator).Select(int.Parse).ToArray();
+            var vector = tag.Split(Separator).Select(decimal.Parse).ToArray();
             return this.Answers.FirstOrDefault(
               a => LinkedQuestionViewModel.IsVectorsEqual(a.PropagationVector, vector));
         }
 
         protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel[] selectedAnswers)
         {
-            var elements = selectedAnswers.Select(a => new Tuple<int[],int> (a.PropagationVector, this.GetAnswerOrder(a))).ToList();
+            var elements = selectedAnswers.Select(a => new Tuple<decimal[], int>(a.PropagationVector, this.GetAnswerOrder(a))).ToList();
 
             var answered = elements.OrderBy(tuple => tuple.Item2).Where(w => w.Item2 > 0).Select(a => a.Item1).
                 Union(elements.Where(w => w.Item2 == 0).Select(a => a.Item1));
             
             return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,
-                this.Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
+                this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow,
                 answered.ToArray());
         }
 
