@@ -66,8 +66,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
           eventContext.ShouldContainEvent<RosterRowAdded>(@event
               => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0);
 
-        It should_not_raise_RosterRowDeleted_event = () =>
-            eventContext.ShouldNotContainEvent<RosterRowDeleted>(@event
+        It should_not_raise_RosterRowRemoved_event = () =>
+            eventContext.ShouldNotContainEvent<RosterRowRemoved>(@event
                 => @event.GroupId == rosterGroupId);
 
         private static EventContext eventContext;

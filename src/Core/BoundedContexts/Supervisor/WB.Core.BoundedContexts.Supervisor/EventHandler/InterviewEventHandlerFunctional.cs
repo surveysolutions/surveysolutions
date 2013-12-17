@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewerAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupPropagated>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowDeleted>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
@@ -287,7 +287,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return currentState;
         }
 
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowDeleted> evnt)
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowRemoved> evnt)
         {
             Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                          evnt.Payload.GroupId);
