@@ -1615,8 +1615,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CalculateChangesInRosterInstances(rosterVector, idsOfRosterGroups, rosterSize,
                 out rosterInstancesToAdd, out rosterInstancesToRemove);
 
+            var rosterInstanceIdsBeingRemoved = new HashSet<decimal>(rosterInstancesToRemove.Select(instance => instance.RosterInstanceId));
+
             List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(
-                idsOfRosterGroups, rosterInstanceIds, rosterVector, questionnaire);
+                idsOfRosterGroups, rosterInstanceIdsBeingRemoved, rosterVector, questionnaire);
 
             this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
                 idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getAnswer, getRosterInstanceIds,
@@ -2169,26 +2171,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(
-            IEnumerable<Guid> rosterIds, HashSet<decimal> rosterInstanceIds, decimal[] outerRosterVector,
+            IEnumerable<Guid> rosterIds, HashSet<decimal> rosterInstanceIdsBeingRemoved, decimal[] outerRosterVector,
             IQuestionnaire questionnaire)
         {
+            if (rosterInstanceIdsBeingRemoved.Count == 0)
+                return new List<Identity>();
+
             return rosterIds
                 .SelectMany(rosterId =>
-                    this.GetAnswersToRemoveIfRosterInstancesAreRemoved(rosterId, rosterInstanceIds, outerRosterVector, questionnaire))
+                    this.GetAnswersToRemoveIfRosterInstancesAreRemoved(rosterId, rosterInstanceIdsBeingRemoved, outerRosterVector, questionnaire))
                 .ToList();
         }
 
         private IEnumerable<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(
-            Guid rosterId, HashSet<decimal> rosterInstanceIds, decimal[] outerRosterVector,
+            Guid rosterId, HashSet<decimal> rosterInstanceIdsBeingRemoved, decimal[] outerRosterVector,
             IQuestionnaire questionnaire)
         {
-            HashSet<decimal> rosterInstanceIdsBeingRemoved = GetRosterInstanceIdsBeingRemoved(
-                existingRosterInstanceIds: this.GetRosterInstanceIds(rosterId, outerRosterVector),
-                newRosterInstanceIds: rosterInstanceIds);
-
-            if (rosterInstanceIdsBeingRemoved.Count == 0)
-                return Enumerable.Empty<Identity>();
-
             int indexOfRosterInRosterVector = GetIndexOfRosterGroupInRosterVector(rosterId, questionnaire);
 
             IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(rosterId);
