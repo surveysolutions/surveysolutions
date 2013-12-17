@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_have_empty_title.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_question_that_have_roster_title_question_in_document_root.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_have_roster_title_question_not_in_groups_by_roster_size.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_categorical_question_that_have_roster_title_question.cs" />
