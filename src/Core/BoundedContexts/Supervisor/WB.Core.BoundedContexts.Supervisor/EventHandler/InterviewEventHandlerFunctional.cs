@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupPropagated>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowDeleted>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericRealQuestionAnswered>,
@@ -487,6 +488,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewDeclaredValid> evt)
         {
             return new ViewWithSequence<InterviewData>(this.SetInterviewValidity(currentState.Document, true), evt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterTitleChanged> evnt)
+        {
+            throw new NotImplementedException();
+
+            /*return
+                new ViewWithSequence<InterviewData>(
+                    PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, (level) =>
+                {
+                    if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    {
+                        level.DisabledGroups.Add(evnt.Payload.GroupId);
+                    }
+                }), evnt.EventSequence);*/
         }
     }
 }
