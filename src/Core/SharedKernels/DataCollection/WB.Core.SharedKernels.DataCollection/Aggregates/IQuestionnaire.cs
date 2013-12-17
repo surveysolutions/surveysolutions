@@ -96,5 +96,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionInteger(Guid questionId);
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
+
+        bool IsQuestionHeadOfRoster(Guid questionId);
     }
 }
