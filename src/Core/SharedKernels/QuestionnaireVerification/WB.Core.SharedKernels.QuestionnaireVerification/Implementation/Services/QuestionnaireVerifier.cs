@@ -77,6 +77,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupRosteredByFixedTitlesHaveRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupRosteredByQuestionHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion),
                     Verifier<IGroup>(GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion),
+                    Verifier<IGroup>(GroupRosteredByFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupRosteredByFixedTitlesHaveEmptyTitles),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
@@ -209,6 +210,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!IsCategoricalRosterSizeQuestion(GetRosterSizeQuestionByRosterGroup(group, questionnaire)))
                 return false;
             return group.RosterTitleQuestionId.HasValue;
+        }
+
+        private static bool GroupRosteredByFixedTitlesHaveEmptyTitles(IGroup group)
+        {
+            if (!IsRosterByFixedTitles(group))
+                return false;
+            if (group.RosterFixedTitles == null)
+                return false;
+            if (group.RosterFixedTitles.Length == 0)
+                return false;
+
+            return group.RosterFixedTitles.Any(string.IsNullOrWhiteSpace);
         }
 
         private static bool RosterSizeQuestionCannotBeInsideAnyRosterGroup(IQuestion question, QuestionnaireDocument questionnaire)
