@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             this.BuildInterviewStructureFromTemplate(questionnaire);
 
-            this.BuildHeadQuestionsInsidePropagateGroupsStructure(questionnaire);
+            this.BuildHeadQuestionsInsidePropagateGroupsStructure(rosterStructure);
 
             this.referencedQuestionToLinkedQuestionsMap = questionnaire
                 .Find<IQuestion>(question => question.LinkedToQuestionId != null)
@@ -143,15 +143,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return this.Questions.Values.Where(x => x.SubstitutionReferences.Any());
         }
 
-        private void BuildHeadQuestionsInsidePropagateGroupsStructure(IQuestionnaireDocument questionnaire)
+        private void BuildHeadQuestionsInsidePropagateGroupsStructure(QuestionnaireRosterStructure rosterStructure)
         {
-            foreach (var propagatedGroup in questionnaire.Find<IGroup>(group => group.Propagated != Propagate.None || group.IsRoster))
+            foreach (var rosterDescription in rosterStructure.RosterScopes.Values)
             {
-                var scopeOfPropagationId = this.GetScopeOfPropagatedScreen(propagatedGroup.PublicKey);
-                foreach (var headQuestion in propagatedGroup.Find<IQuestion>(question => question.Capital))
-                {
-                    this.listOfHeadQuestionsMappedOnScope.Add(headQuestion.PublicKey, scopeOfPropagationId);
-                }
+                if(rosterDescription.HeadQuestionId.HasValue)
+                    this.listOfHeadQuestionsMappedOnScope.Add(rosterDescription.HeadQuestionId.Value, rosterDescription.ScopeId);
             }
         }
 
@@ -480,7 +477,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (this.listOfHeadQuestionsMappedOnScope.ContainsKey(questionId))
             {
                 this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[questionId],
-                propagationVector);
+                propagationVector, rosterTitle);
             }
         }
 
@@ -534,10 +531,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
 
             this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[question.PublicKey.Id],
-                question.PublicKey.InterviewItemPropagationVector);
+                question.PublicKey.InterviewItemPropagationVector, question.AnswerString);
         }
 
-        private void UpdatePropagationScopeTitleForVector(Guid scopeId, decimal[] propagationVector)
+        private void UpdatePropagationScopeTitleForVector(Guid scopeId, decimal[] propagationVector, string newTitle)
         {
             var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId].RosterGroupsId;
 
@@ -545,24 +542,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 siblingsByPropagationScopeIds.Select(
                     screenId => this.Screens[new InterviewItemId(screenId, propagationVector)] as QuestionnairePropagatedScreenViewModel);
 
-            var newTitle = this.BuildPropagationScopeTitleBasedOnAnswersToCapitalQuestions(propagationVector, scopeId);
-
             foreach (var screen in screensSiblingByPropagationScopeWithVector)
             {
                 screen.UpdateScreenName(newTitle);
             }
-        }
-
-        private string BuildPropagationScopeTitleBasedOnAnswersToCapitalQuestions(decimal[] propagationVector, Guid scopeId)
-        {
-            return string.Concat(
-                this.Questions.Where(
-                    q =>
-                        q.Key.CompareWithVector(propagationVector) &&
-                            this.listOfHeadQuestionsMappedOnScope.Any(
-                                headQuestion => headQuestion.Key == q.Key.Id && headQuestion.Value == scopeId)).
-                    Select(
-                        q => q.Value.AnswerString));
         }
 
         private void screen_PropertyChanged(object sender, PropertyChangedEventArgs e)
