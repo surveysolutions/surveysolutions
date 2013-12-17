@@ -5,10 +5,12 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -27,6 +29,9 @@ namespace Web.Supervisor.Code
         private readonly ILogger logger;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewsDataWriter;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewsSummaryWriter;
+
 
         static RevalidateInterviewsAdministrationService()
         {
@@ -36,12 +41,16 @@ namespace Web.Supervisor.Code
         public RevalidateInterviewsAdministrationService(
             ILogger logger,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor)
+            ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor, 
+            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewsDataWriter, 
+            IReadSideRepositoryWriter<InterviewSummary> interviewsSummaryWriter)
         {
             this.logger = logger;
             this.interviews = interviews;
             this.commandService = commandService;
             this.indexAccessor = indexAccessor;
+            this.interviewsDataWriter = interviewsDataWriter;
+            this.interviewsSummaryWriter = interviewsSummaryWriter;
         }
 
         public void RevalidateAllInterviewsWithErrorsAsync()
@@ -131,9 +140,22 @@ namespace Web.Supervisor.Code
 
                             UpdateStatusMessage(string.Format("Revalidated interviews {0}. ", processedInterviewsCount + 1) + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
 
-                            using (bus.InMemoryTransaction(interviewItemId.InterviewId))
+                            List<CommittedEvent> events;
+
+                            using (var eventContext = new UnpublishedEventContext())
                             {
                                 this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
+                                events = eventContext.Events.ToList();
+                            }
+
+                            using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<InterviewData>>(this.interviewsDataWriter, interviewItemId.InterviewId))
+                            {
+                                bus.PublishByEventSource(events, inMemoryStorage);
+                            }
+
+                            using (var inMemoryStorage = new InMemoryViewStorage<InterviewSummary>(this.interviewsSummaryWriter, interviewItemId.InterviewId))
+                            {
+                                bus.PublishByEventSource(events, inMemoryStorage);
                             }
 
                             processedInterviewsCount++;
