@@ -118,6 +118,7 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_title_question.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_fixed_titles.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_fixed_titles.cs" />

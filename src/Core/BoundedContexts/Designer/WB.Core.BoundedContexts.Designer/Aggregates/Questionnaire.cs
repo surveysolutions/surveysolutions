@@ -703,6 +703,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(groupId);
+            this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
 
             this.ApplyEvent(new GroupDeleted() { GroupPublicKey = groupId, ResponsibleId = responsibleId });
         }
@@ -957,6 +958,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(questionId);
             this.ThrowIfQuestionIsUsedAsRosterSize(questionId);
+            this.ThrowIfQuestionIsUsedAsRosterTitle(questionId);
 
             this.ApplyEvent(new QuestionDeleted() { QuestionId = questionId, ResponsibleId = responsibleId });
         }
@@ -1900,6 +1902,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
+        private void ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(Guid groupId)
+        {
+            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x.PublicKey));
+
+            var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
+                question =>
+                    this.innerDocument.Find<IGroup>(
+                        group => (group.PublicKey != groupId) && (group.RosterTitleQuestionId == question.PublicKey)).Select(GetTitle));
+
+            if (referencedQuestions.Values.Count(x => x.Any()) > 0)
+            {
+                throw new QuestionnaireException(DomainExceptionType.QuestionUsedAsRosterTitleOfOtherGroup, string.Join(Environment.NewLine,
+                    referencedQuestions.Select(x => string.Format("Question {0} used as roster title question in group(s):{1}{2}",
+                        FormatQuestionForException(x.Key, this.innerDocument),
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, x.Value)))));
+            }
+        }
+
         private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Guid? rosterSizeQuestionId,
             string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
@@ -2016,6 +2037,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Question {0} is referenced as roster size question by group {1}.",
                     FormatQuestionForException(questionId, this.innerDocument),
                     FormatGroupForException(referencingRoster.PublicKey, this.innerDocument)));
+        }
+
+        private void ThrowIfQuestionIsUsedAsRosterTitle(Guid questionId)
+        {
+            var referencingRosterTitle = this.innerDocument.Find<IGroup>(group => @group.RosterTitleQuestionId == questionId).FirstOrDefault();
+
+            if (referencingRosterTitle != null)
+                throw new QuestionnaireException(
+                    string.Format("Question {0} is referenced as roster title question by group {1}.",
+                    FormatQuestionForException(questionId, this.innerDocument),
+                    FormatGroupForException(referencingRosterTitle.PublicKey, this.innerDocument)));
         }
 
         private void ThrowIfRosterCantBecomeAGroupBecauseOfHeadQuestions(Guid groupId, bool isRoster)
