@@ -31,7 +31,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId, params Guid[] groupIdsFromScope)
         {
             var rosterStructure= new QuestionnaireRosterStructure();
-            rosterStructure.RosterScopes.Add(scopeId, new HashSet<Guid>(groupIdsFromScope));
+            var rosterDescription = new RosterDescription(Guid.NewGuid(), null);
+            groupIdsFromScope.ToList().ForEach(groupId => rosterDescription.RosterGroupsId.Add(groupId));
+            rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
         }
 

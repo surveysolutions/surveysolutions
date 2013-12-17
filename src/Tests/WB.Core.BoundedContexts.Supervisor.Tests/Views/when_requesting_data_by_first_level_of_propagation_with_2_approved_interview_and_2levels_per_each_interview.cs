@@ -77,7 +77,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         private static QuestionnaireRosterStructure CreateQuestionnairePropagationStructure()
         {
             var propagationStructure = new QuestionnaireRosterStructure();
-            propagationStructure.RosterScopes.Add(propagationScopeKey, new HashSet<Guid>() { propagatedGroup });
+            var rosterDescription = new RosterDescription(Guid.NewGuid(), null);
+            rosterDescription.RosterGroupsId.Add(propagatedGroup);
+            propagationStructure.RosterScopes.Add(propagationScopeKey, rosterDescription);
             return propagationStructure;
         }
 

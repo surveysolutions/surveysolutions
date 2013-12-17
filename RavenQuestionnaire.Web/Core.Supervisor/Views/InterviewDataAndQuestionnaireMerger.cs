@@ -98,7 +98,7 @@ namespace Core.Supervisor.Views
             //totally not efficient
             foreach (var scopeId in questionnaireRoster.RosterScopes.Keys)
             {
-                foreach (var trigger in questionnaireRoster.RosterScopes[scopeId])
+                foreach (var trigger in questionnaireRoster.RosterScopes[scopeId].RosterGroupsId)
                 {
                     if (trigger == groupId)
                     {
