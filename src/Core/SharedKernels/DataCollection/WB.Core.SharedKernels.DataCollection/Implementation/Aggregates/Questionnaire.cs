@@ -521,7 +521,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
             if (numericQuestion.IsInteger)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be real.", questionId));
+            
             return numericQuestion.CountOfDecimalPlaces;
+        }
+
+        public bool IsQuestionHeadOfRoster(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            
+            return question.Capital;
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
