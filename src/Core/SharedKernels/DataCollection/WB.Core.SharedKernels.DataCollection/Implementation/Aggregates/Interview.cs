@@ -1608,9 +1608,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .Range(0, rosterSize)
                     .Select(rosterIndex => (decimal) rosterIndex));
 
-            List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToDelete;
+            List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToRemove;
             List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled,
                 initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
+
+            this.CalculateChangesInRosterInstances(rosterVector, idsOfRosterGroups, rosterSize,
+                out rosterInstancesToAdd, out rosterInstancesToRemove);
 
             List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(
                 idsOfRosterGroups, rosterInstanceIds, rosterVector, questionnaire);
@@ -1625,19 +1628,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 idsOfRosterGroups, rosterSize, rosterVector, questionnaire, getRosterInstanceIds, initializedGroupsToBeDisabled,
                 initializedQuestionsToBeDisabled, out initializedQuestionsToBeInvalid);
 
-            this.PerformRosterSizeChange(rosterVector, idsOfRosterGroups, rosterSize,
-                out rosterInstancesToAdd, out rosterInstancesToDelete);
-
-            return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToDelete,
+            return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToRemove,
                 answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
                 initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid);
         }
 
-        private void PerformRosterSizeChange(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize, out List<RosterIdentity> rosterInstancesToAdd,
-            out List<RosterIdentity> rosterInstancesToDelete)
+        private void CalculateChangesInRosterInstances(decimal[] rosterVector, List<Guid> idsOfRosterGroups, int rosterSize,
+            out List<RosterIdentity> rosterInstancesToAdd, out List<RosterIdentity> rosterInstancesToDelete)
         {
             Dictionary<Guid, List<int>> rosterRowIdsForDelete, rosterRowIdsForAdd;
-            this.PerformRosterSizeChange(idsOfRosterGroups, rosterVector, rosterSize, out rosterRowIdsForDelete, out rosterRowIdsForAdd);
+            this.CalculateChangesInRosterInstances(idsOfRosterGroups, rosterVector, rosterSize, out rosterRowIdsForDelete, out rosterRowIdsForAdd);
 
             // nested rosters bug: rosterVector cannot be used as outerRosterVector when answered question has roster level 0 but roster has roster level 2
 
@@ -1650,7 +1650,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
-        private void PerformRosterSizeChange(List<Guid> idsOfRosterGroups, decimal[] rosterVector, int rosterSize,
+        private void CalculateChangesInRosterInstances(List<Guid> idsOfRosterGroups, decimal[] rosterVector, int rosterSize,
             out Dictionary<Guid, List<int>> rosterRowIdsForDelete, out Dictionary<Guid, List<int>> rosterRowIdsForAdd)
         {
             rosterRowIdsForAdd = new Dictionary<Guid, List<int>>();
