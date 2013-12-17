@@ -8,11 +8,13 @@ using Android.Widget;
 using Android.Content.PM;
 using CAPI.Android.Core.Model.SyncCacher;
 using Main.Core;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.UI.Capi.Implementations.Activities;
@@ -24,7 +26,7 @@ namespace WB.UI.Capi
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : Activity
     {
-
+        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -58,10 +60,18 @@ namespace WB.UI.Capi
             var item = syncCacher.LoadItem(itemKey);
             if (!string.IsNullOrWhiteSpace(item))
             {
-                string content = PackageHelper.DecompressString(item);
-                var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
+                try
+                {
+                    string content = PackageHelper.DecompressString(item);
+                    var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
 
-                NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
+                    NcqrsEnvironment.Get<ICommandService>()
+                        .Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
+                }
+                catch(Exception e)
+                {
+                    logger.Error("error during restor after synchronization", e);
+                }
             }
             syncCacher.DeleteItem(itemKey);
         }

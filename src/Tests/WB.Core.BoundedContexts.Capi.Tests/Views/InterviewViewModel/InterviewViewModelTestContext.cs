@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         }
 
         protected static InterviewSynchronizationDto CreateInterviewSynchronizationDto(AnsweredQuestionSynchronizationDto[] answers,
-            Dictionary<InterviewItemId, List<decimal>> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, Dictionary<decimal, int?>> propagatedGroupInstanceCounts)
         {
             return new InterviewSynchronizationDto(id: Guid.NewGuid(), status: InterviewStatus.InterviewerAssigned,
                 userId: Guid.NewGuid(), questionnaireId: Guid.NewGuid(), questionnaireVersion: 1,
@@ -30,7 +30,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
                 disabledGroups: new HashSet<InterviewItemId>(),
                 disabledQuestions: new HashSet<InterviewItemId>(), validAnsweredQuestions: new HashSet<InterviewItemId>(),
                 invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
-                propagatedGroupInstanceCounts: propagatedGroupInstanceCounts,
+                propagatedGroupInstanceCounts:null,
+                rosterGroupInstances: propagatedGroupInstanceCounts,
                 wasCompleted: false);
         }
 
