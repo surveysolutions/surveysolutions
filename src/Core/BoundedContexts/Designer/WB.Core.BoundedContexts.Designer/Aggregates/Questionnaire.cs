@@ -39,6 +39,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.GpsCoordinates
         };
 
+        private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
+        {
+            QuestionType.Numeric,
+            QuestionType.MultyOption
+        };
+
         private static readonly HashSet<QuestionType> ReroutedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
@@ -156,7 +162,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(RosterChanged e)
         {
-            this.innerDocument.UpdateGroup(e.GroupId, group => group.RosterSizeQuestionId = e.RosterSizeQuestionId);
+            this.innerDocument.UpdateGroup(e.GroupId, group =>
+            {
+                group.RosterSizeQuestionId = e.RosterSizeQuestionId;
+                group.RosterSizeSource = e.RosterSizeSource;
+                group.RosterFixedTitles = e.RosterFixedTitles;
+                group.RosterTitleQuestionId = e.RosterTitleQuestionId;
+            });
         }
 
         private void Apply(GroupStoppedBeingARoster e)
@@ -562,7 +574,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddGroup(Guid groupId, Guid responsibleId,
             string title, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId)
+            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -572,7 +584,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
-            this.ThrowIfRosterInformationIsIncorrect(rosterSizeQuestionId);
+            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
+                rosterTitleQuestionId: rosterTitleQuestionId);
 
 
             this.ApplyEvent(new NewGroupAdded
@@ -585,10 +599,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
 
-            if (rosterSizeQuestionId.HasValue)
+            if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
+                    rosterTitleQuestionId));
             }
             else
             {
@@ -598,7 +613,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void CloneGroupWithoutChildren(Guid groupId, Guid responsibleId,
             string title, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId, Guid sourceGroupId, int targetIndex)
+            Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -608,7 +623,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
-            this.ThrowIfRosterInformationIsIncorrect(rosterSizeQuestionId);
+            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
+                rosterTitleQuestionId: rosterTitleQuestionId);
 
 
             this.ApplyEvent(new GroupCloned
@@ -623,10 +640,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
 
-            if (rosterSizeQuestionId.HasValue)
+            if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
+                    rosterTitleQuestionId));
             }
             else
             {
@@ -635,7 +653,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
-            string title, Guid? rosterSizeQuestionId, string description, string condition)
+            string title, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
+            RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -647,7 +666,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
-            this.ThrowIfRosterInformationIsIncorrect(rosterSizeQuestionId);
+            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
+                rosterTitleQuestionId: rosterTitleQuestionId);
 
             this.ThrowIfGroupsShouldBecomeARosterButCannot(groupId, rosterSizeQuestionId);
 
@@ -664,10 +685,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
 
-            if (rosterSizeQuestionId.HasValue)
+            if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId.Value));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
+                    rosterTitleQuestionId));
             }
             else
             {
@@ -681,6 +703,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(groupId);
+            this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
 
             this.ApplyEvent(new GroupDeleted() { GroupPublicKey = groupId, ResponsibleId = responsibleId });
         }
@@ -935,6 +958,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(questionId);
             this.ThrowIfQuestionIsUsedAsRosterSize(questionId);
+            this.ThrowIfQuestionIsUsedAsRosterTitle(questionId);
 
             this.ApplyEvent(new QuestionDeleted() { QuestionId = questionId, ResponsibleId = responsibleId });
         }
@@ -1878,38 +1902,130 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfRosterInformationIsIncorrect(Guid? rosterSizeQuestionId)
+        private void ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(Guid groupId)
         {
-            if (rosterSizeQuestionId.HasValue)
-                this.ThrowIfRosterSizeQuestionIsIncorrect(rosterSizeQuestionId.Value);
+            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x.PublicKey));
+
+            var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
+                question =>
+                    this.innerDocument.Find<IGroup>(
+                        group => (group.PublicKey != groupId) && (group.RosterTitleQuestionId == question.PublicKey)).Select(GetTitle));
+
+            if (referencedQuestions.Values.Count(x => x.Any()) > 0)
+            {
+                throw new QuestionnaireException(DomainExceptionType.QuestionUsedAsRosterTitleOfOtherGroup, string.Join(Environment.NewLine,
+                    referencedQuestions.Select(x => string.Format("Question {0} used as roster title question in group(s):{1}{2}",
+                        FormatQuestionForException(x.Key, this.innerDocument),
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, x.Value)))));
+            }
         }
 
-        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid rosterSizeQuestionId)
+        private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Guid? rosterSizeQuestionId,
+            string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
-            var question = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
+            if (!isRoster) return;
 
-            if (question == null)
+            switch (rosterSizeSource)
+            {
+                case RosterSizeSourceType.Question:
+                    this.ThrowIfRosterByQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles);
+                    break;
+                case RosterSizeSourceType.FixedTitles:
+                    this.ThrowIfRosterByFixedTitlesIsIncorrect(rosterSizeQuestionId, rosterTitleQuestionId, rosterFixedTitles);
+                    break;
+            }
+        }
+
+        private void ThrowIfRosterByFixedTitlesIsIncorrect(Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
+        {
+            if (rosterFixedTitles == null || rosterFixedTitles.Length == 0)
+            {
+                throw new QuestionnaireException("List of fixed roster titles could not be empty");
+            }
+
+            if (rosterFixedTitles.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new QuestionnaireException("Fixed roster titles could not have empty titles");
+            }
+
+            if (rosterSizeQuestionId.HasValue)
+            {
+                throw new QuestionnaireException("Roster by fixed titles could not have roster size question");
+            }
+
+            if (rosterTitleQuestionId.HasValue)
+            {
+                throw new QuestionnaireException("Roster by fixed titles could not have roster title question");
+            }
+        }
+
+        private void ThrowIfRosterByQuestionIsIncorrect(Guid groupId,Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
+        {
+            var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
+
+            if (rosterSizeQuestion == null)
                 // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} is missing in questionnaire.",
                     rosterSizeQuestionId));
-
-            if (question.QuestionType != QuestionType.Numeric)
+            
+            if (!RosterSizeQuestionTypes.Contains(rosterSizeQuestion.QuestionType))
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should have Numeric type.",
+                "Roster size question {0} should have Numeric or Categorical Multy Answers type.",
+                FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+
+            if (GetAllParentGroups(rosterSizeQuestion).Any(group => group.IsRoster))
+                throw new QuestionnaireException(string.Format(
+                    "Roster size question {0} cannot be placed under another roster group.",
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
-            var numericQuestion = (INumericQuestion)question;
-
-            if (!numericQuestion.IsInteger)
+            if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterSizeQuestion.LinkedToQuestionId.HasValue)
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should be Integer.",
+                    "Roster size question {0} should not be linked.",
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
-            if (GetAllParentGroups(numericQuestion).Any(group => group.IsRoster))
+            if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
+            {
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} cannot be placed under another roster group",
+                    "Categorical multy answers question {0} as roster size question cannot have roster title question.",
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+            }
+
+            if (rosterSizeQuestion.QuestionType == QuestionType.Numeric)
+            {
+                var numericQuestion = (INumericQuestion) rosterSizeQuestion;
+
+                if (!numericQuestion.IsInteger)
+                    throw new QuestionnaireException(string.Format(
+                        "Roster size question {0} should be Integer.",
+                        FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+
+                if (rosterTitleQuestionId.HasValue)
+                {
+                    var rosterTitleQuestion = this.innerDocument.Find<IQuestion>(rosterTitleQuestionId.Value);
+                    if (rosterTitleQuestion == null)
+                        // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
+                        throw new QuestionnaireException(string.Format(
+                            "Roster title question {0} is missing in questionnaire.", rosterTitleQuestionId));
+
+                    var groupsByRosterSizeQuestion =
+                        this.innerDocument.Find<IGroup>(x => x.RosterSizeQuestionId == rosterSizeQuestionId).Select(x => x.PublicKey);
+
+                    IComposite parentOfTitleQuestion = rosterTitleQuestion.GetParent();
+                    if (parentOfTitleQuestion == null || !groupsByRosterSizeQuestion.Contains(parentOfTitleQuestion.PublicKey))
+                        throw new QuestionnaireException(string.Format(
+                            "Question for roster titles {0} should be placed only inside groups that rostered by {1} roster size question.",
+                            FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
+                            FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                }
+            }
+
+            if (rosterFixedTitles != null && rosterFixedTitles.Any())
+            {
+                throw new QuestionnaireException(string.Format("Roster fixed titles should be empty for roster group by question: {0}.",
+                    FormatGroupForException(groupId, this.innerDocument)));
+            }
         }
 
         private void ThrowIfQuestionIsUsedAsRosterSize(Guid questionId)
@@ -1921,6 +2037,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Question {0} is referenced as roster size question by group {1}.",
                     FormatQuestionForException(questionId, this.innerDocument),
                     FormatGroupForException(referencingRoster.PublicKey, this.innerDocument)));
+        }
+
+        private void ThrowIfQuestionIsUsedAsRosterTitle(Guid questionId)
+        {
+            var referencingRosterTitle = this.innerDocument.Find<IGroup>(group => @group.RosterTitleQuestionId == questionId).FirstOrDefault();
+
+            if (referencingRosterTitle != null)
+                throw new QuestionnaireException(
+                    string.Format("Question {0} is referenced as roster title question by group {1}.",
+                    FormatQuestionForException(questionId, this.innerDocument),
+                    FormatGroupForException(referencingRosterTitle.PublicKey, this.innerDocument)));
         }
 
         private void ThrowIfRosterCantBecomeAGroupBecauseOfHeadQuestions(Guid groupId, bool isRoster)

@@ -6,10 +6,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     public class GroupPropagated : InterviewPassiveEvent
     {
         public Guid GroupId { get; private set; }
-        public int[] OuterScopePropagationVector { get; private set; }
+        public decimal[] OuterScopePropagationVector { get; private set; }
         public int Count { get; private set; }
 
-        public GroupPropagated(Guid groupId, int[] outerScopePropagationVector, int count)
+        public GroupPropagated(Guid groupId, decimal[] outerScopePropagationVector, int count)
         {
             this.GroupId = groupId;
             this.OuterScopePropagationVector = outerScopePropagationVector;

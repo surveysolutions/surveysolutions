@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid groupId = Guid.NewGuid();
                 bool isFeatured = true;
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId: groupId, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: groupId, responsibleId: responsibleId);
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid autoGroupId = Guid.NewGuid();
                 bool isHeadOfPropagatedGroup = true;
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupId, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneRosterGroup(groupId: autoGroupId, responsibleId: responsibleId);
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?",
@@ -296,7 +296,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Arrange
                 Guid groupId = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: groupId, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneRosterGroup(groupId: groupId, responsibleId: responsibleId);
                 bool capital = true;
 
                 // Act
@@ -635,7 +635,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string answerValue2 = "100";
                 Guid autoGroupId = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupId, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneRosterGroup(groupId: autoGroupId, responsibleId: responsibleId);
 
                 // act
                 questionnaire.NewAddQuestion(
@@ -834,7 +834,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string answerValue2 = "100";
                 Guid autoGroupId = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupId, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneRosterGroup(groupId: autoGroupId, responsibleId: responsibleId);
 
                 // act
                 questionnaire.NewAddQuestion(
@@ -919,7 +919,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // arrange
                 Guid autoGroupId = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(groupId: autoGroupId, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneRosterGroup(groupId: autoGroupId, responsibleId: responsibleId);
 
                 // act
                 questionnaire.NewAddQuestion(
@@ -1055,7 +1055,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var autoPropagateGroupId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
             var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
-            Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey: autoPropagateGroupId, secondGroup: groupId, responsibleId: Guid.NewGuid());
+            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(autoGroupPublicKey: autoPropagateGroupId, secondGroup: groupId, responsibleId: Guid.NewGuid());
             // act
             TestDelegate act = () => questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
                                          false,

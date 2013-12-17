@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
     {
         public DateTime AnswerTime { get; private set; }
 
-        protected AnswerQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector, DateTime answerTime)
+        protected AnswerQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime)
             : base(interviewId, userId, questionId, rosterVector)
         {
             this.AnswerTime = answerTime;

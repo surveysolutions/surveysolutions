@@ -85,6 +85,19 @@ namespace Main.Core.Documents
             get { return null; }
         }
 
+        public RosterSizeSourceType RosterSizeSource
+        {
+            get { return RosterSizeSourceType.Question; }
+        }
+
+        public string[] RosterFixedTitles {
+            get { return new string[0]; }
+        }
+
+        public Guid? RosterTitleQuestionId {
+            get { return null; }
+        }
+
         public List<Guid> SharedPersons { get; set; }
 
         public long LastEventSequence { get; set; }

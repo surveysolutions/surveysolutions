@@ -58,7 +58,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
 
         protected override LinkedAnswerViewModel FindAnswerInModelByRadioButtonTag(string tag)
         {
-            var vector = tag.Split(Separator).Select(int.Parse).ToArray();
+            var vector = tag.Split(Separator).Select(decimal.Parse).ToArray();
             return this.Answers.FirstOrDefault(
               a => LinkedQuestionViewModel.IsVectorsEqual(a.PropagationVector, vector));
         }
@@ -67,7 +67,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
         {
             return new AnswerSingleOptionLinkedQuestionCommand(this.QuestionnairePublicKey,
                  this.Membership.CurrentUser.Id,
-                 this.Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
+                 this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow,
                  selectedAnswer.PropagationVector);
         }
 

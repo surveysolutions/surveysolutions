@@ -913,3 +913,7 @@ a.btn.btn-help {
     #details-questionnaire label.checkbox {
         cursor: pointer;
     }
+
+.add-more-space-bottom {
+    margin-bottom: 50px;
+}
