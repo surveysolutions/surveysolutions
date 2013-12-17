@@ -12,6 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
 
         bool HasQuestion(Guid questionId);
@@ -95,5 +96,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionInteger(Guid questionId);
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
+
+        bool IsQuestionHeadOfRoster(Guid questionId);
     }
 }

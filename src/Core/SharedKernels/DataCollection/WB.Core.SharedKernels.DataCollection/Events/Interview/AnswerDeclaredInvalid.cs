@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswerDeclaredInvalid : QuestionPassiveEvent
     {
-        public AnswerDeclaredInvalid(Guid questionId, int[] propagationVector)
+        public AnswerDeclaredInvalid(Guid questionId, decimal[] propagationVector)
             : base(questionId, propagationVector) {}
     }
 }

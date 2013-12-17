@@ -50,7 +50,6 @@
         /// Gets or sets the user name.
         /// </summary>
         [Display(Name = "User name", Order = 1)]
-        [ReadOnly(true)]
         public string UserName { get; set; }
 
         #endregion
