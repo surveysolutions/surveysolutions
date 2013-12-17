@@ -210,4 +210,7 @@
   <data name="WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion" xml:space="preserve">
     <value>Group rostered by categorical multy answers question could not have roster title question</value>
   </data>
+  <data name="WB0037_GroupRosteredByFixedTitlesHaveEmptyTitles" xml:space="preserve">
+    <value>Group rostered by fixed titles could not have empty titles</value>
+  </data>
 </root>
