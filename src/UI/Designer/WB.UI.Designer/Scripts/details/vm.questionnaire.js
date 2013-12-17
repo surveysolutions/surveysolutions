@@ -112,7 +112,8 @@
                     return;
                 }
                 group.isSelected(true);
-                group.integerQuestions(datacontext.questions.getAllIntegerQuestionsForSelect());
+                group.allowedQuestions(datacontext.questions.getAllAllowedQuestionsForSelect());
+                group.rosterTitlesForNumericRosterSizeQuestion(datacontext.questions.getRosterTitleQuestionsForSelect(group.rosterSizeQuestion()));
                 selectedGroup(group);
                 openDetails("show-group");
             },
@@ -518,6 +519,7 @@
                                 target.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
                                 target.fillChildren();
                             }
+                            item.parent(target);
                         },
                         error: function(d) {
                             _.each(datacontext.groups.getAllLocal(), function(group) {

@@ -22,10 +22,39 @@
                         </label>
                     </div>
                 </div>
-                <div class="control-group" data-bind="validationElement: rosterSizeQuestion, visible: isRoster">
+                <div class="control-group" data-bind="visible: isRoster">
+                    <div class="controls">
+                        <label class="control-label">Roster size source</label>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-small" data-value="Question" data-bind="checkedButtons: rosterSizeSource">Question</button>
+                            <button type="button" class="btn btn-small" data-value="FixedTitles" data-bind="checkedButtons: rosterSizeSource">Fixed Titles</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group" data-bind="validationElement: rosterSizeQuestion, visible: isRosterSizeSourceQuestion">
                     <div class="controls">
                         <label class="control-label">Roster size</label>
-                         <select class="input-block-level" data-bind="options: integerQuestions, optionsValue: 'questionId', optionsText: 'title', value: rosterSizeQuestion, optionsCaption: 'Choose integer question'"></select>
+                        <select class="input-block-level" data-bind="options: allowedQuestions, optionsValue: 'questionId', optionsText: 'title', value: rosterSizeQuestion, optionsCaption: 'Choose roster size question'"></select>
+                        <blockquote class="text-info" data-bind="visible: isCategoricalRosterSizeQuestion">*Option names to be used as titles of roster</blockquote>
+                    </div>
+                </div>
+                <div class="control-group" data-bind="validationElement: rosterTitleQuestion, visible: isNumericRosterSizeQuestion">
+                    <div class="controls">
+                        <label class="control-label">Roster title should be taken from question</label>
+                        <select class="input-block-level" data-bind="options: rosterTitlesForNumericRosterSizeQuestion, optionsValue: 'questionId', optionsText: 'title', value: rosterTitleQuestion, optionsCaption: 'Choose roster title question'"></select>
+                    </div>
+                </div>
+                <div class="control-group" data-bind="validationElement: rosterFixedTitles, visible: isRosterSizeSourceFixedTitles">
+                    <div class="controls">
+                        <label>
+                    <a href="#" class="btn btn-info btn btn-help"
+                        data-content="Each line - it is new title for the roster"
+                        data-original-title="Fixed roster titles"
+                        data-html="true"
+                        data-trigger="hover"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Fixed roster titles</label>
+                        <textarea rows="5" data-bind="autoGrowArea: rosterFixedTitles, valueUpdate: 'afterkeydown'" class="span8"></textarea>
                     </div>
                 </div>
                 <!-- /ko -->
@@ -43,7 +72,7 @@
                         data-placement="right"
                         data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
 
-                <div class="control-group" data-bind="validationElement: condition">
+                <div class="control-group add-more-space-bottom" data-bind="validationElement: condition">
                     <div class="controls">
                         <textarea rows="1" data-bind="autoGrowArea: condition, valueUpdate: 'afterkeydown'" class="input-block-level"></textarea>
                         @* <div class="editor-container" data-bind="validationElement: condition">

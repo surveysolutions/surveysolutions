@@ -16,10 +16,17 @@
                 self.template = "GroupView"; // inner html template name
 
                 self.isRoster = ko.observable(false);
+                self.rosterSizeSource = ko.observable(config.rosterSizeSourceTypes.Question);
+                self.isRosterSizeSourceQuestion = ko.computed(function () {
+                    return self.isRoster() && (self.rosterSizeSource() == config.rosterSizeSourceTypes.Question);
+                });
+                self.isRosterSizeSourceFixedTitles = ko.computed(function () {
+                    return self.isRoster() && (self.rosterSizeSource() == config.rosterSizeSourceTypes.FixedTitles);
+                });
                 self.rosterSizeQuestion = ko.observable().extend({
                     required: {
                         onlyIf: function () {
-                            if (self.isRoster()) {
+                            if (self.isRosterSizeSourceQuestion()) {
                                 self.rosterSizeQuestion.valueHasMutated();
                                 return true;
                             }
@@ -27,8 +34,32 @@
                         }
                     }
                 });
+                self.rosterFixedTitles = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () {
+                            if (self.isRosterSizeSourceFixedTitles()) {
+                                self.rosterFixedTitles.valueHasMutated();
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                });
                 
-                self.integerQuestions = ko.observableArray([]);
+                self.allowedQuestions = ko.observableArray([]);
+                self.rosterTitlesForNumericRosterSizeQuestion = ko.observableArray([]);
+                
+                var selectedRosterSizeQuestion = ko.computed(function () {
+                    return _.find(self.allowedQuestions(), function(item) { return !_.isUndefined(self.rosterSizeQuestion()) && item.questionId == self.rosterSizeQuestion(); });
+                });
+                self.isNumericRosterSizeQuestion = ko.computed(function () {
+                    return !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isNumeric;
+                });
+                self.isCategoricalRosterSizeQuestion = ko.computed(function () {
+                    return !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isCategorical;
+                });
+
+                self.rosterTitleQuestion = ko.observable();
 
                 self.level = ko.observable();
                 self.description = ko.observable('');
@@ -54,7 +85,7 @@
                 self.cloneSource = ko.observable();
                 self.isSelected = ko.observable();
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition, self.isRoster, self.rosterSizeQuestion]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition, self.isRoster, self.rosterSizeQuestion, self.rosterSizeSource, self.rosterFixedTitles, self.rosterTitleQuestion]);
                 self.dirtyFlag().reset();
                 
                 self.errors = ko.validation.group(self);
@@ -139,6 +170,9 @@
                     item.isClone(true);
                     item.isRoster(this.isRoster());
                     item.rosterSizeQuestion(this.rosterSizeQuestion());
+                    item.rosterSizeSource(this.rosterSizeSource());
+                    item.rosterFixedTitles(this.rosterFixedTitles());
+                    item.rosterTitleQuestion(this.rosterTitleQuestion());
 
                     item.childrenID(_.map(this.childrenID(), function (child) {
                         var clonedItem;
@@ -188,6 +222,9 @@
                 this.condition(data.condition);
                 this.isRoster(data.isRoster);
                 this.rosterSizeQuestion(data.rosterSizeQuestion);
+                this.rosterSizeSource(data.rosterSizeSource);
+                this.rosterFixedTitles(data.rosterFixedTitles);
+                this.rosterTitleQuestion(data.rosterTitleQuestion);
 
                 //save off the latest data for later use
                 this.cache.latestData = data;

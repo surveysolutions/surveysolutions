@@ -397,6 +397,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
+        public IEnumerable<Guid> GetFixedRosterGroups()
+        {
+            return this.GetAllGroups().Where(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.FixedTitles).Select(x => x.PublicKey);
+        }
+
         public int GetRosterLevelForQuestion(Guid questionId)
         {
             this.ThrowIfQuestionDoesNotExist(questionId);
@@ -521,7 +526,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
             if (numericQuestion.IsInteger)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be real.", questionId));
+            
             return numericQuestion.CountOfDecimalPlaces;
+        }
+
+        public bool IsQuestionHeadOfRoster(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            
+            return question.Capital;
+        }
+
+        public IEnumerable<string> GetFixedRosterTitles(Guid groupId)
+        {
+            var group = this.GetGroup(groupId);
+            if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
+            {
+                return Enumerable.Empty<string>();
+            }
+            return group.RosterFixedTitles;
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
