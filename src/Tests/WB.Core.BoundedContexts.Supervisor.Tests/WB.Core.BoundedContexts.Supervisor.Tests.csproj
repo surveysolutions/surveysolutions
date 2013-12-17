@@ -60,6 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\InterviewEventHandlerFunctionalTestContext.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_add.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_removed.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowAdded_event_recived.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
