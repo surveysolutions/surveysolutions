@@ -292,6 +292,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.rosterGroupInstanceCounts[rosterGroupKey].Remove(@event.RosterInstanceId);
         }
 
+
+        private void Apply(RosterTitleChanged @event)
+        {
+            
+        }
+
         private void Apply(InterviewStatusChanged @event)
         {
             this.status = @event.Status;
@@ -673,12 +679,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,groupsToBeEnabled, questionsToBeEnabled, out answersDeclaredValid, out answersDeclaredInvalid);
             
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
-
+            
             /*if (questionnaire.IsQuestionHeadOfRoster(questionId))
             {
-                this.ApplyEvent(new RosterTitleChanged(questionId, rosterVector, answer));
-            }*/
-
+                this.ApplyEvent(new RosterTitleChanged(userId, questionId, rosterVector, answer));
+            }
+*/
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
