@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("will be unignored after support in Interview")]
     internal class when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size : InterviewTestsContext
     {
         Establish context = () =>
