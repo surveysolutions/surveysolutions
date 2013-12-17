@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -17,8 +18,24 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         protected static Capi.Views.InterviewDetails.InterviewViewModel CreateInterviewViewModel(QuestionnaireDocument template,
             QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interviewSynchronizationDto)
         {
-            return new Capi.Views.InterviewDetails.InterviewViewModel(Guid.NewGuid(), template, rosterStructure,
+            var result = new Capi.Views.InterviewDetails.InterviewViewModel(Guid.NewGuid(), template, rosterStructure,
                 interviewSynchronizationDto);
+
+            foreach (var questionViewModel in result.FindQuestion(q=>true))
+            {
+                questionViewModel.ShouldAlwaysRaiseInpcOnUserInterfaceThread(false);
+            }
+
+            foreach (var screen in result.Screens.Values)
+            {
+                var mvxNotifyPropertyChanged = screen as MvxNotifyPropertyChanged;
+                if (mvxNotifyPropertyChanged != null)
+                {
+                    mvxNotifyPropertyChanged.ShouldAlwaysRaiseInpcOnUserInterfaceThread(false);
+                }
+            }
+            
+            return result;
         }
 
         protected static InterviewSynchronizationDto CreateInterviewSynchronizationDto(AnsweredQuestionSynchronizationDto[] answers,
