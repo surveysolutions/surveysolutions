@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public Guid GetScopeOfPropagatedScreen(Guid itemKey)
         {
-            var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.Contains(itemKey));
+            var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.RosterGroupsId.Contains(itemKey));
             if (itemScope.Equals(default(KeyValuePair<Guid, HashSet<Guid>>)))
                 throw new ArgumentException("item is absent in any scope");
             return itemScope.Key;
@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var propagationScopeId in this.rosterStructure.RosterScopes.Keys)
             {
-                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].ToArray();
+                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].RosterGroupsId.ToArray();
 
                 for (int i = 0; i < screenSiblingByPropagationScopeIds.Length; i++)
                 {
@@ -539,7 +539,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void UpdatePropagationScopeTitleForVector(Guid scopeId, decimal[] propagationVector)
         {
-            var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId];
+            var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId].RosterGroupsId;
 
             var screensSiblingByPropagationScopeWithVector =
                 siblingsByPropagationScopeIds.Select(

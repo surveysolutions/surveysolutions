@@ -116,6 +116,9 @@
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="UserARTests.cs" />
+    <Compile Include="Views\QuestionnaireRosterStructureTests\QuestionnaireRosterStructureTestContext.cs" />
+    <Compile Include="Views\QuestionnaireRosterStructureTests\when_questionnarie_has_capital_question_inside_autopropagate_style_roster.cs" />
+    <Compile Include="Views\QuestionnaireRosterStructureTests\when_questionnarie_has_roster_title_question_inside_roster_group.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
