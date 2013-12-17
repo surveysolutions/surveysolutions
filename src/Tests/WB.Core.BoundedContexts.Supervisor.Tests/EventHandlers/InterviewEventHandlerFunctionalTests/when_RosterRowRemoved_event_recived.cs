@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
 
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(new RosterRowDeleted(rosterGroupId, new decimal[0], 0)));
+                CreatePublishableEvent(new RosterRowRemoved(rosterGroupId, new decimal[0], 0)));
 
         It should_interview_levels_count_be_equal_to_0 = () =>
             viewState.Document.Levels.Keys.Count.ShouldEqual(0);
