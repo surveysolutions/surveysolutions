@@ -312,5 +312,32 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by fixed titles could not have roster title question.
+        /// </summary>
+        internal static string WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion {
+            get {
+                return ResourceManager.GetString("WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by question has invalid roster title question.
+        /// </summary>
+        internal static string WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion {
+            get {
+                return ResourceManager.GetString("WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by categorical multy answers question could not have roster title question.
+        /// </summary>
+        internal static string WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion {
+            get {
+                return ResourceManager.GetString("WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion", resourceCulture);
+            }
+        }
     }
 }

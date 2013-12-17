@@ -201,4 +201,13 @@
   <data name="WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
     <value>Group rostered by fixed titles could not have roster size question</value>
   </data>
+  <data name="WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Group rostered by fixed titles could not have roster title question</value>
+  </data>
+  <data name="WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+    <value>Group rostered by question has invalid roster title question</value>
+  </data>
+  <data name="WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Group rostered by categorical multy answers question could not have roster title question</value>
+  </data>
 </root>

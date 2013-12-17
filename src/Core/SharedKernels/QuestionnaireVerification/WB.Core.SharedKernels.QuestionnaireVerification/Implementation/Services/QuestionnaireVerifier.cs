@@ -74,6 +74,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(HeadQuestionCantBeInsideOfNonRoster, "WB0031", VerificationMessages.WB0031_HeadQuestionCantBeInsideOfNonRoster),
                     Verifier<IGroup>(GroupRosteredByQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupRosteredByQuestionHaveFixedTitles),
                     Verifier<IGroup>(GroupRosteredByFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion),
+                    Verifier<IGroup>(GroupRosteredByFixedTitlesHaveRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion),
+                    Verifier<IGroup>(GroupRosteredByQuestionHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion),
+                    Verifier<IGroup>(GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
@@ -147,7 +150,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool GroupRosteredByQuestionHasNoRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
         {
-            return IsRosterGroup(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
+            return IsRosterByQuestion(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
         }
 
         private static bool GroupRosteredByQuestionHasInvalidRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
@@ -161,12 +164,51 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool GroupRosteredByQuestionHaveFixedTitles(IGroup group)
         {
-            return IsRosterByQuestion(group) && group.RosterFixedTitles != null;
+            return IsRosterByQuestion(group) && group.RosterFixedTitles != null && group.RosterFixedTitles.Any();
         }
 
         private static bool GroupRosteredByFixedTitlesHaveRosterSizeQuestion(IGroup group)
         {
             return IsRosterByFixedTitles(group) && group.RosterSizeQuestionId.HasValue;
+        }
+
+        private static bool GroupRosteredByFixedTitlesHaveRosterTitleQuestion(IGroup group)
+        {
+            return IsRosterByFixedTitles(group) && group.RosterTitleQuestionId.HasValue;
+        }
+
+        private static bool GroupRosteredByQuestionHasInvalidRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            if (!IsRosterByQuestion(group))
+                return false;
+            if (!IsNumericRosterSizeQuestion(GetRosterSizeQuestionByRosterGroup(group, questionnaire)))
+                return false;
+            if (!group.RosterTitleQuestionId.HasValue)
+                return false;
+
+            var rosterTitleQuestion = questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == group.RosterTitleQuestionId.Value);
+            if (rosterTitleQuestion == null)
+                return true;
+
+            var groupsRosteredByRosterSizeQuestion =
+                questionnaire.Find<IGroup>(
+                    x => x.RosterSizeQuestionId.HasValue && x.RosterSizeQuestionId.Value == group.RosterSizeQuestionId.Value)
+                    .Select(x => x.PublicKey);
+
+            var parentForRosterTitleQuestion = questionnaire.GetParentOfQuestion(rosterTitleQuestion.PublicKey);
+            if (parentForRosterTitleQuestion == null)
+                return true;
+
+            return !groupsRosteredByRosterSizeQuestion.Contains(parentForRosterTitleQuestion.PublicKey);
+        }
+
+        private static bool GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            if (!IsRosterByQuestion(group))
+                return false;
+            if (!IsCategoricalRosterSizeQuestion(GetRosterSizeQuestionByRosterGroup(group, questionnaire)))
+                return false;
+            return group.RosterTitleQuestionId.HasValue;
         }
 
         private static bool RosterSizeQuestionCannotBeInsideAnyRosterGroup(IQuestion question, QuestionnaireDocument questionnaire)
@@ -197,15 +239,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool IsQuestionAllowedToBeRosterSize(IQuestion question)
         {
-            var numericQuestion = question as NumericQuestion;
-            if (numericQuestion != null)
-                return numericQuestion.IsInteger;
+            return IsNumericRosterSizeQuestion(question) || IsCategoricalRosterSizeQuestion(question);
+        }
 
+        private static bool IsNumericRosterSizeQuestion(IQuestion question)
+        {
+            var numericQuestion = question as NumericQuestion;
+            return numericQuestion != null && numericQuestion.IsInteger;
+        }
+
+        private static bool IsCategoricalRosterSizeQuestion(IQuestion question)
+        {
             var multiOptionQuestion = question as MultyOptionsQuestion;
-            if (multiOptionQuestion != null)
-                return !multiOptionQuestion.LinkedToQuestionId.HasValue;
-            
-            return false;
+            return multiOptionQuestion != null && !multiOptionQuestion.LinkedToQuestionId.HasValue;
         }
 
         private static bool HeadQuestionCantBeInsideOfNonRoster(IQuestion question, QuestionnaireDocument questionnaire)
@@ -566,12 +612,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool IsRosterByQuestion(IGroup group)
         {
-            return group.IsRoster && (group.RosterSizeSource == RosterSizeSourceType.Question) && group.RosterSizeQuestionId.HasValue;
+            return group.IsRoster && (group.RosterSizeSource == RosterSizeSourceType.Question);
         }
 
         private static bool IsRosterByFixedTitles(IGroup group)
         {
-            return group.IsRoster && (group.RosterSizeSource == RosterSizeSourceType.FixedTitles) && group.RosterFixedTitles.Any();
+            return group.IsRoster && (group.RosterSizeSource == RosterSizeSourceType.FixedTitles);
         }
 
         private static bool IsRosterSizeQuestion(IQuestion question, QuestionnaireDocument questionnaire)
@@ -595,9 +641,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)
         {
-            return IsRosterByQuestion(group)
-                ? questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == group.RosterSizeQuestionId.Value)
-                : null;
+            return
+                questionnaire.FirstOrDefault<IQuestion>(
+                    question => group.RosterSizeQuestionId.HasValue && question.PublicKey == group.RosterSizeQuestionId.Value);
         }
 
         private static IEnumerable<IGroup> GetAllParentGroupsForQuestion(IQuestion question, QuestionnaireDocument document)
