@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
 
         public IEnumerable<InterviewItemId> Breadcrumbs { get; protected set; }
-
+        
 
         protected void UpdateCounters()
         {

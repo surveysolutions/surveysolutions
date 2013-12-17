@@ -106,11 +106,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster group has no roster size question..
+        ///   Looks up a localized string similar to Group rostered by question has no roster size question..
         /// </summary>
-        internal static string WB0009_RosterGroupHasNoRosterSizeQuestion {
+        internal static string WB0009_GroupRosteredByQuestionHasNoRosterSizeQuestion {
             get {
-                return ResourceManager.GetString("WB0009_RosterGroupHasNoRosterSizeQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0009_GroupRosteredByQuestionHasNoRosterSizeQuestion", resourceCulture);
             }
         }
         
@@ -135,9 +135,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Linked question references question not under roster group..
         /// </summary>
-        internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup {
+        internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
-                return ResourceManager.GetString("WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup", resourceCulture);
+                return ResourceManager.GetString("WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup", resourceCulture);
             }
         }
         
@@ -215,20 +215,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only numeric question can be used as roster size question for group.
+        ///   Looks up a localized string similar to Group rostered by question can be used as roster size question only numeric or categorical with multiple answers question..
         /// </summary>
-        internal static string WB0023_RosterGroupHasNotNumericRosterSizeQuestion {
+        internal static string WB0023_GroupRosteredByQuestionHasInvalidRosterSizeQuestion {
             get {
-                return ResourceManager.GetString("WB0023_RosterGroupHasNotNumericRosterSizeQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0023_GroupRosteredByQuestionHasInvalidRosterSizeQuestion", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Roster size question cannot be inside any roster group.
         /// </summary>
-        internal static string WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup {
+        internal static string WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup {
             get {
-                return ResourceManager.GetString("WB0024_RosterSizeQuestionCannotBeInnsideAnyRosterGroup", resourceCulture);
+                return ResourceManager.GetString("WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup", resourceCulture);
             }
         }
         
@@ -242,11 +242,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max value for roster size question could be in range [1, 16].
+        ///   Looks up a localized string similar to Max value for roster size question could be in range [1, 20].
         /// </summary>
-        internal static string WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16 {
+        internal static string WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20 {
             get {
-                return ResourceManager.GetString("WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And16", resourceCulture);
+                return ResourceManager.GetString("WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20", resourceCulture);
             }
         }
         
@@ -292,6 +292,60 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         internal static string WB0031_HeadQuestionCantBeInsideOfNonRoster {
             get {
                 return ResourceManager.GetString("WB0031_HeadQuestionCantBeInsideOfNonRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by question could not have fixed titles.
+        /// </summary>
+        internal static string WB0032_GroupRosteredByQuestionHaveFixedTitles {
+            get {
+                return ResourceManager.GetString("WB0032_GroupRosteredByQuestionHaveFixedTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by fixed titles could not have roster size question.
+        /// </summary>
+        internal static string WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion {
+            get {
+                return ResourceManager.GetString("WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by fixed titles could not have roster title question.
+        /// </summary>
+        internal static string WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion {
+            get {
+                return ResourceManager.GetString("WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by question has invalid roster title question.
+        /// </summary>
+        internal static string WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion {
+            get {
+                return ResourceManager.GetString("WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by categorical multy answers question could not have roster title question.
+        /// </summary>
+        internal static string WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion {
+            get {
+                return ResourceManager.GetString("WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group rostered by fixed titles could not have empty titles.
+        /// </summary>
+        internal static string WB0037_GroupRosteredByFixedTitlesHaveEmptyTitles {
+            get {
+                return ResourceManager.GetString("WB0037_GroupRosteredByFixedTitlesHaveEmptyTitles", resourceCulture);
             }
         }
     }

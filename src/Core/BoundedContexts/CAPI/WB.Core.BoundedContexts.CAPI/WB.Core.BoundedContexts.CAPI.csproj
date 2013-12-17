@@ -80,6 +80,7 @@
     <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
     <Compile Include="IAuthentication.cs" />
     <Compile Include="ModelUtils\JsonUtils.cs" />
+    <Compile Include="ModelUtils\QuestionUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InterviewDetails\AnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\CommentDocument.cs" />
