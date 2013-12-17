@@ -3,12 +3,12 @@
     using System;
     using Base;
 
-    public class RosterTitleChanged : QuestionPassiveEvent
+    public class RosterTitleChanged : QuestionActiveEvent
     {
         public string RosterTitle { set; get; }
 
-        public RosterTitleChanged(Guid questionId, decimal[] propagationVector, string rosterTitle)
-            : base(questionId, propagationVector)
+        public RosterTitleChanged(Guid userId, Guid questionId, decimal[] propagationVector, string rosterTitle)
+            : base(userId, questionId, propagationVector)
         {
             this.RosterTitle = rosterTitle;
         }
