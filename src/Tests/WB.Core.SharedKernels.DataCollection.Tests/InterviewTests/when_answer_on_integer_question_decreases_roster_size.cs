@@ -62,8 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
            interview.AnswerNumericIntegerQuestion(userId, questionWhichDecreasesRosterSizeId, new decimal[] { }, DateTime.Now, 0);
 
-        It should_raise_RosterRowDeleted_event = () =>
-          eventContext.ShouldContainEvent<RosterRowDeleted>(@event
+        It should_raise_RosterRowRemoved_event = () =>
+          eventContext.ShouldContainEvent<RosterRowRemoved>(@event
               => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0);
 
         It should_not_raise_RosterRowAdded_event = () =>

@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<InterviewSynchronized>,
         IEventHandler<GroupPropagated>,
         IEventHandler<RosterRowAdded>,
-        IEventHandler<RosterRowDeleted>,
+        IEventHandler<RosterRowRemoved>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<AnswerCommented>,
@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             doc.AddPropagateScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex);
         }
 
-        public void Handle(IPublishedEvent<RosterRowDeleted> evnt)
+        public void Handle(IPublishedEvent<RosterRowRemoved> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.RemovePropagatedScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
