@@ -45,8 +45,28 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
+        [Obsolete("please use RosterGroupInstances")]
         public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get; set; }
-        public Dictionary<InterviewItemId, Dictionary<decimal, int?>> RosterGroupInstances { get; set; }
+        public Dictionary<InterviewItemId, Dictionary<decimal, int?>> RosterGroupInstances {
+            get
+            {
+                if (rosterGroupInstances == null && PropagatedGroupInstanceCounts != null)
+                {
+                    RosterGroupInstances = new Dictionary<InterviewItemId, Dictionary<decimal, int?>>();
+                    foreach (var propagatedGroupInstanceCount in PropagatedGroupInstanceCounts)
+                    {
+                        RosterGroupInstances[propagatedGroupInstanceCount.Key] = new Dictionary<decimal, int?>();
+                        for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
+                        {
+                            RosterGroupInstances[propagatedGroupInstanceCount.Key][i] = null;
+                        }
+                    }
+                }
+                return rosterGroupInstances;
+            }
+            set { rosterGroupInstances = value; }
+        }
+        private Dictionary<InterviewItemId, Dictionary<decimal, int?>> rosterGroupInstances;
         public bool WasCompleted { get; set; }
     }
 }

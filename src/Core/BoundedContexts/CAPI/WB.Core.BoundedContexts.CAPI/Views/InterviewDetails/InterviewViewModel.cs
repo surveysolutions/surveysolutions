@@ -208,27 +208,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void PropagateGroups(InterviewSynchronizationDto interview)
         {
-            if (interview.PropagatedGroupInstanceCounts != null)
+            foreach (var rosterGroupInstance in interview.RosterGroupInstances)
             {
-                foreach (var propagatedGroupInstanceCount in interview.PropagatedGroupInstanceCounts)
+                foreach (var rosterInstance in rosterGroupInstance.Value)
                 {
-                    for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
-                    {
-                        this.AddPropagateScreen(propagatedGroupInstanceCount.Key.Id,
-                            propagatedGroupInstanceCount.Key.InterviewItemPropagationVector, i, null);
-                    }
-                }
-            }
-
-            if (interview.RosterGroupInstances != null)
-            {
-                foreach (var rosterGroupInstance in interview.RosterGroupInstances)
-                {
-                    foreach (var rosterInstance in rosterGroupInstance.Value)
-                    {
-                        this.AddPropagateScreen(rosterGroupInstance.Key.Id,
-                            rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.Key, rosterInstance.Value);
-                    }
+                    this.AddPropagateScreen(rosterGroupInstance.Key.Id,
+                        rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.Key, rosterInstance.Value);
                 }
             }
         }
