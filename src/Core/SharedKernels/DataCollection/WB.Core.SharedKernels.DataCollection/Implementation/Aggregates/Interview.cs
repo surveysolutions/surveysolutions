@@ -99,21 +99,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.invalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
         }
 
-        private Dictionary<string, HashSet<decimal>> BuildRosterGroupInstancesFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
+        private Dictionary<string, HashSet<decimal>> BuildRosterGroupInstancesFromSynchronizationDto(
+            InterviewSynchronizationDto synchronizationDto)
         {
-            if (synchronizationDto.RosterGroupInstances != null)
-            {
-                return synchronizationDto.RosterGroupInstances.ToDictionary(
-                    pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
-                    pair => new HashSet<decimal>(pair.Value.Keys));
-            }
-            if (synchronizationDto.PropagatedGroupInstanceCounts != null)
-            {
-                return synchronizationDto.PropagatedGroupInstanceCounts.ToDictionary(
-                  pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
-                  pair => CreateHashSetForRosterFromCount(pair.Value));
-            }
-            return null;
+            return synchronizationDto.RosterGroupInstances.ToDictionary(
+                pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
+                pair => new HashSet<decimal>(pair.Value.Keys));
         }
 
         private HashSet<decimal> CreateHashSetForRosterFromCount(int count)
