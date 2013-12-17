@@ -1944,7 +1944,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException("List of fixed roster titles could not be empty");
             }
 
-            if (rosterFixedTitles.Any(string.IsNullOrEmpty))
+            if (rosterFixedTitles.Any(string.IsNullOrWhiteSpace))
             {
                 throw new QuestionnaireException("Fixed roster titles could not have empty titles");
             }
