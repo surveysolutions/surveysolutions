@@ -114,6 +114,7 @@
 
         ExpressionContainsNotExistingQuestionReference,
 
-        QuestionOrGroupDependOnAnotherQuestion
+        QuestionOrGroupDependOnAnotherQuestion,
+        QuestionUsedAsRosterTitleOfOtherGroup
     }
 }
