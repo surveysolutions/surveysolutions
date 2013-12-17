@@ -7,9 +7,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class RosterRowDeleted: InterviewPassiveEvent
+    public class RosterRowRemoved: InterviewPassiveEvent
     {
-        public RosterRowDeleted(Guid groupId, decimal[] outerRosterVector, decimal rosterInstanceId)
+        public RosterRowRemoved(Guid groupId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             this.GroupId = groupId;
             this.OuterRosterVector = outerRosterVector;
