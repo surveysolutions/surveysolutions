@@ -286,7 +286,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.rosterGroupInstanceCounts[rosterGroupKey] = rosterRowInstances;
         }
 
-        private void Apply(RosterRowDeleted @event)
+        private void Apply(RosterRowRemoved @event)
         {
             string rosterGroupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
             this.rosterGroupInstanceCounts[rosterGroupKey].Remove(@event.RosterInstanceId);
@@ -1323,7 +1323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ApplyRosterEvents(RosterCalculationData data)
         {
             data.RosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
-            data.RosterInstancesToRemove.ForEach(roster => this.ApplyEvent(new RosterRowDeleted(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId)));
+            data.RosterInstancesToRemove.ForEach(roster => this.ApplyEvent(new RosterRowRemoved(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId)));
 
             data.AnswersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
