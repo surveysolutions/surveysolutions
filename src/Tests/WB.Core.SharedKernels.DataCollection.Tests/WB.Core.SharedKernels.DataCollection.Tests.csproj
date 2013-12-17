@@ -68,6 +68,7 @@
     <Compile Include="InterviewItemIdTests\InterviewItemIdTestsContext.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
+    <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_on_the_third_level.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
     <Compile Include="InterviewTests\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
     <Compile Include="InterviewTests\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
