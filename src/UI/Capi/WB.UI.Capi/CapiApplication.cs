@@ -129,12 +129,15 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
+            bus.RegisterHandler(eventHandler, typeof(RosterRowAdded));
+            bus.RegisterHandler(eventHandler, typeof(RosterRowDeleted));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
-
+            bus.RegisterHandler(eventHandler, typeof(RosterTitleChanged));
+            
 
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
 

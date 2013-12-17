@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
 {
     public class InterviewItemIdTestsContext
     {
-        protected static InterviewItemId CreateInterviewItemId(Guid? id = null, int[] vector = null)
+        protected static InterviewItemId CreateInterviewItemId(Guid? id = null, decimal[] vector = null)
         {
-            return new InterviewItemId(id ?? Guid.NewGuid(), vector ?? new int[0]);
+            return new InterviewItemId(id ?? Guid.NewGuid(), vector ?? new decimal[0]);
         }
 
         protected static Guid InterviewItemIdInitialData

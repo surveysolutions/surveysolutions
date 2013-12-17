@@ -136,9 +136,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             if (!levelId.HasValue)
             {
-                return interview.Levels.Values.Where(level => level.ScopeIds.Contains(interview.InterviewId));
+                return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(interview.InterviewId));
             }
-            return interview.Levels.Values.Where(level => level.ScopeIds.Contains(levelId.Value));
+            return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(levelId.Value));
         }
 
         private void AddDataRecordFromInterviewLevel(List<InterviewDataExportRerord> dataRecords, InterviewLevel level,
@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             dataRecords.Add(record);
         }
 
-        private int? GetParentRecordIndex(InterviewLevel level)
+        private decimal? GetParentRecordIndex(InterviewLevel level)
         {
             if (level.RosterVector.Length < 2)
                 return null;

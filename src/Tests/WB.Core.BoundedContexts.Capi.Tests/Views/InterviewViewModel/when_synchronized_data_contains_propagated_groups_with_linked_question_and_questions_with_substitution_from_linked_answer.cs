@@ -17,86 +17,68 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 {
-    internal class when_synchronized_data_contains_propagated_groups_with_linked_question_and_questions_with_substitution_from_linked_answer
+    internal class when_synchronized_data_contains_propagated_groups_with_linked_question_and_questions_with_substitution_from_linked_answer : InterviewViewModelTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-
             propagatedGroupId = Guid.Parse("10000000000000000000000000000000");
             sourceForLinkedQuestionId = Guid.Parse("11111111111111111111111111111111");
             linkedQuestionId = Guid.Parse("22222222222222222222222222222222");
             autoPropagatedQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            questionnarie=new QuestionnaireDocument();
-            var chapter = new Group("chapter");
-            var autopropagatedQuestion = new AutoPropagateQuestion()
-            {
-                PublicKey = autoPropagatedQuestionId,
-                QuestionType = QuestionType.AutoPropagate,
-                Triggers = new List<Guid> { propagatedGroupId }
-            };
-            chapter.Children.Add(autopropagatedQuestion);
-
-            var roster = new Group() { PublicKey = propagatedGroupId, Propagated = Propagate.AutoPropagated };
-            var sourceForLinkedQuestion = new NumericQuestion()
-            {
-                PublicKey = sourceForLinkedQuestionId
-            };
-            roster.Children.Add(sourceForLinkedQuestion);
-            var linkedQuestion = new SingleQuestion()
+            var rosterGroup = new Group() { PublicKey = propagatedGroupId, Propagated = Propagate.AutoPropagated };
+            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = sourceForLinkedQuestionId });
+            rosterGroup.Children.Add(new SingleQuestion()
             {
                 PublicKey = linkedQuestionId,
                 LinkedToQuestionId = sourceForLinkedQuestionId,
                 StataExportCaption = sourceForLinkedQuestionVariableName
-            };
-            roster.Children.Add(linkedQuestion);
+            });
 
-            var questionWhichSubstitutesLinkedQuestionAnswer =
-                new TextQuestion(string.Format("subst %{0}%", sourceForLinkedQuestionVariableName)) { PublicKey = Guid.NewGuid() };
-            roster.Children.Add(questionWhichSubstitutesLinkedQuestionAnswer);
-
-            chapter.Children.Add(roster);
-            questionnarie.Children.Add(chapter);
-
-            rosterStructure = new QuestionnaireRosterStructure(questionnarie, 1);
-            interviewSynchronizationDto = new InterviewSynchronizationDto(id: Guid.NewGuid(), status: InterviewStatus.InterviewerAssigned,
-                userId: Guid.NewGuid(), questionnaireId: questionnarie.PublicKey, questionnaireVersion: 1,
-                answers: new AnsweredQuestionSynchronizationDto[]
+            questionnarie = CreateQuestionnaireDocumentWithOneChapter(
+                new AutoPropagateQuestion()
                 {
-                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId,new int[]{0},1,string.Empty ),
-                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId,new int[]{1},2,string.Empty )
+                    PublicKey = autoPropagatedQuestionId,
+                    QuestionType = QuestionType.AutoPropagate,
+                    Triggers = new List<Guid> { propagatedGroupId }
                 },
-                disabledGroups: new HashSet<InterviewItemId>(),
-                disabledQuestions: new HashSet<InterviewItemId>(), validAnsweredQuestions: new HashSet<InterviewItemId>(),
-                invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
-                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>()
+                rosterGroup);
+            rosterGroup.Children.Add(
+                new TextQuestion(string.Format("subst %{0}%", sourceForLinkedQuestionVariableName)) { PublicKey = Guid.NewGuid() });
+
+            rosterStructure = CreateQuestionnaireRosterStructure(questionnarie);
+
+            interviewSynchronizationDto = CreateInterviewSynchronizationDto(
+                answers: new[]
                 {
-                    {new InterviewItemId(propagatedGroupId, new int[0]),2 }
-                }, 
-                wasCompleted: false);
+                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 0 }, 1, string.Empty),
+                    new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 1 }, 2, string.Empty)
+                },
+                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, Dictionary<decimal, int?>>()
+                {
+                    { new InterviewItemId(propagatedGroupId, new decimal[0]), new Dictionary<decimal, int?> { { 0, null }, { 1, null } } }
+                });
         };
 
-        private Because of = () =>
-            interviewViewModel =
-                new Capi.Views.InterviewDetails.InterviewViewModel(interviewSynchronizationDto.Id, questionnarie, rosterStructure,
-                    interviewSynchronizationDto);
+        Because of = () =>
+            interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure,
+                interviewSynchronizationDto);
 
-        private It should_chapters_count_equals_1 = () =>
+        It should_chapters_count_equals_1 = () =>
             interviewViewModel.Chapters.Count.ShouldEqual(1);
 
-        private It should_roster_size_equals_2 = () =>
+        It should_roster_size_equals_2 = () =>
             interviewViewModel.Screens.Values.Count(s => s.ScreenId.Id == propagatedGroupId && !s.ScreenId.IsTopLevel()).ShouldEqual(2);
 
-        private It should_answer_on_first_question_in_first_row_of_roster_equals_to_1 = () =>
+        It should_answer_on_first_question_in_first_row_of_roster_equals_to_1 = () =>
             interviewViewModel.FindQuestion(
-                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new int[] { 0 }))
+                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new decimal[] { 0 }))
                 .FirstOrDefault()
                 .AnswerObject.ShouldEqual(1);
 
-        private It should_answer_on_first_question_in_second_row_of_roster_equals_to_2 = () =>
+        It should_answer_on_first_question_in_second_row_of_roster_equals_to_2 = () =>
             interviewViewModel.FindQuestion(
-                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new int[] { 1 }))
+                question => question.PublicKey == new InterviewItemId(sourceForLinkedQuestionId, new decimal[] { 1 }))
                 .FirstOrDefault()
                 .AnswerObject.ShouldEqual(2);
 
