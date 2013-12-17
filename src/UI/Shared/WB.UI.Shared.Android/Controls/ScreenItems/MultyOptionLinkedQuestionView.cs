@@ -83,7 +83,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             
             return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,
-                this.Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
+                this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow,
                 answered.ToArray());
         }
 

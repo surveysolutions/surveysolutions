@@ -8,25 +8,43 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         public InterviewItemId(Guid id, decimal[] propagationVector)
         {
             Id = id;
-            PropagationVector = propagationVector ?? new decimal[0];
+            interviewItemPropagationVector = propagationVector ?? new decimal[0];
+            PropagationVector = null;
         }
 
         public InterviewItemId(Guid id)
             : this(id, new decimal[0]) { }
 
         public Guid Id;
-        public decimal[] PropagationVector;
+
+        public decimal[] InterviewItemPropagationVector
+        {
+            get
+            {
+                if (interviewItemPropagationVector == null && PropagationVector != null)
+                {
+                    interviewItemPropagationVector = PropagationVector.Select(v => (decimal)v).ToArray();
+                }
+                return interviewItemPropagationVector;
+            }
+            set { interviewItemPropagationVector = value; }
+        }
+
+        private decimal[] interviewItemPropagationVector;
+
+        [Obsolete("please use QuestionPropagationVector instead")] 
+        public int[] PropagationVector;
 
         public bool CompareWithVector(decimal[] vector)
         {
-            if (PropagationVector.Length != vector.Length)
+            if (this.InterviewItemPropagationVector.Length != vector.Length)
                 return false;
-            return !this.PropagationVector.Where((t, i) => t != vector[i]).Any();
+            return !this.InterviewItemPropagationVector.Where((t, i) => t != vector[i]).Any();
         }
 
         public bool IsTopLevel()
         {
-            return this.PropagationVector.Length == 0;
+            return this.InterviewItemPropagationVector.Length == 0;
         }
 
         public override bool Equals(object obj)
@@ -43,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (x.Id != y.Id)
                 return false;
-            return x.CompareWithVector(y.PropagationVector);
+            return x.CompareWithVector(y.InterviewItemPropagationVector);
         }
 
         public static bool operator !=(InterviewItemId x, InterviewItemId y)
@@ -55,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (!IsTopLevel())
             {
-                string vector = string.Join(",", PropagationVector);
+                string vector = string.Join(",", this.InterviewItemPropagationVector);
                 return string.Format("{0},{1}", vector, Id);
             }
             return Id.ToString();
