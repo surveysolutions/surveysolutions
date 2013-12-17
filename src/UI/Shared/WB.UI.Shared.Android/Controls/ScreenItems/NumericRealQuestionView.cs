@@ -57,7 +57,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,
                 this.Model.PublicKey.Id,
-                this.Model.PublicKey.PropagationVector,
+                this.Model.PublicKey.InterviewItemPropagationVector,
                 DateTime.UtcNow, answer);
         }
     }

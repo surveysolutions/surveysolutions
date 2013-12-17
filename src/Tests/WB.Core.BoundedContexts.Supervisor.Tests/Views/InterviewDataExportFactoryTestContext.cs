@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         {
             var interview = new InterviewData();
             interview.InterviewId = Guid.NewGuid();
-            interview.Levels.Add(firstLevelkey, new InterviewLevel(interview.InterviewId, new decimal[0]));
+            interview.Levels.Add(firstLevelkey, new InterviewLevel(interview.InterviewId,null, new decimal[0]));
             return interview;
         }
 

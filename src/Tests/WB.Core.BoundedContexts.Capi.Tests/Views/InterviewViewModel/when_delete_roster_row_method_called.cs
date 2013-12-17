@@ -34,9 +34,9 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 
             interviewSynchronizationDto = CreateInterviewSynchronizationDto(
                 answers: new AnsweredQuestionSynchronizationDto[0],
-                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, List<decimal>>()
+                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, Dictionary<decimal, int?>>()
                 {
-                    { new InterviewItemId(rosterId, new decimal[0]), new List<decimal> { 0 } }
+                    { new InterviewItemId(rosterId, new decimal[0]), new Dictionary<decimal, int?> { { 0, null } } }
                 });
 
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure,
