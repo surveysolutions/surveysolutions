@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
-            rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
             rosterSizeSourceType = RosterSizeSourceType.Question;
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -29,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         private Because of = () =>
             questionnaire.UpdateGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, isRoster: true,
-                rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId);
+                rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         Cleanup stuff = () =>
         {
@@ -62,16 +61,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_raise_RosterChanged_event_with_RosterFixedTitles_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterFixedTitles.ShouldBeNull();
 
-        It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_rosterTitleQuestionId = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
-                .RosterTitleQuestionId.ShouldEqual(rosterTitleQuestionId);
+        It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
+            eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid rosterSizeQuestionId;
-        private static Guid rosterTitleQuestionId;
         private static RosterSizeSourceType rosterSizeSourceType;
     }
 }
