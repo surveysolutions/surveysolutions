@@ -555,7 +555,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             getRosterInstanceIds))
                     .ToList();
 
-            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
+            fixedRosterCalculationDatas.ForEach(data => this.ApplyRosterEvents(data));
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
