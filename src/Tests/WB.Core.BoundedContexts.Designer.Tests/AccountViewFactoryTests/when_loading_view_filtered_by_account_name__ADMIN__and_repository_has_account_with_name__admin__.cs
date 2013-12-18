@@ -17,11 +17,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountViewFactoryTests
 
             var accountsRepositoryMock = new Mock<IQueryableReadSideRepositoryReader<AccountDocument>>();
 
-            var repositoryDocuments = new[] { CreateAccountDocument(userName: "admin") };
+            var repositoryDocuments = new[] { CreateAccountDocument(userName: "admin") }.AsQueryable();
 
             accountsRepositoryMock
-                .Setup(x => x.Query<AccountView>(it.IsAny<Func<IQueryable<AccountDocument>, AccountView>>()))
-                .Returns<Func<IQueryable<AccountDocument>, AccountView>>(func => func.Invoke(repositoryDocuments.AsQueryable()));
+                .Setup(x => x.Query<IQueryable<AccountDocument>>(it.IsAny<Func<IQueryable<AccountDocument>, IQueryable<AccountDocument>>>()))
+                .Returns(repositoryDocuments);
 
             accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepositoryMock.Object);
         };
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountViewFactoryTests
             filteredAccount = accountFactory.Load(inputWithFilterByAccountName);
 
         It should_find_one_account = () =>
-            filteredAccount.ShouldNotBeNull();
+            filteredAccount.ShouldNotBeNull(); 
 
         private static AccountView filteredAccount;
         private static AccountViewInputModel inputWithFilterByAccountName;
