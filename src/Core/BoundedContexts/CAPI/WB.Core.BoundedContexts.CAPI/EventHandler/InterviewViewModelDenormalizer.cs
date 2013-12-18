@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<InterviewForTestingCreated>,
-        IEventHandler<RosterTitleChanged>
+        IEventHandler<RosterRowTitleChanged>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -249,7 +249,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             doc.RemovePropagatedScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
         }
 
-        public void Handle(IPublishedEvent<RosterTitleChanged> evnt)
+        public void Handle(IPublishedEvent<RosterRowTitleChanged> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
 
