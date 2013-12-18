@@ -63,7 +63,12 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
                 RosterScopes.Add(rosterSizeQuestion.PublicKey, rosterDescription);
             }
 
-            fixedRosterGroups.ForEach(fixedRoster => this.RosterScopes.Add(fixedRoster.PublicKey, new HashSet<Guid>(new[] { fixedRoster.PublicKey })));
+            foreach (var fixedRosterGroup in fixedRosterGroups)
+            {
+                var rosterDescription = new RosterDescription(fixedRosterGroup.PublicKey, null);
+                rosterDescription.RosterGroupsId.Add(fixedRosterGroup.PublicKey);
+                this.RosterScopes[fixedRosterGroup.PublicKey] = rosterDescription;
+            }
         }
 
         private Guid? GetRosterTitleQuestionId(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
