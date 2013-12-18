@@ -1615,9 +1615,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .Range(0, rosterSize)
                     .Select(rosterIndex => (decimal) rosterIndex));
 
+            return this.CalculateRosterData(rosterIds, rosterVector, rosterInstanceIds, questionnaire, getAnswer, getRosterInstanceIds);
+        }
+
+        private RosterCalculationData CalculateRosterData(
+            List<Guid> rosterIds, decimal[] rosterVector, HashSet<decimal> rosterInstanceIds, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds)
+        {
             List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToRemove;
-            List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled,
-                initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
+            List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
+                initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled,
+                initializedQuestionsToBeInvalid;
 
             this.CalculateChangesInRosterInstances(rosterIds, rosterVector, rosterInstanceIds,
                 out rosterInstancesToAdd, out rosterInstancesToRemove);
@@ -1630,13 +1638,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(
                 rosterIds, rosterInstanceIdsBeingRemoved, outerRosterVector: rosterVector, questionnaire: questionnaire);
 
-            this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
+            this.DetermineCustomEnablementStateOfGroupsInitializedByAddedRosterInstances(
                 rosterIds, rosterInstanceIdsBeingAdded, rosterVector, questionnaire, getAnswer, getRosterInstanceIds,
                 out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
+            this.DetermineCustomEnablementStateOfQuestionsInitializedByAddedRosterInstances(
                 rosterIds, rosterInstanceIdsBeingAdded, rosterVector, questionnaire, getAnswer, getRosterInstanceIds,
                 out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
-            this.DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
+            this.DetermineValidityStateOfQuestionsInitializedByAddedRosterInstances(
                 rosterIds, rosterInstanceIdsBeingAdded, rosterVector, questionnaire, initializedGroupsToBeDisabled,
                 initializedQuestionsToBeDisabled, getRosterInstanceIds, out initializedQuestionsToBeInvalid);
 
@@ -1869,7 +1877,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled = collectedQuestionsToBeEnabled;
         }
 
-        private void DetermineCustomEnablementStateOfGroupsInitializedByIncreasedRosterSize(
+        private void DetermineCustomEnablementStateOfGroupsInitializedByAddedRosterInstances(
             IEnumerable<Guid> rosterIds, HashSet<decimal> rosterInstanceIdsBeingAdded, decimal[] outerScopeRosterVector, IQuestionnaire questionnaire,
             Func<Identity, object> getAnswer, Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds,
             out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
@@ -1899,7 +1907,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
+        private void DetermineCustomEnablementStateOfQuestionsInitializedByAddedRosterInstances(
             IEnumerable<Guid> rosterIds, HashSet<decimal> rosterInstanceIdsBeingAdded, decimal[] outerScopeRosterVector, IQuestionnaire questionnaire,
             Func<Identity, object> getAnswer, Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds,
             out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
@@ -1930,7 +1938,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
+        private void DetermineValidityStateOfQuestionsInitializedByAddedRosterInstances(
             List<Guid> rosterIds, HashSet<decimal> rosterInstanceIdsBeingAdded, decimal[] outerScopeRosterVector, IQuestionnaire questionnaire,
             List<Identity> groupsToBeDisabled, List<Identity> questionsToBeDisabled,
             Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds,
