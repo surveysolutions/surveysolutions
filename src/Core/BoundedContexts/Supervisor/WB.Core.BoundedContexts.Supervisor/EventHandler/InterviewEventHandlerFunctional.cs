@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -83,7 +79,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire",
                                                       groupId));
         }
-
+        
         private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete, Guid scopeId)
         {
             foreach (var levelKey in levelKeysForDelete)
@@ -310,7 +306,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             int countOfLevelByScope = keysOfLevelsByScope.Count();
 
             if (evnt.Payload.Count == countOfLevelByScope)
+            {
+                currentState.Sequence = evnt.EventSequence;
                 return currentState;
+            }
 
             if (countOfLevelByScope < evnt.Payload.Count)
             {
@@ -492,17 +491,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowTitleChanged> evnt)
         {
-            throw new NotImplementedException();
-
-            /*return
-                new ViewWithSequence<InterviewData>(
-                    PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, (level) =>
+            //Guid scopeOfRosterTitleQuestion = GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
+            
+            return
+                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, evnt.Payload.OuterRosterVector, (level) =>
                 {
-                    if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    if (level.RosterRowTitles.ContainsKey(evnt.Payload.GroupId))
                     {
-                        level.DisabledGroups.Add(evnt.Payload.GroupId);
+                        level.RosterRowTitles[evnt.Payload.GroupId] = evnt.Payload.Title;
                     }
-                }), evnt.EventSequence);*/
+                    else
+                    {
+                        level.RosterRowTitles.Add(evnt.Payload.GroupId, evnt.Payload.Title);
+                    }
+
+                }), evnt.EventSequence);
         }
     }
 }

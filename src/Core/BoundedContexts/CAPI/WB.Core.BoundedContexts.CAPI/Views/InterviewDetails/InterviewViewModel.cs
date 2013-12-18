@@ -472,13 +472,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        public void UpdateRosterTitle(Guid questionId, decimal[] propagationVector, string rosterTitle)
+        public void UpdateRosterRowTitle(Guid groupId, decimal[] outerScopePropagationVector, decimal index, string rosterTitle)
         {
-            if (this.listOfHeadQuestionsMappedOnScope.ContainsKey(questionId))
-            {
-                this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[questionId],
-                propagationVector, rosterTitle);
-            }
+            var key = new InterviewItemId(groupId, outerScopePropagationVector);
+            var screen = this.Screens[key] as QuestionnairePropagatedScreenViewModel;
+            if (screen == null)
+                return;
+
+            screen.UpdateScreenName(rosterTitle);
         }
 
         public IEnumerable<QuestionViewModel> FindQuestion(Func<QuestionViewModel, bool> filter)
