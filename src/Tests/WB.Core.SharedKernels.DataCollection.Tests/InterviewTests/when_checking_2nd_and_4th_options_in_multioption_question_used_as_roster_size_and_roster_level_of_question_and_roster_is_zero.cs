@@ -63,6 +63,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_raise_MultipleOptionsQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
 
+        It should_not_raise_RosterRowRemoved_event = () =>
+            eventContext.ShouldNotContainEvent<RosterRowRemoved>();
+
         It should_raise_2_RosterRowAdded_events = () =>
             eventContext.ShouldContainEvents<RosterRowAdded>(count: 2);
 
