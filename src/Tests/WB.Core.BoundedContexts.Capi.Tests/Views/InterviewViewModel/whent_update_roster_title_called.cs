@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -45,7 +42,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         };
 
         Because of = () =>
-            interviewViewModel.UpdateRosterTitle(rosterTitleQuestionId, new decimal[]{0}, rosterTitle);
+            interviewViewModel.UpdateRosterRowTitle(rosterGroupId, new decimal[] { 0 }, 0, rosterTitle);
 
         It should_roster_screen_title_rosterTitle = () =>
             ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
