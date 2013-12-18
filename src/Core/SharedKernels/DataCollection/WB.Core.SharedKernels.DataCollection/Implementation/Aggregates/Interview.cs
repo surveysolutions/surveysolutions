@@ -979,8 +979,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId).ToList();
 
-            var rosterInstanceIds = selectedValues.ToHashSet();
-            var rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
+            HashSet<decimal> rosterInstanceIds = selectedValues.ToHashSet();
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
                 selectedValue => selectedValue,
                 selectedValue => (int?) availableValues.IndexOf(selectedValue));
 
