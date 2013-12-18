@@ -377,7 +377,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return null;
         }
 
-        public IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId)
+        public IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId)
         {
             return this
                 .GetAllParentGroupsForQuestionStartingFromBottom(questionId)
@@ -386,7 +386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(Guid groupId)
+        public IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId)
         {
             IGroup group = this.GetGroupOrThrow(groupId);
 
