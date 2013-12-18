@@ -252,9 +252,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<RosterRowTitleChanged> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-
-            // TODO: Vitalik: use correct version of event
-            //doc.UpdateRosterTitle(evnt.Payload.QuestionId, evnt.Payload.PropagationVector, evnt.Payload.Title);
+            
+            doc.UpdateRosterRowTitle(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.Title);
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
