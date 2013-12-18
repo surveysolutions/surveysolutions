@@ -63,6 +63,9 @@
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
