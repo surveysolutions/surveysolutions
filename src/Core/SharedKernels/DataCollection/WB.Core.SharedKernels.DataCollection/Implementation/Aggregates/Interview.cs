@@ -736,7 +736,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => rosterIds.Contains(groupId)
                 && AreEqualRosterVectors(groupOuterScopeRosterVector, rosterVector);
 
-            var rosterInstanceIds = new HashSet<decimal>(Enumerable.Range(0, rosterSize).Select(index => (decimal) index));
+            HashSet<decimal> rosterInstanceIds = Enumerable.Range(0, rosterSize).Select(index => (decimal) index).ToHashSet();
 
             Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
                 => isRoster(groupId, groupOuterRosterVector)
@@ -1653,8 +1653,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CalculateChangesInRosterInstances(rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes,
                 out rosterInstancesToAdd, out rosterInstancesToRemove);
 
-            var rosterInstanceIdsBeingAdded = new HashSet<decimal>(rosterInstancesToAdd.Select(instance => instance.RosterInstanceId));
-            var rosterInstanceIdsBeingRemoved = new HashSet<decimal>(rosterInstancesToRemove.Select(instance => instance.RosterInstanceId));
+            HashSet<decimal> rosterInstanceIdsBeingAdded = rosterInstancesToAdd.Select(instance => instance.RosterInstanceId).ToHashSet();
+            HashSet<decimal> rosterInstanceIdsBeingRemoved = rosterInstancesToRemove.Select(instance => instance.RosterInstanceId).ToHashSet();
 
             // situation like in nested rosters bug: rosterVector cannot be used as outerRosterVector when answered question has roster level 0 but roster has roster level 2
             // but actually here is no bug, just should be renamed method parameter to something else like nearestOuterRosterVector
