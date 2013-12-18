@@ -1205,7 +1205,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string questionKey = ConvertIdAndRosterVectorToString(questionIdAtInterview.Id, questionIdAtInterview.RosterVector);
 
                     if (!this.answeredQuestions.Contains(questionKey))
+                    {
+                        questionsDeclaredInvalid.Add(questionIdAtInterview);
                         continue;
+                    }
 
                     questionsDeclaredValid.Add(questionIdAtInterview);
                 }
