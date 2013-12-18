@@ -47,11 +47,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<GroupDisabled>();
 
         It should_provide_id_of_question_with_custom_enablement_condition_in_GroupDisabled_event = () =>
-            GetEvent<GroupDisabled>(eventContext)
+            eventContext.GetEvent<GroupDisabled>()
                 .GroupId.ShouldEqual(groupId);
 
         It should_provide_zero_dimensional_propagation_vector_in_GroupDisabled_event = () =>
-            GetEvent<GroupDisabled>(eventContext)
+            eventContext.GetEvent<GroupDisabled>()
                 .PropagationVector.Length.ShouldEqual(0);
 
         Cleanup stuff = () =>
