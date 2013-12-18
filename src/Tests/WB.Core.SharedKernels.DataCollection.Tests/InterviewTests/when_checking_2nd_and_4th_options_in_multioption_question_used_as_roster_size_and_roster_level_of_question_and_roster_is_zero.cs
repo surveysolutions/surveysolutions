@@ -78,6 +78,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvents<RosterRowAdded>().Select(@event => @event.RosterInstanceId).ToArray()
                 .ShouldContainOnly(option2, option4);
 
+        It should_set_sort_index_to_1_in_RosterRowAdded_event_with_roster_instance_id_equal_to_2nd_option = () =>
+            eventContext.GetEvents<RosterRowAdded>().Single(@event => @event.RosterInstanceId == option2)
+                .SortIndex.ShouldEqual(1);
+
+        It should_set_sort_index_to_3_in_RosterRowAdded_event_with_roster_instance_id_equal_to_4th_option = () =>
+            eventContext.GetEvents<RosterRowAdded>().Single(@event => @event.RosterInstanceId == option4)
+                .SortIndex.ShouldEqual(3);
+
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
