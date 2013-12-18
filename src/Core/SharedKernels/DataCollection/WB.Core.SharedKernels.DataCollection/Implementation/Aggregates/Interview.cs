@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return synchronizationDto.RosterGroupInstances.ToDictionary(
                 pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
-                pair => new HashSet<decimal>(pair.Value.Keys));
+                pair => pair.Value.Keys.ToHashSet());
         }
 
         private void Apply(SynchronizationMetadataApplied @event)
@@ -533,10 +533,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     && AreEqualRosterVectors(groupOuterScopeRosterVector, EmptyRosterVector);
 
             Func<Guid, HashSet<decimal>> getFixedRosterInstanceIds = fixedRosterId =>
-                new HashSet<decimal>(
-                    Enumerable
-                        .Range(0, questionnaire.GetFixedRosterTitles(fixedRosterId).Count())
-                        .Select(index => (decimal) index));
+                Enumerable
+                    .Range(0, questionnaire.GetFixedRosterTitles(fixedRosterId).Count())
+                    .Select(index => (decimal) index)
+                    .ToHashSet();
 
             Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
                 => isFixedRoster(groupId, groupOuterRosterVector)
