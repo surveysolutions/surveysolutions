@@ -1634,11 +1634,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterIds, rosterInstanceIdsBeingAdded, rosterVector, questionnaire, getAnswer, getRosterInstanceIds,
                 out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
             this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
-                rosterIds, rosterSize, rosterVector, questionnaire, getAnswer, getRosterInstanceIds,
+                rosterIds, rosterInstanceIdsBeingAdded, rosterVector, questionnaire, getAnswer, getRosterInstanceIds,
                 out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
             this.DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
-                rosterIds, rosterSize, rosterVector, questionnaire, getRosterInstanceIds, initializedGroupsToBeDisabled,
-                initializedQuestionsToBeDisabled, out initializedQuestionsToBeInvalid);
+                rosterIds, rosterInstanceIdsBeingAdded, rosterVector, questionnaire, initializedGroupsToBeDisabled,
+                initializedQuestionsToBeDisabled, getRosterInstanceIds, out initializedQuestionsToBeInvalid);
 
             return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToRemove,
                 answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
@@ -1900,29 +1900,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedRosterSize(
-            IEnumerable<Guid> idsOfGroupsBeingRostered, int rosterSize, decimal[] outerScopeRosterVector, IQuestionnaire questionnaire,
+            IEnumerable<Guid> rosterIds, HashSet<decimal> rosterInstanceIdsBeingAdded, decimal[] outerScopeRosterVector, IQuestionnaire questionnaire,
             Func<Identity, object> getAnswer, Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds,
             out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
         {
             questionsToBeDisabled = new List<Identity>();
             questionsToBeEnabled = new List<Identity>();
 
-            foreach (Guid idOfGroupBeingRostered in idsOfGroupsBeingRostered)
+            if (rosterInstanceIdsBeingAdded.Count == 0)
+                return;
+
+            foreach (Guid rosterId in rosterIds)
             {
-                int oldRosterSize = this.GetCountOfRosterGroupInstances(idOfGroupBeingRostered, outerScopeRosterVector);
+                int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
 
-                bool isRosterSizeBeingIncreased = rosterSize > oldRosterSize;
-                if (!isRosterSizeBeingIncreased)
-                    continue;
-
-                int indexOfGroupBeingRosteredInRosterVector = GetIndexOfRosterInRosterVector(idOfGroupBeingRostered, questionnaire);
-
-                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(idOfGroupBeingRostered);
+                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(rosterId);
 
                 IEnumerable<Identity> affectedQuestions = this
                     .GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                         affectedQuestionIds, outerScopeRosterVector, questionnaire, getRosterInstanceIds)
-                    .Where(group => IsInstanceBeingInitializedByIncreasedRosterSize(group.RosterVector, oldRosterSize, indexOfGroupBeingRosteredInRosterVector));
+                    .Where(question => rosterInstanceIdsBeingAdded.Contains(question.RosterVector[indexOfRosterInRosterVector]));
 
                 foreach (Identity question in affectedQuestions)
                 {
@@ -1933,34 +1930,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(List<Guid> idsOfGroupsToBeRostered,
-            int rosterSize, decimal[] outerScopeRosterVector, IQuestionnaire questionnaire,
-            Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds, List<Identity> groupsToBeDisabled,
-            List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeInvalid)
+        private void DetermineValidityStateOfQuestionsInitializedByIncreasedRosterSize(
+            List<Guid> rosterIds, HashSet<decimal> rosterInstanceIdsBeingAdded, decimal[] outerScopeRosterVector, IQuestionnaire questionnaire,
+            List<Identity> groupsToBeDisabled, List<Identity> questionsToBeDisabled,
+            Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds,
+            out List<Identity> questionsToBeInvalid)
         {
             questionsToBeInvalid = new List<Identity>();
 
-            foreach (Guid idOfGroupBeingRostered in idsOfGroupsToBeRostered)
+            if (rosterInstanceIdsBeingAdded.Count == 0)
+                return;
+
+            foreach (Guid rosterId in rosterIds)
             {
-                int oldRosterSize = this.GetCountOfRosterGroupInstances(idOfGroupBeingRostered, outerScopeRosterVector);
+                int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
 
-                bool isRosterSizeBeingIncreased = rosterSize > oldRosterSize;
-                if (!isRosterSizeBeingIncreased)
-                    continue;
-
-                int indexOfGroupBeingRosteredInRosterVector = GetIndexOfRosterInRosterVector(idOfGroupBeingRostered,
-                    questionnaire);
-
-                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingMandatoryQuestions(idOfGroupBeingRostered);
+                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingMandatoryQuestions(rosterId);
 
                 IEnumerable<Identity> affectedQuestions = this
                     .GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                         affectedQuestionIds, outerScopeRosterVector, questionnaire, getRosterInstanceIds)
-                    .Where(
-                        question =>
-                            IsInstanceBeingInitializedByIncreasedRosterSize(question.RosterVector, oldRosterSize,
-                                indexOfGroupBeingRosteredInRosterVector) &&
-                                !IsQuestionOrParentGroupDisabled(question, questionnaire, (questionId) => groupsToBeDisabled.Any(q => AreEqual(q, questionId)), (questionId) => questionsToBeDisabled.Any(q => AreEqual(q, questionId))));
+                    .Where(question
+                        => rosterInstanceIdsBeingAdded.Contains(question.RosterVector[indexOfRosterInRosterVector])
+                        && !IsQuestionOrParentGroupDisabled(question, questionnaire, (questionId) => groupsToBeDisabled.Any(q => AreEqual(q, questionId)), (questionId) => questionsToBeDisabled.Any(q => AreEqual(q, questionId))));
 
                 questionsToBeInvalid.AddRange(affectedQuestions);
             }
@@ -2202,11 +2194,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static IEnumerable<decimal> GetRosterInstanceIdsBeingRemoved(HashSet<decimal> existingRosterInstanceIds, HashSet<decimal> newRosterInstanceIds)
         {
             return existingRosterInstanceIds.Where(existingRosterInstanceId => !newRosterInstanceIds.Contains(existingRosterInstanceId));
-        }
-
-        private static bool IsInstanceBeingInitializedByIncreasedRosterSize(decimal[] instanceRosterVector, int oldRosterSize, int indexOfGroupBeingRosteredInRosterVector)
-        {
-            return instanceRosterVector[indexOfGroupBeingRosteredInRosterVector] >= oldRosterSize;
         }
 
         private IEnumerable<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
