@@ -63,6 +63,9 @@
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
@@ -147,6 +150,9 @@
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
+    <Compile Include="Implementation\EnumerableExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />

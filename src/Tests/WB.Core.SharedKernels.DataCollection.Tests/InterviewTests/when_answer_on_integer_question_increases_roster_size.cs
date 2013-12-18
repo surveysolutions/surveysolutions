@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.HasGroup(rosterGroupId) == true
                                                         && _.GetRosterLevelForGroup(rosterGroupId) == 1
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(rosterGroupId) == new Guid[] { rosterGroupId }
-                                                        && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(rosterGroupId) == new Guid[] { rosterGroupId });
+                                                        && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionnaire);

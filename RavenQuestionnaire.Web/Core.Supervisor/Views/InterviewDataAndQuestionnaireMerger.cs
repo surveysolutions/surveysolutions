@@ -49,7 +49,7 @@ namespace Core.Supervisor.Views
                 //### old questionnaires supporting
                 if (currentGroup.Key.Propagated == Propagate.AutoPropagated ||
                     //### roster
-                    (currentGroup.Key.IsRoster && currentGroup.Key.RosterSizeQuestionId.HasValue))
+                    (currentGroup.Key.IsRoster))
                 {
                     var rosterGroups = this.GetRosterLevels(currentGroup.Key.PublicKey, interview, questionnaireRosters).ToList();
 

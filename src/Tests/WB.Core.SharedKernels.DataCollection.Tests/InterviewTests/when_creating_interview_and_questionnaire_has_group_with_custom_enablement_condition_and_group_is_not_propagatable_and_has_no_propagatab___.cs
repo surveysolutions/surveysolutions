@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
                 && _.IsRosterGroup(groupId) == false
-                && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupId) == new Guid[] { });
+                && _.GetRostersFromTopToSpecifiedGroup(groupId) == new Guid[] { });
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire);
@@ -47,11 +47,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<GroupDisabled>();
 
         It should_provide_id_of_question_with_custom_enablement_condition_in_GroupDisabled_event = () =>
-            GetEvent<GroupDisabled>(eventContext)
+            eventContext.GetEvent<GroupDisabled>()
                 .GroupId.ShouldEqual(groupId);
 
         It should_provide_zero_dimensional_propagation_vector_in_GroupDisabled_event = () =>
-            GetEvent<GroupDisabled>(eventContext)
+            eventContext.GetEvent<GroupDisabled>()
                 .PropagationVector.Length.ShouldEqual(0);
 
         Cleanup stuff = () =>

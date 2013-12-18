@@ -45,11 +45,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<InterviewCreated>();
 
         It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
-            GetEvent<InterviewCreated>(eventContext)
+            eventContext.GetEvent<InterviewCreated>()
                 .QuestionnaireId.ShouldEqual(questionnaireId);
 
         It should_provide_questionnaire_verstion_in_InterviewCreated_event = () =>
-            GetEvent<InterviewCreated>(eventContext)
+            eventContext.GetEvent<InterviewCreated>()
                 .QuestionnaireVersion.ShouldEqual(questionnaireVersion);
 
         Cleanup stuff = () =>
