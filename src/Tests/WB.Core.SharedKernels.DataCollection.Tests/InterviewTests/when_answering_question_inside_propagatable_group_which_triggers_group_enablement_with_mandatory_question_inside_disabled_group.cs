@@ -41,15 +41,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                    && _.GetRosterLevelForGroup(propagatedGroupId) == 1
                    && _.GetRosterLevelForGroup(disabledPropagatedGroupId) == 1
                    && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
-                   && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                   && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedGroup(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
 
                    && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { disabledPropagatedGroupId }
                    && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new[] { mandatoryQuestionId }
 
 
                    && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
-                   && _.GetParentRosterGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedQuestion(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
                    && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new Guid[] { mandatoryQuestionId }
 
                    
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                    && _.GetRosterLevelForQuestion(mandatoryQuestionId)==1
 
                    && _.HasQuestion(answeringQuestionId) == true
-                   && _.GetParentRosterGroupsForQuestionStartingFromTop(answeringQuestionId) == new Guid[] { propagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedQuestion(answeringQuestionId) == new Guid[] { propagatedGroupId }
                    && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric
                    && _.GetRosterLevelForQuestion(answeringQuestionId) == 1
                 );
