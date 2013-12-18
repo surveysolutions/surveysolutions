@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -12,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size : InterviewTestsContext
+    internal class when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -62,8 +63,31 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_raise_MultipleOptionsQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
 
+        It should_not_raise_RosterRowRemoved_event = () =>
+            eventContext.ShouldNotContainEvent<RosterRowRemoved>();
+
         It should_raise_2_RosterRowAdded_events = () =>
             eventContext.ShouldContainEvents<RosterRowAdded>(count: 2);
+
+        It should_set_roster_id_to_all_RosterRowAdded_events = () =>
+            eventContext.GetEvents<RosterRowAdded>()
+                .ShouldEachConformTo(@event => @event.GroupId == rosterId);
+
+        It should_set_empty_outer_roster_vector_to_all_RosterRowAdded_events = () =>
+            eventContext.GetEvents<RosterRowAdded>()
+                .ShouldEachConformTo(@event => @event.OuterRosterVector.Length == 0);
+
+        It should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterRowAdded_events = () =>
+            eventContext.GetEvents<RosterRowAdded>().Select(@event => @event.RosterInstanceId).ToArray()
+                .ShouldContainOnly(option2, option4);
+
+        It should_set_sort_index_to_1_in_RosterRowAdded_event_with_roster_instance_id_equal_to_2nd_option = () =>
+            eventContext.GetEvents<RosterRowAdded>().Single(@event => @event.RosterInstanceId == option2)
+                .SortIndex.ShouldEqual(1);
+
+        It should_set_sort_index_to_3_in_RosterRowAdded_event_with_roster_instance_id_equal_to_4th_option = () =>
+            eventContext.GetEvents<RosterRowAdded>().Single(@event => @event.RosterInstanceId == option4)
+                .SortIndex.ShouldEqual(3);
 
         private static EventContext eventContext;
         private static Interview interview;
