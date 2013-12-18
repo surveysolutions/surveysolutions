@@ -42,22 +42,21 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
 
             //### roster
-            var rosterGroups =
-                questionnaire.Find<IGroup>(question => question.IsRoster && question.RosterSizeQuestionId.HasValue);
+            var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question);
+            var fixedRosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles).ToList();
 
-            var rosterSizeQuestions =
-                questionnaire.Find<IQuestion>(
-                    question =>
-                        rosterGroups.Any(
-                            group => group.RosterSizeQuestionId.Value == question.PublicKey));
+            var rosterSizeQuestions = questionnaire.Find<IQuestion>(question => rosterGroups.Any(group => group.RosterSizeQuestionId.Value == question.PublicKey));
 
             foreach (var rosterSizeQuestion in rosterSizeQuestions)
             {
-                this.RosterScopes.Add(rosterSizeQuestion.PublicKey,
-                    new HashSet<Guid>(
-                        rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey)
-                            .Select(group => group.PublicKey)));
+                this.RosterScopes.Add(
+                    rosterSizeQuestion.PublicKey,
+                    new HashSet<Guid>(rosterGroups
+                        .Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey)
+                        .Select(group => group.PublicKey)));
             }
+
+            fixedRosterGroups.ForEach(fixedRoster => this.RosterScopes.Add(fixedRoster.PublicKey, new HashSet<Guid>(new[] { fixedRoster.PublicKey })));
         }
 
         public Guid QuestionnaireId { get; set; }
