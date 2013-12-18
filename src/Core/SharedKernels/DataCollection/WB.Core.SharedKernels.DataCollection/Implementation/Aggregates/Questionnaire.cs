@@ -221,6 +221,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
 
+        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return answer option title for question with id '{0}' because it's type {1} does not support answer options.",
+                    questionId, question.QuestionType));
+
+            return question
+                .Answers
+                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .AnswerText;
+        }
+
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
