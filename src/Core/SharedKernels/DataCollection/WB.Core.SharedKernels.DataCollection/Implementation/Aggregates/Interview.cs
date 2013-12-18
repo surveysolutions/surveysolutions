@@ -273,7 +273,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.rosterGroupInstanceIds[rosterGroupKey].Remove(@event.RosterInstanceId);
         }
 
-        private void Apply(RosterTitleChanged @event)
+        private void Apply(RosterRowTitleChanged @event)
         {
 
         }
