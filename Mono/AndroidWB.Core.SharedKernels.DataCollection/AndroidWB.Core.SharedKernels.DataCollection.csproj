@@ -343,6 +343,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Snapshots\QuestionnaireState.cs">
       <Link>Implementation\Aggregates\Snapshots\QuestionnaireState.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\EnumerableExtensions.cs">
+      <Link>Implementation\EnumerableExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireFactory.cs">
       <Link>Implementation\Factories\QuestionnaireFactory.cs</Link>
     </Compile>
