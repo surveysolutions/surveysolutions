@@ -44,14 +44,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
 
             //### roster
-            var rosterGroups =
-                questionnaire.Find<IGroup>(question => question.IsRoster && question.RosterSizeQuestionId.HasValue);
+            var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question);
+            var fixedRosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles).ToList();
 
-            var rosterSizeQuestions =
-                questionnaire.Find<IQuestion>(
-                    question =>
-                        rosterGroups.Any(
-                            group => group.RosterSizeQuestionId.Value == question.PublicKey));
+            var rosterSizeQuestions = questionnaire.Find<IQuestion>(question => rosterGroups.Any(group => group.RosterSizeQuestionId.Value == question.PublicKey));
 
             foreach (var rosterSizeQuestion in rosterSizeQuestions)
             {
@@ -66,6 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
                 RosterScopes.Add(rosterSizeQuestion.PublicKey, rosterDescription);
             }
+
+            fixedRosterGroups.ForEach(fixedRoster => this.RosterScopes.Add(fixedRoster.PublicKey, new HashSet<Guid>(new[] { fixedRoster.PublicKey })));
         }
 
         private Guid? GetRosterTitleQuestionId(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)

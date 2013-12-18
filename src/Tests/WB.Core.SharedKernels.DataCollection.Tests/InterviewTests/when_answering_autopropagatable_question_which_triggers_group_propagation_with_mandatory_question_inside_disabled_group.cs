@@ -41,10 +41,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.HasGroup(propagatedGroupId) == true
                                                         && _.GetRosterLevelForGroup(propagatedGroupId) == 1
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetParentRosterGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRostersFromTopToSpecifiedQuestion(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
                                                         && _.GetUnderlyingMandatoryQuestions(propagatedGroupId) == new Guid[] { mandatoryQuestionId });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();

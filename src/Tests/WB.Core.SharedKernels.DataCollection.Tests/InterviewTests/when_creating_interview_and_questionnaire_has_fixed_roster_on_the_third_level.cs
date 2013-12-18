@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => _.GetFixedRosterGroups() == new Guid[] {fixedRosterId}
                 && _.GetFixedRosterTitles(fixedRosterId) == fixedRosterTitles
                 && _.IsRosterGroup(fixedRosterId) == true
-                && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(fixedRosterId) == new Guid[] { fixedRosterId }
+                && _.GetRostersFromTopToSpecifiedGroup(fixedRosterId) == new Guid[] { fixedRosterId }
                 );
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
