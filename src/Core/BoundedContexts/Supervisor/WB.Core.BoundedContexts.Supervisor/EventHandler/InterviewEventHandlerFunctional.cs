@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var scopeId in questionnarie.RosterScopes.Keys)
             {
-                if (questionnarie.RosterScopes[scopeId].Contains(groupId))
+                if (questionnarie.RosterScopes[scopeId].RosterGroupsId.Contains(groupId))
                 {
                     return scopeId;
                 }
