@@ -1685,8 +1685,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var rosterId in rosterIds)
             {
-                // nested rosters bug: rosterVector cannot be used as outerRosterVector when answered question has roster level 0 but roster has roster level 2
-                // should be renamed method parameter to something else like nearestOuterRosterVector
+                // nested rosters bug: nearestOuterRosterVector cannot be used as outerRosterVector when answered question has roster level 0 but roster has roster level 2
 
                 var rosterInstanceIdsBeingAdded = GetRosterInstanceIdsBeingAdded(
                     existingRosterInstanceIds: this.GetRosterInstanceIds(rosterId, nearestToOuterRosterVector),
