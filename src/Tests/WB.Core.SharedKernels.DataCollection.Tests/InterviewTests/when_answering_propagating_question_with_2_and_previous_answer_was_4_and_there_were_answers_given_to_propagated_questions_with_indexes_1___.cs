@@ -39,8 +39,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.HasQuestion(propagatedQuestionId) == true
                 && _.GetQuestionType(propagatedQuestionId) == QuestionType.Text
                 && _.GetRosterLevelForQuestion(propagatedQuestionId) == 1
-                && _.GetParentRosterGroupsForQuestionStartingFromTop(propagatedQuestionId) == new [] { propagatedGroupId }
-                && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new[] { propagatedGroupId });
+                && _.GetRostersFromTopToSpecifiedQuestion(propagatedQuestionId) == new [] { propagatedGroupId }
+                && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new[] { propagatedGroupId });
 
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
