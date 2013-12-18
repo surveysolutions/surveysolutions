@@ -67,15 +67,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvents<RosterRowAdded>(count: 2);
 
         It should_set_roster_id_to_all_RosterRowAdded_events = () =>
-            GetEvents<RosterRowAdded>(eventContext)
+            eventContext.GetEvents<RosterRowAdded>()
                 .ShouldEachConformTo(@event => @event.GroupId == rosterId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowAdded_events = () =>
-            GetEvents<RosterRowAdded>(eventContext)
+            eventContext.GetEvents<RosterRowAdded>()
                 .ShouldEachConformTo(@event => @event.OuterRosterVector.Length == 0);
 
         It should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterRowAdded_events = () =>
-            GetEvents<RosterRowAdded>(eventContext).Select(@event => @event.RosterInstanceId).ToArray()
+            eventContext.GetEvents<RosterRowAdded>().Select(@event => @event.RosterInstanceId).ToArray()
                 .ShouldContainOnly(option2, option4);
 
         private static EventContext eventContext;
