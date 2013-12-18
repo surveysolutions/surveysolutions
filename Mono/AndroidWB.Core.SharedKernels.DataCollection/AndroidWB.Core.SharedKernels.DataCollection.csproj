@@ -298,8 +298,8 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowRemoved.cs">
       <Link>Events\Interview\RosterRowRemoved.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterTitleChanged.cs">
-      <Link>Events\Interview\RosterTitleChanged.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowTitleChanged.cs">
+      <Link>Events\Interview\RosterRowTitleChanged.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SingleOptionLinkedQuestionAnswered.cs">
       <Link>Events\Interview\SingleOptionLinkedQuestionAnswered.cs</Link>
