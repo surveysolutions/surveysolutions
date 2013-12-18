@@ -63,9 +63,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetMaxValueForNumericQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId);
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(Guid groupId);
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId);
 
         IEnumerable<Guid> GetFixedRosterGroups();
 

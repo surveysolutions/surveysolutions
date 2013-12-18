@@ -1386,7 +1386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             ThrowIfRosterVectorIsNull(questionId, rosterVector, questionnaire);
 
-            Guid[] parentRosterGroupIdsStartingFromTop = questionnaire.GetParentRosterGroupsForQuestionStartingFromTop(questionId).ToArray();
+            Guid[] parentRosterGroupIdsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
 
             ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(questionId, rosterVector, parentRosterGroupIdsStartingFromTop, questionnaire);
 
@@ -2061,7 +2061,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
 
             Guid[] parentRosterGroupsStartingFromTop =
-                questionnare.GetParentRosterGroupsForQuestionStartingFromTop(questionId).ToArray();
+                questionnare.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
 
             IEnumerable<decimal[]> questionRosterVectors = ExtendRosterVector(
                 rosterVector, questionRosterLevel, parentRosterGroupsStartingFromTop, getRosterInstanceIds);
@@ -2107,7 +2107,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         "Group {0} expected to have roster level not upper than {1} but it is {2}.",
                         FormatGroupForException(groupId, questionnare), vectorRosterLevel, groupRosterLevel));
 
-                Guid[] rosterGroupsStartingFromTop = questionnare.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupId).ToArray();
+                Guid[] rosterGroupsStartingFromTop = questionnare.GetRostersFromTopToSpecifiedGroup(groupId).ToArray();
                 IEnumerable<decimal[]> groupRosterVectors = ExtendRosterVector(
                     rosterVector, groupRosterLevel, rosterGroupsStartingFromTop, getRosterInstanceIds);
 
@@ -2153,12 +2153,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool IsGroupUnderRosterGroup(IQuestionnaire questionnaire, Guid groupId)
         {
-            return questionnaire.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupId).Any();
+            return questionnaire.GetRostersFromTopToSpecifiedGroup(groupId).Any();
         }
 
         private static bool IsQuestionUnderRosterGroup(IQuestionnaire questionnaire, Guid questionId)
         {
-            return questionnaire.GetParentRosterGroupsForQuestionStartingFromTop(questionId).Any();
+            return questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).Any();
         }
 
         private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(
@@ -2311,7 +2311,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static int GetIndexOfRosterInRosterVector(Guid rosterId, IQuestionnaire questionnaire)
         {
             return questionnaire
-                .GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(rosterId)
+                .GetRostersFromTopToSpecifiedGroup(rosterId)
                 .ToList()
                 .IndexOf(rosterId);
         }
@@ -2392,7 +2392,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int rosterGroupLevel = questionnaire.GetRosterLevelForGroup(groupdId);
 
             Guid[] parentRosterGroupsStartingFromTop =
-                questionnaire.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(groupdId)
+                questionnaire.GetRostersFromTopToSpecifiedGroup(groupdId)
                     .ToArray();
 
             var availableRosterLevels = ExtendRosterVector(EmptyRosterVector, rosterGroupLevel,
@@ -2405,7 +2405,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int questionRosterLevel = questionnaire.GetRosterLevelForQuestion(questionId);
 
             Guid[] parentRosterGroupsStartingFromTop =
-                questionnaire.GetParentRosterGroupsForQuestionStartingFromTop(questionId)
+                questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId)
                     .ToArray();
 
             var availableRosterLevels = ExtendRosterVector(EmptyRosterVector, questionRosterLevel,
