@@ -28,7 +28,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         protected static T GetEvent<T>(EventContext eventContext)
         {
-            return (T)eventContext.Events.Single(e => e.Payload is T).Payload;
+            return GetEvents<T>(eventContext).Single();
+        }
+
+        protected static IEnumerable<T> GetEvents<T>(EventContext eventContext)
+        {
+            return eventContext.Events.Where(e => e.Payload is T).Select(e => (T) e.Payload);
         }
 
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
