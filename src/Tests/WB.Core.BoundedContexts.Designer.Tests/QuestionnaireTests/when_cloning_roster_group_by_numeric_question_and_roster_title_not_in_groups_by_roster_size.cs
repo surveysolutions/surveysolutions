@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            newGroupId = Guid.Parse("BBBB0000000000000000000000000000");
             rosterTitleQuestionId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeQuestionId = Guid.Parse("2BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.Question;
