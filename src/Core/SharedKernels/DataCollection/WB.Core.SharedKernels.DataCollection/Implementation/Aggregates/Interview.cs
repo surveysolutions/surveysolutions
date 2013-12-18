@@ -723,15 +723,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
-            List<Guid> idsOfRosterGroups = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
-            int rosterSize = idsOfRosterGroups.Any() ? ToRosterSize(answer) : 0;
+            List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
+            int rosterSize = rosterIds.Any() ? ToRosterSize(answer) : 0;
 
-            Func<Guid, decimal[], bool> isRosterGroup = (groupId, groupOuterScopePropagationVector)
-                => idsOfRosterGroups.Contains(groupId)
-                && AreEqualRosterVectors(groupOuterScopePropagationVector, rosterVector);
+            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterScopeRosterVector)
+                => rosterIds.Contains(groupId)
+                && AreEqualRosterVectors(groupOuterScopeRosterVector, rosterVector);
 
             Func<Guid, decimal[], int> getCountOfRosterGroupInstances = (groupId, groupOuterRosterVector)
-                => isRosterGroup(groupId, groupOuterRosterVector)
+                => isRoster(groupId, groupOuterRosterVector)
                     ? rosterSize
                     : this.GetCountOfRosterGroupInstances(groupId, groupOuterRosterVector);
 
@@ -739,7 +739,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => GetRosterInstanceIds(groupId, outerRosterVector, getCountOfRosterGroupInstances);
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(
-                rosterVector, idsOfRosterGroups, rosterSize, questionnaire, getAnswer, getRosterInstanceIds);
+                rosterVector, rosterIds, rosterSize, questionnaire, getAnswer, getRosterInstanceIds);
 
             List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -969,6 +969,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
+            var rosterInstanceIds = new HashSet<decimal>(selectedValues);
+
+            List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
+
+            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterRosterVector)
+                => rosterIds.Contains(groupId)
+                && AreEqualRosterVectors(groupOuterRosterVector, rosterVector);
+
+            Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
+                => isRoster(groupId, groupOuterRosterVector)
+                    ? rosterInstanceIds
+                    : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
+
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(
+                rosterIds, rosterVector, rosterInstanceIds, questionnaire, getAnswer, getRosterInstanceIds);
+
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
                 answeredQuestion, questionnaire, getAnswer, this.GetRosterInstanceIds, out groupsToBeDisabled, out groupsToBeEnabled);
@@ -1008,6 +1024,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedValues));
+
+            this.ApplyRosterEvents(rosterCalculationData);
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
