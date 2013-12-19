@@ -71,7 +71,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And20, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
-                    Verifier<IQuestion>(HeadQuestionCantBeInsideOfNonRoster, "WB0031", VerificationMessages.WB0031_HeadQuestionCantBeInsideOfNonRoster),
                     Verifier<IGroup>(GroupRosteredByQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupRosteredByQuestionHaveFixedTitles),
                     Verifier<IGroup>(GroupRosteredByFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion),
                     Verifier<IGroup>(GroupRosteredByFixedTitlesHaveRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion),
@@ -266,12 +265,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             var multiOptionQuestion = question as MultyOptionsQuestion;
             return multiOptionQuestion != null && !multiOptionQuestion.LinkedToQuestionId.HasValue;
         }
-
-        private static bool HeadQuestionCantBeInsideOfNonRoster(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return question.Capital && !GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
-        }
-
+        
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return question.Featured && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);

@@ -287,15 +287,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Head question can&apos;t be inside of non-roster.
-        /// </summary>
-        internal static string WB0031_HeadQuestionCantBeInsideOfNonRoster {
-            get {
-                return ResourceManager.GetString("WB0031_HeadQuestionCantBeInsideOfNonRoster", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Group rostered by question could not have fixed titles.
         /// </summary>
         internal static string WB0032_GroupRosteredByQuestionHaveFixedTitles {
