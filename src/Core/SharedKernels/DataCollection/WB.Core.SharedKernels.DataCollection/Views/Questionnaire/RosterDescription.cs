@@ -5,15 +5,15 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     public class RosterDescription
     {
-        public RosterDescription(Guid scopeId, Guid? headQuestionId)
+        public RosterDescription(Guid scopeId, Dictionary<Guid, Guid> rosterGroupsWithTitleQuestionPairs)
         {
             this.ScopeId = scopeId;
-            this.HeadQuestionId = headQuestionId;
+            this.RosterGroupsWithTitleQuestionPairs = rosterGroupsWithTitleQuestionPairs;
             this.RosterGroupsId = new HashSet<Guid>();
         }
 
         public Guid ScopeId { get; private set; }
-        public Guid? HeadQuestionId { get; private set; }
+        public Dictionary<Guid, Guid> RosterGroupsWithTitleQuestionPairs { get; private set; }
         public HashSet<Guid> RosterGroupsId { get; private set; }
     }
 }
