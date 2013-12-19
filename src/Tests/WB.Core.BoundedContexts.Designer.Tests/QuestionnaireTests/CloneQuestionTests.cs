@@ -506,37 +506,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [TestCase(QuestionType.SingleOption)]
-        [TestCase(QuestionType.MultyOption)]
-        public void CloneQuestion_When_categorical_question_with_linked_question_that_has_head_status_Then_DomainException_should_be_thrown(QuestionType questionType)
-        {
-            // arrange
-            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
-            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
-            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
-            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire =
-                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-                    autoGroupPublicKey: autoGroupId,
-                    secondGroup: groupId,
-                    autoQuestionId: autoQuestionId,
-                    questionId: questionId,
-                    responsibleId: responsibleId,
-                    questionType: questionType);
-
-            // act
-            TestDelegate act =
-                () =>
-                questionnaire.CloneQuestion(Guid.NewGuid(), autoGroupId, "test", questionType, "test", false, false, true,
-                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId, false, null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead));
-        }
-        [Test]
         [TestCase(QuestionType.MultyOption)]
         public void CloneQuestion_When_Categorical_Not_Linked_Multi_Question_That_Ordered_and_MaxAnswer_Are_Set_Then_event_contains_values(QuestionType questionType)
         {

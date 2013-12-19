@@ -749,7 +749,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(questionId, type, options, linkedToQuestionId, isFeatured);
 
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
@@ -860,7 +860,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isFeatured, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(questionId, type, options, linkedToQuestionId, isFeatured);
 
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
@@ -1005,7 +1005,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(questionId, type, options, linkedToQuestionId, isFeatured);
+            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
@@ -1466,7 +1467,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfQuestionIsCategoricalAndInvalid(QuestionType questionType, Option[] options, Guid? linkedToQuestionId, bool isFeatured)
+        private void ThrowIfQuestionIsCategoricalAndInvalid(Guid questionId, QuestionType questionType, Option[] options, Guid? linkedToQuestionId, bool isFeatured)
         {
             bool isCategoricalQuestion =
                 questionType == QuestionType.MultyOption ||
@@ -1487,6 +1488,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (questionIsLinked)
             {
+                this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
                 this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
             }
             else
@@ -1499,6 +1501,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.MultiOptionQuestionCanNotBeFeatured,
                     "Multiple answers question can not be pre-filled");
+            }
+        }
+
+        private void ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(Guid questionId)
+        {
+            var rosterTitleQuestionGroups =
+                this.innerDocument.Find<IGroup>(
+                    group => group.RosterTitleQuestionId.HasValue && group.RosterTitleQuestionId.Value == questionId)
+                    .Select(group => group.PublicKey);
+
+            if (rosterTitleQuestionGroups.Any())
+            {
+                throw new QuestionnaireException(
+                    string.Format("Linked categorical multy answers question could not be used as a roster title question in group(s): {0}",
+                        string.Join(Environment.NewLine,
+                            rosterTitleQuestionGroups.Select(groupId => FormatGroupForException(groupId, this.innerDocument)))));
             }
         }
 
@@ -1551,13 +1569,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
                     "Question that linked to another question can not be pre-filled");
-            }
-
-            if (isHead)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead,
-                    "Question that linked to another question can not be head");
             }
 
             if (!this.IsUnderPropagatableGroup(linkedToQuestion))

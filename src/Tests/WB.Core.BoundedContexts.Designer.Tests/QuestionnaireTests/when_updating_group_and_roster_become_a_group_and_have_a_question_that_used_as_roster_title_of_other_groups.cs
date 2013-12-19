@@ -22,30 +22,35 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
+
             questionnaire.Apply(new NumericQuestionAdded
             {
                 PublicKey = rosterSizeQuestionId,
                 IsInteger = true,
-                GroupPublicKey = anotherRosterId
+                GroupPublicKey = chapterId
             });
+
+            AddGroup(questionnaire: questionnaire, groupId: groupId, parentGroupId: chapterId, condition: null, responsibleId: responsibleId,
+                rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
+                rosterFixedTitles: null, rosterTitleQuestionId: null);
+            
             questionnaire.Apply(new NewQuestionAdded
             {
                 PublicKey = rosterTitleQuestionId,
-                GroupPublicKey = anotherRosterId,
+                GroupPublicKey = groupId,
                 QuestionType = QuestionType.Text
             });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, groupId));
-            questionnaire.Apply(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, RosterSizeSourceType.Question, null,
-                rosterTitleQuestionId));
+
+            AddGroup(questionnaire: questionnaire, groupId: anotherRosterId, parentGroupId: chapterId, condition: null,
+                responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateGroup(groupId, responsibleId, "title", null, null, null, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
+                questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", rosterSizeQuestionId: null,
+                    description: null, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
+                    rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
@@ -59,8 +64,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_exception_with_message_containting__group__ = () =>
             exception.Message.ToLower().ShouldContain("group");
 
-        It should_throw_exception_with_message_containting__have__ = () =>
-            exception.Message.ToLower().ShouldContain("have");
+        It should_throw_exception_with_message_containting__contains__ = () =>
+            exception.Message.ToLower().ShouldContain("contains");
 
         It should_throw_exception_with_message_containting__title__ = () =>
             exception.Message.ToLower().ShouldContain("title");

@@ -85,8 +85,6 @@
 
         QuestionWithLinkedQuestionCanNotBeFeatured,
 
-        QuestionWithLinkedQuestionCanNotBeHead,
-
         AutoPropagateQuestionCantBeReal,
         QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
 
