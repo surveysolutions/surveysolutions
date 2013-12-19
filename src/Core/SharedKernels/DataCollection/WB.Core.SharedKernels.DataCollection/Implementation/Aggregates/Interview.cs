@@ -528,7 +528,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
 
-            Dictionary<Guid, Dictionary<decimal, string>> rosteTitlesGroupedByRosterId = fixedRosterIds
+            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = fixedRosterIds
                 .Select(fixedRosterId =>
                     new
                     {
@@ -543,7 +543,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     && AreEqualRosterVectors(groupOuterScopeRosterVector, EmptyRosterVector);
 
             Func<Guid, HashSet<decimal>> getFixedRosterInstanceIds =
-                fixedRosterId => rosteTitlesGroupedByRosterId[fixedRosterId].Keys.ToHashSet();
+                fixedRosterId => rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToHashSet();
 
             Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
                 => isFixedRoster(groupId, groupOuterRosterVector)
@@ -554,7 +554,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var fixedRosterCalculationDatas = fixedRosterIds
                 .Select(fixedRosterId => new
                     {
-                        FixedRosterId = fixedRosterId,
+                        TitlesForAddedRosterInstances = rosterTitlesGroupedByRosterId[fixedRosterId],
                         CalculatedRosterData = this.CalculateRosterData(
                             new List<Guid> { fixedRosterId },
                             EmptyRosterVector,
@@ -563,7 +563,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                 ).ToList();
 
-            fixedRosterCalculationDatas.ForEach(data => this.ApplyRosterEvents(data.CalculatedRosterData, rosteTitlesGroupedByRosterId[data.FixedRosterId]));
+            fixedRosterCalculationDatas.ForEach(data => this.ApplyRosterEvents(data.CalculatedRosterData, data.TitlesForAddedRosterInstances));
            
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
