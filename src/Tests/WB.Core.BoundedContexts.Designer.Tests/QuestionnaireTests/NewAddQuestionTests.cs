@@ -1413,54 +1413,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [TestCase(QuestionType.SingleOption)]
-        [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_categorical_question_with_linked_question_that_has_head_status_Then_DomainException_should_be_thrown(QuestionType questionType)
-        {
-            // arrange
-            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
-            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
-            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
-            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire =
-                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-                    autoGroupPublicKey: autoGroupId,
-                    secondGroup: groupId,
-                    autoQuestionId: autoQuestionId,
-                    questionId: questionId,
-                    responsibleId: responsibleId,
-                    questionType: questionType);
-
-            // act
-            TestDelegate act =
-                () =>
-                questionnaire.NewAddQuestion(
-                    questionId: Guid.NewGuid(),
-                    groupId: autoGroupId,
-                    title: "Question",
-                    type: questionType,
-                    alias: "test",
-                    isMandatory: false,
-                    isFeatured: false,
-                    isHeaderOfPropagatableGroup: true,
-                    scope: QuestionScope.Interviewer,
-                    condition: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
-                    responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, areAnswersOrdered: false, maxAllowedAnswers: null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead));
-        }
-
-
-        [Test]
         public void NewAddQuestion_When_PreFilled_Question_Contains_Any_Substitution_Then_DomainException_of_type_FeaturedQuestionTitleContainsSubstitutionReference_should_be_thrown()
         {
             // Arrange
