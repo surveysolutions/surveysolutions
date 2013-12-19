@@ -1553,6 +1553,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Question that linked to another question can not be pre-filled");
             }
 
+            if (isHead)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead,
+                    "Question that linked to another question can not be head");
+            }
+
             if (!this.IsUnderPropagatableGroup(linkedToQuestion))
             {
                 throw new QuestionnaireException(
