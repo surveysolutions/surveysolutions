@@ -28,10 +28,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
                 new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object);
         }
 
-        protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId, params Guid[] groupIdsFromScope)
+        protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
+            Dictionary<Guid, Guid> rosterGroupsWithTitleQuestionPairs = null, params Guid[] groupIdsFromScope)
         {
-            var rosterStructure= new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterDescription(Guid.NewGuid(), null);
+            var rosterStructure = new QuestionnaireRosterStructure();
+            var rosterDescription = new RosterDescription(scopeId, rosterGroupsWithTitleQuestionPairs ?? new Dictionary<Guid, Guid>());
             groupIdsFromScope.ToList().ForEach(groupId => rosterDescription.RosterGroupsId.Add(groupId));
             rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
