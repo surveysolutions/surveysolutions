@@ -198,8 +198,8 @@
             });
         };
 
-        questions.isRorterTitleQuestion = function(questionId) {
-            return _.contains(groups.getPropagateableGroups(), function(group) {
+        questions.isRosterTitleQuestion = function(questionId) {
+            return _.any(groups.getPropagateableGroups(), function(group) {
                 return group.rosterTitleQuestion() == questionId;
             });
         };

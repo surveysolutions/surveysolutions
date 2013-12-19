@@ -413,7 +413,7 @@
                 var targetGroupIsAuto = false;
                 if (moveItemType == "question") {
                     isItemAutoQuestion = arg.item.qtype() == "AutoPropagate";
-                    isItemRosterTitleQuestion = datacontext.questions.isRorterTitleQuestion(arg.item.id());
+                    isItemRosterTitleQuestion = datacontext.questions.isRosterTitleQuestion(arg.item.id());
                     isItemFeaturedQuestion = arg.item.isFeatured();
                 }
 
