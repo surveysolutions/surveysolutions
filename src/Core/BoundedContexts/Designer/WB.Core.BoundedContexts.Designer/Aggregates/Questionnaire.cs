@@ -674,7 +674,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(groupId, rosterSizeQuestionId.HasValue);
 
-            this.ThrowIfRosterCantBecomeAGroupBecauseOfHeadQuestions(groupId, rosterSizeQuestionId.HasValue);
+            this.ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(groupId, rosterSizeQuestionId.HasValue);
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -733,7 +733,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void CloneQuestion(Guid questionId,
             Guid groupId, string title, QuestionType type, string alias,
-            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            bool isMandatory, bool isFeatured,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, Guid sourceQuestionId, int targetIndex, Guid responsibleId,
             Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
@@ -746,10 +746,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured);
 
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
@@ -766,7 +766,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 Mandatory = isMandatory,
                 Featured = isFeatured,
-                Capital = isHeaderOfPropagatableGroup,
+                Capital = false,
 
                 QuestionScope = scope,
                 ConditionExpression = condition,
@@ -788,7 +788,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void CloneNumericQuestion(Guid questionId,
             Guid groupId, string title, bool isAutopropagating, string alias,
-            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            bool isMandatory, bool isFeatured,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxValue, Guid[] triggeredGroupIds,
             bool isInteger, int? countOfDecimalPlaces)
@@ -802,7 +802,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var questionType = QuestionType.Numeric;
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, validationExpression, responsibleId);
 
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
@@ -820,7 +820,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 Mandatory = isMandatory,
                 Featured = isFeatured,
-                Capital = isHeaderOfPropagatableGroup,
+                Capital = false,
 
                 QuestionScope = scope,
                 ConditionExpression = condition,
@@ -845,7 +845,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void NewAddQuestion(Guid questionId,
            Guid groupId, string title, QuestionType type, string alias,
-           bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+           bool isMandatory, bool isFeatured,
            QuestionScope scope, string condition, string validationExpression, string validationMessage,
            string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
         {
@@ -857,10 +857,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias,
-                isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+                isFeatured, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured);
 
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
@@ -874,7 +874,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = alias,
                 Mandatory = isMandatory,
                 Featured = isFeatured,
-                Capital = isHeaderOfPropagatableGroup,
+                Capital = false,
                 QuestionScope = scope,
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
@@ -892,7 +892,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddNumericQuestion(Guid questionId,
             Guid groupId, string title, bool isAutopropagating, string alias,
-            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            bool isMandatory, bool isFeatured,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId,
             bool isInteger, int? countOfDecimalPlaces)
@@ -905,7 +905,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var questionType = QuestionType.Numeric;
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType,
-                alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+                alias, isFeatured, validationExpression, responsibleId);
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
@@ -921,7 +921,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = alias,
                 Mandatory = isMandatory,
                 Featured = isFeatured,
-                Capital = isHeaderOfPropagatableGroup,
+                Capital = false,
                 QuestionScope = scope,
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
@@ -936,7 +936,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
-            string alias, bool isPrefilled, bool isHeaderOfRoster, string validationExpression, Guid responsibleId)
+            string alias, bool isPrefilled, string validationExpression, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -948,7 +948,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
 
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
-            this.ThrowDomainExceptionIfQuestionIsHeaderOfRosterButParentGroupIsNotRoster(isHeaderOfRoster, parentGroup);
         }
 
         public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
@@ -976,7 +975,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, parentGroup);
-            this.ThrowDomainExceptionIfQuestionIsHeaderOfRosterButParentGroupIsNotRoster(question.Capital, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -989,7 +987,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void NewUpdateQuestion(Guid questionId,
             string title, QuestionType type, string alias,
-            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            bool isMandatory, bool isFeatured,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId,
             bool areAnswersOrdered, int? maxAllowedAnswers)
@@ -1004,10 +1002,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured);
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
@@ -1021,7 +1019,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 Mandatory = isMandatory,
                 Featured = isFeatured,
-                Capital = isHeaderOfPropagatableGroup,
+                Capital = false,
 
                 QuestionScope = scope,
                 ConditionExpression = condition,
@@ -1041,7 +1039,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateNumericQuestion(Guid questionId,
             string title, bool isAutopropagating, string alias,
-            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            bool isMandatory, bool isFeatured,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
@@ -1055,7 +1053,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var questionType = QuestionType.Numeric;
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured,
-                                                                         isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+                validationExpression, responsibleId);
 
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
@@ -1071,7 +1069,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = alias,
                 Mandatory = isMandatory,
                 Featured = isFeatured,
-                Capital = isHeaderOfPropagatableGroup,
+                Capital = false,
                 QuestionScope = scope,
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
@@ -1231,14 +1229,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (isPrefilled && parentGroup.IsRoster)
                 throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
-        }
-
-        private void ThrowDomainExceptionIfQuestionIsHeaderOfRosterButParentGroupIsNotRoster(bool isHeaderOfRoster, IGroup parentGroup)
-        {
-            if (isHeaderOfRoster && !parentGroup.IsRoster)
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionIsHeaderOfRosterButNotInsideRoster,
-                    "Question marked as header of roster should be inside a roster.");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
@@ -1476,8 +1466,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfQuestionIsCategoricalAndInvalid(QuestionType questionType, Option[] options, Guid? linkedToQuestionId, bool isFeatured,
-            bool isHead)
+        private void ThrowIfQuestionIsCategoricalAndInvalid(QuestionType questionType, Option[] options, Guid? linkedToQuestionId, bool isFeatured)
         {
             bool isCategoricalQuestion =
                 questionType == QuestionType.MultyOption ||
@@ -1498,7 +1487,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (questionIsLinked)
             {
-                this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured, isHead);
+                this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
             }
             else
             {
@@ -1533,7 +1522,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfLinkedCategoricalQuestionIsInvalid(Guid? linkedToQuestionId, bool isFeatured, bool isHead)
+        private void ThrowIfLinkedCategoricalQuestionIsInvalid(Guid? linkedToQuestionId, bool isFeatured)
         {
             var linkedToQuestion =
                 this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).FirstOrDefault();
@@ -1562,13 +1551,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
                     "Question that linked to another question can not be pre-filled");
-            }
-
-            if (isHead)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead,
-                    "Question that linked to another question can not be head");
             }
 
             if (!this.IsUnderPropagatableGroup(linkedToQuestion))
@@ -2050,7 +2032,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     FormatGroupForException(referencingRosterTitle.PublicKey, this.innerDocument)));
         }
 
-        private void ThrowIfRosterCantBecomeAGroupBecauseOfHeadQuestions(Guid groupId, bool isRoster)
+        private void ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(Guid groupId, bool isRoster)
         {
             var group = this.innerDocument.Find<IGroup>(groupId);
 
@@ -2059,16 +2041,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!wasRosterAndBecomeAGroup)
                 return;
 
-            var hasAnyHeadQuestion = this.innerDocument.GetAllQuestions<AbstractQuestion>(@group).Any(question => question.Capital);
+            var groupsWithRosterTitleQuestionExceptInnerGroup =
+                this.innerDocument.Find<IGroup>(
+                    x =>
+                        x.PublicKey != groupId && x.RosterTitleQuestionId.HasValue &&
+                            this.IsQuestionParent(groupId, x.RosterTitleQuestionId.Value));
 
-            if (!hasAnyHeadQuestion) return;
-
-            var questionTitlesAndVariables = this.GetFilteredQuestionForException(@group, question => question.Capital);
+            if (!groupsWithRosterTitleQuestionExceptInnerGroup.Any()) return;
 
             throw new QuestionnaireException(
                 string.Format(
-                    "This roster can't become a group because contains head questions: {0}. Toggle head property for that questions to complete this operation",
-                    string.Join(Environment.NewLine, questionTitlesAndVariables)));
+                    "This roster can't become a group because contains a question that used as roster title question of other group(s): {0}",
+                    string.Join(Environment.NewLine,
+                        groupsWithRosterTitleQuestionExceptInnerGroup.Select(g => FormatGroupForException(g.PublicKey, this.innerDocument)))));
         }
 
         private void ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(Guid groupId, bool isRoster)
