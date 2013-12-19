@@ -474,7 +474,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void UpdateRosterRowTitle(Guid groupId, decimal[] outerScopePropagationVector, decimal index, string rosterTitle)
         {
-            var key = new InterviewItemId(groupId, outerScopePropagationVector);
+            var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector, index);
+            var key = new InterviewItemId(groupId, propagationVector);
+
             var screen = this.Screens[key] as QuestionnairePropagatedScreenViewModel;
             if (screen == null)
                 return;
