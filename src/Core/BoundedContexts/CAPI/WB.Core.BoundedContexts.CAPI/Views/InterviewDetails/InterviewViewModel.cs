@@ -147,8 +147,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var rosterDescription in rosterStructure.RosterScopes.Values)
             {
-                if(rosterDescription.HeadQuestionId.HasValue)
-                    this.listOfHeadQuestionsMappedOnScope.Add(rosterDescription.HeadQuestionId.Value, rosterDescription.ScopeId);
+                foreach (var headQuestion in rosterDescription.RosterGroupsWithTitleQuestionPairs.Values)
+                {
+                    this.listOfHeadQuestionsMappedOnScope.Add(headQuestion, rosterDescription.ScopeId);
+                }
             }
         }
 

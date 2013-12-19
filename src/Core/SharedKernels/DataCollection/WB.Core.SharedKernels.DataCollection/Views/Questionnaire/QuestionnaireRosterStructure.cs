@@ -29,9 +29,9 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
             foreach (var autoPropagatebleQuestion in autoPropagatebleQuestions)
             {
-                Guid? titleQuestionId = GetRosterTitleQuestionIdByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
+                var rosterGroupsWithTitleQuestionPairs = this.GetRosterGroupsWithTitleQuestionPairsByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
 
-                var rosterDescription = new RosterDescription(autoPropagatebleQuestion.PublicKey, titleQuestionId);
+                var rosterDescription = new RosterDescription(autoPropagatebleQuestion.PublicKey, rosterGroupsWithTitleQuestionPairs);
 
                 foreach (var trigger in autoPropagatebleQuestion.Triggers)
                 {
@@ -53,10 +53,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             {
                 var groupsFromRosterSizeQuestionScope =
                     rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
-                
-                Guid? titleQuestionId = GetRosterTitleQuestionId(groupsFromRosterSizeQuestionScope);
 
-                var rosterDescription = new RosterDescription(rosterSizeQuestion.PublicKey, titleQuestionId);
+                var rosterGroupsWithTitleQuestionPairs = this.GetRosterGroupsWithTitleQuestionPairsByRostersInScope(groupsFromRosterSizeQuestionScope);
+
+                var rosterDescription = new RosterDescription(rosterSizeQuestion.PublicKey, rosterGroupsWithTitleQuestionPairs);
                
                 groupsFromRosterSizeQuestionScope.ForEach(group => rosterDescription.RosterGroupsId.Add(group.PublicKey));
 
@@ -71,32 +71,29 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             }
         }
 
-        private Guid? GetRosterTitleQuestionId(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
+        private Dictionary<Guid, Guid> GetRosterGroupsWithTitleQuestionPairsByRostersInScope(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
         {
-            var titleQuestionsId = groupsFromRosterSizeQuestionScope.Where(group => group.RosterTitleQuestionId.HasValue).Select(group => group.RosterTitleQuestionId.Value);
-
-            Guid? titleQuestionId = null;
-            if (titleQuestionsId.Any())
-            {
-                titleQuestionId = titleQuestionsId.First();
-            }
-            return titleQuestionId;
+            return
+                groupsFromRosterSizeQuestionScope.Where(group => group.RosterTitleQuestionId.HasValue)
+                    .ToDictionary(roster => roster.PublicKey, roster => roster.RosterTitleQuestionId.Value);
         }
 
-        private Guid? GetRosterTitleQuestionIdByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
+        private Dictionary<Guid, Guid> GetRosterGroupsWithTitleQuestionPairsByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
         {
             IEnumerable<IGroup> groupsFromAutoPropagatedQuestionScope =
                 questionnaire.Find<IGroup>(group => autoPropagateQuestion.Triggers.Contains(group.PublicKey));
 
-            var titleQuestionsId =
-                groupsFromAutoPropagatedQuestionScope.SelectMany(group => group.Find<IQuestion>(question => question.Capital)).Select(question=>question.PublicKey);
-
-            Guid? titleQuestionId = null;
-            if (titleQuestionsId.Any())
+            Dictionary<Guid, Guid> rosterGroupsWithTitleQuestionPairs = new Dictionary<Guid, Guid>();
+            
+            foreach (var rosterGroup in groupsFromAutoPropagatedQuestionScope)
             {
-                titleQuestionId = titleQuestionsId.First();
+                var capitalQuestions = rosterGroup.Find<IQuestion>(question => question.Capital);
+                if (capitalQuestions.Any())
+                {
+                    rosterGroupsWithTitleQuestionPairs[rosterGroup.PublicKey] = capitalQuestions.First().PublicKey;
+                }
             }
-            return titleQuestionId;
+            return rosterGroupsWithTitleQuestionPairs;
         }
 
         public Guid QuestionnaireId { get; set; }
