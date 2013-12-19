@@ -11,8 +11,6 @@
 
         TriggerLinksToNotPropagatedGroup, 
 
-        QuestionIsHeaderOfRosterButNotInsideRoster, 
-
         GroupTitleRequired, 
 
         QuestionnaireTitleRequired, 
