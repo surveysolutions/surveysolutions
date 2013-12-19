@@ -408,12 +408,12 @@
                 var toId = arg.targetParent.id;
                 var moveItemType = arg.item.type().replace('View', '').toLowerCase();
                 var isItemFeaturedQuestion = false;
-                var isItemHeadQuestion = false;
+                var isItemRosterTitleQuestion = false;
                 var isItemAutoQuestion = false;
                 var targetGroupIsAuto = false;
                 if (moveItemType == "question") {
                     isItemAutoQuestion = arg.item.qtype() == "AutoPropagate";
-                    isItemHeadQuestion = arg.item.isHead();
+                    isItemRosterTitleQuestion = datacontext.questions.isRorterTitleQuestion(arg.item.id());
                     isItemFeaturedQuestion = arg.item.isFeatured();
                 }
 
@@ -466,9 +466,9 @@
                         return;
                     }
 
-                    if (isItemHeadQuestion && targetGroupIsAuto == false) {
+                    if (isItemRosterTitleQuestion && targetGroupIsAuto == false) {
                         arg.cancelDrop = true;
-                        config.logger(config.warnings.cantMoveHeadQuestionOutsideAutoGroup);
+                        config.logger(config.warnings.cantMoveRosterTitleQuestionOutsideRosterGroup);
                         return;
                     }
 

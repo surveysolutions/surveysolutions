@@ -17,8 +17,6 @@
                self.type = ko.observable("QuestionView"); // Object type
                self.template = "QuestionView"; // tempate id in html file
 
-
-               self.isHead = ko.observable(false);
                self.isFeatured = ko.observable(false);
                self.isMandatory = ko.observable(false);
 
@@ -121,7 +119,7 @@
                self.isNullo = false;
                self.cloneSource = ko.observable();
 
-               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead,
+               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype,
                    self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression,
                    self.validationMessage, self.instruction, self.answerOptions, self.maxValue,
                    self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces,
@@ -266,19 +264,6 @@
                                    self.validationExpression('');
                                });
                        }
-                       if (value && self.isHead()) {
-                           var weWillClearHeadFlag = config.warnings.weWillClearHeadFlag;
-                           bootbox.confirm(weWillClearHeadFlag.message,
-                               weWillClearHeadFlag.cancelBtn,
-                               weWillClearHeadFlag.okBtn,
-                               function (result) {
-                                   if (result == false) {
-                                       self.isSupervisorQuestion(false);
-                                       return;
-                                   }
-                                   self.isHead(false);
-                               });
-                       }
                    });
 
                    self.validationExpression.extend({
@@ -398,7 +383,6 @@
                        return new answerOption().id(answer.id()).title(answer.title()).value(answer.value());
                    }));
 
-                   item.isHead(this.isHead());
                    item.isFeatured(this.isFeatured());
                    item.isMandatory(this.isMandatory());
                    item.condition(this.condition());
@@ -450,7 +434,6 @@
                this.title(data.title);
                this.alias(data.alias);
                this.qtype(data.qtype);
-               this.isHead(data.isHead);
                this.isFeatured(data.isFeatured);
                this.isMandatory(data.isMandatory);
                this.scope(data.scope);
