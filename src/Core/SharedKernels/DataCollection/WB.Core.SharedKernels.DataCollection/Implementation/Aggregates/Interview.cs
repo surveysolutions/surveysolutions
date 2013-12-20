@@ -528,7 +528,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
 
-            Dictionary<Guid, Dictionary<decimal, string>> rosteTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
+            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
 
             Func<Guid, decimal[], bool> isFixedRoster = (groupId, groupOuterScopeRosterVector)
                 => fixedRosterIds.Contains(groupId)
@@ -1639,7 +1639,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static Dictionary<Guid, Dictionary<decimal, string>> CalculateFixedRosterData(IEnumerable<Guid> fixedRosterIds, IQuestionnaire questionnaire)
         {
-            Dictionary<Guid, Dictionary<decimal, string>> rosteTitlesGroupedByRosterId = fixedRosterIds
+            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = fixedRosterIds
                 .Select(fixedRosterId =>
                     new
                     {
@@ -1652,7 +1652,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             })
                             .ToDictionary(x => x.RosterInstanceId, x => x.Title)
                     }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
-            return rosteTitlesGroupedByRosterId;
+            return rosterTitlesGroupedByRosterId;
         }
 
 
