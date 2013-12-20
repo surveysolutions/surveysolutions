@@ -528,15 +528,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
 
-            Dictionary<Guid, Dictionary<decimal, string>> rosteTitlesGroupedByRosterId = fixedRosterIds
-                .Select(fixedRosterId =>
-                    new
-                    {
-                        FixedRosterId = fixedRosterId,
-                        TitlesWithIds = questionnaire.GetFixedRosterTitles(fixedRosterId)
-                            .Select((title, index) => new { Title = title, RosterInstanceId = (decimal) index })
-                            .ToDictionary(x => x.RosterInstanceId, x => x.Title)
-                    }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
+            Dictionary<Guid, Dictionary<decimal, string>> rosteTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
 
             Func<Guid, decimal[], bool> isFixedRoster = (groupId, groupOuterScopeRosterVector)
                 => fixedRosterIds.Contains(groupId)
@@ -549,7 +541,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => isFixedRoster(groupId, groupOuterRosterVector)
                     ? getFixedRosterInstanceIds(groupId)
                     : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
-
 
             var fixedRosterCalculationDatas = fixedRosterIds
                 .Select(fixedRosterId => new
@@ -1349,7 +1340,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-
         private void ApplyRosterEvents(RosterCalculationData data, Dictionary<decimal, string> titlesForAddedRosterInstances = null)
         {
             data.RosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
@@ -1368,7 +1358,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             data.InitializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
             data.InitializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
         }
-
 
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
@@ -1644,6 +1633,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewStatus));
         }
 
+        private static Dictionary<Guid, Dictionary<decimal, string>> CalculateFixedRosterData(IEnumerable<Guid> fixedRosterIds, IQuestionnaire questionnaire)
+        {
+            Dictionary<Guid, Dictionary<decimal, string>> rosteTitlesGroupedByRosterId = fixedRosterIds
+                .Select(fixedRosterId =>
+                    new
+                    {
+                        FixedRosterId = fixedRosterId,
+                        TitlesWithIds = questionnaire.GetFixedRosterTitles(fixedRosterId)
+                            .Select((title, index) => new
+                            {
+                                Title = title, 
+                                RosterInstanceId = (decimal) index
+                            })
+                            .ToDictionary(x => x.RosterInstanceId, x => x.Title)
+                    }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
+            return rosteTitlesGroupedByRosterId;
+        }
 
 
         private RosterCalculationData CalculateRosterData(
