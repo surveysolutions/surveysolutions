@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         };
 
         Because of = () =>
-            interviewViewModel.UpdateRosterRowTitle(rosterGroupId, new decimal[] { 0 }, 0, rosterTitle);
+            interviewViewModel.UpdateRosterRowTitle(rosterGroupId, new decimal[] { }, 0, rosterTitle);
 
         It should_roster_screen_title_rosterTitle = () =>
             ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);

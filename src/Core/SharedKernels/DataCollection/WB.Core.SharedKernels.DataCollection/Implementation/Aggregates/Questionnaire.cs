@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
 
         protected internal void OnTemplateImported(TemplateImported e)
         {
@@ -548,13 +549,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return numericQuestion.CountOfDecimalPlaces;
         }
 
-        public bool IsQuestionHeadOfRoster(Guid questionId)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-            
-            return question.Capital;
-        }
-
         public IEnumerable<string> GetFixedRosterTitles(Guid groupId)
         {
             var group = this.GetGroup(groupId);
@@ -563,6 +557,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return Enumerable.Empty<string>();
             }
             return group.RosterFixedTitles;
+        }
+
+        public bool DoesQuestionSpecifyRosterTitle(Guid questionId)
+        {
+            return this.GetRostersAffectedByRosterTitleQuestion(questionId).Any();
+        }
+
+        public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
+        {
+            if (!this.cacheOfRostersAffectedByRosterTitleQuestion.ContainsKey(questionId))
+                this.cacheOfRostersAffectedByRosterTitleQuestion[questionId] = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
+
+            return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
@@ -612,6 +619,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                        && questionId != question.PublicKey
                 select question.PublicKey
             );
+        }
+
+        private IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestionImpl(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            Guid? rosterAffectedByBackwardCompatibility =
+                question.Capital
+                    ? this.GetRostersFromTopToSpecifiedQuestion(questionId).Cast<Guid?>().LastOrDefault()
+                    : null;
+
+            IEnumerable<Guid> rostersAffectedByCurrentDomain =
+                from @group in this.GetAllGroups()
+                where this.IsRosterGroup(@group.PublicKey) && @group.RosterTitleQuestionId == questionId
+                select @group.PublicKey;
+
+            return Enumerable.ToList(
+                rosterAffectedByBackwardCompatibility.HasValue
+                    ? rostersAffectedByCurrentDomain.Union(new[] { rosterAffectedByBackwardCompatibility.Value })
+                    : rostersAffectedByCurrentDomain);
         }
 
         private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfGroupImpl(Guid groupId)
