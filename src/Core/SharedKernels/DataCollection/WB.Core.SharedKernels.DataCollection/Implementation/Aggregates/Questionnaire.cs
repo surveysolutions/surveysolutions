@@ -852,7 +852,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static bool DoesQuestionSupportRoster(IQuestion question)
         {
                    //### roster
-            return question.QuestionType == QuestionType.Numeric ||
+            return question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.MultyOption ||
                    //### old questionnaires supporting
                   (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
 
