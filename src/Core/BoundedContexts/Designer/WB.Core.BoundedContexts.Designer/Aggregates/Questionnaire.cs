@@ -211,6 +211,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(question, e.GroupPublicKey, null);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
         }
 
 
@@ -250,6 +253,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(question, e.GroupPublicKey, null);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
         }
 
         private void Apply(QuestionCloned e)
@@ -286,6 +292,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
         }
 
         private void Apply(NumericQuestionCloned e)
@@ -323,6 +332,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
         }
 
         private void Apply(NewQuestionnaireCreated e)
@@ -366,6 +378,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
 
         private void Apply(NumericQuestionChanged e)
@@ -398,11 +413,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
 
         private void Apply(QuestionDeleted e)
         {
             this.innerDocument.RemoveQuestion(e.QuestionId);
+
+            this.innerDocument.RemoveHeadPropertiesFromRosters(e.QuestionId);
         }
 
         private void Apply(QuestionnaireItemMoved e)
@@ -416,6 +436,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
+
+            this.innerDocument.CheckQuestionAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
         }
 
         public QuestionnaireState CreateSnapshot()
