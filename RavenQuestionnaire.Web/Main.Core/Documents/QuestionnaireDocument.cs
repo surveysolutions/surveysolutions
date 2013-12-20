@@ -481,6 +481,45 @@ namespace Main.Core.Documents
             }
         }
 
+        public void MoveHeadQuestionPropertiesToRoster(Guid QuestionId, Guid? GroupPublicKey)
+        {
+            if (GroupPublicKey != null)
+            {
+                var foundGroup = this.Find<IGroup>(group => group.PublicKey == GroupPublicKey).FirstOrDefault() as Group;
+                if (foundGroup == null)
+                {
+                    logger.Warn(string.Format("Failed to find group {0}.", GroupPublicKey)); 
+                }
+
+                foundGroup.RosterTitleQuestionId = QuestionId;
+
+                if (foundGroup.RosterSizeQuestionId != null)
+                {
+                    var scopeGroups = this.Find<IGroup>(group => group.RosterSizeQuestionId == foundGroup.RosterSizeQuestionId);
+                    foreach (var scopeGroup in scopeGroups)
+                    {
+                        var @group = scopeGroup as Group;
+                        if (@group != null)
+                            @group.RosterTitleQuestionId = QuestionId;
+                    }
+                }
+            }
+        }
+
+
+        public void RemoveHeadPropertiesFromRosters(Guid QuestionId)
+        {
+            var scopeGroups = this.Find<IGroup>(group => group.RosterTitleQuestionId == QuestionId);  
+          
+            foreach (var scopeGroup in scopeGroups)
+                    {
+                        var @group = scopeGroup as Group;
+                        if (@group != null)
+                            @group.RosterTitleQuestionId = null;
+                    }
+        }
+
+
         public void MarkGroupsAsRosterAndSetRosterSizeQuestion(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
         {
             foreach (var triggeredGroupId in triggeredGroupIds)
