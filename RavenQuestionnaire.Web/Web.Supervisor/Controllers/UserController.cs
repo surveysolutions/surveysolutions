@@ -45,7 +45,7 @@ namespace Web.Supervisor.Controllers
             if (this.ModelState.IsValid)
             {
                 this.CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
-                                                                  user.Name + "@worldbank.org", new[] {user.Role},
+                                                                  user.Name + "@example.com", new[] {user.Role},
                                                                   false, null));
 
                 bool isSupervisor = Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString());

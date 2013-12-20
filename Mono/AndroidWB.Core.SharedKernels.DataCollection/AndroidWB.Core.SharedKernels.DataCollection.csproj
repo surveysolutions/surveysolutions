@@ -208,6 +208,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\QuestionPassiveEvent.cs">
       <Link>Events\Interview\Base\QuestionPassiveEvent.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\RosterRowEvent.cs">
+      <Link>Events\Interview\Base\RosterRowEvent.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\DateTimeQuestionAnswered.cs">
       <Link>Events\Interview\DateTimeQuestionAnswered.cs</Link>
     </Compile>
@@ -295,8 +298,8 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowRemoved.cs">
       <Link>Events\Interview\RosterRowRemoved.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterTitleChanged.cs">
-      <Link>Events\Interview\RosterTitleChanged.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowTitleChanged.cs">
+      <Link>Events\Interview\RosterRowTitleChanged.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SingleOptionLinkedQuestionAnswered.cs">
       <Link>Events\Interview\SingleOptionLinkedQuestionAnswered.cs</Link>
@@ -339,6 +342,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Snapshots\QuestionnaireState.cs">
       <Link>Implementation\Aggregates\Snapshots\QuestionnaireState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\EnumerableExtensions.cs">
+      <Link>Implementation\EnumerableExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireFactory.cs">
       <Link>Implementation\Factories\QuestionnaireFactory.cs</Link>
@@ -400,6 +406,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireRosterStructure.cs">
       <Link>Views\Questionnaire\QuestionnaireRosterStructure.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\RosterDescription.cs">
+      <Link>Views\Questionnaire\RosterDescription.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -443,7 +452,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

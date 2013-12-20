@@ -1,7 +1,9 @@
 using System;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -37,11 +39,12 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<InterviewForTestingCreated>,
-        IEventHandler<RosterTitleChanged>
+        IEventHandler<RosterRowTitleChanged>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
         public InterviewViewModelDenormalizer(
             IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
@@ -68,8 +71,16 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         private QuestionnaireRosterStructure GetPropagationStructureOfQuestionnaireAndBuildItIfAbsent(QuestionnaireDocumentVersioned questionnaire)
         {
-            var propagationStructure = this.questionnaireRosterStructureStorage.GetById(questionnaire.Questionnaire.PublicKey,
-                questionnaire.Version);
+            QuestionnaireRosterStructure propagationStructure = null;
+            try
+            {
+                propagationStructure = this.questionnaireRosterStructureStorage.GetById(questionnaire.Questionnaire.PublicKey,
+                    questionnaire.Version);
+            }
+            catch (Exception e)
+            {
+                logger.Error("error during restore QuestionnaireRosterStructure", e);
+            }
 
             if (propagationStructure != null)
                 return propagationStructure;
@@ -249,10 +260,11 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             doc.RemovePropagatedScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
         }
 
-        public void Handle(IPublishedEvent<RosterTitleChanged> evnt)
+        public void Handle(IPublishedEvent<RosterRowTitleChanged> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.UpdateRosterTitle(evnt.Payload.QuestionId, evnt.Payload.PropagationVector, evnt.Payload.RosterTitle);
+            
+            doc.UpdateRosterRowTitle(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.Title);
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)

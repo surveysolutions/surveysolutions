@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                         RosterGroupInstances[propagatedGroupInstanceCount.Key] = new Dictionary<decimal, int?>();
                         for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
                         {
-                            RosterGroupInstances[propagatedGroupInstanceCount.Key][i] = null;
+                            RosterGroupInstances[propagatedGroupInstanceCount.Key][Convert.ToDecimal(i)] = null;
                         }
                     }
                 }

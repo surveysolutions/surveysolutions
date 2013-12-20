@@ -67,6 +67,8 @@
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="InterviewItemIdTests.cs" />
     <Compile Include="InterviewItemIdTests\InterviewItemIdTestsContext.cs" />
+    <Compile Include="InterviewItemIdTests\when_comparing_hashcodes_two_instances_with_same_id_and_propagation_vectors_0point0_and_0.cs" />
+    <Compile Include="InterviewItemIdTests\when_comparing_hashcodes_two_instances_with_same_id_and_propagation_vectors_1point0_and_1.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_on_the_third_level.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size.cs" />
     <Compile Include="InterviewTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
     <Compile Include="InterviewTests\when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero.cs" />
+    <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_with_3_fixed_titles.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_more_than_max_for_selected_answer_options_for_multiquestion_throw_interview_exception.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs" />
@@ -98,9 +101,12 @@
     <Compile Include="InterviewTests\when_propagated_group_is_conditionally_disabled.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_group_with_custom_enablement_condition.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_mandatory_date_and_gps_question.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_mandatory_disabled_question.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_mandatory_inside_disabled_group.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
     <Compile Include="InterviewTests\when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_rost___.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_unanswered_mandatory_question_with_validation.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_question_with_not_existing_group_in_triggers_then_GetRosterGroupsByRosterSizeQuestion_should_t___.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_groups_and_GetRosterGroupsByRosterSizeQuestion_return_them.cs" />
@@ -118,6 +124,9 @@
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="UserARTests.cs" />
+    <Compile Include="Views\QuestionnaireRosterStructureTests\QuestionnaireRosterStructureTestContext.cs" />
+    <Compile Include="Views\QuestionnaireRosterStructureTests\when_questionnarie_has_capital_question_inside_autopropagate_style_roster.cs" />
+    <Compile Include="Views\QuestionnaireRosterStructureTests\when_questionnarie_has_roster_title_question_inside_roster_group.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
