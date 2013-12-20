@@ -67,7 +67,6 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_have_roster_title_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_have_roster_size_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_question_that_have_fixed_titles.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_non_roster_group_that_contains_head_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_prefilled_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_question.cs" />

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             IQueryable<AccountDocument> users = Enumerable.Empty<AccountDocument>().AsQueryable();
             if (input.ProviderUserKey != null)
             {
-                users = accounts.Query(_ => _.Where((x) => x.ProviderUserKey.ToString() == input.ProviderUserKey.ToString()));
+                users = accounts.Query(_ => _.Where((x) => x.ProviderUserKey== input.ProviderUserKey));
             }
             else if (!string.IsNullOrEmpty(input.AccountName))
             {

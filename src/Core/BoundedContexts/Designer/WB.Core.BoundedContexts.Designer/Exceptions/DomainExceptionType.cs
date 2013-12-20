@@ -11,8 +11,6 @@
 
         TriggerLinksToNotPropagatedGroup, 
 
-        QuestionIsHeaderOfRosterButNotInsideRoster, 
-
         GroupTitleRequired, 
 
         QuestionnaireTitleRequired, 
@@ -86,8 +84,6 @@
         NotCategoricalQuestionLinkedToAnoterQuestion,
 
         QuestionWithLinkedQuestionCanNotBeFeatured,
-
-        QuestionWithLinkedQuestionCanNotBeHead,
 
         AutoPropagateQuestionCantBeReal,
         QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,

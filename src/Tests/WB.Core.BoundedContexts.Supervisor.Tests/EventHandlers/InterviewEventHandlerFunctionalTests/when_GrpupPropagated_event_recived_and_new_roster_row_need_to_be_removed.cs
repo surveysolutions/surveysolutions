@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             viewState = CreateViewWithSequenceOfInterviewData();
             viewState.Document.Levels.Add("0",new InterviewLevel(rosterScopeId,null,new decimal[0]));
 
-            var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId, rosterGroupId);
+            var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId, null, rosterGroupId);
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
         };

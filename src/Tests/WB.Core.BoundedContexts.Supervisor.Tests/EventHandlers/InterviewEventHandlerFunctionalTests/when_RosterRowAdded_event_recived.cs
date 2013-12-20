@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterScopeId = Guid.Parse("12222222222222222222222222222222");
             viewState = CreateViewWithSequenceOfInterviewData();
-            var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId, rosterGroupId);
+            var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId, null, rosterGroupId);
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
         };
