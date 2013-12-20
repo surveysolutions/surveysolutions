@@ -514,10 +514,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowTitleChanged> evnt)
         {
-            //Guid scopeOfRosterTitleQuestion = GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
-            
+            var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+
             return
-                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, evnt.Payload.OuterRosterVector, (level) =>
+                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, newVector, (level) =>
                 {
                     if (level.RosterRowTitles.ContainsKey(evnt.Payload.GroupId))
                     {
