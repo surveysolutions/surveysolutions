@@ -77,7 +77,9 @@
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InterviewViewModel\InterviewViewModelTestContext.cs" />
+    <Compile Include="Views\InterviewViewModel\whent_answer_was_set_to_head_question.cs" />
     <Compile Include="Views\InterviewViewModel\whent_synchronized_data_contains_roster_with_2_rows_and_linked_question_out_of_roster.cs" />
+    <Compile Include="Views\InterviewViewModel\whent_update_roster_title_called.cs" />
     <Compile Include="Views\InterviewViewModel\when_add_roster_row_method_called.cs" />
     <Compile Include="Views\InterviewViewModel\when_delete_roster_row_method_called.cs" />
     <Compile Include="Views\InterviewViewModel\when_synchronized_data_contains_propagated_groups_with_linked_question_and_questions_with_substitution_from_linked_answer.cs" />

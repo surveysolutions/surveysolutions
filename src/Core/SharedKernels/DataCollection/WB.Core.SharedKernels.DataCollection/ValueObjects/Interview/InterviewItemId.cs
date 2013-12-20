@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             {
                 if (interviewItemPropagationVector == null && PropagationVector != null)
                 {
-                    interviewItemPropagationVector = PropagationVector.Select(v => (decimal)v).ToArray();
+                    interviewItemPropagationVector = PropagationVector.Select(Convert.ToDecimal).ToArray();
                 }
                 return interviewItemPropagationVector;
             }
@@ -73,10 +73,22 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (!IsTopLevel())
             {
-                string vector = string.Join(",", this.InterviewItemPropagationVector);
+                string vector = string.Join(",", this.InterviewItemPropagationVector.Select(DecimalValueToString));
                 return string.Format("{0},{1}", vector, Id);
             }
             return Id.ToString();
+        }
+
+        private string DecimalValueToString(decimal decimalValue)
+        {
+            if (decimalValue == 0)
+            {
+                return "0";
+            }
+            var decimalString = decimalValue.ToString();
+            decimalString = decimalString.TrimEnd('0');
+            decimalString = decimalString.TrimEnd(',', '.');
+            return decimalString;
         }
 
         /// <remarks>Is needed for Newtonsoft JSON.</remarks>
@@ -93,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
                 var vector = new decimal[items.Length - 1];
                 for (int i = 0; i < items.Length - 1; i++)
                 {
-                    vector[i] = decimal.Parse(items[i]);
+                    vector[i] = Convert.ToDecimal(items[i]);
                 }
                 return new InterviewItemId(Guid.Parse(items[items.Length - 1]), vector);
             }

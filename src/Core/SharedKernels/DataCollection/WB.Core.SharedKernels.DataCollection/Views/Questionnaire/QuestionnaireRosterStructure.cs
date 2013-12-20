@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
     {
         public QuestionnaireRosterStructure()
         {
-            this.RosterScopes = new Dictionary<Guid, HashSet<Guid>>();
+            this.RosterScopes = new Dictionary<Guid, RosterDescription>();
         }
 
         public QuestionnaireRosterStructure(QuestionnaireDocument questionnaire, long version)
@@ -29,15 +29,17 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
             foreach (var autoPropagatebleQuestion in autoPropagatebleQuestions)
             {
-                var triggerHashSet = new HashSet<Guid>();
+                var rosterGroupsWithTitleQuestionPairs = this.GetRosterGroupsWithTitleQuestionPairsByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
+
+                var rosterDescription = new RosterDescription(autoPropagatebleQuestion.PublicKey, rosterGroupsWithTitleQuestionPairs);
 
                 foreach (var trigger in autoPropagatebleQuestion.Triggers)
                 {
-                    triggerHashSet.Add(trigger);
+                    rosterDescription.RosterGroupsId.Add(trigger);
                 }
 
                 this.RosterScopes.Add(autoPropagatebleQuestion.PublicKey,
-                    triggerHashSet);
+                    rosterDescription);
             }
 
 
@@ -49,18 +51,53 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
             foreach (var rosterSizeQuestion in rosterSizeQuestions)
             {
-                this.RosterScopes.Add(
-                    rosterSizeQuestion.PublicKey,
-                    new HashSet<Guid>(rosterGroups
-                        .Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey)
-                        .Select(group => group.PublicKey)));
+                var groupsFromRosterSizeQuestionScope =
+                    rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
+
+                var rosterGroupsWithTitleQuestionPairs = this.GetRosterGroupsWithTitleQuestionPairsByRostersInScope(groupsFromRosterSizeQuestionScope);
+
+                var rosterDescription = new RosterDescription(rosterSizeQuestion.PublicKey, rosterGroupsWithTitleQuestionPairs);
+               
+                groupsFromRosterSizeQuestionScope.ForEach(group => rosterDescription.RosterGroupsId.Add(group.PublicKey));
+
+                RosterScopes.Add(rosterSizeQuestion.PublicKey, rosterDescription);
             }
 
-            fixedRosterGroups.ForEach(fixedRoster => this.RosterScopes.Add(fixedRoster.PublicKey, new HashSet<Guid>(new[] { fixedRoster.PublicKey })));
+            foreach (var fixedRosterGroup in fixedRosterGroups)
+            {
+                var rosterDescription = new RosterDescription(fixedRosterGroup.PublicKey, null);
+                rosterDescription.RosterGroupsId.Add(fixedRosterGroup.PublicKey);
+                this.RosterScopes[fixedRosterGroup.PublicKey] = rosterDescription;
+            }
+        }
+
+        private Dictionary<Guid, Guid> GetRosterGroupsWithTitleQuestionPairsByRostersInScope(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
+        {
+            return
+                groupsFromRosterSizeQuestionScope.Where(group => group.RosterTitleQuestionId.HasValue)
+                    .ToDictionary(roster => roster.PublicKey, roster => roster.RosterTitleQuestionId.Value);
+        }
+
+        private Dictionary<Guid, Guid> GetRosterGroupsWithTitleQuestionPairsByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
+        {
+            IEnumerable<IGroup> groupsFromAutoPropagatedQuestionScope =
+                questionnaire.Find<IGroup>(group => autoPropagateQuestion.Triggers.Contains(group.PublicKey));
+
+            Dictionary<Guid, Guid> rosterGroupsWithTitleQuestionPairs = new Dictionary<Guid, Guid>();
+            
+            foreach (var rosterGroup in groupsFromAutoPropagatedQuestionScope)
+            {
+                var capitalQuestions = rosterGroup.Find<IQuestion>(question => question.Capital);
+                if (capitalQuestions.Any())
+                {
+                    rosterGroupsWithTitleQuestionPairs[rosterGroup.PublicKey] = capitalQuestions.First().PublicKey;
+                }
+            }
+            return rosterGroupsWithTitleQuestionPairs;
         }
 
         public Guid QuestionnaireId { get; set; }
-        public Dictionary<Guid, HashSet<Guid>> RosterScopes { get; set; }
+        public Dictionary<Guid, RosterDescription> RosterScopes { get; set; }
         public long Version { get; set; }
     }
 }

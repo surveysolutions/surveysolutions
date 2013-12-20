@@ -41,6 +41,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             MarkAllNonReferencedAutoPropagatedGroupsAsNotPropagated(document);
 
+            MoveAllQuestionsHeadPropertyToRosterProperty(document);
+
             return document;
         }
 
@@ -116,6 +118,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return propagateQuestion != null
                 ? propagateQuestion.Triggers.ToArray()
                 : new Guid[0];
+        }
+
+        private static void MoveAllQuestionsHeadPropertyToRosterProperty(QuestionnaireDocument document)
+        {
+            //assuming all groups were updated to roster
+            var headQuestions = document.Find<AbstractQuestion>(q => q.Capital == true).ToList();
+
+            foreach (var headQuestion in headQuestions)
+            {
+                var parentGroup = headQuestion.GetParent() as Group;
+                if (parentGroup != null && parentGroup.IsRoster)
+                {
+                    parentGroup.RosterTitleQuestionId = headQuestion.PublicKey;
+
+                    if (parentGroup.RosterSizeQuestionId != null)
+                    {
+                        var rosterGroups = document.Find<Group>(q => q.RosterSizeQuestionId == parentGroup.RosterSizeQuestionId).ToList();
+                        foreach (var @group in rosterGroups)
+                        {
+                            @group.RosterTitleQuestionId = headQuestion.PublicKey;
+                        }
+                    }
+                }
+                headQuestion.Capital = false;
+            }
         }
     }
 }
