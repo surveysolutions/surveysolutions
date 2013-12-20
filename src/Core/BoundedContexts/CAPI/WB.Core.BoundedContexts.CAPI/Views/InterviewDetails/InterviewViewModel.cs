@@ -147,8 +147,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var rosterDescription in rosterStructure.RosterScopes.Values)
             {
-                if(rosterDescription.HeadQuestionId.HasValue)
-                    this.listOfHeadQuestionsMappedOnScope.Add(rosterDescription.HeadQuestionId.Value, rosterDescription.ScopeId);
+                foreach (var headQuestion in rosterDescription.RosterGroupsWithTitleQuestionPairs.Values)
+                {
+                    this.listOfHeadQuestionsMappedOnScope.Add(headQuestion, rosterDescription.ScopeId);
+                }
             }
         }
 
@@ -474,7 +476,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void UpdateRosterRowTitle(Guid groupId, decimal[] outerScopePropagationVector, decimal index, string rosterTitle)
         {
-            var key = new InterviewItemId(groupId, outerScopePropagationVector);
+            var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector, index);
+            var key = new InterviewItemId(groupId, propagationVector);
+
             var screen = this.Screens[key] as QuestionnairePropagatedScreenViewModel;
             if (screen == null)
                 return;
