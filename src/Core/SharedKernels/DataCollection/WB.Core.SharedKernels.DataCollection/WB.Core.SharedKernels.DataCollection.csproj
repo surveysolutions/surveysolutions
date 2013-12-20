@@ -184,7 +184,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
-    <Compile Include="Views\Questionnaire\RosterDescription.cs" />
+    <Compile Include="Views\Questionnaire\RosterScopeDescription.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
