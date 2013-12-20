@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             {
                 if (questionPropagationVector == null && PropagationVector != null)
                 {
-                    questionPropagationVector = PropagationVector.Select(v => (decimal) v).ToArray();
+                    questionPropagationVector = PropagationVector.Select(Convert.ToDecimal).ToArray();
                 }
                 return questionPropagationVector;
             }

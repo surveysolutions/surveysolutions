@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
+        string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
+
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
         bool IsCustomValidationDefined(Guid questionId);

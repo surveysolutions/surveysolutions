@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -28,7 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupPropagated>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, RosterTitleChanged>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericRealQuestionAnswered>,
@@ -68,22 +64,22 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return string.Join(",", vector);
         }
 
-        private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
+        private RosterDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
             var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             foreach (var scopeId in questionnarie.RosterScopes.Keys)
             {
-                if (questionnarie.RosterScopes[scopeId].Contains(groupId))
+                if (questionnarie.RosterScopes[scopeId].RosterGroupsId.Contains(groupId))
                 {
-                    return scopeId;
+                    return questionnarie.RosterScopes[scopeId];
                 }
             }
 
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire",
                                                       groupId));
         }
-
+        
         private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete, Guid scopeId)
         {
             foreach (var levelKey in levelKeysForDelete)
@@ -92,11 +88,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, int? sortIndex, Guid scopeId)
+        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, int? sortIndex, RosterDescription scope)
         {
             for (int rosterInstanceId = startIndex; rosterInstanceId < startIndex + count; rosterInstanceId++)
             {
-                this.AddLevelToInterview(interview, outerVector, rosterInstanceId, sortIndex, scopeId);
+                this.AddLevelToInterview(interview, outerVector, rosterInstanceId, sortIndex, scope);
             }
         }
 
@@ -114,14 +110,20 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, int? sortIndex, Guid scopeId)
+        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, int? sortIndex, RosterDescription scope)
         {
             var newVector = CreateNewVector(vector, rosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
             if (!interview.Levels.ContainsKey(levelKey))
-                interview.Levels[levelKey] = new InterviewLevel(scopeId, sortIndex, newVector);
+                interview.Levels[levelKey] = new InterviewLevel(scope.ScopeId, sortIndex, newVector);
             else
-                interview.Levels[levelKey].ScopeIds[scopeId] = sortIndex;
+                interview.Levels[levelKey].ScopeIds[scope.ScopeId] = sortIndex;
+
+            var level = interview.Levels[levelKey];
+            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterGroupsWithTitleQuestionPairs)
+            {
+                level.HeadQuestionsMappedOnRosterGroup[rosterGroupsWithTitleQuestionPair.Value] = rosterGroupsWithTitleQuestionPair.Key;
+            }
         }
 
         private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, decimal indexInScope)
@@ -179,11 +181,28 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private InterviewData SaveAnswer(InterviewData interview, decimal[] vector, Guid questionId, object answer)
          {
-            return this.UpdateQuestion(interview, vector, questionId, (question) =>
-                 {
-                     question.Answer = answer;
-                     question.IsAnswered = true;
-                 });
+            return this.PreformActionOnLevel(interview, vector, (level) =>
+            {
+                var answeredQuestion = level.GetOrCreateQuestion(questionId);
+
+                answeredQuestion.Answer = answer;
+                answeredQuestion.IsAnswered = true;
+
+                if (level.HeadQuestionsMappedOnRosterGroup.ContainsKey(questionId))
+                {
+                    var groupId = level.HeadQuestionsMappedOnRosterGroup[questionId];
+                    var answerString = (answer ?? string.Empty).ToString();
+
+                    if (level.RosterRowTitles.ContainsKey(groupId))
+                    {
+                        level.RosterRowTitles[groupId] = answerString;
+                    }
+                    else
+                    {
+                        level.RosterRowTitles.Add(groupId, answerString);
+                    }
+                }
+            });
          }
 
         private InterviewData SetFlagStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId, bool isFlagged)
@@ -278,7 +297,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowAdded> evnt)
         {
-            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
 
             this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex, scopeOfCurrentGroup);
@@ -289,12 +308,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowRemoved> evnt)
         {
-            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                          evnt.Payload.GroupId);
 
             var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
-            this.RemoveLevelFromInterview(currentState.Document, levelKey, scopeOfCurrentGroup);
+            this.RemoveLevelFromInterview(currentState.Document, levelKey, scopeOfCurrentGroup.ScopeId);
 
             currentState.Sequence = evnt.EventSequence;
             return currentState;
@@ -302,27 +321,30 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupPropagated> evnt)
         {
-            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
             List<string> keysOfLevelsByScope =
-                GetLevelsByScopeFromInterview(interview: currentState.Document, scopeId: scopeOfCurrentGroup);
+                GetLevelsByScopeFromInterview(interview: currentState.Document, scopeId: scopeOfCurrentGroup.ScopeId);
 
             int countOfLevelByScope = keysOfLevelsByScope.Count();
 
             if (evnt.Payload.Count == countOfLevelByScope)
+            {
+                currentState.Sequence = evnt.EventSequence;
                 return currentState;
+            }
 
             if (countOfLevelByScope < evnt.Payload.Count)
             {
                 AddNewLevelsToInterview(currentState.Document, startIndex: countOfLevelByScope,
                     count: evnt.Payload.Count - countOfLevelByScope,
-                    outerVector: evnt.Payload.OuterScopePropagationVector, sortIndex: null, scopeId: scopeOfCurrentGroup);
+                    outerVector: evnt.Payload.OuterScopePropagationVector, sortIndex: null, scope: scopeOfCurrentGroup);
             }
             else
             {
                 var keysOfLevelToBeDeleted =
                     keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(countOfLevelByScope - evnt.Payload.Count);
-                RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup);
+                RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup.ScopeId);
             }
             currentState.Sequence = evnt.EventSequence;
             return currentState;
@@ -490,19 +512,23 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return new ViewWithSequence<InterviewData>(this.SetInterviewValidity(currentState.Document, true), evt.EventSequence);
         }
 
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterTitleChanged> evnt)
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowTitleChanged> evnt)
         {
-            throw new NotImplementedException();
+            var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
 
-            /*return
-                new ViewWithSequence<InterviewData>(
-                    PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, (level) =>
+            return
+                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, newVector, (level) =>
                 {
-                    if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    if (level.RosterRowTitles.ContainsKey(evnt.Payload.GroupId))
                     {
-                        level.DisabledGroups.Add(evnt.Payload.GroupId);
+                        level.RosterRowTitles[evnt.Payload.GroupId] = evnt.Payload.Title;
                     }
-                }), evnt.EventSequence);*/
+                    else
+                    {
+                        level.RosterRowTitles.Add(evnt.Payload.GroupId, evnt.Payload.Title);
+                    }
+
+                }), evnt.EventSequence);
         }
     }
 }

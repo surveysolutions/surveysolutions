@@ -13,66 +13,66 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             this.accounts = accounts;
         }
-        
+
         public AccountView Load(AccountViewInputModel input)
         {
-            Func<AccountDocument, bool> query = (x) => false;
+            IQueryable<AccountDocument> users = Enumerable.Empty<AccountDocument>().AsQueryable();
             if (input.ProviderUserKey != null)
             {
-                query = (x) => x.ProviderUserKey.ToString()== input.ProviderUserKey.ToString();
+                users = accounts.Query(_ => _.Where((x) => x.ProviderUserKey== input.ProviderUserKey));
             }
             else if (!string.IsNullOrEmpty(input.AccountName))
             {
-                query = (x) => x.UserName == NormalizeAccountName(input.AccountName);
+                var normalizedAccountName = NormalizeAccountName(input.AccountName);
+                users = accounts.Query(_ => _.Where((x) => x.UserName == normalizedAccountName));
             }
             else if (!string.IsNullOrEmpty(input.AccountEmail))
             {
-                query = (x) => x.Email == input.AccountEmail;
+                users = accounts.Query(_ => _.Where((x) => x.Email == input.AccountEmail));
             }
             else if (!string.IsNullOrEmpty(input.ConfirmationToken))
             {
-                query = (x) => x.ConfirmationToken == input.ConfirmationToken;
+                users = accounts.Query(_ => _.Where((x) => x.ConfirmationToken == input.ConfirmationToken));
             }
             else if (!string.IsNullOrEmpty(input.ResetPasswordToken))
             {
-                query = (x) => x.PasswordResetToken == input.ResetPasswordToken;
+                users = accounts.Query(_ => _.Where((x) => x.PasswordResetToken == input.ResetPasswordToken));
             }
 
             return
-                this.accounts.Query(_ => _
-                    .Where(query)
+                users
                     .Select(
                         x =>
-                        new AccountView
+                            new AccountView
                             {
-                                ApplicationName = x.ApplicationName, 
-                                ProviderUserKey = x.ProviderUserKey, 
-                                UserName = x.UserName, 
-                                Comment = x.Comment, 
-                                ConfirmationToken = x.ConfirmationToken, 
-                                CreatedAt = x.CreatedAt, 
-                                Email = x.Email, 
+                                ApplicationName = x.ApplicationName,
+                                ProviderUserKey = x.ProviderUserKey,
+                                UserName = x.UserName,
+                                Comment = x.Comment,
+                                ConfirmationToken = x.ConfirmationToken,
+                                CreatedAt = x.CreatedAt,
+                                Email = x.Email,
                                 FailedPasswordAnswerWindowAttemptCount =
-                                    x.FailedPasswordAnswerWindowAttemptCount, 
-                                FailedPasswordAnswerWindowStartedAt = x.FailedPasswordAnswerWindowStartedAt, 
-                                FailedPasswordWindowAttemptCount = x.FailedPasswordWindowAttemptCount, 
-                                FailedPasswordWindowStartedAt = x.FailedPasswordWindowStartedAt, 
-                                IsConfirmed = x.IsConfirmed, 
-                                IsLockedOut = x.IsLockedOut, 
-                                IsOnline = x.IsOnline, 
-                                LastActivityAt = x.LastActivityAt, 
-                                LastLockedOutAt = x.LastLockedOutAt, 
-                                LastLoginAt = x.LastLoginAt, 
-                                LastPasswordChangeAt = x.LastPasswordChangeAt, 
-                                Password = x.Password, 
-                                PasswordSalt = x.PasswordSalt, 
-                                PasswordQuestion = x.PasswordQuestion, 
-                                PasswordAnswer = x.PasswordAnswer, 
-                                PasswordResetToken = x.PasswordResetToken, 
-                                PasswordResetExpirationDate = x.PasswordResetExpirationDate, 
+                                    x.FailedPasswordAnswerWindowAttemptCount,
+                                FailedPasswordAnswerWindowStartedAt = x.FailedPasswordAnswerWindowStartedAt,
+                                FailedPasswordWindowAttemptCount = x.FailedPasswordWindowAttemptCount,
+                                FailedPasswordWindowStartedAt = x.FailedPasswordWindowStartedAt,
+                                IsConfirmed = x.IsConfirmed,
+                                IsLockedOut = x.IsLockedOut,
+                                IsOnline = x.IsOnline,
+                                LastActivityAt = x.LastActivityAt,
+                                LastLockedOutAt = x.LastLockedOutAt,
+                                LastLoginAt = x.LastLoginAt,
+                                LastPasswordChangeAt = x.LastPasswordChangeAt,
+                                Password = x.Password,
+                                PasswordSalt = x.PasswordSalt,
+                                PasswordQuestion = x.PasswordQuestion,
+                                PasswordAnswer = x.PasswordAnswer,
+                                PasswordResetToken = x.PasswordResetToken,
+                                PasswordResetExpirationDate = x.PasswordResetExpirationDate,
                                 SimpleRoles = x.SimpleRoles
                             })
-                    .FirstOrDefault());
+                    .FirstOrDefault();
         }
 
         private string NormalizeAccountName(string accountName)

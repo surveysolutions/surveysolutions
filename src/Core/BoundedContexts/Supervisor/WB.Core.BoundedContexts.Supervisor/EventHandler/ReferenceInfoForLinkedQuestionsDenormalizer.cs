@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 }   
             }
 
-            foreach (var roster in template.Find<IGroup>(group => group.IsRoster))
+            foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.Question))
             {
                 result.Add(roster.PublicKey, roster.RosterSizeQuestionId.Value);
             }
