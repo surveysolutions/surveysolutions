@@ -35,10 +35,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterSt
             questionnaireRosterStructure = new QuestionnaireRosterStructure(questionnarie, 1);
 
         It should_contain_roster_description_with_record_about_rosterGroupId_in_RosterGroupsWithTitleQuestionPairs = () =>
-            questionnaireRosterStructure.RosterScopes[rosterSizeQuestionId].RosterGroupsWithTitleQuestionPairs.Keys.ShouldContain(rosterGroupId);
+            questionnaireRosterStructure.RosterScopes[rosterSizeQuestionId].RosterIdMappedOfRosterTitleQuestionId.Keys.ShouldContain(rosterGroupId);
 
         It should_contain_roster_description_with_title_question_equal_to_capitalQuestionId = () =>
-            questionnaireRosterStructure.RosterScopes[rosterSizeQuestionId].RosterGroupsWithTitleQuestionPairs[rosterGroupId].ShouldEqual(rosterTitleQuestionId);
+            questionnaireRosterStructure.RosterScopes[rosterSizeQuestionId].RosterIdMappedOfRosterTitleQuestionId[rosterGroupId].ShouldEqual(rosterTitleQuestionId);
 
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure questionnaireRosterStructure;

@@ -29,15 +29,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
-            Dictionary<Guid, Guid> rosterGroupsWithTitleQuestionPairs = null, params Guid[] groupIdsFromScope)
+            Dictionary<Guid, Guid?> rosterGroupsWithTitleQuestionPairs)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterDescription(scopeId, rosterGroupsWithTitleQuestionPairs ?? new Dictionary<Guid, Guid>());
-            groupIdsFromScope.ToList().ForEach(groupId => rosterDescription.RosterGroupsId.Add(groupId));
+            var rosterDescription = new RosterScopeDescription(scopeId, rosterGroupsWithTitleQuestionPairs ?? new Dictionary<Guid, Guid?>());
             rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
         }
 
+        protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId, params Guid[] groupIdsFromScope)
+        {
+            var rosterStructure = new QuestionnaireRosterStructure();
+            var rosterGroupsWithTitleQuestionPairs = groupIdsFromScope.ToDictionary<Guid, Guid, Guid?>(groupId => groupId, groupId => null);
+            var rosterDescription = new RosterScopeDescription(scopeId, rosterGroupsWithTitleQuestionPairs);
+            rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
+            return rosterStructure;
+        }
         protected static ViewWithSequence<InterviewData> CreateViewWithSequenceOfInterviewData()
         {
             return new ViewWithSequence<InterviewData>(new InterviewData(), 1);

@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
-            this.HeadQuestionsMappedOnRosterGroup=new Dictionary<Guid, Guid>();
+            this.RosterTitleQuestionsMappedOnRosterId=new Dictionary<Guid, Guid>();
         }
 
         public decimal[] RosterVector { get; private set; }
@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         private List<InterviewQuestion> Questions { get; set; }
         public HashSet<Guid> DisabledGroups { get; private set; }
         public Dictionary<Guid, string> RosterRowTitles { set; get; }
-        public Dictionary<Guid, Guid> HeadQuestionsMappedOnRosterGroup { get; private set; }
+        public Dictionary<Guid, Guid> RosterTitleQuestionsMappedOnRosterId { get; private set; }
 
         public IEnumerable<InterviewQuestion> GetAllQuestions()
         {
