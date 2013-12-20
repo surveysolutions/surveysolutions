@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var disabledQuestions = new HashSet<InterviewItemId>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
-            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, Dictionary<decimal, int?>>();
+            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
             var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
             QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
-            Dictionary<InterviewItemId, Dictionary<decimal, int?>> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts)
         {
             if (interviewLevel.RosterVector.Length == 0)
                 return;
@@ -151,28 +151,26 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key].RosterGroupsId)
                 {
-                    var groupKey = new InterviewItemId(groupId, outerVector);
+                     var groupKey = new InterviewItemId(groupId, outerVector);
 
-                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, scopeId.Value, groupKey);
+                    var rosterTitle = interviewLevel.RosterRowTitles.ContainsKey(groupId)
+                        ? interviewLevel.RosterRowTitles[groupId]
+                        : string.Empty;
+                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, scopeId.Value, rosterTitle, interviewLevel.RosterVector.Last(), groupKey);
                 }
             }
         }
 
-        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, Dictionary<decimal, int?>> propagatedGroupInstanceCounts,
-            int? sortIndex,
+        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts,
+            int? sortIndex, string rosterTitle, decimal rosterInstanceId,
             InterviewItemId groupKey)
         {
-            if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
-            {
-                var currentRosterInstances = propagatedGroupInstanceCounts[groupKey];
-                var lastInstance = currentRosterInstances.Keys.Max();
-                currentRosterInstances[lastInstance + 1] = sortIndex;
-                propagatedGroupInstanceCounts[groupKey] = currentRosterInstances;
-            }
-            else
-            {
-                propagatedGroupInstanceCounts.Add(groupKey, new Dictionary<decimal, int?> { { 0, sortIndex } });
-            }
+            List<RosterSynchronizationDto> currentRosterInstances = propagatedGroupInstanceCounts.ContainsKey(groupKey) ? propagatedGroupInstanceCounts[groupKey].ToList() : new List<RosterSynchronizationDto>();
+
+            currentRosterInstances.Add(new RosterSynchronizationDto(groupKey.Id,
+                groupKey.InterviewItemPropagationVector, rosterInstanceId, sortIndex, rosterTitle));
+
+            propagatedGroupInstanceCounts[groupKey] = currentRosterInstances.ToArray();
         }
 
         private decimal[] CreateOuterVector(InterviewLevel interviewLevel)

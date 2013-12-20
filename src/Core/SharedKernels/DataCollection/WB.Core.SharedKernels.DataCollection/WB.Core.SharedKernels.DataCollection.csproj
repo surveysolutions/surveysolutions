@@ -62,6 +62,7 @@
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
       <SubType>Code</SubType>
