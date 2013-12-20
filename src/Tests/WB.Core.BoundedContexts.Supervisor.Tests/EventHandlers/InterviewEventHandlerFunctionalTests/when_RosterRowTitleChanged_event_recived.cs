@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -11,8 +7,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventHandlerFunctionalTests
 {
-    internal class when_RosterRowRemoved_event_recived : InterviewEventHandlerFunctionalTestContext
+    class when_RosterRowTitleChanged_event_recived : InterviewEventHandlerFunctionalTestContext
     {
+
         Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
@@ -24,20 +21,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
         };
-
+        
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(new RosterRowRemoved(rosterGroupId, new decimal[0], 0)));
+                CreatePublishableEvent(new RosterRowTitleChanged(rosterGroupId, new decimal[0], 0, rosterTitle)));
 
-        It should_interview_levels_count_be_equal_to_0 = () =>
-            viewState.Document.Levels.Keys.Count.ShouldEqual(0);
 
-        It should_interview_level_with_id_0_be_present = () =>
-            viewState.Document.Levels.Keys.ShouldNotContain("0");
+        It should_roster_title_be_equal_to_rosterTitle = () =>
+            viewState.Document.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual(rosterTitle);
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
         private static ViewWithSequence<InterviewData> viewState;
         private static Guid rosterGroupId;
         private static Guid rosterScopeId;
+        private static string rosterTitle = "new roster title";
     }
 }

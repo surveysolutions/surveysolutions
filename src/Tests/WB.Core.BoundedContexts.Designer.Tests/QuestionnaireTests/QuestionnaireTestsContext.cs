@@ -149,10 +149,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: groupId, responsibleId: responsibleId);
 
             questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Title", QuestionType.Text, "text", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
+                                         QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
             questionnaire.NewAddQuestion(secondQuestionId, groupId, "Title", QuestionType.Text, "name", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
+                                         QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
             return questionnaire;
         }
@@ -195,7 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(autoGroupPublicKey, secondGroup, responsibleId);
             questionnaire.AddNumericQuestion(autoQuestoinId, secondGroup, "Title", true, "auto", false, false,
-                false, QuestionScope.Interviewer, "", "", "", "", null, new Guid[] { autoGroupPublicKey }, responsibleId, true, null);
+                QuestionScope.Interviewer, "", "", "", "", null, new Guid[] { autoGroupPublicKey }, responsibleId, true, null);
             return questionnaire;
         }
 
@@ -280,7 +280,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire.NewAddQuestion(questionThatLinkedButNotFromPropagateGroup, secondGroup, "Title",
                                          autoQuestionType, "manual2", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", null, Order.AsIs, responsibleId, null, areAnswersOrdered: false, maxAllowedAnswers: null);
+                                         QuestionScope.Interviewer, "", "", "", "", null, Order.AsIs, responsibleId, null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
             return questionnaire;
         }
@@ -302,12 +302,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             {
                 questionnaire.AddNumericQuestion(questionId, groupId, "Title", questionType == QuestionType.AutoPropagate, alias, false,
                     false,
-                    false, QuestionScope.Interviewer, condition, validation, "", "", null, new Guid[0], responsible, true, null);
+                    QuestionScope.Interviewer, condition, validation, "", "", null, new Guid[0], responsible, true, null);
                 return;
             }
             questionnaire.NewAddQuestion(questionId, groupId, "Title", questionType, alias, false,
                 false,
-                false, QuestionScope.Interviewer, condition, validation, "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
+                QuestionScope.Interviewer, condition, validation, "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
                 Order.AsIs, responsible, null, areAnswersOrdered: false, maxAllowedAnswers: null);
         }
 

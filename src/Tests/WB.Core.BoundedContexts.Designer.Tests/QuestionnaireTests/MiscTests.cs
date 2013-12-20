@@ -85,10 +85,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 var answerOrder = Order.AsIs;
                 string instructions = "do it";
                 Option[] answers = null;
-                bool capital = false;
 
                 questionnaire.NewAddQuestion(publicKey, groupPublicKey, questionText, questionType,
-                    stataExportCaption, mandatory, featured, capital, questionScope, conditionExpression,
+                    stataExportCaption, mandatory, featured, questionScope, conditionExpression,
                     validationExpression, validationMessage, instructions, answers, answerOrder, 
                     responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 

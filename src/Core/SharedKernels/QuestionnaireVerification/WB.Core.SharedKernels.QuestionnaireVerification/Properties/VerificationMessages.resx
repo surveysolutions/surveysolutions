@@ -192,9 +192,6 @@
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Pre-filled questions can't be inside of roster</value>
   </data>
-  <data name="WB0031_HeadQuestionCantBeInsideOfNonRoster" xml:space="preserve">
-    <value>Head question can't be inside of non-roster</value>
-  </data>
   <data name="WB0032_GroupRosteredByQuestionHaveFixedTitles" xml:space="preserve">
     <value>Group rostered by question could not have fixed titles</value>
   </data>

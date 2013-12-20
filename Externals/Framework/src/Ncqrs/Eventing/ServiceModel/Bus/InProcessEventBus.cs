@@ -39,13 +39,13 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             var eventMessageType = eventMessage.GetType();
 
-            Log.InfoFormat("Started publishing event {0}.", eventMessageType.FullName);
+            //Log.InfoFormat("Started publishing event {0}.", eventMessageType.FullName);
 
             IEnumerable<Action<PublishedEvent>> handlers = GetHandlersForEvent(eventMessage);
 
             if (handlers.Count() == 0)
             {
-                Log.WarnFormat("No handler was found for event {0}.", eventMessage.EventSourceId);
+                //Log.WarnFormat("No handler was found for event {0}.", eventMessage.EventSourceId);
             }
             else
             {
