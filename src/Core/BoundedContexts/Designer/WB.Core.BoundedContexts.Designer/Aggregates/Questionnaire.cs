@@ -972,9 +972,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 #warning reorganize checkings - now we are searching for items several times
 
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-            var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
-            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, parentGroup);
+            var targetGroup = this.innerDocument.Find<IGroup>(targetGroupId);
+            var sourceGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, targetGroup);
+            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
+            this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(questionId, sourceGroup, targetGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1907,9 +1909,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x.PublicKey));
 
             var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
-                question =>
-                    this.innerDocument.Find<IGroup>(
-                        group => (group.PublicKey != groupId) && (group.RosterTitleQuestionId == question.PublicKey)).Select(GetTitle));
+                question => this.GetGroupsByRosterTitleId(question.PublicKey, groupId).Select(GetTitle));
 
             if (referencedQuestions.Values.Count(x => x.Any()) > 0)
             {
@@ -1919,6 +1919,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         Environment.NewLine,
                         string.Join(Environment.NewLine, x.Value)))));
             }
+        }
+
+        private IEnumerable<IGroup> GetGroupsByRosterTitleId(Guid questionId, params Guid[] exceptGroups)
+        {
+            return this.innerDocument.Find<IGroup>(
+                group => !exceptGroups.Contains(group.PublicKey) && (group.RosterTitleQuestionId == questionId));
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(Guid questionId, IGroup sourceGroup,
+            IGroup targetGroup)
+        {
+            var groupsByRosterTitleId = this.GetGroupsByRosterTitleId(questionId);
+
+            if (!groupsByRosterTitleId.Any()) return;
+
+            if (!targetGroup.RosterSizeQuestionId.HasValue ||
+                (targetGroup.RosterSizeQuestionId.Value != groupsByRosterTitleId.FirstOrDefault().RosterSizeQuestionId.Value))
+                throw new QuestionnaireException(
+                    string.Format("You can move a roster title question {0} only to a roster group that have a roster size question {1}",
+                        this.FormatQuestionForException(questionId, this.innerDocument),
+                        this.FormatQuestionForException(sourceGroup.RosterSizeQuestionId.Value, this.innerDocument)));
         }
 
         private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Guid? rosterSizeQuestionId,
