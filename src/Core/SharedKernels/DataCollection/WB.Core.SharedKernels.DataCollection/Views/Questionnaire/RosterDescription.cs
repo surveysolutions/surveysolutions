@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         public RosterDescription(Guid scopeId, Dictionary<Guid, Guid> rosterGroupsWithTitleQuestionPairs)
         {
             this.ScopeId = scopeId;
-            this.RosterGroupsWithTitleQuestionPairs = rosterGroupsWithTitleQuestionPairs;
+            this.RosterGroupsWithTitleQuestionPairs = rosterGroupsWithTitleQuestionPairs ?? new Dictionary<Guid, Guid>();
             this.RosterGroupsId = new HashSet<Guid>();
         }
 
