@@ -548,13 +548,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return numericQuestion.CountOfDecimalPlaces;
         }
 
-        public bool IsQuestionHeadOfRoster(Guid questionId)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-            
-            return question.Capital;
-        }
-
         public IEnumerable<string> GetFixedRosterTitles(Guid groupId)
         {
             var group = this.GetGroup(groupId);

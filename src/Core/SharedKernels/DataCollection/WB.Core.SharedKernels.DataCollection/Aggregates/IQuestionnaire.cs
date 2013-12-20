@@ -101,8 +101,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
-        bool IsQuestionHeadOfRoster(Guid questionId);
-
         IEnumerable<string> GetFixedRosterTitles(Guid groupId);
     }
 }
