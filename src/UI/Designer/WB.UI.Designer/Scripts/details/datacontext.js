@@ -198,6 +198,12 @@
             });
         };
 
+        questions.isRosterTitleQuestion = function(questionId) {
+            return _.any(groups.getPropagateableGroups(), function(group) {
+                return group.rosterTitleQuestion() == questionId;
+            });
+        };
+
         var isNumericInteger = function(question) {
             return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
         };
@@ -349,7 +355,6 @@
                 title: question.title(),
                 type: question.qtype(),
                 alias: question.alias(),
-                isHeaderOfPropagatableGroup: question.isHead(),
                 isFeatured: question.isFeatured(),
                 isMandatory: question.isMandatory(),
                 scope: question.scope(),

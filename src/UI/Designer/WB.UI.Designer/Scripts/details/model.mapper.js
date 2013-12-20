@@ -74,7 +74,6 @@
                         item.scope(dto.QuestionScope);
                     }
                   
-                    item.isHead(dto.Capital);
                     item.isFeatured(dto.Featured);
                     item.isMandatory(dto.Mandatory);
                     item.condition(dto.ConditionExpression);

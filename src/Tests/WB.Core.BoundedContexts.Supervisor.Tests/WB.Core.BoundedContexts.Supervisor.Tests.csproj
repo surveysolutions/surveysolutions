@@ -65,6 +65,7 @@
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_removed.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowAdded_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowTitleChanged_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_reciver_and_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

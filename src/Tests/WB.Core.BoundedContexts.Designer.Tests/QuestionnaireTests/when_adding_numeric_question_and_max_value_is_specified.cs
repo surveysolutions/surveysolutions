@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             questionnaire.AddNumericQuestion(questionId, chapterId, "title",
-                false, "var1", false, false, false, QuestionScope.Interviewer, null, null, null, null,
+                false, "var1", false, false, QuestionScope.Interviewer, null, null, null, null,
                 maxValue, new Guid[] { }, responsibleId, false, null);
 
         Cleanup stuff = () =>
