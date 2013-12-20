@@ -481,17 +481,37 @@ namespace Main.Core.Documents
             }
         }
 
-        public void MoveHeadQuestionPropertiesToRoster(Guid QuestionId, Guid? GroupPublicKey)
+
+        public void CheckQuestionAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
         {
-            if (GroupPublicKey != null)
+            IQuestion item = this.GetItemOrLogWarning(itemToCheckId) as IQuestion;
+            if (item == null)
+                return;
+            if (item.Capital)
             {
-                var foundGroup = this.Find<IGroup>(group => group.PublicKey == GroupPublicKey).FirstOrDefault() as Group;
+                RemoveHeadPropertiesFromRosters(itemToCheckId);
+                MoveHeadQuestionPropertiesToRoster(itemToCheckId, groupPublicKey);
+            }
+        }
+
+
+        public void MoveHeadQuestionPropertiesToRoster(Guid questionId, Guid? groupPublicKey)
+        {
+            if (groupPublicKey == null)
+            {
+                IComposite questionParent = this.GetParentOfQuestion(questionId);
+                if (questionParent == null)
+                    return;
+                groupPublicKey = questionParent.PublicKey;
+            }
+
+            var foundGroup = this.Find<IGroup>(group => group.PublicKey == groupPublicKey).FirstOrDefault() as Group;
                 if (foundGroup == null)
                 {
-                    logger.Warn(string.Format("Failed to find group {0}.", GroupPublicKey)); 
+                    logger.Warn(string.Format("Failed to find group {0}.", groupPublicKey)); 
                 }
 
-                foundGroup.RosterTitleQuestionId = QuestionId;
+                foundGroup.RosterTitleQuestionId = questionId;
 
                 if (foundGroup.RosterSizeQuestionId != null)
                 {
@@ -500,16 +520,15 @@ namespace Main.Core.Documents
                     {
                         var @group = scopeGroup as Group;
                         if (@group != null)
-                            @group.RosterTitleQuestionId = QuestionId;
+                            @group.RosterTitleQuestionId = questionId;
                     }
                 }
-            }
         }
 
 
-        public void RemoveHeadPropertiesFromRosters(Guid QuestionId)
+        public void RemoveHeadPropertiesFromRosters(Guid questionId)
         {
-            var scopeGroups = this.Find<IGroup>(group => group.RosterTitleQuestionId == QuestionId);  
+            var scopeGroups = this.Find<IGroup>(group => group.RosterTitleQuestionId == questionId);  
           
             foreach (var scopeGroup in scopeGroups)
                     {

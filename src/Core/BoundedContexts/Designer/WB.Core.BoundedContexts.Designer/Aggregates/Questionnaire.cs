@@ -378,6 +378,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
 
         private void Apply(NumericQuestionChanged e)
@@ -410,6 +413,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
+
+            if (e.Capital)
+                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
 
         private void Apply(QuestionDeleted e)
@@ -430,6 +436,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
+
+            this.innerDocument.CheckQuestionAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
         }
 
         public QuestionnaireState CreateSnapshot()
