@@ -138,9 +138,9 @@
                     title: "Can't move question",
                     text: "You can't move an roster size question into a roster"
                 },
-                cantMoveRosterTitleQuestionOutsideRosterGroup: {
+                cantMoveRosterTitleQuestion: {
                     title: "Can't move question",
-                    text: "You can't move a roster title question outside of any roster"
+                    text: "You can move a roster title question only to a roster group that have a roster size question the same as parent group of roster title question"
                 },
                 savedData: 'Data saved successfully',
                 weWillClearCondition: {
