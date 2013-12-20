@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             HashSet<InterviewItemId> validAnsweredQuestions,
             HashSet<InterviewItemId> invalidAnsweredQuestions,
             Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
-            Dictionary<InterviewItemId, Dictionary<decimal, int?>> rosterGroupInstances,
+            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
             bool wasCompleted)
         {
             Id = id;
@@ -47,18 +47,22 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
         [Obsolete("please use RosterGroupInstances")]
         public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get; set; }
-        public Dictionary<InterviewItemId, Dictionary<decimal, int?>> RosterGroupInstances {
+        public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances
+        {
             get
             {
                 if (rosterGroupInstances == null && PropagatedGroupInstanceCounts != null)
                 {
-                    RosterGroupInstances = new Dictionary<InterviewItemId, Dictionary<decimal, int?>>();
+                    RosterGroupInstances = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
                     foreach (var propagatedGroupInstanceCount in PropagatedGroupInstanceCounts)
                     {
-                        RosterGroupInstances[propagatedGroupInstanceCount.Key] = new Dictionary<decimal, int?>();
+                        RosterGroupInstances[propagatedGroupInstanceCount.Key] = new RosterSynchronizationDto[propagatedGroupInstanceCount.Value];
                         for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
                         {
-                            RosterGroupInstances[propagatedGroupInstanceCount.Key][Convert.ToDecimal(i)] = null;
+                            RosterGroupInstances[propagatedGroupInstanceCount.Key][i] =
+                                new RosterSynchronizationDto(propagatedGroupInstanceCount.Key.Id,
+                                    propagatedGroupInstanceCount.Key.InterviewItemPropagationVector, Convert.ToDecimal(i), null,
+                                    string.Empty);
                         }
                     }
                 }
@@ -66,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             }
             set { rosterGroupInstances = value; }
         }
-        private Dictionary<InterviewItemId, Dictionary<decimal, int?>> rosterGroupInstances;
+        private Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances;
         public bool WasCompleted { get; set; }
     }
 }

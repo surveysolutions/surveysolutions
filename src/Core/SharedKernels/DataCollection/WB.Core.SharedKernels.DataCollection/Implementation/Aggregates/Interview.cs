@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return synchronizationDto.RosterGroupInstances.ToDictionary(
                 pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
-                pair => pair.Value.Keys.ToHashSet());
+                pair => pair.Value.Select(rosterInstance=>rosterInstance.RosterInstanceId).ToHashSet());
         }
 
         private void Apply(SynchronizationMetadataApplied @event)

@@ -147,6 +147,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var rosterDescription in rosterStructure.RosterScopes.Values)
             {
+                if (rosterDescription.RosterGroupsWithTitleQuestionPairs==null)
+                    continue;
+                
                 foreach (var headQuestion in rosterDescription.RosterGroupsWithTitleQuestionPairs.Values)
                 {
                     this.listOfHeadQuestionsMappedOnScope.Add(headQuestion, rosterDescription.ScopeId);
@@ -212,7 +215,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 foreach (var rosterInstance in rosterGroupInstance.Value)
                 {
                     this.AddPropagateScreen(rosterGroupInstance.Key.Id,
-                        rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.Key, rosterInstance.Value);
+                        rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.RosterInstanceId, rosterInstance.SortIndex);
+                    
+                    if (!string.IsNullOrEmpty(rosterInstance.RosterTitle))
+                        this.UpdateRosterRowTitle(rosterGroupInstance.Key.Id, rosterGroupInstance.Key.InterviewItemPropagationVector,
+                        rosterInstance.RosterInstanceId, rosterInstance.RosterTitle);
                 }
             }
         }

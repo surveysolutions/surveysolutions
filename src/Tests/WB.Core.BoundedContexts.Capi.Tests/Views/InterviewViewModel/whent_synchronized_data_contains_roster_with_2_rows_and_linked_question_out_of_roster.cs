@@ -50,9 +50,16 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
                     new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 0 }, 1, string.Empty),
                     new AnsweredQuestionSynchronizationDto(sourceForLinkedQuestionId, new decimal[] { 1 }, 2, string.Empty)
                 },
-                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, Dictionary<decimal, int?>>()
+                propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>()
                 {
-                    { new InterviewItemId(propagatedGroupId, new decimal[0]), new Dictionary<decimal, int?> { { 0, null }, { 1, null } } }
+                    {
+                        new InterviewItemId(propagatedGroupId, new decimal[0]),
+                        new[]
+                        {
+                            new RosterSynchronizationDto(propagatedGroupId, new decimal[0], 0, null, null),
+                            new RosterSynchronizationDto(propagatedGroupId, new decimal[0], 1, null, null)
+                        }
+                    }
                 });
         };
 
