@@ -45,25 +45,23 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             template.ConnectChildrenWithParent();
             var referenceInfo = new Dictionary<Guid, ReferenceInfoByQuestion>();
             
-            var linkedQuestions =
-                GetAllLinkedQuestions(template);
+            var linkedQuestions = GetAllLinkedQuestions(template);
 
-            var groupsMappedOnPropagatableQuestion =
-              this.GetAllPropagatebleGroupsMappedOnPropagatableQuestion(template);
+            var groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId(template);
 
             foreach (var linkedQuestion in linkedQuestions)
             {
                 var referencedQuestion =
                     template.FirstOrDefault<IQuestion>(question => question.PublicKey == linkedQuestion.LinkedToQuestionId.Value);
 
-                referenceInfo[linkedQuestion.PublicKey] =
-                    new ReferenceInfoByQuestion(GetScopeOfReferencedQuestions(referencedQuestion, groupsMappedOnPropagatableQuestion),
-                        referencedQuestion.PublicKey);
+                referenceInfo[linkedQuestion.PublicKey] = new ReferenceInfoByQuestion(
+                    GetScopeOfReferencedQuestions(referencedQuestion, groupsMappedOnPropagatableQuestion),
+                    referencedQuestion.PublicKey);
             }
 
-            var questionnaire = new ReferenceInfoForLinkedQuestions(evnt.EventSourceId, evnt.EventSequence, referenceInfo);
+            var referenceInfoForLinkedQuestions = new ReferenceInfoForLinkedQuestions(evnt.EventSourceId, evnt.EventSequence, referenceInfo);
 
-            questionnaires.Store(questionnaire, evnt.EventSourceId);
+            questionnaires.Store(referenceInfoForLinkedQuestions, evnt.EventSourceId);
         }
 
         private Guid GetScopeOfReferencedQuestions(IQuestion referencedQuestion, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion)
@@ -82,7 +80,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return questionParent.PublicKey;
         }
 
-        private IDictionary<Guid, Guid> GetAllPropagatebleGroupsMappedOnPropagatableQuestion(QuestionnaireDocument template)
+        private IDictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId(QuestionnaireDocument template)
         {
             var result = new Dictionary<Guid, Guid>();
 
@@ -99,6 +97,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.Question))
             {
                 result.Add(roster.PublicKey, roster.RosterSizeQuestionId.Value);
+            }
+
+            foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles))
+            {
+                result.Add(roster.PublicKey, roster.PublicKey);
             }
 
             return result;
