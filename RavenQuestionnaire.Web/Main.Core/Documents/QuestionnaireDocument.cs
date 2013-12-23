@@ -482,7 +482,7 @@ namespace Main.Core.Documents
         }
 
 
-        public void CheckQuestionAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
+        public void CheckIsQuestionHeadAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
         {
             IQuestion item = this.GetItemOrLogWarning(itemToCheckId) as IQuestion;
             if (item == null)
@@ -506,23 +506,26 @@ namespace Main.Core.Documents
             }
 
             var foundGroup = this.Find<IGroup>(group => group.PublicKey == groupPublicKey).FirstOrDefault() as Group;
-                if (foundGroup == null)
-                {
-                    logger.Warn(string.Format("Failed to find group {0}.", groupPublicKey)); 
-                }
-
+            if (foundGroup == null)
+            {
+                logger.Warn(string.Format("Failed to find group {0}.", groupPublicKey));
+                return;
+            }
+            if (foundGroup.IsRoster)
+            {
                 foundGroup.RosterTitleQuestionId = questionId;
+            }
 
-                if (foundGroup.RosterSizeQuestionId != null)
+            if (foundGroup.RosterSizeQuestionId != null)
+            {
+                var scopeGroups = this.Find<IGroup>(group => group.RosterSizeQuestionId == foundGroup.RosterSizeQuestionId);
+                foreach (var scopeGroup in scopeGroups)
                 {
-                    var scopeGroups = this.Find<IGroup>(group => group.RosterSizeQuestionId == foundGroup.RosterSizeQuestionId);
-                    foreach (var scopeGroup in scopeGroups)
-                    {
-                        var @group = scopeGroup as Group;
-                        if (@group != null)
-                            @group.RosterTitleQuestionId = questionId;
-                    }
+                    var @group = scopeGroup as Group;
+                    if (@group != null && @group.IsRoster)
+                        @group.RosterTitleQuestionId = questionId;
                 }
+            }
         }
 
 

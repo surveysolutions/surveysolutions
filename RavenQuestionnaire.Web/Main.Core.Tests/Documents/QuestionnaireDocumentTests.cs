@@ -53,6 +53,91 @@ namespace Main.Core.Tests.Documents
             return doc;
         }
 
+        [Test]
+        public void RemoveHeadPropertiesFromRosters_when_removeRosterTitle_is_called_then_allrosters_titleQuestionId_is_CleanedUp()
+        {
+            // Arrange
+            var questionId = Guid.NewGuid();
+            var question1Id = Guid.NewGuid();
+            var group1Id = Guid.NewGuid();
+            var group2Id = Guid.NewGuid();
+            
+            
+            var doc = CreateQuestionnaireDocumentWithTwoRostersAndOneRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
+
+            // Act
+            doc.RemoveHeadPropertiesFromRosters(questionId);
+
+            // Assert
+            Assert.That(doc.Find<IGroup>(x => x.PublicKey == group2Id).FirstOrDefault().RosterTitleQuestionId, Is.Null);
+            Assert.That(doc.Find<IGroup>(x => x.PublicKey == group1Id).FirstOrDefault().RosterTitleQuestionId, Is.Null);
+        }
+
+        [Test]
+        public void MoveHeadQuestionPropertiesToRoster_when_headquestion_is_removed_then_allrosters_titleQuestionIds_are_CleanedUp()
+        {
+            // Arrange
+            var questionId = Guid.NewGuid();
+            var question1Id = Guid.NewGuid();
+            var group1Id = Guid.NewGuid();
+            var group2Id = Guid.NewGuid();
+
+
+            var doc = CreateQuestionnaireDocumentWithTwoRostersAndOneRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
+
+            // Act
+            doc.MoveHeadQuestionPropertiesToRoster(question1Id, group1Id);
+
+            // Assert
+            
+            var group1 = doc.Find<IGroup>(x => x.PublicKey == group1Id).FirstOrDefault() as Group;
+            var group2 = doc.Find<IGroup>(x => x.PublicKey == group2Id).FirstOrDefault() as Group;
+
+            Assert.That(group1.RosterTitleQuestionId, Is.EqualTo(question1Id));
+            Assert.That(group2.RosterTitleQuestionId, Is.EqualTo(question1Id));
+        }
+
+
+        private QuestionnaireDocument CreateQuestionnaireDocumentWithTwoRostersAndOneRosterTitleQuestion(Guid textQuestionId, Guid textQuestion1Id, Guid group1Id, Guid group2Id)
+        {
+            var doc = new QuestionnaireDocument();
+            var chapter1 = new Group("Chapter 1") { PublicKey = Guid.NewGuid() };
+
+            var numQuestionId = Guid.NewGuid();
+            //var textQuestionId = Guid.NewGuid();
+
+            var numQuestion = new NumericQuestion("Numeric") { PublicKey = numQuestionId, MaxValue = 10 };
+            
+            var textQuestion = new TextQuestion("Text") { PublicKey = textQuestionId };
+            var textQuestion1 = new TextQuestion("Text") { PublicKey = textQuestion1Id };
+            
+
+            var group1 = new Group("G 1")
+            {
+                PublicKey = group1Id,
+                RosterTitleQuestionId = textQuestionId, 
+                IsRoster = true, 
+                RosterSizeQuestionId = numQuestionId };
+
+            var group2 = new Group("G 2")
+            {
+                PublicKey = group2Id,
+                RosterTitleQuestionId = textQuestionId, 
+                IsRoster = true, 
+                RosterSizeQuestionId = numQuestionId };
+
+            group1.Children.Add(textQuestion);
+            group2.Children.Add(textQuestion1);
+
+            chapter1.Children.Add(numQuestion);
+            chapter1.Children.Add(group1);
+            chapter1.Children.Add(group2);
+            
+            doc.Children.Add(chapter1);
+
+            return doc;
+        }
+
         private QuestionnaireDocument CreateQuestionnaireDocumentWithAutoPropagateGroupAndQuestion(Guid autoGroupId, out AutoPropagateQuestion autoQuestion)
         {
             var doc = new QuestionnaireDocument();
