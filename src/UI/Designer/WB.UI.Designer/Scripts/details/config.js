@@ -140,7 +140,7 @@
                 },
                 cantMoveRosterTitleQuestion: {
                     title: "Can't move question",
-                    text: "You can move a roster title question only to a roster group that have a roster size question the same as parent group of roster title question"
+                    text: "You can move a roster title question only to a roster group that has a roster size question the same as parent group of roster title question"
                 },
                 savedData: 'Data saved successfully',
                 weWillClearCondition: {
