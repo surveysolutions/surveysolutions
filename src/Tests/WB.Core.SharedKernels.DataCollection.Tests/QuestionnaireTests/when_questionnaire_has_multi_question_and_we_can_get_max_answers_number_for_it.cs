@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(Guid.NewGuid(), questionnaireDocument);
         };
 
-        private Because of = () =>
+        Because of = () =>
             maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(validatedQuestionId);
 
         It should_max_selected_answer_options_be_equal_of_proposed_selected_answer_options = () =>

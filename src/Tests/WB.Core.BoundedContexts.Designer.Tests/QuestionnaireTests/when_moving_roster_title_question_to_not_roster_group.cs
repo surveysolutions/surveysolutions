@@ -70,17 +70,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_exception_with_message_containting__question__ = () =>
             exception.Message.ToLower().ShouldContain("question");
 
-        It should_throw_exception_with_message_containting__to__ = () =>
-            exception.Message.ToLower().ShouldContain("to");
-
         It should_throw_exception_with_message_containting__group__ = () =>
             exception.Message.ToLower().ShouldContain("group");
 
-        It should_throw_exception_with_message_containting__that__ = () =>
-            exception.Message.ToLower().ShouldContain("that");
-
-        It should_throw_exception_with_message_containting__have__ = () =>
-            exception.Message.ToLower().ShouldContain("have");
+        It should_throw_exception_with_message_containting__has__ = () =>
+            exception.Message.ToLower().ShouldContain("has");
 
         It should_throw_exception_with_message_containting__size__ = () =>
             exception.Message.ToLower().ShouldContain("size");

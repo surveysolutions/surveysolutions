@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
                 CreateInterviewDataWith2PropagatedLevels, 2, CreateQuestionnairePropagationStructure);
         };
 
-        private Because of = () =>
+        Because of = () =>
             result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(Guid.NewGuid(), 1, propagationScopeKey));
 
         private It should_records_count_equals_4 = () =>

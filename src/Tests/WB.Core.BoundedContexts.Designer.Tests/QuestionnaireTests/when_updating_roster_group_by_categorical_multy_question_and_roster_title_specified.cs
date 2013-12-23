@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_cloning_roster_group_by_categorical_question_and_roster_title_specified : QuestionnaireTestsContext
+    internal class when_updating_roster_group_by_categorical_multy_question_and_roster_title_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            newGroupId = Guid.Parse("3BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterTitleQuestionId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeQuestionId = Guid.Parse("2BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.Question;
@@ -35,10 +34,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(
                 () =>
-                    questionnaire.CloneGroupWithoutChildren(groupId: newGroupId, responsibleId: responsibleId, title: "title",
-                        parentGroupId: parentGroupId, description: null, condition: null, rosterSizeQuestionId: rosterSizeQuestionId,
-                        isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null,
-                        rosterTitleQuestionId: rosterTitleQuestionId, sourceGroupId: groupId, targetIndex: 0));
+                    questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title",
+                        description: null, condition: null, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,
+                        rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
@@ -62,7 +60,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
-        private static Guid newGroupId;
         private static Guid rosterTitleQuestionId;
         private static Guid rosterSizeQuestionId;
         private static Guid parentGroupId;

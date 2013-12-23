@@ -63,11 +63,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_raise_QuestionnaireItemMoved_event = () =>
            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
 
-        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_specified = () =>
+        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_equal_to_roster_title_question_id = () =>
             eventContext.GetSingleEvent<QuestionnaireItemMoved>()
                 .PublicKey.ShouldEqual(rosterTitleQuestionId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_specified = () =>
+        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_equal_to_new_group_id_for_roster_title_question = () =>
             eventContext.GetSingleEvent<QuestionnaireItemMoved>()
                 .GroupKey.ShouldEqual(targetGroupId);
 
