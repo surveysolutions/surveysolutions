@@ -62,8 +62,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_exception_with_message_containting__only__ = () =>
             exception.Message.ToLower().ShouldContain("only");
 
-        It should_throw_exception_with_message_containting__by__ = () =>
-            exception.Message.ToLower().ShouldContain("by");
+        It should_throw_exception_with_message_containting__inside__ = () =>
+            exception.Message.ToLower().ShouldContain("inside");
+
+        It should_throw_exception_with_message_containting__group__ = () =>
+            exception.Message.ToLower().ShouldContain("group");
+
+        It should_throw_exception_with_message_containting__where__ = () =>
+            exception.Message.ToLower().ShouldContain("where");
 
         It should_throw_exception_with_message_containting__size__ = () =>
             exception.Message.ToLower().ShouldContain("size");

@@ -50,17 +50,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             questionnaireDocument.GetGroup(groupId)
                 .RosterSizeSource.ShouldEqual(rosterSizeSource);
 
-        It should_set_group_RosterFixedTitles_property_to_2_items_array = () =>
-            questionnaireDocument.GetGroup(groupId)
-                .RosterFixedTitles.Length.ShouldEqual(rosterFixedTitles.Length);
-
-        It should_set_first_item_of_groups_RosterFixedTitles_property_to_rosterFixedTitle1_value = () =>
-            questionnaireDocument.GetGroup(groupId)
-                .RosterFixedTitles[0].ShouldEqual(rosterFixedTitle1);
-
-        It should_set_second_item_of_groups_RosterFixedTitles_property_to_rosterFixedTitle2_value = () =>
-            questionnaireDocument.GetGroup(groupId)
-                .RosterFixedTitles[1].ShouldEqual(rosterFixedTitle2);
+        It should_set_group_RosterFixedTitles_property_to_specified_value = () =>
+             questionnaireDocument.GetGroup(groupId)
+                 .RosterFixedTitles.ShouldEqual(new[] { rosterFixedTitle1, rosterFixedTitle2 });
 
         It should_set_group_RosterTitleQuestionId_property_to_specified_value = () =>
             questionnaireDocument.GetGroup(groupId)

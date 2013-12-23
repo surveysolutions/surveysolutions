@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
         };
 
-        private Because of = () =>
+        Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title", null, null, null, parentRosterId,
                     sourceGroupId, 0, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));

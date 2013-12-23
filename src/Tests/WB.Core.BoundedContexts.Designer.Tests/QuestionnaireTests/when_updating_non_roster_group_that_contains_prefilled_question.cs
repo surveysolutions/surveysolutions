@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             exception =
                 Catch.Exception(
                     () =>

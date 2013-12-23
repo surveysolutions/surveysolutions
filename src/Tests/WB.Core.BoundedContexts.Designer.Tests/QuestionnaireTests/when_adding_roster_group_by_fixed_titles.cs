@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", parentGroupId: parentGroupId, description: null,
                 condition: null,
                 rosterSizeQuestionId: null, isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: rosterFixedTitles,
@@ -68,14 +68,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_raise_RosterChanged_event_with_not_nullable_RosterFixedTitles = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterFixedTitles.ShouldNotBeNull();
 
-        It should_raise_RosterChanged_event_with_RosterFixedTitles_that_have_2_items = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterFixedTitles.ShouldNotBeEmpty();
-
-        It should_raise_RosterChanged_event_with_RosterFixedTitles_that_first_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterFixedTitles[0].ShouldEqual(rosterFixedTitle1);
-
-        It should_raise_RosterChanged_event_with_RosterFixedTitles_that_second_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterFixedTitles[1].ShouldEqual(rosterFixedTitle2);
+        It should_raise_RosterChanged_event_with_RosterFixedTitles_specified = () =>
+            eventContext.GetSingleEvent<RosterChanged>()
+                .RosterFixedTitles.ShouldEqual(new[] {rosterFixedTitle1, rosterFixedTitle2});
 
         It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
