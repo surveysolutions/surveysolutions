@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupRosteredByFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupRosteredByFixedTitlesHaveRosterSizeQuestion),
                     Verifier<IGroup>(GroupRosteredByFixedTitlesHaveRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupRosteredByFixedTitlesHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupRosteredByQuestionHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupRosteredByQuestionHasInvalidRosterTitleQuestion),
-                    Verifier<IGroup>(GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion),
+                    Verifier<IGroup>(GroupRosteredByCategoricalMultyQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupRosteredByCategoricalMultyQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupRosteredByFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupRosteredByFixedTitlesHaveEmptyTitles),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -202,7 +202,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !groupsRosteredByRosterSizeQuestion.Contains(parentForRosterTitleQuestion.PublicKey);
         }
 
-        private static bool GroupRosteredByCategoricalQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
+        private static bool GroupRosteredByCategoricalMultyQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
         {
             if (!IsRosterByQuestion(group))
                 return false;

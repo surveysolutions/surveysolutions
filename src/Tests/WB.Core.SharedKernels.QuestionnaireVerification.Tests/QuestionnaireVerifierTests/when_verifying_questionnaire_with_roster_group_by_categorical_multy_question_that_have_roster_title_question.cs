@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_roster_group_by_categorical_question_that_have_roster_title_question : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_that_have_roster_title_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
