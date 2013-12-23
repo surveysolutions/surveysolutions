@@ -437,7 +437,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
 
-            this.innerDocument.CheckQuestionAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
+            this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
         }
 
         public QuestionnaireState CreateSnapshot()
