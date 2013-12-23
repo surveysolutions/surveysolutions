@@ -119,10 +119,13 @@ namespace Core.Supervisor.Views
             Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, Dictionary<decimal[], string>> getAvailableOptions,
             IQuestionnaireDocument questionnaire)
         {
+            var rosterTitle = interviewLevel.RosterRowTitles.ContainsKey(currentGroup.PublicKey)
+                ? string.Format("{0}: {1}", currentGroup.Title, interviewLevel.RosterRowTitles[currentGroup.PublicKey])
+                : currentGroup.Title;
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
             {
                 Depth = depth,
-                Title = currentGroup.Title,
+                Title = rosterTitle,
                 RosterVector = interviewLevel.RosterVector,
                 ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
             };
