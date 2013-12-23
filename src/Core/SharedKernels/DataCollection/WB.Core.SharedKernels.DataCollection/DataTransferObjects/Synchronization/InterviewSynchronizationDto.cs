@@ -51,20 +51,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
             get
             {
-                if (rosterGroupInstances == null && PropagatedGroupInstanceCounts != null)
+                if (rosterGroupInstances == null)
                 {
-                    RosterGroupInstances = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
-                    foreach (var propagatedGroupInstanceCount in PropagatedGroupInstanceCounts)
-                    {
-                        RosterGroupInstances[propagatedGroupInstanceCount.Key] = new RosterSynchronizationDto[propagatedGroupInstanceCount.Value];
-                        for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
-                        {
-                            RosterGroupInstances[propagatedGroupInstanceCount.Key][i] =
-                                new RosterSynchronizationDto(propagatedGroupInstanceCount.Key.Id,
-                                    propagatedGroupInstanceCount.Key.InterviewItemPropagationVector, Convert.ToDecimal(i), null,
-                                    string.Empty);
-                        }
-                    }
+                    rosterGroupInstances = this.RestoreFromPropagatedGroupInstanceCounts();
                 }
                 return rosterGroupInstances;
             }
@@ -72,5 +61,25 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         }
         private Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances;
         public bool WasCompleted { get; set; }
+
+        private Dictionary<InterviewItemId, RosterSynchronizationDto[]> RestoreFromPropagatedGroupInstanceCounts()
+        {
+            if (PropagatedGroupInstanceCounts == null)
+                return new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
+
+            var result = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
+            foreach (var propagatedGroupInstanceCount in PropagatedGroupInstanceCounts)
+            {
+                result[propagatedGroupInstanceCount.Key] = new RosterSynchronizationDto[propagatedGroupInstanceCount.Value];
+                for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
+                {
+                    result[propagatedGroupInstanceCount.Key][i] =
+                        new RosterSynchronizationDto(propagatedGroupInstanceCount.Key.Id,
+                            propagatedGroupInstanceCount.Key.InterviewItemPropagationVector, Convert.ToDecimal(i), null,
+                            string.Empty);
+                }
+            }
+            return result;
+        }
     }
 }
