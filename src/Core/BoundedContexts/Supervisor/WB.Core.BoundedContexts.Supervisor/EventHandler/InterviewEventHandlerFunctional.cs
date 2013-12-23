@@ -64,13 +64,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return string.Join(",", vector);
         }
 
-        private RosterDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
+        private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
             var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             foreach (var scopeId in questionnarie.RosterScopes.Keys)
             {
-                if (questionnarie.RosterScopes[scopeId].RosterGroupsId.Contains(groupId))
+                if (questionnarie.RosterScopes[scopeId].RosterIdMappedOfRosterTitleQuestionId.ContainsKey(groupId))
                 {
                     return questionnarie.RosterScopes[scopeId];
                 }
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, int? sortIndex, RosterDescription scope)
+        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, int? sortIndex, RosterScopeDescription scope)
         {
             for (int rosterInstanceId = startIndex; rosterInstanceId < startIndex + count; rosterInstanceId++)
             {
@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, int? sortIndex, RosterDescription scope)
+        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, int? sortIndex, RosterScopeDescription scope)
         {
             var newVector = CreateNewVector(vector, rosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
@@ -120,9 +120,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 interview.Levels[levelKey].ScopeIds[scope.ScopeId] = sortIndex;
 
             var level = interview.Levels[levelKey];
-            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterGroupsWithTitleQuestionPairs)
+            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdMappedOfRosterTitleQuestionId)
             {
-                level.HeadQuestionsMappedOnRosterGroup[rosterGroupsWithTitleQuestionPair.Value] = rosterGroupsWithTitleQuestionPair.Key;
+                if (rosterGroupsWithTitleQuestionPair.Value.HasValue)
+                    level.RosterTitleQuestionsMappedOnRosterId[rosterGroupsWithTitleQuestionPair.Value.Value] = rosterGroupsWithTitleQuestionPair.Key;
             }
         }
 
@@ -188,9 +189,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 answeredQuestion.Answer = answer;
                 answeredQuestion.IsAnswered = true;
 
-                if (level.HeadQuestionsMappedOnRosterGroup.ContainsKey(questionId))
+                if (level.RosterTitleQuestionsMappedOnRosterId.ContainsKey(questionId))
                 {
-                    var groupId = level.HeadQuestionsMappedOnRosterGroup[questionId];
+                    var groupId = level.RosterTitleQuestionsMappedOnRosterId[questionId];
                     var answerString = (answer ?? string.Empty).ToString();
 
                     if (level.RosterRowTitles.ContainsKey(groupId))

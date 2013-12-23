@@ -409,6 +409,7 @@
                 var moveItemType = arg.item.type().replace('View', '').toLowerCase();
                 var isItemFeaturedQuestion = false;
                 var isItemRosterTitleQuestion = false;
+                var canMoveRosterTitleQuestionToTarget = false;
                 var isItemAutoQuestion = false;
                 var targetGroupIsAuto = false;
                 if (moveItemType == "question") {
@@ -447,6 +448,10 @@
                     var target = datacontext.groups.getLocalById(toId);
 
                     targetGroupIsAuto = target.isRoster();
+                    
+                    if (isItemRosterTitleQuestion && targetGroupIsAuto) {
+                        canMoveRosterTitleQuestionToTarget = source.rosterSizeQuestion() == target.rosterSizeQuestion();
+                    }
 
                     if (target.isNew()) {
                         arg.cancelDrop = true;
@@ -466,9 +471,9 @@
                         return;
                     }
 
-                    if (isItemRosterTitleQuestion && targetGroupIsAuto == false) {
+                    if (isItemRosterTitleQuestion && !canMoveRosterTitleQuestionToTarget) {
                         arg.cancelDrop = true;
-                        config.logger(config.warnings.cantMoveRosterTitleQuestionOutsideRosterGroup);
+                        config.logger(config.warnings.cantMoveRosterTitleQuestion);
                         return;
                     }
 

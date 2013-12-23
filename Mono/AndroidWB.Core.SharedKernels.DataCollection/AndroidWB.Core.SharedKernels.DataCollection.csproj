@@ -175,6 +175,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs">
       <Link>DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\RosterSynchronizationDto.cs">
+      <Link>DataTransferObjects\Synchronization\RosterSynchronizationDto.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\EventHandler\QuestionnaireDenormalizer.cs">
       <Link>EventHandler\QuestionnaireDenormalizer.cs</Link>
     </Compile>
@@ -406,8 +409,8 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireRosterStructure.cs">
       <Link>Views\Questionnaire\QuestionnaireRosterStructure.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\RosterDescription.cs">
-      <Link>Views\Questionnaire\RosterDescription.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\RosterScopeDescription.cs">
+      <Link>Views\Questionnaire\RosterScopeDescription.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
