@@ -1,29 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Core;
-using Cirrious.CrossCore.IoC;
-using Cirrious.MvvmCross;
-using Cirrious.MvvmCross.Platform;
-using Cirrious.MvvmCross.ViewModels;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 {
-    internal class whent_answer_was_set_to_head_question : InterviewViewModelTestContext
+    internal class when_updating_roster_title : InterviewViewModelTestContext
     {
         Establish context = () =>
         {
@@ -31,12 +19,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
             rosterTitleQuestionId = Guid.Parse("11111111111111111111111111111111");
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId, RosterTitleQuestionId = rosterTitleQuestionId };
-            rosterGroup.Children.Add(new NumericQuestion()
-            {
-                PublicKey = rosterTitleQuestionId,
-                QuestionType = QuestionType.Numeric
-            });
+            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId, RosterTitleQuestionId = rosterTitleQuestionId};
+            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = rosterTitleQuestionId });
 
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
@@ -52,16 +36,13 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
                 answers: new AnsweredQuestionSynchronizationDto[0],
                 propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>()
                 {
-                    {
-                        new InterviewItemId(rosterGroupId, new decimal[0]),
-                        new[] { new RosterSynchronizationDto(rosterGroupId, new decimal[0], 0, null, null) }
-                    }
+                    { new InterviewItemId(rosterGroupId, new decimal[0]), new []{ new RosterSynchronizationDto(rosterGroupId, new decimal[0], 0, null, null)} }
                 });
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
+            interviewViewModel.UpdateRosterRowTitle(rosterGroupId, new decimal[] { }, 0, rosterTitle);
 
         It should_roster_screen_title_rosterTitle = () =>
             ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
