@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId);
         };
 
-        private Because of = () => expectedException = Catch.Exception(() =>
+        Because of = () => expectedException = Catch.Exception(() =>
             interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, new decimal[] { 1, 2, 3 }));
 
         It should_raise_MultipleOptionsQuestionAnswered_event_with_QuestionId_equal_to_validatingQuestionId = () =>
