@@ -147,16 +147,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var rosterDescription in rosterStructure.RosterScopes.Values)
             {
-                foreach (var headQuestion in rosterDescription.RosterGroupsWithTitleQuestionPairs.Values)
+                foreach (var headQuestionId in rosterDescription.RosterIdMappedOfRosterTitleQuestionId.Values)
                 {
-                    this.listOfHeadQuestionsMappedOnScope.Add(headQuestion, rosterDescription.ScopeId);
+                    if (headQuestionId.HasValue)
+                        this.listOfHeadQuestionsMappedOnScope.Add(headQuestionId.Value, rosterDescription.ScopeId);
                 }
             }
         }
 
         public Guid GetScopeOfPropagatedScreen(Guid itemKey)
         {
-            var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.RosterGroupsId.Contains(itemKey));
+            var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.RosterIdMappedOfRosterTitleQuestionId.ContainsKey(itemKey));
             if (itemScope.Equals(default(KeyValuePair<Guid, HashSet<Guid>>)))
                 throw new ArgumentException("item is absent in any scope");
             return itemScope.Key;
@@ -212,7 +213,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 foreach (var rosterInstance in rosterGroupInstance.Value)
                 {
                     this.AddPropagateScreen(rosterGroupInstance.Key.Id,
-                        rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.Key, rosterInstance.Value);
+                        rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.RosterInstanceId, rosterInstance.SortIndex);
+                    
+                    if (!string.IsNullOrEmpty(rosterInstance.RosterTitle))
+                        this.UpdateRosterRowTitle(rosterGroupInstance.Key.Id, rosterGroupInstance.Key.InterviewItemPropagationVector,
+                        rosterInstance.RosterInstanceId, rosterInstance.RosterTitle);
                 }
             }
         }
@@ -269,7 +274,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var propagationScopeId in this.rosterStructure.RosterScopes.Keys)
             {
-                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].RosterGroupsId.ToArray();
+                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].RosterIdMappedOfRosterTitleQuestionId.Keys.ToArray();
 
                 for (int i = 0; i < screenSiblingByPropagationScopeIds.Length; i++)
                 {
@@ -541,7 +546,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void UpdatePropagationScopeTitleForVector(Guid scopeId, decimal[] propagationVector, string newTitle)
         {
-            var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId].RosterGroupsId;
+            var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId].RosterIdMappedOfRosterTitleQuestionId.Keys;
 
             var screensSiblingByPropagationScopeWithVector =
                 siblingsByPropagationScopeIds.Select(

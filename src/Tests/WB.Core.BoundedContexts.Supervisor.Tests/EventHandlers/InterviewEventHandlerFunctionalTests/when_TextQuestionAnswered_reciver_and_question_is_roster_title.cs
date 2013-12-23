@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             headQuestionId = Guid.Parse("13333333333333333333333333333333");
             viewState = CreateViewWithSequenceOfInterviewData();
             var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId,
-                new Dictionary<Guid, Guid>() { { rosterGroupId, headQuestionId } }, rosterGroupId);
+                new Dictionary<Guid, Guid?>() { { rosterGroupId, headQuestionId } });
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
             viewState = interviewEventHandlerFunctional.Update(viewState,
