@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new decimal[] { 0 }, DateTime.Now, 0);
 
         private Cleanup stuff = () =>

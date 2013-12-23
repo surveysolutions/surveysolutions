@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
         private Cleanup stuff = () =>

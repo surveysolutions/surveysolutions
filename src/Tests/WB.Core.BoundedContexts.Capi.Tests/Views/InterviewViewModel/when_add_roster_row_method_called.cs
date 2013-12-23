@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
              interviewSynchronizationDto);
         };
 
-        private Because of = () =>
+        Because of = () =>
             interviewViewModel.AddPropagateScreen(rosterId, new decimal[0], 0, 0);
 
         It should_contain_screen_with_added_roster_row = () =>

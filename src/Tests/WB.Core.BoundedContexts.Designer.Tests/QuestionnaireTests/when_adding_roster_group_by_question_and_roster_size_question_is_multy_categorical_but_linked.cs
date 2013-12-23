@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NewQuestionAdded { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.MultyOption, LinkedToQuestionId = Guid.NewGuid(), GroupPublicKey = chapterId });
         };
 
-        private Because of = () =>
+        Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, null, true,
                     RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
