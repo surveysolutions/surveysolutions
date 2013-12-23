@@ -21,10 +21,11 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             get
             {
-                if (interviewItemPropagationVector == null && PropagationVector != null)
+                if (interviewItemPropagationVector == null)
                 {
-                    interviewItemPropagationVector = PropagationVector.Select(Convert.ToDecimal).ToArray();
+                    interviewItemPropagationVector = this.RestoreFromPropagationVectorInOldIntFormat();
                 }
+
                 return interviewItemPropagationVector;
             }
             set { interviewItemPropagationVector = value; }
@@ -77,6 +78,13 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
                 return string.Format("{0},{1}", vector, Id);
             }
             return Id.ToString();
+        }
+
+        private decimal[] RestoreFromPropagationVectorInOldIntFormat()
+        {
+            if (PropagationVector == null)
+                return new decimal[0];
+            return PropagationVector.Select(Convert.ToDecimal).ToArray();
         }
 
         private string DecimalValueToString(decimal decimalValue)
