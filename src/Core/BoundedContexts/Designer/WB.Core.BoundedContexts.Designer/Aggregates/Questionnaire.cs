@@ -2058,7 +2058,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     IComposite parentOfTitleQuestion = rosterTitleQuestion.GetParent();
                     if (parentOfTitleQuestion == null || !groupsByRosterSizeQuestion.Contains(parentOfTitleQuestion.PublicKey))
                         throw new QuestionnaireException(string.Format(
-                            "Question for roster titles {0} should be placed only inside groups that rostered by {1} roster size question.",
+                            "Question for roster titles {0} should be placed only inside groups where roster size question is {1}",
                             FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
                             FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
                 }
