@@ -34,8 +34,6 @@ namespace Main.Core.Entities.SubEntities
 
         public bool IsRoster { get; set; }
 
-        public string RosterTitle { get; set; }
-
         public Guid? RosterSizeQuestionId { get; set; }
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
