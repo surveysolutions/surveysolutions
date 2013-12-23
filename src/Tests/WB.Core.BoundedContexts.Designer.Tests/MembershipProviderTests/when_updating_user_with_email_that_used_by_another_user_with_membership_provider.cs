@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.MembershipProviderTests
             membershipUser = Mock.Of<MembershipUser>(x => x.Email == validatedUserEmail && (Guid)x.ProviderUserKey == userIdWithExistingEmail);
         };
 
-        private Because of = () => exception =
+        Because of = () => exception =
             Catch.Exception(() => membershipProvider.UpdateUser(membershipUser));
 
         It should_throw_exception_with_message_containting__e_mail__ = () =>

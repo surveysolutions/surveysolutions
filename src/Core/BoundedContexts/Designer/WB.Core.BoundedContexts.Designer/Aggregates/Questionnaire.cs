@@ -1959,7 +1959,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!targetGroup.RosterSizeQuestionId.HasValue ||
                 (targetGroup.RosterSizeQuestionId.Value != groupsByRosterTitleId.FirstOrDefault().RosterSizeQuestionId.Value))
                 throw new QuestionnaireException(
-                    string.Format("You can move a roster title question {0} only to a roster group that have a roster size question {1}",
+                    string.Format("You can move a roster title question {0} only to a roster group that has a roster size question {1}",
                         this.FormatQuestionForException(questionId, this.innerDocument),
                         this.FormatQuestionForException(sourceGroup.RosterSizeQuestionId.Value, this.innerDocument)));
         }
@@ -2058,7 +2058,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     IComposite parentOfTitleQuestion = rosterTitleQuestion.GetParent();
                     if (parentOfTitleQuestion == null || !groupsByRosterSizeQuestion.Contains(parentOfTitleQuestion.PublicKey))
                         throw new QuestionnaireException(string.Format(
-                            "Question for roster titles {0} should be placed only inside groups that rostered by {1} roster size question.",
+                            "Question for roster titles {0} should be placed only inside groups where roster size question is {1}",
                             FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
                             FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
                 }

@@ -1,15 +1,13 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
-using NUnit.Framework.Constraints;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_updating_group_and_roster_group_changed_to_simple_group : QuestionnaireTestsContext
+    internal class when_updating_group_and_is_roster_flag_set_to_false : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -21,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             questionnaire.UpdateGroup(groupId, responsibleId, "title", null, null, null, isRoster: false,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
