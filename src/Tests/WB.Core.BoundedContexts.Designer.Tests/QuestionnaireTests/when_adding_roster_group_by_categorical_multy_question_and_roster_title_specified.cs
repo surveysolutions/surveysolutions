@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_updating_roster_group_by_categorical_question_and_roster_title_specified : QuestionnaireTestsContext
+    internal class when_adding_roster_group_by_categorical_multy_question_and_roster_title_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new NewQuestionAdded()
             {
                 PublicKey = rosterSizeQuestionId,
@@ -34,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(
                 () =>
-                    questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title",
+                    questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", parentGroupId: parentGroupId,
                         description: null, condition: null, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,
                         rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
 
