@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
@@ -13,7 +14,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
-            this.RosterTitleQuestionIdToRosterIdMap=new Dictionary<Guid, Guid>();
+            this.RosterTitleQuestionIdToRosterIdMap = new Dictionary<Guid, Guid>();
+            this.RosterTitleQuestionDescriptions = new Dictionary<Guid, RosterTitleQuestionDescription>();
         }
 
         public decimal[] RosterVector { get; private set; }
@@ -22,6 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         public HashSet<Guid> DisabledGroups { get; private set; }
         public Dictionary<Guid, string> RosterRowTitles { set; get; }
         public Dictionary<Guid, Guid> RosterTitleQuestionIdToRosterIdMap { get; private set; }
+        public Dictionary<Guid, RosterTitleQuestionDescription> RosterTitleQuestionDescriptions { get; private set; }
 
         public IEnumerable<InterviewQuestion> GetAllQuestions()
         {

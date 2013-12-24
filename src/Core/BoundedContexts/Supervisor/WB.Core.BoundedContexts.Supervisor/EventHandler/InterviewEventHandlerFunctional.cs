@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -122,8 +123,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var level = interview.Levels[levelKey];
             foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdToRosterTitleQuestionIdMap)
             {
-                if (rosterGroupsWithTitleQuestionPair.Value.HasValue)
-                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.Value] = rosterGroupsWithTitleQuestionPair.Key;
+                if (rosterGroupsWithTitleQuestionPair.Value != null)
+                {
+                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
+                        rosterGroupsWithTitleQuestionPair.Key;
+
+                    level.RosterTitleQuestionDescriptions[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
+                        rosterGroupsWithTitleQuestionPair.Value;
+                }
             }
         }
 
@@ -180,8 +187,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        private InterviewData SaveAnswer(InterviewData interview, decimal[] vector, Guid questionId, object answer)
-         {
+        private InterviewData SaveAnswer<T>(InterviewData interview, decimal[] vector, Guid questionId, T answer)
+        {
             return this.PreformActionOnLevel(interview, vector, (level) =>
             {
                 var answeredQuestion = level.GetOrCreateQuestion(questionId);
@@ -192,7 +199,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 if (level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(questionId))
                 {
                     var groupId = level.RosterTitleQuestionIdToRosterIdMap[questionId];
-                    var answerString = (answer ?? string.Empty).ToString();
+
+                    var questionDescription = level.RosterTitleQuestionDescriptions.ContainsKey(questionId)
+                        ? level.RosterTitleQuestionDescriptions[questionId]
+                        : null;
+
+                    var answerString = AnswerUtils.AnswerToString(answer, questionDescription);
 
                     if (level.RosterRowTitles.ContainsKey(groupId))
                     {
@@ -204,7 +216,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     }
                 }
             });
-         }
+        }
 
         private InterviewData SetFlagStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId, bool isFlagged)
         {
