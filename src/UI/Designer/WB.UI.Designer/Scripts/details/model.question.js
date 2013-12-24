@@ -245,7 +245,8 @@
                                        self.isFeatured(false);
                                        return;
                                    }
-                                   self.scope("Interviewer");
+                                   self.scope(config.questionScopes.interviewer);
+                                   self.qtype.valueHasMutated();
                                });
                        }
                    });
