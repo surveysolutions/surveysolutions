@@ -44,7 +44,11 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
-        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+
+        private static ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
 
         public InterviewViewModelDenormalizer(
             IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
@@ -79,7 +83,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             }
             catch (Exception e)
             {
-                logger.Error("error during restore QuestionnaireRosterStructure", e);
+                Logger.Error("error during restore QuestionnaireRosterStructure", e);
             }
 
             if (propagationStructure != null)
