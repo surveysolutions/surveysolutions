@@ -89,6 +89,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration">
       <HintPath>..\..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
@@ -135,7 +139,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Merger\when_merging_interview_data_with_questionnaire_with_roster_groups_with_titles.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_error_statuses.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_approve_statuses.cs" />
