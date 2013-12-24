@@ -22,9 +22,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public decimal[] QuestionPropagationVector {
             get
             {
-                if (questionPropagationVector == null && PropagationVector != null)
+                if (questionPropagationVector == null)
                 {
-                    questionPropagationVector = PropagationVector.Select(Convert.ToDecimal).ToArray();
+                    questionPropagationVector = RestoreFromPropagationVectorInOldIntFormat();
                 }
                 return questionPropagationVector;
             }
@@ -38,5 +38,12 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public object Answer { get;  set; }
         public string Comments { get;  set; }
+
+        private decimal[] RestoreFromPropagationVectorInOldIntFormat()
+        {
+            if (PropagationVector == null)
+                return new decimal[0];
+            return PropagationVector.Select(Convert.ToDecimal).ToArray();
+        }
     }
 }

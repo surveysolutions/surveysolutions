@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
+namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 {
-    internal class whent_update_roster_title_called : InterviewViewModelTestContext
+    internal class when_setting_answer_to_roster_title_question : InterviewViewModelTestContext
     {
         Establish context = () =>
         {
@@ -19,8 +21,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
             rosterTitleQuestionId = Guid.Parse("11111111111111111111111111111111");
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId, RosterTitleQuestionId = rosterTitleQuestionId};
-            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = rosterTitleQuestionId });
 
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
@@ -28,7 +28,21 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
                     PublicKey = rosterSizeQuestionId,
                     QuestionType = QuestionType.Numeric
                 },
-                rosterGroup);
+                new Group()
+                {
+                    PublicKey = rosterGroupId,
+                    IsRoster = true,
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterTitleQuestionId = rosterTitleQuestionId,
+                    Children = new List<IComposite>
+                    {
+                        new NumericQuestion()
+                        {
+                            PublicKey = rosterTitleQuestionId,
+                            QuestionType = QuestionType.Numeric
+                        }
+                    }
+                });
 
             rosterStructure = CreateQuestionnaireRosterStructure(questionnarie);
 
@@ -36,18 +50,21 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
                 answers: new AnsweredQuestionSynchronizationDto[0],
                 propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>()
                 {
-                    { new InterviewItemId(rosterGroupId, new decimal[0]), new []{ new RosterSynchronizationDto(rosterGroupId, new decimal[0], 0, null, null)} }
+                    {
+                        new InterviewItemId(rosterGroupId, new decimal[0]),
+                        new[] { new RosterSynchronizationDto(rosterGroupId, new decimal[0], 0, null, null) }
+                    }
                 });
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
         };
 
         Because of = () =>
-            interviewViewModel.UpdateRosterRowTitle(rosterGroupId, new decimal[] { }, 0, rosterTitle);
+            interviewViewModel.SetAnswer(new InterviewItemId(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
 
-        It should_roster_screen_title_rosterTitle = () =>
+        It should_roster_title_be_equal_set_answer = () =>
             ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
-        private static WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel interviewViewModel;
+        private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
         private static Guid rosterGroupId;

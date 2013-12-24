@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterStructureTests
 {
-    internal class when_questionnarie_has_capital_question_inside_autopropagate_style_roster : QuestionnaireRosterStructureTestContext
+    internal class when_creating_roster_structure_for_questionnarie_which_has_capital_question_inside_autopropagate_style_roster : QuestionnaireRosterStructureTestContext
     {
         Establish context = () =>
         {
@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterSt
             var roster = new Group("Roster") { Propagated = Propagate.AutoPropagated, PublicKey = rosterGroupId };
             roster.Children.Add(new NumericQuestion() { PublicKey = capitalQuestionId, Capital = true });
 
-            questionnarie = CreateQuestionnaireDocument(
+            questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new AutoPropagateQuestion()
                 {
                     PublicKey = autoPropagatedQuestionId,
@@ -35,11 +35,21 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterSt
         Because of = () =>
             questionnaireRosterStructure = new QuestionnaireRosterStructure(questionnarie, 1);
 
-        It should_contain_roster_description_with_record_about_rosterGroupId_in_RosterGroupsWithTitleQuestionPairs = () =>
-            questionnaireRosterStructure.RosterScopes[autoPropagatedQuestionId].RosterIdMappedOfRosterTitleQuestionId.Keys.ShouldContain(rosterGroupId);
+        /*It should_contain_roster_description_with_record_about_rosterGroupId_in_RosterGroupsWithTitleQuestionPairs = () =>
+            questionnaireRosterStructure.RosterScopes[autoPropagatedQuestionId].RosterIdToRosterTitleQuestionIdMap.Keys.ShouldContain(rosterGroupId);
 
         It should_contain_roster_description_with_title_question_equal_to_capitalQuestionId = () =>
-            questionnaireRosterStructure.RosterScopes[autoPropagatedQuestionId].RosterIdMappedOfRosterTitleQuestionId[rosterGroupId].ShouldEqual(capitalQuestionId);
+            questionnaireRosterStructure.RosterScopes[autoPropagatedQuestionId].RosterIdToRosterTitleQuestionIdMap[rosterGroupId].ShouldEqual(capitalQuestionId);*/
+
+        It should_contain_1_roster_scope = () =>
+            questionnaireRosterStructure.RosterScopes.Count().ShouldEqual(1);
+
+        It should_specify_autoPropagated_question_id_as_id_of_roster_scope = () =>
+            questionnaireRosterStructure.RosterScopes.Single().Key.ShouldEqual(autoPropagatedQuestionId);
+
+        It should_specify_id_of_roster_title_question_as_capital_question_id_for_roster_id_in_roster_scope = () =>
+            questionnaireRosterStructure.RosterScopes.Single().Value
+                .RosterIdToRosterTitleQuestionIdMap[rosterGroupId].ShouldEqual(capitalQuestionId);
 
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure questionnaireRosterStructure;

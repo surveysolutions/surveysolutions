@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
             foreach (var autoPropagatebleQuestion in autoPropagatebleQuestions)
             {
-                var rosterIdMappedOfRosterTitleQuestionId = this.GetRosterIdMappedOfRosterTitleQuestionIdByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
+                var rosterIdMappedOfRosterTitleQuestionId = this.GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
 
                 var rosterDescription = new RosterScopeDescription(autoPropagatebleQuestion.PublicKey, rosterIdMappedOfRosterTitleQuestionId);
 
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
                 var groupsFromRosterSizeQuestionScope =
                     rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
 
-                var rosterIdWithTitleQuestionIds = this.GetRosterIdMappedOfRosterTitleQuestionIdByRostersInScope(groupsFromRosterSizeQuestionScope);
+                var rosterIdWithTitleQuestionIds = this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(groupsFromRosterSizeQuestionScope);
 
                 var rosterDescription = new RosterScopeDescription(rosterSizeQuestion.PublicKey, rosterIdWithTitleQuestionIds);
 
@@ -63,14 +63,14 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             }
         }
 
-        private Dictionary<Guid, Guid?> GetRosterIdMappedOfRosterTitleQuestionIdByRostersInScope(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
+        private Dictionary<Guid, Guid?> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
         {
             return
                 groupsFromRosterSizeQuestionScope
                     .ToDictionary(roster => roster.PublicKey, roster => roster.RosterTitleQuestionId);
         }
 
-        private Dictionary<Guid, Guid?> GetRosterIdMappedOfRosterTitleQuestionIdByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
+        private Dictionary<Guid, Guid?> GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
         {
             IEnumerable<IGroup> groupsFromAutoPropagatedQuestionScope =
                 questionnaire.Find<IGroup>(group => autoPropagateQuestion.Triggers.Contains(group.PublicKey));

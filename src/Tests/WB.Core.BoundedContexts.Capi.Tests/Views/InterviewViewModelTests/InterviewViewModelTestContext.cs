@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
+namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 {
+    [Subject(typeof(InterviewViewModel))]
     internal class InterviewViewModelTestContext
     {
-        protected static Capi.Views.InterviewDetails.InterviewViewModel CreateInterviewViewModel(QuestionnaireDocument template,
+        protected static InterviewViewModel CreateInterviewViewModel(QuestionnaireDocument template,
             QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interviewSynchronizationDto)
         {
-            var result = new Capi.Views.InterviewDetails.InterviewViewModel(Guid.NewGuid(), template, rosterStructure,
+            var result = new InterviewViewModel(Guid.NewGuid(), template, rosterStructure,
                 interviewSynchronizationDto);
 
             foreach (var questionViewModel in result.FindQuestion(q=>true))
