@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
                 var groupsFromRosterSizeQuestionScope =
                     rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
 
-                var rosterIdWithTitleQuestionIds = this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(groupsFromRosterSizeQuestionScope);
+                var rosterIdWithTitleQuestionIds = this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(questionnaire, groupsFromRosterSizeQuestionScope);
 
                 var rosterDescription = new RosterScopeDescription(rosterSizeQuestion.PublicKey, rosterIdWithTitleQuestionIds);
 
@@ -59,35 +59,49 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             foreach (var fixedRosterGroup in fixedRosterGroups)
             {
                 this.RosterScopes[fixedRosterGroup.PublicKey] = new RosterScopeDescription(fixedRosterGroup.PublicKey,
-                    new Dictionary<Guid, Guid?> { { fixedRosterGroup.PublicKey, null } });
+                    new Dictionary<Guid, RosterTitleQuestionDescription> { { fixedRosterGroup.PublicKey, null } });
             }
         }
 
-        private Dictionary<Guid, Guid?> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
+        private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(QuestionnaireDocument questionnaire, IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
         {
             return
                 groupsFromRosterSizeQuestionScope
-                    .ToDictionary(roster => roster.PublicKey, roster => roster.RosterTitleQuestionId);
+                    .ToDictionary(roster => roster.PublicKey,
+                        roster => roster.RosterTitleQuestionId.HasValue
+                            ? CreateRosterTitleQuestionDescription(
+                                questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == roster.RosterTitleQuestionId.Value))
+                            : null);
         }
 
-        private Dictionary<Guid, Guid?> GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
+        private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
         {
             IEnumerable<IGroup> groupsFromAutoPropagatedQuestionScope =
                 questionnaire.Find<IGroup>(group => autoPropagateQuestion.Triggers.Contains(group.PublicKey));
 
-            Dictionary<Guid, Guid?> rosterGroupsWithTitleQuestionPairs = new Dictionary<Guid, Guid?>();
+            var capitalQuestions =
+                groupsFromAutoPropagatedQuestionScope.SelectMany(rosterGroup => rosterGroup.Find<IQuestion>(question => question.Capital));
+
+            RosterTitleQuestionDescription headQuestion = null;
+
+            if (capitalQuestions.Any())
+            {
+                headQuestion = CreateRosterTitleQuestionDescription(capitalQuestions.First());
+            }
+
+            var rosterGroupsWithTitleQuestionPairs = new Dictionary<Guid, RosterTitleQuestionDescription>();
             
             foreach (var rosterGroup in groupsFromAutoPropagatedQuestionScope)
             {
-                var capitalQuestions = rosterGroup.Find<IQuestion>(question => question.Capital);
-                Guid? headQuestionId = null;
-                if (capitalQuestions.Any())
-                {
-                    headQuestionId = capitalQuestions.First().PublicKey;
-                }
-                rosterGroupsWithTitleQuestionPairs.Add(rosterGroup.PublicKey, headQuestionId);
+                rosterGroupsWithTitleQuestionPairs.Add(rosterGroup.PublicKey, headQuestion);
             }
             return rosterGroupsWithTitleQuestionPairs;
+        }
+
+        private RosterTitleQuestionDescription CreateRosterTitleQuestionDescription(IQuestion question)
+        {
+            return new RosterTitleQuestionDescription(question.PublicKey,
+                question.Answers.ToDictionary(a => decimal.Parse(a.AnswerValue), a => a.AnswerText));
         }
 
         public Guid QuestionnaireId { get; set; }

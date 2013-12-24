@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterSt
 
         It should_specify_id_of_roster_title_question_as_roster_title_question_id_for_roster_id_in_roster_scope = () =>
             questionnaireRosterStructure.RosterScopes.Single().Value
-                .RosterIdToRosterTitleQuestionIdMap[rosterGroupId].ShouldEqual(rosterTitleQuestionId);
+                .RosterIdToRosterTitleQuestionIdMap[rosterGroupId].QuestionId.ShouldEqual(rosterTitleQuestionId);
 
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure questionnaireRosterStructure;

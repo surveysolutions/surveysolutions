@@ -164,6 +164,7 @@
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
+    <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\Questionnaire\QuestionIdAndVariableName.cs" />
@@ -185,6 +186,7 @@
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
     <Compile Include="Views\Questionnaire\RosterScopeDescription.cs" />
+    <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

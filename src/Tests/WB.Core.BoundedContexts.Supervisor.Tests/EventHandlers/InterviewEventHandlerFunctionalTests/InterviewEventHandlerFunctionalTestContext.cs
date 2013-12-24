@@ -32,7 +32,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             Dictionary<Guid, Guid?> rosterGroupsWithTitleQuestionPairs)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterScopeDescription(scopeId, rosterGroupsWithTitleQuestionPairs ?? new Dictionary<Guid, Guid?>());
+            var rosterDescription = new RosterScopeDescription(scopeId,
+                rosterGroupsWithTitleQuestionPairs.ToDictionary(roster => roster.Key,
+                    roster => roster.Value.HasValue ? new RosterTitleQuestionDescription(roster.Value.Value) : null));
+
+            rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
+            return rosterStructure;
+        }
+
+        protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
+           Dictionary<Guid, RosterTitleQuestionDescription> rosterGroupsWithTitleQuestionPairs)
+        {
+            var rosterStructure = new QuestionnaireRosterStructure();
+            var rosterDescription = new RosterScopeDescription(scopeId, rosterGroupsWithTitleQuestionPairs);
+
             rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
         }
@@ -40,7 +53,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId, params Guid[] groupIdsFromScope)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
-            var rosterGroupsWithTitleQuestionPairs = groupIdsFromScope.ToDictionary<Guid, Guid, Guid?>(groupId => groupId, groupId => null);
+            var rosterGroupsWithTitleQuestionPairs = groupIdsFromScope.ToDictionary<Guid, Guid, RosterTitleQuestionDescription>(groupId => groupId, groupId => null);
             var rosterDescription = new RosterScopeDescription(scopeId, rosterGroupsWithTitleQuestionPairs);
             rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
