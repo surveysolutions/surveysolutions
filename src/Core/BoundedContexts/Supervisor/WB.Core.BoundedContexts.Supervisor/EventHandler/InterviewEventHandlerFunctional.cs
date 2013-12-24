@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var scopeId in questionnarie.RosterScopes.Keys)
             {
-                if (questionnarie.RosterScopes[scopeId].RosterIdMappedOfRosterTitleQuestionId.ContainsKey(groupId))
+                if (questionnarie.RosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.ContainsKey(groupId))
                 {
                     return questionnarie.RosterScopes[scopeId];
                 }
@@ -120,10 +120,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 interview.Levels[levelKey].ScopeIds[scope.ScopeId] = sortIndex;
 
             var level = interview.Levels[levelKey];
-            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdMappedOfRosterTitleQuestionId)
+            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdToRosterTitleQuestionIdMap)
             {
                 if (rosterGroupsWithTitleQuestionPair.Value.HasValue)
-                    level.RosterTitleQuestionsMappedOnRosterId[rosterGroupsWithTitleQuestionPair.Value.Value] = rosterGroupsWithTitleQuestionPair.Key;
+                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.Value] = rosterGroupsWithTitleQuestionPair.Key;
             }
         }
 
@@ -189,9 +189,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 answeredQuestion.Answer = answer;
                 answeredQuestion.IsAnswered = true;
 
-                if (level.RosterTitleQuestionsMappedOnRosterId.ContainsKey(questionId))
+                if (level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(questionId))
                 {
-                    var groupId = level.RosterTitleQuestionsMappedOnRosterId[questionId];
+                    var groupId = level.RosterTitleQuestionIdToRosterIdMap[questionId];
                     var answerString = (answer ?? string.Empty).ToString();
 
                     if (level.RosterRowTitles.ContainsKey(groupId))

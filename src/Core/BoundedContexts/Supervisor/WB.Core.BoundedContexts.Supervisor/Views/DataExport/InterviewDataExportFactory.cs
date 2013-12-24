@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             if (!questionnaireLevelStructure.RosterScopes.ContainsKey(levelId))
                 throw new InvalidOperationException("level is absent in template");
 
-            return new HashSet<Guid>(questionnaireLevelStructure.RosterScopes[levelId].RosterIdMappedOfRosterTitleQuestionId.Keys);
+            return new HashSet<Guid>(questionnaireLevelStructure.RosterScopes[levelId].RosterIdToRosterTitleQuestionIdMap.Keys);
         }
 
         private void FillHeaderWithQuestionsInsideGroup(ExportedHeaderCollection headerItems, IGroup @group)
