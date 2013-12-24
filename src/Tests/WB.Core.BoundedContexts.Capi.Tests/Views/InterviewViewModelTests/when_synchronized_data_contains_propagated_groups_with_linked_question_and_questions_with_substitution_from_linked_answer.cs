@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
+namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 {
     internal class when_synchronized_data_contains_propagated_groups_with_linked_question_and_questions_with_substitution_from_linked_answer : InterviewViewModelTestContext
     {
@@ -26,15 +23,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
             linkedQuestionId = Guid.Parse("22222222222222222222222222222222");
             autoPropagatedQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            var rosterGroup = new Group() { PublicKey = propagatedGroupId, Propagated = Propagate.AutoPropagated };
-            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = sourceForLinkedQuestionId });
-            rosterGroup.Children.Add(new SingleQuestion()
-            {
-                PublicKey = linkedQuestionId,
-                LinkedToQuestionId = sourceForLinkedQuestionId,
-                StataExportCaption = sourceForLinkedQuestionVariableName
-            });
-
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new AutoPropagateQuestion()
                 {
@@ -42,9 +30,22 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
                     QuestionType = QuestionType.AutoPropagate,
                     Triggers = new List<Guid> { propagatedGroupId }
                 },
-                rosterGroup);
-            rosterGroup.Children.Add(
-                new TextQuestion(string.Format("subst %{0}%", sourceForLinkedQuestionVariableName)) { PublicKey = Guid.NewGuid() });
+                new Group()
+                {
+                    PublicKey = propagatedGroupId,
+                    Propagated = Propagate.AutoPropagated,
+                    Children = new List<IComposite>
+                    {
+                        new NumericQuestion() { PublicKey = sourceForLinkedQuestionId },
+                        new SingleQuestion()
+                        {
+                            PublicKey = linkedQuestionId,
+                            LinkedToQuestionId = sourceForLinkedQuestionId,
+                            StataExportCaption = sourceForLinkedQuestionVariableName
+                        },
+                        new TextQuestion(string.Format("subst %{0}%", sourceForLinkedQuestionVariableName)) { PublicKey = Guid.NewGuid() }
+                    }
+                });
 
             rosterStructure = CreateQuestionnaireRosterStructure(questionnarie);
 
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
                 .FirstOrDefault()
                 .AnswerObject.ShouldEqual(2);
 
-        private static WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel interviewViewModel;
+        private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
         private static InterviewSynchronizationDto interviewSynchronizationDto;

@@ -11,16 +11,16 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventHandlerFunctionalTests
 {
-    internal class when_TextQuestionAnswered_reciver_and_question_is_roster_title : InterviewEventHandlerFunctionalTestContext
+    internal class when_TextQuestionAnswered_recived_and_answered_question_is_roster_title : InterviewEventHandlerFunctionalTestContext
     {
         Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterScopeId = Guid.Parse("12222222222222222222222222222222");
-            headQuestionId = Guid.Parse("13333333333333333333333333333333");
+            rosterTitleQuestionId = Guid.Parse("13333333333333333333333333333333");
             viewState = CreateViewWithSequenceOfInterviewData();
             var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId,
-                new Dictionary<Guid, Guid?>() { { rosterGroupId, headQuestionId } });
+                new Dictionary<Guid, Guid?>() { { rosterGroupId, rosterTitleQuestionId } });
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
             viewState = interviewEventHandlerFunctional.Update(viewState,
@@ -29,20 +29,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
 
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(new TextQuestionAnswered(Guid.NewGuid(), headQuestionId, new decimal[] { 0 }, DateTime.Now,
+                CreatePublishableEvent(new TextQuestionAnswered(Guid.NewGuid(), rosterTitleQuestionId, new decimal[] { 0 }, DateTime.Now,
                     helloRoster)));
 
-        It should_roster_title_be_equal_to_helloRoster = () =>
+        It should_roster_title_be_equal_to_recived_answer = () =>
             viewState.Document.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual(helloRoster);
 
-        It should_answer_on_head_question_be_equal_to_helloRoster = () =>
-            viewState.Document.Levels["0"].GetAllQuestions().First(q => q.Id == headQuestionId).Answer.ShouldEqual(helloRoster);
+        It should_answer_on_head_question_be_equal_to_recived_answer = () =>
+            viewState.Document.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer.ShouldEqual(helloRoster);
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
         private static ViewWithSequence<InterviewData> viewState;
         private static Guid rosterGroupId;
         private static Guid rosterScopeId;
-        private static Guid headQuestionId;
+        private static Guid rosterTitleQuestionId;
         private static string helloRoster = "hello roster";
     }
 }
