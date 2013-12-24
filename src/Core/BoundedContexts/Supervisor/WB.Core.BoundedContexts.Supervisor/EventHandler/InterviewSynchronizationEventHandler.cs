@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var scopeId in interviewLevel.ScopeIds)
             {
-                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key].RosterIdMappedOfRosterTitleQuestionId.Keys)
+                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key].RosterIdToRosterTitleQuestionIdMap.Keys)
                 {
                      var groupKey = new InterviewItemId(groupId, outerVector);
 

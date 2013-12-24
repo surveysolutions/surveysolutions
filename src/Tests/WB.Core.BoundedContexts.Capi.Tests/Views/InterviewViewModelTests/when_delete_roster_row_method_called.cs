@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
+namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 {
     internal class when_delete_roster_row_method_called : InterviewViewModelTestContext
     {
@@ -21,14 +19,13 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
 
             var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            var rosterGroup = new Group() { PublicKey = rosterId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
                     QuestionType = QuestionType.Numeric
                 },
-                rosterGroup);
+                new Group() { PublicKey = rosterId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId });
 
             rosterStructure = CreateQuestionnaireRosterStructure(questionnarie);
 
@@ -49,7 +46,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
         It should_contain_screen_with_added_roster_row = () =>
             interviewViewModel.Screens.Keys.ShouldNotContain(new InterviewItemId(rosterId, new decimal[] { 0 }));
 
-        private static WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel interviewViewModel;
+        private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
         private static InterviewSynchronizationDto interviewSynchronizationDto;

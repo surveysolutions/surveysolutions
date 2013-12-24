@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             this.BuildInterviewStructureFromTemplate(questionnaire);
 
-            this.BuildHeadQuestionsInsidePropagateGroupsStructure(rosterStructure);
+            this.BuildRosterTitleQuestions(rosterStructure);
 
             this.referencedQuestionToLinkedQuestionsMap = questionnaire
                 .Find<IQuestion>(question => question.LinkedToQuestionId != null)
@@ -143,11 +143,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return this.Questions.Values.Where(x => x.SubstitutionReferences.Any());
         }
 
-        private void BuildHeadQuestionsInsidePropagateGroupsStructure(QuestionnaireRosterStructure rosterStructure)
+        private void BuildRosterTitleQuestions(QuestionnaireRosterStructure rosterStructure)
         {
             foreach (var rosterDescription in rosterStructure.RosterScopes.Values)
             {
-                foreach (var headQuestionId in rosterDescription.RosterIdMappedOfRosterTitleQuestionId.Values)
+                foreach (var headQuestionId in rosterDescription.RosterIdToRosterTitleQuestionIdMap.Values)
                 {
                     if (headQuestionId.HasValue)
                         this.listOfHeadQuestionsMappedOnScope.Add(headQuestionId.Value, rosterDescription.ScopeId);
@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public Guid GetScopeOfPropagatedScreen(Guid itemKey)
         {
-            var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.RosterIdMappedOfRosterTitleQuestionId.ContainsKey(itemKey));
+            var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.RosterIdToRosterTitleQuestionIdMap.ContainsKey(itemKey));
             if (itemScope.Equals(default(KeyValuePair<Guid, HashSet<Guid>>)))
                 throw new ArgumentException("item is absent in any scope");
             return itemScope.Key;
@@ -274,7 +274,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (var propagationScopeId in this.rosterStructure.RosterScopes.Keys)
             {
-                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].RosterIdMappedOfRosterTitleQuestionId.Keys.ToArray();
+                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].RosterIdToRosterTitleQuestionIdMap.Keys.ToArray();
 
                 for (int i = 0; i < screenSiblingByPropagationScopeIds.Length; i++)
                 {
@@ -546,7 +546,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void UpdatePropagationScopeTitleForVector(Guid scopeId, decimal[] propagationVector, string newTitle)
         {
-            var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId].RosterIdMappedOfRosterTitleQuestionId.Keys;
+            var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.Keys;
 
             var screensSiblingByPropagationScopeWithVector =
                 siblingsByPropagationScopeIds.Select(

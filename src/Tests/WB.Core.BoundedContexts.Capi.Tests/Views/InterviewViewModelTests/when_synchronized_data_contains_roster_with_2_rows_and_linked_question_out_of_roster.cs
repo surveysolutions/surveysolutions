@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -12,9 +10,9 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
+namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 {
-    internal class whent_synchronized_data_contains_roster_with_2_rows_and_linked_question_out_of_roster : InterviewViewModelTestContext
+    internal class when_synchronized_data_contains_roster_with_2_rows_and_linked_question_out_of_roster : InterviewViewModelTestContext
     {
         Establish context = () =>
         {
@@ -82,7 +80,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModel
               question => question.PublicKey == new InterviewItemId(linkedQuestionInRosterId, new decimal[] { 1 }))
               .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(2);
 
-        private static WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel interviewViewModel;
+        private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
         private static InterviewSynchronizationDto interviewSynchronizationDto;

@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterStructureTests
 {
-    internal class when_questionnarie_has_roster_title_question_inside_roster_group : QuestionnaireRosterStructureTestContext
+    internal class when_creating_roster_structure_for_questionnarie_which_has_roster_title_question_inside_roster_group : QuestionnaireRosterStructureTestContext
     {
         Establish context = () =>
         {
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterSt
             rosterSizeQuestionId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterGroupId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            questionnarie = CreateQuestionnaireDocument(
+            questionnarie = CreateQuestionnaireDocumentWithOneChapter(
 
                 new NumericQuestion { PublicKey = rosterSizeQuestionId },
 
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Views.QuestionnaireRosterSt
 
         It should_specify_id_of_roster_title_question_as_roster_title_question_id_for_roster_id_in_roster_scope = () =>
             questionnaireRosterStructure.RosterScopes.Single().Value
-                .RosterIdMappedOfRosterTitleQuestionId[rosterGroupId].ShouldEqual(rosterTitleQuestionId);
+                .RosterIdToRosterTitleQuestionIdMap[rosterGroupId].ShouldEqual(rosterTitleQuestionId);
 
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure questionnaireRosterStructure;
