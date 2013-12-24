@@ -62,8 +62,7 @@ namespace Main.Core.Tests.Documents
             var group1Id = Guid.NewGuid();
             var group2Id = Guid.NewGuid();
             
-            
-            var doc = CreateQuestionnaireDocumentWithTwoRostersAndOneRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
+            var doc = CreateQuestionnaireDocumentWithTwoRostersAndTwoRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
 
             // Act
             doc.RemoveHeadPropertiesFromRosters(questionId);
@@ -83,22 +82,18 @@ namespace Main.Core.Tests.Documents
             var group2Id = Guid.NewGuid();
 
 
-            var doc = CreateQuestionnaireDocumentWithTwoRostersAndOneRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
+            var doc = CreateQuestionnaireDocumentWithTwoRostersAndTwoRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
 
             // Act
             doc.MoveHeadQuestionPropertiesToRoster(question1Id, group1Id);
 
             // Assert
-            
-            var group1 = doc.Find<IGroup>(x => x.PublicKey == group1Id).FirstOrDefault() as Group;
-            var group2 = doc.Find<IGroup>(x => x.PublicKey == group2Id).FirstOrDefault() as Group;
-
-            Assert.That(group1.RosterTitleQuestionId, Is.EqualTo(question1Id));
-            Assert.That(group2.RosterTitleQuestionId, Is.EqualTo(question1Id));
+            Assert.That(doc.Find<IGroup>(x => x.PublicKey == group1Id).FirstOrDefault().RosterTitleQuestionId, Is.EqualTo(question1Id));
+            Assert.That(doc.Find<IGroup>(x => x.PublicKey == group2Id).FirstOrDefault().RosterTitleQuestionId, Is.EqualTo(question1Id));
         }
 
 
-        private QuestionnaireDocument CreateQuestionnaireDocumentWithTwoRostersAndOneRosterTitleQuestion(Guid textQuestionId, Guid textQuestion1Id, Guid group1Id, Guid group2Id)
+        private QuestionnaireDocument CreateQuestionnaireDocumentWithTwoRostersAndTwoRosterTitleQuestion(Guid textQuestionId, Guid textQuestion1Id, Guid group1Id, Guid group2Id)
         {
             var doc = new QuestionnaireDocument();
             var chapter1 = new Group("Chapter 1") { PublicKey = Guid.NewGuid() };
