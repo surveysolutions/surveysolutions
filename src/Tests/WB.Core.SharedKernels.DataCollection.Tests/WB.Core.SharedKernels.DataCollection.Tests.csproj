@@ -127,6 +127,7 @@
     <Compile Include="UserARTests.cs" />
     <Compile Include="Views\QuestionnaireRosterStructureTests\QuestionnaireRosterStructureTestContext.cs" />
     <Compile Include="Views\QuestionnaireRosterStructureTests\when_creating_roster_structure_for_questionnarie_which_has_capital_question_inside_autopropagate_style_roster.cs" />
+    <Compile Include="Views\QuestionnaireRosterStructureTests\when_creating_roster_structure_for_questionnarie_which_has_fixed_roster_group.cs" />
     <Compile Include="Views\QuestionnaireRosterStructureTests\when_creating_roster_structure_for_questionnarie_which_has_roster_title_question_inside_roster_group.cs" />
   </ItemGroup>
   <ItemGroup>
