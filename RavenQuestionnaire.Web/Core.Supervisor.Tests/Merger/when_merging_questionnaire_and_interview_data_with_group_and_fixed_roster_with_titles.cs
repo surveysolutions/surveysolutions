@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,8 +6,6 @@ using Core.Supervisor.Views;
 using Core.Supervisor.Views.Interview;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -41,11 +38,13 @@ namespace Core.Supervisor.Tests.Merger
         It should_set__groupTitle__to_regular_group_with_groupId_id = () =>
             mergeResult.Groups.Single(x => x.Id == groupId).Title.ShouldEqual(groupTitle);
 
-        It should_set_first_fixed_roster_title_= () =>
-            mergeResult.Groups.Single(x => x.Id == fixedRosterId && Enumerable.SequenceEqual<decimal>(x.RosterVector,new decimal[] { 0 } ) ).Title.ShouldEqual(fixedRosterTitle + ": " + rosterFixedTitles[0]);
+        It should_set_first_fixed_roster_title_ = () =>
+            mergeResult.Groups.Single(x => x.Id == fixedRosterId && x.RosterVector.SequenceEqual(new decimal[] { 0 }))
+                .Title.ShouldEqual(string.Format(fixedRosterTitleFormat, rosterFixedTitles[0]));
 
         It should_set_second_fixed_roster_title_ = () =>
-            mergeResult.Groups.Single(x => x.Id == fixedRosterId && Enumerable.SequenceEqual<decimal>(x.RosterVector, new decimal[] { 1 })).Title.ShouldEqual(fixedRosterTitle + ": " + rosterFixedTitles[1]);
+            mergeResult.Groups.Single(x => x.Id == fixedRosterId && x.RosterVector.SequenceEqual(new decimal[] { 1 }))
+                .Title.ShouldEqual(string.Format(fixedRosterTitleFormat, rosterFixedTitles[1]));
 
 
         private static InterviewDataAndQuestionnaireMerger merger;
@@ -59,107 +58,8 @@ namespace Core.Supervisor.Tests.Merger
         private static Guid fixedRosterId = Guid.Parse("22222222222222222222222222222222");
         private static Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static string fixedRosterTitle = "Fixed roster";
+        private static string fixedRosterTitleFormat = string.Format("{0}: {{0}}", fixedRosterTitle);
         private static string[] rosterFixedTitles = { "Title1", "Title2" };
         private static string groupTitle = "Group Title";
-    }
-
-    internal class InterviewDataAndQuestionnaireMergerTestContext
-    {
-        internal static QuestionnaireRosterStructure CreateQuestionnaireRosterStructureWithOneFixedRoster(Guid fixedRosterId)
-        {
-            return new QuestionnaireRosterStructure()
-            {
-                RosterScopes = new Dictionary<Guid, RosterScopeDescription>()
-                {
-                    {
-                        fixedRosterId,
-                        new RosterScopeDescription(fixedRosterId, new Dictionary<Guid, RosterTitleQuestionDescription>()
-                        {
-                            { fixedRosterId, null }
-                        })
-                    }
-                }
-            };
-        }
-
-        internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo()
-        {
-            return new ReferenceInfoForLinkedQuestions(Guid.NewGuid(), 0, Mock.Of<Dictionary<Guid, ReferenceInfoByQuestion>>());
-        }
-
-        internal static QuestionnaireDocument CreateQuestionnaireDocumentWithGroupAndFixedRoster(Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)
-        {
-            return new QuestionnaireDocument()
-            {
-                Children = new List<IComposite>
-                {
-                    new Group(groupTitle)
-                    {
-                        PublicKey = groupId,
-                        IsRoster = false
-                    },
-                    new Group(fixedRosterTitle)
-                    {
-                         PublicKey = fixedRosterId,
-                        IsRoster = true,
-                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = rosterFixedTitles
-                    }
-                }
-            };
-        }
-
-        internal static QuestionnaireDocumentVersioned CreateQuestionnaireWithVersion(QuestionnaireDocument questionnaireDocument)
-        {
-
-            return new QuestionnaireDocumentVersioned
-            {
-                Version = 1,
-                Questionnaire = questionnaireDocument
-            };
-        }
-
-        internal static InterviewData CreateInterviewDataForQuestionnaireWithGroupAndFixedRoster(Guid interviewId, Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)
-        {
-            return new InterviewData()
-            {
-                InterviewId = interviewId,
-                Levels = new Dictionary<string, InterviewLevel>()
-                {
-                    {
-                        "#", 
-                        new InterviewLevel(interviewId, null, new decimal[0])
-                        {
-                            RosterRowTitles = new Dictionary<Guid, string>()
-                        }
-                    },
-                    {
-                        "0",
-                        new InterviewLevel(fixedRosterId, null, new decimal[] { 0 })
-                        {
-                            RosterRowTitles = new Dictionary<Guid, string>()
-                            {
-                                { fixedRosterId, rosterFixedTitles[0] }
-                            }
-                        }
-                    },
-                    {
-                        "1", 
-                        new InterviewLevel(fixedRosterId, null, new decimal[] { 1 })
-                        {
-                            RosterRowTitles = new Dictionary<Guid, string>()
-                            {
-                                { fixedRosterId, rosterFixedTitles[1] }
-                            }
-                        }
-                    }
-                }
-            };
-        }
-
-        internal static InterviewDataAndQuestionnaireMerger CreateMerger()
-        {
-            return new InterviewDataAndQuestionnaireMerger();
-        }
     }
 }
