@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7 : InterviewTestsContext
+    internal class when_answering_datetime_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is__08_Mar_2011__ : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -31,8 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>
             (_
                 => _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.Numeric
-                && _.IsQuestionInteger(questionId) == true
+                && _.GetQuestionType(questionId) == QuestionType.DateTime
                 && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
                 && _.DoesQuestionSpecifyRosterTitle(questionId) == true
                 && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }
@@ -50,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericIntegerQuestion(userId, questionId, rosterVector, DateTime.Now, 7);
+            interview.AnswerDateTimeQuestion(userId, questionId, rosterVector, DateTime.Now, new DateTime(2011, 03, 08));
 
         Cleanup stuff = () =>
         {
@@ -58,8 +57,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        It should_raise_NumericIntegerQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<NumericIntegerQuestionAnswered>();
+        It should_raise_DateTimeQuestionAnswered_event = () =>
+            eventContext.ShouldContainEvent<DateTimeQuestionAnswered>();
 
         It should_raise_2_RosterRowTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 2);
@@ -76,9 +75,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvents<RosterRowTitleChanged>()
                 .ShouldEachConformTo(@event => @event.RosterInstanceId == rosterVector.Last());
 
-        It should_set_title_to__7__in_all_RosterRowTitleChanged_events = () =>
+        It should_set_title_to__3_slash_8_slash_2011__in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterRowTitleChanged>().Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "7");
+                .ShouldEachConformTo(title => title == "3/8/2011");
 
         private static EventContext eventContext;
         private static Interview interview;

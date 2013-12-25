@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7 : InterviewTestsContext
+    internal class when_answering_multiple_options_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_options_are_X_Y_Z_and_selected_are_Z_and_X : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -27,12 +27,19 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             rosterAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
+            optionX = 1;
+            var optionY = (decimal) -2;
+            optionZ = (decimal) 3.2;
+
 
             var questionnaire = Mock.Of<IQuestionnaire>
             (_
                 => _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.Numeric
-                && _.IsQuestionInteger(questionId) == true
+                && _.GetQuestionType(questionId) == QuestionType.MultyOption
+                && _.GetAnswerOptionsAsValues(questionId) == new[] { optionX, optionY, optionZ }
+                && _.GetAnswerOptionTitle(questionId, optionX) == "X"
+                && _.GetAnswerOptionTitle(questionId, optionY) == "Y"
+                && _.GetAnswerOptionTitle(questionId, optionZ) == "Z"
                 && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
                 && _.DoesQuestionSpecifyRosterTitle(questionId) == true
                 && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }
@@ -50,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericIntegerQuestion(userId, questionId, rosterVector, DateTime.Now, 7);
+            interview.AnswerMultipleOptionsQuestion(userId, questionId, rosterVector, DateTime.Now, new[] { optionZ, optionX });
 
         Cleanup stuff = () =>
         {
@@ -58,8 +65,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        It should_raise_NumericIntegerQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<NumericIntegerQuestionAnswered>();
+        It should_raise_MultipleOptionsQuestionAnswered_event = () =>
+            eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
 
         It should_raise_2_RosterRowTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 2);
@@ -76,9 +83,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvents<RosterRowTitleChanged>()
                 .ShouldEachConformTo(@event => @event.RosterInstanceId == rosterVector.Last());
 
-        It should_set_title_to__7__in_all_RosterRowTitleChanged_events = () =>
+        It should_set_title_to__Z_comma_space_X__in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterRowTitleChanged>().Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "7");
+                .ShouldEachConformTo(title => title == "Z, X");
 
         private static EventContext eventContext;
         private static Interview interview;
@@ -88,5 +95,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static decimal[] emptyRosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
+        private static decimal optionX;
+        private static decimal optionZ;
     }
 }
