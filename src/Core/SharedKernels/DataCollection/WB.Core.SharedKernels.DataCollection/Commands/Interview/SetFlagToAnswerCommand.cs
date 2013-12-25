@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "SetFlagToAnswer")]
     public class SetFlagToAnswerCommand : QuestionCommand
     {
-        public SetFlagToAnswerCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector)
+        public SetFlagToAnswerCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector)
             : base(interviewId, userId, questionId, rosterVector) {}
     }
 }

@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "RemoveFlagFromAnswer")]
     public class RemoveFlagFromAnswerCommand : QuestionCommand
     {
-        public RemoveFlagFromAnswerCommand(Guid interviewId, Guid userId, Guid questionId, int[] rosterVector)
+        public RemoveFlagFromAnswerCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector)
             : base(interviewId, userId, questionId, rosterVector) {}
     }
 }

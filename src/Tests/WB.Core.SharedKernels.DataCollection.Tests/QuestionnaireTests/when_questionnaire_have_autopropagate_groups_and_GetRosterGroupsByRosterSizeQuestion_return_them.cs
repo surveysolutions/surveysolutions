@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(Guid.NewGuid(), questionnaireDocument);
         };
 
-        private Because of = () =>
+        Because of = () =>
             rosterGroups = questionnaire.GetRosterGroupsByRosterSizeQuestion(validatedQuestionId);
 
         It should_rosterGroups_not_be_empty = () =>

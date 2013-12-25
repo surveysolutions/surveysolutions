@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -6,13 +7,15 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "AddGroup")]
+    [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "AddGroup")]
     public class AddGroupCommand : FullGroupDataCommand
     {
         public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId)
-            : base(questionnaireId, groupId, responsibleId, title, rosterSizeQuestionId, description, condition)
+            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            : base(
+                questionnaireId, groupId, responsibleId, title, rosterSizeQuestionId, description, condition, isRoster, rosterSizeSource,
+                rosterFixedTitles, rosterTitleQuestionId)
         {
             this.ParentGroupId = parentGroupId;
         }

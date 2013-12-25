@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
                 CreateInterviewDataWith2PropagatedLevels, 2, CreateQuestionnairePropagationStructure);
         };
 
-        private Because of = () =>
+        Because of = () =>
             result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(Guid.NewGuid(), 1, propagationScopeKey));
 
         private It should_records_count_equals_4 = () =>
@@ -77,7 +77,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         private static QuestionnaireRosterStructure CreateQuestionnairePropagationStructure()
         {
             var propagationStructure = new QuestionnaireRosterStructure();
-            propagationStructure.RosterScopes.Add(propagationScopeKey, new HashSet<Guid>() { propagatedGroup });
+            var rosterDescription = new RosterScopeDescription(propagationScopeKey,
+                new Dictionary<Guid, RosterTitleQuestionDescription> { { propagatedGroup, null } });
+            propagationStructure.RosterScopes.Add(propagationScopeKey, rosterDescription);
             return propagationStructure;
         }
 
@@ -86,8 +88,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             InterviewData interview =  CreateInterviewData();
             for (int i = 0; i < levelCount; i++)
             {
-                var vector = new int[1] { i };
-                var interviewLevel = new InterviewLevel(propagationScopeKey, vector);
+                var vector = new decimal[1] { i };
+                var interviewLevel = new InterviewLevel(propagationScopeKey, null, vector);
 
                 foreach (var question in variableNameAndQuestionId)
                 {

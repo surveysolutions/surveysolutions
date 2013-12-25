@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.AddGroup(groupId, responsibleId, "title", null, null, null, parentRosterId));
+                questionnaire.AddGroup(groupId, responsibleId, "title", null, null, null, parentRosterId, false,
+                    RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();

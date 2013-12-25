@@ -12,6 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
 
         bool HasQuestion(Guid questionId);
@@ -29,6 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetGroupTitle(Guid groupId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
+
+        string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
@@ -62,9 +65,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetMaxValueForNumericQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId);
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(Guid groupId);
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId);
+
+        IEnumerable<Guid> GetFixedRosterGroups();
 
         int GetRosterLevelForQuestion(Guid questionId);
 
@@ -95,5 +100,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionInteger(Guid questionId);
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
+
+        IEnumerable<string> GetFixedRosterTitles(Guid groupId);
+
+        bool DoesQuestionSpecifyRosterTitle(Guid questionId);
+
+        IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
     }
 }

@@ -39,10 +39,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.HasGroup(propagatedGroupId) == true
                                                         && _.GetRosterLevelForGroup(propagatedGroupId) == 1
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId }
 
                                                         && _.GetRosterLevelForQuestion(mandatoryQuestionId)==1
-                                                        && _.GetParentRosterGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
+                                                        && _.GetRostersFromTopToSpecifiedQuestion(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
                                                         && _.GetUnderlyingMandatoryQuestions(propagatedGroupId) == new Guid[]{mandatoryQuestionId});
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
+           interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new decimal[] { }, DateTime.Now, 1);
 
 
         private It should_not_raise_AnswerDeclaredValid_event = () =>

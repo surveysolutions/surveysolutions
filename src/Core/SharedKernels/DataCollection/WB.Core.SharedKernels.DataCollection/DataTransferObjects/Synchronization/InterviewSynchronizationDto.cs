@@ -11,13 +11,14 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         }
 
         public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId, long questionnaireVersion,
-                                           AnsweredQuestionSynchronizationDto[] answers,
-                                           HashSet<InterviewItemId> disabledGroups,
-                                           HashSet<InterviewItemId> disabledQuestions,
-                                           HashSet<InterviewItemId> validAnsweredQuestions,
-                                           HashSet<InterviewItemId> invalidAnsweredQuestions,
-                                           Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
-                                           bool wasCompleted)
+            AnsweredQuestionSynchronizationDto[] answers,
+            HashSet<InterviewItemId> disabledGroups,
+            HashSet<InterviewItemId> disabledQuestions,
+            HashSet<InterviewItemId> validAnsweredQuestions,
+            HashSet<InterviewItemId> invalidAnsweredQuestions,
+            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
+            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
+            bool wasCompleted)
         {
             Id = id;
             Status = status;
@@ -30,6 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
+            RosterGroupInstances = rosterGroupInstances;
             this.WasCompleted = wasCompleted;
         }
 
@@ -43,7 +45,41 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
-        public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get;  set; }
+        [Obsolete("please use RosterGroupInstances")]
+        public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get; set; }
+        public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances
+        {
+            get
+            {
+                if (rosterGroupInstances == null)
+                {
+                    rosterGroupInstances = this.RestoreFromPropagatedGroupInstanceCounts();
+                }
+                return rosterGroupInstances;
+            }
+            set { rosterGroupInstances = value; }
+        }
+        private Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances;
         public bool WasCompleted { get; set; }
+
+        private Dictionary<InterviewItemId, RosterSynchronizationDto[]> RestoreFromPropagatedGroupInstanceCounts()
+        {
+            if (PropagatedGroupInstanceCounts == null)
+                return new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
+
+            var result = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
+            foreach (var propagatedGroupInstanceCount in PropagatedGroupInstanceCounts)
+            {
+                result[propagatedGroupInstanceCount.Key] = new RosterSynchronizationDto[propagatedGroupInstanceCount.Value];
+                for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
+                {
+                    result[propagatedGroupInstanceCount.Key][i] =
+                        new RosterSynchronizationDto(propagatedGroupInstanceCount.Key.Id,
+                            propagatedGroupInstanceCount.Key.InterviewItemPropagationVector, Convert.ToDecimal(i), null,
+                            string.Empty);
+                }
+            }
+            return result;
+        }
     }
 }

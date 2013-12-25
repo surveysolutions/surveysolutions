@@ -75,7 +75,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             if (parentId.HasValue)
             {
                 var pdfGroupView = this.GetGroup(parentId.Value);
-                pdfGroupView.AddChild(newGroup);
+                if (pdfGroupView != null)
+                    pdfGroupView.AddChild(newGroup);
             }
             else
             {
@@ -93,7 +94,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
 
             var group = this.GetGroup(groupPublicKey.Value);
-            group.AddChild(newQuestion);
+            if (group!= null)
+                group.AddChild(newQuestion);
         }
 
         public PdfQuestionView GetQuestion(Guid publicKey)

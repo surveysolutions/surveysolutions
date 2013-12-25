@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
 
         protected internal void OnTemplateImported(TemplateImported e)
         {
@@ -221,6 +222,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
 
+        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return answer option title for question with id '{0}' because it's type {1} does not support answer options.",
+                    questionId, question.QuestionType));
+
+            return question
+                .Answers
+                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .AnswerText;
+        }
+
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -377,7 +396,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return null;
         }
 
-        public IEnumerable<Guid> GetParentRosterGroupsForQuestionStartingFromTop(Guid questionId)
+        public IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId)
         {
             return this
                 .GetAllParentGroupsForQuestionStartingFromBottom(questionId)
@@ -386,7 +405,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(Guid groupId)
+        public IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId)
         {
             IGroup group = this.GetGroupOrThrow(groupId);
 
@@ -395,6 +414,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(this.IsRosterGroup)
                 .Reverse()
                 .ToList();
+        }
+
+        public IEnumerable<Guid> GetFixedRosterGroups()
+        {
+            return this.GetAllGroups().Where(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.FixedTitles).Select(x => x.PublicKey);
         }
 
         public int GetRosterLevelForQuestion(Guid questionId)
@@ -521,7 +545,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
             if (numericQuestion.IsInteger)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be real.", questionId));
+            
             return numericQuestion.CountOfDecimalPlaces;
+        }
+
+        public IEnumerable<string> GetFixedRosterTitles(Guid groupId)
+        {
+            var group = this.GetGroup(groupId);
+            if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
+            {
+                return Enumerable.Empty<string>();
+            }
+            return group.RosterFixedTitles;
+        }
+
+        public bool DoesQuestionSpecifyRosterTitle(Guid questionId)
+        {
+            return this.GetRostersAffectedByRosterTitleQuestion(questionId).Any();
+        }
+
+        public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
+        {
+            if (!this.cacheOfRostersAffectedByRosterTitleQuestion.ContainsKey(questionId))
+                this.cacheOfRostersAffectedByRosterTitleQuestion[questionId] = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
+
+            return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
@@ -571,6 +619,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                        && questionId != question.PublicKey
                 select question.PublicKey
             );
+        }
+
+        private IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestionImpl(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            Guid? rosterAffectedByBackwardCompatibility =
+                question.Capital
+                    ? this.GetRostersFromTopToSpecifiedQuestion(questionId).Cast<Guid?>().LastOrDefault()
+                    : null;
+
+            IEnumerable<Guid> rostersAffectedByCurrentDomain =
+                from @group in this.GetAllGroups()
+                where this.IsRosterGroup(@group.PublicKey) && @group.RosterTitleQuestionId == questionId
+                select @group.PublicKey;
+
+            return Enumerable.ToList(
+                rosterAffectedByBackwardCompatibility.HasValue
+                    ? rostersAffectedByCurrentDomain.Union(new[] { rosterAffectedByBackwardCompatibility.Value })
+                    : rostersAffectedByCurrentDomain);
         }
 
         private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfGroupImpl(Guid groupId)
@@ -818,7 +886,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static bool DoesQuestionSupportRoster(IQuestion question)
         {
                    //### roster
-            return question.QuestionType == QuestionType.Numeric ||
+            return question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.MultyOption ||
                    //### old questionnaires supporting
                   (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
 
