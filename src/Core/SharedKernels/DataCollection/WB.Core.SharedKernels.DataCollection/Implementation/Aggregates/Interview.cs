@@ -1111,9 +1111,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            var answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
+
+
+
             this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, answerTime, latitude, longitude, accuracy, timestamp));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedPropagationVector)
