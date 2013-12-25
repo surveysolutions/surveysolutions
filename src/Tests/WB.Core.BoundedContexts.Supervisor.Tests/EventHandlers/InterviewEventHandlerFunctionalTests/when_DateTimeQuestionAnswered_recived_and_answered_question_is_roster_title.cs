@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
                     dateTimeAnswer)));
 
         It should_roster_title_be_equal_to_answer_text_representation = () =>
-            viewState.Document.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual("1/1/2014");
+            viewState.Document.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual("3/1/2014");
 
         It should_answer_on_head_question_be_equal_to_recived_answer = () =>
             viewState.Document.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer.ShouldEqual(dateTimeAnswer);
@@ -43,6 +43,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
         private static Guid rosterGroupId;
         private static Guid rosterScopeId;
         private static Guid rosterTitleQuestionId;
-        private static DateTime dateTimeAnswer = DateTime.Parse("01/01/2014");
+        private static DateTime dateTimeAnswer = new DateTime(2014, 3, 1);
     }
 }

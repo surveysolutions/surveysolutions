@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
             if (typeof (T) == typeof (DateTime))
             {
-                return (Convert.ToDateTime(answer)).ToUniversalTime().ToShortDateString();
+                return (Convert.ToDateTime(answer)).ToString("M/d/yyyy", CultureInfo.InvariantCulture);
             }
 
             if (typeof (T) == typeof (GeoPosition))
