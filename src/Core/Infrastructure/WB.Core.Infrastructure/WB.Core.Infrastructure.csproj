@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Folder Include="Revalidation\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandlerDescription.cs" />

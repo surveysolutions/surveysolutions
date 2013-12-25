@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
+        public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
             IList<AnswerViewModel> newAnswers = new List<AnswerViewModel>();
             foreach (AnswerViewModel answerViewModel in this.Answers)

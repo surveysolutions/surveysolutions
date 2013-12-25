@@ -81,6 +81,7 @@
     <Compile Include="Implementation\DocumentStoreProvider.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />
@@ -126,6 +127,10 @@
     <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>

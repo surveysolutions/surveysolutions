@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }
 
-        private void AddAnswerOptionForLinkedQuestions(Guid interviewId, Guid questionId, int[] propagationVector)
+        private void AddAnswerOptionForLinkedQuestions(Guid interviewId, Guid questionId, decimal[] propagationVector)
         {
             this.UpdateInMemoryInterviewViewModel(interviewId, interviewViewModel =>
             {
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             });
         }
 
-        private void RemoveAnswerOptionForLinkedQuestions(Guid interviewId, Guid questionId, int[] propagationVector)
+        private void RemoveAnswerOptionForLinkedQuestions(Guid interviewId, Guid questionId, decimal[] propagationVector)
         {
             this.UpdateInMemoryInterviewViewModel(interviewId, interviewViewModel =>
             {

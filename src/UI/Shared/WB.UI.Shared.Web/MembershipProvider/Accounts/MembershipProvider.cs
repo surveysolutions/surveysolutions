@@ -1025,7 +1025,7 @@
         /// </param>
         public override void UpdateUser(MembershipUser user)
         {
-            IMembershipAccount account = this.AccountRepository.Get(user.UserName);
+            IMembershipAccount account = this.AccountRepository.GetByProviderKey(user.ProviderUserKey);
             this.Merge(user, account);
             this.AccountRepository.Update(account);
         }
@@ -1266,6 +1266,14 @@
         /// </param>
         private void Merge(MembershipUser user, IMembershipAccount account)
         {
+            string userNameByEmail = this.AccountRepository.GetUserNameByEmail(user.Email);
+
+            if (this.AccountRepository.IsUniqueEmailRequired && !string.IsNullOrEmpty(userNameByEmail) && userNameByEmail != account.UserName)
+            {
+                throw new ProviderException(string.Format(
+                    "User with e-mail '{0}' already exists. Please enter a different e-mail address.", user.Email));
+            }
+
             account.Comment = user.Comment;
             account.IsConfirmed = user.IsApproved;
             account.Email = user.Email;

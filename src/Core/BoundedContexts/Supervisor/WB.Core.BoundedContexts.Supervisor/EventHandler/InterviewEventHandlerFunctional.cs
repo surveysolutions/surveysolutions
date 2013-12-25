@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -26,6 +23,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, SupervisorAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewerAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupPropagated>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericRealQuestionAnswered>,
@@ -58,29 +58,29 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireRosterStructure) }; }
         }
 
-        private string CreateLevelIdFromPropagationVector(int[] vector)
+        private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
             if (vector.Length == 0)
                 return "#";
             return string.Join(",", vector);
         }
 
-        private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
+        private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
             var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             foreach (var scopeId in questionnarie.RosterScopes.Keys)
             {
-                if (questionnarie.RosterScopes[scopeId].Contains(groupId))
+                if (questionnarie.RosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.ContainsKey(groupId))
                 {
-                    return scopeId;
+                    return questionnarie.RosterScopes[scopeId];
                 }
             }
 
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire",
                                                       groupId));
         }
-
+        
         private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete, Guid scopeId)
         {
             foreach (var levelKey in levelKeysForDelete)
@@ -89,11 +89,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, int[] outerVector, Guid scopeId)
+        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, decimal[] outerVector, int? sortIndex, RosterScopeDescription scope)
         {
-            for (int i = startIndex; i < startIndex + count; i++)
+            for (int rosterInstanceId = startIndex; rosterInstanceId < startIndex + count; rosterInstanceId++)
             {
-                AddLevelToInterview(interview, outerVector, i, scopeId);
+                this.AddLevelToInterview(interview, outerVector, rosterInstanceId, sortIndex, scope);
             }
         }
 
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             if (interview.Levels.ContainsKey(levelKey))
             {
                 var level = interview.Levels[levelKey];
-                if (!level.ScopeIds.Contains(scopeId))
+                if (!level.ScopeIds.ContainsKey(scopeId))
                     return;
                 if (level.ScopeIds.Count == 1)
                     interview.Levels.Remove(levelKey);
@@ -111,21 +111,32 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void AddLevelToInterview(InterviewData interview, int[] vector, int index, Guid scopeId)
+        private void AddLevelToInterview(InterviewData interview, decimal[] vector, decimal rosterInstanceId, int? sortIndex, RosterScopeDescription scope)
         {
-            var newVector = CreateNewVector(vector, index);
+            var newVector = CreateNewVector(vector, rosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
             if (!interview.Levels.ContainsKey(levelKey))
-                interview.Levels[levelKey] = new InterviewLevel(scopeId, newVector);
+                interview.Levels[levelKey] = new InterviewLevel(scope.ScopeId, sortIndex, newVector);
             else
+                interview.Levels[levelKey].ScopeIds[scope.ScopeId] = sortIndex;
+
+            var level = interview.Levels[levelKey];
+            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdToRosterTitleQuestionIdMap)
             {
-                interview.Levels[levelKey].ScopeIds.Add(scopeId);
+                if (rosterGroupsWithTitleQuestionPair.Value != null)
+                {
+                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
+                        rosterGroupsWithTitleQuestionPair.Key;
+
+                    level.RosterTitleQuestionDescriptions[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
+                        rosterGroupsWithTitleQuestionPair.Value;
+                }
             }
         }
 
-        private int[] CreateNewVector(int[] outerScopePropagationVector, int indexInScope)
+        private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, decimal indexInScope)
         {
-            var scopeVecor = new int[outerScopePropagationVector.Length + 1];
+            var scopeVecor = new decimal[outerScopePropagationVector.Length + 1];
             outerScopePropagationVector.CopyTo(scopeVecor, 0);
             scopeVecor[scopeVecor.Length - 1] = indexInScope;
             return scopeVecor;
@@ -133,11 +144,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private List<string> GetLevelsByScopeFromInterview(InterviewData interview, Guid scopeId)
         {
-            return interview.Levels.Where(level => level.Value.ScopeIds.Contains(scopeId))
+            return interview.Levels.Where(level => level.Value.ScopeIds.ContainsKey(scopeId))
                             .Select(level => level.Key).ToList();
         }
 
-        private InterviewData PreformActionOnLevel(InterviewData interview, int[] vector, Action<InterviewLevel> action)
+        private InterviewData PreformActionOnLevel(InterviewData interview, decimal[] vector, Action<InterviewLevel> action)
         {
             var levelId = CreateLevelIdFromPropagationVector(vector);
 
@@ -148,7 +159,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return interview;
         }
 
-        private InterviewData UpdateQuestion(InterviewData interview, int[] vector, Guid questionId, Action<InterviewQuestion> update)
+        private InterviewData UpdateQuestion(InterviewData interview, decimal[] vector, Guid questionId, Action<InterviewQuestion> update)
         {
             return PreformActionOnLevel(interview, vector, (questionsAtTheLevel) =>
             {
@@ -160,7 +171,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
 
 
-        private InterviewData ChangeQuestionConditionState(InterviewData interview, int[] vector, Guid questionId, bool newState)
+        private InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool newState)
         {
             return this.UpdateQuestion(interview, vector, questionId, (question) =>
             {
@@ -168,7 +179,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        private InterviewData ChangeQuestionConditionValidity(InterviewData interview, int[] vector, Guid questionId, bool valid)
+        private InterviewData ChangeQuestionConditionValidity(InterviewData interview, decimal[] vector, Guid questionId, bool valid)
         {
             return this.UpdateQuestion(interview, vector, questionId, (question) =>
             {
@@ -176,16 +187,38 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        private InterviewData SaveAnswer(InterviewData interview, int[] vector, Guid questionId, object answer)
-         {
-            return this.UpdateQuestion(interview, vector, questionId, (question) =>
-                 {
-                     question.Answer = answer;
-                     question.IsAnswered = true;
-                 });
-         }
+        private InterviewData SaveAnswer<T>(InterviewData interview, decimal[] vector, Guid questionId, T answer)
+        {
+            return this.PreformActionOnLevel(interview, vector, (level) =>
+            {
+                var answeredQuestion = level.GetOrCreateQuestion(questionId);
 
-        private InterviewData SetFlagStateForQuestion(InterviewData interview, int[] vector, Guid questionId, bool isFlagged)
+                answeredQuestion.Answer = answer;
+                answeredQuestion.IsAnswered = true;
+
+                if (level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(questionId))
+                {
+                    var groupId = level.RosterTitleQuestionIdToRosterIdMap[questionId];
+
+                    var questionDescription = level.RosterTitleQuestionDescriptions.ContainsKey(questionId)
+                        ? level.RosterTitleQuestionDescriptions[questionId]
+                        : null;
+
+                    var answerString = AnswerUtils.AnswerToString(answer, questionDescription);
+
+                    if (level.RosterRowTitles.ContainsKey(groupId))
+                    {
+                        level.RosterRowTitles[groupId] = answerString;
+                    }
+                    else
+                    {
+                        level.RosterRowTitles.Add(groupId, answerString);
+                    }
+                }
+            });
+        }
+
+        private InterviewData SetFlagStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId, bool isFlagged)
         {
             return this.UpdateQuestion(interview, vector, questionId, (question) =>
             {
@@ -199,7 +232,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return interview;
         }
 
-        private InterviewData SaveComment(InterviewData interview, int[] vector, Guid questionId, string comment, Guid userId, string userName,
+        private InterviewData SaveComment(InterviewData interview, decimal[] vector, Guid questionId, string comment, Guid userId, string userName,
             DateTime commentTime)
         {
             var interviewQuestionComment = new InterviewQuestionComment()
@@ -240,8 +273,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 ResponsibleId = evnt.Payload.UserId, // Creator is responsible
                 ResponsibleRole = responsible.Roles.FirstOrDefault()
             };
-            var emptyVector = new int[0];
-            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, emptyVector));
+            var emptyVector = new decimal[0];
+            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, null, emptyVector));
             return new ViewWithSequence<InterviewData>(interview, evnt.EventSequence);
         }
 
@@ -273,32 +306,58 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return currentState;
         }
 
+
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowAdded> evnt)
+        {
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+                                                          evnt.Payload.GroupId);
+
+            this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex, scopeOfCurrentGroup);
+
+            currentState.Sequence = evnt.EventSequence;
+            return currentState;
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowRemoved> evnt)
+        {
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+                                                         evnt.Payload.GroupId);
+
+            var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+            var levelKey = CreateLevelIdFromPropagationVector(newVector);
+            this.RemoveLevelFromInterview(currentState.Document, levelKey, scopeOfCurrentGroup.ScopeId);
+
+            currentState.Sequence = evnt.EventSequence;
+            return currentState;
+        }
+
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupPropagated> evnt)
         {
-            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
-            /*if (scopeOfCurrentGroup == null)
-                return;*/
-
             List<string> keysOfLevelsByScope =
-                GetLevelsByScopeFromInterview(interview: currentState.Document, scopeId: scopeOfCurrentGroup);
+                GetLevelsByScopeFromInterview(interview: currentState.Document, scopeId: scopeOfCurrentGroup.ScopeId);
 
             int countOfLevelByScope = keysOfLevelsByScope.Count();
 
             if (evnt.Payload.Count == countOfLevelByScope)
+            {
+                currentState.Sequence = evnt.EventSequence;
                 return currentState;
+            }
 
             if (countOfLevelByScope < evnt.Payload.Count)
             {
                 AddNewLevelsToInterview(currentState.Document, startIndex: countOfLevelByScope,
-                             count: evnt.Payload.Count - countOfLevelByScope,
-                             outerVector: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
+                    count: evnt.Payload.Count - countOfLevelByScope,
+                    outerVector: evnt.Payload.OuterScopePropagationVector, sortIndex: null, scope: scopeOfCurrentGroup);
             }
             else
             {
                 var keysOfLevelToBeDeleted =
                     keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(countOfLevelByScope - evnt.Payload.Count);
-                RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup);
+                RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup.ScopeId);
             }
             currentState.Sequence = evnt.EventSequence;
             return currentState;
@@ -464,6 +523,25 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewDeclaredValid> evt)
         {
             return new ViewWithSequence<InterviewData>(this.SetInterviewValidity(currentState.Document, true), evt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowTitleChanged> evnt)
+        {
+            var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+
+            return
+                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, newVector, (level) =>
+                {
+                    if (level.RosterRowTitles.ContainsKey(evnt.Payload.GroupId))
+                    {
+                        level.RosterRowTitles[evnt.Payload.GroupId] = evnt.Payload.Title;
+                    }
+                    else
+                    {
+                        level.RosterRowTitles.Add(evnt.Payload.GroupId, evnt.Payload.Title);
+                    }
+
+                }), evnt.EventSequence);
         }
     }
 }

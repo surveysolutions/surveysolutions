@@ -41,15 +41,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                    && _.GetRosterLevelForGroup(propagatedGroupId) == 1
                    && _.GetRosterLevelForGroup(disabledPropagatedGroupId) == 1
                    && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
-                   && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                   && _.GetParentRosterGroupsAndGroupItselfIfRosterStartingFromTop(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedGroup(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
 
                    && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { disabledPropagatedGroupId }
                    && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new[] { mandatoryQuestionId }
 
 
                    && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
-                   && _.GetParentRosterGroupsForQuestionStartingFromTop(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedQuestion(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
                    && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new Guid[] { mandatoryQuestionId }
 
                    
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                    && _.GetRosterLevelForQuestion(mandatoryQuestionId)==1
 
                    && _.HasQuestion(answeringQuestionId) == true
-                   && _.GetParentRosterGroupsForQuestionStartingFromTop(answeringQuestionId) == new Guid[] { propagatedGroupId }
+                   && _.GetRostersFromTopToSpecifiedQuestion(answeringQuestionId) == new Guid[] { propagatedGroupId }
                    && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric
                    && _.GetRosterLevelForQuestion(answeringQuestionId) == 1
                 );
@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new decimal[] { }, DateTime.Now, 1);
 
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
                 .Returns(true);
@@ -85,8 +85,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
-            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new int[] {0}, DateTime.Now, 0);
+        Because of = () =>
+            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new decimal[] { 0 }, DateTime.Now, 0);
 
         private Cleanup stuff = () =>
         {

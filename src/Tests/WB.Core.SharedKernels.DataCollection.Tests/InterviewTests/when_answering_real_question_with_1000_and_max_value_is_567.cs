@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                interview.AnswerNumericRealQuestion(userId, questionId, new int[] { }, DateTime.Now, 1000));
+                interview.AnswerNumericRealQuestion(userId, questionId, new decimal[] { }, DateTime.Now, 1000));
 
         It should_throw_InterviewException = () =>
             exception.ShouldBeOfType<InterviewException>();

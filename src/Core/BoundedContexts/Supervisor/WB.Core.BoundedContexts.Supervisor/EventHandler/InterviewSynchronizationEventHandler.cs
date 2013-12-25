@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var disabledQuestions = new HashSet<InterviewItemId>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
-            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, int>();
+            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
             var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
@@ -135,12 +135,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 status,
                 userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
                 answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
-                validQuestions, invalidQuestions, propagatedGroupInstanceCounts, interview.WasCompleted);
+                validQuestions, invalidQuestions,null, propagatedGroupInstanceCounts, interview.WasCompleted);
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
             QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
-            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts)
         {
             if (interviewLevel.RosterVector.Length == 0)
                 return;
@@ -149,31 +149,33 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var scopeId in interviewLevel.ScopeIds)
             {
-                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId])
+                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key].RosterIdToRosterTitleQuestionIdMap.Keys)
                 {
-                    var groupKey = new InterviewItemId(groupId, outerVector);
+                     var groupKey = new InterviewItemId(groupId, outerVector);
 
-                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, groupKey);
+                    var rosterTitle = interviewLevel.RosterRowTitles.ContainsKey(groupId)
+                        ? interviewLevel.RosterRowTitles[groupId]
+                        : string.Empty;
+                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, scopeId.Value, rosterTitle, interviewLevel.RosterVector.Last(), groupKey);
                 }
             }
         }
 
-        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
+        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts,
+            int? sortIndex, string rosterTitle, decimal rosterInstanceId,
             InterviewItemId groupKey)
         {
-            if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
-            {
-                propagatedGroupInstanceCounts[groupKey] = propagatedGroupInstanceCounts[groupKey] + 1;
-            }
-            else
-            {
-                propagatedGroupInstanceCounts.Add(groupKey, 1);
-            }
+            List<RosterSynchronizationDto> currentRosterInstances = propagatedGroupInstanceCounts.ContainsKey(groupKey) ? propagatedGroupInstanceCounts[groupKey].ToList() : new List<RosterSynchronizationDto>();
+
+            currentRosterInstances.Add(new RosterSynchronizationDto(groupKey.Id,
+                groupKey.InterviewItemPropagationVector, rosterInstanceId, sortIndex, rosterTitle));
+
+            propagatedGroupInstanceCounts[groupKey] = currentRosterInstances.ToArray();
         }
 
-        private int[] CreateOuterVector(InterviewLevel interviewLevel)
+        private decimal[] CreateOuterVector(InterviewLevel interviewLevel)
         {
-            var outerVector = new int[interviewLevel.RosterVector.Length - 1];
+            var outerVector = new decimal[interviewLevel.RosterVector.Length - 1];
             for (int i = 0; i < interviewLevel.RosterVector.Length - 1; i++)
             {
                 outerVector[i] = interviewLevel.RosterVector[i];

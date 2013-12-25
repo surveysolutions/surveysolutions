@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
     public class InterviewLevel
     {
-        public InterviewLevel(Guid scopeId, int[] vector)
+        public InterviewLevel(Guid scopeId, int? sortIndex, decimal[] vector)
         {
-            this.ScopeIds = new HashSet<Guid>(new[] {scopeId});
+            this.ScopeIds = new Dictionary<Guid, int?> { { scopeId, sortIndex } };
             this.RosterVector = vector;
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
+            this.RosterRowTitles = new Dictionary<Guid, string>();
+            this.RosterTitleQuestionIdToRosterIdMap = new Dictionary<Guid, Guid>();
+            this.RosterTitleQuestionDescriptions = new Dictionary<Guid, RosterTitleQuestionDescription>();
         }
 
-        public int[] RosterVector { get; private set; }
-        public HashSet<Guid> ScopeIds { get; private set; }
+        public decimal[] RosterVector { get; private set; }
+        public Dictionary<Guid, int?> ScopeIds { get; private set; }
         private List<InterviewQuestion> Questions { get; set; }
         public HashSet<Guid> DisabledGroups { get; private set; }
+        public Dictionary<Guid, string> RosterRowTitles { set; get; }
+        public Dictionary<Guid, Guid> RosterTitleQuestionIdToRosterIdMap { get; private set; }
+        public Dictionary<Guid, RosterTitleQuestionDescription> RosterTitleQuestionDescriptions { get; private set; }
 
         public IEnumerable<InterviewQuestion> GetAllQuestions()
         {

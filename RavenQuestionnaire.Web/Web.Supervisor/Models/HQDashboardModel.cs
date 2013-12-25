@@ -1,11 +1,9 @@
-﻿using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
+    using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+
     public class HQDashboardModel
     {
         public QuestionnaireBrowseView Questionnaires { get; set; }
-
-        /*public UserListView Teams { get; set; }*/
     }
 }

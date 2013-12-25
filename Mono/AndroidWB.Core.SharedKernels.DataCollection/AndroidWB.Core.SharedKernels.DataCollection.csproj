@@ -175,6 +175,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs">
       <Link>DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\RosterSynchronizationDto.cs">
+      <Link>DataTransferObjects\Synchronization\RosterSynchronizationDto.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\EventHandler\QuestionnaireDenormalizer.cs">
       <Link>EventHandler\QuestionnaireDenormalizer.cs</Link>
     </Compile>
@@ -207,6 +210,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\QuestionPassiveEvent.cs">
       <Link>Events\Interview\Base\QuestionPassiveEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\RosterRowEvent.cs">
+      <Link>Events\Interview\Base\RosterRowEvent.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\DateTimeQuestionAnswered.cs">
       <Link>Events\Interview\DateTimeQuestionAnswered.cs</Link>
@@ -289,6 +295,15 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionEnabled.cs">
       <Link>Events\Interview\QuestionEnabled.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowAdded.cs">
+      <Link>Events\Interview\RosterRowAdded.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowRemoved.cs">
+      <Link>Events\Interview\RosterRowRemoved.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowTitleChanged.cs">
+      <Link>Events\Interview\RosterRowTitleChanged.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SingleOptionLinkedQuestionAnswered.cs">
       <Link>Events\Interview\SingleOptionLinkedQuestionAnswered.cs</Link>
     </Compile>
@@ -331,6 +346,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Snapshots\QuestionnaireState.cs">
       <Link>Implementation\Aggregates\Snapshots\QuestionnaireState.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\EnumerableExtensions.cs">
+      <Link>Implementation\EnumerableExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireFactory.cs">
       <Link>Implementation\Factories\QuestionnaireFactory.cs</Link>
     </Compile>
@@ -354,6 +372,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedView.cs">
       <Link>ReadSide\IVersionedView.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Utils\AnswerUtils.cs">
+      <Link>Utils\AnswerUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewItemId.cs">
       <Link>ValueObjects\Interview\InterviewItemId.cs</Link>
@@ -390,6 +411,12 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireRosterStructure.cs">
       <Link>Views\Questionnaire\QuestionnaireRosterStructure.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\RosterScopeDescription.cs">
+      <Link>Views\Questionnaire\RosterScopeDescription.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\RosterTitleQuestionDescription.cs">
+      <Link>Views\Questionnaire\RosterTitleQuestionDescription.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -434,7 +461,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

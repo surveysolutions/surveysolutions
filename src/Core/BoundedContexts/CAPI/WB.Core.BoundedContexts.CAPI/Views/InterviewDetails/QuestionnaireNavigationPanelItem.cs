@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public InterviewItemId PublicKey { get; private set; }
 
 
-        public IQuestionnaireItemViewModel Clone(int[] propagationVector)
+        public IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
             return new QuestionnaireNavigationPanelItem(new InterviewItemId(this.PublicKey.Id, propagationVector),
                                                         this.fullScreen);

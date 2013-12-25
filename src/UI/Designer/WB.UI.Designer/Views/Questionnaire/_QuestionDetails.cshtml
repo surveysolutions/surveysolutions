@@ -46,8 +46,6 @@
                 <div data-bind="template: { name: qtype(), data: $data }"></div>
                 <p>
                     <button type="button" data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory, popover: { content: 'A mandatory question without an answer is an error. It is shown as an error on the interface and in the questionnaire statistics.', title: 'Mandatory question', placement: 'right', trigger: 'hover' }" class="btn btn-small"><i class="icon-exclamation"></i>&nbsp;mandatory</button>
-
-                    <button type="button" data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead, visible: (parent().isRoster()) && isSupervisorQuestion() == false" class="btn btn-small"><i class="icon-male"></i>&nbsp;head</button>
                 </p>
                 <div data-bind="visible: isSupervisorQuestion() == false">
                     <label>

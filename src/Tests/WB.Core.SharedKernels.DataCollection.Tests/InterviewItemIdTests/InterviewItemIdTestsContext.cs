@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewItemIdTests
     [Subject(typeof(InterviewItemId))]
     internal class InterviewItemIdTestsContext
     {
-        protected static InterviewItemId CreateInterviewItemId(Guid id, int[] propagationVector)
+        protected static InterviewItemId CreateInterviewItemId(Guid id, decimal[] propagationVector)
         {
             return new InterviewItemId(id, propagationVector);
         }

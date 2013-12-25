@@ -202,5 +202,35 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion));
         }
+
+        [Test]
+        public void DeleteGroup_When_Some_Groups_Id_Of_Question_used_as_roster_title_question_of_another_groups_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid deletedGroupId = Guid.Parse("10000000000000000000000000000000");
+            Guid groupWithRosterTitleQuestionId = Guid.Parse("20000000000000000000000000000000");
+            Guid responsibleId = Guid.Parse("30000000000000000000000000000000");
+            Guid rosterSizeQuestionId = Guid.Parse("40000000000000000000000000000000");
+            Guid rosterTitleQuestionId = Guid.Parse("50000000000000000000000000000000");
+            Guid chapterId = Guid.Parse("60000000000000000000000000000000");
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId, groupId: chapterId);
+
+            AddQuestion(questionnaire, rosterSizeQuestionId, chapterId, responsibleId, QuestionType.Numeric, "q1");
+
+            AddGroup(questionnaire: questionnaire, groupId: deletedGroupId, parentGroupId: chapterId, responsibleId: responsibleId,
+                condition: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId);
+            AddQuestion(questionnaire, rosterTitleQuestionId, deletedGroupId, responsibleId, QuestionType.Text, "q2");
+
+            AddGroup(questionnaire: questionnaire, groupId: groupWithRosterTitleQuestionId, parentGroupId: chapterId,
+                responsibleId: responsibleId, condition: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterTitleQuestionId: rosterTitleQuestionId);
+
+            // act
+            TestDelegate act = () => questionnaire.DeleteGroup(deletedGroupId, responsibleId: responsibleId);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionUsedAsRosterTitleOfOtherGroup));
+        }
     }
 }

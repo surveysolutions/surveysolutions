@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
+using WB.Core.Infrastructure.ReadSide.Repository;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher
 {
@@ -17,8 +20,21 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
             this.eventStore = eventStore;
         }
 
+        private bool IsEventNeedToBeIgnored(Guid id)
+        {
+            if (this.eventsToBeIgnored.Contains(id))
+            {
+                this.eventsToBeIgnored.Remove(id);
+                return true;
+            }
+            return false;
+        }
+
         public void Publish(IPublishableEvent eventMessage)
         {
+            if(this.IsEventNeedToBeIgnored(eventMessage.EventIdentifier))
+                return;
+
             foreach (var handler in this.registredHandlers.Values.ToList())
             {
                 handler.Bus.Publish(eventMessage);
@@ -27,47 +43,31 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
-            foreach (var handler in this.registredHandlers.Values.ToList())
-            {
-                handler.Bus.Publish(eventMessages);
-            }
-        }
-
-        public void PublishByEventSource(Guid eventSourceId, long sequence = 0)
-        {
-            var eventMessages = this.eventStore.ReadFrom(eventSourceId, sequence + 1, long.MaxValue);
-
-            if (eventMessages.IsEmpty)
-                return;
-
-            var functionalDenormalizers = this.registredHandlers.Values.Where(h => h.Handler is IFunctionalEventHandler).ToList();
-            foreach (var handler in functionalDenormalizers)
-            {
-                var functionalHandler = handler.Handler as IFunctionalEventHandler;
-                if (functionalHandler != null)
-                {
-                    functionalHandler.ChangeForSingleEventSource(eventSourceId);
-                }
-            }
-
             foreach (var publishableEvent in eventMessages)
             {
-                foreach (var handler in functionalDenormalizers)
+                if (this.IsEventNeedToBeIgnored(publishableEvent.EventIdentifier))
+                    continue;
+
+                foreach (var handler in this.registredHandlers.Values.ToList())
                 {
                     handler.Bus.Publish(publishableEvent);
                 }
             }
+        }
 
-            foreach (var handler in functionalDenormalizers)
+        public void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
+        {
+            var functionalHandlers =
+                this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler<T>).Where(h => h != null).ToList();
+
+            foreach (var publishableEvent in eventStream)
             {
-                var functionalHandler = handler.Handler as IFunctionalEventHandler;
-                if (functionalHandler != null)
+                foreach (var handler in functionalHandlers)
                 {
-                    functionalHandler.FlushDataToPersistentStorage(eventSourceId);
+                    handler.Handle(publishableEvent, storage);
                 }
             }
         }
-
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers)
         {
@@ -114,5 +114,12 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
         {
             return this.registredHandlers.Values.Where(h => enabledHandlers.Contains(h.Handler)).Select(h => h.Bus).ToList();
         }
+
+        public void IgnoreEventWithId(Guid eventIdentifier)
+        {
+            eventsToBeIgnored.Add(eventIdentifier);
+        }
+
+        private readonly HashSet<Guid> eventsToBeIgnored=new HashSet<Guid>();
     }
 }

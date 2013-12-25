@@ -5,9 +5,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class SingleOptionLinkedQuestionAnswered : QuestionAnswered
     {
-        public int[] SelectedPropagationVector { get; private set; }
+        public decimal[] SelectedPropagationVector { get; private set; }
 
-        public SingleOptionLinkedQuestionAnswered(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[] selectedPropagationVector)
+        public SingleOptionLinkedQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime, decimal[] selectedPropagationVector)
             : base(userId, questionId, propagationVector, answerTime)
         {
             this.SelectedPropagationVector = selectedPropagationVector;

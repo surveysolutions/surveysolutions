@@ -144,7 +144,7 @@ namespace WB.UI.Capi.Syncronization.Pull
                 metaInfo.FeaturedQuestionsMeta.Select(
                     q =>
                         new AnsweredQuestionSynchronizationDto(
-                            q.PublicKey, new int[0], q.Value,
+                            q.PublicKey, new decimal[0], q.Value,
                             string.Empty))
                     .ToArray(), string.Empty, true));
         }
