@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7 : InterviewTestsContext
+    internal class when_answering_single_option_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1 : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -27,12 +27,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             rosterAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
+            selectedOptionValue = (decimal) 2.2;
+            selectedOptionTitle = "Title 2.1";
+
 
             var questionnaire = Mock.Of<IQuestionnaire>
             (_
                 => _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.Numeric
-                && _.IsQuestionInteger(questionId) == true
+                && _.GetQuestionType(questionId) == QuestionType.SingleOption
+                && _.GetAnswerOptionsAsValues(questionId) == new[] { 2, (decimal) 4.5, selectedOptionValue, -43 }
+                && _.GetAnswerOptionTitle(questionId, selectedOptionValue) == selectedOptionTitle
                 && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
                 && _.DoesQuestionSpecifyRosterTitle(questionId) == true
                 && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }
@@ -50,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericIntegerQuestion(userId, questionId, rosterVector, DateTime.Now, 7);
+            interview.AnswerSingleOptionQuestion(userId, questionId, rosterVector, DateTime.Now, selectedOptionValue);
 
         Cleanup stuff = () =>
         {
@@ -58,8 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        It should_raise_NumericIntegerQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<NumericIntegerQuestionAnswered>();
+        It should_raise_SingleOptionQuestionAnswered_event = () =>
+            eventContext.ShouldContainEvent<SingleOptionQuestionAnswered>();
 
         It should_raise_2_RosterRowTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 2);
@@ -76,9 +80,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvents<RosterRowTitleChanged>()
                 .ShouldEachConformTo(@event => @event.RosterInstanceId == rosterVector.Last());
 
-        It should_set_title_to__7__in_all_RosterRowTitleChanged_events = () =>
+        It should_set_title_to_title_of_selected_option_in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterRowTitleChanged>().Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "7");
+                .ShouldEachConformTo(title => title == selectedOptionTitle);
 
         private static EventContext eventContext;
         private static Interview interview;
@@ -88,5 +92,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static decimal[] emptyRosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
+        private static string selectedOptionTitle;
+        private static decimal selectedOptionValue;
     }
 }
