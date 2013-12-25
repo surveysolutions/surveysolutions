@@ -410,11 +410,11 @@
                 var isItemFeaturedQuestion = false;
                 var isItemRosterTitleQuestion = false;
                 var canMoveRosterTitleQuestionToTarget = false;
-                var isItemAutoQuestion = false;
-                var targetGroupIsAuto = false;
+                var isItemRosterSizeQuestion = false;
+                var targetGroupIsRoster = false;
                 if (moveItemType == "question") {
-                    isItemAutoQuestion = arg.item.qtype() == "AutoPropagate";
                     isItemRosterTitleQuestion = datacontext.questions.isRosterTitleQuestion(arg.item.id());
+                    isItemRosterSizeQuestion = datacontext.questions.isRosterSizeQuestion(arg.item.id());
                     isItemFeaturedQuestion = arg.item.isFeatured();
                 }
 
@@ -447,9 +447,9 @@
                 } else {
                     var target = datacontext.groups.getLocalById(toId);
 
-                    targetGroupIsAuto = target.isRoster();
+                    targetGroupIsRoster = target.isRoster();
                     
-                    if (isItemRosterTitleQuestion && targetGroupIsAuto) {
+                    if (isItemRosterTitleQuestion && targetGroupIsRoster) {
                         canMoveRosterTitleQuestionToTarget = source.rosterSizeQuestion() == target.rosterSizeQuestion();
                     }
 
@@ -459,15 +459,15 @@
                         return;
                     }
 
-                    if (isItemFeaturedQuestion && targetGroupIsAuto) {
+                    if (isItemFeaturedQuestion && targetGroupIsRoster) {
                         arg.cancelDrop = true;
                         config.logger(config.warnings.cantMoveFeaturedQuestionIntoAutoGroup);
                         return;
                     }
 
-                    if (isItemAutoQuestion && targetGroupIsAuto) {
+                    if (isItemRosterSizeQuestion && targetGroupIsRoster) {
                         arg.cancelDrop = true;
-                        config.logger(config.warnings.cantMoveAutoQuestionIntoAutoGroup);
+                        config.logger(config.warnings.cantMoveRosterSizeQuestionIntoRosterGroup);
                         return;
                     }
 
@@ -483,7 +483,7 @@
                         return;
                     }
 
-                    if (!isDropedInQuestionnaire && targetGroupIsAuto && moveItemType == "group") {
+                    if (!isDropedInQuestionnaire && targetGroupIsRoster && moveItemType == "group") {
                         arg.cancelDrop = true;
                         config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
                         return;
