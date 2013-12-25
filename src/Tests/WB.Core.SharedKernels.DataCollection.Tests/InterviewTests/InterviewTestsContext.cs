@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -25,16 +26,18 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
         }
 
-        protected static T GetEvent<T>(EventContext eventContext)
-        {
-            return (T)eventContext.Events.Single(e => e.Payload is T).Payload;
-        }
-
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
         {
             return Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire);
+        }
+
+        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
+        {
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<TInstance>())
+                .Returns(instance);
         }
     }
 }

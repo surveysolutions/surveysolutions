@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     {
         InterviewItemId PublicKey { get; }
         string Text { get; }
-        IQuestionnaireItemViewModel Clone(int[] propagationVector);
+        IQuestionnaireItemViewModel Clone(decimal[] propagationVector);
     }
 }

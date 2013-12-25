@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
 {
     public class InterviewItemIdTestsContext
     {
-        protected static InterviewItemId CreateInterviewItemId(Guid? id = null, int[] vector = null)
+        protected static InterviewItemId CreateInterviewItemId(Guid? id = null, decimal[] vector = null)
         {
-            return new InterviewItemId(id ?? Guid.NewGuid(), vector ?? new int[0]);
+            return new InterviewItemId(id ?? Guid.NewGuid(), vector ?? new decimal[0]);
         }
 
         protected static Guid InterviewItemIdInitialData
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     InterviewItemIdInitialData);
             };
 
-        private Because of = () =>
+        Because of = () =>
             {
                 firstResult = entity.GetHashCode();
                 secondResult = identicalInterviewItemId.GetHashCode();
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                 entity = CreateInterviewItemId();
             };
 
-        private Because of = () =>
+        Because of = () =>
                              result = entity.Equals(null);
 
         private It should_return_false = () =>
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                 entity = CreateInterviewItemId();
             };
 
-        private Because of = () =>
+        Because of = () =>
                              result = entity.Equals(object_of_other_type_probably_string);
 
         private It should_return_false = () =>
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     InterviewItemIdInitialData);
             };
 
-        private Because of = () =>
+        Because of = () =>
                              result = entity.Equals(identicalInterviewItemId);
 
         private It should_return_true = () =>
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     DifferentInterviewItemIdInitialData);
             };
 
-        private Because of = () =>
+        Because of = () =>
                              result = entity.Equals(differentInterviewItemId);
 
         private It should_return_false = () =>
@@ -156,7 +156,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
 
 #pragma warning disable 1718
 
-        private Because of = () =>
+        Because of = () =>
                              result = entity == entity;
 
 #pragma warning restore 1718
@@ -180,7 +180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     InterviewItemIdInitialData);
             };
 
-        private Because of = () =>
+        Because of = () =>
                              result = entity == identicalInterviewItemId;
 
         private It should_return_true = () =>
@@ -203,7 +203,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     DifferentInterviewItemIdInitialData);
             };
 
-        private Because of = () =>
+        Because of = () =>
                              result = entity == differentInterviewItemId;
 
         private It should_return_false = () =>

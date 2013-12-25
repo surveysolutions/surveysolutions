@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         PublicKey = rosterGroup,
                         IsRoster = true,
+                        RosterSizeSource = RosterSizeSourceType.Question,
                         RosterSizeQuestionId = rosterSizeQuestion,
                         Children = new List<IComposite>()
                         {

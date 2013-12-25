@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
                 () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), 1);
         };
 
-        private Because of = () =>
+        Because of = () =>
             result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(Guid.NewGuid(), 1, null));
 
         private It should_records_count_equals_1 = () =>

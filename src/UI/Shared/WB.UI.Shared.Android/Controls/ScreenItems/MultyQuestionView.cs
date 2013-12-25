@@ -64,7 +64,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             return new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,
-                this.Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answered.ToArray());
+                this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, answered.ToArray());
         }
 
         protected override bool IsAnswerSelected(AnswerViewModel answer)

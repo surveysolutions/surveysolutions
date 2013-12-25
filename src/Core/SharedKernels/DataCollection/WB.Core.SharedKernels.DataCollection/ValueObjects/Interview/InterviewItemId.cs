@@ -5,28 +5,47 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public struct InterviewItemId
     {
-        public InterviewItemId(Guid id, int[] propagationVector)
+        public InterviewItemId(Guid id, decimal[] propagationVector)
         {
             Id = id;
-            PropagationVector = propagationVector ?? new int[0];
+            interviewItemPropagationVector = propagationVector ?? new decimal[0];
+            PropagationVector = null;
         }
 
         public InterviewItemId(Guid id)
-            : this(id, new int[0]) {}
+            : this(id, new decimal[0]) { }
 
         public Guid Id;
+
+        public decimal[] InterviewItemPropagationVector
+        {
+            get
+            {
+                if (interviewItemPropagationVector == null)
+                {
+                    interviewItemPropagationVector = this.RestoreFromPropagationVectorInOldIntFormat();
+                }
+
+                return interviewItemPropagationVector;
+            }
+            set { interviewItemPropagationVector = value; }
+        }
+
+        private decimal[] interviewItemPropagationVector;
+
+        [Obsolete("please use QuestionPropagationVector instead")] 
         public int[] PropagationVector;
 
-        public bool CompareWithVector(int[] vector)
+        public bool CompareWithVector(decimal[] vector)
         {
-            if (PropagationVector.Length != vector.Length)
+            if (this.InterviewItemPropagationVector.Length != vector.Length)
                 return false;
-            return !this.PropagationVector.Where((t, i) => t != vector[i]).Any();
+            return !this.InterviewItemPropagationVector.Where((t, i) => t != vector[i]).Any();
         }
 
         public bool IsTopLevel()
         {
-            return this.PropagationVector.Length == 0;
+            return this.InterviewItemPropagationVector.Length == 0;
         }
 
         public override bool Equals(object obj)
@@ -43,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (x.Id != y.Id)
                 return false;
-            return x.CompareWithVector(y.PropagationVector);
+            return x.CompareWithVector(y.InterviewItemPropagationVector);
         }
 
         public static bool operator !=(InterviewItemId x, InterviewItemId y)
@@ -55,10 +74,29 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (!IsTopLevel())
             {
-                string vector = string.Join(",", PropagationVector);
+                string vector = string.Join(",", this.InterviewItemPropagationVector.Select(DecimalValueToString));
                 return string.Format("{0},{1}", vector, Id);
             }
             return Id.ToString();
+        }
+
+        private decimal[] RestoreFromPropagationVectorInOldIntFormat()
+        {
+            if (PropagationVector == null)
+                return new decimal[0];
+            return PropagationVector.Select(Convert.ToDecimal).ToArray();
+        }
+
+        private string DecimalValueToString(decimal decimalValue)
+        {
+            if (decimalValue == 0)
+            {
+                return "0";
+            }
+            var decimalString = decimalValue.ToString();
+            decimalString = decimalString.TrimEnd('0');
+            decimalString = decimalString.TrimEnd(',', '.');
+            return decimalString;
         }
 
         /// <remarks>Is needed for Newtonsoft JSON.</remarks>
@@ -72,10 +110,10 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             if (value.Contains(','))
             {
                 var items = value.Split(',');
-                var vector = new int[items.Length - 1];
+                var vector = new decimal[items.Length - 1];
                 for (int i = 0; i < items.Length - 1; i++)
                 {
-                    vector[i] = int.Parse(items[i]);
+                    vector[i] = Convert.ToDecimal(items[i]);
                 }
                 return new InterviewItemId(Guid.Parse(items[items.Length - 1]), vector);
             }

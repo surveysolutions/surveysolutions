@@ -178,17 +178,39 @@
             });
         };
         
-        questions.getAllIntegerQuestionsForSelect = function () {
+        questions.getAllAllowedQuestionsForSelect = function () {
             return _.filter(questions.getAllLocal(), function (question) {
                 if (question.parent().isRoster()) {
                     return false;
                 }
-                return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
+                return isNumericInteger(question) || isNotLinkedMultyCategorical(question);
+            }).map(function (item) {
+                return { questionId: item.id(), title: item.alias() + ": " + item.title(), isNumeric: isNumericInteger(item), isCategorical: isNotLinkedMultyCategorical(item) };
+            });
+        };
+
+        questions.getRosterTitleQuestionsForSelect = function (rosterSizeQuestionId) {
+            return _.filter(groups.getQuestionsFromPropagatableGroups(), function (question) {
+                var groupRosterSizeQuestionId = question.parent().rosterSizeQuestion();
+                return !_.isUndefined(groupRosterSizeQuestionId) && (groupRosterSizeQuestionId == rosterSizeQuestionId);
             }).map(function (item) {
                 return { questionId: item.id(), title: item.alias() + ": " + item.title() };
             });
         };
 
+        questions.isRosterTitleQuestion = function(questionId) {
+            return _.any(groups.getPropagateableGroups(), function(group) {
+                return group.rosterTitleQuestion() == questionId;
+            });
+        };
+
+        var isNumericInteger = function(question) {
+            return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
+        };
+
+        var isNotLinkedMultyCategorical = function (question) {
+            return question.qtype() == config.questionTypes.MultyOption && !question.isLinked();
+        };
 
         var getChildItemByIdAndType = function (item) {
             if (item.type === "GroupView")
@@ -252,7 +274,11 @@
                 title: group.title(),
                 description: group.description(),
                 condition: group.condition(),
-                rosterSizeQuestionId: group.isRoster() ? group.rosterSizeQuestion() : null
+                isRoster : group.isRoster(),
+                rosterSizeQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterSizeQuestion() : null,
+                rosterSizeSource: group.rosterSizeSource(),
+                rosterFixedTitles: group.isRosterSizeSourceFixedTitles() ? group.rosterFixedTitles().split("\n") : null,
+                rosterTitleQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterTitleQuestion() : null
             };
         };
 
@@ -329,7 +355,6 @@
                 title: question.title(),
                 type: question.qtype(),
                 alias: question.alias(),
-                isHeaderOfPropagatableGroup: question.isHead(),
                 isFeatured: question.isFeatured(),
                 isMandatory: question.isMandatory(),
                 scope: question.scope(),

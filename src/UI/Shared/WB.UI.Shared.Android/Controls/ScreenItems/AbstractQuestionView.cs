@@ -144,7 +144,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.CommandService.Execute(new CommentAnswerCommand(this.QuestionnairePublicKey,
                                                                 this.Membership.CurrentUser.Id,
                                                                 this.Model.PublicKey.Id,
-                                                                this.Model.PublicKey.PropagationVector,
+                                                                this.Model.PublicKey.InterviewItemPropagationVector,
                                                                 DateTime.UtcNow,
                                                                 newComments));
                 this.tvComments.Text = newComments;

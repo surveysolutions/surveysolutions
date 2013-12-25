@@ -9,10 +9,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 {
-    public abstract class AbstractFunctionalEventHandler<T> : IFunctionalEventHandler where T : class, IReadSideRepositoryEntity
+    public abstract class AbstractFunctionalEventHandler<T> : IFunctionalEventHandler<T> where T : class, IReadSideRepositoryEntity
     {
         private IStorageStrategy<T> storageStrategy;
-        private IStorageStrategy<T> percistantStorageStrategy;
         protected AbstractFunctionalEventHandler(IReadSideRepositoryWriter<T> readsideRepositoryWriter)
         {
             this.storageStrategy = new ReadSideStorageStrategy<T>(readsideRepositoryWriter);
@@ -20,13 +19,18 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 
         public void Handle(IPublishableEvent evt)
         {
+            Handle(evt, storageStrategy);
+        }
+
+        public void Handle(IPublishableEvent evt, IStorageStrategy<T> storage)
+        {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
             if (this.IsUpgrader(evt))
             {
-                T currentState = this.GetViewById(evt.EventSourceId);
+                T currentState = this.GetViewById(evt.EventSourceId, storage);
                 var newState = (T)this.GetType().GetMethod("Update", new Type[] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, newState);
+                this.SaveView(evt.EventSourceId, newState, storage);
                 return;
             }
 
@@ -36,15 +40,15 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
                     (T)this.GetType()
                         .GetMethod("Create", new Type[] { eventType })
                         .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, newObject);
+                this.SaveView(evt.EventSourceId, newObject, storage);
                 return;
             }
 
             if (this.IsDeleter(evt))
             {
-                T currentState = this.GetViewById(evt.EventSourceId);
+                T currentState = this.GetViewById(evt.EventSourceId, storage);
                 this.GetType().GetMethod("Delete", new Type[] { eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, currentState);
+                this.SaveView(evt.EventSourceId, currentState, storage);
             }
         }
 
@@ -71,37 +75,14 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             oldEventBus.RegisterHandler(evntType, this.Handle);
         }
 
-        private void SaveView(Guid id, T newState)
+        private void SaveView(Guid id, T newState, IStorageStrategy<T> storage)
         {
-            this.storageStrategy.AddOrUpdate(newState, id);
+            storage.AddOrUpdate(newState, id);
         }
 
-        private T GetViewById(Guid id)
+        private T GetViewById(Guid id, IStorageStrategy<T> storage)
         {
-            return this.storageStrategy.Select(id);
-        }
-
-        public void ChangeForSingleEventSource(Guid eventSourceId)
-        {
-            var single = new SingleEventSourceStorageStrategy<T>(this.storageStrategy.Select(eventSourceId));
-            this.percistantStorageStrategy = this.storageStrategy;
-            this.storageStrategy = single;
-        }
-
-        public void FlushDataToPersistentStorage(Guid eventSourceId)
-        {
-            var view = this.storageStrategy.Select(eventSourceId);
-
-            if (view != null)
-                this.percistantStorageStrategy.AddOrUpdate(view, eventSourceId);
-            else
-            {
-                view = this.percistantStorageStrategy.Select(eventSourceId);
-                if(view!=null)
-                    this.percistantStorageStrategy.Delete(view, eventSourceId);
-            }
-
-            this.storageStrategy = this.percistantStorageStrategy;
+            return storage.Select(id);
         }
 
         protected PublishedEvent CreatePublishedEvent(IPublishableEvent evt)

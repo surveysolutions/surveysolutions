@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-              interview.AnswerNumericIntegerQuestion(userId, answeredQuestionId, new int[] { }, DateTime.Now, 1);
+              interview.AnswerNumericIntegerQuestion(userId, answeredQuestionId, new decimal[] { }, DateTime.Now, 1);
 
         It should_raise_AnswerDeclaredValid_event = () =>
              eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event

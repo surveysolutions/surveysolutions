@@ -12,6 +12,10 @@
                 "Text": "Text",
                 "GpsCoordinates": "GpsCoordinates"
             },
+            rosterSizeSourceTypes = {
+                "FixedTitles": "FixedTitles",
+                "Question": "Question"
+            },
             verificationReferenceType = {
                 question: 1,
                 group: 10,
@@ -134,9 +138,9 @@
                     title: "Can't move question",
                     text: "You can't move an roster size question into a roster"
                 },
-                cantMoveHeadQuestionOutsideAutoGroup: {
+                cantMoveRosterTitleQuestion: {
                     title: "Can't move question",
-                    text: "You can't move a head question outside of any roster"
+                    text: "You can move a roster title question only to a roster group that has a roster size question the same as parent group of roster title question"
                 },
                 savedData: 'Data saved successfully',
                 weWillClearCondition: {
@@ -151,11 +155,6 @@
                 },
                 weWillClearSupervisorFlag: {
                     message: "If a question is pre-filled, it can't at the same time be marked as answered by the supervisor. Would you like to disable the 'answered by the supervisor' option for this question?",
-                    okBtn: "Yes, disable it",
-                    cancelBtn: "No, don't disable it"
-                },
-                weWillClearHeadFlag: {
-                    message: "Questions answered by supervisor can't serve as a header of a roster group. Would you like to disable the 'head' option for this question?",
                     okBtn: "Yes, disable it",
                     cancelBtn: "No, don't disable it"
                 },
@@ -196,6 +195,7 @@
             commands: commands,
             tips: tips,
             verificationReferenceType: verificationReferenceType,
-            messageTabs: messageTabs
+            messageTabs: messageTabs,
+            rosterSizeSourceTypes: rosterSizeSourceTypes
         };
     });

@@ -57,7 +57,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.SaveAnswer(newAnswer,
                     new AnswerTextQuestionCommand(
                         this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
-                        this.Model.PublicKey.PropagationVector, DateTime.UtcNow, newAnswer));
+                        this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, newAnswer));
             }
         }
 

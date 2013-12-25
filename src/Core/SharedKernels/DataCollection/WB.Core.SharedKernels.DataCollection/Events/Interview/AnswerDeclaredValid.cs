@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswerDeclaredValid : QuestionPassiveEvent
     {
-        public AnswerDeclaredValid(Guid questionId, int[] propagationVector)
+        public AnswerDeclaredValid(Guid questionId, decimal[] propagationVector)
             : base(questionId, propagationVector) {}
     }
 }

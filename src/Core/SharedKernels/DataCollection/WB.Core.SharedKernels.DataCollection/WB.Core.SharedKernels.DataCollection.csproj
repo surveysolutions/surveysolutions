@@ -62,11 +62,18 @@
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\RosterRowAdded.cs" />
+    <Compile Include="Events\Interview\RosterRowRemoved.cs" />
+    <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
@@ -144,6 +151,9 @@
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
+    <Compile Include="Implementation\EnumerableExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />
@@ -154,6 +164,7 @@
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
+    <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\Questionnaire\QuestionIdAndVariableName.cs" />
@@ -174,6 +185,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
+    <Compile Include="Views\Questionnaire\RosterScopeDescription.cs" />
+    <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class GroupDisabled : GroupPassiveEvent
     {
-        public GroupDisabled(Guid groupId, int[] propagationVector)
+        public GroupDisabled(Guid groupId, decimal[] propagationVector)
             : base(groupId, propagationVector) {}
     }
 }

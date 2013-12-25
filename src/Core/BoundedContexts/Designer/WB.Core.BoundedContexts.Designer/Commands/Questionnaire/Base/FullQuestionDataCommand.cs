@@ -6,11 +6,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class FullQuestionDataCommand : AbstractQuestionCommand
     {
         protected FullQuestionDataCommand(Guid questionnaireId, Guid questionId,
-            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
             Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
             : base(
-                questionnaireId, questionId, title, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup, scope, condition,
+                questionnaireId, questionId, title, alias, isMandatory, isFeatured, scope, condition,
                 validationExpression, validationMessage, instructions, responsibleId)
         {
             this.Options = options;

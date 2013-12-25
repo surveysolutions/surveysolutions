@@ -1,5 +1,6 @@
 ﻿using System;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -87,7 +88,8 @@ namespace WB.UI.Designer.Tests
             var qId = questionnaireId.HasValue ? questionnaireId.Value : Guid.NewGuid();
 
             var command = new UpdateGroupCommand(qId, Guid.NewGuid(), responsibleId: responsibleId,
-                title: string.Empty, rosterSizeQuestionId: null, description: string.Empty, condition: string.Empty);
+                title: string.Empty, rosterSizeQuestionId: null, description: string.Empty, condition: string.Empty, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return command;
         }

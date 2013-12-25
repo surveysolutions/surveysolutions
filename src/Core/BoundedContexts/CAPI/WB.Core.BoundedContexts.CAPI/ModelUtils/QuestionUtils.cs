@@ -14,20 +14,20 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             return CastAnswerToSingleDimensionalArray<decimal>(answer, decimal.TryParse) ?? CastAnswerToDecimal(answer);
         }
 
-        public static int[][] ExtractSelectedOptionsOfLinkedQuestion(object answer)
+        public static decimal[][] ExtractSelectedOptionsOfLinkedQuestion(object answer)
         {
             if (answer == null)
                 return null;
 
-            var selectedAnswer = CastAnswerToSingleDimensionalArray<int>(answer, int.TryParse);
+            var selectedAnswer = CastAnswerToSingleDimensionalArray<decimal>(answer, decimal.TryParse);
             if (selectedAnswer != null)
-                return new int[][] { selectedAnswer };
+                return new decimal[][] { selectedAnswer };
 
-            int[][] typedAnswers = CastAnswerTo2DimensionalArray(answer);
+            decimal[][] typedAnswers = CastAnswerTo2DimensionalArray(answer);
             if (typedAnswers != null)
                 return typedAnswers;
 
-            return new int[0][];
+            return new decimal[0][];
         }
 
         private static T[] CastAnswerToSingleDimensionalArray<T>(object answer, TryParseDelegate<T> tryParseFunction) where T : struct 
@@ -79,9 +79,9 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             return null;
         }
 
-        private static int[][] CastAnswerTo2DimensionalArray(object answer)
+        private static decimal[][] CastAnswerTo2DimensionalArray(object answer)
         {
-            var intCast = answer as IEnumerable<int[]>;
+            var intCast = answer as IEnumerable<decimal[]>;
             if (intCast != null)
                 return intCast.ToArray();
 
@@ -89,13 +89,13 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             if (objectCast != null)
             {
                 var result =
-                    objectCast.Select((obj) => CastAnswerFormObjectToIntArray<int>(obj, int.TryParse)).Where(i => i != null).ToArray();
+                    objectCast.Select((obj) => CastAnswerFormObjectToIntArray<decimal>(obj, decimal.TryParse)).Where(i => i != null).ToArray();
              
                 if (result.Length > 0)
                     return result;
             }
 
-            var jArrayCast = GetValueFromJArray<int[]>(answer);
+            var jArrayCast = GetValueFromJArray<decimal[]>(answer);
             if (jArrayCast.Length > 0)
                 return jArrayCast;
             return null;
