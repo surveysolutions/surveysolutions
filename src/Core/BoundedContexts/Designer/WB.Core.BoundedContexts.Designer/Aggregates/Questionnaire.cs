@@ -998,6 +998,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var sourceGroup = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
+            this.ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(questionId, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(questionId, sourceGroup, targetGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
@@ -1962,6 +1963,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("You can move a roster title question {0} only to a roster group that has a roster size question {1}",
                         this.FormatQuestionForException(questionId, this.innerDocument),
                         this.FormatQuestionForException(sourceGroup.RosterSizeQuestionId.Value, this.innerDocument)));
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(Guid questionId, IGroup parentGroup)
+        {
+            if (this.IsRosterSizeQuestion(questionId) && parentGroup.IsRoster)
+            {
+                throw new QuestionnaireException(string.Format("Roster size question {0} cannot be placed inside roster group",
+                        this.FormatQuestionForException(questionId, this.innerDocument)));
+            }
+        }
+
+        private bool IsRosterSizeQuestion(Guid questionId)
+        {
+            return this.innerDocument.Find<IGroup>(group => group.RosterSizeQuestionId == questionId).Any();
         }
 
         private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Guid? rosterSizeQuestionId,
