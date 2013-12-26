@@ -13,6 +13,16 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
     {
         public static string AnswerToString<T>(T answer, RosterTitleQuestionDescription questionDescription)
         {
+            Func<decimal, string> getCategoricalAnswerOptionText =
+                questionDescription == null || !questionDescription.Options.Any()
+                    ? (Func<decimal, string>) null
+                    : value => questionDescription.Options[value];
+
+            return AnswerToString(answer, getCategoricalAnswerOptionText);
+        }
+
+        public static string AnswerToString<T>(T answer, Func<decimal, string> getCategoricalAnswerOptionText = null)
+        {
             if (typeof (T) == typeof (string))
             {
                 return answer as string;
@@ -26,10 +36,10 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             if (typeof (T) == typeof (decimal))
             {
                 var decimalAnswer = Convert.ToDecimal(answer);
-                if (questionDescription == null || !questionDescription.Options.Any())
-                    return decimalAnswer.ToString(CultureInfo.InvariantCulture);
 
-                return questionDescription.Options[decimalAnswer];
+                return getCategoricalAnswerOptionText == null
+                    ? decimalAnswer.ToString(CultureInfo.InvariantCulture)
+                    : getCategoricalAnswerOptionText(decimalAnswer);
             }
 
             if (typeof (T) == typeof (DateTime))
@@ -48,10 +58,10 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             if (typeof (T) == typeof (decimal[]))
             {
                 var multiAnswer = answer as decimal[];
-                if (multiAnswer == null || questionDescription==null)
-                    return string.Empty;
 
-                return string.Join(",", multiAnswer.Select(answerValue => questionDescription.Options[answerValue]));
+                return multiAnswer == null || getCategoricalAnswerOptionText == null
+                    ? string.Empty
+                    : string.Join(", ", multiAnswer.Select(getCategoricalAnswerOptionText));
             }
 
             return answer.ToString();
