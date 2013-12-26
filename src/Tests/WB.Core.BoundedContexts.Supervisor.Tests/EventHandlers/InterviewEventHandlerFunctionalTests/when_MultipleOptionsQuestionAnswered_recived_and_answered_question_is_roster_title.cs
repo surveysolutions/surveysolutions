@@ -52,6 +52,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
         private static Guid rosterScopeId;
         private static Guid rosterTitleQuestionId;
         private static decimal[] selectedOptions = new decimal[] { 1, 3 };
-        private static string selectedOptionsText = "one,three";
+        private static string selectedOptionsText = "one, three";
     }
 }
