@@ -11,57 +11,41 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class AnswerUtils
     {
-        public static string AnswerToString<T>(T answer, RosterTitleQuestionDescription questionDescription)
+        public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null)
         {
-            Func<decimal, string> getCategoricalAnswerOptionText =
-                questionDescription == null || !questionDescription.Options.Any()
-                    ? (Func<decimal, string>) null
-                    : value => questionDescription.Options[value];
+            if (answer == null)
+                return string.Empty;
 
-            return AnswerToString(answer, getCategoricalAnswerOptionText);
-        }
+            if (answer is string)
+                return (string) answer;
 
-        public static string AnswerToString<T>(T answer, Func<decimal, string> getCategoricalAnswerOptionText = null)
-        {
-            if (typeof (T) == typeof (string))
+            if (answer is int)
+                return ((int) answer).ToString(CultureInfo.InvariantCulture);
+
+            if (answer is DateTime)
+                return ((DateTime)answer).ToString("M/d/yyyy", CultureInfo.InvariantCulture);
+
+            if (answer is decimal)
             {
-                return answer as string;
-            }
-
-            if (typeof (T) == typeof (int))
-            {
-                return (Convert.ToInt32(answer)).ToString(CultureInfo.InvariantCulture);
-            }
-
-            if (typeof (T) == typeof (decimal))
-            {
-                var decimalAnswer = Convert.ToDecimal(answer);
+                var decimalAnswer = (decimal) answer;
 
                 return getCategoricalAnswerOptionText == null
                     ? decimalAnswer.ToString(CultureInfo.InvariantCulture)
                     : getCategoricalAnswerOptionText(decimalAnswer);
             }
 
-            if (typeof (T) == typeof (DateTime))
+            if (answer is decimal[])
             {
-                return (Convert.ToDateTime(answer)).ToString("M/d/yyyy", CultureInfo.InvariantCulture);
-            }
+                var multiAnswer = (decimal[]) answer;
 
-            if (typeof (T) == typeof (GeoPosition))
-            {
-                var geoAnswer = answer as GeoPosition;
-                if (geoAnswer == null)
-                    return string.Empty;
-                return geoAnswer.ToString();
-            }
-
-            if (typeof (T) == typeof (decimal[]))
-            {
-                var multiAnswer = answer as decimal[];
-
-                return multiAnswer == null || getCategoricalAnswerOptionText == null
+                return getCategoricalAnswerOptionText == null
                     ? string.Empty
                     : string.Join(", ", multiAnswer.Select(getCategoricalAnswerOptionText));
+            }
+
+            if (answer is GeoPosition)
+            {
+                return ((GeoPosition) answer).ToString();
             }
 
             return answer.ToString();
