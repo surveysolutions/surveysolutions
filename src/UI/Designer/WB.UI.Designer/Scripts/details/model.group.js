@@ -53,10 +53,12 @@
                     return _.find(self.allowedQuestions(), function(item) { return !_.isUndefined(self.rosterSizeQuestion()) && item.questionId == self.rosterSizeQuestion(); });
                 });
                 self.isNumericRosterSizeQuestion = ko.computed(function () {
-                    return !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isNumeric;
+                    return self.isRosterSizeSourceQuestion() &&
+                        !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isNumeric;
                 });
                 self.isCategoricalRosterSizeQuestion = ko.computed(function () {
-                    return !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isCategorical;
+                    return self.isRosterSizeSourceQuestion() &&
+                        !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isCategorical;
                 });
 
                 self.rosterTitleQuestion = ko.observable();
