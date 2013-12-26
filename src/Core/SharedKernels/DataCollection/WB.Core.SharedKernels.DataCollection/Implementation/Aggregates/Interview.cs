@@ -790,7 +790,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = answer.ToString(CultureInfo.InvariantCulture);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
 
 
@@ -857,7 +857,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = answer.ToString(CultureInfo.InvariantCulture);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
 
             this.ApplyEvent(new NumericRealQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
@@ -912,7 +912,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = answer.ToString("M/d/yyyy", CultureInfo.InvariantCulture);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
 
 
@@ -977,7 +977,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = questionnaire.GetAnswerOptionTitle(questionId, selectedValue);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
+                answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
 
 
@@ -1064,8 +1065,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = string.Join(", ",
-                selectedValues.Select(selectedValue => questionnaire.GetAnswerOptionTitle(questionId, selectedValue)));
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues,
+                answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
 
 
@@ -1114,7 +1115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
+            string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
 
 
 
