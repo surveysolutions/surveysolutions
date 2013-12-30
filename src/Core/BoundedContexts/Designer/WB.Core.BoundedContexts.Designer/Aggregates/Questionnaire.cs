@@ -2002,6 +2002,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException("List of fixed roster titles could not be empty");
             }
 
+            if (rosterFixedTitles.Length > 250)
+            {
+                throw new QuestionnaireException("Number of fixed roster titles could not be more than 250");
+            }
+
             if (rosterFixedTitles.Any(string.IsNullOrWhiteSpace))
             {
                 throw new QuestionnaireException("Fixed roster titles could not have empty titles");
