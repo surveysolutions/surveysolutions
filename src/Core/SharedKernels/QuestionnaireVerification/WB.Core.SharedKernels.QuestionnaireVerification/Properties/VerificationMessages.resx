@@ -210,4 +210,7 @@
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
     <value>Group where roster size source is fixed titles could not have empty titles</value>
   </data>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan250Items" xml:space="preserve">
+    <value>Number of fixed roster titles could not be more than 250</value>
+  </data>
 </root>
