@@ -33,6 +33,7 @@
                     <div class="control-group" data-bind="validationElement: isSupervisorQuestion">
                         <div class="controls">
                             <p data-bind="visible: $data.parent().isRoster() == false">
+                                <button type="button" data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory, popover: { content: 'A mandatory question without an answer is an error. It is shown as an error on the interface and in the questionnaire statistics.', title: 'Mandatory question', placement: 'right', trigger: 'hover' }" class="btn btn-small"><i class="icon-exclamation"></i>&nbsp;mandatory</button>
                                 <button type="button" data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured, popover: { content: 'Answers for pre-filled questions are provided by HQ or Supervisor. Questions of this type cannot be modified by the enumerator.', title: 'Pre-filled question', placement: 'right', trigger: 'hover' }" class="btn btn-small"><i class="icon-star"></i>&nbsp;pre-filled</button>
                             </p>
                             <label class="checkbox" data-bind="visible: isFeatured() == false">
@@ -44,9 +45,7 @@
                 </div>
 
                 <div data-bind="template: { name: qtype(), data: $data }"></div>
-                <p>
-                    <button type="button" data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory, popover: { content: 'A mandatory question without an answer is an error. It is shown as an error on the interface and in the questionnaire statistics.', title: 'Mandatory question', placement: 'right', trigger: 'hover' }" class="btn btn-small"><i class="icon-exclamation"></i>&nbsp;mandatory</button>
-                </p>
+                
                 <div data-bind="visible: isSupervisorQuestion() == false">
                     <label>
                         <a href="#" class="btn btn-info btn-small btn-help"
