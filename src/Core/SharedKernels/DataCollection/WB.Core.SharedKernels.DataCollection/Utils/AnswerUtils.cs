@@ -11,47 +11,41 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class AnswerUtils
     {
-        public static string AnswerToString<T>(T answer, RosterTitleQuestionDescription questionDescription)
+        public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null)
         {
-            if (typeof (T) == typeof (string))
+            if (answer == null)
+                return string.Empty;
+
+            if (answer is string)
+                return (string) answer;
+
+            if (answer is int)
+                return ((int) answer).ToString(CultureInfo.InvariantCulture);
+
+            if (answer is DateTime)
+                return ((DateTime)answer).ToString("M/d/yyyy", CultureInfo.InvariantCulture);
+
+            if (answer is decimal)
             {
-                return answer as string;
+                var decimalAnswer = (decimal) answer;
+
+                return getCategoricalAnswerOptionText == null
+                    ? decimalAnswer.ToString(CultureInfo.InvariantCulture)
+                    : getCategoricalAnswerOptionText(decimalAnswer);
             }
 
-            if (typeof (T) == typeof (int))
+            if (answer is decimal[])
             {
-                return (Convert.ToInt32(answer)).ToString(CultureInfo.InvariantCulture);
+                var multiAnswer = (decimal[]) answer;
+
+                return getCategoricalAnswerOptionText == null
+                    ? string.Empty
+                    : string.Join(", ", multiAnswer.Select(getCategoricalAnswerOptionText));
             }
 
-            if (typeof (T) == typeof (decimal))
+            if (answer is GeoPosition)
             {
-                var decimalAnswer = Convert.ToDecimal(answer);
-                if (questionDescription == null || !questionDescription.Options.Any())
-                    return decimalAnswer.ToString(CultureInfo.InvariantCulture);
-
-                return questionDescription.Options[decimalAnswer];
-            }
-
-            if (typeof (T) == typeof (DateTime))
-            {
-                return (Convert.ToDateTime(answer)).ToUniversalTime().ToShortDateString();
-            }
-
-            if (typeof (T) == typeof (GeoPosition))
-            {
-                var geoAnswer = answer as GeoPosition;
-                if (geoAnswer == null)
-                    return string.Empty;
-                return geoAnswer.ToString();
-            }
-
-            if (typeof (T) == typeof (decimal[]))
-            {
-                var multiAnswer = answer as decimal[];
-                if (multiAnswer == null || questionDescription==null)
-                    return string.Empty;
-
-                return string.Join(",", multiAnswer.Select(answerValue => questionDescription.Options[answerValue]));
+                return ((GeoPosition) answer).ToString();
             }
 
             return answer.ToString();

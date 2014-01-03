@@ -204,7 +204,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                         ? level.RosterTitleQuestionDescriptions[questionId]
                         : null;
 
-                    var answerString = AnswerUtils.AnswerToString(answer, questionDescription);
+                    var answerString =
+                        questionDescription != null && questionDescription.Options.Any()
+                            ? AnswerUtils.AnswerToString(answer, value => questionDescription.Options[value])
+                            : AnswerUtils.AnswerToString(answer);
 
                     if (level.RosterRowTitles.ContainsKey(groupId))
                     {

@@ -77,8 +77,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .ShouldEachConformTo(@event => @event.RosterInstanceId == rosterVector.Last());
 
         It should_set_title_to_1_dot_5_in_all_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>()
-                .ShouldEachConformTo(@event => @event.Title == "1.5");
+            eventContext.GetEvents<RosterRowTitleChanged>().Select(@event => @event.Title)
+                .ShouldEachConformTo(title => title == "1.5");
 
         private static EventContext eventContext;
         private static Interview interview;
