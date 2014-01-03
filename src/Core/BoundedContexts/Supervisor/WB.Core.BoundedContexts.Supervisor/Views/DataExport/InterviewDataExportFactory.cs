@@ -23,50 +23,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
 
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStorage;
-
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireLevelStorage;
-
-        private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStorage;
 
         public InterviewDataExportFactory(IReadSideRepositoryReader<InterviewData> interviewStorage,IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
-                                          IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStorage,
-                                          IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>
-                                              questionnaireLevelStorage, IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions)
+                                          IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStorage)
         {
             this.interviewStorage = interviewStorage;
             this.interviewSummaryStorage = interviewSummaryStorage;
-            this.questionnaireStorage = questionnaireStorage;
-            this.questionnaireLevelStorage = questionnaireLevelStorage;
-            this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
+            this.questionnaireExportStorage = questionnaireExportStorage;
         }
 
         public InterviewDataExportView Load(InterviewDataExportInputModel input)
         {
-            var questionnaire = GetQuestionnaireOrThrow(input.TemplateId, input.TemplateVersion).Questionnaire;
-            var questionnaireLevelStructure = GetQuestionnaireLevelStructureOrThrow(input.TemplateId,
-                                                                                    input.TemplateVersion);
-
-            var questionnaireReferenceInfo = GetQuestionnaireReferenceInfoForLinkedQuestions(input.TemplateId,
-                                                                                    input.TemplateVersion);
-
-            var header = BuildHeaderByTemplate(questionnaire, questionnaireLevelStructure, questionnaireReferenceInfo, input.LevelId);
+            var exportStructure = questionnaireExportStorage.GetById(input.TemplateId,
+                input.TemplateVersion);
+            var exportStructureForLevel = exportStructure.HeaderToLevelMap[input.LevelId ?? input.TemplateId];
 
             var records = BuildRecordsForHeader(input.TemplateId, input.TemplateVersion,
-                                                input.LevelId, header);
-
-            var levelName = BuildLevelName(questionnaire, questionnaireLevelStructure, input.LevelId);
+                                                input.LevelId, exportStructureForLevel);
 
             var exportedData = new InterviewDataExportView(input.TemplateId, input.TemplateVersion, input.LevelId,
-                                                           levelName,
-                                                           header, records);
+                                                           exportStructureForLevel, records);
             return exportedData;
-        }
-
-        private string BuildLevelName(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid? levelId)
-        {
-            var rootGroups = GetRootGroupsForLevel(questionnaire, questionnaireLevelStructure, levelId);
-            return rootGroups.First().Title;
         }
 
         public IList<InterviewSummary> GetApprovedInterviews(Guid templateId,
@@ -98,7 +76,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         }
 
         private InterviewDataExportRerord[] BuildRecordsForHeader(Guid templateId,
-                                                                  long templateVersion, Guid? levelId, ExportedHeaderCollection header)
+                                                                  long templateVersion, Guid? levelId, HeaderStructureForLevel header)
         {
             var dataRecords = new List<InterviewDataExportRerord>();
 
@@ -117,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         }
 
         private int FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(List<InterviewDataExportRerord> dataRecords,
-            InterviewData interview, Guid? levelId, ExportedHeaderCollection header, int recordIndex)
+            InterviewData interview, Guid? levelId, HeaderStructureForLevel header, int recordIndex)
         {
             var interviewDataByLevels = GetLevelsFromInterview(interview, levelId);
 
@@ -143,7 +121,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private void AddDataRecordFromInterviewLevel(List<InterviewDataExportRerord> dataRecords, InterviewLevel level,
                                                      int recordId,
-                                                     Guid interviewId, ExportedHeaderCollection header)
+                                                     Guid interviewId, HeaderStructureForLevel header)
         {
 #warning parentid is always null
             var record = new InterviewDataExportRerord(interviewId, recordId, GetParentRecordIndex(level), BuildExportedQuestionsByLevel(level, header));
@@ -157,13 +135,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return level.RosterVector[level.RosterVector.Length - 2];
         }
 
-        private Dictionary<Guid, ExportedQuestion> BuildExportedQuestionsByLevel(InterviewLevel level,  ExportedHeaderCollection header)
+        private Dictionary<Guid, ExportedQuestion> BuildExportedQuestionsByLevel(InterviewLevel level,  HeaderStructureForLevel header)
         {
             var answeredQuestions = new Dictionary<Guid,ExportedQuestion>();
 
             foreach (var question in level.GetAllQuestions())
             {
-                var headerItem = header[question.Id];
+                var headerItem = header.HeaderItems[question.Id];
 
                 if (headerItem == null)
                     continue;
@@ -173,90 +151,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             }
 
             return answeredQuestions;
-        }
-
-        private QuestionnaireDocumentVersioned GetQuestionnaireOrThrow(Guid questionnaireId, long version)
-        {
-            var questionnaire = questionnaireStorage.GetById(questionnaireId,version);
-            if (questionnaire == null)
-                throw new InvalidOperationException("template is absent");
-            return questionnaire;
-        }
-
-        private QuestionnaireRosterStructure GetQuestionnaireLevelStructureOrThrow(Guid questionnaireId, long version)
-        {
-            var questionnaireLevelStructure = questionnaireLevelStorage.GetById(questionnaireId, version);
-            if (questionnaireLevelStructure == null)
-                throw new InvalidOperationException("template is present but propagation structure is absent is absent");
-            return questionnaireLevelStructure;
-        }
-
-        private ReferenceInfoForLinkedQuestions GetQuestionnaireReferenceInfoForLinkedQuestions(Guid templateId, long templateVersion)
-        {
-            var questionnaireLevelStructure = questionnaireReferenceInfoForLinkedQuestions.GetById(templateId, templateVersion);
-            if (questionnaireLevelStructure == null)
-                throw new InvalidOperationException("template is present but reference structure structure is absent is absent");
-            return questionnaireLevelStructure;
-        }
-
-        private ExportedHeaderCollection BuildHeaderByTemplate(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, ReferenceInfoForLinkedQuestions questionnaireReferenceInfoForLinkedQuestions, Guid? levelId)
-        {
-
-            var result = new ExportedHeaderCollection(questionnaireReferenceInfoForLinkedQuestions, questionnaire);
-
-            var rootGroups = GetRootGroupsForLevel(questionnaire,questionnaireLevelStructure, levelId);
-
-            foreach (var rootGroup in rootGroups)
-            {
-                FillHeaderWithQuestionsInsideGroup(result, rootGroup);    
-            }
-            
-            return result;
-        }
-
-        private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid? levelId)
-        {
-            if (!levelId.HasValue)
-            {
-                yield return questionnaire;
-                yield break;
-            }
-
-            var rootGroupsForLevel = GetRootGroupsByLevelIdOrThrow(questionnaireLevelStructure, levelId.Value);
-
-            foreach (var rootGroup in rootGroupsForLevel)
-            {
-                yield return questionnaire.FirstOrDefault<IGroup>(group => group.PublicKey == rootGroup);
-            }
-        }
-
-        private HashSet<Guid> GetRootGroupsByLevelIdOrThrow(QuestionnaireRosterStructure questionnaireLevelStructure, Guid levelId)
-        {
-            if (!questionnaireLevelStructure.RosterScopes.ContainsKey(levelId))
-                throw new InvalidOperationException("level is absent in template");
-
-            return new HashSet<Guid>(questionnaireLevelStructure.RosterScopes[levelId].RosterIdToRosterTitleQuestionIdMap.Keys);
-        }
-
-        private void FillHeaderWithQuestionsInsideGroup(ExportedHeaderCollection headerItems, IGroup @group)
-        {
-            foreach (var groupChild in @group.Children)
-            {
-                var question = groupChild as IQuestion;
-                if (question != null)
-                {
-                    headerItems.Add(question);
-                    continue;
-                }
-                var innerGroup = groupChild as IGroup;
-                if (innerGroup != null)
-                {
-                        //### old questionnaires supporting        //### roster
-                    if (innerGroup.Propagated != Propagate.None || innerGroup.IsRoster)
-                        continue;
-                    FillHeaderWithQuestionsInsideGroup(headerItems, innerGroup);
-                }
-            }
         }
     }
 }

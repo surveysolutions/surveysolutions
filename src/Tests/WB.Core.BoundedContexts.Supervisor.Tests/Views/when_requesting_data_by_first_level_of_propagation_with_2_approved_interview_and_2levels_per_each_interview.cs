@@ -31,14 +31,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             };
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
-
+            questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
             interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
-                CreateQuestionnaireDocumentWith1PropagationLevel,
+                () => questionnarie,
                 CreateInterviewDataWith2PropagatedLevels, 2, CreateQuestionnairePropagationStructure);
         };
 
         Because of = () =>
-            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(Guid.NewGuid(), 1, propagationScopeKey));
+            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnarie.PublicKey, 1, propagationScopeKey));
 
         private It should_records_count_equals_4 = () =>
           result.Records.Length.ShouldEqual(4);
@@ -56,14 +56,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             result.Records[3].RecordId.ShouldEqual(1);
 
         private It should_header_column_count_be_equal_2 = () =>
-           result.Header.Count().ShouldEqual(2);
+           result.Header.HeaderItems.Count().ShouldEqual(2);
 
         private static QuestionnaireDocument CreateQuestionnaireDocumentWith1PropagationLevel()
         {
             var initialDocument = CreateQuestionnaireDocument(new Dictionary<string, Guid>() { { "auto", propagationScopeKey } });
             var chapter = new Group();
             initialDocument.Children.Add(chapter);
-            var roasterGroup = new Group() { Propagated = Propagate.AutoPropagated, PublicKey = propagatedGroup };
+            var roasterGroup = new Group() { PublicKey = propagatedGroup, IsRoster = true, RosterSizeQuestionId = propagationScopeKey };
             chapter.Children.Add(roasterGroup);
 
             foreach (var question in variableNameAndQuestionId)
@@ -110,5 +110,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         private static Guid secondQuestionId;
         private static Guid firstQuestionId;
         private static int levelCount;
+        private static QuestionnaireDocument questionnarie;
     }
 }

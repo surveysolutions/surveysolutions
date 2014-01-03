@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -33,27 +34,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             var interviewDataStorageMock = new Mock<IReadSideRepositoryReader<InterviewData>>();
             interviewDataStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>())).Returns(interviewCreationAction());
 
-            var questionnaireStorageMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>();
-            questionnaireStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(new QuestionnaireDocumentVersioned()
-                {
-                    Questionnaire =  templateCreationAction()
-                });
-
-            var propagationStructureStorageMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>();
-            propagationStructureStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(questionnairePropagationStructure==null? new QuestionnaireRosterStructure() : questionnairePropagationStructure());
-
-            var linkedQuestionStructureStorageMock = new Mock<IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions>>();
-            linkedQuestionStructureStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns<Guid, long>(
-                    (questionnaireId, version) => new ReferenceInfoForLinkedQuestions(questionnaireId, version, new Dictionary<Guid, ReferenceInfoByQuestion>()));
+            var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>();
+            questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+                .Returns(new QuestionnaireExportStructure(templateCreationAction(), 1));
 
             return new InterviewDataExportFactory(interviewDataStorageMock.Object,
                 interviewSummaryStorageMock.Object,
-                questionnaireStorageMock.Object,
-                propagationStructureStorageMock.Object,
-                linkedQuestionStructureStorageMock.Object);
+                questionnaireExportStructureMock.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Dictionary<string,Guid> variableNameAndQuestionId)
@@ -62,7 +49,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 
             foreach (var question in variableNameAndQuestionId)
             {
-                questionnaire.Children.Add(new NumericQuestion() { StataExportCaption = question.Key, PublicKey = question.Value });
+                questionnaire.Children.Add(new NumericQuestion() { StataExportCaption = question.Key, PublicKey = question.Value, QuestionType = QuestionType.Numeric});
             }
 
             return questionnaire;
