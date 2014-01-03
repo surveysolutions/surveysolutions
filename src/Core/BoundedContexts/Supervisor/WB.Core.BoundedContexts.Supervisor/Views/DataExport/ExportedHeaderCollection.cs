@@ -28,6 +28,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
             var rosterGroups = document.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeQuestionId.HasValue);
 
+            var fixedRosterGroups =
+                document.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles);
+            
             IEnumerable<INumericQuestion> rosterSizeNumericQuestions =
                 rosterGroups.Select(@group => document.Find<INumericQuestion>(@group.RosterSizeQuestionId.Value))
                     .Where(question => question != null && question.MaxValue.HasValue).Distinct();
@@ -51,6 +54,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             foreach (IMultyOptionsQuestion rosterSizeMultyOptionQuestion in rosterSizeMultyOptionQuestions)
             {
                 collectedMaxValues.Add(rosterSizeMultyOptionQuestion.PublicKey, rosterSizeMultyOptionQuestion.Answers.Count);
+            }
+
+            foreach (IGroup fixedRosterGroup in fixedRosterGroups)
+            {
+                collectedMaxValues.Add(fixedRosterGroup.PublicKey, fixedRosterGroup.RosterFixedTitles.Length);
             }
 
             return collectedMaxValues;
