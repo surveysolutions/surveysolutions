@@ -33,7 +33,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                     .Where(question => question != null && question.MaxValue.HasValue).Distinct();
 
             IEnumerable<IMultyOptionsQuestion> rosterSizeMultyOptionQuestions =
-                rosterGroups.Select(@group => document.Find<IMultyOptionsQuestion>(@group.RosterSizeQuestionId.Value));
+                rosterGroups.Select(@group => document.Find<IMultyOptionsQuestion>(@group.RosterSizeQuestionId.Value))
+                    .Where(question => question != null);
 
             var collectedMaxValues = new Dictionary<Guid, int>();
 
@@ -111,7 +112,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             var rosterSizeQuestionId =
                 questionnaireReferences.ReferencesOnLinkedQuestions[question.PublicKey].ScopeId;
+            var parentFixedRoster = GetParentAsRosterByFixedTitles(question);
+            //return parentFixedRoster == null
+            //    ? this.maxValuesForRosterSizeQuestions[rosterSizeQuestionId]
+            //    : parentFixedRoster.RosterFixedTitles.Length;
             return this.maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
+        }
+
+        private IGroup GetParentAsRosterByFixedTitles(IQuestion question)
+        {
+            return null;
         }
     }
 }
