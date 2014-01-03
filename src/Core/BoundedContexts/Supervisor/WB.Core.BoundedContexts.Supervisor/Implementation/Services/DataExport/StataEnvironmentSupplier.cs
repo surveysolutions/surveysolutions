@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         protected void BuildLabelsForLevel(InterviewDataExportView result, StringBuilder doContent)
         {
-            foreach (ExportedHeaderItem headerItem in result.Header)
+            foreach (ExportedHeaderItem headerItem in result.Header.HeaderItems.Values)
             {
                 bool hasLabels = headerItem.Labels.Count > 0;
 
