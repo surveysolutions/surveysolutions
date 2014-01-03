@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             MarkAllNonReferencedAutoPropagatedGroupsAsNotPropagated(document);
 
-            MoveAllQuestionsHeadPropertyToRosterProperty(document);
+            FindHeadQuestionsAndUpdateThemToRosterTitles(document);
 
             return document;
         }
@@ -120,11 +120,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 : new Guid[0];
         }
 
-        private static void MoveAllQuestionsHeadPropertyToRosterProperty(QuestionnaireDocument document)
+        private static void FindHeadQuestionsAndUpdateThemToRosterTitles(QuestionnaireDocument document)
         {
             //assuming all groups were updated to roster
-            var headQuestions = document.Find<AbstractQuestion>(q => q.Capital == true).ToList();
+            var headQuestions = document.Find<AbstractQuestion>(q => q.Capital).ToList();
 
+            if (!headQuestions.Any()) return;
+
+            document.ConnectChildrenWithParent();
             foreach (var headQuestion in headQuestions)
             {
                 var parentGroup = headQuestion.GetParent() as Group;
@@ -134,10 +137,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                     if (parentGroup.RosterSizeQuestionId != null)
                     {
-                        var rosterGroups = document.Find<Group>(q => q.RosterSizeQuestionId == parentGroup.RosterSizeQuestionId).ToList();
+                        var rosterGroups =
+                            document.Find<Group>(q => q.RosterSizeQuestionId == parentGroup.RosterSizeQuestionId).ToList();
                         foreach (var @group in rosterGroups)
                         {
-                            @group.RosterTitleQuestionId = headQuestion.PublicKey;
+                            document.UpdateGroup(@group.PublicKey, g =>
+                            {
+                                g.RosterTitleQuestionId = headQuestion.PublicKey;
+                            });
+
                         }
                     }
                 }
