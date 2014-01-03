@@ -285,7 +285,7 @@
                 rosterSizeQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterSizeQuestion() : null,
                 rosterSizeSource: group.rosterSizeSource(),
                 rosterFixedTitles: group.isRosterSizeSourceFixedTitles() ? group.rosterFixedTitles().split("\n") : null,
-                rosterTitleQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterTitleQuestion() : null
+                rosterTitleQuestionId: group.isNumericRosterSizeQuestion() ? group.rosterTitleQuestion() : null
             };
         };
 

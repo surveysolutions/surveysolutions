@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -671,6 +672,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
 
+
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
@@ -699,6 +701,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
+
 
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
@@ -732,6 +735,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
             }
+
 
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
@@ -786,7 +790,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = answer.ToString(CultureInfo.InvariantCulture);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
+
 
 
             this.ApplyEvent(new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
@@ -852,7 +857,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
-            var answerFormattedAsRosterTitle = answer.ToString(CultureInfo.InvariantCulture);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
 
             this.ApplyEvent(new NumericRealQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
@@ -905,6 +910,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Identity, object> getAnswerConcerningDisabling =
                 question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question, getNewQuestionState);
 
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
+
 
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
@@ -922,6 +931,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue)
@@ -964,6 +975,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState, groupsToBeEnabled, questionsToBeEnabled, out answersDeclaredValid, out answersDeclaredInvalid);
 
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
+                answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
+
+
+
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedValue));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
@@ -975,6 +993,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedValues)
@@ -988,6 +1008,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
+
+
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
@@ -1041,6 +1063,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState, groupsToBeEnabled, questionsToBeEnabled, out answersDeclaredValid, out answersDeclaredInvalid);
 
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues,
+                answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
+
+
+
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedValues));
 
             this.ApplyRosterEvents(rosterCalculationData);
@@ -1054,6 +1083,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
         private RosterCalculationData GetRosterCalculationDataWithRosterTitles(Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
@@ -1082,12 +1113,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
+
+
+
             this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, answerTime, latitude, longitude, accuracy, timestamp));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
-        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedPropagationVector)
+        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
+            decimal[] selectedPropagationVector)
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1107,12 +1147,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
 
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            string answerFormattedAsRosterTitle = this.GetLinkedQuestionAnswerFormattedAsRosterTitle(answeredLinkedQuestion);
+
+
+
             this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedPropagationVector));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
-        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[][] selectedPropagationVectors)
+        private string GetLinkedQuestionAnswerFormattedAsRosterTitle(Identity linkedQuestion)
+        {
+            object answer = this.GetEnabledQuestionAnswerSupportedInExpressions(linkedQuestion);
+
+            return AnswerUtils.AnswerToString(answer);
+        }
+
+        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
+            decimal[][] selectedPropagationVectors)
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1123,7 +1179,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
             Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
-            foreach (var answeredLinkedQuestion in selectedPropagationVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector)))
+            var answeredLinkedQuestions = selectedPropagationVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
+            foreach (var answeredLinkedQuestion in answeredLinkedQuestions)
             {
                 this.ThrowIfRosterVectorIsIncorrect(linkedQuestionId, answeredLinkedQuestion.RosterVector, questionnaire);
                 this.ThrowIfQuestionOrParentGroupIsDisabled(answeredLinkedQuestion, questionnaire);
@@ -1132,9 +1189,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedPropagationVectors.Length, questionnaire);
 
 
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            string answerFormattedAsRosterTitle = string.Join(", ",
+                answeredLinkedQuestions.Select(this.GetLinkedQuestionAnswerFormattedAsRosterTitle));
+
+
+
             this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedPropagationVectors));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
         public void ReevaluateSynchronizedInterview()
