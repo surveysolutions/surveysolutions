@@ -1030,7 +1030,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(questionId, type, options, linkedToQuestionId, isFeatured);
-            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
