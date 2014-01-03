@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 writer.WriteField("InterviewId");
                 writer.WriteField("Id");
 
-                foreach (ExportedHeaderItem question in items.Header)
+                foreach (ExportedHeaderItem question in items.Header.HeaderItems.Values)
                 {
                     foreach (var columnName in question.ColumnNames)
                     {
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 {
                     writer.WriteField(item.InterviewId);
                     writer.WriteField(item.RecordId);
-                    foreach (var headerItem in items.Header)
+                    foreach (var headerItem in items.Header.HeaderItems.Values)
                     {
                         if (!item.Questions.ContainsKey(headerItem.PublicKey))
                         {

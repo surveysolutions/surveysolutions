@@ -32,7 +32,7 @@ namespace Core.Supervisor.Tests.Merger
 
         internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo()
         {
-            return new ReferenceInfoForLinkedQuestions(Guid.NewGuid(), 0, Mock.Of<Dictionary<Guid, ReferenceInfoByQuestion>>());
+            return new ReferenceInfoForLinkedQuestions();
         }
 
         internal static QuestionnaireDocument CreateQuestionnaireDocumentWithGroupAndFixedRoster(Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)

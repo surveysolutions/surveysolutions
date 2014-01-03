@@ -26,19 +26,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
     {
         private Establish context = () =>
         {
+            questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>
+            {
+                { "q1", Guid.NewGuid() },
+                { "q2", Guid.NewGuid() }
+            });
             interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
-                () =>
-                    CreateQuestionnaireDocument(new Dictionary<string, Guid>
-                    {
-                        { "q1", Guid.NewGuid() },
-                        { "q2", Guid.NewGuid() }
-                    }),
+                () => questionnarie,
                 CreateInterviewData,
                 2);
         };
 
         Because of = () =>
-           result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(Guid.NewGuid(), 1, null));
+           result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnarie.PublicKey, 1, null));
 
         private It should_records_count_equals_2 = () =>
             result.Records.Length.ShouldEqual(2);
@@ -53,9 +53,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             result.Records[1].RecordId.ShouldEqual(1);
 
         private It should_header_column_count_be_equal_2 = () =>
-           result.Header.Count().ShouldEqual(2);
+           result.Header.HeaderItems.Count().ShouldEqual(2);
 
         private static InterviewDataExportFactory interviewDataExportFactory;
         private static InterviewDataExportView result;
+        private static QuestionnaireDocument questionnarie;
     }
 }

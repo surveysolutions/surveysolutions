@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Documents;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
@@ -23,14 +24,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
                 { "q1", answeredQuestionId },
                 { "q2", unansweredQuestionId }
             };
-
+            questionnaireDocument = CreateQuestionnaireDocument(variableNameAndQuestionId);
             interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
-                () => CreateQuestionnaireDocument(variableNameAndQuestionId),
+                () => questionnaireDocument,
                 () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), 1);
         };
 
         Because of = () =>
-            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(Guid.NewGuid(), 1, null));
+            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnaireDocument.PublicKey, 1, null));
 
         private It should_records_count_equals_1 = () =>
             result.Records.Length.ShouldEqual(1);
@@ -48,12 +49,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
           result.Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
 
         private It should_header_column_count_be_equal_2 = () =>
-            result.Header.Count().ShouldEqual(2);
+            result.Header.HeaderItems.Count().ShouldEqual(2);
 
         private static InterviewDataExportFactory interviewDataExportFactory;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid answeredQuestionId;
         private static Guid unansweredQuestionId;
+        private static QuestionnaireDocument questionnaireDocument;
     }
 }
