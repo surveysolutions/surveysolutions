@@ -29,13 +29,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
             var interviewExportedDataStorageMock = new Mock<IQueryableReadSideRepositoryReader<InterviewExportedData>>();
+            var questionnaire = templateCreationAction();
 
-            interviewExportedDataStorageMock.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewExportedData>, InterviewExportedData[]>>())).Returns(CreateListOfApprovedInterviews(interviewCount, dataCreationAction ?? CreateInterviewData));
+
+            interviewExportedDataStorageMock.Setup(
+                x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewExportedData>, InterviewExportedData[]>>()))
+                .Returns(CreateListOfApprovedInterviews(interviewCount,
+                    () =>
+                    {
+                        var createInterview = dataCreationAction ?? CreateInterviewData;
+                        var interview = createInterview();
+                        interview.QuestionnaireId = questionnaire.PublicKey;
+                        return interview;
+                    }));
 
 
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>();
             questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(new QuestionnaireExportStructure(templateCreationAction(), 1));
+                .Returns(new QuestionnaireExportStructure(questionnaire, 1));
 
             return new InterviewDataExportFactory(
                 interviewExportedDataStorageMock.Object,

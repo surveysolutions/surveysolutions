@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class IterviewExporter : IExportProvider<InterviewDataExportView>
+    internal class IterviewExporter : IExportProvider<InterviewDataExportLevelView>
     {
         private readonly char delimeter;
 
@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             this.delimeter = exportingFileType == FileType.Csv ? ',' : '\t';
         }
 
-        public bool DoExport(InterviewDataExportView items, string fileName)
+        public bool DoExport(InterviewDataExportLevelView items, string fileName)
         {
             byte[] bytes = this.DoExportToStream(items);
 
@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return true;
         }
 
-        public byte[] DoExportToStream(InterviewDataExportView items)
+        public byte[] DoExportToStream(InterviewDataExportLevelView items)
         {
             using (var memoryStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))

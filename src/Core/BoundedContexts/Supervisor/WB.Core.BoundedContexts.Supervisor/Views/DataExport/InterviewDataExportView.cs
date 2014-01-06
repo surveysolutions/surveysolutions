@@ -8,21 +8,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class InterviewDataExportView
     {
-        public InterviewDataExportView(Guid templateId, long templateVersion, Guid? levelId, HeaderStructureForLevel header, InterviewDataExportRecord[] records)
+        public InterviewDataExportView(Guid templateId, long templateVersion, InterviewDataExportLevelView[] levels)
         {
-            TemplateId = templateId;
-            TemplateVersion = templateVersion;
-            LevelId = levelId;
-            LevelName = header.LevelName;
-            Header = header;
-            Records = records;
+            this.TemplateId = templateId;
+            this.TemplateVersion = templateVersion;
+            this.Levels = levels;
         }
 
         public Guid TemplateId { get; private set; }
         public long TemplateVersion { get; private set; }
-        public Guid? LevelId { get; private set; }
-        public string LevelName { get; private set; }
-        public HeaderStructureForLevel Header { get; private set; }
-        public InterviewDataExportRecord[] Records { get; set; }
+        public InterviewDataExportLevelView[] Levels { get; private set; }
     }
 }

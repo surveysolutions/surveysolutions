@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class StataEnvironmentSupplier : IEnvironmentSupplier<InterviewDataExportView>
+    internal class StataEnvironmentSupplier : IEnvironmentSupplier<InterviewDataExportLevelView>
     {
         private readonly Dictionary<string, StringBuilder> doFiles;
 
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             }
         }
 
-        public string BuildContent(InterviewDataExportView result, string parentPrimaryKeyName, string fileName, FileType type)
+        public string BuildContent(InterviewDataExportLevelView result, string parentPrimaryKeyName, string fileName, FileType type)
         {
             string primaryKeyColumnName = CreateColumnName(parentPrimaryKeyName, result.LevelName);
 
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 string.Format("insheet using \"{0}\", {1}", fileName, type == FileType.Csv ? "comma" : "tab"));
         }
 
-        protected void BuildLabelsForLevel(InterviewDataExportView result, StringBuilder doContent)
+        protected void BuildLabelsForLevel(InterviewDataExportLevelView result, StringBuilder doContent)
         {
             foreach (ExportedHeaderItem headerItem in result.Header.HeaderItems.Values)
             {

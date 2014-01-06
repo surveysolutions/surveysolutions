@@ -13,18 +13,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
     internal class DataExportService : IDataExportService
     {
-        private readonly IEnvironmentSupplier<InterviewDataExportView> supplier;
+        private readonly IEnvironmentSupplier<InterviewDataExportLevelView> supplier;
         private readonly IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireLevelStorage;
 
         public DataExportService(
-            IEnvironmentSupplier<InterviewDataExportView> supplier, 
-            IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory, 
-            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireLevelStorage)
+            IEnvironmentSupplier<InterviewDataExportLevelView> supplier,
+            IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory)
         {
             this.supplier = supplier;
             this.interviewDataExportViewFactory = interviewDataExportViewFactory;
-            this.questionnaireLevelStorage = questionnaireLevelStorage;
         }
 
         public IDictionary<string, byte[]> ExportData(Guid questionnaireId, long version, string type)
@@ -33,44 +30,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
             var allLevels = new Dictionary<string, byte[]>();
 
-            var questionnarieLevel = GetAllQuestionnaireLevels(questionnaireId, version);
-
-            foreach (var levelId in questionnarieLevel)
-            {
-                CollectLevels(
-                    interviewDataExportViewFactory.Load(new InterviewDataExportInputModel(questionnaireId, version,
-                        levelId)),
-                    allLevels,
-                    new IterviewExporter(fileType), fileType);
-            }
+            CollectLevels(
+                interviewDataExportViewFactory.Load(new InterviewDataExportInputModel(questionnaireId, version)),
+                allLevels,
+                new IterviewExporter(fileType), fileType);
 
             supplier.AddCompletedResults(allLevels);
 
             return allLevels;
         }
 
-        private HashSet<Guid?> GetAllQuestionnaireLevels(Guid questionnarieid, long version)
-        {
-            var levels = new HashSet<Guid?> { null };
-            var questionnarieLevelStructure = this.questionnaireLevelStorage.GetById(questionnarieid, version);
-            foreach (var levelId in questionnarieLevelStructure.RosterScopes.Keys)
-            {
-                levels.Add(levelId);
-            }
-            return levels;
-        }
-
         protected void CollectLevels(
             InterviewDataExportView records,
             Dictionary<string, byte[]> container,
-             IExportProvider<InterviewDataExportView> provider,
+            IExportProvider<InterviewDataExportLevelView> provider,
             FileType type)
         {
-            string fileName = GetName(records.LevelName,type, container, 0);
+            foreach (var interviewDataExportLevelView in records.Levels)
+            {
+                string fileName = GetName(interviewDataExportLevelView.LevelName, type, container, 0);
 
-            container.Add(fileName, provider.DoExportToStream(records));
+                container.Add(fileName, provider.DoExportToStream(interviewDataExportLevelView));
 
-            this.supplier.BuildContent(records, string.Empty, fileName, type);
+                this.supplier.BuildContent(interviewDataExportLevelView, string.Empty, fileName, type);
+            }
         }
 
         private FileType GetFileTypeOrThrow(string type)
