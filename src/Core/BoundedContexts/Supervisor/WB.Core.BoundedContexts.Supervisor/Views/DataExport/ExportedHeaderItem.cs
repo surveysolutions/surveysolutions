@@ -67,6 +67,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
     public class LabelItem
     {
+        public LabelItem() {}
+
         public LabelItem(IAnswer answer)
         {
             PublicKey = answer.PublicKey;

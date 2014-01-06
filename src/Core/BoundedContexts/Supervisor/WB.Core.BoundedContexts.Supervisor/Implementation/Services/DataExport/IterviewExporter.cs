@@ -55,7 +55,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                     writer.WriteField(item.RecordId);
                     foreach (var headerItem in items.Header.HeaderItems.Values)
                     {
-                        if (!item.Questions.ContainsKey(headerItem.PublicKey))
+                        var question = item.Questions.FirstOrDefault(q => q.QuestionId == headerItem.PublicKey);
+                        if (question==null)
                         {
                             for (int i = 0; i < headerItem.ColumnNames.Count(); i++)
                             {
@@ -64,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
                             continue;
                         }
-                        foreach (string itemValue in item.Questions[headerItem.PublicKey].Answers)
+                        foreach (string itemValue in question.Answers)
                         {
                             writer.WriteField(itemValue);
                         }
