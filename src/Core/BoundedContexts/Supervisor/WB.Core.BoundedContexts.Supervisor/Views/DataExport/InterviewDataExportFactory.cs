@@ -46,35 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                             this.BuildRecordsForHeader(approvedInterviews, exportStructureForLevel.LevelId))).ToArray());
         }
 
-        public IList<InterviewExportedData> GetApprovedInterviews(Guid templateId,
-                                                                  long templateVersion, int bulkSize=256)
-        {
-            var result = new List<InterviewExportedData>();
-            int returnedEventCount = 0;
-            while (true)
-            {
-                var interviews =
-                    this.interviewExportedDataStorage.Query(
-                        _ =>
-                        _.Where(
-                            interview =>
-                            interview.QuestionnaireId == templateId && interview.QuestionnaireVersion == templateVersion &&
-                            interview.Status == InterviewStatus.ApprovedBySupervisor).Skip(returnedEventCount)
-                        .Take(bulkSize).ToArray());
-
-                result.AddRange(interviews);
-
-                bool allEventsWereAlreadyReturned = interviews.Length < bulkSize;
-
-                if (allEventsWereAlreadyReturned)
-                     break;
-
-                returnedEventCount += bulkSize;
-            }
-            return result;
-        }
-
-        private InterviewDataExportRecord[] BuildRecordsForHeader(IList<InterviewExportedData> interviews, Guid levelId)
+        private InterviewDataExportRecord[] BuildRecordsForHeader(IEnumerable<InterviewExportedData> interviews, Guid levelId)
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
@@ -82,26 +54,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
             foreach (var interview in interviews)
             {
-                recordId = this.FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(dataRecords, interview, levelId, recordId);
+                var interviewDataByLevels = this.GetLevelsFromInterview(interview, levelId);
+
+                foreach (var dataByLevel in interviewDataByLevels)
+                {
+#warning parentid is always null
+                    dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, null, dataByLevel));
+                    if (levelId != interview.QuestionnaireId) recordId++;
+                }
+
+                //increase only in case of top level, if I increase record index inside roaster, linked questions data would be broken
+                recordId = levelId == interview.QuestionnaireId ? recordId + 1 : 0;
             }
-            
+
             return dataRecords.ToArray();
-        }
-
-        private int FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(List<InterviewDataExportRecord> dataRecords,
-            InterviewExportedData interview, Guid levelId, int recordIndex)
-        {
-            var interviewDataByLevels = GetLevelsFromInterview(interview, levelId);
-
-            foreach (var dataByLevel in interviewDataByLevels)
-            {
-                dataRecords.Add(CreateDataRecordFromInterviewLevel(dataByLevel, recordIndex, interview.InterviewId));
-                if (levelId != interview.QuestionnaireId) recordIndex++;
-            }
-
-            //increase only in case of top level, if I increase record index inside roaster, linked questions data would be broken
-            recordIndex = levelId == interview.QuestionnaireId ? recordIndex + 1 : 0;
-            return recordIndex;
         }
 
         private IEnumerable<ExportedQuestion[]> GetLevelsFromInterview(InterviewExportedData interview, Guid levelId)
@@ -113,12 +79,32 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return interview.InterviewDataByLevels.Where(level => level.ScopeId == levelId).Select(level => level.Questions);
         }
 
-        private InterviewDataExportRecord CreateDataRecordFromInterviewLevel(ExportedQuestion[] exportedQuestions,
-                                                     int recordId,
-                                                     Guid interviewId)
+        public IList<InterviewExportedData> GetApprovedInterviews(Guid templateId,
+            long templateVersion, int bulkSize=256)
         {
-#warning parentid is always null
-            return new InterviewDataExportRecord(interviewId, recordId, null, exportedQuestions);
+            var result = new List<InterviewExportedData>();
+            int returnedEventCount = 0;
+            while (true)
+            {
+                var interviews =
+                    this.interviewExportedDataStorage.Query(
+                        _ =>
+                            _.Where(
+                                interview =>
+                                    interview.QuestionnaireId == templateId && interview.QuestionnaireVersion == templateVersion &&
+                                        interview.Status == InterviewStatus.ApprovedBySupervisor).Skip(returnedEventCount)
+                                .Take(bulkSize).ToArray());
+
+                result.AddRange(interviews);
+
+                bool allEventsWereAlreadyReturned = interviews.Length < bulkSize;
+
+                if (allEventsWereAlreadyReturned)
+                    break;
+
+                returnedEventCount += bulkSize;
+            }
+            return result;
         }
     }
 }
