@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 {
     class when_requesting_data_by_first_level_of_propagation_with_2_approved_interview_and_2levels_per_each_interview : InterviewDataExportFactoryTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             firstQuestionId = Guid.Parse("12222222222222222222222222222222");
             secondQuestionId = Guid.Parse("11111111111111111111111111111111");
@@ -38,25 +38,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         };
 
         Because of = () =>
-            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnarie.PublicKey, 1, propagationScopeKey));
+            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnarie.PublicKey, 1));
 
-        private It should_records_count_equals_4 = () =>
-          result.Records.Length.ShouldEqual(4);
+        It should_records_count_equals_4 = () =>
+           GetLevel(result,propagationScopeKey).Records.Length.ShouldEqual(4);
 
-        private It should_first_record_id_equals_0 = () =>
-            result.Records[0].RecordId.ShouldEqual(0);
+        It should_first_record_id_equals_0 = () =>
+           GetLevel(result, propagationScopeKey).Records[0].RecordId.ShouldEqual(0);
 
-        private It should_second_record_id_equals_1 = () =>
-            result.Records[1].RecordId.ShouldEqual(1);
+        It should_second_record_id_equals_1 = () =>
+           GetLevel(result, propagationScopeKey).Records[1].RecordId.ShouldEqual(1);
 
-        private It should_third_record_id_equals_0 = () =>
-            result.Records[2].RecordId.ShouldEqual(0);
+        It should_third_record_id_equals_0 = () =>
+           GetLevel(result, propagationScopeKey).Records[2].RecordId.ShouldEqual(0);
 
-        private It should_forth_record_id_equals_1 = () =>
-            result.Records[3].RecordId.ShouldEqual(1);
+        It should_forth_record_id_equals_1 = () =>
+           GetLevel(result, propagationScopeKey).Records[3].RecordId.ShouldEqual(1);
 
-        private It should_header_column_count_be_equal_2 = () =>
-           result.Header.HeaderItems.Count().ShouldEqual(2);
+        It should_header_column_count_be_equal_2 = () =>
+           GetLevel(result, propagationScopeKey).Header.HeaderItems.Count().ShouldEqual(2);
 
         private static QuestionnaireDocument CreateQuestionnaireDocumentWith1PropagationLevel()
         {
@@ -72,6 +72,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             }
 
             return initialDocument;
+        }
+
+        private static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid levelId)
+        {
+            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelId == levelId);
         }
 
         private static InterviewExportedData CreateInterviewDataWith2PropagatedLevels()
