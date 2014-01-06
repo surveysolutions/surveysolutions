@@ -27,42 +27,52 @@ namespace WB.UI.QuestionnaireTester
     public class LoadingActivity : Activity
     {
         protected ILogger logger;
+        private CancellationTokenSource longOperationTokenSource;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+            this.longOperationTokenSource =
+                this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+        }
+
+        public override void OnBackPressed()
+        {
+            this.RunOnUiThread(this.Finish);
+            base.OnBackPressed();
+        }
+
+        public override void Finish()
+        {
+            this.longOperationTokenSource.Cancel();
+            base.Finish();
         }
 
         protected void Restore(CancellationToken ct, Guid publicKey)
         {
             Guid interviewId = Guid.NewGuid();
 
-            if (!LoadTemplateAndCreateInterview(publicKey, interviewId, ct))
-            {
-                this.RunOnUiThread(this.Finish);
-                return;
-            } 
-            
-            var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                    new QuestionnaireScreenInput(interviewId));
+            if (!LoadTemplateAndCreateInterview(publicKey, interviewId, ct)) return;
 
-            if (questionnaire == null)
-            {
-                this.RunOnUiThread(this.Finish);
-                return;
-            }
+            var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+                new QuestionnaireScreenInput(interviewId));
+
+            if (questionnaire == null) return;
 
             var intent = new Intent(this, typeof(CreateInterviewActivity));
             intent.PutExtra("publicKey", interviewId.ToString());
-            this.StartActivity(intent);
+
+            if (!ct.IsCancellationRequested)
+                this.StartActivity(intent);
         }
 
         private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId, CancellationToken ct)
         {
             QuestionnaireCommunicationPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, ct);
+
+            if (ct.IsCancellationRequested) return false;
 
             if (template == null)
             {

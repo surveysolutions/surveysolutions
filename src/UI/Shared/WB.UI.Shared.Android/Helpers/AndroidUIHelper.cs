@@ -16,12 +16,11 @@ namespace WB.UI.Shared.Android.Helpers
 {
     public static class AndroidUIHelper
     {
-        public static void WaitForLongOperation(this Activity activity, Action<CancellationToken> operation, bool showProgressDialog = true)
+        public static CancellationTokenSource WaitForLongOperation(this Activity activity, Action<CancellationToken> operation, bool showProgressDialog = true)
         {
-
             var progressBar = showProgressDialog ? CreateProgressBar(activity) : null;
-            var tokenSource2 = new CancellationTokenSource();
-            var cancellationToken = tokenSource2.Token;
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
             
             Task.Factory.StartNew(() =>
             {
@@ -35,6 +34,8 @@ namespace WB.UI.Shared.Android.Helpers
                     });
                 }
             }, cancellationToken);
+
+            return cancellationTokenSource;
         }
 
         private static ProgressBar CreateProgressBar(Activity activity)
