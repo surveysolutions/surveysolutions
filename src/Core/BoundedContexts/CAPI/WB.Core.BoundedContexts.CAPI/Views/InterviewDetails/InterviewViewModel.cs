@@ -179,9 +179,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     question.SetAnswer(answeredQuestion.Answer);
                 }
 
-                if (!IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
-                    continue;
-                AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector);
+                if (IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
+                    AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector);
             }
         }
 
