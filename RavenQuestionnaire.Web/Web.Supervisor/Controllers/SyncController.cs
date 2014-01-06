@@ -282,7 +282,7 @@ namespace Web.Supervisor.Controllers
         {
             int maxVersion = this.GetLastVersionNumber();
 
-            if (maxVersion != 0)
+            if (maxVersion > 0)
             {
                 var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
                 string path = Path.Combine(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
