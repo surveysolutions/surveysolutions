@@ -26,12 +26,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             Version = version;
 
             questionnaire.ConnectChildrenWithParent();
-            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
 
+            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
             var questionnaireLevelStructure = new QuestionnaireRosterStructure(questionnaire, version);
             var referenceInfoForLinkedQuestions = new ReferenceInfoForLinkedQuestions(questionnaire, version);
+
             this.HeaderToLevelMap.Add(questionnaire.PublicKey,
-                this.BuildHeaderByTemplate(questionnaire, null, questionnaireLevelStructure, referenceInfoForLinkedQuestions,
+                this.BuildHeaderByTemplate(questionnaire, questionnaire.PublicKey, questionnaireLevelStructure, referenceInfoForLinkedQuestions,
                     maxValuesForRosterSizeQuestions));
 
             foreach (var rosterScopeDescription in questionnaireLevelStructure.RosterScopes)
@@ -42,8 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             }
         }
 
-        public Guid QuestionnaireId { get; private set; }
-        public Dictionary<Guid, HeaderStructureForLevel> HeaderToLevelMap { get; private set; }
+        public Guid QuestionnaireId { get; set; }
+        public Dictionary<Guid, HeaderStructureForLevel> HeaderToLevelMap { get; set; }
         public long Version { get; set; }
 
         private static Dictionary<Guid, int> GetMaxValuesForRosterSizeQuestions(QuestionnaireDocument document)
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return collectedMaxValues;
         }
 
-        private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, Guid? levelId,
+        private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, Guid levelId,
             QuestionnaireRosterStructure questionnaireLevelStructure, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
@@ -96,15 +97,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return new HeaderStructureForLevel(rootGroups, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions, levelId);
         }
 
-        private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid? levelId)
+        private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid levelId)
         {
-            if (!levelId.HasValue)
+            if (levelId == questionnaire.PublicKey)
             {
                 yield return questionnaire;
                 yield break;
             }
 
-            var rootGroupsForLevel = GetRootGroupsByLevelIdOrThrow(questionnaireLevelStructure, levelId.Value);
+            var rootGroupsForLevel = GetRootGroupsByLevelIdOrThrow(questionnaireLevelStructure, levelId);
 
             foreach (var rootGroup in rootGroupsForLevel)
             {

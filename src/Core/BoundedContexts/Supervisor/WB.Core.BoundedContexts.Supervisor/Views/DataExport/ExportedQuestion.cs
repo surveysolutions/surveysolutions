@@ -9,6 +9,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class ExportedQuestion
     {
+        public ExportedQuestion()
+        {
+        }
+
         public ExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
         {
             QuestionId = question.Id;
@@ -22,8 +26,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                         Answers.Length, header.ColumnNames.Length));
         }
 
-        public Guid QuestionId { get; private set; }
-        public string[] Answers { get; private set; }
+        public Guid QuestionId { get; set; }
+        public string[] Answers { get; set; }
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {

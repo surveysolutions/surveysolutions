@@ -12,34 +12,33 @@ using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 {
+    [Subject(typeof(InterviewDataExportFactory))]
     internal class InterviewDataExportFactoryTestContext {
         protected const string firstLevelkey = "#";
 
         protected static InterviewDataExportFactory CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
-            Func<QuestionnaireDocument> templateCreationAction, 
-            Func<InterviewData> interviewCreationAction,
-            int interviewCount = 0,
-            Func<QuestionnaireRosterStructure> questionnairePropagationStructure = null)
+            Func<QuestionnaireDocument> templateCreationAction,
+            Func<InterviewExportedData> dataCreationAction=null,
+            int interviewCount = 0)
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
-            var interviewSummaryStorageMock = new Mock<IQueryableReadSideRepositoryReader<InterviewSummary>>();
+            var interviewExportedDataStorageMock = new Mock<IQueryableReadSideRepositoryReader<InterviewExportedData>>();
 
-            interviewSummaryStorageMock.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewSummary>, InterviewSummary[]>>())).Returns((InterviewSummary[]) CreateListOfApprovedInterviews(interviewCount));
+            interviewExportedDataStorageMock.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewExportedData>, InterviewExportedData[]>>())).Returns(CreateListOfApprovedInterviews(interviewCount, dataCreationAction ?? CreateInterviewData));
 
-            var interviewDataStorageMock = new Mock<IReadSideRepositoryReader<InterviewData>>();
-            interviewDataStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>())).Returns(interviewCreationAction());
 
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>();
             questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(new QuestionnaireExportStructure(templateCreationAction(), 1));
 
-            return new InterviewDataExportFactory(interviewDataStorageMock.Object,
-                interviewSummaryStorageMock.Object,
+            return new InterviewDataExportFactory(
+                interviewExportedDataStorageMock.Object,
                 questionnaireExportStructureMock.Object);
         }
 
@@ -55,35 +54,39 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             return questionnaire;
         }
 
-        protected static InterviewData CreateInterviewData()
+        protected static InterviewExportedData CreateInterviewData()
         {
-            var interview = new InterviewData();
-            interview.InterviewId = Guid.NewGuid();
-            interview.Levels.Add(firstLevelkey, new InterviewLevel(interview.InterviewId,null, new decimal[0]));
-            return interview;
+            var interviewsSummary = new InterviewExportedData();
+            interviewsSummary.InterviewDataByLevels = new []
+            { new InterviewExportedLevel(Guid.NewGuid(), new decimal[0], new ExportedQuestion[0]) };
+            return interviewsSummary;
         }
 
-        protected static InterviewData CreateInterviewWithAnswers(IEnumerable<Guid> questionsWithAnswers)
+        protected static InterviewExportedData CreateInterviewWithAnswers(IEnumerable<Guid> questionsWithAnswers)
         {
-            var interview = CreateInterviewData();
-            var firstLevel = interview.Levels[firstLevelkey];
-
-            foreach (var questionsWithAnswer in questionsWithAnswers)
+            var interviewsSummary = new InterviewExportedData();
+            interviewsSummary.InterviewDataByLevels = new[]
             {
-                var question = firstLevel.GetOrCreateQuestion(questionsWithAnswer);
-                question.Answer = "some answer";
-            }
-
-            return interview;
+                new InterviewExportedLevel(Guid.NewGuid(), new decimal[0],
+                    questionsWithAnswers.Select(qId => CreateExportedQuestion(qId, "some answer")).ToArray())
+            };
+            return interviewsSummary;
         }
 
-        protected static InterviewSummary[] CreateListOfApprovedInterviews(int count)
+        protected static ExportedQuestion CreateExportedQuestion(Guid questionId, string answer)
         {
-            var interviewsSummary = new InterviewSummary[count];
+            var interviewQuestion = new InterviewQuestion(questionId);
+            interviewQuestion.Answer = answer;
+            return new ExportedQuestion(interviewQuestion, new ExportedHeaderItem(new TextQuestion()));
+        }
+
+        protected static InterviewExportedData[] CreateListOfApprovedInterviews(int count, Func<InterviewExportedData> dataCreationAction)
+        {
+            var interviewsSummary = new InterviewExportedData[count];
 
             for (int i = 0; i < count; i++)
             {
-                interviewsSummary[i] = new InterviewSummary();
+                interviewsSummary[i] = dataCreationAction();
             }
 
             return interviewsSummary;
@@ -92,18 +95,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 
     public static class ShouldExtensions
     {
-        public static void ShouldQuestionHasOneNotEmptyAnswer(this Dictionary<Guid, ExportedQuestion> questions, Guid questionId)
+        public static void ShouldQuestionHasOneNotEmptyAnswer(this ExportedQuestion[] questions, Guid questionId)
         {
-            questions.Keys.ShouldContain(qId => qId == questionId);
-            var answers = questions[questionId].Answers;
+            questions.ShouldContain(q => q.QuestionId == questionId);
+            var answers = questions.First(q => q.QuestionId == questionId).Answers;
             answers.Length.ShouldEqual(1);
             var answer = answers[0];
             answer.ShouldNotBeEmpty();
         }
 
-        public static void ShouldQuestionHasNoAnswers(this Dictionary<Guid, ExportedQuestion> questions, Guid questionId)
+        public static void ShouldQuestionHasNoAnswers(this ExportedQuestion[] questions, Guid questionId)
         {
-            questions.Keys.ShouldNotContain(qId => qId == questionId);
+            questions.ShouldNotContain(q => q.QuestionId == questionId);
         }
     }
 }

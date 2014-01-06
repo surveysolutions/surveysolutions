@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class HeaderStructureForLevel
     {
-        public Guid? LevelId { get; private set; }
+        public Guid LevelId { get; private set; }
         public string LevelName { get; private set; }
         public IDictionary<Guid, ExportedHeaderItem> HeaderItems { get; private set; }
 
@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             IEnumerable<IGroup> groupsInLevel, 
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions,
-            Guid? levelId)
+            Guid levelId)
             : this()
         {
             this.LevelId = levelId;
