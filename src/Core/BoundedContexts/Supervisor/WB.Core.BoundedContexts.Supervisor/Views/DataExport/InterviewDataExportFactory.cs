@@ -19,17 +19,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class InterviewDataExportFactory : IViewFactory<InterviewDataExportInputModel, InterviewDataExportView>
     {
-        private readonly IReadSideRepositoryReader<InterviewData> interviewStorage;
-
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewExportedData> interviewExportedDataStorage;
 
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStorage;
 
-        public InterviewDataExportFactory(IReadSideRepositoryReader<InterviewData> interviewStorage,IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
+        public InterviewDataExportFactory(
+                                          IQueryableReadSideRepositoryReader<InterviewExportedData> interviewExportedDataStorage,
                                           IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStorage)
         {
-            this.interviewStorage = interviewStorage;
-            this.interviewSummaryStorage = interviewSummaryStorage;
+            this.interviewExportedDataStorage = interviewExportedDataStorage;
             this.questionnaireExportStorage = questionnaireExportStorage;
         }
 
@@ -40,22 +38,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             var exportStructureForLevel = exportStructure.HeaderToLevelMap[input.LevelId ?? input.TemplateId];
 
             var records = BuildRecordsForHeader(input.TemplateId, input.TemplateVersion,
-                                                input.LevelId, exportStructureForLevel);
+                                                input.LevelId);
 
             var exportedData = new InterviewDataExportView(input.TemplateId, input.TemplateVersion, input.LevelId,
                                                            exportStructureForLevel, records);
             return exportedData;
         }
 
-        public IList<InterviewSummary> GetApprovedInterviews(Guid templateId,
+        public IList<InterviewExportedData> GetApprovedInterviews(Guid templateId,
                                                                   long templateVersion, int bulkSize=256)
         {
-            var result = new List<InterviewSummary>();
+            var result = new List<InterviewExportedData>();
             int returnedEventCount = 0;
             while (true)
             {
                 var interviews =
-                    this.interviewSummaryStorage.Query(
+                    this.interviewExportedDataStorage.Query(
                         _ =>
                         _.Where(
                             interview =>
@@ -75,33 +73,32 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return result;
         }
 
-        private InterviewDataExportRerord[] BuildRecordsForHeader(Guid templateId,
-                                                                  long templateVersion, Guid? levelId, HeaderStructureForLevel header)
+        private InterviewDataExportRecord[] BuildRecordsForHeader(Guid templateId,
+                                                                  long templateVersion, Guid? levelId)
         {
-            var dataRecords = new List<InterviewDataExportRerord>();
+            var dataRecords = new List<InterviewDataExportRecord>();
 
             var interviews =
-                GetApprovedInterviews(templateId, templateVersion)
-                    .Select(interview => this.interviewStorage.GetById(interview.InterviewId));
+                GetApprovedInterviews(templateId, templateVersion);
 
             int recordId = 0;
 
             foreach (var interview in interviews)
             {
-                recordId = this.FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(dataRecords, interview, levelId, header, recordId);
+                recordId = this.FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(dataRecords, interview, levelId, recordId);
             }
             
             return dataRecords.ToArray();
         }
 
-        private int FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(List<InterviewDataExportRerord> dataRecords,
-            InterviewData interview, Guid? levelId, HeaderStructureForLevel header, int recordIndex)
+        private int FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(List<InterviewDataExportRecord> dataRecords,
+            InterviewExportedData interview, Guid? levelId, int recordIndex)
         {
             var interviewDataByLevels = GetLevelsFromInterview(interview, levelId);
 
             foreach (var dataByLevel in interviewDataByLevels)
             {
-                AddDataRecordFromInterviewLevel(dataRecords, dataByLevel, recordIndex, interview.InterviewId, header);
+                dataRecords.Add(CreateDataRecordFromInterviewLevel(dataByLevel, recordIndex, interview.InterviewId));
                 if (levelId.HasValue) recordIndex++;
             }
 
@@ -110,47 +107,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return recordIndex;
         }
 
-        private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, Guid? levelId)
+        private IEnumerable<ExportedQuestion[]> GetLevelsFromInterview(InterviewExportedData interview, Guid? levelId)
         {
             if (!levelId.HasValue)
             {
-                return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(interview.InterviewId));
+                return interview.InterviewDataByLevels.Where(level => level.RosterVector.Length == 0).Select(level => level.Questions);
             }
-            return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(levelId.Value));
+            return interview.InterviewDataByLevels.Where(level => level.ScopeId == levelId.Value).Select(level => level.Questions);
         }
 
-        private void AddDataRecordFromInterviewLevel(List<InterviewDataExportRerord> dataRecords, InterviewLevel level,
+        private InterviewDataExportRecord CreateDataRecordFromInterviewLevel(ExportedQuestion[] exportedQuestions,
                                                      int recordId,
-                                                     Guid interviewId, HeaderStructureForLevel header)
+                                                     Guid interviewId)
         {
 #warning parentid is always null
-            var record = new InterviewDataExportRerord(interviewId, recordId, GetParentRecordIndex(level), BuildExportedQuestionsByLevel(level, header));
-            dataRecords.Add(record);
-        }
-
-        private decimal? GetParentRecordIndex(InterviewLevel level)
-        {
-            if (level.RosterVector.Length < 2)
-                return null;
-            return level.RosterVector[level.RosterVector.Length - 2];
-        }
-
-        private Dictionary<Guid, ExportedQuestion> BuildExportedQuestionsByLevel(InterviewLevel level,  HeaderStructureForLevel header)
-        {
-            var answeredQuestions = new Dictionary<Guid,ExportedQuestion>();
-
-            foreach (var question in level.GetAllQuestions())
-            {
-                var headerItem = header.HeaderItems[question.Id];
-
-                if (headerItem == null)
-                    continue;
-
-                var exportedQuestion = new ExportedQuestion(question, headerItem);
-                answeredQuestions.Add(question.Id, exportedQuestion);
-            }
-
-            return answeredQuestions;
+            return new InterviewDataExportRecord(interviewId, recordId, null, exportedQuestions);
         }
     }
 }

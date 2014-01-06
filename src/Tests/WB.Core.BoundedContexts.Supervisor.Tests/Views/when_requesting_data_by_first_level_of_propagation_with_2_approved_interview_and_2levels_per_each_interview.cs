@@ -9,11 +9,11 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 {
-    [Subject(typeof(InterviewDataExportFactory))]
     class when_requesting_data_by_first_level_of_propagation_with_2_approved_interview_and_2levels_per_each_interview : InterviewDataExportFactoryTestContext
     {
         private Establish context = () =>
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
             interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
                 () => questionnarie,
-                CreateInterviewDataWith2PropagatedLevels, 2, CreateQuestionnairePropagationStructure);
+                CreateInterviewDataWith2PropagatedLevels, 2);
         };
 
         Because of = () =>
@@ -74,30 +74,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             return initialDocument;
         }
 
-        private static QuestionnaireRosterStructure CreateQuestionnairePropagationStructure()
+        private static InterviewExportedData CreateInterviewDataWith2PropagatedLevels()
         {
-            var propagationStructure = new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterScopeDescription(propagationScopeKey,
-                new Dictionary<Guid, RosterTitleQuestionDescription> { { propagatedGroup, null } });
-            propagationStructure.RosterScopes.Add(propagationScopeKey, rosterDescription);
-            return propagationStructure;
-        }
-
-        private static InterviewData CreateInterviewDataWith2PropagatedLevels()
-        {
-            InterviewData interview =  CreateInterviewData();
+            InterviewExportedData interview = CreateInterviewData();
+            interview.InterviewDataByLevels = new InterviewExportedLevel[levelCount];
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new decimal[1] { i };
-                var interviewLevel = new InterviewLevel(propagationScopeKey, null, vector);
+                var exportedQuestionsByLevel = new ExportedQuestion[variableNameAndQuestionId.Count];
 
+                var j = 0;
                 foreach (var question in variableNameAndQuestionId)
                 {
-                    var interviewQuestion = interviewLevel.GetOrCreateQuestion(question.Value);
-                    interviewQuestion.Answer = "some answer";
+                    exportedQuestionsByLevel[j] = CreateExportedQuestion(question.Value, "some answer");
+                    j++;
                 }
-
-                interview.Levels.Add(i.ToString(), interviewLevel);
+                interview.InterviewDataByLevels[i] = new InterviewExportedLevel(propagationScopeKey, vector, exportedQuestionsByLevel);
             }
             return interview;
         }

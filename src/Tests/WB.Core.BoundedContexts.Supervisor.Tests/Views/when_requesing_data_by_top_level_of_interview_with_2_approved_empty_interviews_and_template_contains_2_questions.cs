@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             result.Records.Length.ShouldEqual(2);
 
         private It should__first_record_have_0_answers= () =>
-           result.Records[0].Questions.Count.ShouldEqual(0);
+           result.Records[0].Questions.Length.ShouldEqual(0);
 
         private It should_first_record_id_equals_0 = () =>
             result.Records[0].RecordId.ShouldEqual(0);
