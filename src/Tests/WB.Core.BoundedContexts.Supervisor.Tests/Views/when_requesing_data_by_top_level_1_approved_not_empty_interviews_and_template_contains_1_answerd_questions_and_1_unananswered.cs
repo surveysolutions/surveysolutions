@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
     internal class when_requesing_data_by_top_level_1_approved_not_empty_interviews_and_template_contains_1_answerd_questions_and_1_unananswered :
         InterviewDataExportFactoryTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             answeredQuestionId = Guid.Parse("10000000000000000000000000000000");
             unansweredQuestionId = Guid.Parse("11111111111111111111111111111111");
@@ -31,25 +31,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         };
 
         Because of = () =>
-            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnaireDocument.PublicKey, 1, null));
+            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnaireDocument.PublicKey, 1));
 
-        private It should_records_count_equals_1 = () =>
-            result.Records.Length.ShouldEqual(1);
+        It should_records_count_equals_1 = () =>
+            result.Levels[0].Records.Length.ShouldEqual(1);
 
-        private It should__first_record_have_1_answers = () =>
-            result.Records[0].Questions.Length.ShouldEqual(1);
+        It should__first_record_have_1_answers = () =>
+            result.Levels[0].Records[0].Questions.Length.ShouldEqual(1);
 
-        private It should_first_record_id_equals_0 = () =>
-            result.Records[0].RecordId.ShouldEqual(0);
+        It should_first_record_id_equals_0 = () =>
+            result.Levels[0].Records[0].RecordId.ShouldEqual(0);
 
-        private It should_answered_question_be_not_empty = () =>
-           result.Records[0].Questions.ShouldQuestionHasOneNotEmptyAnswer(answeredQuestionId);
+        It should_answered_question_be_not_empty = () =>
+           result.Levels[0].Records[0].Questions.ShouldQuestionHasOneNotEmptyAnswer(answeredQuestionId);
 
-        private It should_unanswered_question_be_empty = () =>
-          result.Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
+        It should_unanswered_question_be_empty = () =>
+          result.Levels[0].Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
 
-        private It should_header_column_count_be_equal_2 = () =>
-            result.Header.HeaderItems.Count().ShouldEqual(2);
+        It should_header_column_count_be_equal_2 = () =>
+            result.Levels[0].Header.HeaderItems.Count().ShouldEqual(2);
 
         private static InterviewDataExportFactory interviewDataExportFactory;
         private static InterviewDataExportView result;

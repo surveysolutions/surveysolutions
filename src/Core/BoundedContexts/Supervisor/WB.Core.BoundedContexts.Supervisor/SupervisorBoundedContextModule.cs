@@ -26,8 +26,8 @@ namespace WB.Core.BoundedContexts.Supervisor
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IDataExportService>().To<DataExportService>();
-            this.Bind<IEnvironmentSupplier<InterviewDataExportView>>().To<StataEnvironmentSupplier>();
-            this.Bind<IExportProvider<InterviewDataExportView>>().To<IterviewExporter>();
+            this.Bind<IEnvironmentSupplier<InterviewDataExportLevelView>>().To<StataEnvironmentSupplier>();
+            this.Bind<IExportProvider<InterviewDataExportLevelView>>().To<IterviewExporter>();
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
             Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;

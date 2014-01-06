@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
     [Subject(typeof(InterviewDataExportFactory))]
     internal class when_requesing_data_by_top_level_of_interview_with_2_approved_empty_interviews_and_template_contains_2_questions : InterviewDataExportFactoryTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>
             {
@@ -38,22 +38,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         };
 
         Because of = () =>
-           result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnarie.PublicKey, 1, null));
+           result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnarie.PublicKey, 1));
 
-        private It should_records_count_equals_2 = () =>
-            result.Records.Length.ShouldEqual(2);
+        It should_records_count_equals_2 = () =>
+            result.Levels[0].Records.Length.ShouldEqual(2);
 
-        private It should__first_record_have_0_answers= () =>
-           result.Records[0].Questions.Length.ShouldEqual(0);
+        It should__first_record_have_0_answers= () =>
+           result.Levels[0].Records[0].Questions.Length.ShouldEqual(0);
 
-        private It should_first_record_id_equals_0 = () =>
-            result.Records[0].RecordId.ShouldEqual(0);
+        It should_first_record_id_equals_0 = () =>
+            result.Levels[0].Records[0].RecordId.ShouldEqual(0);
 
-        private It should_second_record_id_equals_1 = () =>
-            result.Records[1].RecordId.ShouldEqual(1);
+        It should_second_record_id_equals_1 = () =>
+            result.Levels[0].Records[1].RecordId.ShouldEqual(1);
 
-        private It should_header_column_count_be_equal_2 = () =>
-           result.Header.HeaderItems.Count().ShouldEqual(2);
+        It should_header_column_count_be_equal_2 = () =>
+           result.Levels[0].Header.HeaderItems.Count().ShouldEqual(2);
 
         private static InterviewDataExportFactory interviewDataExportFactory;
         private static InterviewDataExportView result;
