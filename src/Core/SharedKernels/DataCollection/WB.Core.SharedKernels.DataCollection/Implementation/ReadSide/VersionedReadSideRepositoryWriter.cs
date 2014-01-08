@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -13,6 +15,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
     internal class VersionedReadSideRepositoryWriter<TEntity> : IVersionedReadSideRepositoryWriter<TEntity> where TEntity : class, IVersionedView
     {
         private readonly IReadSideRepositoryWriter<TEntity> internalRepositoryWroter;
+
+        private static ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
 
         public VersionedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> internalRepositoryWroter)
         {
@@ -31,7 +38,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
 
         public void Store(TEntity view, Guid id)
         {
-            var previousEntity = internalRepositoryWroter.GetById(id);
+            TEntity previousEntity = null;
+            try
+            {
+                previousEntity = internalRepositoryWroter.GetById(id);
+            }
+            catch (Exception e)
+            {
+                Logger.Error("error during restore QuestionnaireRosterStructure", e);
+            }
             if (previousEntity != null)
             {
                 internalRepositoryWroter.Store(previousEntity, id.Combine(previousEntity.Version));
