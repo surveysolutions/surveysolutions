@@ -1162,6 +1162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private string GetLinkedQuestionAnswerFormattedAsRosterTitle(Identity linkedQuestion)
         {
+            // set of answers that support expressions includes set of answers that may be linked to, so following line is correct
             object answer = this.GetEnabledQuestionAnswerSupportedInExpressions(linkedQuestion);
 
             return AnswerUtils.AnswerToString(answer);
