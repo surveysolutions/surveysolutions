@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventHandlerFunctionalTests
 {
-    [Ignore]
     internal class when_answered_head_text_question_that_in_questionnaire_with_2_rosters_triggered_by_numeric_question : InterviewEventHandlerFunctionalTestContext
     {
         Establish context = () =>

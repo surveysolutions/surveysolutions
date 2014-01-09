@@ -125,8 +125,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 if (rosterGroupsWithTitleQuestionPair.Value != null)
                 {
-                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
-                        rosterGroupsWithTitleQuestionPair.Key;
+                    if (!level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(
+                        rosterGroupsWithTitleQuestionPair.Value.QuestionId))
+                    {
+                        level.RosterTitleQuestionIdToRosterIdMap.Add(
+                            rosterGroupsWithTitleQuestionPair.Value.QuestionId, new List<Guid>());
+                    }
+
+                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.QuestionId].Add(rosterGroupsWithTitleQuestionPair.Key);
 
                     level.RosterTitleQuestionDescriptions[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
                         rosterGroupsWithTitleQuestionPair.Value;
@@ -198,7 +204,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
                 if (level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(questionId))
                 {
-                    var groupId = level.RosterTitleQuestionIdToRosterIdMap[questionId];
+                    var groupIds = level.RosterTitleQuestionIdToRosterIdMap[questionId];
 
                     var questionDescription = level.RosterTitleQuestionDescriptions.ContainsKey(questionId)
                         ? level.RosterTitleQuestionDescriptions[questionId]
@@ -209,13 +215,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                             ? AnswerUtils.AnswerToString(answer, value => questionDescription.Options[value])
                             : AnswerUtils.AnswerToString(answer);
 
-                    if (level.RosterRowTitles.ContainsKey(groupId))
+                    foreach (var groupId in groupIds)
                     {
-                        level.RosterRowTitles[groupId] = answerString;
-                    }
-                    else
-                    {
-                        level.RosterRowTitles.Add(groupId, answerString);
+                        if (level.RosterRowTitles.ContainsKey(groupId))
+                        {
+                            level.RosterRowTitles[groupId] = answerString;
+                        }
+                        else
+                        {
+                            level.RosterRowTitles.Add(groupId, answerString);
+                        }
                     }
                 }
             });
