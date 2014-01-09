@@ -61,7 +61,7 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\InterviewEventHandlerFunctionalTestContext.cs" />
-    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_answered_head_text_question_that_in_questionnaire_with_2_rosters_triggered_by_numeric_question.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_for_two_rosters_triggered_by_numeric___.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_DateTimeQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_GeoLocationQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_add.cs" />
