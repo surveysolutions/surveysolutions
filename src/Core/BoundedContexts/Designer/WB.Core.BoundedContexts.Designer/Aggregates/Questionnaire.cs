@@ -1967,10 +1967,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(Guid questionId, IGroup parentGroup)
         {
             if (this.IsRosterSizeQuestion(questionId) && parentGroup.IsRoster)
-            {
-                throw new QuestionnaireException(string.Format("Roster size question {0} cannot be placed inside roster group",
-                        this.FormatQuestionForException(questionId, this.innerDocument)));
-            }
+                throw new QuestionnaireException(string.Format("Roster size question {0} cannot be placed inside roster group.",
+                    this.FormatQuestionForException(questionId, this.innerDocument)));
         }
 
         private bool IsRosterSizeQuestion(Guid questionId)
