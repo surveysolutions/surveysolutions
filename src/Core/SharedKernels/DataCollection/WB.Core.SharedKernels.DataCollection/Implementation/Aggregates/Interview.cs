@@ -629,6 +629,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             questionId, questionType));
                 }
             }
+
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(questionnaire);
+            fixedRosterCalculationDatas.ForEach(calculatedRosterData => this.ApplyRosterEvents(calculatedRosterData));
+
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
