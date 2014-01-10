@@ -65,13 +65,14 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
         private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(QuestionnaireDocument questionnaire, IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
         {
+            RosterTitleQuestionDescription capitalQuestion = GetRosterTitleQuestionDescriptionBasedOnCapitalQuestionsInsideGroups(groupsFromRosterSizeQuestionScope);
             return
                 groupsFromRosterSizeQuestionScope
                     .ToDictionary(roster => roster.PublicKey,
                         roster => roster.RosterTitleQuestionId.HasValue
                             ? CreateRosterTitleQuestionDescription(
                                 questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == roster.RosterTitleQuestionId.Value))
-                            : null);
+                            : capitalQuestion);
         }
 
         private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
@@ -79,23 +80,27 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             IEnumerable<IGroup> groupsFromAutoPropagatedQuestionScope =
                 questionnaire.Find<IGroup>(group => autoPropagateQuestion.Triggers.Contains(group.PublicKey));
 
-            var capitalQuestions =
-                groupsFromAutoPropagatedQuestionScope.SelectMany(rosterGroup => rosterGroup.Find<IQuestion>(question => question.Capital));
-
-            RosterTitleQuestionDescription headQuestion = null;
-
-            if (capitalQuestions.Any())
-            {
-                headQuestion = CreateRosterTitleQuestionDescription(capitalQuestions.First());
-            }
+            RosterTitleQuestionDescription capitalQuestion = GetRosterTitleQuestionDescriptionBasedOnCapitalQuestionsInsideGroups(groupsFromAutoPropagatedQuestionScope);
 
             var rosterGroupsWithTitleQuestionPairs = new Dictionary<Guid, RosterTitleQuestionDescription>();
             
             foreach (var rosterGroup in groupsFromAutoPropagatedQuestionScope)
             {
-                rosterGroupsWithTitleQuestionPairs.Add(rosterGroup.PublicKey, headQuestion);
+                rosterGroupsWithTitleQuestionPairs.Add(rosterGroup.PublicKey, capitalQuestion);
             }
             return rosterGroupsWithTitleQuestionPairs;
+        }
+
+        private RosterTitleQuestionDescription GetRosterTitleQuestionDescriptionBasedOnCapitalQuestionsInsideGroups(IEnumerable<IGroup> groups)
+        {
+            var capitalQuestions =
+               groups.SelectMany(rosterGroup => rosterGroup.Find<IQuestion>(question => question.Capital));
+
+            if (capitalQuestions.Any())
+            {
+                return CreateRosterTitleQuestionDescription(capitalQuestions.First());
+            }
+            return null;
         }
 
         private RosterTitleQuestionDescription CreateRosterTitleQuestionDescription(IQuestion question)

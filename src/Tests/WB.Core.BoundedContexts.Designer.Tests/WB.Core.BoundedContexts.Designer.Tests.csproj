@@ -84,6 +84,7 @@
     <Compile Include="MembershipProviderTests\MembershipProviderTestsContext.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
+    <Compile Include="PdfTests\PdfQuestionViewTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionFactoryTests\QuestionFactoryTestContext.cs" />
     <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__Text__.cs" />
