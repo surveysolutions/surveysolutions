@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return synchronizationDto.RosterGroupInstances.ToDictionary(
                 pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
-                pair => pair.Value.Select(rosterInstance=>rosterInstance.RosterInstanceId).ToHashSet());
+                pair => pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToHashSet());
         }
 
         private void Apply(SynchronizationMetadataApplied @event)
@@ -402,6 +402,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private class Identity
         {
             public Guid Id { get; private set; }
+
             public decimal[] RosterVector { get; private set; }
 
             public Identity(Guid id, decimal[] rosterVector)
@@ -429,11 +430,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private class RosterCalculationData
         {
-            public RosterCalculationData(List<RosterIdentity> rosterInstancesToAdd, List<RosterIdentity> rosterInstancesToRemove, 
-                List<Identity> answersToRemoveByDecreasedRosterSize, 
-                List<Identity> initializedGroupsToBeDisabled, List<Identity> initializedGroupsToBeEnabled, 
-                List<Identity> initializedQuestionsToBeDisabled, List<Identity> initializedQuestionsToBeEnabled, 
-                List<Identity> initializedQuestionsToBeInvalid, 
+            public RosterCalculationData(List<RosterIdentity> rosterInstancesToAdd, List<RosterIdentity> rosterInstancesToRemove,
+                List<Identity> answersToRemoveByDecreasedRosterSize,
+                List<Identity> initializedGroupsToBeDisabled, List<Identity> initializedGroupsToBeEnabled,
+                List<Identity> initializedQuestionsToBeDisabled, List<Identity> initializedQuestionsToBeEnabled,
+                List<Identity> initializedQuestionsToBeInvalid,
                 Dictionary<decimal, string> titlesForRosterInstancesToAdd)
             {
 
@@ -532,7 +533,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(questionnaire);
 
             fixedRosterCalculationDatas.ForEach(calculatedRosterData => this.ApplyRosterEvents(calculatedRosterData));
-           
+
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
@@ -629,6 +630,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             questionId, questionType));
                 }
             }
+
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(questionnaire);
+            fixedRosterCalculationDatas.ForEach(calculatedRosterData => this.ApplyRosterEvents(calculatedRosterData));
+
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
@@ -1162,6 +1167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private string GetLinkedQuestionAnswerFormattedAsRosterTitle(Identity linkedQuestion)
         {
+            // set of answers that support expressions includes set of answers that may be linked to, so following line is correct
             object answer = this.GetEnabledQuestionAnswerSupportedInExpressions(linkedQuestion);
 
             return AnswerUtils.AnswerToString(answer);
@@ -1286,29 +1292,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            foreach (var mandatoryQuestion in questionnaire.GetAllMandatoryQuestions())
+            Func<Identity, bool> wasQuestionValidationPerformed = mandatoryQuestion => questionsDeclaredInvalid.Any(x => AreEqual(x, mandatoryQuestion)) || questionsDeclaredValid.Any(x => AreEqual(x, mandatoryQuestion));
+
+            IEnumerable<Identity> mandatoryQuestionInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(questionnaire.GetAllMandatoryQuestions(), EmptyRosterVector,
+                 questionnaire, this.GetRosterInstanceIds);
+
+
+            foreach (Identity mandatoryQuestion in mandatoryQuestionInstances)
             {
-                var availableRosterLevels = this.AvailableRosterLevelsForQuestion(questionnaire, mandatoryQuestion);
+                if (isQuestionDisabled(mandatoryQuestion) || wasQuestionValidationPerformed(mandatoryQuestion))
+                    continue;
 
-                foreach (var availableRosterLevel in availableRosterLevels)
+                string questionKey = ConvertIdAndRosterVectorToString(mandatoryQuestion.Id, mandatoryQuestion.RosterVector);
+
+                bool hasQuestionAnswer = this.answeredQuestions.Contains(questionKey);
+
+                switch (hasQuestionAnswer)
                 {
-                    Identity questionIdAtInterview = new Identity(mandatoryQuestion, availableRosterLevel);
-
-                    if (isQuestionDisabled(questionIdAtInterview))
-                        continue;
-
-                    if (questionsDeclaredInvalid.Contains(questionIdAtInterview) || questionsDeclaredInvalid.Contains(questionIdAtInterview))
-                        continue;
-
-                    string questionKey = ConvertIdAndRosterVectorToString(questionIdAtInterview.Id, questionIdAtInterview.RosterVector);
-
-                    if (!this.answeredQuestions.Contains(questionKey))
-                    {
-                        questionsDeclaredInvalid.Add(questionIdAtInterview);
-                        continue;
-                    }
-
-                    questionsDeclaredValid.Add(questionIdAtInterview);
+                    case true:
+                        questionsDeclaredValid.Add(mandatoryQuestion);
+                        break;
+                    case false:
+                        questionsDeclaredInvalid.Add(mandatoryQuestion);
+                        break;
                 }
             }
 
@@ -1734,8 +1740,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         TitlesWithIds = questionnaire.GetFixedRosterTitles(fixedRosterId)
                             .Select((title, index) => new
                             {
-                                Title = title, 
-                                RosterInstanceId = (decimal) index
+                                Title = title,
+                                RosterInstanceId = (decimal)index
                             })
                             .ToDictionary(x => x.RosterInstanceId, x => x.Title)
                     }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);

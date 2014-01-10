@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfQuestionView : PdfEntityView
     {
-        private static Regex conditionRegex = new Regex(@"\[([^\]]*)\]", RegexOptions.Compiled);
+        private static readonly Regex ConditionRegex = new Regex(@"\[([^\]]*)\]", RegexOptions.Compiled);
 
         public PdfQuestionView()
         {
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetReadableValidationExpression()
         {
-            if (this.ValidationExpression == null)
+            if (string.IsNullOrWhiteSpace(this.ValidationExpression))
             {
                 return null;
             }
@@ -31,22 +31,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         public string ValidationExpression { get; set; }
-
-        public string GetReadableConditionExpression()
-        {
-            if (string.IsNullOrEmpty(this.ConditionExpression))
-            {
-                return null;
-            }
-
-            return this.ReplaceGuidsWithQuestionNumbers(this.ConditionExpression);
-        }
-
+        
         public string ConditionExpression { get; set; }
 
         private string ReplaceGuidsWithQuestionNumbers(string expression)
         {
-            return conditionRegex.Replace(expression, match => {
+            return ConditionRegex.Replace(expression, match => {
                 Guid matchId = Guid.Empty;
                 if (Guid.TryParse(match.Groups[1].Value, out matchId))
                 {
@@ -67,25 +57,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool GetHasCondition()
         {
-            return !string.IsNullOrEmpty(this.GetReadableConditionExpression());
+            return !string.IsNullOrWhiteSpace(this.ConditionExpression);
         }
+
+        private PdfEntityView rootElement = null;
 
         private PdfEntityView GetRoot()
         {
-            var next = this.GetParent();
-            do
-            {
-                if (next.GetParent() != null)
-                {
-                    next = next.GetParent();
-                }
-                else
-                {
-                    return next;
-                }
-            } while (next != null);
+            if (rootElement != null) 
+                return rootElement;
 
-            return next;
+            PdfEntityView currentElement = this;
+
+            while (currentElement.GetParent() != null)
+            {
+                currentElement = currentElement.GetParent();
+            }
+            rootElement = currentElement;
+
+            return rootElement;
         }
 
         private string stringItemNumber = null;

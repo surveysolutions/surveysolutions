@@ -139,6 +139,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             item.RemoveQuestion(evnt.Payload.QuestionId);
+
+            item.RemoveHeadPropertiesFromRosters(evnt.Payload.QuestionId);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -240,6 +243,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 
+            if (result.Capital)
+                item.MoveHeadQuestionPropertiesToRoster(result.PublicKey, groupId);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -259,6 +265,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 
+            if (newQuestion.Capital)
+                item.MoveHeadQuestionPropertiesToRoster(question.PublicKey, null);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -274,6 +283,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             item.Insert(index, result, groupId);
 
             item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+
+            if (result.Capital)
+                item.MoveHeadQuestionPropertiesToRoster(result.PublicKey, groupId);
 
             this.UpdateQuestionnaire(evnt, item);
         }
