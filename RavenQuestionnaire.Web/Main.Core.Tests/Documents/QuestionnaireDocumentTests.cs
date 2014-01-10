@@ -61,8 +61,9 @@ namespace Main.Core.Tests.Documents
             var question1Id = Guid.NewGuid();
             var group1Id = Guid.NewGuid();
             var group2Id = Guid.NewGuid();
-            
-            var doc = CreateQuestionnaireDocumentWithTwoRostersAndTwoRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
+            var group3Id = Guid.NewGuid();
+
+            var doc = CreateQuestionnaireDocumentWithTreeRostersAndTwoRosterTitleQuestion(questionId, question1Id, group1Id, group2Id, group3Id);
 
             // Act
             doc.RemoveHeadPropertiesFromRosters(questionId);
@@ -73,16 +74,16 @@ namespace Main.Core.Tests.Documents
         }
 
         [Test]
-        public void MoveHeadQuestionPropertiesToRoster_when_headquestion_is_removed_then_allrosters_titleQuestionIds_are_CleanedUp()
+        public void MoveHeadQuestionPropertiesToRoster_when_headquestion_is_removed_then_allrosters_titleQuestionIds_are_Updated()
         {
             // Arrange
             var questionId = Guid.NewGuid();
             var question1Id = Guid.NewGuid();
             var group1Id = Guid.NewGuid();
             var group2Id = Guid.NewGuid();
+            var group3Id = Guid.NewGuid();
 
-
-            var doc = CreateQuestionnaireDocumentWithTwoRostersAndTwoRosterTitleQuestion(questionId, question1Id, group1Id, group2Id);
+            var doc = CreateQuestionnaireDocumentWithTreeRostersAndTwoRosterTitleQuestion(questionId, question1Id, group1Id, group2Id, group3Id);
 
             // Act
             doc.MoveHeadQuestionPropertiesToRoster(question1Id, group1Id);
@@ -92,8 +93,30 @@ namespace Main.Core.Tests.Documents
             Assert.That(doc.Find<IGroup>(x => x.PublicKey == group2Id).FirstOrDefault().RosterTitleQuestionId, Is.EqualTo(question1Id));
         }
 
+        [Test]
+        public void CheckIsQuestionHeadAndUpdateRosterProperties_When_head_question_moved_Then_allrosters_titleQuestionIds_are_Updated()
+        {
+            // Arrange
+            var questionId = Guid.NewGuid();
+            var question1Id = Guid.NewGuid();
+            var group1Id = Guid.NewGuid();
+            var group2Id = Guid.NewGuid();
+            var group3Id = Guid.NewGuid();
 
-        private QuestionnaireDocument CreateQuestionnaireDocumentWithTwoRostersAndTwoRosterTitleQuestion(Guid textQuestionId, Guid textQuestion1Id, Guid group1Id, Guid group2Id)
+            var doc = CreateQuestionnaireDocumentWithTreeRostersAndTwoRosterTitleQuestion(questionId, question1Id, group1Id, group2Id, group3Id);
+            doc.MoveItem(questionId, group3Id, 0);
+
+            // Act
+            doc.CheckIsQuestionHeadAndUpdateRosterProperties(questionId, group3Id);
+
+            // Assert
+            Assert.That(doc.Find<IGroup>(x => x.PublicKey == group2Id).FirstOrDefault().RosterTitleQuestionId, Is.Null);
+            Assert.That(doc.Find<IGroup>(x => x.PublicKey == group1Id).FirstOrDefault().RosterTitleQuestionId, Is.Null);
+
+            Assert.That(doc.Find<IGroup>(x => x.PublicKey == group3Id).FirstOrDefault().RosterTitleQuestionId, Is.EqualTo(questionId));
+        }
+
+        private QuestionnaireDocument CreateQuestionnaireDocumentWithTreeRostersAndTwoRosterTitleQuestion(Guid textQuestionId, Guid textQuestion1Id, Guid group1Id, Guid group2Id, Guid group3Id)
         {
             var doc = new QuestionnaireDocument();
             var chapter1 = new Group("Chapter 1") { PublicKey = Guid.NewGuid() };
@@ -102,10 +125,14 @@ namespace Main.Core.Tests.Documents
             //var textQuestionId = Guid.NewGuid();
 
             var numQuestion = new NumericQuestion("Numeric") { PublicKey = numQuestionId, MaxValue = 10 };
-            
-            var textQuestion = new TextQuestion("Text") { PublicKey = textQuestionId };
-            var textQuestion1 = new TextQuestion("Text") { PublicKey = textQuestion1Id };
-            
+
+            var numQuestion1Id = Guid.NewGuid();
+            //var textQuestionId = Guid.NewGuid();
+
+            var numQuestion1 = new NumericQuestion("Numeric") { PublicKey = numQuestion1Id, MaxValue = 10 };
+
+            var textQuestion = new TextQuestion("Text") { PublicKey = textQuestionId, Capital = true };
+            var textQuestion1 = new TextQuestion("Text") { PublicKey = textQuestion1Id, Capital = true };
 
             var group1 = new Group("G 1")
             {
@@ -121,12 +148,23 @@ namespace Main.Core.Tests.Documents
                 IsRoster = true, 
                 RosterSizeQuestionId = numQuestionId };
 
+            var group3 = new Group("G 3")
+            {
+                PublicKey = group3Id,
+                RosterTitleQuestionId = null,
+                IsRoster = true,
+                RosterSizeQuestionId = numQuestion1Id
+            };
+
             group1.Children.Add(textQuestion);
             group2.Children.Add(textQuestion1);
 
             chapter1.Children.Add(numQuestion);
+            chapter1.Children.Add(numQuestion1);
+
             chapter1.Children.Add(group1);
             chapter1.Children.Add(group2);
+            chapter1.Children.Add(group3);
             
             doc.Children.Add(chapter1);
 

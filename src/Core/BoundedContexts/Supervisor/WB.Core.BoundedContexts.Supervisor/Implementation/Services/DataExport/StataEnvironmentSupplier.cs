@@ -38,9 +38,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
             BuildLabelsForLevel(result, doContent);
 
-            doFiles.Add(result.LevelName, doContent);
+            doFiles.Add(GetDoFileNameByLevelName(result.LevelName), doContent);
 
             return primaryKeyColumnName;
+        }
+
+        private string GetDoFileNameByLevelName(string levelName, int level = 0)
+        {
+            string doFileName = level == 0 ? levelName : string.Concat(levelName, level);
+
+            return !this.doFiles.ContainsKey(doFileName) ? doFileName : GetDoFileNameByLevelName(levelName, ++level);
         }
 
         private static void BuildInsheet(string fileName, FileType type, StringBuilder doContent)

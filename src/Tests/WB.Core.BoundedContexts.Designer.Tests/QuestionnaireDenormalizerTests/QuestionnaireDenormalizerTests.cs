@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
             var innerDocument = CreateQuestionnaireDocument(questionnaireId);
 
-           innerDocument
+            innerDocument
                 .AddChapter(Guid.NewGuid())
                 .AddQuestion(questionId);
 

@@ -149,8 +149,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 foreach (var headQuestionId in rosterDescription.RosterIdToRosterTitleQuestionIdMap.Values)
                 {
-                    if (headQuestionId!=null)
-                        this.listOfHeadQuestionsMappedOnScope.Add(headQuestionId.QuestionId, rosterDescription.ScopeId);
+                    if (headQuestionId != null)
+                        this.listOfHeadQuestionsMappedOnScope[headQuestionId.QuestionId] = rosterDescription.ScopeId;
                 }
             }
         }
@@ -179,9 +179,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     question.SetAnswer(answeredQuestion.Answer);
                 }
 
-                if (!IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
-                    continue;
-                AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector);
+                if (IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
+                    AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector);
             }
         }
 
