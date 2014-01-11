@@ -10,23 +10,42 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     {
         private readonly char delimeter;
 
-        public IterviewExporter(FileType exportingFileType)
+        public IterviewExporter(/*FileType exportingFileType*/)
         {
-            this.delimeter = exportingFileType == FileType.Csv ? ',' : '\t';
+          //  this.delimeter = exportingFileType == FileType.Csv ? ',' : '\t';
+            this.delimeter = ',';
         }
 
-        public bool DoExport(InterviewDataExportLevelView items, string fileName)
+        public void AddRecord(string filePath, InterviewDataExportLevelView items)
         {
-            byte[] bytes = this.DoExportToStream(items);
-
-            using (FileStream fileStream = File.Create(fileName))
+            using (var fileStream = new FileStream(filePath, FileMode.Append))
+            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+            using (var writer = new CsvWriter(streamWriter))
             {
-                fileStream.Write(bytes, 0, bytes.Length);
+                writer.Configuration.Delimiter = this.delimeter.ToString();
+
+                foreach (var item in items.Records)
+                {
+                    writer.WriteField(item.InterviewId);
+                    writer.WriteField(item.RecordId);
+
+                    foreach (var exportedQuestion in item.Questions)
+                    {
+                        foreach (string itemValue in exportedQuestion.Answers)
+                        {
+                            writer.WriteField(itemValue);
+                        }
+                    }
+
+                    //      writer.WriteField(item.ParentRecordId.HasValue ? item.ParentRecordId.ToString() : string.Empty);
+                    writer.NextRecord();
+                }
+
+                streamWriter.Flush();
             }
-            return true;
         }
 
-        public byte[] DoExportToStream(InterviewDataExportLevelView items)
+        public byte[] CreateHeader(HeaderStructureForLevel header)
         {
             using (var memoryStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
@@ -34,51 +53,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             {
                 writer.Configuration.Delimiter = this.delimeter.ToString();
 
-               
+
                 writer.WriteField("InterviewId");
                 writer.WriteField("Id");
 
-                foreach (ExportedHeaderItem question in items.Header.HeaderItems.Values)
+                foreach (ExportedHeaderItem question in header.HeaderItems.Values)
                 {
                     foreach (var columnName in question.ColumnNames)
                     {
                         writer.WriteField(columnName);
                     }
                 }
-
-             //   writer.WriteField("ForeignKey");
                 writer.NextRecord();
-
-                foreach (var item in items.Records)
-                {
-                    writer.WriteField(item.InterviewId);
-                    writer.WriteField(item.RecordId);
-                    foreach (var headerItem in items.Header.HeaderItems.Values)
-                    {
-                        var question = item.Questions.FirstOrDefault(q => q.QuestionId == headerItem.PublicKey);
-                        if (question==null)
-                        {
-                            for (int i = 0; i < headerItem.ColumnNames.Count(); i++)
-                            {
-                                writer.WriteField(string.Empty);
-                            }
-
-                            continue;
-                        }
-                        foreach (string itemValue in question.Answers)
-                        {
-                            writer.WriteField(itemValue);
-                        }
-                    }
-
-              //      writer.WriteField(item.ParentRecordId.HasValue ? item.ParentRecordId.ToString() : string.Empty);
-                    writer.NextRecord();
-                }
-
                 streamWriter.Flush();
                 memoryStream.Position = 0;
                 return memoryStream.ToArray();
             }
         }
+
     }
 }
