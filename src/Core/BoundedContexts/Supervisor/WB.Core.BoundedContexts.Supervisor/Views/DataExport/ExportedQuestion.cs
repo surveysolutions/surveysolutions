@@ -13,6 +13,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
         }
 
+        public ExportedQuestion(Guid questionId, string[] answers)
+        {
+            QuestionId = questionId;
+            Answers = answers;
+        }
+
         public ExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
         {
             QuestionId = question.Id;
