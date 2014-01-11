@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
-    public class InterviewDataExportView
+    public class InterviewDataExportView : IView
     {
         public InterviewDataExportView(Guid templateId, long templateVersion, InterviewDataExportLevelView[] levels)
         {
