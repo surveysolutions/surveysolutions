@@ -125,7 +125,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             //assuming all groups were updated to roster
             var headQuestions = document.Find<AbstractQuestion>(q => q.Capital).ToList();
 
-            if (!headQuestions.Any()) return;
+            if (!headQuestions.Any()) 
+                return;
 
             document.ConnectChildrenWithParent();
             foreach (var headQuestion in headQuestions)
