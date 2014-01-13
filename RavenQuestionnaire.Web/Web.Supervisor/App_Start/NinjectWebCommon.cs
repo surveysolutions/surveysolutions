@@ -127,7 +127,7 @@ namespace Web.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
-                new SupervisorBoundedContextModule());
+                new SupervisorBoundedContextModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
