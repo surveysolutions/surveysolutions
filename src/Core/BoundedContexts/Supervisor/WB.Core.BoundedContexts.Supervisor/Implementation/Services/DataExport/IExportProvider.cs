@@ -1,9 +1,10 @@
+using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
     public interface IExportProvider<T>
     {
-        bool DoExport(T items, string fileName);
-
-        byte[] DoExportToStream(T items);
+        void AddRecord(string filePath, T items);
+        byte[] CreateHeader(HeaderStructureForLevel header);
     }
 }

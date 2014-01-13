@@ -74,6 +74,10 @@
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowTitleChanged_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_SingleOptionQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandler\InterviewExportedDataEventHandlerTestContext.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_created_from_template_containing_2_questions.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_with_1_answerd_questions_and_1_unananswered.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows.cs" />
     <Compile Include="EventHandlers\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
@@ -85,10 +89,6 @@
     <Compile Include="Views\ExportedHeaderCollectionTests\QuestionnaireExportStructureTestsContext.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_questionnaire_export_structure_from_questionnaire_containing_roster_max_2_rows_and_multy_option_linked___.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and__.cs" />
-    <Compile Include="Views\InterviewDataExportFactoryTestContext.cs" />
-    <Compile Include="Views\when_requesing_data_by_top_level_1_approved_not_empty_interviews_and_template_contains_1_answerd_questions_and_1_unananswered.cs" />
-    <Compile Include="Views\when_requesing_data_by_top_level_of_interview_with_2_approved_empty_interviews_and_template_contains_2_questions.cs" />
-    <Compile Include="Views\when_requesting_data_by_first_level_of_propagation_with_2_approved_interview_and_2levels_per_each_interview.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
