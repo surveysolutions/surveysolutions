@@ -681,11 +681,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, this.GetRosterInstanceIds, out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, answer, questionnaire, this.GetRosterInstanceIds,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.CalculateEnablementChanges(answeredQuestion, answer, questionnaire, getAnswer, this.GetRosterInstanceIds,
+                out groupsToBeDisabled, out groupsToBeEnabled, out questionsToBeDisabled, out questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -763,12 +760,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer, getRosterInstanceIds);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, getRosterInstanceIds,
-                out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, answer, questionnaire, getRosterInstanceIds,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.CalculateEnablementChanges(answeredQuestion, answer, questionnaire, getAnswer, getRosterInstanceIds,
+                out groupsToBeDisabled, out groupsToBeEnabled, out questionsToBeDisabled, out questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -833,12 +826,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, GetRosterInstanceIds,
-                out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, answer, questionnaire, this.GetRosterInstanceIds,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.CalculateEnablementChanges(answeredQuestion, answer, questionnaire, getAnswer, this.GetRosterInstanceIds,
+                out groupsToBeDisabled, out groupsToBeEnabled, out questionsToBeDisabled, out questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -895,11 +884,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, this.GetRosterInstanceIds, out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, answer, questionnaire, this.GetRosterInstanceIds,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.CalculateEnablementChanges(answeredQuestion, answer, questionnaire, getAnswer, this.GetRosterInstanceIds,
+                out groupsToBeDisabled, out groupsToBeEnabled, out questionsToBeDisabled, out questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -956,11 +942,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValue : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, this.GetRosterInstanceIds, out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, selectedValue, questionnaire, this.GetRosterInstanceIds,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.CalculateEnablementChanges(answeredQuestion, selectedValue, questionnaire, getAnswer, this.GetRosterInstanceIds,
+                out groupsToBeDisabled, out groupsToBeEnabled, out questionsToBeDisabled, out questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -1039,11 +1022,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var rosterCalculationData = this.GetRosterCalculationDataWithRosterTitles(questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, this.GetRosterInstanceIds, out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, selectedValues, questionnaire, this.GetRosterInstanceIds,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.CalculateEnablementChanges(answeredQuestion, selectedValues, questionnaire, getAnswer, getRosterInstanceIds,
+                out groupsToBeDisabled, out groupsToBeEnabled, out questionsToBeDisabled, out questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -1438,6 +1418,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
+
+
         private void ApplyRosterEvents(RosterCalculationData data)
         {
             data.RosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
@@ -1456,6 +1438,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             data.InitializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
             data.InitializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
         }
+
+
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
@@ -1730,6 +1714,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewStatus));
         }
 
+
+
+        private void CalculateEnablementChanges(Identity answeredQuestion, object answer, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], HashSet<decimal>> getRosterInstanceIds,
+            out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled, out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
+        {
+            this.DetermineCustomEnablementStateOfDependentGroups(
+                answeredQuestion, questionnaire, getAnswer, getRosterInstanceIds,
+                out groupsToBeDisabled, out groupsToBeEnabled);
+
+            this.DetermineCustomEnablementStateOfDependentQuestions(
+                answeredQuestion, answer, questionnaire, getRosterInstanceIds,
+                out questionsToBeDisabled, out questionsToBeEnabled);
+        }
+
+
         private static Dictionary<Guid, Dictionary<decimal, string>> CalculateFixedRosterData(IEnumerable<Guid> fixedRosterIds, IQuestionnaire questionnaire)
         {
             Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = fixedRosterIds
@@ -1747,7 +1747,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
             return rosterTitlesGroupedByRosterId;
         }
-
 
         private RosterCalculationData CalculateRosterData(
             List<Guid> rosterIds, decimal[] nearestToOuterRosterVector, HashSet<decimal> rosterInstanceIds, Dictionary<decimal, string> rosterTitles, IQuestionnaire questionnaire,
