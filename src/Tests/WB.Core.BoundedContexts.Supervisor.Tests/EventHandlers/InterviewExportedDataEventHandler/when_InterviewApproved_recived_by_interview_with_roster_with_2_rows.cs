@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
+namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandler
 {
-    class when_requesting_data_by_first_level_of_propagation_with_2_approved_interview_and_2levels_per_each_interview : InterviewDataExportFactoryTestContext
+    class when_InterviewApproved_recived_by_interview_with_roster_with_2_rows : InterviewExportedDataEventHandlerTestContext
     {
         Establish context = () =>
         {
@@ -32,31 +28,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
             questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
-            interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
+            interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
-                CreateInterviewDataWith2PropagatedLevels, 2);
+                CreateInterviewDataWith2PropagatedLevels);
         };
 
         Because of = () =>
-            result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(questionnarie.PublicKey, 1));
+            result = interviewExportedDataEventHandler.Create(CreatePublishableEvent());
 
         It should_records_count_equals_4 = () =>
-           GetLevel(result,propagationScopeKey).Records.Length.ShouldEqual(4);
+           GetLevel(result,propagationScopeKey).Records.Length.ShouldEqual(2);
 
         It should_first_record_id_equals_0 = () =>
            GetLevel(result, propagationScopeKey).Records[0].RecordId.ShouldEqual(0);
 
         It should_second_record_id_equals_1 = () =>
            GetLevel(result, propagationScopeKey).Records[1].RecordId.ShouldEqual(1);
-
-        It should_third_record_id_equals_0 = () =>
-           GetLevel(result, propagationScopeKey).Records[2].RecordId.ShouldEqual(0);
-
-        It should_forth_record_id_equals_1 = () =>
-           GetLevel(result, propagationScopeKey).Records[3].RecordId.ShouldEqual(1);
-
-        It should_header_column_count_be_equal_2 = () =>
-           GetLevel(result, propagationScopeKey).Header.HeaderItems.Count().ShouldEqual(2);
 
         private static QuestionnaireDocument CreateQuestionnaireDocumentWith1PropagationLevel()
         {
@@ -79,27 +66,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelId == levelId);
         }
 
-        private static InterviewExportedData CreateInterviewDataWith2PropagatedLevels()
+        private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
-            InterviewExportedData interview = CreateInterviewData();
-            interview.InterviewDataByLevels = new InterviewExportedLevel[levelCount];
+            InterviewData interview = CreateInterviewData();
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new decimal[1] { i };
-                var exportedQuestionsByLevel = new ExportedQuestion[variableNameAndQuestionId.Count];
+                var newLevel = new InterviewLevel(propagationScopeKey, null, vector);
+                interview.Levels.Add(string.Join(",", vector), newLevel);
 
-                var j = 0;
-                foreach (var question in variableNameAndQuestionId)
+                foreach (var questionId in variableNameAndQuestionId)
                 {
-                    exportedQuestionsByLevel[j] = CreateExportedQuestion(question.Value, "some answer");
-                    j++;
+                    var question = newLevel.GetOrCreateQuestion(questionId.Value);
+                    question.Answer = "some answer";
                 }
-                interview.InterviewDataByLevels[i] = new InterviewExportedLevel(propagationScopeKey, vector, exportedQuestionsByLevel);
             }
             return interview;
         }
 
-        private static InterviewDataExportFactory interviewDataExportFactory;
+        private static EventHandler.InterviewExportedDataEventHandler interviewExportedDataEventHandler;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid propagatedGroup;
