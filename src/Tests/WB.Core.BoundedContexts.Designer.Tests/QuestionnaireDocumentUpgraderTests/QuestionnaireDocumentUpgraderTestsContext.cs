@@ -74,5 +74,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
                 Triggers = triggers ?? new List<Guid>(),
             };
         }
+
+        protected static TextQuestion CreateHeadQuestion(Guid? questionId = null,
+            string title = "Head Question Title X")
+        {
+            return new TextQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionText = title,
+                QuestionType = QuestionType.Text,
+                Capital = true
+            };
+        }
     }
 }

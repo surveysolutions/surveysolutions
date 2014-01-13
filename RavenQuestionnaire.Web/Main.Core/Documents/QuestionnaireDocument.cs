@@ -485,9 +485,7 @@ namespace Main.Core.Documents
         public void CheckIsQuestionHeadAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
         {
             IQuestion item = this.GetItemOrLogWarning(itemToCheckId) as IQuestion;
-            if (item == null)
-                return;
-            if (item.Capital)
+            if (item != null && item.Capital)
             {
                 RemoveHeadPropertiesFromRosters(itemToCheckId);
                 MoveHeadQuestionPropertiesToRoster(itemToCheckId, groupPublicKey);
@@ -500,8 +498,6 @@ namespace Main.Core.Documents
             if (groupPublicKey == null)
             {
                 IComposite questionParent = this.GetParentOfQuestion(questionId);
-                if (questionParent == null)
-                    return;
                 groupPublicKey = questionParent.PublicKey;
             }
 
