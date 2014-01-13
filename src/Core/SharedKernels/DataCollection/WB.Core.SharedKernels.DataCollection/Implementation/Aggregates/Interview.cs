@@ -729,10 +729,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -818,10 +815,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -879,10 +873,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -937,10 +928,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -997,10 +985,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -1085,10 +1070,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
             answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
@@ -1442,6 +1424,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
+
+        private void ApplyEnablementChangesEvents(EnablementChanges enablementChanges)
+        {
+            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
+            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
+            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
+            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+        }
 
         private void ApplyRosterEvents(RosterCalculationData data)
         {
