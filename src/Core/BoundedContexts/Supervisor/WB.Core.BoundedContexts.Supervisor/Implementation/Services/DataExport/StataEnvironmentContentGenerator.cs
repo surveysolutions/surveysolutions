@@ -11,21 +11,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     internal class StataEnvironmentContentGenerator
     {
         private readonly HeaderStructureForLevel headerStructureForLevel;
-        private readonly string levelFileName;
-        private readonly string levelFileNameWithExtension;
-        private readonly FileType levelFileType;
+        private readonly string doFileName;
+        private readonly string dataFileName;
 
-        public StataEnvironmentContentGenerator(HeaderStructureForLevel headerStructureForLevel, string levelFileName, FileType levelFileType, string levelFileNameWithExtension)
+        public StataEnvironmentContentGenerator(HeaderStructureForLevel headerStructureForLevel, string doFileName, string dataFileName)
         {
             this.headerStructureForLevel = headerStructureForLevel;
-            this.levelFileName = levelFileName;
-            this.levelFileType = levelFileType;
-            this.levelFileNameWithExtension = levelFileNameWithExtension;
+            this.doFileName = doFileName;
+            this.dataFileName = dataFileName;
         }
 
         public string NameOfAdditionalFile
         {
-            get { return string.Format("{0}.do", levelFileName); }
+            get { return string.Format("{0}.do", doFileName); }
         }
 
         public byte[] ContentOfAdditionalFile
@@ -34,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             {
                 var doContent = new StringBuilder();
 
-                BuildInsheet(levelFileNameWithExtension, levelFileType, doContent);
+                BuildInsheet(dataFileName, doContent);
 
                 BuildLabelsForLevel(headerStructureForLevel, doContent);
 
@@ -42,18 +40,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
                 return new UTF8Encoding().GetBytes(doContent.ToString().ToLower());
             }
-
-        private string GetDoFileNameByLevelName(string levelName, int level = 0)
-        {
-            string doFileName = level == 0 ? levelName : string.Concat(levelName, level);
-
-            return !this.doFiles.ContainsKey(doFileName) ? doFileName : GetDoFileNameByLevelName(levelName, ++level);
         }
 
-        private static void BuildInsheet(string fileName, FileType type, StringBuilder doContent)
+        private static void BuildInsheet(string fileName, StringBuilder doContent)
         {
             doContent.AppendLine(
-                string.Format("insheet using \"{0}\", {1}", fileName, type == FileType.Csv ? "comma" : "tab"));
+                string.Format("insheet using \"{0}\", comma", fileName));
         }
 
         protected void BuildLabelsForLevel(HeaderStructureForLevel headerStructureForLevel, StringBuilder doContent)

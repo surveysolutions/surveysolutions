@@ -68,9 +68,9 @@ namespace Web.Supervisor.Controllers
         }
 
         [Authorize(Roles = "Headquarter")]
-        public void GetExportedDataAsync(Guid id, long version, string type)
+        public void GetExportedDataAsync(Guid id, long version)
         {
-            if (id == Guid.Empty || string.IsNullOrEmpty(type))
+            if (id == Guid.Empty)
             {
                 throw new HttpException(404, "Invalid query string parameters");
             }
@@ -81,7 +81,7 @@ namespace Web.Supervisor.Controllers
                 {
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedCompressedData(id, version, type);
+                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedCompressedData(id, version);
                     }
                     catch (Exception exc)
                     {
