@@ -323,6 +323,7 @@
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
+    <Compile Include="Code\LocalizationExtensions.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
@@ -330,6 +331,9 @@
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
+    <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
+    <Compile Include="Models\HistoryItemView.cs" />
+    <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
@@ -397,6 +401,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Properties\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Attributes\CompressContentAttribute .cs" />
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
@@ -467,7 +476,6 @@
     <Content Include="Scripts\moment+langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\viewmodels\pages\interviewchangestate.js" />
     <Content Include="Scripts\viewmodels\pages\interview\details\config.js" />
     <Content Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
     <Content Include="Scripts\viewmodels\pages\interview\details\mapper.js" />
@@ -734,7 +742,6 @@
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
-    <Content Include="Views\Interview\ChangeState.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml">
       <SubType>
       </SubType>
@@ -748,6 +755,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\DesignerPublicService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

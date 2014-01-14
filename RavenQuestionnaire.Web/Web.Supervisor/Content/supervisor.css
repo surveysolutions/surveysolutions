@@ -4599,3 +4599,14 @@ a.pseudo-link:hover {
     font-size: 18px;
     text-align: right;
 }
+#statesHistoryPopover {
+    float: right;
+    top: 35px;
+    right: 10px;
+    left: inherit;
+    width: 650px;
+    max-width: 650px;
+}
+#statesHistoryPopover .arrow {
+    left: 95%;
+}

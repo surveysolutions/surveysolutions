@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Core.Supervisor.Views.ChangeStatus;
 using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Interviews;
 using Main.Core.View;
@@ -6,6 +7,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using Web.Supervisor.Models;
+using System.Linq;
 
 namespace Web.Supervisor.Controllers
 {
@@ -13,14 +15,17 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
         private readonly IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory;
+        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
 
         public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
                                       IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
-                                      IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory)
+                                      IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory,
+                                      IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory)
             : base(commandService, globalInfo, logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.teamInterviewViewFactory = teamInterviewViewFactory;
+            this.changeStatusFactory = changeStatusFactory;
         }
 
         [HttpPost]
@@ -70,6 +75,23 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.teamInterviewViewFactory.Load(input);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Supervisor")]
+        public InverviewChangeStateHistoryView ChangeStateHistory(ChangeStateHistoryViewModel data)
+        {
+            return new InverviewChangeStateHistoryView()
+            {
+                HistoryItems =
+                    this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = data.InterviewId })
+                        .StatusHistory.Select(x => new HistoryItemView()
+                        {
+                            Comment = x.Comment,
+                            Date = x.Date.ToShortDateString(),
+                            State = x.Status.ToLocalizeString()
+                        })
+            };
         }
     }
 }
