@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class InterviewDataExportRecord 
     {
-        public InterviewDataExportRecord(Guid interviewId, int recordId, decimal? parentLevelId,
+        public InterviewDataExportRecord(Guid interviewId, decimal recordId, decimal? parentLevelId,
             ExportedQuestion[] questions)
         {
             InterviewId = interviewId;
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         }
 
         public Guid InterviewId { get; private set; }
-        public int RecordId { get; private set; }
+        public decimal RecordId { get; private set; }
         public decimal? ParentRecordId { get; private set; }
         public ExportedQuestion[] Questions { get; private set; }
     }
