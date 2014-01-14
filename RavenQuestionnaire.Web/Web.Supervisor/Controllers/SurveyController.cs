@@ -51,16 +51,6 @@ namespace Web.Supervisor.Controllers
             return this.View(this.Filters());
         }
 
-        public ActionResult InterviewStatusChanged(string statchange)
-        {
-            if (!string.IsNullOrWhiteSpace(statchange))
-            {
-                this.Success(string.Format(@"Status was successfully changed. Interview is {0}", statchange));
-            }
-
-            return this.RedirectToAction("Interviews");
-        }
-
         public ActionResult TeamMembersAndStatuses()
         {
             this.ViewBag.ActivePage = MenuItem.Summary;

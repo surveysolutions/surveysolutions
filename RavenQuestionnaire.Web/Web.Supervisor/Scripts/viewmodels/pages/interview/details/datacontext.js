@@ -167,6 +167,22 @@
             comment: args.comment
         };
     };
+    
+    commands[config.commands.approveInterviewCommand] = function (args) {
+        return {
+            interviewId: questionnaire.id(),
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+    
+    commands[config.commands.rejectInterviewCommand] = function (args) {
+        return {
+            interviewId: questionnaire.id(),
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
 
     var getCommand = function(commandName, args) {
         return {
