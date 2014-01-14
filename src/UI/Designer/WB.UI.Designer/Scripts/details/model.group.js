@@ -36,14 +36,22 @@
                 });
                 self.rosterFixedTitles = ko.observable('').extend({
                     required: {
-                        onlyIf: function () {
+                        onlyIf: function() {
                             if (self.isRosterSizeSourceFixedTitles()) {
                                 self.rosterFixedTitles.valueHasMutated();
                                 return true;
                             }
                             return false;
                         }
-                    }
+                    },
+                    validation: [
+                        {
+                            validator: function(val) {
+                                var arrayOfFixedTitles = val.split("\n");
+                                return arrayOfFixedTitles.length <= 250;
+                            },
+                            message: 'Number of fixed roster titles could not be more than 250'
+                        }]
                 });
                 
                 self.allowedQuestions = ko.observableArray([]);

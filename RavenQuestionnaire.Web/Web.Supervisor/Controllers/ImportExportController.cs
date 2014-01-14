@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -67,9 +68,9 @@ namespace Web.Supervisor.Controllers
         }
 
         [Authorize(Roles = "Headquarter")]
-        public void GetExportedDataAsync(Guid id,long version, string type)
+        public void GetExportedDataAsync(Guid id, long version)
         {
-            if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
+            if (id == Guid.Empty)
             {
                 throw new HttpException(404, "Invalid query string parameters");
             }
@@ -77,24 +78,23 @@ namespace Web.Supervisor.Controllers
             AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
                 () =>
+                {
+                    try
                     {
-                        try
-                        {
-                            this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, version, type);
-                        }
-                        catch (Exception exc)
-                        {
-                            logger.Error("Error occurred during export. " + exc.Message, exc);
-                            this.AsyncManager.Parameters["result"] = null;
-                        }
-                    });
+                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedCompressedData(id, version);
+                    }
+                    catch (Exception exc)
+                    {
+                        logger.Error("Error occurred during export. " + exc.Message, exc);
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
         }
 
-        public ActionResult GetExportedDataCompleted(Dictionary<string, byte[]> result)
+        public ActionResult GetExportedDataCompleted(string result)
         {
-            return this.File(ZipFileData.ExportInternal(result, string.Format("exported{0}.zip", DateTime.Now.ToLongTimeString())), "application/zip", "data.zip");
+            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
-
 
         public void BackupAsync(Guid syncKey)
         {
