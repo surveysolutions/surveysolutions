@@ -134,9 +134,9 @@
                     title: "Can't move question",
                     text: "You can't move a pre-filled question into a roster"
                 },
-                cantMoveAutoQuestionIntoAutoGroup: {
+                cantMoveRosterSizeQuestionIntoRosterGroup: {
                     title: "Can't move question",
-                    text: "You can't move an roster size question into a roster"
+                    text: "You can't move roster size question into a roster group"
                 },
                 cantMoveRosterTitleQuestion: {
                     title: "Can't move question",

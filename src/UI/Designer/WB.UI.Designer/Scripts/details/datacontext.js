@@ -227,6 +227,13 @@
             }
             return 0;
         };
+        
+
+        questions.isRosterSizeQuestion = function (questionId) {
+            return _.any(groups.getPropagateableGroups(), function (group) {
+                return group.rosterSizeQuestion() == questionId;
+            });
+        };
 
         var commands = {};
 
