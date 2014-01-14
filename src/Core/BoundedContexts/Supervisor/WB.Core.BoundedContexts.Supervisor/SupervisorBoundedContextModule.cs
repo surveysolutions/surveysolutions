@@ -34,9 +34,12 @@ namespace WB.Core.BoundedContexts.Supervisor
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IDataExportService>().To<DataExportService>().WithConstructorArgument("folderPath", currentFolderPath);
-            this.Bind<IExportProvider<InterviewDataExportLevelView>>().To<IterviewExporter>();
+
             this.Unbind<IReadSideRepositoryWriter<InterviewDataExportView>>();
             this.Bind<IReadSideRepositoryWriter<InterviewDataExportView>>().To<CsvInterviewDataExportViewWriter>();
+
+            this.Unbind<IReadSideRepositoryWriter<QuestionnaireExportStructure>>();
+            this.Bind<IReadSideRepositoryWriter<QuestionnaireExportStructure>>().To<FileBaseQuestionnaireExportStructureWriter>().WithConstructorArgument("folderPath", currentFolderPath);
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 

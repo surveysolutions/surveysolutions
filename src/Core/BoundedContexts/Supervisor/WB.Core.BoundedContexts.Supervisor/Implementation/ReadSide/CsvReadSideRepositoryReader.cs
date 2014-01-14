@@ -10,21 +10,20 @@ using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 {
     internal class CsvInterviewDataExportViewWriter : IReadSideRepositoryWriter<InterviewDataExportView>
     {
         private readonly IDataExportService dataExportService;
-        private readonly IterviewExporter interviewExporter;
 
         public CsvInterviewDataExportViewWriter(IDataExportService dataExportService)
         {
             this.dataExportService = dataExportService;
-            this.interviewExporter = new IterviewExporter();
         }
 
-        public InterviewDataExportView GetById(Guid id)
+        InterviewDataExportView IReadSideRepositoryWriter<InterviewDataExportView>.GetById(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -36,13 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 
         public void Store(InterviewDataExportView view, Guid id)
         {
-            var levelIdToDataFilePathMap = dataExportService.GetLevelIdToDataFilePathMap(view);
-            foreach (var level in view.Levels)
-            {
-                interviewExporter.AddRecord(
-                    levelIdToDataFilePathMap[level.LevelId],
-                    level);
-            }
+            dataExportService.AddExportedDataByInterview(view);
         }
     }
 }
