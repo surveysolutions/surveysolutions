@@ -8,6 +8,7 @@ using Ionic.Zlib;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -17,22 +18,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     {
         private const string FolderName = "ExportedData";
         private readonly string path;
-        private readonly FileType fileType = FileType.Csv;
+        private readonly CsvInterviewExporter csvInterviewExporter = new CsvInterviewExporter();
 
-        public DataExportService(string folderPath)
+        public DataExportService(IReadSideRepositoryCleanerRegistry cleanerRegistry, string folderPath)
         {
+            cleanerRegistry.Register(this);
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
         }
 
-        public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version, string type)
+        public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version)
         {
-            var dataDirectoryPath = GetFolderPath(questionnaireId, version);
+            var dataDirectoryPath = GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
 
-            if (!Directory.Exists(dataDirectoryPath))
-                return string.Empty;
+            ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, version, dataDirectoryPath);
+
             var archiveFilePath = Path.Combine(path, string.Format("{0}.zip", Path.GetFileName(dataDirectoryPath)));
+
             if (File.Exists(archiveFilePath))
                 File.Delete(archiveFilePath);
 
@@ -45,66 +48,69 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return archiveFilePath;
         }
 
-        public Dictionary<Guid, string> GetLevelIdToDataFilePathMap(InterviewDataExportView interviewDataExportView)
+        public void CreateExportedDataStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure)
         {
-            var dataFolderForTemplatePath = GetFolderPath(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
-            var result = new Dictionary<Guid, string>();
-            var createdFileNames = new HashSet<string>();
-            foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
-            {
-                string fileName = GetName(interviewDataExportLevelView.LevelName, createdFileNames, 0);
-                var dataFileNameWithExtension = string.Format("{0}.{1}", fileName, this.GetFileExtension(fileType));
-                result[interviewDataExportLevelView.LevelId]=Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension);
-                createdFileNames.Add(fileName);
-            }
-            return result;
-        }
-
-        public void CreateDataFolderForTemplate(QuestionnaireExportStructure questionnaireExportStructure)
-        {
-            var dataFolderForTemplatePath = GetFolderPath(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
+            var dataFolderForTemplatePath = GetFolderPathOfDataByQuestionnaire(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
+            
             if (Directory.Exists(dataFolderForTemplatePath))
                 Directory.Delete(dataFolderForTemplatePath, true);
-         
             Directory.CreateDirectory(dataFolderForTemplatePath);
 
             var createdFileNames = new HashSet<string>();
-            var interviewExporter = new IterviewExporter();
 
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap)
             {
-                string fileName = GetName(headerStructureForLevel.Value.LevelName, createdFileNames, 0);
+                string fileName = CreateValidFileName(headerStructureForLevel.Value.LevelName, createdFileNames, 0);
                 createdFileNames.Add(fileName);
-                var dataFileNameWithExtension = string.Format("{0}.{1}", fileName, this.GetFileExtension(fileType));
+                var dataFileNameWithExtension = string.Format("{0}.csv", fileName);
                 var stataContent = new StataEnvironmentContentGenerator(headerStructureForLevel.Value, fileName,
-                    fileType,
                     dataFileNameWithExtension);
 
                 File.WriteAllBytes(Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension),
-                    interviewExporter.CreateHeader(headerStructureForLevel.Value));
+                    csvInterviewExporter.CreateHeader(headerStructureForLevel.Value));
                 File.WriteAllBytes(Path.Combine(dataFolderForTemplatePath, stataContent.NameOfAdditionalFile),
                     stataContent.ContentOfAdditionalFile);
             }
         }
 
-        private string GetFolderPath(Guid questionnaireId, long version)
+        public void DeleteExportedData(Guid questionnaireId, long version)
         {
-            return Path.Combine(path, GetFolderName(questionnaireId, version));
+            var dataFolderForTemplatePath = GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+            if (Directory.Exists(dataFolderForTemplatePath))
+                Directory.Delete(dataFolderForTemplatePath, true);
         }
 
-        private string GetFolderName(Guid questionnaireId, long version)
+        public void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView)
         {
-            return string.Format("exported_data_{0}_{1}", questionnaireId, version);
+            var dataFolderForTemplatePath = GetFolderPathOfDataByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
+
+            ThrowArgumentExceptionIfDataFolderMissing(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion, dataFolderForTemplatePath);
+
+            var createdFileNames = new HashSet<string>();
+            foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
+            {
+                string fileName = CreateValidFileName(interviewDataExportLevelView.LevelName, createdFileNames, 0);
+                var dataFileNameWithExtension = string.Format("{0}.csv", fileName);
+                var pathToLevelDataFile = Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension);
+                csvInterviewExporter.AddRecord(pathToLevelDataFile,interviewDataExportLevelView);
+                createdFileNames.Add(fileName);
+            }
         }
 
-        private FileType GetFileTypeOrThrow(string type)
+        private void ThrowArgumentExceptionIfDataFolderMissing(Guid questionnaireId, long version, string dataDirectoryPath)
         {
-            if (type != InterviewExportConstants.CSVFORMAT && type != InterviewExportConstants.TABFORMAT)
-                throw new InvalidOperationException("file type doesn't support");
-            return type == InterviewExportConstants.CSVFORMAT ? FileType.Csv : FileType.Tab;
+            if (!Directory.Exists(dataDirectoryPath))
+                throw new ArgumentException(
+                    string.Format("data files are absent for questionnaire with id '{0}' and version '{1}'",
+                        questionnaireId, version));
         }
 
-        protected string GetName(string name, HashSet<string> createdFileNames, int i)
+        private string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
+        {
+            return Path.Combine(path, string.Format("exported_data_{0}_{1}", questionnaireId, version));
+        }
+
+        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i)
         {
             string fileNameWithoutInvalidFileNameChars = Path.GetInvalidFileNameChars()
                                                              .Aggregate(name, (current, c) => current.Replace(c, '_'));
@@ -115,24 +121,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
             return !createdFileNames.Contains(validFileName)
                        ? validFileName
-                       : this.GetName(name, createdFileNames, i + 1);
+                       : this.CreateValidFileName(name, createdFileNames, i + 1);
         }
 
-        protected string GetFileExtension(FileType type)
-        {
-            return type == FileType.Csv ? InterviewExportConstants.CSVFORMAT : InterviewExportConstants.TABFORMAT;
-        }
-
-        protected string RemoveNonAscii(string s)
+        private string RemoveNonAscii(string s)
         {
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }
 
-        public string MakeValidFileName(string name)
+        private string MakeValidFileName(string name)
         {
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
             return Regex.Replace(name, invalidReStr, "_");
+        }
+
+        public void Clear()
+        {
+            Array.ForEach(Directory.GetFiles(path), File.Delete);
         }
     }
 }

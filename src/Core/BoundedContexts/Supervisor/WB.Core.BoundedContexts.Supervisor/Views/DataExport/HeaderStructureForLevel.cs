@@ -11,9 +11,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class HeaderStructureForLevel
     {
-        public Guid LevelId { get; private set; }
-        public string LevelName { get; private set; }
-        public IDictionary<Guid, ExportedHeaderItem> HeaderItems { get; private set; }
+        public Guid LevelId { get; set; }
+        public string LevelName { get; set; }
+        public IDictionary<Guid, ExportedHeaderItem> HeaderItems { get; set; }
 
         public HeaderStructureForLevel()
         {

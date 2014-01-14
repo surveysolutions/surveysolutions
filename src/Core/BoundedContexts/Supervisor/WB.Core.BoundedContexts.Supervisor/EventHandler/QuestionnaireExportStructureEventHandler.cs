@@ -16,10 +16,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     public class QuestionnaireExportStructureEventHandler : AbstractFunctionalEventHandler<QuestionnaireExportStructure>,
         ICreateHandler<QuestionnaireExportStructure, TemplateImported>
     {
-        public QuestionnaireExportStructureEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportService dataExportService)
+        public QuestionnaireExportStructureEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter)
             : base(readsideRepositoryWriter)
         {
-            this.dataExportService = dataExportService;
         }
 
         public override Type[] UsesViews
@@ -29,11 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public QuestionnaireExportStructure Create(IPublishedEvent<TemplateImported> evnt)
         {
-            var result = new QuestionnaireExportStructure(evnt.Payload.Source, evnt.EventSequence);
-            dataExportService.CreateDataFolderForTemplate(result);
-            return result;
+            return new QuestionnaireExportStructure(evnt.Payload.Source, evnt.EventSequence);
         }
-
-        private readonly IDataExportService dataExportService;
     }
 }

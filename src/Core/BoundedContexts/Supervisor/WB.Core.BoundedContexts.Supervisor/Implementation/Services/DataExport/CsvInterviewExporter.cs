@@ -6,15 +6,9 @@ using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class IterviewExporter : IExportProvider<InterviewDataExportLevelView>
+    internal class CsvInterviewExporter
     {
-        private readonly char delimeter;
-
-        public IterviewExporter(/*FileType exportingFileType*/)
-        {
-          //  this.delimeter = exportingFileType == FileType.Csv ? ',' : '\t';
-            this.delimeter = ',';
-        }
+        private readonly string delimiter = ",";
 
         public void AddRecord(string filePath, InterviewDataExportLevelView items)
         {
@@ -22,7 +16,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
-                writer.Configuration.Delimiter = this.delimeter.ToString();
+                writer.Configuration.Delimiter = delimiter;
 
                 foreach (var item in items.Records)
                 {
@@ -51,8 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
-                writer.Configuration.Delimiter = this.delimeter.ToString();
-
+                writer.Configuration.Delimiter = this.delimiter;
 
                 writer.WriteField("InterviewId");
                 writer.WriteField("Id");
@@ -64,12 +57,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                         writer.WriteField(columnName);
                     }
                 }
+
                 writer.NextRecord();
                 streamWriter.Flush();
                 memoryStream.Position = 0;
                 return memoryStream.ToArray();
             }
         }
-
     }
 }
