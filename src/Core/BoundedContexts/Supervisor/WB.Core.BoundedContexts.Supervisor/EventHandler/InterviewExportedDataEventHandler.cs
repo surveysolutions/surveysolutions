@@ -56,20 +56,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
-            int recordId = 0;
-
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelId);
 
             foreach (var dataByLevel in interviewDataByLevels)
             {
+                decimal recordId = dataByLevel.RosterVector.Length == 0 ? 0 : dataByLevel.RosterVector.Last();
+
 #warning parentid is always null
-                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, null, GetQuestionsFroExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
-                if (headerStructureForLevel.LevelId != interview.QuestionnaireId) recordId++;
+                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, null,
+                    GetQuestionsFroExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
             }
-
-            //increase only in case of top level, if I increase record index inside roaster, linked questions data would be broken
-            recordId = headerStructureForLevel.LevelId == interview.QuestionnaireId ? recordId + 1 : 0;
-
 
             return dataRecords.ToArray();
         }
