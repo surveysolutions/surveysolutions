@@ -10,7 +10,8 @@
                 "Numeric": "Numeric",
                 "DateTime": "DateTime",
                 "Text": "Text",
-                "GpsCoordinates": "GpsCoordinates"
+                "GpsCoordinates": "GpsCoordinates",
+                "MultiAnswer": "MultiAnswer"
             },
             rosterSizeSourceTypes = {
                 "FixedTitles": "FixedTitles",
@@ -48,6 +49,10 @@
                 {
                     key: "GpsCoordinates",
                     value: "Geo Location"
+                },
+                {
+                    key: "MultiAnswer",
+                    value: "MultiAnswer"
                 }
             ],
             questionScopes = {
