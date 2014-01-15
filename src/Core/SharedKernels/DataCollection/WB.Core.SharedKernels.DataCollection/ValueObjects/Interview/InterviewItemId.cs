@@ -93,7 +93,13 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             {
                 return "0";
             }
+            var possibleSeparators = new char[] { ',', '.' };
+
             var decimalString = decimalValue.ToString();
+
+            if (!possibleSeparators.Any(separator => decimalString.Contains(separator)))
+                return decimalString;
+
             decimalString = decimalString.TrimEnd('0');
             decimalString = decimalString.TrimEnd(',', '.');
             return decimalString;
