@@ -397,6 +397,7 @@
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
+                case "MultiAnswer":
                     break;
             }
             return command;

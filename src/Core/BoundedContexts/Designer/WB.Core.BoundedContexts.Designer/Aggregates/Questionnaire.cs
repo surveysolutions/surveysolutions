@@ -36,7 +36,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.DateTime,
             QuestionType.Text,
             QuestionType.AutoPropagate,
-            QuestionType.GpsCoordinates
+            QuestionType.GpsCoordinates,
+            QuestionType.MultiAnswer
         };
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
