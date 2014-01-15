@@ -79,6 +79,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 case QuestionType.GpsCoordinates:
                     return new GpsCoordinateQuestion();
 
+                case QuestionType.MultiAnswer:
+                    return new MultiAnswerQuestion();
+
                 default:
                     throw new NotSupportedException(string.Format("Question type is not supported: {0}", type));
             }
