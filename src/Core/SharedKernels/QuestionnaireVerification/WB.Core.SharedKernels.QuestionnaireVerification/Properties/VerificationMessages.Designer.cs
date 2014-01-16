@@ -376,5 +376,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0041_MultiAnswerQuestionCannotCustomValidation", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MaxAnswerCount cannot be more than 40.
+        /// </summary>
+        internal static string WB0042_MultiAnswerQuestionMaxAnswerInRange1And40 {
+            get {
+                return ResourceManager.GetString("WB0042_MultiAnswerQuestionMaxAnswerInRange1And40", resourceCulture);
+            }
+        }
     }
 }
