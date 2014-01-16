@@ -57,16 +57,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                     question.QuestionType, question.QuestionText));
         }
 
-        public Guid PublicKey { get; private set; }
-        public QuestionType QuestionType { get; private set; }
-        public string[] ColumnNames { get; private set; }
-        public string[] Titles { get; private set; }
-        public string VariableName { get; private set; }
-        public Dictionary<Guid, LabelItem> Labels { get; private set; }}
+        public Guid PublicKey { get; set; }
+        public QuestionType QuestionType { get; set; }
+        public string[] ColumnNames { get; set; }
+        public string[] Titles { get; set; }
+        public string VariableName { get; set; }
+        public Dictionary<Guid, LabelItem> Labels { get; set; }}
 
 
     public class LabelItem
     {
+        public LabelItem() {}
+
         public LabelItem(IAnswer answer)
         {
             PublicKey = answer.PublicKey;
@@ -74,9 +76,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             Title = answer.AnswerText;
         }
 
-        public Guid PublicKey { get; private set; }
-        public string Caption { get; private set; }
-        public string Title { get; private set; }
+        public Guid PublicKey { get; set; }
+        public string Caption { get; set; }
+        public string Title { get; set; }
     }
 
 }

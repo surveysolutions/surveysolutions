@@ -12,22 +12,17 @@ using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
 {
-    [Subject(typeof(ExportedHeaderCollection))]
-    internal class ExportedHeaderCollectionTestsContext
+    [Subject(typeof(HeaderStructureForLevel))]
+    internal class QuestionnaireExportStructureTestsContext
     {
-        protected static ExportedHeaderCollection CreateExportedHeaderCollection(ReferenceInfoForLinkedQuestions questionnaireReferences, QuestionnaireDocument document)
+        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
         {
-            return new ExportedHeaderCollection(questionnaireReferences, document);
-        }
-
-        protected static ReferenceInfoForLinkedQuestions CreateReferenceInfoForLinkedQuestionsWithOneLink(Guid linkedQuestionId, Guid scopeId, Guid referencedQuestionId)
-        {
-            return new ReferenceInfoForLinkedQuestions(Guid.NewGuid(), 1, new Dictionary<Guid, ReferenceInfoByQuestion> { { linkedQuestionId, new ReferenceInfoByQuestion(scopeId, referencedQuestionId) } });
+            return new QuestionnaireExportStructure(questionnaire, 1);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
         {
-            return new QuestionnaireDocument
+            var questionnaireDocument= new QuestionnaireDocument
             {
                 Children = new List<IComposite>
                 {
@@ -38,6 +33,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
                     }
                 }
             };
+            questionnaireDocument.ConnectChildrenWithParent();
+            return questionnaireDocument;
         }
     }
 }
