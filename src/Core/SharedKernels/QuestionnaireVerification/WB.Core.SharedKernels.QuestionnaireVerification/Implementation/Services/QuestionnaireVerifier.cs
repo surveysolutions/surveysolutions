@@ -80,9 +80,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
-                    Verifier<IQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
-                    Verifier<IQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
-                    Verifier<IQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_MultiAnswerQuestionMaxAnswerInRange1And40),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
@@ -90,8 +91,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 };
             }
         }
-
-
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
         {
@@ -305,19 +304,24 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
         }
 
-        private static bool MultiAnswerQuestionCannotBePrefilled(IQuestion question, QuestionnaireDocument questionnaire)
+        private static bool MultiAnswerQuestionCannotBePrefilled(IMultiAnswerQuestion question)
         {
-            return question.Featured && (question is MultiAnswerQuestion);
+            return question.Featured;
         }
 
-        private static bool MultiAnswerQuestionCannotCustomValidation(IQuestion question)
+        private static bool MultiAnswerQuestionMaxAnswerInRange1And40(IMultiAnswerQuestion question)
         {
-            return (question is MultiAnswerQuestion) && !string.IsNullOrWhiteSpace(question.ValidationExpression);
+            return question.MaxAnswerCount.HasValue && (question.MaxAnswerCount.Value > 0 && question.MaxAnswerCount.Value< 40);
         }
 
-        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(IQuestion question)
+        private static bool MultiAnswerQuestionCannotCustomValidation(IMultiAnswerQuestion question)
         {
-            return (question is MultiAnswerQuestion) && question.QuestionScope == QuestionScope.Supervisor;
+            return !string.IsNullOrWhiteSpace(question.ValidationExpression);
+        }
+
+        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(IMultiAnswerQuestion question)
+        {
+            return question.QuestionScope == QuestionScope.Supervisor;
         }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestions(QuestionnaireDocument questionnaire)
