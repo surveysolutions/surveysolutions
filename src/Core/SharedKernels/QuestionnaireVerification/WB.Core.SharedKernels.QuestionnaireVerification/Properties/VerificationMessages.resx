@@ -222,4 +222,7 @@
   <data name="WB0041_MultiAnswerQuestionCannotCustomValidation" xml:space="preserve">
     <value>MultiAnswer question cannot contain validation expression</value>
   </data>
+  <data name="WB0042_MultiAnswerQuestionMaxAnswerInRange1And40" xml:space="preserve">
+    <value>MaxAnswerCount cannot be more than 40</value>
+  </data>
 </root>
