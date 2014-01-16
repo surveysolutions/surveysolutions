@@ -40,7 +40,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.sibligsValue = sibligs;
             if (!screenId.IsTopLevel())
             {
-
                 this.ScreenName = string.Empty;
             }
             this.SortIndex = sortIndex;
@@ -54,18 +53,30 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 throw new InvalidOperationException("only template can mutate in that way");
 
             var key = new InterviewItemId(this.ScreenId.Id, propagationVector);
-            var bradCrumbs = this.Breadcrumbs.ToList();
+            var breadcrumbs =this.Breadcrumbs.ToArray();
 
-            return new QuestionnairePropagatedScreenViewModel(this.QuestionnaireId,
-                this.Title, true,
-                key, items,
-                this.sibligsValue, bradCrumbs,
-                this.Next != null
-                    ? this.Next.Clone(propagationVector)
-                    : null,
-                this.Previous != null
-                    ? this.Previous.Clone(propagationVector)
-                    : null,
+            var lastVector = new decimal[propagationVector.Length];
+            propagationVector.CopyTo(lastVector, 0);
+
+            for (int i = breadcrumbs.Length - 1; i >= 0; i--)
+            {
+                if (EmptyBreadcrumbForRosterRow.IsInterviewItemIdEmptyBreadcrumbForRosterRow(breadcrumbs[i]))
+                {
+                    breadcrumbs[i] = new InterviewItemId(breadcrumbs[i].Id, lastVector);
+                    lastVector = lastVector.Take(lastVector.Length - 1).ToArray();
+                }
+            }
+
+            return new QuestionnairePropagatedScreenViewModel(
+                QuestionnaireId,
+                Title,
+                true,
+                key,
+                items,
+                sibligsValue,
+                breadcrumbs,
+                Next != null ? Next.Clone(propagationVector) : null,
+                Previous != null ? Previous.Clone(propagationVector) : null,
                 sortIndex);
         }
 
