@@ -1737,7 +1737,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         private EnablementChanges CalculateEnablementChanges(Identity answeredQuestion, object answer, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
 
