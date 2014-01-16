@@ -11,7 +11,9 @@
         setCommentCommand: "CommentAnswerCommand",
         setAnswerCommand: "SetAnswerCommand",
         setFlagToAnswer: "SetFlagToAnswerCommand",
-        removeFlagFromAnswer: "RemoveFlagFromAnswerCommand"
+        removeFlagFromAnswer: "RemoveFlagFromAnswerCommand",
+        approveInterviewCommand: "ApproveInterviewCommand",
+        rejectInterviewCommand: "RejectInterviewCommand"
     },
         statusMap = {
             Created: "Created",

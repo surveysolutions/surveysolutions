@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
 {
-    internal class when_adding_multy_option_linked_question_to_collection_from_questionnaire_containing_multy_options_roster_size_question : ExportedHeaderCollectionTestsContext
+    internal class when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option_linked_question : QuestionnaireExportStructureTestsContext
     {
         Establish context = () =>
         {
-            var rosterSizeQuestionId = Guid.Parse("AAF000AAA111EE2DD2EE111AAA000FFF");
+            rosterSizeQuestionId = Guid.Parse("AAF000AAA111EE2DD2EE111AAA000FFF");
             var rosterGroupId = Guid.Parse("00F000AAA111EE2DD2EE111AAA000FFF");
             linkedQuestionId = Guid.Parse("BBF000AAA111EE2DD2EE111AAA000FFF");
             referencedQuestionId = Guid.Parse("CCF000AAA111EE2DD2EE111AAA000FFF");
 
-            var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new MultyOptionsQuestion("multy options roster size question")
                 {
                     PublicKey = rosterSizeQuestionId,
+                    QuestionType = QuestionType.MultyOption,
                     Answers =
                         new List<IAnswer>()
                         {
@@ -33,23 +37,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
                     PublicKey = rosterGroupId,
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.Question,
-                    RosterSizeQuestionId = rosterSizeQuestionId
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    Children = new List<IComposite>
+                    {
+                        new NumericQuestion() { PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric },
+                        new MultyOptionsQuestion() { LinkedToQuestionId = referencedQuestionId,PublicKey = linkedQuestionId, QuestionType = QuestionType.MultyOption}
+                    }
                 });
-
-            var referenceInfoForLinkedQuestions = CreateReferenceInfoForLinkedQuestionsWithOneLink(linkedQuestionId, rosterSizeQuestionId,
-                referencedQuestionId);
-
-            headerCollection = CreateExportedHeaderCollection(referenceInfoForLinkedQuestions, questionnaireDocument);
         };
 
         Because of = () =>
-            headerCollection.Add(new MultyOptionsQuestion() { LinkedToQuestionId = referencedQuestionId,PublicKey = linkedQuestionId, QuestionType = QuestionType.MultyOption});
+            questionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaireDocument);
 
         It should_create_header_with_2_column = () =>
-            headerCollection[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
+            questionnaireExportStructure.HeaderToLevelMap[rosterSizeQuestionId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
 
-        private static ExportedHeaderCollection headerCollection;
+        private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Guid linkedQuestionId;
         private static Guid referencedQuestionId;
+        private static QuestionnaireDocument questionnaireDocument;
+        private static Guid rosterSizeQuestionId;
     }
 }

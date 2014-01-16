@@ -36,7 +36,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.DateTime,
             QuestionType.Text,
             QuestionType.AutoPropagate,
-            QuestionType.GpsCoordinates
+            QuestionType.GpsCoordinates,
+            QuestionType.MultiAnswer
         };
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
@@ -998,6 +999,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var sourceGroup = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
+            this.ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(questionId, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(questionId, sourceGroup, targetGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
@@ -1963,6 +1965,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         this.FormatQuestionForException(sourceGroup.RosterSizeQuestionId.Value, this.innerDocument)));
         }
 
+        private void ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(Guid questionId, IGroup parentGroup)
+        {
+            if (this.IsRosterSizeQuestion(questionId) && parentGroup.IsRoster)
+                throw new QuestionnaireException(string.Format("Roster size question {0} cannot be placed inside roster group.",
+                    this.FormatQuestionForException(questionId, this.innerDocument)));
+        }
+
+        private bool IsRosterSizeQuestion(Guid questionId)
+        {
+            return this.innerDocument.Find<IGroup>(group => group.RosterSizeQuestionId == questionId).Any();
+        }
+
         private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Guid? rosterSizeQuestionId,
             string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
@@ -1984,6 +1998,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (rosterFixedTitles == null || rosterFixedTitles.Length == 0)
             {
                 throw new QuestionnaireException("List of fixed roster titles could not be empty");
+            }
+
+            if (rosterFixedTitles.Length > 250)
+            {
+                throw new QuestionnaireException("Number of fixed roster titles could not be more than 250");
             }
 
             if (rosterFixedTitles.Any(string.IsNullOrWhiteSpace))

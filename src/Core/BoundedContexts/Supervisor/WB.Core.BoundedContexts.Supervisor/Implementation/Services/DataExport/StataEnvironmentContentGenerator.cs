@@ -8,57 +8,49 @@ using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class StataEnvironmentSupplier : IEnvironmentSupplier<InterviewDataExportView>
+    internal class StataEnvironmentContentGenerator
     {
-        private readonly Dictionary<string, StringBuilder> doFiles;
+        private readonly HeaderStructureForLevel headerStructureForLevel;
+        private readonly string doFileName;
+        private readonly string dataFileName;
 
-        public StataEnvironmentSupplier()
+        public StataEnvironmentContentGenerator(HeaderStructureForLevel headerStructureForLevel, string doFileName, string dataFileName)
         {
-            this.doFiles = new Dictionary<string, StringBuilder>();
+            this.headerStructureForLevel = headerStructureForLevel;
+            this.doFileName = doFileName;
+            this.dataFileName = dataFileName;
         }
 
-        public void AddCompletedResults(IDictionary<string, byte[]> container)
+        public string NameOfAdditionalFile
         {
-            foreach (var doFile in doFiles)
+            get { return string.Format("{0}.do", doFileName); }
+        }
+
+        public byte[] ContentOfAdditionalFile
+        {
+            get
             {
-                var doContent = doFile.Value;
+                var doContent = new StringBuilder();
+
+                BuildInsheet(dataFileName, doContent);
+
+                BuildLabelsForLevel(headerStructureForLevel, doContent);
+
                 doContent.AppendLine("list");
-                var toBytes = new UTF8Encoding().GetBytes(doContent.ToString().ToLower());
-                container.Add(string.Format("{0}.do", doFile.Key), toBytes);
+
+                return new UTF8Encoding().GetBytes(doContent.ToString().ToLower());
             }
         }
 
-        public string BuildContent(InterviewDataExportView result, string parentPrimaryKeyName, string fileName, FileType type)
-        {
-            string primaryKeyColumnName = CreateColumnName(parentPrimaryKeyName, result.LevelName);
-
-            var doContent = new StringBuilder();
-
-            BuildInsheet(fileName, type, doContent);
-
-            BuildLabelsForLevel(result, doContent);
-
-            doFiles.Add(GetDoFileNameByLevelName(result.LevelName), doContent);
-
-            return primaryKeyColumnName;
-        }
-
-        private string GetDoFileNameByLevelName(string levelName, int level = 0)
-        {
-            string doFileName = level == 0 ? levelName : string.Concat(levelName, level);
-
-            return !this.doFiles.ContainsKey(doFileName) ? doFileName : GetDoFileNameByLevelName(levelName, ++level);
-        }
-
-        private static void BuildInsheet(string fileName, FileType type, StringBuilder doContent)
+        private static void BuildInsheet(string fileName, StringBuilder doContent)
         {
             doContent.AppendLine(
-                string.Format("insheet using \"{0}\", {1}", fileName, type == FileType.Csv ? "comma" : "tab"));
+                string.Format("insheet using \"{0}\", comma", fileName));
         }
 
-        protected void BuildLabelsForLevel(InterviewDataExportView result, StringBuilder doContent)
+        protected void BuildLabelsForLevel(HeaderStructureForLevel headerStructureForLevel, StringBuilder doContent)
         {
-            foreach (ExportedHeaderItem headerItem in result.Header)
+            foreach (ExportedHeaderItem headerItem in headerStructureForLevel.HeaderItems.Values)
             {
                 bool hasLabels = headerItem.Labels.Count > 0;
 

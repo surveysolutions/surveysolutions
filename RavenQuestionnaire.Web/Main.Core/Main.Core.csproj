@@ -254,6 +254,7 @@
     <Compile Include="Entities\SubEntities\Question\SingleQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\Question\MultiAnswerQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\TextQuestion.cs">
       <SubType>Code</SubType>
     </Compile>

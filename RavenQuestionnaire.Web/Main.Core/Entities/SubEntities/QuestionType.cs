@@ -16,6 +16,7 @@ namespace Main.Core.Entities.SubEntities
 
         Numeric = 4, 
 
+
         DateTime = 5, 
         
         GpsCoordinates = 6, 
@@ -23,6 +24,8 @@ namespace Main.Core.Entities.SubEntities
         Text = 7, 
 
         [Obsolete]
-        AutoPropagate = 8
+        AutoPropagate = 8,
+
+        MultiAnswer = 9
     }
 }

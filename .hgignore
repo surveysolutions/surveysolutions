@@ -47,3 +47,5 @@ RavenQuestionnaire.Web/Web.Supervisor/App_Data/TempFileImportData/*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/IncomigData/*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/IncomingData/*.sync
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/IncomingData/IncomingDataWithErrors/*.sync
+RavenQuestionnaire.Web/Web.Supervisor/App_Data/ExportedData/*
+RavenQuestionnaire.Web/Web.Supervisor/App_Data/QuestionnaireExportStructureStorage/*

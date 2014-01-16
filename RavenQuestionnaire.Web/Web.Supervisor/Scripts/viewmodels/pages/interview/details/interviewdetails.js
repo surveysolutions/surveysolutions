@@ -1,4 +1,4 @@
-Supervisor.VM.InterviewDetails = function(commandExecutionUrl, inputQuestionnaire, userName) {
+Supervisor.VM.InterviewDetails = function (commandExecutionUrl, inputQuestionnaire, userName, changeStateHistoryUrl, interviewsUrl, urlReferrer) {
     Supervisor.VM.InterviewDetails.superclass.constructor.apply(this, arguments);
 
     var self = this,
@@ -6,13 +6,16 @@ Supervisor.VM.InterviewDetails = function(commandExecutionUrl, inputQuestionnair
         model = new Model(),
         mapper = new Mapper(model, config),
         datacontext = new DataContext(mapper, config);
-    
+
     self.filter = ko.observable('all');
     self.questionnaire = ko.observable();
     self.groups = ko.observableArray();
     self.questions = ko.observableArray();
     self.currentQuestion = ko.observable();
     self.currentComment = ko.observable('');
+    self.changeStateComment = ko.observable('');
+    self.changeStateHistory = ko.observable();
+    
 
     self.closeDetails = function() {
         $('#content').removeClass('details-visible');
@@ -132,7 +135,7 @@ Supervisor.VM.InterviewDetails = function(commandExecutionUrl, inputQuestionnair
         self.questionnaire(datacontext.questionnaire);
         self.groups(datacontext.groups.getAllLocal());
         self.questions(datacontext.questions.getAllLocal());
-        
+
         Router({
             '/group/:groupId': function(groupId) {
                 self.applyQuestionFilter('all');
@@ -154,6 +157,47 @@ Supervisor.VM.InterviewDetails = function(commandExecutionUrl, inputQuestionnair
         }).init();
         self.IsAjaxComplete(true);
         self.IsPageLoaded(true);
+    };
+
+    self.showApproveModal = function () {
+        $('#approveModal').modal('show');
+    };
+    
+    self.showRejectModal = function () {
+        $('#rejectModal').modal('show');
+    };
+    
+    self.approveInterview = function () {
+        self.changeState(config.commands.approveInterviewCommand);
+    };
+    self.rejectInterview = function () {
+        self.changeState(config.commands.rejectInterviewCommand);
+    };
+    
+    self.changeState = function (commandName) {
+        var command = datacontext.getCommand(commandName, { comment: self.changeStateComment() });
+        self.SendCommand(command, function () {
+            if (!_.isNull(urlReferrer)) {
+                window.location = urlReferrer;
+            } else {
+                window.location = interviewsUrl;
+            }
+            
+        });
+    };
+
+    var isHistoryShowed = false;
+    self.showStatesHistory = function () {
+        if (!isHistoryShowed) {
+            self.changeStateHistory(undefined);
+            self.SendRequest(changeStateHistoryUrl, { interviewId: datacontext.questionnaire.id() }, function (data) {
+                self.changeStateHistory(data);
+                $('#statesHistoryPopover').show();
+            });
+        } else {
+            $('#statesHistoryPopover').hide();
+        }
+        isHistoryShowed = !isHistoryShowed;
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewDetails, Supervisor.VM.BasePage);
