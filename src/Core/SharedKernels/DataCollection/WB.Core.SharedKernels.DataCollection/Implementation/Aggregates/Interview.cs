@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private HashSet<string> answeredQuestions = new HashSet<string>();
         private HashSet<string> disabledGroups = new HashSet<string>();
         private HashSet<string> disabledQuestions = new HashSet<string>();
-        private Dictionary<string, IEnumerable<decimal>> rosterGroupInstanceIds = new Dictionary<string, IEnumerable<decimal>>();
+        private Dictionary<string, List<decimal>> rosterGroupInstanceIds = new Dictionary<string, List<decimal>>();
         private HashSet<string> validAnsweredQuestions = new HashSet<string>();
         private HashSet<string> invalidAnsweredQuestions = new HashSet<string>();
 
@@ -100,12 +100,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.invalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
         }
 
-        private static Dictionary<string, IEnumerable<decimal>> BuildRosterInstanceIdsFromSynchronizationDto(
+        private static Dictionary<string, List<decimal>> BuildRosterInstanceIdsFromSynchronizationDto(
             InterviewSynchronizationDto synchronizationDto)
         {
             return synchronizationDto.RosterGroupInstances.ToDictionary(
                 pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector.Take(pair.Key.InterviewItemPropagationVector.Length - 1).ToArray()),
-                pair => pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId));
+                pair => pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList());
         }
 
         private void Apply(SynchronizationMetadataApplied @event)
@@ -573,10 +573,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => fixedRosterIds.Contains(groupId)
                     && AreEqualRosterVectors(groupOuterScopeRosterVector, EmptyRosterVector);
 
-            Func<Guid, IEnumerable<decimal>> getFixedRosterInstanceIds =
-                fixedRosterId => rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToHashSet();
+            Func<Guid, List<decimal>> getFixedRosterInstanceIds =
+                fixedRosterId => rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToList();
 
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
                 => isFixedRoster(groupId, groupOuterRosterVector)
                     ? getFixedRosterInstanceIds(groupId)
                     : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
@@ -770,9 +770,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => rosterIds.Contains(groupId)
                 && AreEqualRosterVectors(groupOuterScopeRosterVector, rosterVector);
 
-            IEnumerable<decimal> rosterInstanceIds = Enumerable.Range(0, rosterSize).Select(index => (decimal)index);
+            List<decimal> rosterInstanceIds = Enumerable.Range(0, rosterSize).Select(index => (decimal)index).ToList();
 
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
@@ -1016,7 +1016,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId).ToList();
 
-            IEnumerable<decimal> rosterInstanceIds = selectedValues.ToList();
+            List<decimal> rosterInstanceIds = selectedValues.ToList();
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
                 selectedValue => selectedValue,
                 selectedValue => (int?)availableValues.IndexOf(selectedValue));
@@ -1027,7 +1027,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => rosterIds.Contains(groupId)
                 && AreEqualRosterVectors(groupOuterRosterVector, rosterVector);
 
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
@@ -1084,7 +1084,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private RosterCalculationData GetRosterCalculationDataWithRosterTitles(Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
-            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire, Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(
                 rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer, getRosterInstanceIds);
@@ -1093,6 +1094,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterCalculationData.RosterInstancesToAdd.ToDictionary(
                     rosterInstance => rosterInstance.RosterInstanceId,
                     rosterInstance => questionnaire.GetAnswerOptionTitle(questionId, rosterInstance.RosterInstanceId));
+
             return rosterCalculationData;
         }
 
@@ -1531,7 +1533,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
                 decimal[] rosterGroupOuterScopeRosterVector = ShrinkRosterVector(rosterVector, rosterGroupOuterScopeRosterLevel);
-                IEnumerable<decimal> rosterInstanceIds = this.GetRosterInstanceIds(
+                List<decimal> rosterInstanceIds = this.GetRosterInstanceIds(
                     groupId: rosterGroupId,
                     outerRosterVector: rosterGroupOuterScopeRosterVector);
 
@@ -1770,8 +1772,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private RosterCalculationData CalculateRosterData(
-            List<Guid> rosterIds, decimal[] nearestToOuterRosterVector, IEnumerable<decimal> rosterInstanceIds, Dictionary<decimal, string> rosterTitles, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            List<Guid> rosterIds, decimal[] nearestToOuterRosterVector, List<decimal> rosterInstanceIds, Dictionary<decimal, string> rosterTitles, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes =
                 rosterInstanceIds.ToDictionary(
@@ -1786,7 +1788,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Guid> rosterIds, decimal[] nearestToOuterRosterVector, Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes,
             Dictionary<decimal, string> rosterTitles,
             IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToRemove;
             List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
@@ -1796,8 +1798,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CalculateChangesInRosterInstances(rosterIds, nearestToOuterRosterVector, rosterInstanceIdsWithSortIndexes,
                 out rosterInstancesToAdd, out rosterInstancesToRemove);
 
-            IEnumerable<decimal> rosterInstanceIdsBeingAdded = rosterInstancesToAdd.Select(instance => instance.RosterInstanceId);
-            IEnumerable<decimal> rosterInstanceIdsBeingRemoved = rosterInstancesToRemove.Select(instance => instance.RosterInstanceId);
+            List<decimal> rosterInstanceIdsBeingAdded = rosterInstancesToAdd.Select(instance => instance.RosterInstanceId).ToList();
+            List<decimal> rosterInstanceIdsBeingRemoved = rosterInstancesToRemove.Select(instance => instance.RosterInstanceId).ToList();
 
             List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(
                 rosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
@@ -1902,7 +1904,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void PerformValidationOfDependentQuestionsAndJustEnabledQuestions(Identity question, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds, Func<Identity, bool?> getNewQuestionStatus,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds, Func<Identity, bool?> getNewQuestionStatus,
             List<Identity> groupsToBeEnabled, List<Identity> questionsToBeEnabled,
             out List<Identity> questionsDeclaredValid, out List<Identity> questionsDeclaredInvalid)
         {
@@ -1932,7 +1934,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<Identity> GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(IQuestionnaire questionnaire,
             List<Identity> groupsToBeEnabled, List<Identity> questionsToBeEnabled,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             foreach (var question in questionsToBeEnabled)
             {
@@ -1991,7 +1993,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         private void DetermineCustomEnablementStateOfDependentGroups(Identity question, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds,
             out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
         {
             groupsToBeDisabled = new List<Identity>();
@@ -2010,7 +2012,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void DetermineCustomEnablementStateOfDependentQuestions(Identity questionBeingAnswered, object answerBeingApplied,
-            IQuestionnaire questionnaire, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds,
+            IQuestionnaire questionnaire, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds,
             out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
         {
             var collectedQuestionsToBeDisabled = new List<Identity>();
@@ -2058,15 +2060,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void DetermineCustomEnablementStateOfGroupsInitializedByAddedRosterInstances(
-            IEnumerable<Guid> rosterIds, IEnumerable<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
+            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds,
             out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
         {
             groupsToBeDisabled = new List<Identity>();
             groupsToBeEnabled = new List<Identity>();
 
-            if (rosterInstanceIdsBeingAdded.Count() == 0)
+            if (rosterInstanceIdsBeingAdded.Count == 0)
                 return;
 
             foreach (Guid rosterId in rosterIds)
@@ -2089,15 +2091,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void DetermineCustomEnablementStateOfQuestionsInitializedByAddedRosterInstances(
-            IEnumerable<Guid> rosterIds, IEnumerable<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
+            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds,
             out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
         {
             questionsToBeDisabled = new List<Identity>();
             questionsToBeEnabled = new List<Identity>();
 
-            if (rosterInstanceIdsBeingAdded.Count() == 0)
+            if (rosterInstanceIdsBeingAdded.Count == 0)
                 return;
 
             foreach (Guid rosterId in rosterIds)
@@ -2121,15 +2123,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void DetermineValidityStateOfQuestionsInitializedByAddedRosterInstances(
-            List<Guid> rosterIds, IEnumerable<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
+            List<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire,
             List<Identity> groupsToBeDisabled, List<Identity> questionsToBeDisabled,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds,
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds,
             out List<Identity> questionsToBeInvalid)
         {
             questionsToBeInvalid = new List<Identity>();
 
-            if (rosterInstanceIdsBeingAdded.Count() == 0)
+            if (rosterInstanceIdsBeingAdded.Count == 0)
                 return;
 
             foreach (Guid rosterId in rosterIds)
@@ -2218,7 +2220,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             IEnumerable<Guid> questionIds, decimal[] rosterVector, IQuestionnaire questionnare,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             return questionIds.SelectMany(questionId =>
                 this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(questionId, rosterVector, questionnare, getRosterInstanceIds));
@@ -2226,7 +2228,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             int vectorRosterLevel = rosterVector.Length;
             int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
@@ -2270,7 +2272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
             IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnare,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             int vectorRosterLevel = rosterVector.Length;
 
@@ -2338,10 +2340,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(
-            IEnumerable<Guid> rosterIds, IEnumerable<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
+            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire)
         {
-            if (rosterInstanceIdsBeingRemoved.Count() == 0)
+            if (rosterInstanceIdsBeingRemoved.Count == 0)
                 return new List<Identity>();
 
             return rosterIds
@@ -2351,7 +2353,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private IEnumerable<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(
-            Guid rosterId, IEnumerable<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
+            Guid rosterId, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire)
         {
             int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
@@ -2377,19 +2379,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved);
         }
 
-        private static IEnumerable<decimal> GetRosterInstanceIdsBeingAdded(IEnumerable<decimal> existingRosterInstanceIds, IEnumerable<decimal> newRosterInstanceIds)
+        private static List<decimal> GetRosterInstanceIdsBeingAdded(List<decimal> existingRosterInstanceIds, List<decimal> newRosterInstanceIds)
         {
-            return newRosterInstanceIds.Where(newRosterInstanceId => !existingRosterInstanceIds.Contains(newRosterInstanceId));
+            return newRosterInstanceIds.Where(newRosterInstanceId => !existingRosterInstanceIds.Contains(newRosterInstanceId)).ToList();
         }
 
-        private static IEnumerable<decimal> GetRosterInstanceIdsBeingRemoved(IEnumerable<decimal> existingRosterInstanceIds, IEnumerable<decimal> newRosterInstanceIds)
+        private static List<decimal> GetRosterInstanceIdsBeingRemoved(List<decimal> existingRosterInstanceIds, List<decimal> newRosterInstanceIds)
         {
-            return existingRosterInstanceIds.Where(existingRosterInstanceId => !newRosterInstanceIds.Contains(existingRosterInstanceId));
+            return existingRosterInstanceIds.Where(existingRosterInstanceId => !newRosterInstanceIds.Contains(existingRosterInstanceId)).ToList();
         }
 
         private IEnumerable<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
             IEnumerable<Identity> questionsToRemove, IQuestionnaire questionnaire,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             bool nothingGoingToBeRemoved = !questionsToRemove.Any();
             if (nothingGoingToBeRemoved)
@@ -2401,7 +2403,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
             IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             bool nothingGoingToBeDisabled = !groupsToBeDisabled.Any() && !questionsToBeDisabled.Any();
             if (nothingGoingToBeDisabled)
@@ -2412,7 +2414,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(IQuestionnaire questionnaire,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds, Func<Identity, bool> isQuestionAnswerGoingToDisappear)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds, Func<Identity, bool> isQuestionAnswerGoingToDisappear)
         {
             var answersToRemove = new List<Identity>();
 
@@ -2461,7 +2463,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private IEnumerable<Identity> GetQuestionsReferencedByLinkedQuestion(
-            Identity linkedQuestion, IQuestionnaire questionnaire, Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Identity linkedQuestion, IQuestionnaire questionnaire, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             Guid referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestion.Id);
 
@@ -2554,13 +2556,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionMappedOnVariableNames[identifier];
         }
 
-        private IEnumerable<decimal> GetRosterInstanceIds(Guid groupId, decimal[] outerRosterVector)
+        private List<decimal> GetRosterInstanceIds(Guid groupId, decimal[] outerRosterVector)
         {
             string groupKey = ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
 
             return this.rosterGroupInstanceIds.ContainsKey(groupKey)
                 ? this.rosterGroupInstanceIds[groupKey]
-                : Enumerable.Empty<decimal>();
+                : new List<decimal>();
         }
 
         private IEnumerable<decimal[]> AvailableRosterLevelsForGroup(IQuestionnaire questionnaire, Guid groupdId)
@@ -2702,7 +2704,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
         /// </remarks>
         private static IEnumerable<decimal[]> ExtendRosterVector(decimal[] rosterVector, int length, Guid[] rosterGroupsStartingFromTop,
-            Func<Guid, decimal[], IEnumerable<decimal>> getRosterInstanceIds)
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
         {
             if (length < rosterVector.Length)
                 throw new ArgumentException(string.Format(
@@ -2716,7 +2718,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (length == rosterVector.Length + 1)
             {
-                IEnumerable<decimal> rosterInstanceIds = getRosterInstanceIds(rosterGroupsStartingFromTop.Last(), rosterVector);
+                List<decimal> rosterInstanceIds = getRosterInstanceIds(rosterGroupsStartingFromTop.Last(), rosterVector);
 
                 foreach (decimal rosterInstanceId in rosterInstanceIds)
                 {
