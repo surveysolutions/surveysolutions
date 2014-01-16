@@ -352,6 +352,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 rosterInstanceId);
 
+            if(this.Screens.ContainsKey(new InterviewItemId(screenId,propagationVector)))
+                return;
+
             var screenPrototype = this.propagatedScreenPrototypes[screenId];
             var screen = screenPrototype.Clone(propagationVector, sortIndex);
 
@@ -373,7 +376,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
+
             var key = new InterviewItemId(screenId, propagationVector);
+            if (!this.Screens.ContainsKey(key))
+                return;
+
             var screen = this.Screens[key] as QuestionnaireScreenViewModel;
             foreach (var item in screen.Items)
             {
@@ -482,7 +489,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector, index);
             var key = new InterviewItemId(groupId, propagationVector);
-
+            
+            if(!this.Screens.ContainsKey(key))
+                return;
+            
             var screen = this.Screens[key] as QuestionnairePropagatedScreenViewModel;
             if (screen == null)
                 return;
