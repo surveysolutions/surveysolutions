@@ -349,5 +349,41 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0038_RosterFixedTitlesHaveMoreThan250Items", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiAnswer question cannot be prefilled.
+        /// </summary>
+        internal static string WB0039_MultiAnswerQuestionCannotBePrefilled {
+            get {
+                return ResourceManager.GetString("WB0039_MultiAnswerQuestionCannotBePrefilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiAnswer  question cannot be filled by supervisor.
+        /// </summary>
+        internal static string WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor {
+            get {
+                return ResourceManager.GetString("WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiAnswer question cannot contain validation expression.
+        /// </summary>
+        internal static string WB0041_MultiAnswerQuestionCannotCustomValidation {
+            get {
+                return ResourceManager.GetString("WB0041_MultiAnswerQuestionCannotCustomValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MaxAnswerCount cannot be more than 40.
+        /// </summary>
+        internal static string WB0042_MultiAnswerQuestionMaxAnswerInRange1And40 {
+            get {
+                return ResourceManager.GetString("WB0042_MultiAnswerQuestionMaxAnswerInRange1And40", resourceCulture);
+            }
+        }
     }
 }

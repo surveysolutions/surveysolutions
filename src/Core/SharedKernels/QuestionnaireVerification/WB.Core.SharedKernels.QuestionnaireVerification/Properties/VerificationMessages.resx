@@ -213,4 +213,16 @@
   <data name="WB0038_RosterFixedTitlesHaveMoreThan250Items" xml:space="preserve">
     <value>Number of fixed roster titles could not be more than 250</value>
   </data>
+  <data name="WB0039_MultiAnswerQuestionCannotBePrefilled" xml:space="preserve">
+    <value>MultiAnswer question cannot be prefilled</value>
+  </data>
+  <data name="WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+    <value>MultiAnswer  question cannot be filled by supervisor</value>
+  </data>
+  <data name="WB0041_MultiAnswerQuestionCannotCustomValidation" xml:space="preserve">
+    <value>MultiAnswer question cannot contain validation expression</value>
+  </data>
+  <data name="WB0042_MultiAnswerQuestionMaxAnswerInRange1And40" xml:space="preserve">
+    <value>MaxAnswerCount cannot be more than 40</value>
+  </data>
 </root>
