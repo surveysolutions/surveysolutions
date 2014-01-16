@@ -11,7 +11,7 @@
                 "DateTime": "DateTime",
                 "Text": "Text",
                 "GpsCoordinates": "GpsCoordinates",
-                "MultiAnswer": "MultiAnswer"
+                "TextList": "TextList"
             },
             rosterSizeSourceTypes = {
                 "FixedTitles": "FixedTitles",
@@ -51,8 +51,8 @@
                     value: "Geo Location"
                 },
                 {
-                    key: "MultiAnswer",
-                    value: "MultiAnswer"
+                    key: "TextList",
+                    value: "List"
                 }
             ],
             questionScopes = {
