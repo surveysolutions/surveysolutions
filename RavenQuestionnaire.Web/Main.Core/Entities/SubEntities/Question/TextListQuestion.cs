@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public class MultiAnswerQuestion : AbstractQuestion
+    public class TextListQuestion : AbstractQuestion
     {
-        public MultiAnswerQuestion(string text)
+        public TextListQuestion(string text)
             : base(text)
         {
         }
 
-        public MultiAnswerQuestion()
+        public TextListQuestion()
         {
         }
 
@@ -33,5 +33,8 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
+
+        int MaxAnswerCount { get; set; }
+
     }
 }
