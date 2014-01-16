@@ -31,6 +31,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         public string ValidationExpression { get; set; }
+
+        public string GetReadableConditionExpression()
+        {
+            if (string.IsNullOrWhiteSpace(this.ConditionExpression))
+            {
+                return null;
+            }
+
+            return this.ReplaceGuidsWithQuestionNumbers(this.ConditionExpression);
+        }
         
         public string ConditionExpression { get; set; }
 
