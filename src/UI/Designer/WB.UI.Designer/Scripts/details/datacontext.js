@@ -227,6 +227,13 @@
             }
             return 0;
         };
+        
+
+        questions.isRosterSizeQuestion = function (questionId) {
+            return _.any(groups.getPropagateableGroups(), function (group) {
+                return group.rosterSizeQuestion() == questionId;
+            });
+        };
 
         var commands = {};
 
@@ -390,6 +397,7 @@
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
+                case "MultiAnswer":
                     break;
             }
             return command;

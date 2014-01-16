@@ -9,12 +9,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
     {
         #region [Constants]
         private bool isLockOut = false;
+        private bool isConfirmed = false;
         #endregion
 
         #region [State]
 
         public void Apply(AccountRegistered @event) { }
-        public void Apply(AccountConfirmed @event) { }
+        public void Apply(AccountConfirmed @event)
+        {
+            this.isConfirmed = true;
+        }
         public void Apply(AccountDeleted @event) {}
         public void Apply(AccountLocked @event)
         {
@@ -144,6 +148,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     UserName = userName
                 });
             
+            if (!this.isConfirmed && isConfirmed)
+            {
+                this.ApplyEvent(new AccountConfirmed());
+            }
+
             if (this.isLockOut != isLockedOut)
             {
                 if (isLockedOut)

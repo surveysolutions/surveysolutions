@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
-    public class InterviewDataExportRerord
+    public class InterviewDataExportRecord 
     {
-        public InterviewDataExportRerord(Guid interviewId, int recordId, decimal? parentLevelId, Dictionary<Guid, ExportedQuestion> questions)
+        public InterviewDataExportRecord(Guid interviewId, decimal recordId, decimal? parentLevelId,
+            ExportedQuestion[] questions)
         {
             InterviewId = interviewId;
             RecordId = recordId;
@@ -17,8 +20,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         }
 
         public Guid InterviewId { get; private set; }
-        public int RecordId { get; private set; }
+        public decimal RecordId { get; private set; }
         public decimal? ParentRecordId { get; private set; }
-        public Dictionary<Guid,ExportedQuestion> Questions { get; private set; }
+        public ExportedQuestion[] Questions { get; private set; }
     }
 }

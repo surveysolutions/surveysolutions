@@ -72,6 +72,12 @@
     <Compile Include="AccountRepositoryTests\AccountRepositoryTestsContext.cs" />
     <Compile Include="AccountRepositoryTests\when_registering_new_user_with_account_repository.cs" />
     <Compile Include="AccountRepositoryTests\when_account_repository_creating_new_user.cs" />
+    <Compile Include="AccountTests\AccountTestsContext.cs" />
+    <Compile Include="AccountTests\when_updating_account_and_it_should_be_confirmed.cs" />
+    <Compile Include="AccountTests\when_updating_account_and_it_should_be_locked.cs" />
+    <Compile Include="AccountTests\when_updating_confirmed_account_and_it_should_not_be_confirmed_again.cs" />
+    <Compile Include="AccountTests\when_updating_account_and_it_should_be_unlocked.cs" />
+    <Compile Include="AccountTests\when_updating_account.cs" />
     <Compile Include="AccountViewFactoryTests\AccountViewFactoryTestsContext.cs" />
     <Compile Include="AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />
     <Compile Include="AssemblyContext.cs" />
@@ -120,6 +126,10 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_roster_size_question_to_roster_group.cs" />
     <Compile Include="QuestionnaireTests\when_moving_roster_title_question_to_roster_group_having_same_roster_size_question.cs" />
     <Compile Include="QuestionnaireTests\when_moving_roster_title_question_to_not_roster_group.cs" />
     <Compile Include="QuestionnaireTests\when_updating_categorical_linked_question_in_roster_group_that_used_as_roster_title_question.cs" />
