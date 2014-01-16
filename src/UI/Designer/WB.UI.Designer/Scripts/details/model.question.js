@@ -187,13 +187,13 @@
                                            case "DateTime":
                                            case "AutoPropagate":
                                            case "GpsCoordinates":
-                                           case "MultiAnswer": 
+                                           case "TextList":
                                                return false;
                                        }
                                    }
                                    return true;
                                },
-                               message: 'Date, Auto propagate, Linked categorical, MultiAnswer and Geo Location questions cannot be filled by supervisor. '
+                               message: 'Date, Auto propagate, Linked categorical, List and Geo Location questions cannot be filled by supervisor. '
                            }]
                    }); // Questoin type
 
