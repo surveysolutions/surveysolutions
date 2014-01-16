@@ -80,6 +80,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
+                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_MultiAnswerQuestionMaxAnswerInRange1And40),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
@@ -273,7 +277,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             var multiOptionQuestion = question as MultyOptionsQuestion;
             return multiOptionQuestion != null && !multiOptionQuestion.LinkedToQuestionId.HasValue;
         }
-        
+
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return question.Featured && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
@@ -298,6 +302,26 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static bool QuestionnaireHaveAutopropagatedGroups(IGroup group, QuestionnaireDocument questionnaire)
         {
             return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
+        }
+
+        private static bool MultiAnswerQuestionCannotBePrefilled(IMultiAnswerQuestion question)
+        {
+            return question.Featured;
+        }
+
+        private static bool MultiAnswerQuestionMaxAnswerInRange1And40(IMultiAnswerQuestion question)
+        {
+            return question.MaxAnswerCount.HasValue && (question.MaxAnswerCount.Value > 0 && question.MaxAnswerCount.Value< 40);
+        }
+
+        private static bool MultiAnswerQuestionCannotCustomValidation(IMultiAnswerQuestion question)
+        {
+            return !string.IsNullOrWhiteSpace(question.ValidationExpression);
+        }
+
+        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(IMultiAnswerQuestion question)
+        {
+            return question.QuestionScope == QuestionScope.Supervisor;
         }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestions(QuestionnaireDocument questionnaire)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public class MultiAnswerQuestion : AbstractQuestion
+    public class MultiAnswerQuestion : AbstractQuestion, IMultiAnswerQuestion
     {
         public MultiAnswerQuestion(string text)
             : base(text)
@@ -33,5 +33,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
+
+        public int? MaxAnswerCount { get; set; }
     }
 }
