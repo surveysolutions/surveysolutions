@@ -15,9 +15,9 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace Core.Supervisor.Views.Revalidate
 {
-    public class RevalidateInterviewFactory : IViewFactory<RevalidateInterviewInputModel, RevalidatInterviewView>
+    public class RevalidateInterviewFactory : IViewFactory<RevalidateInterviewInputModel, RevalidateInterviewView>
     {
-        public IInterviewDataAndQuestionnaireMerger merger;
+        private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
@@ -39,7 +39,7 @@ namespace Core.Supervisor.Views.Revalidate
             this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
         }
 
-        public RevalidatInterviewView Load(RevalidateInterviewInputModel input)
+        public RevalidateInterviewView Load(RevalidateInterviewInputModel input)
         {
             var interview = this.interviewStore.GetById(input.InterviewId);
             if (interview == null || interview.IsDeleted)
@@ -61,7 +61,7 @@ namespace Core.Supervisor.Views.Revalidate
             var mergedInterview = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
 
-            var revalidateInterviewView = new RevalidatInterviewView
+            var revalidateInterviewView = new RevalidateInterviewView
             {
                 Responsible = mergedInterview.Responsible,
                 QuestionnairePublicKey = mergedInterview.QuestionnairePublicKey,

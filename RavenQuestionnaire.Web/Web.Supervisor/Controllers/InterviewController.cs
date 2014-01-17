@@ -21,12 +21,12 @@ namespace Web.Supervisor.Controllers
     public class InterviewController : BaseController
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IViewFactory<RevalidateInterviewInputModel, RevalidatInterviewView> revalidateInterviewViewFactory;
+        private readonly IViewFactory<RevalidateInterviewInputModel, RevalidateInterviewView> revalidateInterviewViewFactory;
         private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory;
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                    IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-                                    IViewFactory<RevalidateInterviewInputModel, RevalidatInterviewView> revalidateInterviewViewFactory,
+                                    IViewFactory<RevalidateInterviewInputModel, RevalidateInterviewView> revalidateInterviewViewFactory,
                                    IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory)
             : base(commandService, provider, logger)
         {
