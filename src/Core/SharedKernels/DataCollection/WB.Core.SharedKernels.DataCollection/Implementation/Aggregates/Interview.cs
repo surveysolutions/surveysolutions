@@ -1300,14 +1300,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 bool hasQuestionAnswer = this.answeredQuestions.Contains(questionKey);
 
-                switch (hasQuestionAnswer)
+                if (hasQuestionAnswer)
                 {
-                    case true:
-                        questionsDeclaredValid.Add(mandatoryQuestion);
-                        break;
-                    case false:
-                        questionsDeclaredInvalid.Add(mandatoryQuestion);
-                        break;
+                    questionsDeclaredValid.Add(mandatoryQuestion);
+                }
+                else 
+                {
+                    questionsDeclaredInvalid.Add(mandatoryQuestion);
                 }
             }
 
