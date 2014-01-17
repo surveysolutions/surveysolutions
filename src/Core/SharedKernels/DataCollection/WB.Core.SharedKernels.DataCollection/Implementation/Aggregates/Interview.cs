@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewSynchronizationDto synchronizationDto)
         {
             return synchronizationDto.RosterGroupInstances.ToDictionary(
-                pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector.Take(pair.Key.InterviewItemPropagationVector.Length - 1).ToArray()),
+                pair => ConvertIdAndRosterVectorToString(pair.Key.Id, SplitRosterVectorOntoOuterVectorAndRosterInstanceId(pair.Key.InterviewItemPropagationVector).Item1),
                 pair => pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList());
         }
 
