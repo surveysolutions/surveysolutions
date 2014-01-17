@@ -223,6 +223,12 @@
     <value>MultiAnswer question cannot contain validation expression</value>
   </data>
   <data name="WB0042_MultiAnswerQuestionMaxAnswerInRange1And40" xml:space="preserve">
-    <value>MaxAnswerCount cannot be more than 40</value>
+    <value>MaxAnswerCount could be in range [1, 40]</value>
+  </data>
+  <data name="WB0043_MultiAnswerQuestionCannotBeUsedInValidationExpressions" xml:space="preserve">
+    <value>MultiAnswer question cannot be used in conditions or validation expressions</value>
+  </data>
+  <data name="WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions" xml:space="preserve">
+    <value>MultiAnswer question cannot be used in conditions or validation expressions</value>
   </data>
 </root>

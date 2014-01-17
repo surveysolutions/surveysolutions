@@ -378,11 +378,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MaxAnswerCount cannot be more than 40.
+        ///   Looks up a localized string similar to MaxAnswerCount could be in range [1, 40].
         /// </summary>
         internal static string WB0042_MultiAnswerQuestionMaxAnswerInRange1And40 {
             get {
                 return ResourceManager.GetString("WB0042_MultiAnswerQuestionMaxAnswerInRange1And40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiAnswer question cannot be used in conditions or validation expressions.
+        /// </summary>
+        internal static string WB0043_MultiAnswerQuestionCannotBeUsedInValidationExpressions {
+            get {
+                return ResourceManager.GetString("WB0043_MultiAnswerQuestionCannotBeUsedInValidationExpressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiAnswer question cannot be used in conditions or validation expressions.
+        /// </summary>
+        internal static string WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions {
+            get {
+                return ResourceManager.GetString("WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions", resourceCulture);
             }
         }
     }
