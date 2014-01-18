@@ -1,3 +1,4 @@
+using System;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -5,22 +6,20 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class QuestionnaireNavigationPanelItem : Cirrious.MvvmCross.ViewModels.MvxViewModel,
                                                     IQuestionnaireItemViewModel
     {
-        public QuestionnaireNavigationPanelItem(InterviewItemId publicKey, IQuestionnaireViewModel fullScreen)
+        public QuestionnaireNavigationPanelItem(InterviewItemId publicKey, Func<InterviewItemId, IQuestionnaireViewModel> getFullScreen)
         {
             this.PublicKey = publicKey;
-            this.fullScreen = fullScreen;
-            fullScreen.PropertyChanged += screen_PropertyChanged;
+            this.getFullScreen = getFullScreen;
         }
 
-        private IQuestionnaireViewModel fullScreen;
+        private Func<InterviewItemId, IQuestionnaireViewModel> getFullScreen;
 
         public InterviewItemId PublicKey { get; private set; }
-
 
         public IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
             return new QuestionnaireNavigationPanelItem(new InterviewItemId(this.PublicKey.Id, propagationVector),
-                                                        this.fullScreen);
+                                                        this.getFullScreen);
         }
 
         public string Text
@@ -45,8 +44,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected IQuestionnaireViewModel Screen
         {
-            get { return this.fullScreen; }
+            get
+            {
+                if (screen == null)
+                {
+                    screen = getFullScreen(PublicKey);
+                    screen.PropertyChanged += screen_PropertyChanged;
+                }
+                return this.screen;
+            }
         }
+
+        private IQuestionnaireViewModel screen;
 
         private void screen_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
