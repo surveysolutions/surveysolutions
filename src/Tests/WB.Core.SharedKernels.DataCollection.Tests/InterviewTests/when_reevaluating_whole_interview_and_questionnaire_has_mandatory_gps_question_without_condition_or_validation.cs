@@ -35,10 +35,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
 
-            eventContext = new EventContext();
-
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new GeoLocationQuestionAnswered(userId, geoQuestionId, new decimal[0], DateTime.Now, 0.111, 0.222, 333, new DateTimeOffset(DateTime.Now)));
+            
+            eventContext = new EventContext();
         };
 
         Cleanup stuff = () =>
@@ -49,9 +49,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         Because of = () =>
             interview.ReevaluateSynchronizedInterview();
-
-        It should_raise_AnswerDeclaredInvalid_event_with_QuestionId_equal_to_geoQuestionId = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event => @event.QuestionId == geoQuestionId);
 
         It should_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_geoQuestionId = () =>
             eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event => @event.QuestionId == geoQuestionId);
