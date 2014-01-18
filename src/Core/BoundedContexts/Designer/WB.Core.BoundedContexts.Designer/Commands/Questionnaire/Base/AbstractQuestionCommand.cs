@@ -7,7 +7,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     {
         protected AbstractQuestionCommand(Guid questionnaireId, Guid questionId,
             string title, string alias, bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,Guid responsibleId)
+            QuestionScope scope, string condition, string validationExpression, 
+            string validationMessage, string instructions,Guid responsibleId)
             : base(questionnaireId, questionId, responsibleId)
         {
             this.Title = title;

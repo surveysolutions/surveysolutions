@@ -98,7 +98,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     isInteger: true,
                     countOfDecimalPlaces: null,
                     areAnswersOrdered: false,
-                    maxAllowedAnswers: null));
+                    maxAllowedAnswers: null,
+                    maxAnswerCount: null));
         }
 
         private int? GetMaxValueFromQuestion(AbstractQuestion question)
