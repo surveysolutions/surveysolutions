@@ -83,6 +83,7 @@
     <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
     <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
     <Compile Include="Commands\Account\ValidateAccountCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\AbstractListQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
@@ -92,7 +93,10 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddNumericQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\CloneListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs" />
@@ -112,11 +116,15 @@
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
+    <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
     <Compile Include="Events\Questionnaire\GroupEvent.cs" />
     <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
+    <Compile Include="Events\Questionnaire\ListQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\ListQuestionChanged.cs" />
+    <Compile Include="Events\Questionnaire\ListQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />

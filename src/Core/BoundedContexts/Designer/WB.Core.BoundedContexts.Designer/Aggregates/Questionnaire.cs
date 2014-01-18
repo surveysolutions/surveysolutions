@@ -202,7 +202,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
 
             if (question == null)
             {
@@ -244,6 +245,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -257,6 +259,43 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
+        }
+
+        internal void Apply(ListQuestionAdded e)
+        {
+            IQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
+            
         }
 
         private void Apply(QuestionCloned e)
@@ -284,7 +323,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
             if (question == null)
             {
                 return;
@@ -323,6 +363,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -336,6 +377,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
+        }
+
+
+        internal void Apply(ListQuestionCloned e)
+        {
+            IQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+
         }
 
         private void Apply(NewQuestionnaireCreated e)
@@ -374,7 +453,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
 
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
@@ -410,6 +490,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
@@ -417,6 +498,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
+        }
+
+        internal void Apply(ListQuestionChanged e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            IQuestion newQuestion =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+
         }
 
         private void Apply(QuestionDeleted e)
@@ -955,6 +1074,122 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
+            });
+        }
+
+
+        public void AddListQuestion(Guid questionId, Guid groupId, string title, string alias,
+           bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression, 
+           string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            var questionType = QuestionType.TextList;
+
+            alias = alias.Trim();
+            title = title.Trim();
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias,
+                isFeatured, validationExpression, responsibleId);
+            
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            this.ApplyEvent(new ListQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                StataExportCaption = alias,
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = false,
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        public void CloneListQuestion(Guid questionId, Guid groupId, string title, string alias,
+           bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression,
+           string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex,
+            Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            var questionType = QuestionType.TextList;
+
+            alias = alias.Trim();
+            title = title.Trim();
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias,
+                isFeatured, validationExpression, responsibleId);
+
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            this.ApplyEvent(new ListQuestionCloned
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                StataExportCaption = alias,
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = false,
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        public void UpdateListQuestion(Guid questionId, string title, string alias,
+           bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression,
+           string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            var questionType = QuestionType.TextList;
+
+            alias = alias.Trim();
+            title = title.Trim();
+            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias,
+                isFeatured, validationExpression, responsibleId);
+
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            this.ApplyEvent(new ListQuestionChanged
+            {
+                PublicKey = questionId,
+                
+                QuestionText = title,
+                StataExportCaption = alias,
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = false,
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
             });
         }
 
@@ -1766,7 +2001,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(exceptionType, getExceptionDescription(elementsWithSameId));
             }
-        }
+         }
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId)
         {
