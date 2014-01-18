@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
             nestedGroupId = Guid.Parse("22222222222222222222222222222222");
 
+            nestedGroupTitle = "nested Group";
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
                 {
@@ -37,7 +38,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>
                     {
-                        new Group("nested Group") { PublicKey = nestedGroupId }
+                        new Group(nestedGroupTitle) { PublicKey = nestedGroupId }
                     }
                 });
 
@@ -52,13 +53,19 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.AddPropagateScreen(rosterId, new decimal[0], 0, 0);
+             PropagateScreen(interviewViewModel, rosterId, 0);
 
         It should_contain_grid_screen = () =>
             interviewViewModel.Screens.Keys.ShouldContain(new InterviewItemId(rosterId, new decimal[0]));
 
         It should_contain_grid_screen_with_nested_group = () =>
             ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Rows.First().Items[0].PublicKey.ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
+
+        It should_contain_grid_screen_with_header_with_nested_group_id = () =>
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Header[0].PublicKey.ShouldEqual(nestedGroupId);
+
+        It should_contain_grid_screen_with_header_with_nested_group_title = () =>
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Header[0].Title.ShouldEqual(nestedGroupTitle);
 
         It should_contain_screen_with_added_roster_row = () =>
             interviewViewModel.Screens.Keys.ShouldContain(new InterviewItemId(rosterId, new decimal[] { 0 }));
@@ -72,6 +79,12 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         It should_not_contain_nested_rosters_grid_screen = () =>
            interviewViewModel.Screens.Keys.ShouldNotContain(new InterviewItemId(nestedGroupId, new decimal[0]));
 
+        It should_last_breadcrumb_of_nested_group_be_equal_to_4 = () =>
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.Count().ShouldEqual(4);
+
+        It should_not_contain_nested_rosters_grid_screen_with_nested_group_title = () =>
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(nestedGroupTitle);
+
         It should_last_breadcrumb_of_nested_group_be_equal_to_nested_group_id = () =>
             ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.Last().ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
 
@@ -81,6 +94,12 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         It should_2n_breadcrumb_of_nested_group_be_equal_to_nested_group_id = () =>
             ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.ToList()[1].ShouldEqual(new InterviewItemId(rosterId, new decimal[0]));
 
+        It should_have_1_sibling = () =>
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Siblings.Count().ShouldEqual(1);
+
+        It should_have_him_self_in_list_of_siblings = () =>
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Siblings.First().ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
+
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
@@ -88,5 +107,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 
         private static Guid rosterId;
         private static Guid nestedGroupId;
+        private static string nestedGroupTitle;
     }
 }

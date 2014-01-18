@@ -22,21 +22,62 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             var result = new InterviewViewModel(Guid.NewGuid(), template, rosterStructure,
                 interviewSynchronizationDto);
 
-            foreach (var questionViewModel in result.FindQuestion(q=>true))
+            foreach (var screen in result.Chapters)
             {
-                questionViewModel.ShouldAlwaysRaiseInpcOnUserInterfaceThread(false);
-            }
-
-            foreach (var screen in result.Screens.Values)
-            {
-                var mvxNotifyPropertyChanged = screen as MvxNotifyPropertyChanged;
-                if (mvxNotifyPropertyChanged != null)
-                {
-                    mvxNotifyPropertyChanged.ShouldAlwaysRaiseInpcOnUserInterfaceThread(false);
-                }
+                SubscribeScreen(result, screen);
             }
             
             return result;
+        }
+
+        protected static void PropagateScreen(InterviewViewModel interviewViewModel, Guid screenId, decimal rosterInstanceId)
+        {
+            interviewViewModel.AddPropagateScreen(screenId, new decimal[0], rosterInstanceId, null);
+
+            var newScreen = interviewViewModel.Screens[new InterviewItemId(screenId, new decimal[] { rosterInstanceId })] as QuestionnaireScreenViewModel;
+            SubscribeScreen(interviewViewModel, newScreen);
+        }
+
+        private static void SubscribeScreen(InterviewViewModel interviewViewModel, IQuestionnaireViewModel screen)
+        {
+            SubscribeObject(screen);
+
+            var questionnaireScreenViewModel = screen as QuestionnaireScreenViewModel;
+            if (questionnaireScreenViewModel != null)
+            {
+                foreach (var item in questionnaireScreenViewModel.Items)
+                {
+                    SubscribeObject(item);
+
+                    var questionnaireNavigationPanelItem = item as QuestionnaireNavigationPanelItem;
+                    if (questionnaireNavigationPanelItem != null)
+                        SubscribeScreen(interviewViewModel, interviewViewModel.Screens[questionnaireNavigationPanelItem.PublicKey]);
+                }
+
+                var questionnairePropagatedScreenViewModel = questionnaireScreenViewModel as QuestionnairePropagatedScreenViewModel;
+                if (questionnairePropagatedScreenViewModel != null)
+                {
+                    SubscribeObject(questionnairePropagatedScreenViewModel.Next);
+                    SubscribeObject(questionnairePropagatedScreenViewModel.Previous);   
+                }
+            }
+            var questionnaireGridViewModel = screen as QuestionnaireGridViewModel;
+            if (questionnaireGridViewModel != null)
+            {
+                foreach (var questionnairePropagatedScreenViewModel in questionnaireGridViewModel.Rows)
+                {
+                    SubscribeScreen(interviewViewModel, questionnairePropagatedScreenViewModel);
+                }
+            }
+        }
+
+        private static void SubscribeObject(object o)
+        {
+            var mvxNotifyScreenPropertyChanged = o as MvxNotifyPropertyChanged;
+            if (mvxNotifyScreenPropertyChanged != null)
+            {
+                mvxNotifyScreenPropertyChanged.ShouldAlwaysRaiseInpcOnUserInterfaceThread(false);
+            }
         }
 
         protected static InterviewSynchronizationDto CreateInterviewSynchronizationDto(AnsweredQuestionSynchronizationDto[] answers,
