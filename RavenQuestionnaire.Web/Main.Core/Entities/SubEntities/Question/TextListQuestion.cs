@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public class TextListQuestion : AbstractQuestion, IMultiAnswerQuestion
+    public class TextListQuestion : AbstractQuestion, IListQuestion
     {
         public TextListQuestion(string text)
             : base(text)
