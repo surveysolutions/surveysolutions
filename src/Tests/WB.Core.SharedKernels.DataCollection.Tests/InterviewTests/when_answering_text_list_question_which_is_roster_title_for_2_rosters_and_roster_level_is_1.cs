@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>
                 (_
                     => _.HasQuestion(questionId) == true
-                        && _.GetQuestionType(questionId) == QuestionType.MultiAnswer
+                        && _.GetQuestionType(questionId) == QuestionType.TextList
                         && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
                         && _.DoesQuestionSpecifyRosterTitle(questionId) == true
                         && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }

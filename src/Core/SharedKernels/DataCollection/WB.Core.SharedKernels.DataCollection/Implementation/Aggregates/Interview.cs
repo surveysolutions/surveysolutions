@@ -1113,7 +1113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultiAnswer);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
             ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
