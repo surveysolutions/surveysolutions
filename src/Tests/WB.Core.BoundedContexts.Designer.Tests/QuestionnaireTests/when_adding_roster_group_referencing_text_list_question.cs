@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded { PublicKey = rosterSizeQuestionId, GroupPublicKey = chapterId, QuestionType = QuestionType.MultiAnswer });
+            questionnaire.Apply(new NewQuestionAdded { PublicKey = rosterSizeQuestionId, GroupPublicKey = chapterId, QuestionType = QuestionType.TextList });
         };
 
         Because of = () =>

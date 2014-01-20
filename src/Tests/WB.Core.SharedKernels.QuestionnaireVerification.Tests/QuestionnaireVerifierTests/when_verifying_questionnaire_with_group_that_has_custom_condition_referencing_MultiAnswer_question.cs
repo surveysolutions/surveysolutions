@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             multiAnswerQuestionId = Guid.Parse("12222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new MultiAnswerQuestion("Text") { PublicKey = multiAnswerQuestionId });
+            questionnaire.Children.Add(new TextListQuestion("Text") { PublicKey = multiAnswerQuestionId });
             questionnaire.Children.Add(new Group()
             {
                 PublicKey = groupWithCustomCondition,
