@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
                     Verifier<IMultyOptionsQuestion>(this.CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
-                    Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion),
+                    Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
                     Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And20, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20),
@@ -158,13 +158,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsRosterByQuestion(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
         }
 
-        private static bool GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
+        private static bool RosterSizeSourceQuestionTypeIsIncorrect(IGroup group, QuestionnaireDocument questionnaire)
         {
             var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(group, questionnaire);
             if (rosterSizeQuestion == null)
                 return false;
 
-            return !IsQuestionAllowedToBeRosterSize(rosterSizeQuestion);
+            return !IsQuestionAllowedToBeRosterSizeSource(rosterSizeQuestion);
         }
 
         private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group)
@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (!IsRosterSizeQuestion(question, questionnaire))
                 return false;
-            if (!IsQuestionAllowedToBeRosterSize(question))
+            if (!IsQuestionAllowedToBeRosterSizeSource(question))
                 return false;
             return !GetRosterSizeQuestionMaxValue(question).HasValue;
         }
@@ -254,7 +254,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (!IsRosterSizeQuestion(question, questionnaire))
                 return false;
-            if (!IsQuestionAllowedToBeRosterSize(question))
+            if (!IsQuestionAllowedToBeRosterSizeSource(question))
                 return false;
             var rosterSizeQuestionMaxValue = GetRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
@@ -262,9 +262,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !Enumerable.Range(1, 20).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
-        private static bool IsQuestionAllowedToBeRosterSize(IQuestion question)
+        private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
         {
-            return IsNumericRosterSizeQuestion(question) || IsCategoricalRosterSizeQuestion(question);
+            return IsNumericRosterSizeQuestion(question)
+                || IsCategoricalRosterSizeQuestion(question)
+                || IsTextListQuestion(question);
+        }
+
+        private static bool IsTextListQuestion(IQuestion question)
+        {
+            return question.QuestionType == QuestionType.TextList;
         }
 
         private static bool IsNumericRosterSizeQuestion(IQuestion question)
