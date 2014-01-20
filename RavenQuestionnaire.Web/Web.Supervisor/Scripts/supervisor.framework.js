@@ -77,5 +77,5 @@ Supervisor.Config.QuestionType = {
     Text: "Text",
     AutoPropagate: "AutoPropagate",
     GpsCoordinates: "Geo Location",
-    MultiAnswer: "MultiAnswer"
+    TextList: "TextList"
 };

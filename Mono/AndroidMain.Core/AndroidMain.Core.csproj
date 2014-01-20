@@ -199,14 +199,14 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IAutoPropagateQuestion.cs">
       <Link>Entities\SubEntities\Question\IAutoPropagateQuestion.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IMultiAnswerQuestion.cs">
-      <Link>Entities\SubEntities\Question\IMultiAnswerQuestion.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IMultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\IMultyOptionsQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\INumericQuestion.cs">
       <Link>Entities\SubEntities\Question\INumericQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\ITextListQuestion.cs">
+      <Link>Entities\SubEntities\Question\ITextListQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
@@ -216,6 +216,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\SingleQuestion.cs">
       <Link>Entities\SubEntities\Question\SingleQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\TextListQuestion.cs">
+      <Link>Entities\SubEntities\Question\TextListQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\TextQuestion.cs">
       <Link>Entities\SubEntities\Question\TextQuestion.cs</Link>
@@ -390,7 +393,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,13 +16,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             multiAnswerQuestionWithMaxCountId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new MultiAnswerQuestion()
+            questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = multiAnswerQuestionWithMaxCountId,
                 MaxAnswerCount = 100
             });
 
-            questionnaire.Children.Add(new MultiAnswerQuestion()
+            questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = Guid.Parse("20000000000000000000000000000000"),
                 MaxAnswerCount = null

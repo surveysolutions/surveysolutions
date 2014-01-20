@@ -17,11 +17,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionWithSubstitutionReferenceTomultiAnswerQuestionId = Guid.Parse("10000000000000000000000000000000");
             multiAnswerQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                new MultiAnswerQuestion
+                new TextListQuestion
                 {
                     PublicKey = multiAnswerQuestionId,
                     StataExportCaption = unsupported,
-                    QuestionType = QuestionType.MultiAnswer
+                    QuestionType = QuestionType.TextList
                 },
                 new SingleQuestion
                 {
