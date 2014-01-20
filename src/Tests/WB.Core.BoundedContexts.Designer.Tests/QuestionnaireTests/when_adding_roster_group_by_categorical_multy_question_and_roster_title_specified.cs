@@ -26,15 +26,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(
-                () =>
-                    questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", parentGroupId: parentGroupId,
-                        description: null, condition: null, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,
-                        rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
+            exception = Catch.Exception(() =>
+                questionnaire.AddGroup(
+                    groupId: groupId, responsibleId: responsibleId, title: "title", parentGroupId: parentGroupId,
+                    description: null, condition: null, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,
+                    rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
-
 
         It should_throw_exception_with_message_containting__categorical__ = () =>
             exception.Message.ToLower().ShouldContain("categorical");

@@ -2048,11 +2048,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
-            {
                 throw new QuestionnaireException(string.Format(
-                    "Categorical multy answers question {0} as roster size question cannot have roster title question.",
+                    "Roster having categorical multiple answers question {0} as roster size source cannot have roster title question.",
                     this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
-            }
+
+            if (rosterSizeQuestion.QuestionType == QuestionType.TextList && rosterTitleQuestionId.HasValue)
+                throw new QuestionnaireException(string.Format(
+                    "Roster having list question {0} as roster size source cannot have roster title question.",
+                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.Numeric)
             {

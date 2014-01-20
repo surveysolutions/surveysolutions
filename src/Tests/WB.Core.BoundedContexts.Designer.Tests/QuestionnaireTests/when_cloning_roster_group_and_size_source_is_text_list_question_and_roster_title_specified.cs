@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_cloning_roster_group_by_categorical_multy_question_and_roster_title_specified : QuestionnaireTestsContext
+    internal class when_cloning_roster_group_and_size_source_is_text_list_question_and_roster_title_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded { QuestionType = QuestionType.MultyOption, PublicKey = rosterSizeQuestionId, GroupPublicKey = chapterId });
+            questionnaire.Apply(new NewQuestionAdded { QuestionType = QuestionType.TextList, PublicKey = rosterSizeQuestionId, GroupPublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
         };
 
@@ -38,8 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__categorical__ = () =>
-            exception.Message.ToLower().ShouldContain("categorical");
+        It should_throw_exception_with_message_containing__list__ = () =>
+            exception.Message.ToLower().ShouldContain("list");
 
         It should_throw_exception_with_message_containing__cannot__ = () =>
             exception.Message.ToLower().ShouldContain("cannot");
