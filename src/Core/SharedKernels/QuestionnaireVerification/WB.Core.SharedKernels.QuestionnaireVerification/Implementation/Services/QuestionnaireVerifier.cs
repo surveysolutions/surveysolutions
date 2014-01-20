@@ -243,11 +243,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            if (!IsRosterSizeQuestion(question, questionnaire))
-                return false;
-            if (!IsQuestionAllowedToBeRosterSizeSource(question))
-                return false;
-            return !GetRosterSizeQuestionMaxValue(question).HasValue;
+            return IsRosterSizeQuestion(question, questionnaire)
+                && IsQuestionAllowedToBeRosterSizeSource(question)
+                && IsMaxValueMissing(question);
         }
 
         private static bool RosterSizeQuestionMaxValueCouldBeInRange1And20(IQuestion question, QuestionnaireDocument questionnaire)
@@ -744,21 +742,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return rosterSizeQuestionIds.Contains(question.PublicKey);
         }
 
+        private static bool IsMaxValueMissing(IQuestion question)
+        {
+            var integerQuestion = question as INumericQuestion;
+
+            if (integerQuestion != null && integerQuestion.IsInteger)
+                return !integerQuestion.MaxValue.HasValue;
+            else
+                return false;
+        }
+
         private static int? GetRosterSizeQuestionMaxValue(IQuestion question)
         {
             var integerQuestion = question as INumericQuestion;
-            if (integerQuestion != null)
-                return integerQuestion.IsInteger ? integerQuestion.MaxValue : null;
 
-            var multiOptionsQuestion = question as IMultyOptionsQuestion;
-            if (multiOptionsQuestion != null)
-                return question.LinkedToQuestionId.HasValue ? (int?)null : question.Answers.Count;
-            return null;
-        }
-
-        private static IQuestion GetQuestionByVariableName(string variableName, QuestionnaireDocument questionnaire)
-        {
-            return questionnaire.FirstOrDefault<IQuestion>(question => question.StataExportCaption == variableName);
+            return integerQuestion != null && integerQuestion.IsInteger
+                ? integerQuestion.MaxValue
+                : null;
         }
 
         private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)
