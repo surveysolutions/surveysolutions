@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>
                 (_
                     => _.HasQuestion(questionId) == true
-                        && _.GetQuestionType(questionId) == QuestionType.MultiAnswer
+                        && _.GetQuestionType(questionId) == QuestionType.TextList
                         && _.GetListSizeForListQuestion(questionId) == 2
                 );
 

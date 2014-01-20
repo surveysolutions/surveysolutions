@@ -401,7 +401,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestion question = this.GetQuestionOrThrow(questionId);
             this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
 
-            var listQuestion = question as IMultiAnswerQuestion;
+            var listQuestion = question as ITextListQuestion;
             if (listQuestion != null)
                 return listQuestion.MaxAnswerCount;
 
