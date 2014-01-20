@@ -53,6 +53,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Interview interview;
         private static Guid userId;
         private static Guid questionId;
-        private static decimal[] rosterVector;
+        private static readonly decimal[] rosterVector = new decimal[0];
     }
 }
