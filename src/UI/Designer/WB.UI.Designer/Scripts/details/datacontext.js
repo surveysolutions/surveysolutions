@@ -183,9 +183,15 @@
                 if (question.parent().isRoster()) {
                     return false;
                 }
-                return isNumericInteger(question) || isNotLinkedMultyCategorical(question);
+                return isNumericInteger(question) || isNotLinkedMultyCategorical(question) || isTextList(question);
             }).map(function (item) {
-                return { questionId: item.id(), title: item.alias() + ": " + item.title(), isNumeric: isNumericInteger(item), isCategorical: isNotLinkedMultyCategorical(item) };
+                return {
+                    questionId: item.id(),
+                    title: item.alias() + ": " + item.title(),
+                    isNumeric: isNumericInteger(item),
+                    isCategorical: isNotLinkedMultyCategorical(item),
+                    isTextList: isTextList(item)
+                };
             });
         };
 
@@ -210,6 +216,10 @@
 
         var isNotLinkedMultyCategorical = function (question) {
             return question.qtype() == config.questionTypes.MultyOption && !question.isLinked();
+        };
+
+        var isTextList = function (question) {
+            return question.qtype() == config.questionTypes.TextList;
         };
 
         var getChildItemByIdAndType = function (item) {
