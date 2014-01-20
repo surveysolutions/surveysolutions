@@ -79,6 +79,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerSingleOptionQuestionCommand.cs">
       <Link>Commands\Interview\AnswerSingleOptionQuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerTextListQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerTextListQuestionCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerTextQuestionCommand.cs">
       <Link>Commands\Interview\AnswerTextQuestionCommand.cs</Link>
     </Compile>
@@ -315,6 +318,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SynchronizationMetadataApplied.cs">
       <Link>Events\Interview\SynchronizationMetadataApplied.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\TextListQuestionAnswered.cs">
+      <Link>Events\Interview\TextListQuestionAnswered.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\TextQuestionAnswered.cs">
       <Link>Events\Interview\TextQuestionAnswered.cs</Link>

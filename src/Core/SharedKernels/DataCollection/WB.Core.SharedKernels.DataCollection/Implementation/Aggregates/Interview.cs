@@ -177,6 +177,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
+        internal void Apply(TextListQuestionAnswered @event)
+        {
+            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answeredQuestions.Add(questionKey);
+        }
+
         private void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -1098,6 +1105,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return rosterCalculationData;
         }
 
+        public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
+            Tuple<decimal, string>[] answers)
+        {
+            var answeredQuestion = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultiAnswer);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
+
+            ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
+            ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
+            var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
+            ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
+
+            string answerFormattedAsRosterTitle = string.Join(", ", answers.Select(x => x.Item2).ToArray());
+
+            this.ApplyEvent(new TextListQuestionAnswered(userId, questionId, rosterVector, answerTime, answers));
+
+            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+       
+        }
+
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
             double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
         {
@@ -1460,6 +1495,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
+      
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
@@ -1502,6 +1538,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(questionId, rosterVector, parentRosterGroupIdsStartingFromTop, questionnaire);
 
             this.ThrowIfSomeOfRosterVectorValuesAreInvalid(questionId, rosterVector, parentRosterGroupIdsStartingFromTop, questionnaire);
+        }
+
+        private static void ThrowIfAnswersExceedsMaxAnswerCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit, Guid questionId, IQuestionnaire questionnaire)
+        {
+            if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
+            {
+                throw new InterviewException(string.Format("Answers exceeds MaxAnswerCount limit for question {0}",
+                    FormatQuestionForException(questionId, questionnaire)));
+            }
+        }
+
+        private static void ThrowIfStringValueAreEmptyOrWhitespaces(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
+        {
+            if (answers.Any(x => string.IsNullOrWhiteSpace(x.Item2)))
+            {
+                throw new InterviewException(string.Format("String values should be not empty or whitespaces for question {0}", FormatQuestionForException(questionId, questionnaire)));
+            }
+        }
+
+        private static void ThrowIfDecimalValuesAreNotUnique(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
+        {
+            var decimals = answers.Select(x => x.Item1).Distinct().ToArray();
+            if (answers.Length > decimals.Length)
+            {
+                throw new InterviewException(string.Format("Decimal values should be unique for question {0}", FormatQuestionForException(questionId, questionnaire)));
+            }
         }
 
         private static void ThrowIfRosterVectorIsNull(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire)
