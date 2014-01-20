@@ -37,19 +37,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.Text,
             QuestionType.AutoPropagate,
             QuestionType.GpsCoordinates,
-            QuestionType.MultiAnswer
+            QuestionType.TextList,
         };
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
-            QuestionType.MultyOption
+            QuestionType.MultyOption,
+            QuestionType.TextList,
         };
 
         private static readonly HashSet<QuestionType> ReroutedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
-            QuestionType.AutoPropagate
+            QuestionType.AutoPropagate,
         };
 
         #endregion
@@ -1985,7 +1986,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             switch (rosterSizeSource)
             {
                 case RosterSizeSourceType.Question:
-                    this.ThrowIfRosterByQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles);
+                    this.ThrowIfRosterSizeQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles);
                     break;
                 case RosterSizeSourceType.FixedTitles:
                     this.ThrowIfRosterByFixedTitlesIsIncorrect(rosterSizeQuestionId, rosterTitleQuestionId, rosterFixedTitles);
@@ -2021,7 +2022,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfRosterByQuestionIsIncorrect(Guid groupId,Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
+        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
         {
             var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
 
@@ -2047,11 +2048,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
-            {
                 throw new QuestionnaireException(string.Format(
-                    "Categorical multy answers question {0} as roster size question cannot have roster title question.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
-            }
+                    "Roster having categorical multiple answers question {0} as roster size source cannot have roster title question.",
+                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+
+            if (rosterSizeQuestion.QuestionType == QuestionType.TextList && rosterTitleQuestionId.HasValue)
+                throw new QuestionnaireException(string.Format(
+                    "Roster having list question {0} as roster size source cannot have roster title question.",
+                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.Numeric)
             {

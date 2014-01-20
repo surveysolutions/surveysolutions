@@ -17,10 +17,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notSupportedForLinkingQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                new MultiAnswerQuestion
+                new TextListQuestion
                 {
                     PublicKey = notSupportedForLinkingQuestionId,
-                    QuestionType = QuestionType.MultiAnswer
+                    QuestionType = QuestionType.TextList
                 },
                 new SingleQuestion
                 {

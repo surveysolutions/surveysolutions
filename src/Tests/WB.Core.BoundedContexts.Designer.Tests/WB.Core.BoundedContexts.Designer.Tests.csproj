@@ -126,7 +126,12 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
     <Compile Include="QuestionnaireTests\when_moving_roster_size_question_to_roster_group.cs" />
@@ -220,6 +225,7 @@
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_numeric_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
     <Compile Include="RoleProviderTests\when_adding_roles_to_users_with_non_Guid_userId.cs" />
     <Compile Include="RoleProviderTests\RoleProviderTestsContext.cs" />
     <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
