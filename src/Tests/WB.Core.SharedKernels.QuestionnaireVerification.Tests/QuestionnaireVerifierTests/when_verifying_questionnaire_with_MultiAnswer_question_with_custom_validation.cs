@@ -19,13 +19,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             multiAnswerQuestionWithValidationId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new MultiAnswerQuestion()
+            questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = multiAnswerQuestionWithValidationId,
                 ValidationExpression = "some expression"
             });
 
-            questionnaire.Children.Add(new MultiAnswerQuestion()
+            questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = Guid.Parse("20000000000000000000000000000000")
             });
