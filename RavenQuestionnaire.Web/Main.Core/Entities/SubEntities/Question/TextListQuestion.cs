@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public class MultiAnswerQuestion : AbstractQuestion, IMultiAnswerQuestion
+    public class TextListQuestion : AbstractQuestion, ITextListQuestion
     {
-        public MultiAnswerQuestion(string text)
+        public TextListQuestion(string text)
             : base(text)
         {
         }
 
-        public MultiAnswerQuestion()
+        public TextListQuestion()
         {
         }
 

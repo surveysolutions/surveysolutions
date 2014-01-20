@@ -80,10 +80,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_MultiAnswerQuestionMaxAnswerInRange1And40),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_MultiAnswerQuestionMaxAnswerInRange1And40),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByEpressionsThatUsesMultiAnswerQuestions,
@@ -305,24 +305,24 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
         }
 
-        private static bool MultiAnswerQuestionCannotBePrefilled(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionCannotBePrefilled(ITextListQuestion question)
         {
             return question.Featured;
         }
 
-        private static bool MultiAnswerQuestionMaxAnswerInRange1And40(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionMaxAnswerInRange1And40(ITextListQuestion question)
         {
             if (!question.MaxAnswerCount.HasValue)
                 return false;
             return !Enumerable.Range(1, 40).Contains(question.MaxAnswerCount.Value);
         }
 
-        private static bool MultiAnswerQuestionCannotCustomValidation(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionCannotCustomValidation(ITextListQuestion question)
         {
             return !string.IsNullOrWhiteSpace(question.ValidationExpression);
         }
 
-        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
         {
             return question.QuestionScope == QuestionScope.Supervisor;
         }
@@ -521,7 +521,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
             IQuestion questionsReferencedInValidation = GetQuestionByIdentifier(identifier, questionnaire);
 
-            if (questionsReferencedInValidation is IMultiAnswerQuestion)
+            if (questionsReferencedInValidation is ITextListQuestion)
             {
                 return getCustomError(questionnaireItemWithExpression);
             }

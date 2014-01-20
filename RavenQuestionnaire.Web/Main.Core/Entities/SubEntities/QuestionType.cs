@@ -26,6 +26,6 @@ namespace Main.Core.Entities.SubEntities
         [Obsolete]
         AutoPropagate = 8,
 
-        MultiAnswer = 9
+        TextList = 9
     }
 }
