@@ -1079,36 +1079,41 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void AddTextListQuestion(Guid questionId, Guid groupId, string title, string alias,
-           bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression, 
-           string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
+        public void AddTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var questionScope = QuestionScope.Interviewer;
+            var validationExpression = string.Empty;
 
-            alias = alias.Trim();
+            variableName = variableName.Trim();
             title = title.Trim();
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias,
-                isFeatured, validationExpression, responsibleId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
             
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(questionId, maxAnswerCount);
 
             this.ApplyEvent(new TextListQuestionAdded
             {
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
                 QuestionText = title,
-                StataExportCaption = alias,
+                StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isFeatured,
+                Featured = isPrefilled,
                 Capital = false,
-                QuestionScope = scope,
+                QuestionScope = questionScope,
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
+                ValidationMessage = string.Empty,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
 
@@ -1116,21 +1121,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneTextListQuestion(Guid questionId, Guid groupId, string title, string alias,
-           bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression,
-           string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex,
+        public void CloneTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition,string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId, int? maxAnswerCount)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var questionScope = QuestionScope.Interviewer;
+            var validationExpression = string.Empty;
+            var validationMessage = string.Empty;
 
-            alias = alias.Trim();
+            variableName = variableName.Trim();
             title = title.Trim();
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias,
-                isFeatured, validationExpression, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
@@ -1139,11 +1147,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
                 QuestionText = title,
-                StataExportCaption = alias,
+                StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isFeatured,
+                Featured = isPrefilled,
                 Capital = false,
-                QuestionScope = scope,
+                QuestionScope = questionScope,
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
@@ -1156,21 +1164,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateTextListQuestion(Guid questionId, string title, string alias,
-           bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression,
-           string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
+        public void UpdateTextListQuestion(Guid questionId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
             var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var questionScope = QuestionScope.Interviewer;
+            var validationExpression = string.Empty;
+            var validationMessage = string.Empty;
 
-            alias = alias.Trim();
+
+            variableName = variableName.Trim();
             title = title.Trim();
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias,
-                isFeatured, validationExpression, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
@@ -1179,11 +1191,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = questionId,
                 
                 QuestionText = title,
-                StataExportCaption = alias,
+                StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isFeatured,
+                Featured = isPrefilled,
                 Capital = false,
-                QuestionScope = scope,
+                QuestionScope = questionScope,
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
@@ -1882,6 +1894,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static bool AreElementsUnique(IEnumerable<string> elements)
         {
             return elements.Distinct().Count() == elements.Count();
+        }
+
+        
+        private void ThrowIfMaxAnswerCountNotInRange1to40(Guid questionId, int? maxAnswerCount)
+        {
+            if (maxAnswerCount.HasValue && !Enumerable.Range(1, 20).Contains(maxAnswerCount.Value))
+            {
+                throw new  QuestionnaireException(
+                    DomainExceptionType.MaxAnswerCountNotInRange,
+                    "MaxAnswerCount should be in range ftom 1 to 40");
+            }
         }
 
         private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)

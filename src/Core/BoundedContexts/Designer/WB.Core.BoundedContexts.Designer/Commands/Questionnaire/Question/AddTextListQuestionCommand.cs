@@ -6,15 +6,14 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "AddTextListQuestion")]
+    [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "AddTextListQuestion")]
     public class AddTextListQuestionCommand : AbstractListQuestionCommand
     {
         public AddTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
-            string title, string alias, bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-             Guid responsibleId, int? maxAnswerCount)
-            : base(questionnaireId, questionId, title, alias, isMandatory, isFeatured, scope, condition,
-                validationExpression, validationMessage, instructions, responsibleId, maxAnswerCount)
+            string title, string variableName,
+            bool isMandatory, string condition, string instructions,
+            Guid responsibleId, int? maxAnswerCount)
+            : base(responsibleId, questionnaireId, questionId, title, variableName, isMandatory, condition, instructions, maxAnswerCount)
         {
             this.GroupId = groupId;
         }
