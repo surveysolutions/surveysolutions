@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, GroupText = "group to move", ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, GroupText = rosterTitle, ParentGroupPublicKey = chapterId });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
 
             eventContext = new EventContext();
@@ -39,7 +39,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext.GetSingleEvent<QuestionnaireItemMoved>()
                 .GroupKey.ShouldEqual(parentRosterId);
 
-        private static string rosterTitle;
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
