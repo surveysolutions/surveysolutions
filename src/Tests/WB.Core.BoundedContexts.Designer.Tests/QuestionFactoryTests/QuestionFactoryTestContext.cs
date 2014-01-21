@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
         protected static QuestionData CreateQuestionData(QuestionType questionType)
         {
             return new QuestionData(Guid.NewGuid(), questionType, QuestionScope.Interviewer, "title", "var", "", "", "",
-                Order.AsIs, false, false, false, "", new List<Guid>(), null, new Answer[0], null, null, null, null, null);
+                Order.AsIs, false, false, false, "", new List<Guid>(), null, new Answer[0], null, null, null, null, null, null);
         }
     }
 }

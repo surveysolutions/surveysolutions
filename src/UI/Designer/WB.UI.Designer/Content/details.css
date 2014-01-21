@@ -147,7 +147,8 @@ body.loading .loading-backdrop {
         height: 1px;
     }
 
-        .stack .title .control-group, .stack .title textarea {
+        .stack .title .control-group, .stack .title textarea,
+        .control-group textarea {
             margin-bottom: 0;
         }
 
@@ -805,6 +806,10 @@ ul.list.ui-sortable:empty {
 
 .control-group.error .note input, .control-group.error .note select, .control-group.error .note textarea {
     box-shadow: none;
+}
+
+.details.stack .form-horizontal .control-group {
+    margin-bottom: 10px;
 }
 
 #search-results .q-item-wrap {

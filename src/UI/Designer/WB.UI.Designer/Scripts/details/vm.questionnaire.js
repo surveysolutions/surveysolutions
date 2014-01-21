@@ -309,6 +309,17 @@
                         command = config.commands.updateNumericQuestion;
                     }
                     break;
+                 case config.questionTypes.TextList:
+                     if (question.isNew()) {
+                         if (question.isClone()) {
+                             command = config.commands.cloneListQuestion;
+                         } else {
+                             command = config.commands.createListQuestion;
+                         }
+                     } else {
+                         command = config.commands.updateListQuestion;
+                     }
+                    break;
                 default:
                     if (question.isNew()) {
                         if (question.isClone()) {

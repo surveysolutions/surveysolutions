@@ -68,6 +68,10 @@
                     return self.isRosterSizeSourceQuestion() &&
                         !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isCategorical;
                 });
+                self.isTextListRosterSizeQuestion = ko.computed(function () {
+                    return self.isRosterSizeSourceQuestion() &&
+                        !_.isUndefined(selectedRosterSizeQuestion()) && selectedRosterSizeQuestion().isTextList;
+                });
 
                 self.rosterTitleQuestion = ko.observable();
 

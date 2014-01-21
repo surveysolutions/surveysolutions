@@ -83,6 +83,12 @@
     <Compile Include="InterviewTests\when_answering_multiple_options_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_options_are_X_Y_Z_and_selected_ar___.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_1_with_a_half.cs" />
     <Compile Include="InterviewTests\when_answering_single_option_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_which_is_absent.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_with_incorrect_roster_vector.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_with_not_unique_decimal_values.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_with_some_empty_string_values.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_with_too_much_answers.cs" />
     <Compile Include="InterviewTests\when_answering_text_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\when_answer_on_multy_option_question_increases_roster_size.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_on_the_third_level.cs" />

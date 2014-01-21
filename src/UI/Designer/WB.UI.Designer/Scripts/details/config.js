@@ -11,7 +11,7 @@
                 "DateTime": "DateTime",
                 "Text": "Text",
                 "GpsCoordinates": "GpsCoordinates",
-                "MultiAnswer": "MultiAnswer"
+                "TextList": "TextList"
             },
             rosterSizeSourceTypes = {
                 "FixedTitles": "FixedTitles",
@@ -51,8 +51,8 @@
                     value: "Geo Location"
                 },
                 {
-                    key: "MultiAnswer",
-                    value: "MultiAnswer"
+                    key: "TextList",
+                    value: "List"
                 }
             ],
             questionScopes = {
@@ -69,10 +69,13 @@
                 groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
                 createNumericQuestion: "AddNumericQuestion",
+                createListQuestion: "AddListQuestion",
                 cloneQuestion: "CloneQuestion",
                 cloneNumericQuestion: "CloneNumericQuestion",
+                cloneListQuestion: "CloneListQuestion",
                 updateQuestion: "UpdateQuestion",
                 updateNumericQuestion: "UpdateNumericQuestion",
+                updateListQuestion: "UpdateListQuestion",
                 deleteQuestion: "DeleteQuestion",
                 questionMove: "MoveQuestion",
                 addSharedPersonToQuestionnaire: "AddSharedPersonToQuestionnaire",

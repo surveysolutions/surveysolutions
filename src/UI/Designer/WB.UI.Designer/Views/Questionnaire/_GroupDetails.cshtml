@@ -35,7 +35,8 @@
                     <div class="controls">
                         <label class="control-label">Number of rows</label>
                         <select class="input-block-level" data-bind="options: allowedQuestions, optionsValue: 'questionId', optionsText: 'title', value: rosterSizeQuestion, optionsCaption: 'Choose...'"></select>
-                        <blockquote class="text-info" data-bind="visible: isCategoricalRosterSizeQuestion">*Option names to be used as titles of roster</blockquote>
+                        <blockquote class="text-info" data-bind="visible: isCategoricalRosterSizeQuestion">* Option names will be used as titles of roster rows</blockquote>
+                        <blockquote class="text-info" data-bind="visible: isTextListRosterSizeQuestion">* List answers will be used as titles of roster rows</blockquote>
                     </div>
                 </div>
                 <div class="control-group" data-bind="validationElement: rosterTitleQuestion, visible: isNumericRosterSizeQuestion">

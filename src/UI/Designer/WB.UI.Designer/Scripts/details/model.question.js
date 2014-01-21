@@ -71,7 +71,7 @@
                self.localQuestionsFromProragatedGroups = ko.observableArray();
                self.questionsFromProragatedGroups = ko.computed(function () {
                    return _.filter(self.localQuestionsFromProragatedGroups(), function (item) {
-                       return item.id() != self.id();
+                       return (item.id() != self.id()) && item.qtype()!= config.questionTypes.TextList;
                    }).map(function (item) {
                        return { questionId: item.id(), title: item.alias() + ": " + item.title() };
                    });
@@ -93,11 +93,28 @@
                            message: 'could not be more than categories count'
                        }]
                });
+
+               self.maxAnswerCount = ko.observable('').extend({
+                   digit: true,
+                   min: 1,
+                   max: 40
+               });
+
                self.answerOptions = ko.observableArray([]);
 
                self.maxValue = ko.observable();
 
                // UI stuff
+               self.isValidationVisible = ko.computed(function() {
+                   var validationFieldsAreEmpty = _.isEmpty("" + self.validationExpression() + self.validationMessage());
+                   if (self.isSupervisorQuestion() == false) {
+                       if (self.qtype() == 'TextList') {
+                           return !validationFieldsAreEmpty;
+                       }
+                       return true;
+                   }
+                   return false;
+               });
                self.addAnswer = function () {
                    var answer = new answerOption().id(Math.uuid()).title('').value('');
 
@@ -123,7 +140,7 @@
                    self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression,
                    self.validationMessage, self.instruction, self.answerOptions, self.maxValue,
                    self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces,
-                   self.areAnswersOrdered, self.maxAllowedAnswers]);
+                   self.areAnswersOrdered, self.maxAllowedAnswers, self.maxAnswerCount]);
                self.dirtyFlag().reset();
                self.errors = ko.validation.group(self);
                this.cache = function () {
@@ -165,10 +182,10 @@
                        validatable: true,
                        validation: [{
                            validator: function (val) {
-                               if (self.isFeatured() == true && val == "GpsCoordinates") return false;
+                               if (self.isFeatured() == true && (val == config.questionTypes.GpsCoordinates || val == config.questionTypes.TextList)) return false;
                                return true;
                            },
-                           message: 'Geo Location question cannot be pre-filled'
+                           message: 'Geo Location and List questions cannot be pre-filled'
                        },
                            {
                                validator: function (val) {
@@ -187,13 +204,13 @@
                                            case "DateTime":
                                            case "AutoPropagate":
                                            case "GpsCoordinates":
-                                           case "MultiAnswer": 
+                                           case "TextList":
                                                return false;
                                        }
                                    }
                                    return true;
                                },
-                               message: 'Date, Auto propagate, Linked categorical, MultiAnswer and Geo Location questions cannot be filled by supervisor. '
+                               message: 'Date, Auto propagate, Linked categorical, TextList and Geo Location questions cannot be filled by supervisor. '
                            }]
                    }); // Questoin type
 
@@ -270,7 +287,17 @@
 
                    self.validationExpression.extend({
                        validatable: true,
-                       validation: [{
+                       validation: [
+                           {
+                               validator: function (val) {
+                                   if (!_.isEmpty(val) && self.qtype() == config.questionTypes.TextList) {
+                                       return false;
+                                   }
+                                   return true;
+                               },
+                               message: 'List question cannot contain validation expression'
+                           },
+                           {
                            validator: function (val) {
                                var validationResult = validator.isValidExpression(val);
                                if (validationResult.isValid) {
@@ -281,6 +308,21 @@
                            },
                            message: 'Error'
                        }],
+                       throttle: 1000
+                   });
+
+                   self.validationMessage.extend({
+                       validatable: true,
+                       validation: [
+                           {
+                               validator: function (val) {
+                                   if (!_.isEmpty(val) && self.qtype() == config.questionTypes.TextList) {
+                                       return false;
+                                   }
+                                   return true;
+                               },
+                               message: 'List question cannot contain validation message'
+                           }],
                        throttle: 1000
                    });
 
@@ -457,6 +499,7 @@
                this.isLinked(data.isLinked);
                this.selectedLinkTo(data.selectedLinkTo);
 
+               this.maxAnswerCount(data.maxAnswerCount);
                //save off the latest data for later use
                this.cache.latestData = data;
            },

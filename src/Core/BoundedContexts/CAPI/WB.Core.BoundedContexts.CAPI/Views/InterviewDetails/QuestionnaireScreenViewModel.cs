@@ -11,99 +11,75 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     {
         protected QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
                                             InterviewItemId screenId, IList<IQuestionnaireItemViewModel> items,
-                                            IEnumerable<InterviewItemId> breadcrumbs, int total, int answered)
+                                            IEnumerable<InterviewItemId> breadcrumbs)
         {
 
             this.QuestionnaireId = questionnaireId;
             this.Items = items;
             this.ScreenId = screenId;
-            if (breadcrumbs == null)
-                breadcrumbs = new List<InterviewItemId>();
-            this.Breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] { this.ScreenId });
+            this.Breadcrumbs = (breadcrumbs ?? new List<InterviewItemId>()).Union(new InterviewItemId[1] { this.ScreenId }).ToList();
             this.Title = title;
             this.Enabled = enabled;
             this.ScreenName = screenName;
-            this.Total = total;
-            this.Answered = answered;
-            bool needCounts = total == 0 && answered == 0;
+
             foreach (var item in this.Items)
             {
                 item.PropertyChanged += item_PropertyChanged;
-                if (needCounts)
-                {
-                    var question = item as QuestionViewModel;
-                    if (question != null)
-                    {
-                        if (question.IsEnabled())
-                        {
-                            this.Total++;
-                            if (question.Status.HasFlag(QuestionStatus.Answered))
-                                this.Answered++;
-                        }
-                        continue;
-                    }
-                    var group = item as QuestionnaireNavigationPanelItem;
-                    if (group != null)
-                    {
-                        this.Total += group.Total;
-                        this.Answered = this.Answered + group.Answered;
-                    }
-                }
-            }
-            if (needCounts)
-            {
-                this.RaisePropertyChanged("Total");
-                this.RaisePropertyChanged("Answered");
             }
         }
 
-        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                           InterviewItemId screenId, IList<IQuestionnaireItemViewModel> items,
-                                           IEnumerable<InterviewItemId> siblings,
-                                           IEnumerable<InterviewItemId> breadcrumbs)
-            : this(questionnaireId, screenName, title, enabled, screenId, items, siblings, breadcrumbs, 0, 0)
-        {
-        }
         [JsonConstructor]
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
                                           InterviewItemId screenId, IList<IQuestionnaireItemViewModel> items,
                                           IEnumerable<InterviewItemId> siblings,
-                                          IEnumerable<InterviewItemId> breadcrumbs, int total, int answered)
-            : this(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs, total, answered)
+                                          IEnumerable<InterviewItemId> breadcrumbs)
+            : this(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs)
         {
             this.Siblings = siblings;
         }
+
         public Guid QuestionnaireId { get; private set; }
         public InterviewItemId ScreenId { get; private set; }
         public string Title { get; private set; }
         public string ScreenName { get; protected set; }
+        public bool Enabled { get; private set; }
+        public IList<IQuestionnaireItemViewModel> Items { get; private set; }
+        public virtual IEnumerable<InterviewItemId> Siblings { get; private set; }
+        public IEnumerable<InterviewItemId> Breadcrumbs { get; protected set; }
+
         public int Answered
         {
-            get { return this.Enabled ? this.answered : 0; }
+            get
+            {
+                if (!this.Enabled)
+                    return 0;
+                if (!this.answered.HasValue)
+                    this.UpdateCounters();
+                return answered ?? 0;
+            }
             private set { this.answered = value; }
         }
-        private int answered;
 
         public int Total
         {
-            get { return this.Enabled ? this.total : 0; }
+            get
+            {
+                if (!this.Enabled)
+                    return 0;
+                if (!this.total.HasValue)
+                    this.UpdateCounters();
+                return total ?? 0;
+            }
             private set { this.total = value; }
         }
 
-        private int total;
-        public bool Enabled { get; private set; }
-        public IList<IQuestionnaireItemViewModel> Items { get; private set; }
-
-        public virtual IEnumerable<InterviewItemId> Siblings { get; private set; }
-
-
-        public IEnumerable<InterviewItemId> Breadcrumbs { get; protected set; }
-        
+        private int? answered;
+        private int? total;
 
         protected void UpdateCounters()
         {
-            var total = 0;
-            var answered = 0;
+            var newTotal = 0;
+            var newAnswered = 0;
             foreach (var item in this.Items)
             {
                 var question = item as QuestionViewModel;
@@ -111,28 +87,28 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 {
                     if (question.IsEnabled())
                     {
-                        total++;
+                        newTotal++;
                         if (question.Status.HasFlag(QuestionStatus.Answered))
-                            answered++;
+                            newAnswered++;
                     }
                     continue;
                 }
                 var group = item as QuestionnaireNavigationPanelItem;
                 if (group != null)
                 {
-                    total = total + group.Total;
-                    answered = answered + group.Answered;
+                    newTotal = newTotal + group.Total;
+                    newAnswered = newAnswered + group.Answered;
                 }
 
             }
-            if (total != this.Total)
+            if (newTotal != this.total)
             {
-                this.Total = total;
+                this.total = newTotal;
                 this.RaisePropertyChanged("Total");
             }
-            if (answered != this.Answered)
+            if (newAnswered != this.answered)
             {
-                this.Answered = answered;
+                answered = newAnswered;
                 this.RaisePropertyChanged("Answered");
             }
         }
@@ -145,7 +121,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.RaisePropertyChanged("Enabled");
         }
 
-        void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var question = sender as QuestionViewModel;
             if (question != null)
@@ -162,6 +138,5 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.UpdateCounters();
             }
         }
-
     }
 }
