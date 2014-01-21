@@ -18,13 +18,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         {
             var parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Guid.Parse("11111111111111111111111111111111");
-            maxValue = 42;
+            maxValue = 12;
 
             questionnaireDocument = CreateQuestionnaireDocument(
                 CreateGroup(groupId: parentGroupId)
             );
 
-            @event = CreateTextListQuestionAddedEvent(questionId: questionId, parentGroupId: parentGroupId, maxValue: maxValue);
+            @event = CreateTextListQuestionAddedEvent(questionId: questionId, parentGroupId: parentGroupId, maxAnswerCount: maxValue);
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
