@@ -2,7 +2,7 @@
     ['jquery', 'underscore', 'ko', 'model', 'config', 'dataservice', 'model.mapper', 'utils', 'input'],
     function ($, _, ko, model, config, dataservice, modelmapper, utils, input) {
 
-        var 
+        var
             itemsToArray = function (items, observableArray, filter, sortFunction) {
                 // Maps the memo to an observableArray, 
                 // then returns the observableArray
@@ -177,7 +177,7 @@
                 return question.alias();
             });
         };
-        
+
         questions.getAllAllowedQuestionsForSelect = function () {
             return _.filter(questions.getAllLocal(), function (question) {
                 if (question.parent().isRoster()) {
@@ -204,13 +204,13 @@
             });
         };
 
-        questions.isRosterTitleQuestion = function(questionId) {
-            return _.any(groups.getPropagateableGroups(), function(group) {
+        questions.isRosterTitleQuestion = function (questionId) {
+            return _.any(groups.getPropagateableGroups(), function (group) {
                 return group.rosterTitleQuestion() == questionId;
             });
         };
 
-        var isNumericInteger = function(question) {
+        var isNumericInteger = function (question) {
             return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
         };
 
@@ -237,7 +237,7 @@
             }
             return 0;
         };
-        
+
 
         questions.isRosterSizeQuestion = function (questionId) {
             return _.any(groups.getPropagateableGroups(), function (group) {
@@ -279,19 +279,19 @@
             groupCommand.parentGroupId = parent;
             return groupCommand;
         };
-        
+
         commands[config.commands.updateGroup] = function (group) {
             return converGroupToCommand(group);
         };
 
-        var converGroupToCommand = function(group) {
+        var converGroupToCommand = function (group) {
             return {
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
                 description: group.description(),
                 condition: group.condition(),
-                isRoster : group.isRoster(),
+                isRoster: group.isRoster(),
                 rosterSizeQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterSizeQuestion() : null,
                 rosterSizeSource: group.rosterSizeSource(),
                 rosterFixedTitles: group.isRosterSizeSourceFixedTitles() ? group.rosterFixedTitles().split("\n") : null,
@@ -341,13 +341,13 @@
         };
 
         commands[config.commands.createListQuestion] = function (question) {
-            var command = converQuestionToCommand(question);
+            var command = converQuestionToListCommand(question);
             command.groupId = question.parent().id();
             return command;
         };
 
         commands[config.commands.updateListQuestion] = function (question) {
-            return converQuestionToCommand(question);
+            return converQuestionToListCommand(question);
         };
 
         commands[config.commands.deleteQuestion] = function (question) {
@@ -379,6 +379,19 @@
                 email: sharedUser.userEmail(),
                 questionnaireId: questionnaire.id()
             };
+        };
+
+        var converQuestionToListCommand = function (question) {
+            var command = converQuestionToCommand(question);
+            var variableName = command["alias"];
+            delete command.isFeatured;
+            delete command.type;
+            delete command.alias;
+            delete command.scope;
+            delete command.validationExpression;
+            delete command.validationMessage;
+            command["variableName"] = variableName;
+            return command;
         };
 
         var converQuestionToCommand = function (question) {
@@ -454,19 +467,19 @@
 
             }).promise();
         };
-        var sendCommand = function(commandName, args, uiCallbacks) {
+        var sendCommand = function (commandName, args, uiCallbacks) {
             return $.Deferred(function (deferred) {
                 var command = {
                     type: commandName,
                     command: ko.toJSON(commands[commandName](args))
                 }, callbacks = {
-                    success: function(response) {
+                    success: function (response) {
                         if (uiCallbacks && uiCallbacks.success) {
                             uiCallbacks.success();
                         }
                         deferred.resolve(response);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (uiCallbacks && uiCallbacks.error) {
                             uiCallbacks.error(response);
                         }
