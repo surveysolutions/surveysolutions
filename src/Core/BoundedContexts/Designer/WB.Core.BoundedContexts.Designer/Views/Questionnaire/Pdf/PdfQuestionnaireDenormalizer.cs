@@ -31,7 +31,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<QuestionnaireCloned>,
         IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
-        IEventHandler<NumericQuestionChanged>, IEventHandler
+        IEventHandler<NumericQuestionChanged>,
+        IEventHandler<TextListQuestionAdded>,
+        IEventHandler<TextListQuestionCloned>,
+        IEventHandler<TextListQuestionChanged>, IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader updrader;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
@@ -235,6 +238,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Variable = @event.StataExportCaption
                 };
 
+                newQuestion.ValidationExpression = @event.ValidationExpression;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
@@ -251,6 +255,59 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 existingQuestion.Title = @event.QuestionText;
                 existingQuestion.QuestionType = QuestionType.Numeric;
+                existingQuestion.Answers = new List<PdfAnswerView>(0);
+
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestion = new PdfQuestionView
+                {
+                    PublicId = @event.PublicKey,
+                    Title = @event.QuestionText,
+                    QuestionType = QuestionType.TextList,
+                    Answers = new List<PdfAnswerView>(),
+                    Variable = @event.StataExportCaption
+                };
+                
+                newQuestion.ConditionExpression = @event.ConditionExpression;
+                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestion = new PdfQuestionView
+                {
+                    PublicId = @event.PublicKey,
+                    Title = @event.QuestionText,
+                    QuestionType = QuestionType.TextList,
+                    Answers = new List<PdfAnswerView>(0),
+                    Variable = @event.StataExportCaption
+                };
+
+                newQuestion.ConditionExpression = @event.ConditionExpression;
+                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionChanged> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                existingQuestion.ConditionExpression = @event.ConditionExpression;
+                
+                existingQuestion.Title = @event.QuestionText;
+                existingQuestion.QuestionType = QuestionType.TextList;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
 
                 return questionnaire;
