@@ -1099,7 +1099,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
-            ThrowIfMaxAnswerCountNotInRange1to40(questionId, maxAnswerCount);
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
             this.ApplyEvent(new TextListQuestionAdded
             {
@@ -1142,7 +1142,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
-            ThrowIfMaxAnswerCountNotInRange1to40(questionId, maxAnswerCount);
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
             this.ApplyEvent(new TextListQuestionCloned
             {
@@ -1188,7 +1188,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
-            ThrowIfMaxAnswerCountNotInRange1to40(questionId, maxAnswerCount);
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
             this.ApplyEvent(new TextListQuestionChanged
             {
@@ -1900,14 +1900,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return elements.Distinct().Count() == elements.Count();
         }
 
-        
-        private void ThrowIfMaxAnswerCountNotInRange1to40(Guid questionId, int? maxAnswerCount)
+
+        private static void ThrowIfMaxAnswerCountNotInRange1to40(int? maxAnswerCount)
         {
             if (maxAnswerCount.HasValue && !Enumerable.Range(1, 20).Contains(maxAnswerCount.Value))
             {
                 throw new  QuestionnaireException(
                     DomainExceptionType.MaxAnswerCountNotInRange,
-                    "MaxAnswerCount should be in range ftom 1 to 40");
+                    "Maximum number of answers should be in range ftom 1 to 40");
             }
         }
 
