@@ -93,6 +93,12 @@
                            message: 'could not be more than categories count'
                        }]
                });
+
+               self.maxAnswerCount = ko.observable('').extend({
+                   digit: true,
+                   min: 1
+               });
+
                self.answerOptions = ko.observableArray([]);
 
                self.maxValue = ko.observable();
@@ -123,7 +129,7 @@
                    self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression,
                    self.validationMessage, self.instruction, self.answerOptions, self.maxValue,
                    self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces,
-                   self.areAnswersOrdered, self.maxAllowedAnswers]);
+                   self.areAnswersOrdered, self.maxAllowedAnswers, self.maxAnswerCount]);
                self.dirtyFlag().reset();
                self.errors = ko.validation.group(self);
                this.cache = function () {
@@ -457,6 +463,7 @@
                this.isLinked(data.isLinked);
                this.selectedLinkTo(data.selectedLinkTo);
 
+               this.maxAnswerCount(data.maxAnswerCount);
                //save off the latest data for later use
                this.cache.latestData = data;
            },

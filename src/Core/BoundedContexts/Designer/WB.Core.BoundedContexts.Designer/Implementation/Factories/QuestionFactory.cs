@@ -33,7 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.QuestionType == QuestionType.AutoPropagate? true : data.IsInteger,
                 data.CountOfDecimalPlaces,
                 data.AreAnswersOrdered,
-                data.MaxAllowedAnswers);
+                data.MaxAllowedAnswers,
+                data.MaxAnswerCount);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -123,7 +124,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool? isInteger,
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
-            int? maxAllowedAnswers)
+            int? maxAllowedAnswers,
+            int? masAnswerCount)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -154,6 +156,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 multioptionQuestion.AreAnswersOrdered = areAnswersOrdered ?? false;
                 multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
             }
+
+            var listQuestion = question as IListQuestion;
+            if (listQuestion != null)
+            {
+                listQuestion.MaxAnswerCount = masAnswerCount;
+            }
+
         }
     }
 }
