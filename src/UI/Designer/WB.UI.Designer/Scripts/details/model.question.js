@@ -71,7 +71,7 @@
                self.localQuestionsFromProragatedGroups = ko.observableArray();
                self.questionsFromProragatedGroups = ko.computed(function () {
                    return _.filter(self.localQuestionsFromProragatedGroups(), function (item) {
-                       return item.id() != self.id();
+                       return (item.id() != self.id()) && item.qtype()!= config.questionTypes.TextList;
                    }).map(function (item) {
                        return { questionId: item.id(), title: item.alias() + ": " + item.title() };
                    });
