@@ -1142,6 +1142,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
+            ThrowIfMaxAnswerCountNotInRange1to40(questionId, maxAnswerCount);
+
             this.ApplyEvent(new TextListQuestionCloned
             {
                 PublicKey = questionId,
@@ -1185,6 +1187,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isPrefilled, validationExpression, responsibleId);
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(questionId, maxAnswerCount);
 
             this.ApplyEvent(new TextListQuestionChanged
             {
