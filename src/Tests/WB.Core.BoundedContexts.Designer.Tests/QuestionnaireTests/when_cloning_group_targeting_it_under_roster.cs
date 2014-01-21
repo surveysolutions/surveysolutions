@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = sourceGroupId, GroupText = "Group to be cloned", ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, GroupText = rosterTitle, ParentGroupPublicKey = chapterId });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
 
             eventContext = new EventContext();
@@ -41,7 +41,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext.GetSingleEvent<GroupCloned>()
                 .ParentGroupPublicKey.ShouldEqual(parentRosterId);
 
-        private static string rosterTitle;
         private static Questionnaire questionnaire;
         private static Guid targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
