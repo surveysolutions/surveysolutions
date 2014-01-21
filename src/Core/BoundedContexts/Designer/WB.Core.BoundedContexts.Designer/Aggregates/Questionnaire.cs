@@ -269,16 +269,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
-                        e.QuestionScope,
+                        QuestionScope.Interviewer,
                         e.QuestionText,
                         e.StataExportCaption,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
+                        null,
+                        null,
                         Order.AZ,
-                        e.Featured,
+                        false,
                         e.Mandatory,
-                        e.Capital,
+                        false,
                         e.Instructions,
                         new List<Guid>(),
                         null,
@@ -388,16 +388,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
-                        e.QuestionScope,
+                        QuestionScope.Interviewer,
                         e.QuestionText,
                         e.StataExportCaption,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
+                        null,
+                        null,
                         Order.AZ,
-                        e.Featured,
+                        false,
                         e.Mandatory,
-                        e.Capital,
+                        false,
                         e.Instructions,
                         new List<Guid>(),
                         null,
@@ -509,16 +509,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
-                        e.QuestionScope,
+                        QuestionScope.Interviewer,
                         e.QuestionText,
                         e.StataExportCaption,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
+                        null,
+                       null,
                         Order.AZ,
-                        e.Featured,
+                        false,
                         e.Mandatory,
-                        e.Capital,
+                        false,
                         e.Instructions,
                         new List<Guid>(),
                         null,
@@ -1086,7 +1086,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var questionType = QuestionType.TextList;
             var isPrefilled = false;
-            var questionScope = QuestionScope.Interviewer;
             var validationExpression = string.Empty;
 
             variableName = variableName.Trim();
@@ -1108,12 +1107,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isPrefilled,
-                Capital = false,
-                QuestionScope = questionScope,
                 ConditionExpression = condition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = string.Empty,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
 
@@ -1129,7 +1123,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var questionType = QuestionType.TextList;
             var isPrefilled = false;
-            var questionScope = QuestionScope.Interviewer;
             var validationExpression = string.Empty;
             var validationMessage = string.Empty;
 
@@ -1151,12 +1144,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isPrefilled,
-                Capital = false,
-                QuestionScope = questionScope,
                 ConditionExpression = condition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
@@ -1174,7 +1162,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var questionType = QuestionType.TextList;
             var isPrefilled = false;
-            var questionScope = QuestionScope.Interviewer;
             var validationExpression = string.Empty;
             var validationMessage = string.Empty;
 
@@ -1197,12 +1184,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isPrefilled,
-                Capital = false,
-                QuestionScope = questionScope,
                 ConditionExpression = condition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
 
