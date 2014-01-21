@@ -333,6 +333,23 @@
             return converQuestionToCommand(question);
         };
 
+        commands[config.commands.cloneListQuestion] = function (question) {
+            var command = commands[config.commands.createListQuestion](question);
+            command.sourceQuestionId = question.cloneSource().id();
+            command.targetIndex = firstSavedIndexInCollection(question.parent().childrenID(), question.id());
+            return command;
+        };
+
+        commands[config.commands.createListQuestion] = function (question) {
+            var command = converQuestionToCommand(question);
+            command.groupId = question.parent().id();
+            return command;
+        };
+
+        commands[config.commands.updateListQuestion] = function (question) {
+            return converQuestionToCommand(question);
+        };
+
         commands[config.commands.deleteQuestion] = function (question) {
             return {
                 questionnaireId: questionnaire.id(),
@@ -408,6 +425,7 @@
                 case "GpsCoordinates":
                 case "Text":
                 case "TextList":
+                    command.maxAnswerCount = question.maxAnswerCount();
                     break;
             }
             return command;
