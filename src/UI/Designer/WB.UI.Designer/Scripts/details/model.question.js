@@ -96,7 +96,8 @@
 
                self.maxAnswerCount = ko.observable('').extend({
                    digit: true,
-                   min: 1
+                   min: 1,
+                   max: 40
                });
 
                self.answerOptions = ko.observableArray([]);
