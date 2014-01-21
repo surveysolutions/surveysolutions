@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
             }
 
-            var listQuestion = question as IListQuestion;
+            var listQuestion = question as ITextListQuestion;
             if (listQuestion != null)
             {
                 listQuestion.MaxAnswerCount = masAnswerCount;

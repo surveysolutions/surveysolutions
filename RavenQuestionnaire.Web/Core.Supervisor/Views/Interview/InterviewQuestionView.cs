@@ -57,7 +57,7 @@ namespace Core.Supervisor.Views.Interview
                 };
             }
 
-            var listQuestion = question as IListQuestion;
+            var listQuestion = question as ITextListQuestion;
             if (listQuestion != null)
             {
                 this.Settings = new

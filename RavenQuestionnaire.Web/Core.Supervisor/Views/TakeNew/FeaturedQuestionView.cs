@@ -66,7 +66,7 @@ namespace Core.Supervisor.Views.TakeNew
                 };
             }
 
-            var listQuestion = doc as IListQuestion;
+            var listQuestion = doc as ITextListQuestion;
             if (listQuestion != null)
             {
                 this.Settings = new
