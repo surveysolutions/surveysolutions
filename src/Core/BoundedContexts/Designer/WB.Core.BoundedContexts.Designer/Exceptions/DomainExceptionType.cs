@@ -111,6 +111,9 @@
         ExpressionContainsNotExistingQuestionReference,
 
         QuestionOrGroupDependOnAnotherQuestion,
-        QuestionUsedAsRosterTitleOfOtherGroup
+
+        QuestionUsedAsRosterTitleOfOtherGroup,
+
+        MaxAnswerCountNotInRange
     }
 }

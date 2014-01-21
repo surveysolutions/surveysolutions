@@ -37,19 +37,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.Text,
             QuestionType.AutoPropagate,
             QuestionType.GpsCoordinates,
-            QuestionType.MultiAnswer
+            QuestionType.TextList,
         };
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
-            QuestionType.MultyOption
+            QuestionType.MultyOption,
+            QuestionType.TextList,
         };
 
         private static readonly HashSet<QuestionType> ReroutedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
-            QuestionType.AutoPropagate
+            QuestionType.AutoPropagate,
         };
 
         #endregion
@@ -202,7 +203,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
 
             if (question == null)
             {
@@ -244,6 +246,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -257,6 +260,43 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
+        }
+
+        internal void Apply(TextListQuestionAdded e)
+        {
+            IQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        QuestionScope.Interviewer,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        null,
+                        null,
+                        Order.AZ,
+                        false,
+                        e.Mandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
+            
         }
 
         private void Apply(QuestionCloned e)
@@ -284,7 +324,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
             if (question == null)
             {
                 return;
@@ -323,6 +364,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -336,6 +378,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
+        }
+
+
+        internal void Apply(TextListQuestionCloned e)
+        {
+            IQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        QuestionScope.Interviewer,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        null,
+                        null,
+                        Order.AZ,
+                        false,
+                        e.Mandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+
         }
 
         private void Apply(NewQuestionnaireCreated e)
@@ -374,7 +454,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
 
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
@@ -410,6 +491,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
@@ -417,6 +499,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
+        }
+
+        internal void Apply(TextListQuestionChanged e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            IQuestion newQuestion =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        QuestionScope.Interviewer,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        null,
+                       null,
+                        Order.AZ,
+                        false,
+                        e.Mandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+
         }
 
         private void Apply(QuestionDeleted e)
@@ -959,6 +1079,120 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
+            });
+        }
+
+
+        public void AddTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var validationExpression = string.Empty;
+
+            variableName = variableName.Trim();
+            title = title.Trim();
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
+            
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
+
+            this.ApplyEvent(new TextListQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                StataExportCaption = variableName,
+                Mandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        public void CloneTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition,string instructions, Guid sourceQuestionId, int targetIndex,
+            Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var validationExpression = string.Empty;
+            var validationMessage = string.Empty;
+
+            variableName = variableName.Trim();
+            title = title.Trim();
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
+
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
+
+            this.ApplyEvent(new TextListQuestionCloned
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                StataExportCaption = variableName,
+                Mandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        public void UpdateTextListQuestion(Guid questionId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var validationExpression = string.Empty;
+            var validationMessage = string.Empty;
+
+
+            variableName = variableName.Trim();
+            title = title.Trim();
+            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
+
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
+
+            this.ApplyEvent(new TextListQuestionChanged
+            {
+                PublicKey = questionId,
+                
+                QuestionText = title,
+                StataExportCaption = variableName,
+                Mandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
             });
         }
 
@@ -1761,6 +1995,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return elements.Distinct().Count() == elements.Count();
         }
 
+
+        private static void ThrowIfMaxAnswerCountNotInRange1to40(int? maxAnswerCount)
+        {
+            if (maxAnswerCount.HasValue && !Enumerable.Range(1, 20).Contains(maxAnswerCount.Value))
+            {
+                throw new  QuestionnaireException(
+                    DomainExceptionType.MaxAnswerCountNotInRange,
+                    "Maximum number of answers should be in range ftom 1 to 40");
+            }
+        }
+
         private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
         {
             this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IQuestion>(
@@ -1879,7 +2124,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(exceptionType, getExceptionDescription(elementsWithSameId));
             }
-        }
+         }
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId)
         {
@@ -2132,7 +2377,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             switch (rosterSizeSource)
             {
                 case RosterSizeSourceType.Question:
-                    this.ThrowIfRosterByQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles);
+                    this.ThrowIfRosterSizeQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles);
                     break;
                 case RosterSizeSourceType.FixedTitles:
                     this.ThrowIfRosterByFixedTitlesIsIncorrect(rosterSizeQuestionId, rosterTitleQuestionId, rosterFixedTitles);
@@ -2168,7 +2413,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfRosterByQuestionIsIncorrect(Guid groupId,Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
+        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
         {
             var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
 
@@ -2194,11 +2439,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
-            {
                 throw new QuestionnaireException(string.Format(
-                    "Categorical multy answers question {0} as roster size question cannot have roster title question.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
-            }
+                    "Roster having categorical multiple answers question {0} as roster size source cannot have roster title question.",
+                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+
+            if (rosterSizeQuestion.QuestionType == QuestionType.TextList && rosterTitleQuestionId.HasValue)
+                throw new QuestionnaireException(string.Format(
+                    "Roster having list question {0} as roster size source cannot have roster title question.",
+                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.Numeric)
             {

@@ -101,7 +101,8 @@
                         item.maxValue(_.isNumber(settings.MaxValue) ? settings.MaxValue * 1 : null);
                         item.countOfDecimalPlaces(_.isEmpty(settings.CountOfDecimalPlaces) ? null : settings.CountOfDecimalPlaces);
                         item.areAnswersOrdered(_.isBoolean(dto.Settings.AreAnswersOrdered) ? settings.AreAnswersOrdered : false);
-                        item.maxAllowedAnswers(_.isNumber(dto.Settings.MaxAllowedAnswers) ? settings.MaxAllowedAnswers: null);
+                        item.maxAllowedAnswers(_.isNumber(dto.Settings.MaxAllowedAnswers) ? settings.MaxAllowedAnswers : null);
+                        item.maxAnswerCount(_.isNumber(dto.Settings.MaxAnswerCount) ? settings.MaxAnswerCount : null);
                     }
                     item.isNew(false);
                     item.dirtyFlag().reset();

@@ -1,10 +1,10 @@
- using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
- using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Properties;
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
                     Verifier<IMultyOptionsQuestion>(this.CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
-                    Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion, "WB0023", VerificationMessages.WB0023_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion),
+                    Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
                     Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And20, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20),
@@ -80,12 +80,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
-                    Verifier<IMultiAnswerQuestion>(MultiAnswerQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_MultiAnswerQuestionMaxAnswerInRange1And40),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
+                    Verifier<ITextListQuestion>(MultiAnswerQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_MultiAnswerQuestionMaxAnswerInRange1And40),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
+                    ErrorsByEpressionsThatUsesMultiAnswerQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                 };
@@ -157,13 +158,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsRosterByQuestion(group) && GetRosterSizeQuestionByRosterGroup(group, questionnaire) == null;
         }
 
-        private static bool GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion(IGroup group, QuestionnaireDocument questionnaire)
+        private static bool RosterSizeSourceQuestionTypeIsIncorrect(IGroup group, QuestionnaireDocument questionnaire)
         {
             var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(group, questionnaire);
             if (rosterSizeQuestion == null)
                 return false;
 
-            return !IsQuestionAllowedToBeRosterSize(rosterSizeQuestion);
+            return !IsQuestionAllowedToBeRosterSizeSource(rosterSizeQuestion);
         }
 
         private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group)
@@ -242,18 +243,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            if (!IsRosterSizeQuestion(question, questionnaire))
-                return false;
-            if (!IsQuestionAllowedToBeRosterSize(question))
-                return false;
-            return !GetRosterSizeQuestionMaxValue(question).HasValue;
+            return IsRosterSizeQuestion(question, questionnaire)
+                && IsQuestionAllowedToBeRosterSizeSource(question)
+                && IsMaxValueMissing(question);
         }
 
         private static bool RosterSizeQuestionMaxValueCouldBeInRange1And20(IQuestion question, QuestionnaireDocument questionnaire)
         {
             if (!IsRosterSizeQuestion(question, questionnaire))
                 return false;
-            if (!IsQuestionAllowedToBeRosterSize(question))
+            if (!IsQuestionAllowedToBeRosterSizeSource(question))
                 return false;
             var rosterSizeQuestionMaxValue = GetRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
@@ -261,9 +260,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !Enumerable.Range(1, 20).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
-        private static bool IsQuestionAllowedToBeRosterSize(IQuestion question)
+        private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
         {
-            return IsNumericRosterSizeQuestion(question) || IsCategoricalRosterSizeQuestion(question);
+            return IsNumericRosterSizeQuestion(question)
+                || IsCategoricalRosterSizeQuestion(question)
+                || IsTextListQuestion(question);
+        }
+
+        private static bool IsTextListQuestion(IQuestion question)
+        {
+            return question.QuestionType == QuestionType.TextList;
         }
 
         private static bool IsNumericRosterSizeQuestion(IQuestion question)
@@ -304,22 +310,24 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
         }
 
-        private static bool MultiAnswerQuestionCannotBePrefilled(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionCannotBePrefilled(ITextListQuestion question)
         {
             return question.Featured;
         }
 
-        private static bool MultiAnswerQuestionMaxAnswerInRange1And40(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionMaxAnswerInRange1And40(ITextListQuestion question)
         {
-            return question.MaxAnswerCount.HasValue && (question.MaxAnswerCount.Value > 0 && question.MaxAnswerCount.Value< 40);
+            if (!question.MaxAnswerCount.HasValue)
+                return false;
+            return !Enumerable.Range(1, 40).Contains(question.MaxAnswerCount.Value);
         }
 
-        private static bool MultiAnswerQuestionCannotCustomValidation(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionCannotCustomValidation(ITextListQuestion question)
         {
             return !string.IsNullOrWhiteSpace(question.ValidationExpression);
         }
 
-        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(IMultiAnswerQuestion question)
+        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
         {
             return question.QuestionScope == QuestionScope.Supervisor;
         }
@@ -358,7 +366,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             IEnumerable<IQuestion> questionsWithSubstitutions =
                 questionnaire.Find<IQuestion>(question => StringUtil.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
-            
+
             var errorByAllQuestionsWithSubstitutions = new List<QuestionnaireVerificationError>();
 
             foreach (var questionWithSubstitution in questionsWithSubstitutions)
@@ -412,6 +420,32 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return errorByAllQuestionsWithCustomValidation;
         }
 
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByEpressionsThatUsesMultiAnswerQuestions(QuestionnaireDocument questionnaire)
+        {
+            var errors = new List<QuestionnaireVerificationError>();
+            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ValidationExpression, CustomValidationExpressionUsesMultiAnswerQuestion));
+            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ConditionExpression, CustomConditionExpressionUsesMultiAnswerQuestion));
+            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IGroup>(questionnaire, g => g.ConditionExpression, CustomConditionExpressionUsesMultiAnswerQuestion));
+            return errors;
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomExpression<T>(QuestionnaireDocument questionnaire, Func<T, string> getExpression, Func<T, QuestionnaireVerificationError> qetCustomError) where T : class
+        {
+            var questionsWithValidationExpression = questionnaire.Find<T>(q => !string.IsNullOrEmpty(getExpression(q)));
+
+            var errorByAllQuestionsWithCustomValidation = new List<QuestionnaireVerificationError>();
+
+            foreach (var questionWithValidationExpression in questionsWithValidationExpression)
+            {
+                IEnumerable<string> identifiersUsedInExpression =
+                    this.expressionProcessor.GetIdentifiersUsedInExpression(getExpression(questionWithValidationExpression));
+
+                VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
+                    identifier => GetVerificationErrorByEpressionUsesMultiAnswerQuestion<T>(questionWithValidationExpression, identifier, questionnaire, qetCustomError));
+            }
+            return errorByAllQuestionsWithCustomValidation;
+        }
+
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
             return new QuestionnaireVerificationReference(
@@ -459,7 +493,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             Guid questionId;
             if (!Guid.TryParse(identifier, out questionId))
-                return questionnaire.FirstOrDefault<IQuestion>(question=>question.StataExportCaption==identifier) != null;
+                return questionnaire.FirstOrDefault<IQuestion>(question => question.StataExportCaption == identifier) != null;
 
             return questionnaire.Find<IQuestion>(questionId) != null;
         }
@@ -479,6 +513,27 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return null;
         }
 
+        private static QuestionnaireVerificationError GetVerificationErrorByEpressionUsesMultiAnswerQuestion<T>(
+            T questionnaireItemWithExpression,
+            string identifier,
+            QuestionnaireDocument questionnaire,
+            Func<T, QuestionnaireVerificationError> getCustomError)
+        {
+            if (IsSpecialThisIdentifier(identifier))
+            {
+                return null;
+            }
+
+            IQuestion questionsReferencedInValidation = GetQuestionByIdentifier(identifier, questionnaire);
+
+            if (questionsReferencedInValidation is ITextListQuestion)
+            {
+                return getCustomError(questionnaireItemWithExpression);
+            }
+
+            return null;
+        }
+
         private static QuestionnaireVerificationError GetVerificationErrorByCustomValidationReferenceOrNull(
             IQuestion questionWithValidationExpression, string identifier,
             Guid[] vectorOfRosterQuestionsForQuestionWithCustomValidation, QuestionnaireDocument questionnaire)
@@ -487,17 +542,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             {
                 return null;
             }
-            IQuestion questionsReferencedInValidation = null;
-            Guid parsedId;
 
-            if (Guid.TryParse(identifier, out parsedId))
-            {
-                questionsReferencedInValidation = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == parsedId);
-            }
-            else
-            {
-                questionsReferencedInValidation = questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier);
-            }
+            IQuestion questionsReferencedInValidation = GetQuestionByIdentifier(identifier, questionnaire);
 
             if (questionsReferencedInValidation == null)
             {
@@ -512,6 +558,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
 
             return null;
+        }
+
+        private static IQuestion GetQuestionByIdentifier(string identifier, QuestionnaireDocument questionnaire)
+        {
+            Guid parsedId;
+
+            return Guid.TryParse(identifier, out parsedId)
+                ? questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == parsedId)
+                : questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier);
         }
 
         private static QuestionnaireVerificationError GetVerificationErrorBySubstitutionReferenceOrNull(IQuestion questionWithSubstitution,
@@ -548,6 +603,27 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return null;
         }
 
+        private static QuestionnaireVerificationError CustomValidationExpressionUsesMultiAnswerQuestion(IQuestion questionWithValidationExpression)
+        {
+            return new QuestionnaireVerificationError("WB0043",
+                VerificationMessages.WB0043_MultiAnswerQuestionCannotBeUsedInValidationExpressions,
+                CreateReference(questionWithValidationExpression));
+        }
+
+        private static QuestionnaireVerificationError CustomConditionExpressionUsesMultiAnswerQuestion(IQuestion questionWithConditionExpression)
+        {
+            return new QuestionnaireVerificationError("WB0044",
+                VerificationMessages.WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions,
+                CreateReference(questionWithConditionExpression));
+        }
+
+        private static QuestionnaireVerificationError CustomConditionExpressionUsesMultiAnswerQuestion(IGroup questionWithConditionExpression)
+        {
+            return new QuestionnaireVerificationError("WB0044",
+                VerificationMessages.WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions,
+                CreateReference(questionWithConditionExpression));
+        }
+
         private static QuestionnaireVerificationError CustomValidationExpressionUsesNotRecognizedParameter(IQuestion questionWithValidationExpression)
         {
             return new QuestionnaireVerificationError("WB0004",
@@ -572,7 +648,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(questionsWithSubstitution));
         }
 
-        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
+        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel(IQuestion questionsWithSubstitution, IQuestion questionSourceOfSubstitution)
         {
             return new QuestionnaireVerificationError("WB0019",
                 VerificationMessages.WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
@@ -580,7 +656,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(questionSourceOfSubstitution));
         }
 
-        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
+        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(IQuestion questionsWithSubstitution, IQuestion questionSourceOfSubstitution)
         {
             return new QuestionnaireVerificationError("WB0018",
                 VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType,
@@ -609,7 +685,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(linkedQuestion));
         }
 
-        private static QuestionnaireVerificationError LinkedQuestionReferencesQuestionOfNotSupportedType(IQuestion linkedQuestion,IQuestion sourceQuestion)
+        private static QuestionnaireVerificationError LinkedQuestionReferencesQuestionOfNotSupportedType(IQuestion linkedQuestion, IQuestion sourceQuestion)
         {
             return new QuestionnaireVerificationError("WB0012",
                 VerificationMessages.WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType,
@@ -666,16 +742,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return rosterSizeQuestionIds.Contains(question.PublicKey);
         }
 
+        private static bool IsMaxValueMissing(IQuestion question)
+        {
+            var integerQuestion = question as INumericQuestion;
+
+            if (integerQuestion != null && integerQuestion.IsInteger)
+                return !integerQuestion.MaxValue.HasValue;
+            else
+                return false;
+        }
+
         private static int? GetRosterSizeQuestionMaxValue(IQuestion question)
         {
             var integerQuestion = question as INumericQuestion;
-            if (integerQuestion != null)
-                return integerQuestion.IsInteger ? integerQuestion.MaxValue : null;
-            
-            var multiOptionsQuestion = question as IMultyOptionsQuestion;
-            if (multiOptionsQuestion != null)
-                return question.LinkedToQuestionId.HasValue ? (int?)null : question.Answers.Count;
-            return null;
+
+            return integerQuestion != null && integerQuestion.IsInteger
+                ? integerQuestion.MaxValue
+                : null;
         }
 
         private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)
@@ -693,7 +776,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IQuestion question, QuestionnaireDocument questionnaire)
         {
             Guid?[] rosterSizeQuestions =
-                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), questionnaire)
+                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), questionnaire)
                     .Where(IsRosterGroup)
                     .Select(g => g.RosterSizeQuestionId)
                     .ToArray();
@@ -721,7 +804,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             Guid[] rosterQuestionsAsVectorForQuestionSourceOfSubstitution =
                 GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
-         
+
             return
                 rosterQuestionsAsVectorForQuestionSourceOfSubstitution != null &&
                 rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length > 0 &&

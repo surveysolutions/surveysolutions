@@ -28,6 +28,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? CountOfDecimalPlaces { get; set; }
     }
 
+    public class ListSettings 
+    {
+        public int? MaxAnswerCount { get; set; }
+    }
+
     public class EditQuestionView : ICompositeView
     {
         public EditQuestionView(IQuestion doc, Guid? parentId)
@@ -77,6 +82,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         MaxAllowedAnswers = multyoptionQuestion.MaxAllowedAnswers
                     };
             }
+
+            var listQuestion = doc as ITextListQuestion;
+            if (listQuestion != null)
+            {
+                this.Settings = new ListSettings
+                {
+                    MaxAnswerCount = listQuestion.MaxAnswerCount
+                };
+            }
+
         }
 
         public Guid Id { get; set; }
