@@ -312,12 +312,12 @@
                  case config.questionTypes.TextList:
                      if (question.isNew()) {
                          if (question.isClone()) {
-                             command = config.commands.cloneListQuestion;
+                             command = config.commands.cloneTextListQuestion;
                          } else {
-                             command = config.commands.createListQuestion;
+                             command = config.commands.createTextListQuestion;
                          }
                      } else {
-                         command = config.commands.updateListQuestion;
+                         command = config.commands.updateTextListQuestion;
                      }
                     break;
                 default:
