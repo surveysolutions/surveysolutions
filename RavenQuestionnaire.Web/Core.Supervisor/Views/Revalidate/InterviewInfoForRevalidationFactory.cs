@@ -15,16 +15,16 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace Core.Supervisor.Views.Revalidate
 {
-    public class RevalidateInterviewFactory : IViewFactory<RevalidateInterviewInputModel, RevalidatInterviewView>
+    public class InterviewInfoForRevalidationFactory : IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>
     {
-        public IInterviewDataAndQuestionnaireMerger merger;
+        private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures;
         private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
 
-        public RevalidateInterviewFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
+        public InterviewInfoForRevalidationFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
             IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore,
             IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures,
@@ -39,7 +39,7 @@ namespace Core.Supervisor.Views.Revalidate
             this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
         }
 
-        public RevalidatInterviewView Load(RevalidateInterviewInputModel input)
+        public InterviewInfoForRevalidationView Load(InterviewInfoForRevalidationInputModel input)
         {
             var interview = this.interviewStore.GetById(input.InterviewId);
             if (interview == null || interview.IsDeleted)
@@ -61,7 +61,7 @@ namespace Core.Supervisor.Views.Revalidate
             var mergedInterview = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
 
-            var revalidateInterviewView = new RevalidatInterviewView
+            var revalidateInterviewView = new InterviewInfoForRevalidationView
             {
                 Responsible = mergedInterview.Responsible,
                 QuestionnairePublicKey = mergedInterview.QuestionnairePublicKey,

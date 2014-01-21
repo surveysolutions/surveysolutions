@@ -57,6 +57,15 @@ namespace Core.Supervisor.Views.Interview
                 };
             }
 
+            var listQuestion = question as ITextListQuestion;
+            if (listQuestion != null)
+            {
+                this.Settings = new
+                {
+                    MaxAllowedAnswers = listQuestion.MaxAnswerCount
+                };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;

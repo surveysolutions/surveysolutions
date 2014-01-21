@@ -243,7 +243,7 @@
     <Compile Include="Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\Question\IMultiAnswerQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\ITextListQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\IMultyOptionsQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\INumericQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\MultyOptionsQuestion.cs">
@@ -255,7 +255,7 @@
     <Compile Include="Entities\SubEntities\Question\SingleQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\Question\MultiAnswerQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\TextListQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\TextQuestion.cs">
       <SubType>Code</SubType>
     </Compile>

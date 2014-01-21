@@ -396,6 +396,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return null;
         }
 
+        public int? GetListSizeForListQuestion(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
+
+            var listQuestion = question as ITextListQuestion;
+            if (listQuestion != null)
+                return listQuestion.MaxAnswerCount;
+
+            return null;
+        }
+        
         public IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId)
         {
             return this

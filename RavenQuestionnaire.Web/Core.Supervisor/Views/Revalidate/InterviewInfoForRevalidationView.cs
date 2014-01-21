@@ -6,9 +6,9 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace Core.Supervisor.Views.Revalidate
 {
-    public class RevalidatInterviewView
+    public class InterviewInfoForRevalidationView
     {
-        public RevalidatInterviewView()
+        public InterviewInfoForRevalidationView()
         {
 
             this.FeaturedQuestions = new List<InterviewQuestionView>();

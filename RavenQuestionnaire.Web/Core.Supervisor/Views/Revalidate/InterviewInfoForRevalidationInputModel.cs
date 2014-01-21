@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Supervisor.Views.Revalidate
 {
-    public class RevalidateInterviewInputModel
+    public class InterviewInfoForRevalidationInputModel
     {
         public Guid InterviewId { get; set; }
     }

@@ -28,9 +28,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Title = title;
             this.ScreenId = screenId;
             this.Siblings = siblings;
-            if (breadcrumbs == null)
-                breadcrumbs = new List<InterviewItemId>();
-            this.Breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] { this.ScreenId });
+            this.Breadcrumbs = (breadcrumbs ?? new List<InterviewItemId>()).Union(new InterviewItemId[1] { this.ScreenId }).ToList();
             this.rowsValue = rows;
             this.Header = header;
             this.Enabled = enabled;

@@ -21,12 +21,12 @@ namespace Web.Supervisor.Controllers
     public class InterviewController : BaseController
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IViewFactory<RevalidateInterviewInputModel, RevalidatInterviewView> revalidateInterviewViewFactory;
+        private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
         private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory;
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                    IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-                                    IViewFactory<RevalidateInterviewInputModel, RevalidatInterviewView> revalidateInterviewViewFactory,
+                                    IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
                                    IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory)
             : base(commandService, provider, logger)
         {
@@ -75,7 +75,7 @@ namespace Web.Supervisor.Controllers
         [Authorize(Roles = "Headquarter")]
         public ActionResult ConfirmRevalidation(Guid id)
         {
-            var model = this.revalidateInterviewViewFactory.Load(new RevalidateInterviewInputModel { InterviewId = id });
+            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = id });
             return this.View(model);
         }
 
@@ -84,7 +84,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult ConfirmRevalidation(Guid interviewId, Guid QuestionnairePublicKey)
         {
             this.CommandService.Execute(new ReevaluateSynchronizedInterview(interviewId));
-            var model = this.revalidateInterviewViewFactory.Load(new RevalidateInterviewInputModel { InterviewId = interviewId });
+            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = interviewId });
             return this.View(model);
         }
 
