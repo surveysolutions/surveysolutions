@@ -1885,7 +1885,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfMaxAnswerCountNotInRange1to40(int? maxAnswerCount)
         {
-            if (maxAnswerCount.HasValue && !Enumerable.Range(1, 20).Contains(maxAnswerCount.Value))
+            if (maxAnswerCount.HasValue && !Enumerable.Range(1, 40).Contains(maxAnswerCount.Value))
             {
                 throw new  QuestionnaireException(
                     DomainExceptionType.MaxAnswerCountNotInRange,
