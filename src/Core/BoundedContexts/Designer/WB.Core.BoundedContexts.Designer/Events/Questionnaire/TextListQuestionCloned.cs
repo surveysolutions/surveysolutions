@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
-    public class ListQuestionCloned : AbstractListQuestionDataEvent
+    public class TextListQuestionCloned : AbstractListQuestionDataEvent
     {
         public Guid SourceQuestionId { get; set; }
         public Guid GroupPublicKey { get; set; }

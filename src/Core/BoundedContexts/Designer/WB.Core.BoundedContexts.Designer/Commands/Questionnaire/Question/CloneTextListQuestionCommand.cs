@@ -6,10 +6,10 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneListQuestion")]
-    public class CloneListQuestionCommand : AbstractListQuestionCommand
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneTextListQuestion")]
+    public class CloneTextListQuestionCommand : AbstractListQuestionCommand
     {
-        public CloneListQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, Guid sourceQuestionId, int targetIndex,
+        public CloneTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, Guid sourceQuestionId, int targetIndex,
             string title, string alias, bool isMandatory, bool isFeatured, QuestionScope scope, string condition, 
             string validationExpression, string validationMessage, string instructions, Guid responsibleId, int? countOfDecimalPlaces)
             : base(questionnaireId, questionId, title, alias, isMandatory, isFeatured, scope, condition, 
