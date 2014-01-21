@@ -93,9 +93,9 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\CloneTextListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateTextListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddTextListQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
@@ -122,9 +122,9 @@
     <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
     <Compile Include="Events\Questionnaire\GroupEvent.cs" />
     <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
-    <Compile Include="Events\Questionnaire\ListQuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\ListQuestionChanged.cs" />
-    <Compile Include="Events\Questionnaire\ListQuestionAdded.cs" />
+    <Compile Include="Events\Questionnaire\TextListQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\TextListQuestionChanged.cs" />
+    <Compile Include="Events\Questionnaire\TextListQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />

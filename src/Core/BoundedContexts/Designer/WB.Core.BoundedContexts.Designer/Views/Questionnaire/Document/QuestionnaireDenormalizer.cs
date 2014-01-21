@@ -41,9 +41,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
 
-        IEventHandler<ListQuestionAdded>,
-        IEventHandler<ListQuestionCloned>,
-        IEventHandler<ListQuestionChanged>,
+        IEventHandler<TextListQuestionAdded>,
+        IEventHandler<TextListQuestionCloned>,
+        IEventHandler<TextListQuestionChanged>,
 
         IEventHandler
     {
@@ -387,9 +387,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         }
 
 
-        public void Handle(IPublishedEvent<ListQuestionAdded> evnt)
+        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
         {
-            ListQuestionAdded e = evnt.Payload;
+            TextListQuestionAdded e = evnt.Payload;
             AddQuestion(evnt, evnt.Payload.GroupPublicKey,
                 new QuestionData(
                     e.PublicKey,
@@ -416,9 +416,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.MaxAnswerCount));
         }
 
-        public void Handle(IPublishedEvent<ListQuestionCloned> evnt)
+        public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
         {
-            ListQuestionCloned e = evnt.Payload;
+            TextListQuestionCloned e = evnt.Payload;
             CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
                 new QuestionData(
                     e.PublicKey,
@@ -445,9 +445,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.MaxAnswerCount));
         }
 
-        public void Handle(IPublishedEvent<ListQuestionChanged> evnt)
+        public void Handle(IPublishedEvent<TextListQuestionChanged> evnt)
         {
-            ListQuestionChanged e = evnt.Payload;
+            TextListQuestionChanged e = evnt.Payload;
             UpdateQuestion(evnt, new QuestionData(
                 e.PublicKey,
                 QuestionType.TextList,

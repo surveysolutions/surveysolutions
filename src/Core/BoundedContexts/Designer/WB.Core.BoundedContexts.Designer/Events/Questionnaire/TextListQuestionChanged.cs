@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
-    public class ListQuestionChanged : AbstractListQuestionDataEvent
+    public class TextListQuestionChanged : AbstractListQuestionDataEvent
     {
         
     }
