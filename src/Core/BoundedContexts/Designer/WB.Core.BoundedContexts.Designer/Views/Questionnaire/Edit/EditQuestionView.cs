@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     };
             }
 
-            var listQuestion = doc as IListQuestion;
+            var listQuestion = doc as ITextListQuestion;
             if (listQuestion != null)
             {
                 this.Settings = new ListSettings
