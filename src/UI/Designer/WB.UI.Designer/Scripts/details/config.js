@@ -52,7 +52,7 @@
                 },
                 {
                     key: "TextList",
-                    value: "TextList"
+                    value: "List"
                 }
             ],
             questionScopes = {
@@ -69,10 +69,13 @@
                 groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
                 createNumericQuestion: "AddNumericQuestion",
+                createListQuestion: "AddListQuestion",
                 cloneQuestion: "CloneQuestion",
                 cloneNumericQuestion: "CloneNumericQuestion",
+                cloneListQuestion: "CloneListQuestion",
                 updateQuestion: "UpdateQuestion",
                 updateNumericQuestion: "UpdateNumericQuestion",
+                updateListQuestion: "UpdateListQuestion",
                 deleteQuestion: "DeleteQuestion",
                 questionMove: "MoveQuestion",
                 addSharedPersonToQuestionnaire: "AddSharedPersonToQuestionnaire",
