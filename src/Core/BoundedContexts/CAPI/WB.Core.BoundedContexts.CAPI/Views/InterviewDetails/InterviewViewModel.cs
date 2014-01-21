@@ -603,7 +603,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var routWithouLast = rout.Take(rout.Count - 1).ToList();
                 if (routWithouLast.Any(IsGroupRoster))
                 {
-                    AddPropagatedScreenPrototype(group, this.BuildBreadCrumbsForNestedRosterGroup(lastVersionOfRout, group.PublicKey), (groupId) => this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, groupId));
+                    AddPropagatedScreenPrototype(group, this.BuildBreadCrumbs(lastVersionOfRout), (groupId) => this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, groupId));
                 }
                 else
                 {
@@ -611,7 +611,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     var screen = new QuestionnaireScreenViewModel(this.PublicKey, group.Title, this.Title, true,
                         key, screenItems,
                         this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, key),
-                        this.BuildBreadCrumbs(lastVersionOfRout, key));
+                        this.BuildBreadCrumbs(lastVersionOfRout));
                     this.Screens.Add(key, screen);
                 }
             }
@@ -646,7 +646,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             InterviewItemId rosterKey = new InterviewItemId(group.PublicKey);
             var siblings = this.BuildSiblingsForNonPropagatedGroups(root, rosterKey);
         
-            var breadcrumbs = this.BuildBreadCrumbs(root, rosterKey);
+            var breadcrumbs = this.BuildBreadCrumbs(root);
             var header = new List<HeaderItem>();
 
             foreach (var child in @group.Children)
@@ -668,10 +668,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var roster = new QuestionnaireGridViewModel(this.PublicKey, group.Title, this.Title,
                 rosterKey, true,
                 siblings,
-                breadcrumbs,header,
+                breadcrumbs.Take(breadcrumbs.Count - 1).ToList(), header,
                 () => this.CollectPropagatedScreen(rosterKey.Id));
-
-            breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] { rosterKey }).ToList();
 
             AddPropagatedScreenPrototype(group, breadcrumbs, this.GetSiblings);
             this.Screens.Add(rosterKey, roster);
@@ -734,22 +732,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 .ToList();
         }
 
-        protected IList<InterviewItemId> BuildBreadCrumbs(IList<IGroup> rout, InterviewItemId key)
-        {
-            return
-                rout.Skip(1).TakeWhile(r => r.PublicKey != key.Id).Select(
-                    r => new InterviewItemId(r.PublicKey)).ToList();
-        }
-
-        private IList<InterviewItemId> BuildBreadCrumbsForNestedRosterGroup(List<IGroup> rout, Guid groupId)
+        private IList<InterviewItemId> BuildBreadCrumbs(List<IGroup> rout)
         {
             var result = new List<InterviewItemId>();
 
             foreach (var groupInRout in rout.Skip(1))
             {
-                if(groupInRout.PublicKey==groupId)
-                    break;
-                
                 result.Add(new InterviewItemId(groupInRout.PublicKey));
 
                 if (IsGroupRoster(groupInRout))
