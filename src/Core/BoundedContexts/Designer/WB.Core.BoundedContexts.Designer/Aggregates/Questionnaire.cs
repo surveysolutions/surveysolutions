@@ -261,7 +261,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
         }
 
-        internal void Apply(ListQuestionAdded e)
+        internal void Apply(TextListQuestionAdded e)
         {
             IQuestion question =
                 new QuestionFactory().CreateQuestion(
@@ -380,7 +380,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        internal void Apply(ListQuestionCloned e)
+        internal void Apply(TextListQuestionCloned e)
         {
             IQuestion question =
                 new QuestionFactory().CreateQuestion(
@@ -500,7 +500,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
 
-        internal void Apply(ListQuestionChanged e)
+        internal void Apply(TextListQuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
@@ -1078,7 +1078,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void AddListQuestion(Guid questionId, Guid groupId, string title, string alias,
+        public void AddTextListQuestion(Guid questionId, Guid groupId, string title, string alias,
            bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression, 
            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
@@ -1095,7 +1095,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
-            this.ApplyEvent(new ListQuestionAdded
+            this.ApplyEvent(new TextListQuestionAdded
             {
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
@@ -1115,7 +1115,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneListQuestion(Guid questionId, Guid groupId, string title, string alias,
+        public void CloneTextListQuestion(Guid questionId, Guid groupId, string title, string alias,
            bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression,
            string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId, int? maxAnswerCount)
@@ -1133,7 +1133,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
-            this.ApplyEvent(new ListQuestionCloned
+            this.ApplyEvent(new TextListQuestionCloned
             {
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
@@ -1155,7 +1155,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateListQuestion(Guid questionId, string title, string alias,
+        public void UpdateTextListQuestion(Guid questionId, string title, string alias,
            bool isMandatory, bool isFeatured, QuestionScope scope, string condition, string validationExpression,
            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
@@ -1173,7 +1173,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
 
-            this.ApplyEvent(new ListQuestionChanged
+            this.ApplyEvent(new TextListQuestionChanged
             {
                 PublicKey = questionId,
                 
