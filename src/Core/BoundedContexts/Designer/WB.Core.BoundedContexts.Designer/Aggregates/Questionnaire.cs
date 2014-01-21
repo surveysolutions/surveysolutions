@@ -2319,8 +2319,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup sourceRoster = GetFirstRosterParentGroupOrNull(question);
             IGroup targetRoster = GetFirstRosterParentGroupOrNull(targetGroup);
 
-            if (sourceRoster != null && targetRoster != null && sourceRoster.RosterSizeQuestionId.HasValue && 
-                targetRoster.RosterSizeQuestionId.HasValue && sourceRoster.RosterSizeQuestionId != targetRoster.RosterSizeQuestionId)
+            if (targetRoster == null || (sourceRoster != null && targetRoster != null && sourceRoster.RosterSizeQuestionId.HasValue && 
+                targetRoster.RosterSizeQuestionId.HasValue && sourceRoster.RosterSizeQuestionId != targetRoster.RosterSizeQuestionId))
                 throw new QuestionnaireException(
                     string.Format(
                         "You can move a roster title question {0} only to a roster group that has a roster size question {1}",
