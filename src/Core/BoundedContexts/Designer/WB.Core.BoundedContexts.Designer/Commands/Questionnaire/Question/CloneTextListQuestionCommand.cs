@@ -9,11 +9,20 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneTextListQuestion")]
     public class CloneTextListQuestionCommand : AbstractListQuestionCommand
     {
-        public CloneTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, Guid sourceQuestionId, int targetIndex,
-            string title, string alias, bool isMandatory, bool isFeatured, QuestionScope scope, string condition, 
-            string validationExpression, string validationMessage, string instructions, Guid responsibleId, int? countOfDecimalPlaces)
-            : base(questionnaireId, questionId, title, alias, isMandatory, isFeatured, scope, condition, 
-                   validationExpression, validationMessage, instructions, responsibleId, countOfDecimalPlaces)
+        public CloneTextListQuestionCommand(
+            Guid questionnaireId, 
+            Guid questionId, 
+            Guid groupId, Guid 
+            sourceQuestionId, 
+            int targetIndex,
+            string title, 
+            string variableName, 
+            bool isMandatory, 
+            string condition,
+           string instructions,
+            Guid responsibleId,
+            int? maxAnswerCount)
+            : base(responsibleId, questionnaireId, questionId, title, variableName, isMandatory, condition, instructions, maxAnswerCount)
         {
             this.GroupId = groupId;
             this.SourceQuestionId = sourceQuestionId;
