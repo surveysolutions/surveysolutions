@@ -257,5 +257,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 QuestionnaireDocument = questionnaireDocument ?? new QuestionnaireDocument()
             });
         }
+
+
+        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
+            Guid questionId, Guid? parentGroupId = null, int? maxValue = null)
+        {
+            return ToPublishedEvent(new TextListQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                MaxAnswerCount = maxValue
+            });
+        }
+
+
     }
 }
