@@ -104,6 +104,16 @@
                self.maxValue = ko.observable();
 
                // UI stuff
+               self.isValidationVisible = ko.computed(function() {
+                   var validationFieldsAreEmpty = _.isEmpty("" + self.validationExpression() + self.validationMessage());
+                   if (self.isSupervisorQuestion() == false) {
+                       if (self.qtype() == 'TextList') {
+                           return !validationFieldsAreEmpty;
+                       }
+                       return true;
+                   }
+                   return false;
+               });
                self.addAnswer = function () {
                    var answer = new answerOption().id(Math.uuid()).title('').value('');
 
@@ -171,10 +181,10 @@
                        validatable: true,
                        validation: [{
                            validator: function (val) {
-                               if (self.isFeatured() == true && val == "GpsCoordinates") return false;
+                               if (self.isFeatured() == true && (val == config.questionTypes.GpsCoordinates || val == config.questionTypes.TextList)) return false;
                                return true;
                            },
-                           message: 'Geo Location question cannot be pre-filled'
+                           message: 'Geo Location and List questions cannot be pre-filled'
                        },
                            {
                                validator: function (val) {
@@ -276,7 +286,17 @@
 
                    self.validationExpression.extend({
                        validatable: true,
-                       validation: [{
+                       validation: [
+                           {
+                               validator: function (val) {
+                                   if (!_.isEmpty(val) && self.qtype() == config.questionTypes.TextList) {
+                                       return false;
+                                   }
+                                   return true;
+                               },
+                               message: 'List question cannot contain validation expression'
+                           },
+                           {
                            validator: function (val) {
                                var validationResult = validator.isValidExpression(val);
                                if (validationResult.isValid) {
@@ -287,6 +307,21 @@
                            },
                            message: 'Error'
                        }],
+                       throttle: 1000
+                   });
+
+                   self.validationMessage.extend({
+                       validatable: true,
+                       validation: [
+                           {
+                               validator: function (val) {
+                                   if (!_.isEmpty(val) && self.qtype() == config.questionTypes.TextList) {
+                                       return false;
+                                   }
+                                   return true;
+                               },
+                               message: 'List question cannot contain validation message'
+                           }],
                        throttle: 1000
                    });
 
