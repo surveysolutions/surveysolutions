@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_moving_roster_title_question_to_group_that_have_different_roster_size_question_then_group_of_roster_title_question : QuestionnaireTestsContext
+    internal class when_moving_roster_title_question_to_group_that_have_different_roster_size_question_than_group_of_roster_title_question : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
