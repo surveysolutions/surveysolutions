@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result = new QuestionFactory().CreateQuestion(data);
+            IQuestion result = questionFactory.CreateQuestion(data);
 
             if (result == null)
             {
@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result = new QuestionFactory().CreateQuestion(data);
+            IQuestion result = questionFactory.CreateQuestion(data);
 
             if (result == null)
             {
