@@ -12,6 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        void WarmUpCaches();
+
         [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
 

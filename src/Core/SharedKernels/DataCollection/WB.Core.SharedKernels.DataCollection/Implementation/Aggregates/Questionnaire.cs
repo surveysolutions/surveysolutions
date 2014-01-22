@@ -57,6 +57,54 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+        }
+
+        public void WarmUpCaches()
+        {
+            var questionWarmingUpMethods = new Action<Guid>[]
+            {
+                questionId => GetQuestionsInvolvedInCustomValidation(questionId),
+                questionId => GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionId),
+                questionId => GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId),
+                questionId => GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId),
+                questionId => GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId),
+                questionId => GetRostersAffectedByRosterTitleQuestion(questionId),
+            };
+
+            var groupWarmingUpMethods = new Action<Guid>[]
+            {
+                groupId => GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupId),
+                groupId => GetAllUnderlyingQuestions(groupId),
+                groupId => GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(groupId),
+                groupId => GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupId),
+                groupId => GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(groupId),
+                groupId => GetUnderlyingMandatoryQuestions(groupId),
+            };
+
+            foreach (IQuestion question in this.GetAllQuestions())
+            {
+                foreach (Action<Guid> method in questionWarmingUpMethods)
+                {
+                    try
+                    {
+                        method.Invoke(question.PublicKey);
+                    }
+                    catch {}
+                }
+            }
+
+            foreach (IGroup group in this.GetAllGroups())
+            {
+                foreach (Action<Guid> method in groupWarmingUpMethods)
+                {
+                    try
+                    {
+                        method.Invoke(group.PublicKey);
+                    }
+                    catch {}
+                }
+            }
         }
 
         public QuestionnaireState CreateSnapshot()
