@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
 
-        public Questionnaire(){}
+        public Questionnaire() { }
 
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
@@ -151,10 +151,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             document.ConnectChildrenWithParent();
 
             this.ThrowIfVerifierFindsErrors(document);
-            
+
             document.CreatedBy = this.innerDocument.CreatedBy;
 
-            this.ApplyEvent(new TemplateImported() {Source = document});
+            this.ApplyEvent(new TemplateImported() { Source = document });
         }
 
         public void ImportFromSupervisor(IQuestionnaireDocument source)
@@ -250,7 +250,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
                     questionId, question.QuestionType));
 
-            return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
+            return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
         }
 
         public bool IsCustomValidationDefined(Guid questionId)
@@ -373,7 +373,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 return autoPropagatingQuestion.Triggers.ToList();
             }
-            
+
             //### roster
             return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId).Select(x => x.PublicKey);
         }
@@ -407,7 +407,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return null;
         }
-        
+
         public IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId)
         {
             return this
@@ -545,7 +545,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
-            
+
             return numericQuestion.IsInteger;
         }
 
@@ -557,7 +557,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
             if (numericQuestion.IsInteger)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be real.", questionId));
-            
+
             return numericQuestion.CountOfDecimalPlaces;
         }
 
@@ -627,7 +627,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return Enumerable.ToList(
                 from question in this.GetAllQuestions()
-                where  this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey, specifiedQuestionId: questionId)
+                where this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey, specifiedQuestionId: questionId)
                        && questionId != question.PublicKey
                 select question.PublicKey
             );
@@ -764,7 +764,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            var parentGroup = (IGroup) question.GetParent();
+            var parentGroup = (IGroup)question.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
@@ -781,7 +781,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             while (group != document)
             {
                 parentGroups.Add(group);
-                group = (IGroup) group.GetParent();
+                group = (IGroup)group.GetParent();
             }
 
             return parentGroups;
@@ -897,11 +897,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool DoesQuestionSupportRoster(IQuestion question)
         {
-                   //### roster
-            return question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.MultyOption ||
-                   //### old questionnaires supporting
-                  (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
-
+            //### roster
+            return question.QuestionType == QuestionType.Numeric
+                    || question.QuestionType == QuestionType.MultyOption
+                    || question.QuestionType == QuestionType.TextList
+                    //### old questionnaires supporting
+                    || (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
         }
 
         private static bool IsRosterGroup(IGroup group)
@@ -959,7 +960,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? this.QuestionCache[questionId]
                 : null;
         }
-        
+
         private static string FormatQuestionForException(IQuestion question)
         {
             return string.Format("'{0} [{1}] ({2:N})'",
