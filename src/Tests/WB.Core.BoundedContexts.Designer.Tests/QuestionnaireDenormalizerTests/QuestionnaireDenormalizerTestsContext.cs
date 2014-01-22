@@ -318,7 +318,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 PublicKey = questionId,
                 SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
                 GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
-                
                 MaxAnswerCount = maxAnswerCount
             });
         }
