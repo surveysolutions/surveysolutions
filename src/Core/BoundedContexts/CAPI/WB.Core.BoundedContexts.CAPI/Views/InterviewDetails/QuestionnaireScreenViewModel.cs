@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.QuestionnaireId = questionnaireId;
             this.Items = items;
             this.ScreenId = screenId;
-            this.Breadcrumbs = (breadcrumbs ?? new List<InterviewItemId>()).Union(new InterviewItemId[1] { this.ScreenId }).ToList();
+            this.Breadcrumbs = breadcrumbs;
             this.Title = title;
             this.Enabled = enabled;
             this.ScreenName = screenName;
