@@ -30,7 +30,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
-            IQuestionFactory questionFactory = null, ILogger logger = null, IQuestionnaireDocumentUpgrader upgrader = null)
+            IQuestionFactory questionFactory = null, 
+            ILogger logger = null, 
+            IQuestionnaireDocumentUpgrader upgrader = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
@@ -88,13 +90,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             };
         }
 
-        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null)
+        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null, int? maxValue = null)
         {
             return new NumericQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
-                QuestionType = QuestionType.Numeric
+                QuestionType = QuestionType.Numeric,
+                MaxValue = maxValue
             };
         }
 
@@ -205,6 +208,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
         }
 
+        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
+            Guid questionId, Guid parentGroupId)
+        {
+            return ToPublishedEvent(new TextListQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId
+            });
+        }
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
             Guid questionId, int? maxValue = null, List<Guid> triggers = null)
         {
