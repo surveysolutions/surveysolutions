@@ -1096,7 +1096,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? rosterInstanceIds
                     : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
 
-            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds);
+            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromTextListQuestions(rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds, answers);
 
             Func<Identity, bool?> getNewQuestionState =
                 question =>
@@ -1111,6 +1111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues, answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
 
             this.ApplyEvent(new TextListQuestionAnswered(userId, questionId, rosterVector, answerTime, answers));
+
+            this.ApplyRosterEvents(rosterCalculationData);
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
 
@@ -1323,7 +1325,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     questionsDeclaredValid.Add(mandatoryQuestion);
                 }
-                else 
+                else
                 {
                     questionsDeclaredInvalid.Add(mandatoryQuestion);
                 }
@@ -1479,7 +1481,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-      
+
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
@@ -1828,6 +1830,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ).ToList();
         }
 
+        private RosterCalculationData CalculateRosterDataWithRosterTitlesFromTextListQuestions(decimal[] rosterVector, List<Guid> rosterIds,
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds,
+            Tuple<decimal, string>[] answers)
+        {
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(
+                rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer, getRosterInstanceIds);
+
+            rosterCalculationData.TitlesForRosterInstancesToAdd = rosterCalculationData.RosterInstancesToAdd
+                .Select(rosterInstance => rosterInstance.RosterInstanceId)
+                .Distinct()
+                .ToDictionary(
+                    rosterInstanceId => rosterInstanceId,
+                    rosterInstanceId => answers.Single(x => x.Item1 == rosterInstanceId).Item2);
+
+            return rosterCalculationData;
+        }
+
+
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(
             Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
@@ -1837,9 +1858,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer, getRosterInstanceIds);
 
             rosterCalculationData.TitlesForRosterInstancesToAdd =
-                rosterCalculationData.RosterInstancesToAdd.ToDictionary(
-                    rosterInstance => rosterInstance.RosterInstanceId,
-                    rosterInstance => questionnaire.GetAnswerOptionTitle(questionId, rosterInstance.RosterInstanceId));
+                rosterCalculationData.RosterInstancesToAdd
+                .Select(rosterInstance => rosterInstance.RosterInstanceId)
+                .Distinct()
+                .ToDictionary(
+                    rosterInstanceId => rosterInstanceId,
+                    rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
 
             return rosterCalculationData;
         }
