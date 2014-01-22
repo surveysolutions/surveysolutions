@@ -101,6 +101,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             };
         }
 
+
+        protected static TextListQuestion CreateTextListQuestion(Guid? questionId = null)
+        {
+            return new TextListQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionType = QuestionType.TextList
+            };
+        }
+
         protected static IPublishedEvent<GroupDeleted> CreateGroupDeletedEvent(Guid groupId)
         {
             return ToPublishedEvent(new GroupDeleted
@@ -215,6 +225,24 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 PublicKey = questionId,
                 GroupPublicKey = parentGroupId
+            });
+        }
+
+
+        protected static IPublishedEvent<TextListQuestionCloned> CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
+        {
+            return ToPublishedEvent(new TextListQuestionCloned
+            {
+                PublicKey = questionId,
+                SourceQuestionId = sourceQuestionId
+            });
+        }
+
+        protected static IPublishedEvent<TextListQuestionChanged> CreateTextListQuestionChangedEvent(Guid questionId)
+        {
+            return ToPublishedEvent(new TextListQuestionChanged
+            {
+                PublicKey = questionId
             });
         }
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(

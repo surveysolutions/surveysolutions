@@ -398,7 +398,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.QuestionText,
                     e.StataExportCaption,
                     e.ConditionExpression,
-                 null,
+                    null,
                     null,
                     Order.AZ,
                     false,
