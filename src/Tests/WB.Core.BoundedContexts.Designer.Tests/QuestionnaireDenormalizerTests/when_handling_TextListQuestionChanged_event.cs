@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities;
@@ -13,25 +13,31 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
-    internal class when_handling_TextListQuestionAdded_event : QuestionnaireDenormalizerTestsContext
+    internal class when_handling_TextListQuestionChanged_event : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>
         {
             var parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            @event = CreateTextListQuestionAddedEvent(questionId: questionId, parentGroupId: parentGroupId);
+            @event = CreateTextListQuestionChangedEvent(questionId: questionId);
 
             var questionnaireDocument = CreateQuestionnaireDocument(new[]
             {
-                CreateGroup(groupId: parentGroupId)
+                CreateGroup(groupId: parentGroupId, children: new []
+                {
+                    CreateTextListQuestion(questionId: questionId)
+                })
             });
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer => writer.GetById(Moq.It.IsAny<Guid>()) == questionnaireDocument);
 
             var questionFactory = new Mock<IQuestionFactory>();
 
+            var updatedQuestion = CreateTextListQuestion(questionId: questionId);
+
             questionFactory.Setup(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()))
-                .Callback<QuestionData>(d => questionData = d);
+                .Callback<QuestionData>(d => questionData = d)
+                .Returns(() => updatedQuestion);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory.Object);
         };
@@ -40,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             denormalizer.Handle(@event);
 
         It should_set_null_as_default_value_for__ValidationExpression__field = () =>
-           questionData.ValidationExpression.ShouldBeNull();
+            questionData.ValidationExpression.ShouldBeNull();
 
         It should_set_null_as_default_value_for__ValidationMessage__field = () =>
             questionData.ValidationMessage.ShouldBeNull();
@@ -56,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         private static QuestionData questionData;
         private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<TextListQuestionAdded> @event;
+        private static IPublishedEvent<TextListQuestionChanged> @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }
 }
