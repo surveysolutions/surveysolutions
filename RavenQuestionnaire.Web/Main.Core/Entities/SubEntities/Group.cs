@@ -37,8 +37,12 @@ namespace Main.Core.Entities.SubEntities
         public Guid? RosterSizeQuestionId { get; set; }
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
+
         public string[] RosterFixedTitles { get; set; }
+
         public Guid? RosterTitleQuestionId { get; set; }
+
+        public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
 
         private IComposite parent;
         

@@ -1,10 +1,12 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -17,7 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Establish context = () =>
         {
             var parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = Guid.Parse("11111111111111111111111111111111");
             maxValue = 42;
 
             questionnaireDocument = CreateQuestionnaireDocument(
@@ -29,7 +30,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            var numericQuestion = CreateNumericQuestion(questionId, "title", maxValue);
+
+            var questionFactory = Mock.Of<IQuestionFactory>(factory => factory.CreateQuestion(it.IsAny<QuestionData>()) == numericQuestion);
+
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
         };
 
         Because of = () =>
@@ -42,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<NumericQuestionCloned> @event;
         private static QuestionnaireDocument questionnaireDocument;
-        private static Guid questionId;
+        private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static int maxValue;
     }
 }
