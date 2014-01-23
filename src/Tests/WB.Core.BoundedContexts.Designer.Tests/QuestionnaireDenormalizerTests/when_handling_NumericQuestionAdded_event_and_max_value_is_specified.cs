@@ -1,10 +1,12 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -29,7 +31,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            var textQuestion = CreateNumericQuestion(questionId: questionId, maxValue: maxValue);
+
+            var questionFactory = Mock.Of<IQuestionFactory>(x =>
+                x.CreateQuestion(Moq.It.IsAny<QuestionData>()) == textQuestion
+            );
+
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
         };
 
         Because of = () =>

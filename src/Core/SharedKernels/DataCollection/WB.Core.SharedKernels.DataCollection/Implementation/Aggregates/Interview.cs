@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using InterviewDeleted = WB.Core.SharedKernels.DataCollection.Events.Interview.InterviewDeleted;
 
@@ -568,36 +567,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        private List<RosterCalculationData> CalculateFixedRostersData(IQuestionnaire questionnaire)
-        {
-            Func<Identity, object> getAnswer = question => string.Empty;
-
-            List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
-
-            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
-
-            Func<Guid, decimal[], bool> isFixedRoster = (groupId, groupOuterScopeRosterVector)
-                => fixedRosterIds.Contains(groupId)
-                    && AreEqualRosterVectors(groupOuterScopeRosterVector, EmptyRosterVector);
-
-            Func<Guid, List<decimal>> getFixedRosterInstanceIds =
-                fixedRosterId => rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToList();
-
-            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
-                => isFixedRoster(groupId, groupOuterRosterVector)
-                    ? getFixedRosterInstanceIds(groupId)
-                    : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
-
-            return fixedRosterIds
-                .Select(fixedRosterId => this.CalculateRosterData(
-                    new List<Guid> { fixedRosterId },
-                    EmptyRosterVector,
-                    getFixedRosterInstanceIds(fixedRosterId),
-                    rosterTitlesGroupedByRosterId[fixedRosterId],
-                    questionnaire, getAnswer, getRosterInstanceIds)
-                ).ToList();
-        }
-
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)
             : base(id)
         {
@@ -754,7 +723,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
@@ -840,7 +809,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
@@ -1039,7 +1008,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? rosterInstanceIds
                     : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
 
-            var rosterCalculationData = this.GetRosterCalculationDataWithRosterTitles(questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds);
+            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds);
 
             EnablementChanges enablementChanges = this.CalculateEnablementChanges(
                 answeredQuestion, selectedValues, questionnaire, getAnswer, getRosterInstanceIds);
@@ -1090,21 +1059,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
-        private RosterCalculationData GetRosterCalculationDataWithRosterTitles(Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
-            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
-        {
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(
-                rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer, getRosterInstanceIds);
-
-            rosterCalculationData.TitlesForRosterInstancesToAdd =
-                rosterCalculationData.RosterInstancesToAdd.ToDictionary(
-                    rosterInstance => rosterInstance.RosterInstanceId,
-                    rosterInstance => questionnaire.GetAnswerOptionTitle(questionId, rosterInstance.RosterInstanceId));
-
-            return rosterCalculationData;
-        }
-
         public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
@@ -1121,16 +1075,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
             ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
 
+            var selectedValues = answers.Select(x => x.Item1).ToArray();
+
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
+
+            List<decimal> rosterInstanceIds = selectedValues.ToList();
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
+                selectedValue => selectedValue,
+                selectedValue => (int?)null);
+
+            List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
+
+            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterRosterVector)
+                => rosterIds.Contains(groupId)
+                && AreEqualRosterVectors(groupOuterRosterVector, rosterVector);
+
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
+                => isRoster(groupId, groupOuterRosterVector)
+                    ? rosterInstanceIds
+                    : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
+
+            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromTextListQuestions(rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds, answers);
+
+            Func<Identity, bool?> getNewQuestionState =
+                question =>
+                {
+                    if (rosterCalculationData.InitializedQuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
+                    if (rosterCalculationData.InitializedQuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
+                    return null;
+                };
+
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
 
-            string answerFormattedAsRosterTitle = string.Join(", ", answers.Select(x => x.Item2).ToArray());
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues, answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
 
             this.ApplyEvent(new TextListQuestionAnswered(userId, questionId, rosterVector, answerTime, answers));
+
+            this.ApplyRosterEvents(rosterCalculationData);
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
 
             rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
-       
         }
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
@@ -1339,7 +1324,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     questionsDeclaredValid.Add(mandatoryQuestion);
                 }
-                else 
+                else
                 {
                     questionsDeclaredInvalid.Add(mandatoryQuestion);
                 }
@@ -1495,7 +1480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-      
+
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
@@ -1523,7 +1508,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Interview was completed by interviewer and cannot be deleted"));
         }
 
-        private void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)
+        private static void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)
         {
             if (!questionnaire.HasQuestion(questionId))
                 throw new InterviewException(string.Format("Question with id '{0}' is not found.", questionId));
@@ -1813,6 +1798,74 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
         }
 
+
+        private List<RosterCalculationData> CalculateFixedRostersData(IQuestionnaire questionnaire)
+        {
+            Func<Identity, object> getAnswer = question => string.Empty;
+
+            List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
+
+            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
+
+            Func<Guid, decimal[], bool> isFixedRoster = (groupId, groupOuterScopeRosterVector)
+                => fixedRosterIds.Contains(groupId)
+                    && AreEqualRosterVectors(groupOuterScopeRosterVector, EmptyRosterVector);
+
+            Func<Guid, List<decimal>> getFixedRosterInstanceIds =
+                fixedRosterId => rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToList();
+
+            Func<Guid, decimal[], List<decimal>> getRosterInstanceIds = (groupId, groupOuterRosterVector)
+                => isFixedRoster(groupId, groupOuterRosterVector)
+                    ? getFixedRosterInstanceIds(groupId)
+                    : this.GetRosterInstanceIds(groupId, groupOuterRosterVector);
+
+            return fixedRosterIds
+                .Select(fixedRosterId => this.CalculateRosterData(
+                    new List<Guid> { fixedRosterId },
+                    EmptyRosterVector,
+                    getFixedRosterInstanceIds(fixedRosterId),
+                    rosterTitlesGroupedByRosterId[fixedRosterId],
+                    questionnaire, getAnswer, getRosterInstanceIds)
+                ).ToList();
+        }
+
+        private RosterCalculationData CalculateRosterDataWithRosterTitlesFromTextListQuestions(decimal[] rosterVector, List<Guid> rosterIds,
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds,
+            Tuple<decimal, string>[] answers)
+        {
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(
+                rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer, getRosterInstanceIds);
+
+            rosterCalculationData.TitlesForRosterInstancesToAdd = rosterCalculationData.RosterInstancesToAdd
+                .Select(rosterInstance => rosterInstance.RosterInstanceId)
+                .Distinct()
+                .ToDictionary(
+                    rosterInstanceId => rosterInstanceId,
+                    rosterInstanceId => answers.Single(x => x.Item1 == rosterInstanceId).Item2);
+
+            return rosterCalculationData;
+        }
+
+
+        private RosterCalculationData CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(
+            Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, decimal[], List<decimal>> getRosterInstanceIds)
+        {
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(
+                rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer, getRosterInstanceIds);
+
+            rosterCalculationData.TitlesForRosterInstancesToAdd =
+                rosterCalculationData.RosterInstancesToAdd
+                .Select(rosterInstance => rosterInstance.RosterInstanceId)
+                .Distinct()
+                .ToDictionary(
+                    rosterInstanceId => rosterInstanceId,
+                    rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
+
+            return rosterCalculationData;
+        }
 
         private static Dictionary<Guid, Dictionary<decimal, string>> CalculateFixedRosterData(IEnumerable<Guid> fixedRosterIds, IQuestionnaire questionnaire)
         {

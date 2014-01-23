@@ -1,10 +1,12 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -17,7 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Establish context = () =>
         {
             var parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = Guid.Parse("11111111111111111111111111111111");
             maxAnswerCount = 4;
 
             questionnaireDocument = CreateQuestionnaireDocument(
@@ -29,20 +30,31 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            var questionFactory = new Mock<IQuestionFactory>();
+
+            var clonedQuestion = CreateTextListQuestion(questionId: questionId);
+
+            questionFactory.Setup(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()))
+                .Callback<QuestionData>(d => questionData = d)
+                .Returns(() => clonedQuestion);
+
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory.Object);
         };
 
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_set_question_MaxValue_property_to_specified_max_value = () =>
-            questionnaireDocument.GetQuestion<ITextListQuestion>(questionId)
-                .MaxAnswerCount.ShouldEqual(maxAnswerCount);
+        private It should_set_not_null_questions_MaxAnswerCount_property = () =>
+            questionData.MaxAnswerCount.ShouldNotBeNull();
+
+        private It should_set_question_MaxValue_property_to_specified_max_value = () =>
+            questionData.MaxAnswerCount.ShouldEqual(maxAnswerCount);
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<TextListQuestionCloned> @event;
         private static QuestionnaireDocument questionnaireDocument;
-        private static Guid questionId;
+        private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static int maxAnswerCount;
+        private static QuestionData questionData;
     }
 }
