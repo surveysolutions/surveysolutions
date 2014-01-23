@@ -269,11 +269,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster group could not have groups inside itself..
+        ///   Looks up a localized string similar to Roster could not have roster inside itself..
         /// </summary>
-        internal static string WB0029_RosterGroupHasGroup {
+        internal static string WB0029_RosterHasRoster {
             get {
-                return ResourceManager.GetString("WB0029_RosterGroupHasGroup", resourceCulture);
+                return ResourceManager.GetString("WB0029_RosterHasRoster", resourceCulture);
             }
         }
         
