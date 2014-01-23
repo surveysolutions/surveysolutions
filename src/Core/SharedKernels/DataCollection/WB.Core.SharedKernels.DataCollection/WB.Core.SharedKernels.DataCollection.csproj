@@ -167,9 +167,9 @@
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
+    <Compile Include="Utils\QuestionnaireDocumentCacheWarmer.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
-    <Compile Include="ValueObjects\Questionnaire\QuestionIdAndVariableName.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\Services\" />
+    <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
