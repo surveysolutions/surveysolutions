@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -11,8 +10,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets the current version of the instance as it is known in the event store.
         /// </summary>
         long Version { get; }
-
-        void WarmUpCaches();
 
         [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
