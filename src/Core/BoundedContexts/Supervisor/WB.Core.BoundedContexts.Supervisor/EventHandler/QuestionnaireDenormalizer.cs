@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -27,9 +28,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var document = evnt.Payload.Source.Clone() as QuestionnaireDocument;
             if(document==null)
                 return;
+
+            if (!document.IsCacheWarmed)
+            {
+                new QuestionnaireDocumentCacheWarmer(document).WarmUpCaches();
+            }
+
             this.documentStorage.Store(
                 new QuestionnaireDocumentVersioned() {Questionnaire = document, Version = evnt.EventSequence},
                 document.PublicKey);
+
             this.synchronizationDataStorage.SaveQuestionnaire(document, evnt.EventSequence);
         }
 
