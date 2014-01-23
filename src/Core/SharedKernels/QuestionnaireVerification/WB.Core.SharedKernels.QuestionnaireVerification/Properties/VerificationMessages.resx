@@ -186,8 +186,8 @@
   <data name="WB0028_QuestionnaireHaveAutopropagatedQuestions" xml:space="preserve">
     <value>Questionnaire have autopropagated questions.</value>
   </data>
-  <data name="WB0029_RosterGroupHasGroup" xml:space="preserve">
-    <value>Roster group could not have groups inside itself.</value>
+  <data name="WB0029_RosterHasRoster" xml:space="preserve">
+    <value>Roster could not have roster inside itself.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Pre-filled questions can't be inside of roster.</value>

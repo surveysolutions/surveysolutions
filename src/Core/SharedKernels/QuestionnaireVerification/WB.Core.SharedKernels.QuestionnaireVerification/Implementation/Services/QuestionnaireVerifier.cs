@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And20, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20),
                     Verifier<IGroup>(QuestionnaireHaveAutopropagatedGroups, "WB0027", VerificationMessages.WB0027_QuestionnaireHaveAutopropagatedGroups),
                     Verifier<IQuestion>(QuestionnaireHaveAutopropagatedQuestions, "WB0028", VerificationMessages.WB0028_QuestionnaireHaveAutopropagatedQuestions),
-                    Verifier<IGroup>(RosterGroupHasGroupInsideItself, "WB0029", VerificationMessages.WB0029_RosterGroupHasGroup),
+                    Verifier<IGroup>(RosterHasRosterInsideItself, "WB0029", VerificationMessages.WB0029_RosterHasRoster),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
@@ -289,9 +289,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return question.Featured && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
         }
 
-        private static bool RosterGroupHasGroupInsideItself(IGroup group, QuestionnaireDocument questionnaire)
+        private static bool RosterHasRosterInsideItself(IGroup group, QuestionnaireDocument questionnaire)
         {
-            return IsRosterGroup(group) && questionnaire.Find<IGroup>(x => IsParentForGroup(x, group)).Any();
+            return IsRosterGroup(group) && questionnaire.Find<IGroup>(x => IsParentForGroup(x, group) && IsRosterGroup(group)).Any();
         }
 
         private static bool IsParentForGroup(IGroup group, IGroup parentGroup)

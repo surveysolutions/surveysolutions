@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_roster_group_that_contains_group : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_group_that_contains_roster : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -29,6 +29,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 Children = new List<IComposite>()
                 {
                     new Group()
+                    {
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterSizeQiestionId
+                    }
                 }
             });
 
