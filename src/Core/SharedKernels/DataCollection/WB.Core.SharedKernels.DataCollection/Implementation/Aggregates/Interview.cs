@@ -58,6 +58,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewSynchronized @event)
         {
+#warning very very bad idea GetHistoricalQuestionnaire!!!!!!
+            IQuestionnaire questionnaire = this.QuestionnaireRepository.GetHistoricalQuestionnaire(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
+            if (questionnaire == null)
+                return;
+
+#warning very very bad idea GetHistoricalQuestionnaire!!!!!!
+
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.status = @event.InterviewData.Status;
@@ -70,11 +77,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToDictionary(
                         question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => question.Answer);
-
+             
             this.linkedSingleOptionAnswers = @event.InterviewData.Answers == null
                 ? new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>()
                 : @event.InterviewData.Answers
-                    .Where(question => question.Answer is decimal[])
+                    .Where(question => questionnaire.GetQuestionLinkedQuestionId(question.Id).HasValue && question.Answer is decimal[])
                     .ToDictionary(
                         question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[])question.Answer));
@@ -82,7 +89,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.linkedMultipleOptionsAnswers = @event.InterviewData.Answers == null
                 ? new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>()
                 : @event.InterviewData.Answers
-                    .Where(question => question.Answer is decimal[][])
+                    .Where(question => questionnaire.GetQuestionLinkedQuestionId(question.Id).HasValue && question.Answer is decimal[][])
                     .ToDictionary(
                         question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[][])question.Answer));
