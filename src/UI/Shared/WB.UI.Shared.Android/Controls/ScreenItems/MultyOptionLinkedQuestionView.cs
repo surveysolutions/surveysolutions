@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
     public class MultyOptionLinkedQuestionView: AbstractMultyQuestionView<LinkedAnswerViewModel>
     {
-        private const char Separator = ',';
+        private const char Separator = '|';
 
         public MultyOptionLinkedQuestionView(
             Context context,

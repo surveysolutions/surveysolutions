@@ -37,6 +37,7 @@ namespace Core.Supervisor.Views
                 PublicKey = interview.InterviewId,
                 Status = interview.Status
             };
+
             Func<Guid, Dictionary<decimal[], string>> getAvailableOptions = (questionId) => this.GetAvailableOptions(questionId, interview, questionnaireReferenceInfo);
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();
 
@@ -59,12 +60,12 @@ namespace Core.Supervisor.Views
                         //so for every layer we are creating roster group
                         foreach (var rosterGroup in rosterGroups)
                         {
-                            var completedRosterGroup =
-                                this.GetCompletedGroup(currentGroup.Key, currentGroup.Value,
+                            var completedRosterGroups =
+                                this.GetCompletedRosterGroups(currentGroup.Key, currentGroup.Value,
                                     rosterGroup.Value, new[] { rootLevel },
                                     idToVariableMap, variableToIdMap, getAvailableOptions, questionnaire.Questionnaire);
 
-                            interviewDetails.Groups.Add(completedRosterGroup);
+                            interviewDetails.Groups.AddRange(completedRosterGroups);
                         }
                     }
                 }
@@ -114,6 +115,24 @@ namespace Core.Supervisor.Views
             return interviewData.Levels.Where(w => w.Value.ScopeIds.ContainsKey(rosterScope.Value));
         }
 
+        private IEnumerable<InterviewGroupView> GetCompletedRosterGroups(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
+            IEnumerable<InterviewLevel> upperInterviewLevels,
+            Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap,
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions,
+            IQuestionnaireDocument questionnaire)
+        {
+            var result = new List<InterviewGroupView>();
+            result.Add(GetCompletedGroup(currentGroup, depth, interviewLevel, upperInterviewLevels, idToVariableMap, variableToIdMap,
+                getAvailableOptions, questionnaire));
+
+            foreach (var nestedGroup in currentGroup.Children.OfType<IGroup>())
+            {
+                result.AddRange(GetCompletedRosterGroups(nestedGroup, depth + 1, interviewLevel, upperInterviewLevels, idToVariableMap,
+                    variableToIdMap,
+                    getAvailableOptions, questionnaire));
+            }
+            return result;
+        }
 
         private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels,
             Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, Dictionary<decimal[], string>> getAvailableOptions,

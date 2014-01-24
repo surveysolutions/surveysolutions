@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasCompleted;
         private InterviewStatus status;
         private Dictionary<string, object> answersSupportedInExpressions = new Dictionary<string, object>();
-        private Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswers = new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>();
+        private Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswersBuggy = new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>();
         private Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers = new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>();
         private HashSet<string> answeredQuestions = new HashSet<string>();
         private HashSet<string> disabledGroups = new HashSet<string>();
@@ -70,11 +70,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToDictionary(
                         question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => question.Answer);
-
-            this.linkedSingleOptionAnswers = @event.InterviewData.Answers == null
+             
+            this.linkedSingleOptionAnswersBuggy = @event.InterviewData.Answers == null
                 ? new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>()
                 : @event.InterviewData.Answers
-                    .Where(question => question.Answer is decimal[])
+                    .Where(question => question.Answer is decimal[]) // bug: here we get multioption questions as well
                     .ToDictionary(
                         question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[])question.Answer));
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
-            this.linkedSingleOptionAnswers[questionKey] = Tuple.Create(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVector);
+            this.linkedSingleOptionAnswersBuggy[questionKey] = Tuple.Create(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVector);
             this.answeredQuestions.Add(questionKey);
         }
 
@@ -327,7 +327,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.answersSupportedInExpressions.Remove(questionKey);
-            this.linkedSingleOptionAnswers.Remove(questionKey);
+            this.linkedSingleOptionAnswersBuggy.Remove(questionKey);
             this.linkedMultipleOptionsAnswers.Remove(questionKey);
             this.answeredQuestions.Remove(questionKey);
             this.disabledQuestions.Remove(questionKey);
@@ -342,7 +342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.questionnaireVersion,
                 this.status,
                 this.answersSupportedInExpressions,
-                this.linkedSingleOptionAnswers,
+                this.linkedSingleOptionAnswersBuggy,
                 this.linkedMultipleOptionsAnswers,
                 this.answeredQuestions,
                 this.disabledGroups,
@@ -359,7 +359,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = snapshot.QuestionnaireVersion;
             this.status = snapshot.Status;
             this.answersSupportedInExpressions = snapshot.AnswersSupportedInExpressions;
-            this.linkedSingleOptionAnswers = snapshot.LinkedSingleOptionAnswers;
+            this.linkedSingleOptionAnswersBuggy = snapshot.LinkedSingleOptionAnswers;
             this.linkedMultipleOptionsAnswers = snapshot.LinkedMultipleOptionsAnswers;
             this.answeredQuestions = snapshot.AnsweredQuestions;
             this.disabledGroups = snapshot.DisabledGroups;
@@ -1625,13 +1625,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Guid GetLinkedQuestionIdOrThrow(Guid questionId, IQuestionnaire questionnaire)
         {
-            Guid? linkedQuestionId = questionnaire.GetQuestionLinkedQuestionId(questionId);
-            if (!linkedQuestionId.HasValue)
-                throw new InterviewException(string.Format(
-                   "Question {0} wasn't linked on any question",
-                   FormatQuestionForException(questionId, questionnaire)));
-
-            return linkedQuestionId.Value;
+            return questionnaire.GetQuestionReferencedByLinkedQuestion(questionId);
         }
 
         private void ThrowIfLinkedQuestionDoesNotHaveAnswer(Identity answeredQuestion, Identity answeredLinkedQuestion, IQuestionnaire questionnaire)
@@ -2532,7 +2526,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var answersToRemove = new List<Identity>();
 
-            foreach (Tuple<Guid, decimal[], decimal[]> linkedSingleOptionAnswer in this.linkedSingleOptionAnswers.Values)
+            // we currently have a bug that after restore linked single option answers list is filled with not linked answers after sync
+            var realLinkedSingleOptionAnswers = this.linkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1));
+
+            foreach (Tuple<Guid, decimal[], decimal[]> linkedSingleOptionAnswer in realLinkedSingleOptionAnswers)
             {
                 var linkedQuestion = new Identity(linkedSingleOptionAnswer.Item1, linkedSingleOptionAnswer.Item2);
                 decimal[] linkedQuestionSelectedOption = linkedSingleOptionAnswer.Item3;
