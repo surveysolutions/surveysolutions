@@ -319,7 +319,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (!question.MaxAnswerCount.HasValue)
                 return false;
-            return !Enumerable.Range(1, 40).Contains(question.MaxAnswerCount.Value);
+            return !Enumerable.Range(1, TextListQuestion.MaxAnswerCountLimit).Contains(question.MaxAnswerCount.Value);
         }
 
         private static bool MultiAnswerQuestionCannotCustomValidation(ITextListQuestion question)
