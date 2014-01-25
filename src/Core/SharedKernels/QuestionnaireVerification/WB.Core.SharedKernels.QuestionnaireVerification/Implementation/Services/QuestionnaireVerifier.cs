@@ -291,13 +291,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool RosterHasRosterInsideItself(IGroup group, QuestionnaireDocument questionnaire)
         {
-            return IsRosterGroup(group) && questionnaire.Find<IGroup>(x => IsParentForGroup(x, group) && IsRosterGroup(group)).Any();
+            if (!IsRosterGroup(group))
+                return false;
+            
+            foreach (var nestedGroup in group.Children.OfType<IGroup>())
+            {
+                if (HasRosterInsideGroup(nestedGroup))
+                    return true;
+            }
+
+            return false;
         }
 
-        private static bool IsParentForGroup(IGroup group, IGroup parentGroup)
+        private static bool HasRosterInsideGroup(IGroup group)
         {
-            var parent = group.GetParent();
-            return parent != null && parent.PublicKey == parentGroup.PublicKey;
+            if (IsRosterGroup(group))
+                return true;
+
+            foreach (var nestedGroup in group.Children.OfType<IGroup>())
+            {
+                if (HasRosterInsideGroup(nestedGroup))
+                    return true;
+            }
+            return false;
         }
 
         private static bool QuestionnaireHaveAutopropagatedQuestions(IQuestion question, QuestionnaireDocument questionnaire)
