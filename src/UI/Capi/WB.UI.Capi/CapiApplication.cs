@@ -117,6 +117,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof (NumericRealQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (TextQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (TextListQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (SingleOptionQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (GroupDisabled));
