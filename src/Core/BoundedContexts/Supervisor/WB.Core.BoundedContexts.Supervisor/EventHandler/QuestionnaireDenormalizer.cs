@@ -5,6 +5,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -17,10 +19,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
-        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, ISynchronizationDataStorage synchronizationDataStorage)
+        private readonly IQuestionnaireCacheInitializerFactory questionnaireCacheInitializerFactory;
+
+        public QuestionnaireDenormalizer(
+            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
+            ISynchronizationDataStorage synchronizationDataStorage,
+            IQuestionnaireCacheInitializerFactory questionnaireCacheInitializerFactory)
         {
             this.documentStorage = documentStorage;
             this.synchronizationDataStorage = synchronizationDataStorage;
+            this.questionnaireCacheInitializerFactory = questionnaireCacheInitializerFactory;
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -31,7 +39,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             if (!document.IsCacheWarmed)
             {
-                new QuestionnaireDocumentCacheWarmer(document).WarmUpCaches();
+                this.questionnaireCacheInitializerFactory.CreateQuestionnaireCacheInitializer(document).WarmUpCaches();
             }
 
             this.documentStorage.Store(
