@@ -35,6 +35,9 @@ namespace Main.Core.Entities.SubEntities.Question
         }
 
         public int? MaxAnswerCount { get; set; }
-
+        
+        public static int MaxAnswerCountLimit {
+            get { return 40; }
+        }
     }
 }

@@ -11,15 +11,17 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
+using it = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_interview_restored_after_synchronization_and_contains_answer_on_linked_question : InterviewTestsContext
+    internal class when_answering_expression_supporting_question_and_interview_restored_after_synch_and_contains_answer_on_not_linked_multioption_question_and_questionnaire_and_multioption_should_be_disabled_by_answer_throws_when_getting_linked_to_question_for_multioption_question : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -30,35 +32,35 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             multyOptionAnsweredQuestionId = Guid.Parse("22222222222222222222222222222222");
 
+            questionnaireMock = Mock.Get(Mock.Of<IQuestionnaire>(_
+                => _.Version == 1
 
-            questionnaireMock = new Mock<IQuestionnaire>();
-            questionnaireMock.Setup(x => x.Version).Returns(1);
-            questionnaireMock.Setup(x => x.HasQuestion(multyOptionAnsweredQuestionId)).Returns(true);
-            questionnaireMock.Setup(x => x.GetQuestionType(multyOptionAnsweredQuestionId)).Returns(QuestionType.MultyOption);
-            questionnaireMock.Setup(x => x.GetAnswerOptionsAsValues(multyOptionAnsweredQuestionId)).Returns(new decimal[] { 1, 2, 3 });
+                && _.HasQuestion(multyOptionAnsweredQuestionId) == true
+                && _.GetQuestionType(multyOptionAnsweredQuestionId) == QuestionType.MultyOption
+                && _.GetAnswerOptionsAsValues(multyOptionAnsweredQuestionId) == new decimal[] { 1, 2, 3 }
+                && _.IsQuestionLinked(multyOptionAnsweredQuestionId) == false
 
-            questionnaireMock.Setup(x => x.HasQuestion(answeredQuestionId)).Returns(true);
-            questionnaireMock.Setup(x => x.GetQuestionType(answeredQuestionId)).Returns(QuestionType.Numeric);
+                && _.HasQuestion(answeredQuestionId) == true
+                && _.GetQuestionType(answeredQuestionId) == QuestionType.Numeric
+                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeredQuestionId) == new[] { multyOptionAnsweredQuestionId }
+            ));
 
-            questionnaireMock.Setup(x => x.GetQuestionLinkedQuestionId(multyOptionAnsweredQuestionId)).Returns((Guid?)null);
-            
-            questionnaireMock.Setup(x => x.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeredQuestionId)).Returns(new Guid[] { multyOptionAnsweredQuestionId });
+            questionnaireMock
+                .Setup(x => x.GetQuestionReferencedByLinkedQuestion(multyOptionAnsweredQuestionId))
+                .Throws(new QuestionnaireException("not a linked"));
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
             
-            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
+            expressionProcessor
+                .Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))
                 .Returns(false);
-            
-            Mock.Get(ServiceLocator.Current)
-            .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-            .Returns(expressionProcessor.Object);
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaireMock.Object);
+            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+
+            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
+                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaireMock.Object));
+
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
@@ -80,10 +82,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericRealQuestion(userId, answeredQuestionId, new decimal[] { }, DateTime.Now, 5);
+            exception = Catch.Exception(() =>
+                interview.AnswerNumericRealQuestion(userId, answeredQuestionId, new decimal[] { }, DateTime.Now, 5));
 
-        private It should_not_call_GetQuestionReferencedByLinkedQuestion_for_multyOptionAnsweredQuestionId = () =>
-            questionnaireMock.Verify(x => x.GetQuestionReferencedByLinkedQuestion(multyOptionAnsweredQuestionId), Times.Never());
+        It should_not_fail = () =>
+            exception.ShouldEqual(null);
 
         private static EventContext eventContext;
         private static Interview interview;
@@ -91,5 +94,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Guid multyOptionAnsweredQuestionId;
         private static Guid answeredQuestionId;
         private static Mock<IQuestionnaire> questionnaireMock;
+        private static Exception exception;
     }
 }

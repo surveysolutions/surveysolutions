@@ -77,13 +77,17 @@
     <Compile Include="EventHandlers\InterviewExportedDataEventHandler\InterviewExportedDataEventHandlerTestContext.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_created_from_template_containing_2_questions.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_with_1_answerd_questions_and_1_unananswered.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_with_roster_triggered_by_text_list_question.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandler\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows_with_nested_groups.cs" />
     <Compile Include="EventHandlers\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="ServiceTests\SampleImportServiceTests.cs" />
+    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_nested_group_inside_roster.cs" />
+    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_roter_triggered_by_text_list_question.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_structure_from_questionnaire_containing_fixed_roster_and_multy_option_linked_question_to_header.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option___.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\QuestionnaireExportStructureTestsContext.cs" />
