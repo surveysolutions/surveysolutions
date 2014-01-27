@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_MultiAnswer_question : QuestionnaireVerifierTestsContext
+    class when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_TextList_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {

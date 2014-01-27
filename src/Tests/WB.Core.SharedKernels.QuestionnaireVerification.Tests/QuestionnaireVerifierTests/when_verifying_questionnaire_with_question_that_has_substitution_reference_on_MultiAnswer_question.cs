@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_question_that_has_substitution_reference_on_MultiAnswer_question : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_that_has_substitution_reference_on_TextList_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
