@@ -10,13 +10,14 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireDocumentCacheWarmerTests
 {
-    [Subject(typeof(QuestionnaireDocumentCacheWarmer))]
+    [Subject(typeof(QuestionnaireCacheInitializer))]
     internal class when_question_has_enablement_condition
     {
         Establish context = () =>
@@ -40,15 +41,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireDocumentCacheW
             var expressionProcessor = new Mock<IExpressionProcessor>();
             expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>())).Returns(new string[] { referencedInConditionQuestionsVariableName });
 
-            Mock.Get(ServiceLocator.Current)
-              .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-              .Returns(expressionProcessor.Object);
-
-            questionnaireDocumentCacheWarmer = new QuestionnaireDocumentCacheWarmer(questionnaireDocument);
+            questionnaireCacheInitializer = new QuestionnaireCacheInitializer(questionnaireDocument, expressionProcessor.Object);
         };
 
         Because of = () =>
-            questionnaireDocumentCacheWarmer.WarmUpCaches();
+            questionnaireCacheInitializer.WarmUpCaches();
 
         It should_QuestionsInvolvedInCustomEnablementConditionOfQuestion_contain_referenced_in_conditions_question = () =>
             questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == questionWithConditionQuestionId)
@@ -73,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireDocumentCacheW
         private static Guid questionWithConditionQuestionId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid referencedInConditionQuestionId = new Guid("22222222222222222222222222222222");
         private static string referencedInConditionQuestionsVariableName = "var";
-        private static QuestionnaireDocumentCacheWarmer questionnaireDocumentCacheWarmer;
+        private static QuestionnaireCacheInitializer questionnaireCacheInitializer;
         private static QuestionnaireDocument questionnaireDocument;
     }
 }
