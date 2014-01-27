@@ -80,13 +80,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
-                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_MultiAnswerQuestionCannotBePrefilled),
-                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor),
-                    Verifier<ITextListQuestion>(MultiAnswerQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_MultiAnswerQuestionCannotCustomValidation),
-                    Verifier<ITextListQuestion>(MultiAnswerQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_MultiAnswerQuestionMaxAnswerInRange1And40),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
+                    Verifier<ITextListQuestion>(TextListQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
-                    ErrorsByEpressionsThatUsesMultiAnswerQuestions,
+                    ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                 };
@@ -310,24 +310,24 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
         }
 
-        private static bool MultiAnswerQuestionCannotBePrefilled(ITextListQuestion question)
+        private static bool TextListQuestionCannotBePrefilled(ITextListQuestion question)
         {
             return question.Featured;
         }
 
-        private static bool MultiAnswerQuestionMaxAnswerInRange1And40(ITextListQuestion question)
+        private static bool TextListQuestionMaxAnswerInRange1And40(ITextListQuestion question)
         {
             if (!question.MaxAnswerCount.HasValue)
                 return false;
             return !Enumerable.Range(1, 40).Contains(question.MaxAnswerCount.Value);
         }
 
-        private static bool MultiAnswerQuestionCannotCustomValidation(ITextListQuestion question)
+        private static bool TextListQuestionCannotCustomValidation(ITextListQuestion question)
         {
             return !string.IsNullOrWhiteSpace(question.ValidationExpression);
         }
 
-        private static bool MultiAnswerQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
+        private static bool TextListQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
         {
             return question.QuestionScope == QuestionScope.Supervisor;
         }
@@ -420,12 +420,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return errorByAllQuestionsWithCustomValidation;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByEpressionsThatUsesMultiAnswerQuestions(QuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByEpressionsThatUsesTextListQuestions(QuestionnaireDocument questionnaire)
         {
             var errors = new List<QuestionnaireVerificationError>();
-            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ValidationExpression, CustomValidationExpressionUsesMultiAnswerQuestion));
-            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ConditionExpression, CustomConditionExpressionUsesMultiAnswerQuestion));
-            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IGroup>(questionnaire, g => g.ConditionExpression, CustomConditionExpressionUsesMultiAnswerQuestion));
+            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ValidationExpression, CustomValidationExpressionUsesTextListQuestion));
+            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
+            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IGroup>(questionnaire, g => g.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
             return errors;
         }
 
@@ -441,7 +441,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     this.expressionProcessor.GetIdentifiersUsedInExpression(getExpression(questionWithValidationExpression));
 
                 VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
-                    identifier => GetVerificationErrorByEpressionUsesMultiAnswerQuestion<T>(questionWithValidationExpression, identifier, questionnaire, qetCustomError));
+                    identifier => GetVerificationErrorByEpressionUsesTextListQuestion<T>(questionWithValidationExpression, identifier, questionnaire, qetCustomError));
             }
             return errorByAllQuestionsWithCustomValidation;
         }
@@ -513,7 +513,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return null;
         }
 
-        private static QuestionnaireVerificationError GetVerificationErrorByEpressionUsesMultiAnswerQuestion<T>(
+        private static QuestionnaireVerificationError GetVerificationErrorByEpressionUsesTextListQuestion<T>(
             T questionnaireItemWithExpression,
             string identifier,
             QuestionnaireDocument questionnaire,
@@ -603,24 +603,24 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return null;
         }
 
-        private static QuestionnaireVerificationError CustomValidationExpressionUsesMultiAnswerQuestion(IQuestion questionWithValidationExpression)
+        private static QuestionnaireVerificationError CustomValidationExpressionUsesTextListQuestion(IQuestion questionWithValidationExpression)
         {
             return new QuestionnaireVerificationError("WB0043",
-                VerificationMessages.WB0043_MultiAnswerQuestionCannotBeUsedInValidationExpressions,
+                VerificationMessages.WB0043_TextListQuestionCannotBeUsedInValidationExpressions,
                 CreateReference(questionWithValidationExpression));
         }
 
-        private static QuestionnaireVerificationError CustomConditionExpressionUsesMultiAnswerQuestion(IQuestion questionWithConditionExpression)
+        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IQuestion questionWithConditionExpression)
         {
             return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions,
+                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInConditionsExpressions,
                 CreateReference(questionWithConditionExpression));
         }
 
-        private static QuestionnaireVerificationError CustomConditionExpressionUsesMultiAnswerQuestion(IGroup questionWithConditionExpression)
+        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IGroup questionWithConditionExpression)
         {
             return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions,
+                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInConditionsExpressions,
                 CreateReference(questionWithConditionExpression));
         }
 

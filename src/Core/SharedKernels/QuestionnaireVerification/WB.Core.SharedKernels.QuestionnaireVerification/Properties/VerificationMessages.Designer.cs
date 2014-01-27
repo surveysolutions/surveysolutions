@@ -351,56 +351,56 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MultiAnswer question cannot be prefilled..
+        ///   Looks up a localized string similar to List question cannot be prefilled..
         /// </summary>
-        internal static string WB0039_MultiAnswerQuestionCannotBePrefilled {
+        internal static string WB0039_TextListQuestionCannotBePrefilled {
             get {
-                return ResourceManager.GetString("WB0039_MultiAnswerQuestionCannotBePrefilled", resourceCulture);
+                return ResourceManager.GetString("WB0039_TextListQuestionCannotBePrefilled", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MultiAnswer  question cannot be filled by supervisor..
+        ///   Looks up a localized string similar to List  question cannot be filled by supervisor..
         /// </summary>
-        internal static string WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor {
+        internal static string WB0040_TextListQuestionCannotBeFilledBySupervisor {
             get {
-                return ResourceManager.GetString("WB0040_MultiAnswerQuestionCannotBeFilledBySupervisor", resourceCulture);
+                return ResourceManager.GetString("WB0040_TextListQuestionCannotBeFilledBySupervisor", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MultiAnswer question cannot contain validation expression..
+        ///   Looks up a localized string similar to List question cannot contain validation expression..
         /// </summary>
-        internal static string WB0041_MultiAnswerQuestionCannotCustomValidation {
+        internal static string WB0041_TextListQuestionCannotCustomValidation {
             get {
-                return ResourceManager.GetString("WB0041_MultiAnswerQuestionCannotCustomValidation", resourceCulture);
+                return ResourceManager.GetString("WB0041_TextListQuestionCannotCustomValidation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MaxAnswerCount could be in range [1, 40]..
+        ///   Looks up a localized string similar to Max answer count could be in range [1, 40]..
         /// </summary>
-        internal static string WB0042_MultiAnswerQuestionMaxAnswerInRange1And40 {
+        internal static string WB0042_TextListQuestionMaxAnswerInRange1And40 {
             get {
-                return ResourceManager.GetString("WB0042_MultiAnswerQuestionMaxAnswerInRange1And40", resourceCulture);
+                return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And40", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MultiAnswer question cannot be used in validation expressions..
+        ///   Looks up a localized string similar to List question cannot be used in validation expressions..
         /// </summary>
-        internal static string WB0043_MultiAnswerQuestionCannotBeUsedInValidationExpressions {
+        internal static string WB0043_TextListQuestionCannotBeUsedInValidationExpressions {
             get {
-                return ResourceManager.GetString("WB0043_MultiAnswerQuestionCannotBeUsedInValidationExpressions", resourceCulture);
+                return ResourceManager.GetString("WB0043_TextListQuestionCannotBeUsedInValidationExpressions", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MultiAnswer question cannot be used in enablement conditions..
+        ///   Looks up a localized string similar to List question cannot be used in enablement conditions..
         /// </summary>
-        internal static string WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions {
+        internal static string WB0044_TextListQuestionCannotBeUsedInConditionsExpressions {
             get {
-                return ResourceManager.GetString("WB0044_MultiAnswerQuestionCannotBeUsedInConditionsExpressions", resourceCulture);
+                return ResourceManager.GetString("WB0044_TextListQuestionCannotBeUsedInConditionsExpressions", resourceCulture);
             }
         }
     }
