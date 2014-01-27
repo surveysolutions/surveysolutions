@@ -137,6 +137,7 @@
     <Compile Include="Controls\ScreenItems\NumericRealQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\SingleOptionLinkedQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\SingleOptionQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\TextListQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Events\AnswerSetEventArgs.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
