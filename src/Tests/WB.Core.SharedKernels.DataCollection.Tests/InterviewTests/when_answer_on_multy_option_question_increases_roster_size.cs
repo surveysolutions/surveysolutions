@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {
-                            new InterviewItemId(rosterGroupId, new decimal[] { 1 }), new[]
+                            new InterviewItemId(rosterGroupId, new decimal[0]), new[]
                             {
                                 new RosterSynchronizationDto(rosterGroupId, new decimal[0], 1.0m, null, string.Empty),
                             }
