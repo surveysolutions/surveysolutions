@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_MultiAnswer_question_with_maxAnswer_value_set_in_100 : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100 : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {

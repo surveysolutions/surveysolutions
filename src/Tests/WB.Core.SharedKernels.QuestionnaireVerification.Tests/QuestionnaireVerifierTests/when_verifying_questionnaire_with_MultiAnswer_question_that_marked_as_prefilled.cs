@@ -10,16 +10,16 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_prefilled : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_TextList_question_that_marked_as_prefilled : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            prefilledMultiAnswerquestionId = Guid.Parse("10000000000000000000000000000000");
+            prefilledTextListquestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
             questionnaire.Children.Add(new TextListQuestion()
             {
-                PublicKey = prefilledMultiAnswerquestionId,
+                PublicKey = prefilledTextListquestionId,
                 Featured = true
             });
 
@@ -46,13 +46,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         It should_return_error_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_reference_with_id_of_prefilledMultiAnswerquestionId = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(prefilledMultiAnswerquestionId);
+        It should_return_error_reference_with_id_of_prefilledTextListquestionId = () =>
+            resultErrors.Single().References.First().Id.ShouldEqual(prefilledTextListquestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static Guid prefilledMultiAnswerquestionId;
+        private static Guid prefilledTextListquestionId;
     }
 }

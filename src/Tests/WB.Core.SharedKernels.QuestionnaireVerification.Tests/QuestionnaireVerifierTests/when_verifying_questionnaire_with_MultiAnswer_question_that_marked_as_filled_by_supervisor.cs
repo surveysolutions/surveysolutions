@@ -10,16 +10,16 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_filled_by_supervisor : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_TextList_question_that_marked_as_filled_by_supervisor : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            supervisorMultiAnswerquestionId = Guid.Parse("10000000000000000000000000000000");
+            supervisorTextListquestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
             questionnaire.Children.Add(new TextListQuestion()
             {
-                PublicKey = supervisorMultiAnswerquestionId,
+                PublicKey = supervisorTextListquestionId,
                 QuestionScope = QuestionScope.Supervisor
             });
 
@@ -46,13 +46,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         It should_return_error_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_reference_with_id_of_supervisorMultiAnswerquestionId = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(supervisorMultiAnswerquestionId);
+        It should_return_error_reference_with_id_of_supervisorTextListquestionId = () =>
+            resultErrors.Single().References.First().Id.ShouldEqual(supervisorTextListquestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static Guid supervisorMultiAnswerquestionId;
+        private static Guid supervisorTextListquestionId;
     }
 }
