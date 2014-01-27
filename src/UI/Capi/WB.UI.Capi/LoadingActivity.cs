@@ -67,13 +67,14 @@ namespace WB.UI.Capi
 
                     NcqrsEnvironment.Get<ICommandService>()
                         .Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
+
+                    syncCacher.DeleteItem(itemKey);
                 }
                 catch(Exception e)
                 {
                     logger.Error("error during restor after synchronization", e);
                 }
             }
-            syncCacher.DeleteItem(itemKey);
         }
     }
 }
