@@ -54,6 +54,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                             AddHeadersForLinkedMultiOptions(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
                         else AddHeadersForMultiOptions(question);
                     }
+                    else if (this.IsQuestionTextList(question))
+                    {
+                        AddHeadersForTextList(question);
+                    }
                     else
                         AddHeaderForNotMultiOptions(question);
                     continue;
@@ -75,6 +79,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return question is IMultyOptionsQuestion;
         }
 
+        private bool IsQuestionTextList(IQuestion question)
+        {
+            return question is ITextListQuestion;
+        }
+
         private void AddHeadersForLinkedMultiOptions(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
@@ -90,6 +99,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             var multiOptionQuestion = question as IMultyOptionsQuestion;
             var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
+            this.HeaderItems.Add(question.PublicKey, new ExportedHeaderItem(question, maxCount));
+        }
+
+        protected void AddHeadersForTextList(IQuestion question)
+        {
+            var textListQuestion = question as ITextListQuestion;
+            var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
             this.HeaderItems.Add(question.PublicKey, new ExportedHeaderItem(question, maxCount));
         }
 

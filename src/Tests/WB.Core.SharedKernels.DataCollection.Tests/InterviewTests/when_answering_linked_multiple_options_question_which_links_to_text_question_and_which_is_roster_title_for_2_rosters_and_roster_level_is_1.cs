@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                 && _.HasQuestion(questionId) == true
                 && _.GetQuestionType(questionId) == QuestionType.MultyOption
-                && _.GetQuestionLinkedQuestionId(questionId) == linkedToQuestionId
+                && _.GetQuestionReferencedByLinkedQuestion(questionId) == linkedToQuestionId
                 && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
                 && _.DoesQuestionSpecifyRosterTitle(questionId) == true
                 && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }

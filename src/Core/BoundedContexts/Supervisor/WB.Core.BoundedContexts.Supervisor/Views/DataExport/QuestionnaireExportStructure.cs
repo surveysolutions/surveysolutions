@@ -64,6 +64,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                 rosterGroups.Select(@group => document.Find<IMultyOptionsQuestion>(@group.RosterSizeQuestionId.Value))
                     .Where(question => question != null);
 
+            IEnumerable<ITextListQuestion> rosterSizeTextListQuestions =
+                rosterGroups.Select(@group => document.Find<ITextListQuestion>(@group.RosterSizeQuestionId.Value))
+                    .Where(question => question != null);
+
             var collectedMaxValues = new Dictionary<Guid, int>();
 
             foreach (IAutoPropagateQuestion autoPropagateQuestion in autoPropagateQuestions)
@@ -79,6 +83,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             foreach (IMultyOptionsQuestion rosterSizeMultyOptionQuestion in rosterSizeMultyOptionQuestions)
             {
                 collectedMaxValues.Add(rosterSizeMultyOptionQuestion.PublicKey, rosterSizeMultyOptionQuestion.Answers.Count);
+            }
+
+            foreach (ITextListQuestion rosterSizeTextListQuestion in rosterSizeTextListQuestions)
+            {
+                collectedMaxValues.Add(rosterSizeTextListQuestion.PublicKey, rosterSizeTextListQuestion.MaxAnswerCount ?? TextListQuestion.MaxAnswerCountLimit);
             }
 
             foreach (IGroup fixedRosterGroup in fixedRosterGroups)
