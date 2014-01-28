@@ -145,6 +145,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
                            evnt.Payload.Answer);
         }
 
+        /*
         public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
         {
             Tuple<decimal, string>[] answers = evnt.Payload.Answers;
@@ -160,6 +161,13 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                 textListAnswerAsText);
+        }
+        */
+
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
+       {
+           this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.Answers);
         }
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
