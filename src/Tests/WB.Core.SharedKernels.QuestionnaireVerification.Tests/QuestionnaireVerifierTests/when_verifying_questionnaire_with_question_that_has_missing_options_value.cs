@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0044 = () =>
+        It should_return_error_with_code__WB0045 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0045");
 
         It should_return_error_with_one_reference = () =>
