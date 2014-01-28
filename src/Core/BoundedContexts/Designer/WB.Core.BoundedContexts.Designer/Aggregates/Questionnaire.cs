@@ -1511,6 +1511,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (rosterTitleQuestionsWithDependentGroups.All(question => !question.DependentGroups.Any())) return;
 
+            Func<Guid, IEnumerable<IGroup>, string> getWarningMessage = (rosterTitleQuestionId, invalidGroups) =>
+            {
+                return string.Format("Question {0} used as roster title question in group(s):{1}{2}",
+                    this.FormatQuestionForException(rosterTitleQuestionId, this.innerDocument), Environment.NewLine,
+                    string.Join(Environment.NewLine,
+                        invalidGroups.Select(group => FormatGroupForException(@group.PublicKey, this.innerDocument))));
+            };
+
             if (IsRosterOrInsideRoster(targetGroup))
             {
                 var rosterForTargetGroup = GetFirstRosterParentGroupOrNull(targetGroup);
@@ -1528,39 +1536,32 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (!rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion.Any()) return;
 
+                var warningsForRosterTitlesNotInRostersByRosterSize =
+                    rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion.Select(
+                        x => getWarningMessage(x.RostertTitleQuestion.PublicKey, x.DependentGroups));
+
                 throw new QuestionnaireException(
                     string.Join(
                         string.Format(
                             "Group {0} could not be moved to group {1} because contains some questions that used as roster title questions in groups which have roster size question not the same as have target {1} group: ",
-                            FormatGroupForException(sourceGroup.PublicKey, this.innerDocument), FormatGroupForException(targetGroup.PublicKey, this.innerDocument)),
-                        Environment.NewLine,
-                        string.Join(Environment.NewLine,
-                            rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion.Select(
-                                x =>
-                                    string.Format("Question {0} used as roster title question in group(s):{1}{2}",
-                                        FormatQuestionForException(x.RostertTitleQuestion.PublicKey, this.innerDocument),
-                                        Environment.NewLine,
-                                        string.Join(Environment.NewLine,
-                                            x.DependentGroups.Select(group => FormatGroupForException(group.PublicKey, this.innerDocument))))))));
+                            FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
+                            FormatGroupForException(targetGroup.PublicKey, this.innerDocument)), Environment.NewLine,
+                        string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
             }
             else
             {
                 if (sourceGroup.IsRoster || ContainsRoster(sourceGroup)) return;
+
+                var warningsForRosterTitlesNotInRostersByRosterSize =
+                    rosterTitleQuestionsWithDependentGroups.Select(
+                        x => getWarningMessage(x.RostertTitleQuestion.PublicKey, x.DependentGroups));
 
                 throw new QuestionnaireException(
                     string.Join(
                         string.Format("Group {0} could not be moved to group {1} because: ",
                             FormatGroupForException(sourceGroup.PublicKey, this.innerDocument), FormatGroupForException(targetGroup.PublicKey, this.innerDocument)),
                         Environment.NewLine,
-                        string.Join(Environment.NewLine,
-                            rosterTitleQuestionsWithDependentGroups.Select(
-                                question =>
-                                    string.Format("Question {0} used as roster title question in group(s):{1}{2}",
-                                        FormatQuestionForException(question.RostertTitleQuestion.PublicKey, this.innerDocument),
-                                        Environment.NewLine,
-                                        string.Join(Environment.NewLine,
-                                            question.DependentGroups.Select(
-                                                group => FormatGroupForException(group.PublicKey, this.innerDocument))))))));
+                        string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
             }
         }
 

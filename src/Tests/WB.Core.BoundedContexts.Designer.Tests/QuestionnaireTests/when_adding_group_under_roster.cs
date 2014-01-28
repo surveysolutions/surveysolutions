@@ -20,8 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        Because of = () => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", condition: null,
-                    description: null, parentGroupId: parentRosterId, isRoster: false,
+        Because of = () => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: title, condition: condition,
+                    description: description, parentGroupId: parentRosterId, isRoster: false,
                     rosterSizeSource: RosterSizeSourceType.Question, rosterSizeQuestionId: null, rosterFixedTitles: null,
                     rosterTitleQuestionId: null);
 
@@ -42,12 +42,30 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext.GetSingleEvent<NewGroupAdded>()
                 .ParentGroupPublicKey.ShouldEqual(parentRosterId);
 
+        It should_raise_NewGroupAdded_event_with_ConditionExpression_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .ConditionExpression.ShouldEqual(condition);
+
+        It should_raise_NewGroupAdded_event_with_Title_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .GroupText.ShouldEqual(title);
+
+        It should_raise_NewGroupAdded_event_with_Description_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .Description.ShouldEqual(description);
+
+        It should_raise_NewGroupAdded_event_with_ResponsibleId_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .ResponsibleId.ShouldEqual(responsibleId);
 
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
-        private static Guid parentRosterId=Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        private static Guid parentRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static string condition = "some condition";
+        private static string title = "title";
+        private static string description = "description";
         private static EventContext eventContext;
     }
 }
