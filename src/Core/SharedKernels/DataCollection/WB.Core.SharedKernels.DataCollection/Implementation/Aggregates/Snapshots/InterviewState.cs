@@ -8,7 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
     {
         public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             Dictionary<string, object> answersSupportedInExpressions, Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswers,
-            Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, HashSet<string> answeredQuestions,
+            Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, Dictionary<string, Tuple<decimal, string>[]> textListAnswers,
+            HashSet<string> answeredQuestions,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, Interview.DistinctDecimalList> rosterGroupInstanceIds,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
         {
@@ -18,6 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             this.AnswersSupportedInExpressions = answersSupportedInExpressions;
             this.LinkedSingleOptionAnswers = linkedSingleOptionAnswers;
             this.LinkedMultipleOptionsAnswers = linkedMultipleOptionsAnswers;
+            this.TextListAnswers = textListAnswers;
             this.AnsweredQuestions = answeredQuestions;
             this.DisabledGroups = disabledGroups;
             this.DisabledQuestions = disabledQuestions;
@@ -40,5 +42,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
         public bool WasCompleted { get; private set; }
+        public Dictionary<string, Tuple<decimal, string>[]> TextListAnswers { get; set; }
     }
 }
