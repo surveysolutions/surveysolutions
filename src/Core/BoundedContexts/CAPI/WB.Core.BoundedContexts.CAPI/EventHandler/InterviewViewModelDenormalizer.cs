@@ -41,7 +41,9 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<InterviewForTestingCreated>,
-        IEventHandler<RosterRowTitleChanged>
+        IEventHandler<RosterRowTitleChanged>,
+        IEventHandler<TextListQuestionAnswered>
+        
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -308,6 +310,12 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             this.interviewStorage.Store(view, evnt.EventSourceId);
             
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
+        {
+            this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                           evnt.Payload.Answers);
         }
     }
 }

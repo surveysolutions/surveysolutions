@@ -66,6 +66,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 case QuestionType.GpsCoordinates:
                     itemView = new GeoPositionQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);
                     break;
+                case QuestionType.TextList:
+                    itemView = new TextListQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);
+                    break;
                 default:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);
                     break;
