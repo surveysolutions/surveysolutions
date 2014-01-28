@@ -806,14 +806,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private QuestionViewModel CreateQuestionView(IQuestion question)
         {
-            var newType = this.CalculateViewType(question.QuestionType);
+            var questionViewType = this.CalculateViewType(question.QuestionType);
             if (this.selectableQuestionTypes.Contains(question.QuestionType))
             {
                 if (question.LinkedToQuestionId.HasValue)
-                    return this.CreateLinkedQuestion(question, newType);
-                return this.CreateSelectableQuestion(question, newType);
+                    return this.CreateLinkedQuestion(question, questionViewType);
+                return this.CreateSelectableQuestion(question, questionViewType);
             }
-            return this.CreateValueQuestion(question, newType);
+            else if (this.linkedQuestionTypes.Contains(question.QuestionType))
+            {
+                return this.CreateTextListQuestion(question, questionViewType);
+            }
+            return this.CreateValueQuestion(question, questionViewType);
         }
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
@@ -861,6 +865,24 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
+        private TextListQuestionViewModel CreateTextListQuestion(IQuestion question, QuestionType newType)
+        {
+            var textListQuestion = question as TextListQuestion;
+
+            return new TextListQuestionViewModel(
+                new InterviewItemId(question.PublicKey), question.QuestionText,
+                newType,
+                true, question.Instructions,
+                textListQuestion.Comments, 
+                true,
+                question.Mandatory,
+                question.ValidationMessage,
+                question.StataExportCaption, 
+                question.GetVariablesUsedInTitle(),
+                textListQuestion.Answers.Select(a => new TextListAnswerViewModel(1, a.AnswerText)).ToArray());
+        }
+
+
         private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType)
         {
             var multyOptionsQuestion = question as MultyOptionsQuestion;
@@ -901,6 +923,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private readonly QuestionType[] singleOptionTypeVariation = new[]
             {QuestionType.SingleOption, QuestionType.DropDownList, QuestionType.YesNo};
+
+        private readonly QuestionType[] linkedQuestionTypes = new[] 
+        { QuestionType.TextList};
 
         public bool IsQuestionReferencedByAnyLinkedQuestion(Guid questionId)
         {

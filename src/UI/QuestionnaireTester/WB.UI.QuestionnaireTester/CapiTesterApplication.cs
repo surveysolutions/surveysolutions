@@ -144,6 +144,8 @@ namespace WB.UI.QuestionnaireTester
 
             bus.RegisterHandler(eventHandler, typeof(RosterRowTitleChanged));
 
+            bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
+
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));

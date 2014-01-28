@@ -337,6 +337,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\QuestionnaireVerificationException.cs">
       <Link>Exceptions\QuestionnaireVerificationException.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Factories\IQuestionnaireCacheInitializerFactory.cs">
+      <Link>Factories\IQuestionnaireCacheInitializerFactory.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Factories\IQuestionnaireFactory.cs">
       <Link>Factories\IQuestionnaireFactory.cs</Link>
     </Compile>
@@ -355,6 +358,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\EnumerableExtensions.cs">
       <Link>Implementation\EnumerableExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireCacheInitializerFactory.cs">
+      <Link>Implementation\Factories\QuestionnaireCacheInitializerFactory.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireFactory.cs">
       <Link>Implementation\Factories\QuestionnaireFactory.cs</Link>
     </Compile>
@@ -370,6 +376,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Repositories\QuestionnaireRepository.cs">
       <Link>Implementation\Repositories\QuestionnaireRepository.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\QuestionnaireCacheInitializer.cs">
+      <Link>Implementation\Services\QuestionnaireCacheInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedReadSideRepositoryReader.cs">
       <Link>ReadSide\IVersionedReadSideRepositoryReader.cs</Link>
     </Compile>
@@ -379,11 +388,11 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedView.cs">
       <Link>ReadSide\IVersionedView.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Services\IQuestionnaireCacheInitializer.cs">
+      <Link>Services\IQuestionnaireCacheInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Utils\AnswerUtils.cs">
       <Link>Utils\AnswerUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Utils\QuestionnaireDocumentCacheWarmer.cs">
-      <Link>Utils\QuestionnaireDocumentCacheWarmer.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewItemId.cs">
       <Link>ValueObjects\Interview\InterviewItemId.cs</Link>
@@ -462,13 +471,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\Services\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

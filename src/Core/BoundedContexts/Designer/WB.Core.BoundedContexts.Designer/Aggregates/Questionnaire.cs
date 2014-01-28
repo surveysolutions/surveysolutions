@@ -882,7 +882,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
 
             var sourceGroup = this.GetGroupById(groupId);
-            var targetGroup = this.GetGroupById(targetGroupId.Value);
+            // if we don't have a target group we would like to move source group into root of questionnaire
+            var targetGroup = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
 
             this.ThrowIfRosterMovedToRoster(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);

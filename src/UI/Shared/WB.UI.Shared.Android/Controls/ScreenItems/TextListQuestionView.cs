@@ -1,71 +1,39 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
-using Android.Views;
-using Android.Views.InputMethods;
-using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
-    public class TextListQuestionView : AbstractQuestionView
+    public class TextListQuestionView : AbstractTextListQuestionView<TextListAnswerViewModel>
     {
-        public TextListQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source,
-            Guid questionnairePublicKey,  
-            ICommandService commandService,
-            IAnswerOnQuestionCommandService answerCommandService,
-            IAuthentication membership)
+        public TextListQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, 
+                                    QuestionViewModel source, Guid questionnairePublicKey, 
+                                    ICommandService commandService, IAnswerOnQuestionCommandService answerCommandService,
+                                    IAuthentication membership)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService, membership)
         {
         }
 
-        protected override void Initialize()
+        protected override IEnumerable<TextListAnswerViewModel> ListAnswers
         {
-            base.Initialize();
-            this.etAnswer = new EditText(this.Context);
-            this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                ViewGroup.LayoutParams.WrapContent);
-            this.PutAnswerStoredInModelToUI();
-            this.etAnswer.SetSelectAllOnFocus(true);
-            this.etAnswer.ImeOptions = ImeAction.Done;
-            this.etAnswer.SetSingleLine(true);
-            this.etAnswer.EditorAction += this.etAnswer_EditorAction;
-            this.etAnswer.FocusChange += this.etAnswer_FocusChange;
-            this.llWrapper.Click += this.TextQuestionView_Click;
-            this.llWrapper.AddView(this.etAnswer);
+            get { return this.TypedModel.ListAnswers; }
         }
 
-        private void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
+        protected TextListQuestionViewModel TypedModel
         {
-            if (e.HasFocus)
-            {
-                // ShowKeyboard(etAnswer);
-                return;
-            }
+            get { return this.Model as TextListQuestionViewModel; }
+        }
 
-            var newAnswer = this.etAnswer.Text.Trim();
-
-            if (newAnswer != this.Model.AnswerString)
-            {
-                if (!this.IsCommentsEditorFocused)
-                    this.HideKeyboard(this.etAnswer);
-
-                Tuple<decimal, string>[] answerAsTextList =
-                    newAnswer
-                        .Split(';')
-                        .Select((text, index) => Tuple.Create((decimal) index, text))
-                        .Where(tuple => !string.IsNullOrWhiteSpace(tuple.Item2))
-                        .ToArray();
-
-                this.SaveAnswer(newAnswer,
-                    new AnswerTextListQuestionCommand(
-                        this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
-                        this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, answerAsTextList));
-            }
+        protected override int? MaxAnswerCount
+        {
+            get { return TypedModel.MaxAnswerCount; }
         }
 
         protected override string GetAnswerStoredInModelAsString()
@@ -73,22 +41,30 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return this.Model.AnswerString;
         }
 
-        protected override void PutAnswerStoredInModelToUI()
+        
+        protected override string GetAnswerId(TextListAnswerViewModel answer)
         {
-            this.etAnswer.Text = this.GetAnswerStoredInModelAsString();
+            return answer.Value.ToString();
         }
 
-        private void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        protected override string GetAnswerTitle(TextListAnswerViewModel answer)
         {
-            this.etAnswer.ClearFocus();
+            return answer.Title;
         }
 
-        private void TextQuestionView_Click(object sender, EventArgs e)
+        /*protected override TextListAnswerViewModel FindAnswerInModelByCheckBoxTag(string tag)
         {
-            this.etAnswer.RequestFocus();
-            this.ShowKeyboard(this.etAnswer);
-        }
 
-        protected EditText etAnswer { get; set; }
+            throw new NotImplementedException();
+        }*/
+
+        protected override AnswerQuestionCommand CreateSaveAnswerCommand(TextListAnswerViewModel[] selectedAnswers)
+        {
+            var answers = selectedAnswers.Select(a => new Tuple<decimal, string>(a.Value, a.Title)).ToList();
+
+            return new AnswerTextListQuestionCommand(this.QuestionnairePublicKey,this.Membership.CurrentUser.Id,
+                this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, answers.ToArray());
+        }
+        
     }
 }
