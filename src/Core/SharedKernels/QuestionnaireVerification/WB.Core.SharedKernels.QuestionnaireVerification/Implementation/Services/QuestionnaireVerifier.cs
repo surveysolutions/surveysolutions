@@ -82,8 +82,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-                    Verifier<ITextListQuestion>(TextListQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
-                    Verifier<ITextListQuestion>(TextListQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041",VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
+                    Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042",VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
                     Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045",VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -332,7 +332,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return question.Featured;
         }
 
-        private static bool TextListQuestionMaxAnswerInRange1And40(ITextListQuestion question)
+        private static bool TextListQuestionMaxAnswerNotInRange1And40(ITextListQuestion question)
         {
             if (!question.MaxAnswerCount.HasValue)
                 return false;
@@ -350,7 +350,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
         }
 
-        private static bool TextListQuestionCannotCustomValidation(ITextListQuestion question)
+        private static bool TextListQuestionCannotHaveCustomValidation(ITextListQuestion question)
         {
             return !string.IsNullOrWhiteSpace(question.ValidationExpression);
         }
@@ -451,27 +451,27 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private IEnumerable<QuestionnaireVerificationError> ErrorsByEpressionsThatUsesTextListQuestions(QuestionnaireDocument questionnaire)
         {
             var errors = new List<QuestionnaireVerificationError>();
-            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ValidationExpression, CustomValidationExpressionUsesTextListQuestion));
-            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
-            errors.AddRange(this.ErrorsByQuestionsWithCustomExpression<IGroup>(questionnaire, g => g.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
+            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ValidationExpression, CustomValidationExpressionUsesTextListQuestion));
+            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
+            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IGroup>(questionnaire, g => g.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
             return errors;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomExpression<T>(QuestionnaireDocument questionnaire, Func<T, string> getExpression, Func<T, QuestionnaireVerificationError> qetCustomError) where T : class
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByGroupsOrQuestionsWithCustomExpression<T>(QuestionnaireDocument questionnaire, Func<T, string> getExpression, Func<T, QuestionnaireVerificationError> getCustomError) where T : class
         {
-            var questionsWithValidationExpression = questionnaire.Find<T>(q => !string.IsNullOrEmpty(getExpression(q)));
+            var itemsWithValidationExpression = questionnaire.Find<T>(q => !string.IsNullOrEmpty(getExpression(q)));
 
-            var errorByAllQuestionsWithCustomValidation = new List<QuestionnaireVerificationError>();
+            var errorByAllQuestionsOrGroupsWithCustomValidation = new List<QuestionnaireVerificationError>();
 
-            foreach (var questionWithValidationExpression in questionsWithValidationExpression)
+            foreach (var itemWithValidationExpression in itemsWithValidationExpression)
             {
                 IEnumerable<string> identifiersUsedInExpression =
-                    this.expressionProcessor.GetIdentifiersUsedInExpression(getExpression(questionWithValidationExpression));
+                    this.expressionProcessor.GetIdentifiersUsedInExpression(getExpression(itemWithValidationExpression));
 
-                VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
-                    identifier => GetVerificationErrorByEpressionUsesTextListQuestion<T>(questionWithValidationExpression, identifier, questionnaire, qetCustomError));
+                VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsOrGroupsWithCustomValidation,
+                    identifier => GetVerificationErrorByEpressionUsesTextListQuestion<T>(itemWithValidationExpression, identifier, questionnaire, getCustomError));
             }
-            return errorByAllQuestionsWithCustomValidation;
+            return errorByAllQuestionsOrGroupsWithCustomValidation;
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
@@ -645,11 +645,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(questionWithConditionExpression));
         }
 
-        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IGroup questionWithConditionExpression)
+        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IGroup groupWithConditionExpression)
         {
             return new QuestionnaireVerificationError("WB0044",
                 VerificationMessages.WB0044_TextListQuestionCannotBeUsedInConditionsExpressions,
-                CreateReference(questionWithConditionExpression));
+                CreateReference(groupWithConditionExpression));
         }
 
         private static QuestionnaireVerificationError CustomValidationExpressionUsesNotRecognizedParameter(IQuestion questionWithValidationExpression)
