@@ -562,7 +562,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             //### roster
-            return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId).Select(x => x.PublicKey);
+            return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
         }
 
         public int? GetMaxValueForNumericQuestion(Guid questionId)

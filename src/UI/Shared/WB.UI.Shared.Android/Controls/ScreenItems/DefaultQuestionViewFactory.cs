@@ -35,6 +35,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 case QuestionType.Text:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey,this.commandService, this.answerCommandService, this.membership);
                     break;
+                case QuestionType.TextList:
+                    itemView = new TextListQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);
+                    break;
                 case QuestionType.Numeric:
                     var valueQuestionModel = (ValueQuestionViewModel)model;
                         itemView = valueQuestionModel.IsInteger == true

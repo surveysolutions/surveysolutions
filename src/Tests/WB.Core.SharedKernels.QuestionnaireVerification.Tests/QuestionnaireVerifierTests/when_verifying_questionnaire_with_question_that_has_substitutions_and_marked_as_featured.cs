@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new MultyOptionsQuestion()
                 {
                     PublicKey = featuredQuestionId,
-                    Answers = new List<IAnswer>() { new Answer(), new Answer() },
+                    Answers = new List<IAnswer>() { new Answer() { AnswerValue = "1" }, new Answer() { AnswerValue = "2" } },
                     QuestionType = QuestionType.MultyOption,
                     Featured = true
                 });

@@ -103,8 +103,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static Dictionary<string, DistinctDecimalList> BuildRosterInstanceIdsFromSynchronizationDto(
             InterviewSynchronizationDto synchronizationDto)
         {
-            return synchronizationDto.RosterGroupInstances.ToDictionary(
-                pair => ConvertIdAndRosterVectorToString(pair.Key.Id, SplitRosterVectorOntoOuterVectorAndRosterInstanceId(pair.Key.InterviewItemPropagationVector).Item1),
+            return synchronizationDto.RosterGroupInstances.ToDictionary( 
+                pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
                 pair => new DistinctDecimalList(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
         }
 
