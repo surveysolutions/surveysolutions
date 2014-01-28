@@ -38,6 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Dictionary<string, object> answersSupportedInExpressions = new Dictionary<string, object>();
         private Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswersBuggy = new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>();
         private Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers = new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>();
+        private Dictionary<string, Tuple<decimal, string>[]> textListAnswers= new Dictionary<string, Tuple<decimal, string>[]>();
         private HashSet<string> answeredQuestions = new HashSet<string>();
         private HashSet<string> disabledGroups = new HashSet<string>();
         private HashSet<string> disabledQuestions = new HashSet<string>();
@@ -87,6 +88,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToDictionary(
                         question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[][])question.Answer));
+
+            this.textListAnswers = @event.InterviewData.Answers == null
+                ? new Dictionary<string, Tuple<decimal, string>[]>()
+                : @event.InterviewData.Answers
+                    .Where(question => question.Answer is Tuple<decimal, string>[])
+                    .ToDictionary(
+                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
+                        question => (Tuple<decimal, string>[]) question.Answer
+                    );
 
             this.answeredQuestions = new HashSet<string>(
                 @event.InterviewData.Answers.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector)));
@@ -180,7 +190,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal void Apply(TextListQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
+            this.textListAnswers[questionKey] = @event.Answers;
             this.answeredQuestions.Add(questionKey);
         }
 
@@ -330,10 +340,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answersSupportedInExpressions.Remove(questionKey);
             this.linkedSingleOptionAnswersBuggy.Remove(questionKey);
             this.linkedMultipleOptionsAnswers.Remove(questionKey);
+            this.textListAnswers.Remove(questionKey);
             this.answeredQuestions.Remove(questionKey);
             this.disabledQuestions.Remove(questionKey);
             this.validAnsweredQuestions.Remove(questionKey);
             this.invalidAnsweredQuestions.Remove(questionKey);
+
         }
 
         public InterviewState CreateSnapshot()
@@ -345,6 +357,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.answersSupportedInExpressions,
                 this.linkedSingleOptionAnswersBuggy,
                 this.linkedMultipleOptionsAnswers,
+                this.textListAnswers,
                 this.answeredQuestions,
                 this.disabledGroups,
                 this.disabledQuestions,
@@ -362,6 +375,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answersSupportedInExpressions = snapshot.AnswersSupportedInExpressions;
             this.linkedSingleOptionAnswersBuggy = snapshot.LinkedSingleOptionAnswers;
             this.linkedMultipleOptionsAnswers = snapshot.LinkedMultipleOptionsAnswers;
+            this.textListAnswers = snapshot.TextListAnswers;
             this.answeredQuestions = snapshot.AnsweredQuestions;
             this.disabledGroups = snapshot.DisabledGroups;
             this.disabledQuestions = snapshot.DisabledQuestions;
