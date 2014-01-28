@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -17,8 +18,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             questionnaireDocument = CreateQuestionnaireDocument(
-                CreateGroup(groupId: groupId, setup: group => group.IsRoster = true)
-                );
+                CreateGroup(groupId: groupId, setup: group =>
+                {
+                    group.IsRoster = true;
+                    group.RosterSizeQuestionId = Guid.NewGuid();
+                    group.RosterTitleQuestionId = Guid.NewGuid();
+                    group.RosterSizeSource = RosterSizeSourceType.FixedTitles;
+                    group.RosterFixedTitles = new string[] { "fixed roster title" };
+                }));
 
             @event = CreateGroupStoppedBeingARosterEvent(groupId: groupId);
 
@@ -34,6 +41,22 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         It should_set_group_IsRoster_property_to_false = () =>
             questionnaireDocument.GetGroup(groupId)
                 .IsRoster.ShouldEqual(false);
+
+        It should_set_group_RosterSizeSource_property_to_Question = () =>
+            questionnaireDocument.GetGroup(groupId)
+                .RosterSizeSource.ShouldEqual(RosterSizeSourceType.Question);
+
+        It should_set_group_RosterSizeQuestionId_property_to_null = () =>
+            questionnaireDocument.GetGroup(groupId)
+                .RosterSizeQuestionId.ShouldBeNull();
+
+        It should_set_group_RosterTitleQuestionId_property_to_null = () =>
+            questionnaireDocument.GetGroup(groupId)
+                .RosterTitleQuestionId.ShouldBeNull();
+
+        It should_set_group_RosterFixedTitles_property_to_null = () =>
+            questionnaireDocument.GetGroup(groupId)
+                .RosterFixedTitles.ShouldBeNull();
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<GroupStoppedBeingARoster> @event;
