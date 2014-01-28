@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
-                Answers = new List<IAnswer>(){ new Answer(){ }}
+                Answers = new List<IAnswer>() { new Answer() { AnswerValue = "2" } }
             });
 
             questionnaire.Children.Add(new Group()
