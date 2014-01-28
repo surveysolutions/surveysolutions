@@ -10,7 +10,9 @@ using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Tests.Integration.InterviewTests
 {
@@ -46,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Questionnaire CreateQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? userId = null)
         {
-            new QuestionnaireDocumentCacheWarmer(questionnaireDocument).WarmUpCaches();
+            new QuestionnaireCacheInitializer(questionnaireDocument, new Mock<IExpressionProcessor>().Object).WarmUpCaches();
             return new Questionnaire(
                 userId ?? new Guid("E333E333E333E333E333E333E333E333"),
                 questionnaireDocument);
