@@ -4,9 +4,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class TextListAnswerViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, ICloneable
     {
-        public TextListAnswerViewModel(decimal value, string title)
+        public TextListAnswerViewModel(string value, string title)
         {
-            this.Value = value;
+            if (!string.IsNullOrEmpty(value))
+                this.Value = decimal.Parse(value);
+            
             this.Title = title;
         }
 
@@ -15,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public object Clone()
         {
-            return new TextListAnswerViewModel(this.Value, this.Title);
+            return new TextListAnswerViewModel(this.Value.ToString(), this.Title);
         }
     }
 }
