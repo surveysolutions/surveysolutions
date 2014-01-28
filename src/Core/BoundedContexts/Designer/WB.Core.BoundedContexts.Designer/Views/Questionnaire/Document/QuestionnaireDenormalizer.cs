@@ -555,7 +555,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
 
-            item.UpdateGroup(@event.Payload.GroupId, group => group.IsRoster = false);
+            item.UpdateGroup(@event.Payload.GroupId, group =>
+            {
+                group.IsRoster = false;
+                group.RosterSizeSource = RosterSizeSourceType.Question;
+                group.RosterSizeQuestionId = null;
+                group.RosterTitleQuestionId = null;
+                group.RosterFixedTitles = null;
+            });
 
             this.UpdateQuestionnaire(@event, item);
         }
