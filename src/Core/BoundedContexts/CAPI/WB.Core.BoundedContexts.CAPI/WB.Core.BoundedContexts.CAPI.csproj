@@ -88,6 +88,7 @@
     <Compile Include="Views\InterviewDetails\InterviewViewModel.cs" />
     <Compile Include="Views\InterviewDetails\IQuestionnaireItemViewModel.cs" />
     <Compile Include="Views\InterviewDetails\IQuestionnaireViewModel.cs" />
+    <Compile Include="Views\InterviewDetails\TextListAnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\LinkedAnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\LinkedQuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\QuestionnaireGridViewModel.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Views\InterviewDetails\QuestionnaireScreenViewModel.cs" />
     <Compile Include="Views\InterviewDetails\QuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\SelectebleQuestionViewModel.cs" />
+    <Compile Include="Views\InterviewDetails\TextListQuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\ValueQuestionViewModel.cs" />
     <Compile Include="Views\Login\LoginViewModel.cs" />
     <Compile Include="Views\Statistics\StatisticsInput.cs" />
