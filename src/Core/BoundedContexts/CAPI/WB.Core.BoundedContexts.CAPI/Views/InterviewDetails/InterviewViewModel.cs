@@ -872,14 +872,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return new TextListQuestionViewModel(
                 new InterviewItemId(question.PublicKey), question.QuestionText,
                 newType,
-                true, question.Instructions,
+                true, 
+                textListQuestion.Instructions,
                 textListQuestion.Comments, 
                 true,
-                question.Mandatory,
-                question.ValidationMessage,
-                question.StataExportCaption, 
-                question.GetVariablesUsedInTitle(),
-                textListQuestion.Answers.Select(a => new TextListAnswerViewModel(1, a.AnswerText)).ToArray());
+                textListQuestion.Mandatory,
+                textListQuestion.ValidationMessage,
+                textListQuestion.StataExportCaption,
+                textListQuestion.GetVariablesUsedInTitle(),
+
+                textListQuestion.Answers.Select(a => new TextListAnswerViewModel(a.AnswerValue, a.AnswerText)).ToArray(),
+                textListQuestion.MaxAnswerCount);
         }
 
 
