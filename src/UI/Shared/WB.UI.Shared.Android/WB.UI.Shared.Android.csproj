@@ -118,6 +118,7 @@
     <Compile Include="Controls\RosterTable.cs" />
     <Compile Include="Controls\Roster\RosterItemClickEventArgs.cs" />
     <Compile Include="Controls\Roster\RosterQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\AbstractTextListQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\AbstractMultyQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\AbstractQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\AbstractSingleOptionQuestionView.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Controls\ScreenItems\NumericRealQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\SingleOptionLinkedQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\SingleOptionQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\TextListQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Events\AnswerSetEventArgs.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
