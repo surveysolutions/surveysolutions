@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
-        private void Apply(InterviewSynchronized @event)
+        internal void Apply(InterviewSynchronized @event)
         {
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
