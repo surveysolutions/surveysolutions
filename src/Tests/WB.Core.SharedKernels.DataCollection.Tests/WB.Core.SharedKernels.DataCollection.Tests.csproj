@@ -86,8 +86,9 @@
     <Compile Include="InterviewTests\when_answering_text_list_question_which_is_absent.cs" />
     <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_answer_has_3_values.cs" />
     <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_previous_answer_has_3_values_and_new_answer_is_empty.cs" />
-    <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_without_previous_answer_and_new_answer_is_not_the_same.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_has_only_chaned_values.cs" />
     <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_without_previous_answer_and_new_answer_is_the_same.cs" />
+    <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_is_not_the_same.cs" />
     <Compile Include="InterviewTests\when_answering_text_list_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\when_answering_text_list_question_with_incorrect_roster_vector.cs" />
     <Compile Include="InterviewTests\when_answering_text_list_question_with_not_unique_decimal_values.cs" />
