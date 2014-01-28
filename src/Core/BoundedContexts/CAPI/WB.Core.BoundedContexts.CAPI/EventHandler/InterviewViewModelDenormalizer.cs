@@ -307,7 +307,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             var view = new InterviewViewModel(evnt.EventSourceId, questionnaire.Questionnaire, propagationStructure);
 
             this.interviewStorage.Store(view, evnt.EventSourceId);
-            
         }
     }
 }

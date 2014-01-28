@@ -4,24 +4,23 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
-namespace WB.Core.SharedKernels.DataCollection.Utils
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
-    public class QuestionnaireDocumentCacheWarmer
+    public class QuestionnaireCacheInitializer : IQuestionnaireCacheInitializer
     {
-        private IExpressionProcessor ExpressionProcessor
-        {
-            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
-        }
-
+        private readonly IExpressionProcessor expressionProcessor;
         private readonly QuestionnaireDocument document;
+
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
 
-        public QuestionnaireDocumentCacheWarmer(QuestionnaireDocument document)
+        public QuestionnaireCacheInitializer(QuestionnaireDocument document, IExpressionProcessor expressionProcessor)
         {
             this.document = document;
+            this.expressionProcessor = expressionProcessor;
         }
 
         private Dictionary<Guid, IQuestion> QuestionCache
@@ -53,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public void WarmUpCaches()
         {
-            if(document.IsCacheWarmed)
+            if(this.document.IsCacheWarmed)
                 return;
 
             var questionWarmingUpMethods = new Action<Guid>[]
@@ -87,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                     catch {}
                 }
             }
-            document.IsCacheWarmed = true;
+            this.document.IsCacheWarmed = true;
         }
 
         private void GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
@@ -145,7 +144,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             if (!IsExpressionDefined(expression))
                 return Enumerable.Empty<QuestionIdAndVariableName>();
 
-            IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(expression);
+            IEnumerable<string> identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(expression);
 
             return this.DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
                 identifiersUsedInExpression, contextQuestionId, expression);

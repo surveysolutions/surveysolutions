@@ -84,6 +84,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
                     Verifier<ITextListQuestion>(TextListQuestionCannotCustomValidation, "WB0041",VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
                     Verifier<ITextListQuestion>(TextListQuestionMaxAnswerInRange1And40, "WB0042",VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
+                    Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045",VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByEpressionsThatUsesTextListQuestions,
@@ -336,6 +337,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!question.MaxAnswerCount.HasValue)
                 return false;
             return !Enumerable.Range(1, TextListQuestion.MaxAnswerCountLimit).Contains(question.MaxAnswerCount.Value);
+        }
+
+        private static bool QuestionHasOptionsWithEmptyValue(IQuestion question)
+        {
+            if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
+                return false;
+
+            if (question.LinkedToQuestionId.HasValue)
+                return false;
+
+            return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
         }
 
         private static bool TextListQuestionCannotCustomValidation(ITextListQuestion question)
