@@ -403,5 +403,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0044_TextListQuestionCannotBeUsedInConditionsExpressions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has option(s) with empty value.
+        /// </summary>
+        internal static string WB0045_QuestionHasOptionsWithEmptyValue {
+            get {
+                return ResourceManager.GetString("WB0045_QuestionHasOptionsWithEmptyValue", resourceCulture);
+            }
+        }
     }
 }
