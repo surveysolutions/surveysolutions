@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        Because of = () => questionnaire.MoveGroup(groupId, parentRosterId, 0, responsibleId);
+        Because of = () => questionnaire.MoveGroup(groupId, parentRosterId, targetIndex, responsibleId);
 
         Cleanup stuff = () =>
         {
@@ -39,11 +39,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext.GetSingleEvent<QuestionnaireItemMoved>()
                 .GroupKey.ShouldEqual(parentRosterId);
 
+        It should_raise_QuestionnaireItemMoved_event_with_TargetIndex_specified = () =>
+            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+                .TargetIndex.ShouldEqual(targetIndex);
+
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static Guid parentRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static int targetIndex = 1;
         private static EventContext eventContext;
     }
 }
