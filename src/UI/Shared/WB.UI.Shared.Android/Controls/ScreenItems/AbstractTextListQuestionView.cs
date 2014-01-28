@@ -22,11 +22,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected LinearLayout AnswersContainer;
         protected LinearLayout ActionsContainer;
-
-        protected View AddItemView;
+        protected Button AddItemView;
 
         protected abstract IEnumerable<T> ListAnswers { get; }
-
         protected abstract int? MaxAnswerCount { get; }
         
         protected AbstractTextListQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, 
@@ -40,17 +38,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             base.Initialize();
             this.Orientation = Orientation.Vertical;
+            this.AddItemView = CreateAddListButton();
             this.AnswersContainer = this.CreateContainer();
-            this.ActionsContainer = this.CreateContainer();
-
-            this.PutAnswerStoredInModelToUI();
-
+            this.ActionsContainer = this.CreateActionContainer(AddItemView);
+            
             this.llWrapper.AddView(this.AnswersContainer);
             this.llWrapper.AddView(this.ActionsContainer);
-
-            AddItemView = CreateAddListItemBlock();
-
-            this.ActionsContainer.AddView(AddItemView);
+            
+            this.PutAnswerStoredInModelToUI();
         }
 
         protected override string GetAnswerStoredInModelAsString()
@@ -67,29 +62,24 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 var answerBlock = this.CreateAnswerBlock(this.GetAnswerId(answer), this.GetAnswerTitle(answer));
                 this.AnswersContainer.AddView(answerBlock);
             }
+
+            if (IsMaxAnswerCountExceeded(this.ListAnswers.Count()))
+                AddItemView.Enabled = false;
         }
 
-        private View CreateAddListItemBlock()
+        private Button CreateAddListButton()
         {
-            var container = new RelativeLayout(this.Context);
-            container.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
-                                                          LayoutParams.FillParent);
-
             Button button = new Button(this.Context);
-
             var cbLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent,
                                                                  LayoutParams.WrapContent);
-            cbLayoutParams.AddRule(LayoutRules.AlignParentRight);
-            
-            button.LayoutParameters = cbLayoutParams;
 
+            cbLayoutParams.AddRule(LayoutRules.AlignParentRight);
+            button.LayoutParameters = cbLayoutParams;
             button.Text = AddListItemText;
             button.SetTypeface(null, TypefaceStyle.Bold);
             button.Click += this.AddListItemButtonClick;
 
-            container.AddView(button);
-
-            return container;
+            return button;
         }
 
         private void AddListItemButtonClick(object sender, EventArgs e)
@@ -106,8 +96,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             this.AnswersContainer.AddView(CreateAnswerBlock((maxValue + 1).ToString(), ""));
 
-            if (IsMaxAnswerCountExceeded())
-                AddItemView.Enabled = true;
+            if (IsMaxAnswerCountExceeded(this.GetAnswersFromUI().Count()))
+                AddItemView.Enabled = false;
         }
 
         private void RemoveListItemClick(object sender, EventArgs e)
@@ -147,7 +137,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     if (String.Compare(itemTagToRevove, tag, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         this.AnswersContainer.RemoveView(itemContainer);
-                        if (!IsMaxAnswerCountExceeded())
+                        if (!IsMaxAnswerCountExceeded(this.GetAnswersFromUI().Count()))
                             AddItemView.Enabled = true;
                         return;
                     }
@@ -163,7 +153,19 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                                                                LayoutParams.FillParent);
             return optionsWrapper;
         }
-        
+
+        protected LinearLayout CreateActionContainer(Button addButton)
+        {
+            var optionsWrapper = CreateContainer();
+            var container = new RelativeLayout(this.Context);
+            container.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
+                                                          LayoutParams.FillParent);
+
+            container.AddView(addButton);
+            optionsWrapper.AddView(container);
+            return optionsWrapper;
+        }
+
         protected abstract string GetAnswerId(T answer);
 
         protected abstract string GetAnswerTitle(T answer);
@@ -183,10 +185,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             Button button = this.CreateRemoveListItemButton(answerValueTag);
 
             EditText text = new EditText(this.Context);
+            text.Gravity = GravityFlags.Left;
             text.Text = answerTitle;
             var layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent,
                                                                LayoutParams.WrapContent);
             layoutParams.AddRule(LayoutRules.AlignParentLeft);
+            
             text.LayoutParameters = layoutParams;
 
             text.ImeOptions = ImeAction.Done;
@@ -221,21 +225,22 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             var listItemValue = decimal.Parse(editor.GetTag(Resource.Id.AnswerId).ToString());
             var item = answers.FirstOrDefault(i => (i as TextListAnswerViewModel).Value == listItemValue);
 
-            var newElement = new TextListAnswerViewModel(listItemValue, newAnswer);
-
             if (item != null)
             {
-                (item as TextListAnswerViewModel).Title = newAnswer;
+                var textListItem = item as TextListAnswerViewModel;
+                if (string.Compare(textListItem.Title, newAnswer, StringComparison.Ordinal) == 0)
+                {
+                    //check whether value was changed and do not send command
+                    return;
+                }
             }
             else
             {
+                var newElement = new TextListAnswerViewModel(listItemValue.ToString(), newAnswer);
                 answers.Add(newElement as T);
             }
-
-            //add check whether value was changed and do not send command
-            this.SaveAnswer(this.FormatSelectedAnswersAsString(answers), this.CreateSaveAnswerCommand(answers.ToArray()));
-
             
+            this.SaveAnswer(this.FormatSelectedAnswersAsString(answers), this.CreateSaveAnswerCommand(answers.ToArray()));
         }
         
         private Button CreateRemoveListItemButton(string answerTag)
@@ -269,9 +274,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return null;
         }
 
-        private bool IsMaxAnswerCountExceeded()
+        private bool IsMaxAnswerCountExceeded(int valueToCheck)
         {
-            return this.MaxAnswerCount.HasValue && this.GetAnswersFromUI().Count() >= this.MaxAnswerCount;
+            return this.MaxAnswerCount.HasValue && valueToCheck >= this.MaxAnswerCount;
         }
 
         private List<TextListAnswerViewModel> GetAnswersFromUI()
@@ -287,7 +292,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
                 var listItemValue =  decimal.Parse(editText.GetTag(Resource.Id.AnswerId).ToString());
                
-                var item = new TextListAnswerViewModel(listItemValue, editText.Text.Trim());
+                var item = new TextListAnswerViewModel(listItemValue.ToString(), editText.Text.Trim());
 
                 answers.Add(item);
             }
