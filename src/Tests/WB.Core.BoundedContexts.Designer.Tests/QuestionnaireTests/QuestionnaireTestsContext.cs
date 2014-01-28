@@ -235,16 +235,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-            Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestionId, Guid questionId, Guid responsibleId,
+            Guid rosterId, Guid secondGroup, Guid autoQuestionId, Guid questionId, Guid responsibleId,
             QuestionType questionType, QuestionType autoQuestionType = QuestionType.Text)
         {
-            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(autoGroupPublicKey,
+            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(rosterId,
                                                                                           secondGroup, responsibleId);
 
             questionnaire.Apply(new NewQuestionAdded()
                 {
                     PublicKey = autoQuestionId,
-                    GroupPublicKey = autoGroupPublicKey,
+                    GroupPublicKey = rosterId,
                     QuestionText = "Title",
                     QuestionType = autoQuestionType,
                     StataExportCaption = "auto",
@@ -273,7 +273,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire =
                 CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-                    autoGroupPublicKey: autoGroupPublicKey,
+                    rosterId: autoGroupPublicKey,
                     secondGroup: secondGroup, autoQuestionId: autoQuestionId, questionId: questionId,
                     responsibleId: responsibleId,
                     questionType: questionType, autoQuestionType: autoQuestionType);
