@@ -13,12 +13,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
     public class TextQuestionView : AbstractQuestionView
     {
-
         public TextQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source,
-                                Guid questionnairePublicKey,  
-            ICommandService commandService,
-            IAnswerOnQuestionCommandService answerCommandService,
-            IAuthentication membership)
+                                Guid questionnairePublicKey, ICommandService commandService, 
+                                IAnswerOnQuestionCommandService answerCommandService, IAuthentication membership)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService, membership)
         {
         }
