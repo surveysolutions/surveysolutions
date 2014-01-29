@@ -86,6 +86,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="ServiceTests\SampleImportServiceTests.cs" />
+    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_text_list_question.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_nested_group_inside_roster.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_roter_triggered_by_text_list_question.cs" />
     <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_structure_from_questionnaire_containing_fixed_roster_and_multy_option_linked_question_to_header.cs" />
