@@ -90,6 +90,14 @@
             self.errors = ko.validation.group(self);
             self.isValid = ko.observable(true);
         },
+        TextListQuestion: function () {
+            var self = this;
+            ko.utils.extend(self, new QuestionModel());
+            self.answer = ko.observable().extend({ required: true });
+
+            self.errors = ko.validation.group(self);
+            self.isValid = ko.observable(true);
+        },
         NumericQuestion: function (isInteger, countOfDecimalPlaces) {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
