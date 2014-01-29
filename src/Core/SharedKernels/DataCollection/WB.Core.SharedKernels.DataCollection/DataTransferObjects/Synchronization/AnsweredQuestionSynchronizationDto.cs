@@ -1,5 +1,8 @@
 using System;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization
 {
@@ -13,7 +16,19 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
             Id = id;
             QuestionPropagationVector = vector;
-            Answer = answer;
+
+            var interviewTextListAnswers = answer as InterviewTextListAnswers;
+            if (interviewTextListAnswers != null)
+            {
+                Answer =
+                    interviewTextListAnswers.Answers.Select(a => new Tuple<decimal, string>(a.Value, a.Answer))
+                        .ToArray();
+            }
+            else
+            {
+                Answer = answer;   
+            }
+            
             Comments = comments;
         }
 
