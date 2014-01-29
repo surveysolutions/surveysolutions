@@ -73,10 +73,10 @@
     <Compile Include="AccountRepositoryTests\when_registering_new_user_with_account_repository.cs" />
     <Compile Include="AccountRepositoryTests\when_account_repository_creating_new_user.cs" />
     <Compile Include="AccountTests\AccountTestsContext.cs" />
-    <Compile Include="AccountTests\when_updating_account_and_it_should_be_confirmed.cs" />
-    <Compile Include="AccountTests\when_updating_account_and_it_should_be_locked.cs" />
-    <Compile Include="AccountTests\when_updating_confirmed_account_and_it_should_not_be_confirmed_again.cs" />
-    <Compile Include="AccountTests\when_updating_account_and_it_should_be_unlocked.cs" />
+    <Compile Include="AccountTests\when_updating_not_confirmed_account_and_specifying_is_confirmed_true.cs" />
+    <Compile Include="AccountTests\when_updating_unlocked_account_and_specifying_is_locked_true.cs" />
+    <Compile Include="AccountTests\when_updating_confirmed_account_and_specifying_is_confirmed_true.cs" />
+    <Compile Include="AccountTests\when_updating_locked_account_and_specifying_is_locked_false.cs" />
     <Compile Include="AccountTests\when_updating_account.cs" />
     <Compile Include="AccountViewFactoryTests\AccountViewFactoryTestsContext.cs" />
     <Compile Include="AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />

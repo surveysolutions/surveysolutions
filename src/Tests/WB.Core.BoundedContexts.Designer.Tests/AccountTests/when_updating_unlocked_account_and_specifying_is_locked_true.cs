@@ -6,7 +6,7 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.AccountTests
 {
-    internal class when_updating_account_and_it_should_be_confirmed : AccountTestsContext
+    internal class when_updating_unlocked_account_and_specifying_is_locked_true : AccountTestsContext
     {
         Establish context = () =>
         {
@@ -18,8 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountTests
         };
 
         Because of = () =>
-            account.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
-                isConfirmed: true);
+            account.Update(userName: null, comment: null, email: null, passwordQuestion: null, isLockedOut: true, isConfirmed: false);
 
         Cleanup stuff = () =>
         {
@@ -27,8 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountTests
             eventContext = null;
         };
 
-        It should_raise_AccountConfirmed_event = () =>
-            eventContext.ShouldContainEvent<AccountConfirmed>();
+        It should_raise_AccountLocked = () =>
+            eventContext.ShouldContainEvent<AccountLocked>();
 
         private static EventContext eventContext;
         private static AccountAR account;
