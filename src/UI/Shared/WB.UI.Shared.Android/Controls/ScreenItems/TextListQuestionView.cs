@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override string GetAnswerTitle(TextListAnswerViewModel answer)
         {
-            return answer.Title;
+            return answer.Answer;
         }
 
         /*protected override TextListAnswerViewModel FindAnswerInModelByCheckBoxTag(string tag)
@@ -60,7 +60,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override AnswerQuestionCommand CreateSaveAnswerCommand(TextListAnswerViewModel[] selectedAnswers)
         {
-            var answers = selectedAnswers.Select(a => new Tuple<decimal, string>(a.Value, a.Title)).ToList();
+            var answers = selectedAnswers.Select(a => new Tuple<decimal, string>(a.Value, a.Answer)).ToList();
 
             return new AnswerTextListQuestionCommand(this.QuestionnairePublicKey,this.Membership.CurrentUser.Id,
                 this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, answers.ToArray());
