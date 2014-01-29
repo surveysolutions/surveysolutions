@@ -55,26 +55,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
-            exception.Message.ToLower().ShouldContain("roster");
-
-        It should_throw_exception_with_message_containting__title__ = () =>
-            exception.Message.ToLower().ShouldContain("title");
-
-        It should_throw_exception_with_message_containting__question__ = () =>
-            exception.Message.ToLower().ShouldContain("question");
-
-        It should_throw_exception_with_message_containting__in__ = () =>
-            exception.Message.ToLower().ShouldContain("in");
-
-        It should_throw_exception_with_message_containting__group__ = () =>
-            exception.Message.ToLower().ShouldContain("group");
-
-        It should_throw_exception_with_message_containting__not__ = () =>
-            exception.Message.ToLower().ShouldContain("not");
-
-        It should_throw_exception_with_message_containting__size__ = () =>
-            exception.Message.ToLower().ShouldContain("size");
+        It should_throw_exception_with_message_containting__group____could_not_be_moved____roster_size_question____not_same__ =
+            () =>
+                new[] { "group", "could not be moved", "roster size question", "not same" }.ShouldEachConformTo(
+                    keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

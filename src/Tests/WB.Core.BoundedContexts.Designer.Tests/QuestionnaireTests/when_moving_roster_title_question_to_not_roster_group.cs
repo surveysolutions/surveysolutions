@@ -58,26 +58,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__move__ = () =>
-            exception.Message.ToLower().ShouldContain("move");
-
-        It should_throw_exception_with_message_containting__roster__ = () =>
-            exception.Message.ToLower().ShouldContain("roster");
-
-        It should_throw_exception_with_message_containting__title__ = () =>
-            exception.Message.ToLower().ShouldContain("title");
-
-        It should_throw_exception_with_message_containting__question__ = () =>
-            exception.Message.ToLower().ShouldContain("question");
-
-        It should_throw_exception_with_message_containting__group__ = () =>
-            exception.Message.ToLower().ShouldContain("group");
-
-        It should_throw_exception_with_message_containting__has__ = () =>
-            exception.Message.ToLower().ShouldContain("has");
-
-        It should_throw_exception_with_message_containting__size__ = () =>
-            exception.Message.ToLower().ShouldContain("size");
+        It should_throw_exception_with_message_containting___can_move___roster_title_question___roster_size_question__ =
+            () =>
+                new[] { "can move", "roster title question", "roster size question" }.ShouldEachConformTo(
+                    keyword => exception.Message.ToLower().Contains(keyword));
 
 
         private static Exception exception;
