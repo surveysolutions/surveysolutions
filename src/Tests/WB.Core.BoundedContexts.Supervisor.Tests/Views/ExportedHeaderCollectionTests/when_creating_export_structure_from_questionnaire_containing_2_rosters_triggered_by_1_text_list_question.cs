@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
 {
-    [Ignore("failed test for Nastya by KP-3014 Export (2 in 1): text list questions and rosters depending on text list questions")]
     internal class when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_text_list_question : QuestionnaireExportStructureTestsContext
     {
         private Establish context = () =>
@@ -52,7 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
             questionnaireExportStructure.HeaderToLevelMap[rosterSizeQuestionId].HeaderItems[questionInsideRoster1Id].ColumnNames.Length.ShouldEqual(1);
 
         It should_create_header_with_10_columns_at_first_level = () =>
-          questionnaireExportStructure.HeaderToLevelMap[questionnaireDocument.PublicKey].HeaderItems[rosterSizeQuestionId].ColumnNames.Length.ShouldEqual(10);
+          questionnaireExportStructure.HeaderToLevelMap[questionnaireDocument.PublicKey].HeaderItems[rosterSizeQuestionId].ColumnNames.Length.ShouldEqual(maxAnswerCount);
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Guid questionInsideRoster1Id = Guid.Parse("CCF000AAA111EE2DD2EE111AAA000FFF");
