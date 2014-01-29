@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Android.Content;
 using Android.Graphics;
@@ -94,7 +93,16 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                            0 : 
                            listAnswers.Max(i => i.Value);
 
-            this.AnswersContainer.AddView(CreateAnswerBlock((maxValue + 1).ToString(), ""));
+            var newBlock = CreateAnswerBlock((maxValue + 1).ToString(), "");
+            this.AnswersContainer.AddView(newBlock);
+
+
+            var newEditor = GetFirstChildTypeOf<EditText>(newBlock);
+            if (newEditor != null)
+            {
+                newEditor.RequestFocus();
+                this.ShowKeyboard(newEditor);
+            }
 
             if (IsMaxAnswerCountExceeded(this.GetAnswersFromUI().Count()))
                 AddItemView.Enabled = false;
@@ -107,9 +115,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
 
             var selectedAnswers = this.ListAnswers.ToList();
-            string battonTag = button.GetTag(Resource.Id.AnswerId).ToString();
+            string buttonTag = button.GetTag(Resource.Id.AnswerId).ToString();
             decimal listItemValue;
-            if (!decimal.TryParse(battonTag, out listItemValue))
+            if (!decimal.TryParse(buttonTag, out listItemValue))
             {
                 return; //ignore temp item
             }
@@ -123,25 +131,25 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.SaveAnswer(this.FormatSelectedAnswersAsString(answersToSave), this.CreateSaveAnswerCommand(answersToSave));
             }
 
-            RemoveChildFromUI(battonTag);
+            RemoveFirstChildByTag(this.AnswersContainer, buttonTag);
         }
 
-        private void RemoveChildFromUI(string itemTagToRevove)
+        private void RemoveFirstChildByTag(LinearLayout container, string itemTagToRevove)
         {
-            for (int i = 0; i < this.AnswersContainer.ChildCount; i++)
+            for (int i = 0; i < container.ChildCount; i++)
             {
-                var itemContainer = this.AnswersContainer.GetChildAt(i) as RelativeLayout;
-                if (itemContainer != null)
-                {
-                    var tag = itemContainer.GetTag(Resource.Id.AnswerId).ToString();
-                    if (String.Compare(itemTagToRevove, tag, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        this.AnswersContainer.RemoveView(itemContainer);
-                        if (!IsMaxAnswerCountExceeded(this.GetAnswersFromUI().Count()))
-                            AddItemView.Enabled = true;
-                        return;
-                    }
-                }
+                var itemContainer = container.GetChildAt(i) as RelativeLayout;
+                if (itemContainer == null) 
+                    continue;
+
+                var tag = itemContainer.GetTag(Resource.Id.AnswerId).ToString();
+                if (String.Compare(itemTagToRevove, tag, StringComparison.OrdinalIgnoreCase) != 0) 
+                    continue;
+
+                container.RemoveView(itemContainer);
+                if (!IsMaxAnswerCountExceeded(this.GetAnswersFromUI().Count()))
+                    AddItemView.Enabled = true;
+                return;
             }
         }
 
@@ -172,8 +180,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected abstract AnswerQuestionCommand CreateSaveAnswerCommand(T[] selectedAnswers);
         
-        protected virtual void AddAdditionalAttributes(CheckBox checkBox, T answer) { }
-
         private RelativeLayout CreateAnswerBlock(string answerValueTag, string answerTitle)
         {
             var container = new RelativeLayout(this.Context);
@@ -186,17 +192,17 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             EditText text = new EditText(this.Context);
             text.Gravity = GravityFlags.Left;
-            text.Text = answerTitle;
+            text.SetSelectAllOnFocus(true);
+            text.ImeOptions = ImeAction.Done;
+            text.SetSingleLine(true);
+            text.FocusChange += this.etAnswer_FocusChange;
+
             var layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent,
                                                                LayoutParams.WrapContent);
             layoutParams.AddRule(LayoutRules.AlignParentLeft);
-            
             text.LayoutParameters = layoutParams;
 
-            text.ImeOptions = ImeAction.Done;
-            text.SetSingleLine(true);
-
-            text.FocusChange += this.etAnswer_FocusChange;
+            text.Text = answerTitle;
             text.SetTag(Resource.Id.AnswerId, answerValueTag);
 
             container.AddView(button);
@@ -228,7 +234,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (item != null)
             {
                 var textListItem = item as TextListAnswerViewModel;
-                if (string.Compare(textListItem.Title, newAnswer, StringComparison.Ordinal) == 0)
+                if (string.Compare(textListItem.Answer, newAnswer, StringComparison.Ordinal) == 0)
                 {
                     //check whether value was changed and do not send command
                     return;

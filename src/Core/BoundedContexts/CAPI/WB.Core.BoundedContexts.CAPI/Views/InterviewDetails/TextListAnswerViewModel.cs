@@ -9,15 +9,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (!string.IsNullOrEmpty(value))
                 this.Value = decimal.Parse(value);
             
-            this.Title = title;
+            this.Answer = title;
         }
 
         public decimal Value { get; set; }
-        public string Title { get; set; }
+        public string Answer { get; set; }
 
         public object Clone()
         {
-            return new TextListAnswerViewModel(this.Value.ToString(), this.Title);
+            return new TextListAnswerViewModel(this.Value.ToString(), this.Answer);
         }
     }
 }
