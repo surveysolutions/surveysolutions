@@ -84,6 +84,9 @@
     <script type="text/html" id="DateTimeFull">
         <span data-bind=" text: moment(answer()).format('l')"></span>
     </script>
+<script type="text/html" id="TextListFull">
+    <span data-bind=" text: answer"></span>
+</script>
     <script type="text/html" id="AutoPropagateFull">
         <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
