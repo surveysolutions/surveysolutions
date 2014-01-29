@@ -63,6 +63,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             var listOfAnswers = value as IEnumerable<object>;
             if (listOfAnswers != null)
                 return listOfAnswers;
+
+            var interviewTextListAnswer = value as InterviewTextListAnswers;
+            if (interviewTextListAnswer != null)
+            {
+                return interviewTextListAnswer.Answers.Select(a => a.Answer).ToArray();
+            }
+
             return null;
         }
 
