@@ -55,9 +55,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__group____could_not_be_moved____roster_size_question____not_same__ =
+        It should_throw_exception_with_message_containting__group____could_not_be_moved____roster_size_question____not_the_same__ =
             () =>
-                new[] { "group", "could not be moved", "roster size question", "not same" }.ShouldEachConformTo(
+                new[] { "group", "could not be moved", "roster size question", "not the same" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Questionnaire questionnaire;
