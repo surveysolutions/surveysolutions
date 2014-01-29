@@ -11,12 +11,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     {
         public TextListQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType,
             bool enabled, string instructions, string comments, bool valid, bool mandatory,
-            string validationMessage, string variable, IEnumerable<string> substitutionReferences, IEnumerable<TextListAnswerViewModel> answers) 
+            string validationMessage, string variable, IEnumerable<string> substitutionReferences,
+            IEnumerable<TextListAnswerViewModel> answers, int? maxAnswerCount) 
             : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answers, 
                    validationMessage, variable, substitutionReferences)
         {
             this.ListAnswers = answers;
-            this.MaxAnswerCount = MaxAnswerCount;
+            this.MaxAnswerCount = maxAnswerCount;
         }
 
         public IEnumerable<TextListAnswerViewModel> ListAnswers { get; private set; }
@@ -36,7 +37,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                                                    this.Mandatory,
-                                                   this.ValidationMessage, this.Variable, this.SubstitutionReferences, newAnswers);
+                                                   this.ValidationMessage, this.Variable, this.SubstitutionReferences,
+                                                   newAnswers,
+                                                   this.MaxAnswerCount);
         }
 
         public override void SetAnswer(object answer)
@@ -53,7 +56,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
             }
 
-            this.ListAnswers = typedAnswers.Select(item => new TextListAnswerViewModel(item.Item1, item.Item2)).ToArray();
+            this.ListAnswers = typedAnswers.Select(item => new TextListAnswerViewModel(item.Item1.ToString(), item.Item2)).ToArray();
  
             base.SetAnswer(answer);
         }
