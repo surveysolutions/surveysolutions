@@ -6,20 +6,20 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.AccountTests
 {
-    internal class when_updating_account_and_it_should_be_unlocked : AccountTestsContext
+    internal class when_updating_confirmed_account_and_specifying_is_confirmed_true : AccountTestsContext
     {
         Establish context = () =>
         {
             var accountId = Guid.Parse("11111111111111111111111111111111");
 
-            account = CreateAccount(accountId);
-            account.Apply(new AccountLocked());
+            account = CreateAccount(accountId: accountId, isConfirmed: true);
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            account.Update(userName: null, comment: null, email: null, passwordQuestion: null, isLockedOut: false, isConfirmed: false);
+            account.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
+                isConfirmed: true);
 
         Cleanup stuff = () =>
         {
@@ -27,8 +27,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountTests
             eventContext = null;
         };
 
-        It should_raise_AccountUnlocked = () =>
-            eventContext.ShouldContainEvent<AccountUnlocked>();
+        It should_raise_AccountUpdated_event = () =>
+            eventContext.ShouldContainEvent<AccountUpdated>();
+
+        It should_not_raise_AccountConfirmed_event = () =>
+            eventContext.ShouldNotContainEvent<AccountConfirmed>();
 
         private static EventContext eventContext;
         private static AccountAR account;
