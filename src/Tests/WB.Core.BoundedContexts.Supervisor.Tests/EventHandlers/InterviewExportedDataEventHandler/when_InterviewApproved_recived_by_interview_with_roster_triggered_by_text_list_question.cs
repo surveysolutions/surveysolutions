@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                 interview.Levels.Add(string.Join(",", vector), newLevel);
 
                 var question = newLevel.GetOrCreateQuestion(questionInsideRosterGroupId);
-                question.Answer = someAnswer;
+                question.Answer = new InterviewTextListAnswers(new[] { new Tuple<decimal, string>(1, someAnswer) });
             }
 
             return interview;
