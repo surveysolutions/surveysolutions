@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
             IEnumerable<ITextListQuestion> rosterSizeTextListQuestions =
                 rosterGroups.Select(@group => document.Find<ITextListQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null);
+                    .Where(question => question != null).Distinct();
 
             var collectedMaxValues = new Dictionary<Guid, int>();
 
