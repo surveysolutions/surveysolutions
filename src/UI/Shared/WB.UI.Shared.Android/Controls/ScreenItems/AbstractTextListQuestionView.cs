@@ -307,7 +307,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
                 var listItemValue =  decimal.Parse(editText.GetTag(Resource.Id.AnswerId).ToString());
                
-                var item = new TextListAnswerViewModel(listItemValue.ToString(), editText.Text.Trim());
+                var item = new TextListAnswerViewModel(listItemValue, editText.Text.Trim());
 
                 answers.Add(item);
             }

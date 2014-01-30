@@ -52,12 +52,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return answer.Answer;
         }
 
-        /*protected override TextListAnswerViewModel FindAnswerInModelByCheckBoxTag(string tag)
-        {
-
-            throw new NotImplementedException();
-        }*/
-
         protected override AnswerQuestionCommand CreateSaveAnswerCommand(TextListAnswerViewModel[] selectedAnswers)
         {
             var answers = selectedAnswers.Select(a => new Tuple<decimal, string>(a.Value, a.Answer)).ToList();
@@ -85,7 +79,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 item.Answer = newAnswer;
             else
             {
-                newListAnswers.Add(new TextListAnswerViewModel(tagName, newAnswer));
+                newListAnswers.Add(new TextListAnswerViewModel(decimal.Parse(tagName), newAnswer));
             }
 
             return newListAnswers;
