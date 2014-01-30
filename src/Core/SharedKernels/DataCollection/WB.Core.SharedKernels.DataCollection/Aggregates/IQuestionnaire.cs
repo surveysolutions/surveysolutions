@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {

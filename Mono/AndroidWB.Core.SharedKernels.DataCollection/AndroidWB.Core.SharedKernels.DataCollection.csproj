@@ -376,14 +376,14 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Utils\AnswerUtils.cs">
       <Link>Utils\AnswerUtils.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Utils\QuestionnaireDocumentCacheWarmer.cs">
+      <Link>Utils\QuestionnaireDocumentCacheWarmer.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewItemId.cs">
       <Link>ValueObjects\Interview\InterviewItemId.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewStatus.cs">
       <Link>ValueObjects\Interview\InterviewStatus.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Questionnaire\QuestionIdAndVariableName.cs">
-      <Link>ValueObjects\Questionnaire\QuestionIdAndVariableName.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\FeaturedQuestionItem.cs">
       <Link>Views\Questionnaire\FeaturedQuestionItem.cs</Link>
@@ -457,11 +457,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\Services\" />
+    <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
