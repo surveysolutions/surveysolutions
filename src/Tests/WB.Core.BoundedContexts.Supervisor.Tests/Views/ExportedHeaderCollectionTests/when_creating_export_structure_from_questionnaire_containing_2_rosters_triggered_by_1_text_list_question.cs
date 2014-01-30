@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
         It should_create_header_with_1_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[rosterSizeQuestionId].HeaderItems[questionInsideRoster1Id].ColumnNames.Length.ShouldEqual(1);
 
-        It should_create_header_with_10_columns_at_first_level = () =>
+        It should_create_header_with_5_columns_at_first_level = () =>
           questionnaireExportStructure.HeaderToLevelMap[questionnaireDocument.PublicKey].HeaderItems[rosterSizeQuestionId].ColumnNames.Length.ShouldEqual(maxAnswerCount);
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
