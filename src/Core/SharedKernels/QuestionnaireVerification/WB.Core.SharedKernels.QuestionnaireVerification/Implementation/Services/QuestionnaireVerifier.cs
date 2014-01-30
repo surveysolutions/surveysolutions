@@ -196,16 +196,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (rosterTitleQuestion == null)
                 return true;
 
-            var groupsWhereRosterSizeSourceIsQuestion =
-                questionnaire.Find<IGroup>(
-                    x => x.RosterSizeQuestionId.HasValue && x.RosterSizeQuestionId.Value == group.RosterSizeQuestionId.Value)
-                    .Select(x => x.PublicKey);
-
-            var parentForRosterTitleQuestion = questionnaire.GetParentOfQuestion(rosterTitleQuestion.PublicKey);
-            if (parentForRosterTitleQuestion == null)
+            if (!GetAllParentGroupsForQuestion(rosterTitleQuestion, questionnaire).Any(IsRosterGroup))
                 return true;
 
-            return !groupsWhereRosterSizeSourceIsQuestion.Contains(parentForRosterTitleQuestion.PublicKey);
+            var rostersByRosterTitleQuestion =
+                questionnaire.Find<IGroup>(
+                    g => g.RosterTitleQuestionId.HasValue && (g.RosterTitleQuestionId.Value == group.RosterTitleQuestionId.Value));
+
+            return rostersByRosterTitleQuestion.Any(g =>g.RosterSizeQuestionId.HasValue && (g.RosterSizeQuestionId.Value != group.RosterSizeQuestionId.Value));
         }
 
         private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
