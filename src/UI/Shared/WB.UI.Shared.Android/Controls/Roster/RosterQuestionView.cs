@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Views;
@@ -83,9 +84,11 @@ namespace WB.UI.Shared.Android.Controls.Roster
         {
             this.tvTitle.Text = e.AnswerSting;
             if (!this.questionView.IsCommentsEditorFocused)
-                if (this.Model.QuestionType != QuestionType.MultyOption)
+                if (!multiAnswersTypes.Contains(this.Model.QuestionType))
                     this.dialog.Dismiss();
         }
+
+        private readonly QuestionType[] multiAnswersTypes = {QuestionType.MultyOption, QuestionType.TextList};
 
         protected override void Dispose(bool disposing)
         {
