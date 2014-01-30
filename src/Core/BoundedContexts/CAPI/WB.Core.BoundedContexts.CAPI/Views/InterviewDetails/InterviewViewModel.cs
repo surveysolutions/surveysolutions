@@ -284,18 +284,21 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
                     if (i > 0)
                     {
-                        var item = this.propagatedScreenPrototypes[screenSiblingByPropagationScopeIds[i - 1]];
-                        previous = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
+                        previous = new QuestionnaireNavigationPanelItem(new InterviewItemId(screenSiblingByPropagationScopeIds[i - 1]), GetScreenViewModel);
                     }
                     if (i < screenSiblingByPropagationScopeIds.Length - 1)
                     {
-                        var item = this.propagatedScreenPrototypes[screenSiblingByPropagationScopeIds[i + 1]];
-                        next = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
+                        next = new QuestionnaireNavigationPanelItem(new InterviewItemId(screenSiblingByPropagationScopeIds[i + 1]), GetScreenViewModel);
                     }
 
                     target.AddNextPrevious(next, previous);
                 }
             }
+        }
+
+        private IQuestionnaireViewModel GetScreenViewModel(InterviewItemId interviewItemId)
+        {
+            return this.Screens[interviewItemId];
         }
 
         #region fields
@@ -352,14 +355,29 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 rosterInstanceId);
 
+            if(this.Screens.ContainsKey(new InterviewItemId(screenId,propagationVector)))
+                return;
+
             var screenPrototype = this.propagatedScreenPrototypes[screenId];
             var screen = screenPrototype.Clone(propagationVector, sortIndex);
 
-            var questions = screen.Items.OfType<QuestionViewModel>().ToList();
+            var questions = new List<QuestionViewModel>();
 
-            foreach (var question in questions)
+            foreach (var child in screen.Items)
             {
-                this.UpdateQuestionHash(question);
+                var question = child as QuestionViewModel;
+                if (question != null)
+                {
+                    this.UpdateQuestionHash(question);
+                    questions.Add(question);
+                    continue;
+                }
+                var group = child as QuestionnaireNavigationPanelItem;
+                if (group != null)
+                {
+                    AddPropagateScreen(group.PublicKey.Id, outerScopePropagationVector, rosterInstanceId, sortIndex);
+                    continue;
+                }
             }
 
             this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(questions);
@@ -373,7 +391,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
+
             var key = new InterviewItemId(screenId, propagationVector);
+            if (!this.Screens.ContainsKey(key))
+                return;
+
             var screen = this.Screens[key] as QuestionnaireScreenViewModel;
             foreach (var item in screen.Items)
             {
@@ -482,7 +504,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector, index);
             var key = new InterviewItemId(groupId, propagationVector);
-
+            
+            if(!this.Screens.ContainsKey(key))
+                return;
+            
             var screen = this.Screens[key] as QuestionnairePropagatedScreenViewModel;
             if (screen == null)
                 return;
@@ -571,26 +596,39 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             IGroup group)
         {
             var key = new InterviewItemId(group.PublicKey);
+            var lastVersionOfRout = rout.ToList();
 
-
-            if (group.Propagated == Propagate.None && !group.IsRoster)
+            if (!IsGroupRoster(group))
             {
-                var screenItems = this.BuildItems(group, true);
-                var screen = new QuestionnaireScreenViewModel(this.PublicKey, group.Title, this.Title, true,
-                    key, screenItems,
-                    this.BuildSiblingsForNonPropagatedGroups(rout, key),
-                    this.BuildBreadCrumbs(rout, key));
-                this.Screens.Add(key, screen);
+                var routWithouLast = rout.Take(rout.Count - 1).ToList();
+                if (routWithouLast.Any(IsGroupRoster))
+                {
+                    AddPropagatedScreenPrototype(group, this.BuildBreadCrumbs(lastVersionOfRout), (groupId) => this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, groupId));
+                }
+                else
+                {
+                    var screenItems = this.BuildItems(group, true);
+                    var screen = new QuestionnaireScreenViewModel(this.PublicKey, group.Title, this.Title, true,
+                        key, screenItems,
+                        this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, key),
+                        this.BuildBreadCrumbs(lastVersionOfRout));
+                    this.Screens.Add(key, screen);
+                }
             }
             else
             {
                 var gridKey = new InterviewItemId(group.PublicKey);
                 if (!this.Screens.ContainsKey(gridKey))
                 {
-                    this.CreateGrid(group, rout);
+                    this.CreateGrid(group, lastVersionOfRout);
                 }
             }
 
+        }
+
+        protected bool IsGroupRoster(IGroup group)
+        {
+            return group.Propagated != Propagate.None || group.IsRoster;
         }
 
         protected void UpdateQuestionHash(QuestionViewModel question)
@@ -607,35 +645,47 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             InterviewItemId rosterKey = new InterviewItemId(group.PublicKey);
             var siblings = this.BuildSiblingsForNonPropagatedGroups(root, rosterKey);
-            var screenItems = this.BuildItems(group, false);
-            var breadcrumbs = this.BuildBreadCrumbs(root, rosterKey);
+        
+            var breadcrumbs = this.BuildBreadCrumbs(root);
+            var header = new List<HeaderItem>();
+
+            foreach (var child in @group.Children)
+            {
+                var question = child as IQuestion;
+                if (question != null)
+                {
+                    if(question.QuestionScope==QuestionScope.Interviewer)
+                        header.Add(this.BuildHeader(question));
+                    continue;
+                }
+                var childGroup = child as IGroup;
+                if (childGroup != null)
+                {
+                    header.Add(new HeaderItem(childGroup.PublicKey, childGroup.Title, string.Empty));
+                }
+            }
 
             var roster = new QuestionnaireGridViewModel(this.PublicKey, group.Title, this.Title,
                 rosterKey, true,
                 siblings,
-                breadcrumbs,
-                // this.Chapters,
-                Enumerable.ToList<HeaderItem>(@group.Children
-                    .OfType<IQuestion>()
-                    .Where(
-                        q =>
-                            q.QuestionScope ==
-                                QuestionScope
-                                    .Interviewer)
-                    .Select(
-                        this.BuildHeader)),
+                breadcrumbs.Take(breadcrumbs.Count - 1).ToList(), header,
                 () => this.CollectPropagatedScreen(rosterKey.Id));
 
-            breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] {roster.ScreenId}).ToList();
-
-            var screenPrototype = new QuestionnairePropagatedScreenViewModel(this.PublicKey, group.Title, true,
-                rosterKey, screenItems,
-                this.GetSiblings,
-                breadcrumbs, -1);
-
-            this.propagatedScreenPrototypes.Add(rosterKey.Id, screenPrototype);
-
+            AddPropagatedScreenPrototype(group, breadcrumbs, this.GetSiblings);
             this.Screens.Add(rosterKey, roster);
+        }
+
+        protected void AddPropagatedScreenPrototype(IGroup group, IList<InterviewItemId> breadcrumbs, Func<InterviewItemId, IEnumerable<InterviewItemId>> getSiblings)
+        {
+            var newScreenKey = new InterviewItemId(group.PublicKey);
+            var screenItems = this.BuildItems(group, false);
+            var screenName = this.IsGroupRoster(group) ? string.Empty : group.Title;
+            var screenPrototype = new QuestionnairePropagatedScreenViewModel(this.PublicKey, screenName, group.Title, true,
+                newScreenKey, screenItems,
+                getSiblings,
+                breadcrumbs);
+
+            this.propagatedScreenPrototypes.Add(newScreenKey.Id, screenPrototype);
         }
 
         protected IList<IQuestionnaireItemViewModel> BuildItems(IGroup screen, bool updateHash)
@@ -654,16 +704,19 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return result;
         }
 
-        protected IEnumerable<InterviewItemId> GetSiblings(Guid publicKey)
+        protected IEnumerable<InterviewItemId> GetSiblings(InterviewItemId publicKey)
         {
             return
-                this.Screens.Where(s => s.Key.Id == publicKey && !s.Key.IsTopLevel()).Select(
-                    s => new InterviewItemId(publicKey, s.Key.InterviewItemPropagationVector)).ToList();
+                this.Screens.Where(s => s.Key.Id == publicKey.Id && !s.Key.IsTopLevel()).Select(
+                    s => new InterviewItemId(publicKey.Id, s.Key.InterviewItemPropagationVector)).ToList();
         }
 
         protected void UpdateGrid(Guid key)
         {
             var gridkey = new InterviewItemId(key);
+
+            if (!this.Screens.ContainsKey(gridkey))
+                return;
             var grid = this.Screens[gridkey] as QuestionnaireGridViewModel;
             if (grid != null)
                 grid.UpdateCounters();
@@ -679,19 +732,27 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 .ToList();
         }
 
-        protected IList<InterviewItemId> BuildBreadCrumbs(IList<IGroup> rout, InterviewItemId key)
+        private IList<InterviewItemId> BuildBreadCrumbs(List<IGroup> rout)
         {
-            return
-                rout.Skip(1).TakeWhile(r => r.PublicKey != key.Id).Select(
-                    r => new InterviewItemId(r.PublicKey)).ToList();
+            var result = new List<InterviewItemId>();
+
+            foreach (var groupInRout in rout.Skip(1))
+            {
+                result.Add(new InterviewItemId(groupInRout.PublicKey));
+
+                if (IsGroupRoster(groupInRout))
+                {
+                    result.Add(EmptyBreadcrumbForRosterRow.CreateEmptyBreadcrumbForRosterRow(groupInRout.PublicKey));
+                }
+            }
+            return result;
         }
 
-        protected IEnumerable<InterviewItemId> BuildSiblingsForNonPropagatedGroups(IList<IGroup> rout,
-            InterviewItemId key)
+        protected IEnumerable<InterviewItemId> BuildSiblingsForNonPropagatedGroups(IList<IGroup> rout, InterviewItemId key)
         {
             var parent = rout[rout.Count - 2];
             return parent.Children.OfType<IGroup>().Select(
-                g => new InterviewItemId(g.PublicKey));
+                g => new InterviewItemId(g.PublicKey, key.InterviewItemPropagationVector));
         }
 
         protected HeaderItem BuildHeader(IQuestion question)
@@ -733,7 +794,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var key = new InterviewItemId(group.PublicKey);
                 return
                     new QuestionnaireNavigationPanelItem(
-                        key, this.Screens[key]);
+                        key, GetScreenViewModel);
             }
             return null;
         }
@@ -745,14 +806,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private QuestionViewModel CreateQuestionView(IQuestion question)
         {
-            var newType = this.CalculateViewType(question.QuestionType);
+            var questionViewType = this.CalculateViewType(question.QuestionType);
             if (this.selectableQuestionTypes.Contains(question.QuestionType))
             {
                 if (question.LinkedToQuestionId.HasValue)
-                    return this.CreateLinkedQuestion(question, newType);
-                return this.CreateSelectableQuestion(question, newType);
+                    return this.CreateLinkedQuestion(question, questionViewType);
+                return this.CreateSelectableQuestion(question, questionViewType);
             }
-            return this.CreateValueQuestion(question, newType);
+            else if (this.linkedQuestionTypes.Contains(question.QuestionType))
+            {
+                return this.CreateTextListQuestion(question, questionViewType);
+            }
+            return this.CreateValueQuestion(question, questionViewType);
         }
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
@@ -800,6 +865,27 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
+        private TextListQuestionViewModel CreateTextListQuestion(IQuestion question, QuestionType newType)
+        {
+            var textListQuestion = question as TextListQuestion;
+
+            return new TextListQuestionViewModel(
+                new InterviewItemId(question.PublicKey), question.QuestionText,
+                newType,
+                true, 
+                textListQuestion.Instructions,
+                textListQuestion.Comments, 
+                true,
+                textListQuestion.Mandatory,
+                textListQuestion.ValidationMessage,
+                textListQuestion.StataExportCaption,
+                textListQuestion.GetVariablesUsedInTitle(),
+
+                textListQuestion.Answers.Select(a => new TextListAnswerViewModel(a.AnswerValue, a.AnswerText)).ToArray(),
+                textListQuestion.MaxAnswerCount);
+        }
+
+
         private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType)
         {
             var multyOptionsQuestion = question as MultyOptionsQuestion;
@@ -841,10 +927,27 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private readonly QuestionType[] singleOptionTypeVariation = new[]
             {QuestionType.SingleOption, QuestionType.DropDownList, QuestionType.YesNo};
 
+        private readonly QuestionType[] linkedQuestionTypes = new[] 
+        { QuestionType.TextList};
+
         public bool IsQuestionReferencedByAnyLinkedQuestion(Guid questionId)
         {
             return this.referencedQuestionToLinkedQuestionsMap.ContainsKey(questionId)
                 && this.referencedQuestionToLinkedQuestionsMap[questionId].Any();
+        }
+    }
+
+    public static class EmptyBreadcrumbForRosterRow
+    {
+        public static InterviewItemId CreateEmptyBreadcrumbForRosterRow(Guid rosterId)
+        {
+            return new InterviewItemId(rosterId, new decimal[] { -1 });
+        }
+
+        public static bool IsInterviewItemIdEmptyBreadcrumbForRosterRow(InterviewItemId interviewItemId)
+        {
+            return interviewItemId.InterviewItemPropagationVector != null && interviewItemId.InterviewItemPropagationVector.Length == 1 &&
+                interviewItemId.InterviewItemPropagationVector[0] == -1;
         }
     }
 }

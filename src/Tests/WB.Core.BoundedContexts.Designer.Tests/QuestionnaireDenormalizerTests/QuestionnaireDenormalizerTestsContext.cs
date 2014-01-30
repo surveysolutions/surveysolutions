@@ -30,7 +30,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
-            IQuestionFactory questionFactory = null, ILogger logger = null, IQuestionnaireDocumentUpgrader upgrader = null)
+            IQuestionFactory questionFactory = null, 
+            ILogger logger = null, 
+            IQuestionnaireDocumentUpgrader upgrader = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
@@ -88,13 +90,24 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             };
         }
 
-        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null)
+        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null, int? maxValue = null)
         {
             return new NumericQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
-                QuestionType = QuestionType.Numeric
+                QuestionType = QuestionType.Numeric,
+                MaxValue = maxValue
+            };
+        }
+
+
+        protected static TextListQuestion CreateTextListQuestion(Guid? questionId = null)
+        {
+            return new TextListQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionType = QuestionType.TextList
             };
         }
 
@@ -205,6 +218,33 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
         }
 
+        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
+            Guid questionId, Guid parentGroupId)
+        {
+            return ToPublishedEvent(new TextListQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId
+            });
+        }
+
+
+        protected static IPublishedEvent<TextListQuestionCloned> CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
+        {
+            return ToPublishedEvent(new TextListQuestionCloned
+            {
+                PublicKey = questionId,
+                SourceQuestionId = sourceQuestionId
+            });
+        }
+
+        protected static IPublishedEvent<TextListQuestionChanged> CreateTextListQuestionChangedEvent(Guid questionId)
+        {
+            return ToPublishedEvent(new TextListQuestionChanged
+            {
+                PublicKey = questionId
+            });
+        }
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
             Guid questionId, int? maxValue = null, List<Guid> triggers = null)
         {
@@ -257,5 +297,41 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 QuestionnaireDocument = questionnaireDocument ?? new QuestionnaireDocument()
             });
         }
+
+
+        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
+            Guid questionId, Guid? parentGroupId = null, int? maxAnswerCount = null)
+        {
+            return ToPublishedEvent(new TextListQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        protected static IPublishedEvent<TextListQuestionCloned> TextListQuestionClonedEvent(
+            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxAnswerCount = null)
+        {
+            return ToPublishedEvent(new TextListQuestionCloned
+            {
+                PublicKey = questionId,
+                SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        protected static IPublishedEvent<TextListQuestionChanged> CreateTextListQuestionChangedEvent(
+            Guid questionId, int? maxAnswerCount = null)
+        {
+            return ToPublishedEvent(new TextListQuestionChanged
+            {
+                PublicKey = questionId,
+                MaxAnswerCount = maxAnswerCount
+                
+            });
+        }
+
     }
 }

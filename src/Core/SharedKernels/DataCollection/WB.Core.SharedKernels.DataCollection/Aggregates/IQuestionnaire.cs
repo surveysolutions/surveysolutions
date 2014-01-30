@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -21,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         QuestionType GetQuestionType(Guid questionId);
 
-        Guid? GetQuestionLinkedQuestionId(Guid questionId);
+        bool IsQuestionLinked(Guid questionId);
 
         string GetQuestionTitle(Guid questionId);
 
@@ -64,6 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
         int? GetMaxValueForNumericQuestion(Guid questionId);
+
+        int? GetListSizeForListQuestion(Guid questionId);
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);
 

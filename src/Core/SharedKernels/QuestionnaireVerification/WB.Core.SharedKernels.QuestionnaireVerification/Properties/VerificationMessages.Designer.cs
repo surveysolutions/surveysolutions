@@ -206,7 +206,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question of this type cannot be prefilled .
+        ///   Looks up a localized string similar to Question of this type cannot be prefilled..
         /// </summary>
         internal static string WB0022_PrefilledQuestionsOfIllegalType {
             get {
@@ -215,16 +215,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is question can be used as roster size question only numeric or categorical with multiple answers question..
+        ///   Looks up a localized string similar to Roster size source question is incorrect. Only numeric, categorical with multiple answers or text list questions can be used..
         /// </summary>
-        internal static string WB0023_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion {
+        internal static string WB0023_RosterSizeSourceQuestionTypeIsIncorrect {
             get {
-                return ResourceManager.GetString("WB0023_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterSizeQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0023_RosterSizeSourceQuestionTypeIsIncorrect", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size question cannot be inside any roster group.
+        ///   Looks up a localized string similar to Roster size question cannot be inside any roster group..
         /// </summary>
         internal static string WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup {
             get {
@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max value for roster size question could not be empty.
+        ///   Looks up a localized string similar to Max value for roster size question could not be empty..
         /// </summary>
         internal static string WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty {
             get {
@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max value for roster size question could be in range [1, 20].
+        ///   Looks up a localized string similar to Max value for roster size question could be in range [1, 20]..
         /// </summary>
         internal static string WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20 {
             get {
@@ -251,7 +251,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire have autopropagated groups.
+        ///   Looks up a localized string similar to Questionnaire have autopropagated groups..
         /// </summary>
         internal static string WB0027_QuestionnaireHaveAutopropagatedGroups {
             get {
@@ -260,7 +260,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire have autopropagated questions.
+        ///   Looks up a localized string similar to Questionnaire have autopropagated questions..
         /// </summary>
         internal static string WB0028_QuestionnaireHaveAutopropagatedQuestions {
             get {
@@ -269,16 +269,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster group could not have groups inside itself.
+        ///   Looks up a localized string similar to Roster could not have roster inside itself..
         /// </summary>
-        internal static string WB0029_RosterGroupHasGroup {
+        internal static string WB0029_RosterHasRoster {
             get {
-                return ResourceManager.GetString("WB0029_RosterGroupHasGroup", resourceCulture);
+                return ResourceManager.GetString("WB0029_RosterHasRoster", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pre-filled questions can&apos;t be inside of roster.
+        ///   Looks up a localized string similar to Pre-filled questions can&apos;t be inside of roster..
         /// </summary>
         internal static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
             get {
@@ -287,7 +287,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is question could not have fixed titles.
+        ///   Looks up a localized string similar to Group where roster size source is question could not have fixed titles..
         /// </summary>
         internal static string WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles {
             get {
@@ -296,7 +296,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is fixed titles could not have roster size question.
+        ///   Looks up a localized string similar to Group where roster size source is fixed titles could not have roster size question..
         /// </summary>
         internal static string WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion {
             get {
@@ -305,7 +305,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is fixed titles could not have roster title question.
+        ///   Looks up a localized string similar to Group where roster size source is fixed titles could not have roster title question..
         /// </summary>
         internal static string WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion {
             get {
@@ -314,7 +314,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is question has invalid roster title question.
+        ///   Looks up a localized string similar to Group where roster size source is question has invalid roster title question..
         /// </summary>
         internal static string WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion {
             get {
@@ -323,7 +323,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size question is categorical multy answers question could not have roster title question.
+        ///   Looks up a localized string similar to Group where roster size question is categorical multy answers question could not have roster title question..
         /// </summary>
         internal static string WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion {
             get {
@@ -333,7 +333,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is fixed titles could not have empty titles.
+        ///   Looks up a localized string similar to Group where roster size source is fixed titles could not have empty titles..
         /// </summary>
         internal static string WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles {
             get {
@@ -342,11 +342,74 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of fixed roster titles could not be more than 250.
+        ///   Looks up a localized string similar to Number of fixed roster titles could not be more than 250..
         /// </summary>
         internal static string WB0038_RosterFixedTitlesHaveMoreThan250Items {
             get {
                 return ResourceManager.GetString("WB0038_RosterFixedTitlesHaveMoreThan250Items", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List question cannot be prefilled..
+        /// </summary>
+        internal static string WB0039_TextListQuestionCannotBePrefilled {
+            get {
+                return ResourceManager.GetString("WB0039_TextListQuestionCannotBePrefilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List  question cannot be filled by supervisor..
+        /// </summary>
+        internal static string WB0040_TextListQuestionCannotBeFilledBySupervisor {
+            get {
+                return ResourceManager.GetString("WB0040_TextListQuestionCannotBeFilledBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List question cannot contain validation expression..
+        /// </summary>
+        internal static string WB0041_TextListQuestionCannotCustomValidation {
+            get {
+                return ResourceManager.GetString("WB0041_TextListQuestionCannotCustomValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max answer count could be in range [1, 40]..
+        /// </summary>
+        internal static string WB0042_TextListQuestionMaxAnswerInRange1And40 {
+            get {
+                return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List question cannot be used in validation expressions..
+        /// </summary>
+        internal static string WB0043_TextListQuestionCannotBeUsedInValidationExpressions {
+            get {
+                return ResourceManager.GetString("WB0043_TextListQuestionCannotBeUsedInValidationExpressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List question cannot be used in enablement conditions..
+        /// </summary>
+        internal static string WB0044_TextListQuestionCannotBeUsedInConditionsExpressions {
+            get {
+                return ResourceManager.GetString("WB0044_TextListQuestionCannotBeUsedInConditionsExpressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has option(s) with empty value.
+        /// </summary>
+        internal static string WB0045_QuestionHasOptionsWithEmptyValue {
+            get {
+                return ResourceManager.GetString("WB0045_QuestionHasOptionsWithEmptyValue", resourceCulture);
             }
         }
     }

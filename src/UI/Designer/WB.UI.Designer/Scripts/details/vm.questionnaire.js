@@ -309,6 +309,17 @@
                         command = config.commands.updateNumericQuestion;
                     }
                     break;
+                 case config.questionTypes.TextList:
+                     if (question.isNew()) {
+                         if (question.isClone()) {
+                             command = config.commands.cloneTextListQuestion;
+                         } else {
+                             command = config.commands.createTextListQuestion;
+                         }
+                     } else {
+                         command = config.commands.updateTextListQuestion;
+                     }
+                    break;
                 default:
                     if (question.isNew()) {
                         if (question.isClone()) {
@@ -411,11 +422,13 @@
                 var isItemRosterTitleQuestion = false;
                 var canMoveRosterTitleQuestionToTarget = false;
                 var isItemRosterSizeQuestion = false;
+                var isItemLinkedQuestion = false;
                 var targetGroupIsRoster = false;
                 if (moveItemType == "question") {
                     isItemRosterTitleQuestion = datacontext.questions.isRosterTitleQuestion(arg.item.id());
                     isItemRosterSizeQuestion = datacontext.questions.isRosterSizeQuestion(arg.item.id());
                     isItemFeaturedQuestion = arg.item.isFeatured();
+                    isItemLinkedQuestion = datacontext.questions.isLinkedQuestion(arg.item);
                 }
 
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
@@ -441,16 +454,17 @@
                     return;
                 }
                 var source = datacontext.groups.getLocalById(fromId);
-                
+                    
                 if (isDropedInQuestionnaire) {
                     toId = null;
                 } else {
                     var target = datacontext.groups.getLocalById(toId);
 
-                    targetGroupIsRoster = target.isRoster();
+                    targetGroupIsRoster = datacontext.groups.isRosterOrInsideRoster(target);
+                    
                     
                     if (isItemRosterTitleQuestion && targetGroupIsRoster) {
-                        canMoveRosterTitleQuestionToTarget = source.rosterSizeQuestion() == target.rosterSizeQuestion();
+                        canMoveRosterTitleQuestionToTarget = datacontext.questions.isRosterTitleInRosterByRosterSize(arg.item, target);
                     }
 
                     if (target.isNew()) {
@@ -476,16 +490,42 @@
                         config.logger(config.warnings.cantMoveRosterTitleQuestion);
                         return;
                     }
+                    
+                    if (isItemLinkedQuestion && !targetGroupIsRoster) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveLinkedQuestionOutsideRoster);
+                        return;
+                    }
 
                     if (isDropedInQuestionnaire && moveItemType == "group" && arg.item.isRoster()) {
                         arg.cancelDrop = true;
                         config.logger(config.warnings.propagatedGroupCantBecomeChapter);
                         return;
                     }
-
-                    if (!isDropedInQuestionnaire && targetGroupIsRoster && moveItemType == "group") {
+                    
+                    if (moveItemType == "group" && targetGroupIsRoster && datacontext.groups.hasRosterSizeQuestion(arg.item)) {
                         arg.cancelDrop = true;
-                        config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
+                        config.logger(config.warnings.cantMoveGroupWithRosterSizeQuestionIntoRoster);
+                        return;
+                    }
+                    
+                    if (moveItemType == "group" && !arg.item.isRoster() && datacontext.groups.hasRosterTitleQuestion(arg.item)) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveGroupWithRosterTitleQuestion);
+                        return;
+                    }
+                    
+                    if (moveItemType == "group" && !arg.item.isRoster() && !targetGroupIsRoster && datacontext.groups.hasLinkedQuestion(arg.item)) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveGroupWithLinkedQuestion);
+                        return;
+                    }
+                    
+                    
+                    
+                    if (!isDropedInQuestionnaire && moveItemType == "group" && targetGroupIsRoster && datacontext.groups.isRosterOrContainsRoster(arg.item)) {
+                        arg.cancelDrop = true;
+                        config.logger(config.warnings.cantMoveRosterIntoRoster);
                         return;
                     }
                 }

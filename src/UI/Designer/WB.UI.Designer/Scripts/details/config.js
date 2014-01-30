@@ -11,7 +11,7 @@
                 "DateTime": "DateTime",
                 "Text": "Text",
                 "GpsCoordinates": "GpsCoordinates",
-                "MultiAnswer": "MultiAnswer"
+                "TextList": "TextList"
             },
             rosterSizeSourceTypes = {
                 "FixedTitles": "FixedTitles",
@@ -51,8 +51,8 @@
                     value: "Geo Location"
                 },
                 {
-                    key: "MultiAnswer",
-                    value: "MultiAnswer"
+                    key: "TextList",
+                    value: "List"
                 }
             ],
             questionScopes = {
@@ -69,10 +69,13 @@
                 groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
                 createNumericQuestion: "AddNumericQuestion",
+                createTextListQuestion: "AddTextListQuestion",
                 cloneQuestion: "CloneQuestion",
                 cloneNumericQuestion: "CloneNumericQuestion",
+                cloneTextListQuestion: "CloneTextListQuestion",
                 updateQuestion: "UpdateQuestion",
                 updateNumericQuestion: "UpdateNumericQuestion",
+                updateTextListQuestion: "UpdateTextListQuestion",
                 deleteQuestion: "DeleteQuestion",
                 questionMove: "MoveQuestion",
                 addSharedPersonToQuestionnaire: "AddSharedPersonToQuestionnaire",
@@ -115,9 +118,25 @@
                     title: "Can't move",
                     text: "You can't move a question outside of any group"
                 },
-                cantMoveGroupIntoPropagatedGroup: {
+                cantMoveRosterIntoRoster: {
                     title: "Can't move",
-                    text: "You can't move a group into a roster"
+                    text: "You can't move a roster inside another roster"
+                },
+                cantMoveGroupWithLinkedQuestion: {
+                    title: "Can't move",
+                    text: "You can't move a group that contains question used as linked question inside another group"
+                },
+                cantMoveLinkedQuestionOutsideRoster: {
+                    title: "Can't move",
+                    text: "You can't move a question that used as linked question outside roster"
+                },
+                cantMoveGroupWithRosterSizeQuestionIntoRoster: {
+                    title: "Can't move",
+                    text: "You can't move a group with roster size question into a roster"
+                },
+                cantMoveGroupWithRosterTitleQuestion: {
+                    title: "Can't move",
+                    text: "You can't move a group with roster title question"
                 },
                 cantMoveUnsavedItem: {
                     title: "Can't move",

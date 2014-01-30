@@ -5,8 +5,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
     public class InterviewQuestion
     {
-        
-
         public InterviewQuestion()
         {
             Valid = true;

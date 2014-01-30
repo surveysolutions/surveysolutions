@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         public ExportedHeaderItem(IQuestion question, int columnCount)
             : this(question)
         {
-            ThrowIfQuestionIsNotMultiSelect(question);
+            this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
             
             ColumnNames = new string[columnCount];
             Titles=new string[columnCount];
@@ -40,7 +41,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                 ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, i);
 
                 if (!IsQuestionLinked(question))
-                    Titles[i] += string.Format(":{0}", question.Answers[i].AnswerText);
+                {
+                    if(question is IMultyOptionsQuestion)
+                        Titles[i] += string.Format(":{0}", question.Answers[i].AnswerText);
+                    if(question is ITextListQuestion)
+                        Titles[i] += string.Format(":{0}", i);
+                }
             }
         }
 
@@ -49,9 +55,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return question.LinkedToQuestionId.HasValue;
         }
 
-        private void ThrowIfQuestionIsNotMultiSelect(IQuestion question)
+        private void ThrowIfQuestionIsNotMultiSelectOrTextList(IQuestion question)
         {
-            if (question.QuestionType != QuestionType.MultyOption)
+            if (question.QuestionType != QuestionType.MultyOption && question.QuestionType != QuestionType.TextList)
                 throw new InvalidOperationException(string.Format(
                     "question '{1}' with type '{0}' can't be exported as more then one column",
                     question.QuestionType, question.QuestionText));
