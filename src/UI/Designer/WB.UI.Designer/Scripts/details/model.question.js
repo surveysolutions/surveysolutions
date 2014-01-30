@@ -329,14 +329,6 @@
                        }]
                    });
 
-                   self.alias.valueHasMutated();
-                   self.qtype.valueHasMutated();
-                   self.selectedLinkTo.valueHasMutated();
-                   self.answerOptions.valueHasMutated();
-                   self.validationExpression.valueHasMutated();
-                   self.condition.valueHasMutated();
-                   self.title.valueHasMutated();
-
                    self.errors = ko.validation.group(self);
 
                    self.wasValidationAttached = true;
