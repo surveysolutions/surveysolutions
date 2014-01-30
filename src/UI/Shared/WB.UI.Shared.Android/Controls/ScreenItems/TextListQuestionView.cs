@@ -65,6 +65,36 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return new AnswerTextListQuestionCommand(this.QuestionnairePublicKey,this.Membership.CurrentUser.Id,
                 this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, answers.ToArray());
         }
-        
+
+        protected override bool DoesModelHaveItem(string tagName, string newAnswer)
+        {
+            decimal value = decimal.Parse(tagName);
+            return ListAnswers.Any(i => i.Value == value && i.Answer == newAnswer );
+        }
+
+        protected override IEnumerable<TextListAnswerViewModel> GetNewListAnswersToSave(string tagName, string newAnswer, bool addOrRemove)
+        {
+            decimal value = decimal.Parse(tagName);
+
+            if (!addOrRemove)
+                return ListAnswers.Where(i => i.Value != value).ToList();
+
+            var newListAnswers = ListAnswers.ToList();
+            var item = ListAnswers.FirstOrDefault(i => i.Value == value);
+            if (item != null)
+                item.Answer = newAnswer;
+            else
+            {
+                newListAnswers.Add(new TextListAnswerViewModel(tagName, newAnswer));
+            }
+
+            return newListAnswers;
+        }
+
+        protected override TextListAnswerViewModel FindAnswerInModelByTag(string tag)
+        {
+            var answerGuid = decimal.Parse(tag);
+            return this.TypedModel.ListAnswers.FirstOrDefault(a => a.Value == answerGuid);
+        }
     }
 }
