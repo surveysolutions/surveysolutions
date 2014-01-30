@@ -85,9 +85,16 @@ namespace Core.Supervisor.Views.Interview
             var textListQuestion = question as ITextListQuestion;
             if (textListQuestion != null)
             {
-                var typedAnswer = Answer as InterviewTextListAnswers;
+                this.Answer = null;
+                var typedAnswer = answeredQuestion.Answer as InterviewTextListAnswers;
                 if (typedAnswer != null)
-                    this.Answer = string.Join(",", typedAnswer.Answers.Select(a => a.Answer));
+                {
+                    this.Options = typedAnswer.Answers.Select(a => new QuestionOptionView
+                    {
+                        Value = a.Value,
+                        Label = a.Answer
+                    }).ToList();
+                }
             }
         }
 

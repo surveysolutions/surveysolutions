@@ -93,8 +93,8 @@
         TextListQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.answer = ko.observable().extend({ required: true });
 
+            self.options = ko.observableArray();
             self.errors = ko.validation.group(self);
             self.isValid = ko.observable(true);
         },
