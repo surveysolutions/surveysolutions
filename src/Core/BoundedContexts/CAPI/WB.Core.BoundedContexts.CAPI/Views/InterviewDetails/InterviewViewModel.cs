@@ -813,7 +813,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     return this.CreateLinkedQuestion(question, questionViewType);
                 return this.CreateSelectableQuestion(question, questionViewType);
             }
-            else if (this.linkedQuestionTypes.Contains(question.QuestionType))
+            else if (this.listQuestionTypes.Contains(question.QuestionType))
             {
                 return this.CreateTextListQuestion(question, questionViewType);
             }
@@ -927,8 +927,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private readonly QuestionType[] singleOptionTypeVariation = new[]
             {QuestionType.SingleOption, QuestionType.DropDownList, QuestionType.YesNo};
 
-        private readonly QuestionType[] linkedQuestionTypes = new[] 
-        { QuestionType.TextList};
+        private readonly QuestionType[] listQuestionTypes = new[] 
+            { QuestionType.TextList};
 
         public bool IsQuestionReferencedByAnyLinkedQuestion(Guid questionId)
         {
