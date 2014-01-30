@@ -99,6 +99,14 @@
                 }
                 
                 question.isSelected(true);
+
+                question.alias.valueHasMutated();
+                question.qtype.valueHasMutated();
+                question.selectedLinkTo.valueHasMutated();
+                question.answerOptions.valueHasMutated();
+                question.validationExpression.valueHasMutated();
+                question.condition.valueHasMutated();
+                question.title.valueHasMutated();
              
                 question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
                 selectedQuestion(question);
