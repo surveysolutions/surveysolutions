@@ -87,7 +87,7 @@ namespace Core.Supervisor.Views.Interview
             {
                 var typedAnswer = Answer as InterviewTextListAnswers;
                 if (typedAnswer != null)
-                    this.Answer = string.Join(",", typedAnswer.Answers.Select(a => a.Answer));
+                    this.Answer = string.Join(", ", typedAnswer.Answers.Select(a => a.Answer));
             }
         }
 
