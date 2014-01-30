@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.PublicKey = publicKey;
             this.Title = title;
             this.Selected = selected;
-            this.Value = decimal.Parse(value);
+            if (!string.IsNullOrEmpty(value))
+                this.Value = decimal.Parse(value);
             this.ImagePublicKey = imagePublicKey;
             this.AnswerOrder = 0;
         }

@@ -55,6 +55,7 @@
     <Compile Include="Aggregates\UserAR.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
@@ -74,7 +75,9 @@
     <Compile Include="Events\Interview\RosterRowAdded.cs" />
     <Compile Include="Events\Interview\RosterRowRemoved.cs" />
     <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
+    <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
+    <Compile Include="Factories\IQuestionnaireCacheInitializerFactory.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
@@ -154,20 +157,22 @@
     <Compile Include="Implementation\EnumerableExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Implementation\Factories\QuestionnaireCacheInitializerFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireCacheInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
+    <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
-    <Compile Include="ValueObjects\Questionnaire\QuestionIdAndVariableName.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -218,7 +223,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\Services\" />
+    <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

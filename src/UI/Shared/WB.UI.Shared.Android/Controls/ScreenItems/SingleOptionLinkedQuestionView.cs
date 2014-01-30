@@ -13,7 +13,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
 
     public class SingleOptionLinkedQuestionView : AbstractSingleOptionQuestionView<LinkedAnswerViewModel>
     {
-        private const char Separator = ',';
+        private const char Separator = '|';
 
         public SingleOptionLinkedQuestionView(
             Context context,

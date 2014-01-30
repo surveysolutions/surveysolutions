@@ -7,7 +7,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Questionnaire;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -29,11 +28,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-
-            eventContext = new EventContext();
-
+            
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new DateTimeQuestionAnswered(userId, dateQuestionId, new decimal[0], DateTime.Now, new DateTime(1985, 6, 3)));
+
+            eventContext = new EventContext();
         };
 
         Cleanup stuff = () =>
@@ -44,9 +43,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         Because of = () =>
             interview.ReevaluateSynchronizedInterview();
-
-        It should_raise_AnswerDeclaredInvalid_event_with_QuestionId_equal_to_dateQuestionId = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event => @event.QuestionId == dateQuestionId);
 
         It should_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_dateQuestionId = () =>
             eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event => @event.QuestionId == dateQuestionId);

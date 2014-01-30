@@ -38,7 +38,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
 
-            var questionFactory = Mock.Of<IQuestionFactory>(factory => factory.CreateQuestion(it.IsAny<QuestionData>()) == CreateNumericQuestion(questionId, "title"));
+            var numericQuestion = CreateNumericQuestion(questionId, "title");
+
+            var questionFactory = Mock.Of<IQuestionFactory>(factory => factory.CreateQuestion(it.IsAny<QuestionData>()) == numericQuestion);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
         };

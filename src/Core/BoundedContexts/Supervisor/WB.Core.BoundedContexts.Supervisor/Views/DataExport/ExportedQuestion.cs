@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
@@ -63,6 +64,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             var listOfAnswers = value as IEnumerable<object>;
             if (listOfAnswers != null)
                 return listOfAnswers;
+
+            var interviewTextListAnswer = value as InterviewTextListAnswers;
+            if (interviewTextListAnswer != null)
+            {
+                return interviewTextListAnswer.Answers.Select(a => a.Answer).ToArray();
+            }
+
             return null;
         }
 

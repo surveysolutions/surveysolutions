@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -38,7 +39,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
-        IEventHandler<QuestionnaireCloned>, IEventHandler
+        IEventHandler<QuestionnaireCloned>,
+
+        IEventHandler<TextListQuestionAdded>,
+        IEventHandler<TextListQuestionCloned>,
+        IEventHandler<TextListQuestionChanged>,
+
+        IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
@@ -170,7 +177,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.IsInteger,
                     null,
                     e.AreAnswersOrdered,
-                    e.MaxAllowedAnswers));
+                    e.MaxAllowedAnswers,
+                    null));
         }
 
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
@@ -198,7 +206,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.IsInteger,
                     null,
                     e.AreAnswersOrdered,
-                    e.MaxAllowedAnswers));
+                    e.MaxAllowedAnswers,
+                    null));
         }
 
         //// move it out of there
@@ -226,13 +235,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 e.IsInteger,
                 null,
                 e.AreAnswersOrdered,
-                e.MaxAllowedAnswers));
+                e.MaxAllowedAnswers,
+                null));
         }
 
         protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result = new QuestionFactory().CreateQuestion(data);
+            IQuestion result = questionFactory.CreateQuestion(data);
 
             if (result == null)
             {
@@ -274,7 +284,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result = new QuestionFactory().CreateQuestion(data);
+            IQuestion result = questionFactory.CreateQuestion(data);
 
             if (result == null)
             {
@@ -315,6 +325,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.IsInteger, 
                     e.CountOfDecimalPlaces,
                     null,
+                    null,
                     null));
         }
 
@@ -343,6 +354,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.IsInteger, 
                     e.CountOfDecimalPlaces,
                     null,
+                    null,
                     null));
         }
 
@@ -365,13 +377,102 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 e.Instructions,
                 e.Triggers,
                 DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
-                null, null,
+                null, 
+                null,
                 e.IsInteger, 
                 e.CountOfDecimalPlaces,
+                null,
                 null,
                 null));
         }
 
+
+        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
+        {
+            TextListQuestionAdded e = evnt.Payload;
+            AddQuestion(evnt, evnt.Payload.GroupPublicKey,
+                new QuestionData(
+                    e.PublicKey,
+                    QuestionType.TextList,
+                    QuestionScope.Interviewer,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    null,
+                    null,
+                    Order.AZ,
+                    false,
+                    e.Mandatory,
+                    false,
+                    e.Instructions,
+                    new List<Guid>(), 
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    e.MaxAnswerCount));
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
+        {
+            TextListQuestionCloned e = evnt.Payload;
+            CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
+                new QuestionData(
+                    e.PublicKey,
+                    QuestionType.TextList,
+                    QuestionScope.Interviewer,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    null,
+                    null,
+                    Order.AZ,
+                    false,
+                    e.Mandatory,
+                    false,
+                    e.Instructions,
+                    new List<Guid>(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    e.MaxAnswerCount));
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionChanged> evnt)
+        {
+            TextListQuestionChanged e = evnt.Payload;
+            UpdateQuestion(evnt, new QuestionData(
+                e.PublicKey,
+                QuestionType.TextList,
+                QuestionScope.Interviewer,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                null,
+                null,
+                Order.AZ,
+                false,
+                e.Mandatory,
+                false,
+                e.Instructions,
+                new List<Guid>(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                e.MaxAnswerCount));
+        }
+        
         public void Handle(IPublishedEvent<ImageUpdated> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
@@ -454,7 +555,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
 
-            item.UpdateGroup(@event.Payload.GroupId, group => group.IsRoster = false);
+            item.UpdateGroup(@event.Payload.GroupId, group =>
+            {
+                group.IsRoster = false;
+                group.RosterSizeSource = RosterSizeSourceType.Question;
+                group.RosterSizeQuestionId = null;
+                group.RosterTitleQuestionId = null;
+                group.RosterFixedTitles = null;
+            });
 
             this.UpdateQuestionnaire(@event, item);
         }
