@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="Merger\InterviewDataAndQuestionnaireMergerTestContext.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_inside_roster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_error_statuses.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_approve_statuses.cs" />

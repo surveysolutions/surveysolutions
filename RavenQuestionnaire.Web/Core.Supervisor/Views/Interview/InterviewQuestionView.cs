@@ -57,6 +57,15 @@ namespace Core.Supervisor.Views.Interview
                 };
             }
 
+            var listQuestion = question as ITextListQuestion;
+            if (listQuestion != null)
+            {
+                this.Settings = new
+                {
+                    MaxAllowedAnswers = listQuestion.MaxAnswerCount
+                };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;
@@ -72,6 +81,14 @@ namespace Core.Supervisor.Views.Interview
             }).ToList();
             this.IsValid = answeredQuestion.Valid;
             this.Answer = answeredQuestion.Answer;
+
+            var textListQuestion = question as ITextListQuestion;
+            if (textListQuestion != null)
+            {
+                var typedAnswer = Answer as InterviewTextListAnswers;
+                if (typedAnswer != null)
+                    this.Answer = string.Join(",", typedAnswer.Answers.Select(a => a.Answer));
+            }
         }
 
         private static string GetTitleWithSubstitutedVariables(IQuestion question, Dictionary<string, string> answersForTitleSubstitution)

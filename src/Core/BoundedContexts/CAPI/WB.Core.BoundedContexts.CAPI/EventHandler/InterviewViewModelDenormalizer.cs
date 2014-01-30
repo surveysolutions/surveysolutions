@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using System.Linq;
 
 namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<NumericQuestionAnswered>,
         IEventHandler<TextQuestionAnswered>,
+        IEventHandler<TextListQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
@@ -141,6 +143,31 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                            evnt.Payload.Answer);
+        }
+
+        /*
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
+        {
+            Tuple<decimal, string>[] answers = evnt.Payload.Answers;
+
+            var min = (int) answers.Select(tuple => tuple.Item1).Min();
+            var max = (int) answers.Select(tuple => tuple.Item1).Max();
+
+            string textListAnswerAsText = string.Join(
+                ";",
+                Enumerable
+                    .Range(min, max - min + 1)
+                    .Select(index => answers.Where(answer => answer.Item1 == index).Select(answer => answer.Item2).SingleOrDefault() ?? ""));
+
+            this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                textListAnswerAsText);
+        }
+        */
+
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
+       {
+           this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.Answers);
         }
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
@@ -288,7 +315,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             var view = new InterviewViewModel(evnt.EventSourceId, questionnaire.Questionnaire, propagationStructure);
 
             this.interviewStorage.Store(view, evnt.EventSourceId);
-            
         }
     }
 }

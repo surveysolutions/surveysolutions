@@ -55,7 +55,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
             }
             return new QuestionnaireScreenViewModel(QuestionnaireId, "Pre-filled questions", "test", true, new InterviewItemId(Guid.Empty),
                 questionnaire.FeaturedQuestions.Values.Select(q => q as IQuestionnaireItemViewModel).ToList(),
-                new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), 0, 0);
+                new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>());
         }
 
         protected override List<IQuestionnaireViewModel> GetBreadcrumbs()

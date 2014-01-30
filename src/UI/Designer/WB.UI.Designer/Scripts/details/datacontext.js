@@ -2,7 +2,7 @@
     ['jquery', 'underscore', 'ko', 'model', 'config', 'dataservice', 'model.mapper', 'utils', 'input'],
     function ($, _, ko, model, config, dataservice, modelmapper, utils, input) {
 
-        var 
+        var
             itemsToArray = function (items, observableArray, filter, sortFunction) {
                 // Maps the memo to an observableArray, 
                 // then returns the observableArray
@@ -141,13 +141,112 @@
             });
             return propagatable;
         };
+        
+        var isUndefinedOrNull = function (o) {
+            return _.isUndefined(o) || _.isNull(o);
+        };
+
+        groups.isRosterOrInsideRoster = function (group) {
+            while (!isUndefinedOrNull(group)) {
+                if (group.isRoster()) {
+                    return true;
+                }
+
+                group = group.parent();
+            }
+
+            return false;
+        };
 
         groups.getQuestionsFromPropagatableGroups = function () {
             return _.filter(questions.getAllLocal(), function (item) {
-                return !_.isUndefined(item.parent()) && !_.isNull(item.parent()) && item.parent().isRoster();
+                return groups.isRosterOrInsideRoster(item.parent());
             });
         };
 
+        groups.isSelfOrParentForGroup = function(group, parentGroupId) {
+            while (!isUndefinedOrNull(group)) {
+                if (group.id() == parentGroupId) {
+                    return true;
+                }
+
+                group = group.parent();
+            }
+
+            return false;
+        };
+
+        groups.isRosterOrContainsRoster = function(group) {
+            if (isUndefinedOrNull(group))
+                return false;
+
+            return _.any(groups.getPropagateableGroups(), function(roster) {
+                return groups.isSelfOrParentForGroup(roster, group.id());
+            });
+        };
+
+        groups.hasRosterSizeQuestion = function(group) {
+            if (isUndefinedOrNull(group))
+                return false;
+
+            var allRosterSizeQuestions = questions.getAllRosterSizeQuestions();
+
+            return _.any(getAllQuestionsFromGroup(group), function (item) {
+                return _.any(allRosterSizeQuestions, function(questionId) {
+                    return questionId == item.id();
+                });
+            });
+        };
+        groups.hasRosterTitleQuestion = function(group) {
+            if (isUndefinedOrNull(group))
+                return false;
+
+            var allRosterTitleQuestions = questions.getAllRosterTitleQuestions();
+
+            return _.any(getAllQuestionsFromGroup(group), function (item) {
+                return _.any(allRosterTitleQuestions, function (questionId) {
+                    return questionId == item.id();
+                });
+            });
+        };
+        
+        groups.hasLinkedQuestion = function (group) {
+            if (isUndefinedOrNull(group))
+                return false;
+
+            var allLinkedQuestions = questions.getAllLinkedQuestions();
+
+            return _.any(getAllQuestionsFromGroup(group), function (item) {
+                return _.any(allLinkedQuestions, function (questionId) {
+                    return questionId == item.id();
+                });
+            });
+        };
+        
+        groups.getRosterSizeQuestionByGroup = function (group) {
+            while (!isUndefinedOrNull(group)) {
+                if (group.isRoster() && !isUndefinedOrNull(group.rosterSizeQuestion())) {
+                    return group.rosterSizeQuestion();
+                }
+
+                group = group.parent();
+            }
+
+            return null;
+        };
+        
+        var getAllQuestionsFromGroup = function (group) {
+            if (isUndefinedOrNull(group))
+                return [];
+
+            return _.filter(group.children(), function (item) {
+                if (item.type() == "QuestionView")
+                    return item;
+
+                return getAllQuestionsFromGroup(item);
+            });
+        };
+        
         questions.search = function (query) {
             var items = _.filter(questions.getAllLocal(), function (item) {
                 return item.title().toLowerCase().indexOf(query) !== -1;
@@ -177,39 +276,49 @@
                 return question.alias();
             });
         };
-        
+
         questions.getAllAllowedQuestionsForSelect = function () {
             return _.filter(questions.getAllLocal(), function (question) {
-                if (question.parent().isRoster()) {
+                if (groups.isRosterOrInsideRoster(question.parent())) {
                     return false;
                 }
-                return isNumericInteger(question) || isNotLinkedMultyCategorical(question);
+                return isNumericInteger(question) || isNotLinkedMultyCategorical(question) || isTextList(question);
             }).map(function (item) {
-                return { questionId: item.id(), title: item.alias() + ": " + item.title(), isNumeric: isNumericInteger(item), isCategorical: isNotLinkedMultyCategorical(item) };
+                return {
+                    questionId: item.id(),
+                    title: item.alias() + ": " + item.title(),
+                    isNumeric: isNumericInteger(item),
+                    isCategorical: isNotLinkedMultyCategorical(item),
+                    isTextList: isTextList(item)
+                };
             });
         };
 
         questions.getRosterTitleQuestionsForSelect = function (rosterSizeQuestionId) {
             return _.filter(groups.getQuestionsFromPropagatableGroups(), function (question) {
-                var groupRosterSizeQuestionId = question.parent().rosterSizeQuestion();
-                return !_.isUndefined(groupRosterSizeQuestionId) && (groupRosterSizeQuestionId == rosterSizeQuestionId);
+                var groupRosterSizeQuestionId = groups.getRosterSizeQuestionByGroup(question.parent());
+                return !isUndefinedOrNull(groupRosterSizeQuestionId) && (groupRosterSizeQuestionId == rosterSizeQuestionId);
             }).map(function (item) {
                 return { questionId: item.id(), title: item.alias() + ": " + item.title() };
             });
         };
 
-        questions.isRosterTitleQuestion = function(questionId) {
-            return _.any(groups.getPropagateableGroups(), function(group) {
+        questions.isRosterTitleQuestion = function (questionId) {
+            return _.any(groups.getPropagateableGroups(), function (group) {
                 return group.rosterTitleQuestion() == questionId;
             });
         };
 
-        var isNumericInteger = function(question) {
+        var isNumericInteger = function (question) {
             return question.qtype() == config.questionTypes.Numeric && question.isInteger() == 1;
         };
 
         var isNotLinkedMultyCategorical = function (question) {
             return question.qtype() == config.questionTypes.MultyOption && !question.isLinked();
+        };
+
+        var isTextList = function (question) {
+            return question.qtype() == config.questionTypes.TextList;
         };
 
         var getChildItemByIdAndType = function (item) {
@@ -227,11 +336,51 @@
             }
             return 0;
         };
-        
+
 
         questions.isRosterSizeQuestion = function (questionId) {
             return _.any(groups.getPropagateableGroups(), function (group) {
                 return group.rosterSizeQuestion() == questionId;
+            });
+        };
+
+        questions.getAllRosterSizeQuestions = function() {
+            return _.filter(groups.getPropagateableGroups(), function(group) {
+                return !isUndefinedOrNull(group.rosterSizeQuestion());
+            }).map(function(group) {
+                return group.rosterSizeQuestion();
+            });
+        };
+
+        questions.getAllRosterTitleQuestions = function() {
+            return _.filter(groups.getPropagateableGroups(), function(group) {
+                return !isUndefinedOrNull(group.rosterTitleQuestion());
+            }).map(function(group) {
+                return group.rosterTitleQuestion();
+            });
+        };
+
+        questions.getAllLinkedQuestions = function() {
+            return _.filter(questions.getAllLocal(), function(question) {
+                return question.isLinkedAsBool();
+            }).map(function (question) {
+                return question.selectedLinkTo();
+            });
+        };
+
+        questions.isRosterTitleInRosterByRosterSize = function (rosterTitleQuestion, targetRoster) {
+            var sourceRosterSizeId = groups.getRosterSizeQuestionByGroup(rosterTitleQuestion.parent());
+            var targetRisterSizeId = groups.getRosterSizeQuestionByGroup(targetRoster);
+
+            return sourceRosterSizeId == targetRisterSizeId;
+        };
+
+        questions.isLinkedQuestion = function(question) {
+            if (isUndefinedOrNull(question))
+                return false;
+
+            return _.any(questions.getAllLinkedQuestions(), function(linkedQuestionId) {
+                return linkedQuestionId == question.id();
             });
         };
 
@@ -269,19 +418,19 @@
             groupCommand.parentGroupId = parent;
             return groupCommand;
         };
-        
+
         commands[config.commands.updateGroup] = function (group) {
             return converGroupToCommand(group);
         };
 
-        var converGroupToCommand = function(group) {
+        var converGroupToCommand = function (group) {
             return {
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
                 description: group.description(),
                 condition: group.condition(),
-                isRoster : group.isRoster(),
+                isRoster: group.isRoster(),
                 rosterSizeQuestionId: group.isRosterSizeSourceQuestion() ? group.rosterSizeQuestion() : null,
                 rosterSizeSource: group.rosterSizeSource(),
                 rosterFixedTitles: group.isRosterSizeSourceFixedTitles() ? group.rosterFixedTitles().split("\n") : null,
@@ -323,6 +472,23 @@
             return converQuestionToCommand(question);
         };
 
+        commands[config.commands.cloneTextListQuestion] = function (question) {
+            var command = commands[config.commands.createTextListQuestion](question);
+            command.sourceQuestionId = question.cloneSource().id();
+            command.targetIndex = firstSavedIndexInCollection(question.parent().childrenID(), question.id());
+            return command;
+        };
+
+        commands[config.commands.createTextListQuestion] = function (question) {
+            var command = converQuestionToListCommand(question);
+            command.groupId = question.parent().id();
+            return command;
+        };
+
+        commands[config.commands.updateTextListQuestion] = function (question) {
+            return converQuestionToListCommand(question);
+        };
+
         commands[config.commands.deleteQuestion] = function (question) {
             return {
                 questionnaireId: questionnaire.id(),
@@ -352,6 +518,19 @@
                 email: sharedUser.userEmail(),
                 questionnaireId: questionnaire.id()
             };
+        };
+
+        var converQuestionToListCommand = function (question) {
+            var command = converQuestionToCommand(question);
+            var variableName = command["alias"];
+            delete command.isFeatured;
+            delete command.type;
+            delete command.alias;
+            delete command.scope;
+            delete command.validationExpression;
+            delete command.validationMessage;
+            command["variableName"] = variableName;
+            return command;
         };
 
         var converQuestionToCommand = function (question) {
@@ -397,7 +576,8 @@
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
-                case "MultiAnswer":
+                case "TextList":
+                    command.maxAnswerCount = question.maxAnswerCount();
                     break;
             }
             return command;
@@ -426,19 +606,19 @@
 
             }).promise();
         };
-        var sendCommand = function(commandName, args, uiCallbacks) {
+        var sendCommand = function (commandName, args, uiCallbacks) {
             return $.Deferred(function (deferred) {
                 var command = {
                     type: commandName,
                     command: ko.toJSON(commands[commandName](args))
                 }, callbacks = {
-                    success: function(response) {
+                    success: function (response) {
                         if (uiCallbacks && uiCallbacks.success) {
                             uiCallbacks.success();
                         }
                         deferred.resolve(response);
                     },
-                    error: function(response) {
+                    error: function (response) {
                         if (uiCallbacks && uiCallbacks.error) {
                             uiCallbacks.error(response);
                         }

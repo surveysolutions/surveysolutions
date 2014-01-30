@@ -198,7 +198,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\GeoPosition.cs" />
+    <Compile Include="Entities\SubEntities\InterviewTextListAnswer.cs" />
+    <Compile Include="Entities\SubEntities\InterviewTextListAnswers.cs" />
     <Compile Include="Entities\SubEntities\NumericQuestionUtils.cs" />
+    <Compile Include="Entities\SubEntities\QuestionIdAndVariableName.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Entities\SubEntities\Question\IAutoPropagate.cs" />
     <Compile Include="Entities\SubEntities\Question\IAutoPropagateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Group.cs">
@@ -243,6 +248,7 @@
     <Compile Include="Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\Question\ITextListQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\IMultyOptionsQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\INumericQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\MultyOptionsQuestion.cs">
@@ -254,7 +260,7 @@
     <Compile Include="Entities\SubEntities\Question\SingleQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\Question\MultiAnswerQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\TextListQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\TextQuestion.cs">
       <SubType>Code</SubType>
     </Compile>

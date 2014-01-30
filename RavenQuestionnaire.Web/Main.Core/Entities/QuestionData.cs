@@ -27,7 +27,8 @@ namespace Main.Core.Entities
             bool? isInteger,
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
-            int? maxAllowedAnswers
+            int? maxAllowedAnswers,
+            int? maxAnswerCount
             )
         {
             this.PublicKey = publicKey;
@@ -52,6 +53,8 @@ namespace Main.Core.Entities
 
             this.AreAnswersOrdered = areAnswersOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
+
+            this.MaxAnswerCount = maxAnswerCount;
         }
 
         public readonly Guid PublicKey;
@@ -76,5 +79,7 @@ namespace Main.Core.Entities
 
         public readonly bool? AreAnswersOrdered;
         public readonly int? MaxAllowedAnswers;
+
+        public readonly int? MaxAnswerCount;
     }
 }

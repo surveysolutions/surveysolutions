@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities
@@ -20,5 +21,7 @@ namespace Main.Core.Entities.SubEntities
 
         string[] RosterFixedTitles { get; }
         Guid? RosterTitleQuestionId { get; }
+
+        List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
     }
 }

@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericIntegerQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, TextQuestionAnswered>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, TextListQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, SingleOptionQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, SingleOptionLinkedQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsLinkedQuestionAnswered>,
@@ -413,6 +414,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             return new ViewWithSequence<InterviewData>(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                     evnt.Payload.Answer), evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<TextListQuestionAnswered> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                  new InterviewTextListAnswers(evnt.Payload.Answers)), evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<SingleOptionQuestionAnswered> evnt)

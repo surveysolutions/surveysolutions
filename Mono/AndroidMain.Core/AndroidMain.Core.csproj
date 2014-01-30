@@ -166,6 +166,12 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Image.cs">
       <Link>Entities\SubEntities\Image.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\InterviewTextListAnswer.cs">
+      <Link>Entities\SubEntities\InterviewTextListAnswer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\InterviewTextListAnswers.cs">
+      <Link>Entities\SubEntities\InterviewTextListAnswers.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IQuestion.cs">
       <Link>Entities\SubEntities\IQuestion.cs</Link>
     </Compile>
@@ -177,6 +183,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Propagate.cs">
       <Link>Entities\SubEntities\Propagate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\QuestionIdAndVariableName.cs">
+      <Link>Entities\SubEntities\QuestionIdAndVariableName.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\QuestionScope.cs">
       <Link>Entities\SubEntities\QuestionScope.cs</Link>
@@ -205,6 +214,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\INumericQuestion.cs">
       <Link>Entities\SubEntities\Question\INumericQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\ITextListQuestion.cs">
+      <Link>Entities\SubEntities\Question\ITextListQuestion.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
     </Compile>
@@ -213,6 +225,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\SingleQuestion.cs">
       <Link>Entities\SubEntities\Question\SingleQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\TextListQuestion.cs">
+      <Link>Entities\SubEntities\Question\TextListQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\TextQuestion.cs">
       <Link>Entities\SubEntities\Question\TextQuestion.cs</Link>

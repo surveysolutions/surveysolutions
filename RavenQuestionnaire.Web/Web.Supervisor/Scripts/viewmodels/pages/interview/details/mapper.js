@@ -34,10 +34,14 @@
                     item.selectedOptions.push(optionValue + "");
                 });
                 break;
-            case "Text":
+           case "Text":
                 item = new model.TextQuestion();
                 item.answer(_.unescape(dto.Answer));
                 break;
+           case "TextList":
+                    item = new model.TextListQuestion();
+                    item.answer(_.unescape(dto.Answer));
+                    break;
             case "Numeric":
             case "AutoPropagate":
                 item = new model.NumericQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger, _.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);

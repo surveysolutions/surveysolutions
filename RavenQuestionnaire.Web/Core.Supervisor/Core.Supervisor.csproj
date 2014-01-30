@@ -216,9 +216,9 @@
     <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
-    <Compile Include="Views\Revalidate\RevalidateInterviewFactory.cs" />
-    <Compile Include="Views\Revalidate\RevalidateInterviewInputModel.cs" />
-    <Compile Include="Views\Revalidate\RevalidatInterviewView.cs" />
+    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationFactory.cs" />
+    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationInputModel.cs" />
+    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationView.cs" />
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />

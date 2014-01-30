@@ -98,6 +98,8 @@ namespace Main.Core.Documents
             get { return null; }
         }
 
+        public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
+
         public List<Guid> SharedPersons { get; set; }
 
         public long LastEventSequence { get; set; }
@@ -554,5 +556,7 @@ namespace Main.Core.Documents
                 triggeredGroup.RosterSizeQuestionId = rosterSizeQuestionId;
             }
         }
+
+        public bool IsCacheWarmed { get; set; }
     }
 }

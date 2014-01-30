@@ -110,10 +110,23 @@ namespace WB.UI.Shared.Android.Controls
 
         private View CreateRosterCellView(Guid headerId, QuestionnairePropagatedScreenViewModel rosterItem)
         {
-            QuestionViewModel rowModel =
-                rosterItem.Items.FirstOrDefault(q => q.PublicKey.Id == headerId) as QuestionViewModel;
+            var rowModel =
+                rosterItem.Items.FirstOrDefault(q => q.PublicKey.Id == headerId);
 
-            return new RosterQuestionView(this.Context, rowModel, this.questionnaireId, this.questionViewFactory);
+            var questionRowModel = rowModel as QuestionViewModel;
+            if(questionRowModel!=null)
+                return new RosterQuestionView(this.Context, questionRowModel, this.questionnaireId, this.questionViewFactory);
+
+            var groupRowModel = rowModel as QuestionnaireNavigationPanelItem;
+            if (groupRowModel != null)
+            {
+                var groupView= new GroupView(this.Context, groupRowModel);
+
+                groupView.ScreenChanged += (s, e) => this.onScreenChanged(e); 
+                return groupView;
+            }
+
+            return null;
         }
 
         private void tvScreenName_Click(object sender, EventArgs e)

@@ -37,19 +37,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.Text,
             QuestionType.AutoPropagate,
             QuestionType.GpsCoordinates,
-            QuestionType.MultiAnswer
+            QuestionType.TextList,
         };
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
-            QuestionType.MultyOption
+            QuestionType.MultyOption,
+            QuestionType.TextList,
         };
 
         private static readonly HashSet<QuestionType> ReroutedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.Numeric,
-            QuestionType.AutoPropagate
+            QuestionType.AutoPropagate,
         };
 
         #endregion
@@ -202,7 +203,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
 
             if (question == null)
             {
@@ -244,6 +246,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -257,6 +260,43 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
+        }
+
+        internal void Apply(TextListQuestionAdded e)
+        {
+            IQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        QuestionScope.Interviewer,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        null,
+                        null,
+                        Order.AZ,
+                        false,
+                        e.Mandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
+            
         }
 
         private void Apply(QuestionCloned e)
@@ -284,7 +324,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
             if (question == null)
             {
                 return;
@@ -323,6 +364,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -336,6 +378,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
+        }
+
+
+        internal void Apply(TextListQuestionCloned e)
+        {
+            IQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        QuestionScope.Interviewer,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        null,
+                        null,
+                        Order.AZ,
+                        false,
+                        e.Mandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+
         }
 
         private void Apply(NewQuestionnaireCreated e)
@@ -374,7 +454,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers));
+                        e.MaxAllowedAnswers,
+                        null));
 
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
@@ -410,6 +491,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
+                        null,
                         null));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
 
@@ -417,6 +499,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
+        }
+
+        internal void Apply(TextListQuestionChanged e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            IQuestion newQuestion =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        QuestionType.TextList,
+                        QuestionScope.Interviewer,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        null,
+                       null,
+                        Order.AZ,
+                        false,
+                        e.Mandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        e.MaxAnswerCount));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+
         }
 
         private void Apply(QuestionDeleted e)
@@ -601,7 +721,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
-            this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(parentGroupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
@@ -611,6 +730,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId);
 
+            this.ThrowIfRosterPlacedInsideRoster(parentGroupId, isRoster);
+            
 
             this.ApplyEvent(new NewGroupAdded
             {
@@ -640,8 +761,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
-            this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(parentGroupId);
-
+            
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
@@ -693,11 +813,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId);
 
-            this.ThrowIfGroupsShouldBecomeARosterButCannot(groupId, rosterSizeQuestionId);
+            var group = this.GetGroupById(groupId);
 
-            this.ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(groupId, rosterSizeQuestionId.HasValue);
+            var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
+            var wasRosterAndBecomeAGroup = @group.IsRoster && !isRoster;
 
-            this.ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(groupId, rosterSizeQuestionId.HasValue);
+            if (wasGroupAndBecomeARoster)
+            {
+                this.ThrowIfGroupCantBecomeARosterBecausePlacedInsideRoster(group);
+                this.ThrowIfGroupCantBecomeARosterBecauseContainsRoster(group);
+                this.ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(group);    
+            }
+            if (wasRosterAndBecomeAGroup)
+            {
+                this.ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(group);
+                this.ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(group);
+            }
+            
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -728,6 +860,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
 
+            var group = this.GetGroupById(groupId);
+
+            this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
+
             this.ApplyEvent(new GroupDeleted() { GroupPublicKey = groupId, ResponsibleId = responsibleId });
         }
 
@@ -741,9 +877,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (targetGroupId.HasValue)
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
-
-                this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(targetGroupId.Value);
             }
+
+            this.innerDocument.ConnectChildrenWithParent();
+
+            var sourceGroup = this.GetGroupById(groupId);
+            // if we don't have a target group we would like to move source group into root of questionnaire
+            var targetGroup = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
+
+            this.ThrowIfRosterMovedToRoster(sourceGroup, targetGroup);
+            this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
+            this.ThrowIfGroupWithRosterSizeQuestionMovedToRoster(sourceGroup, targetGroup);
+            this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -767,7 +912,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             alias = alias.Trim();
             title = title.Trim();
 
-            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            var parentGroup = this.GetGroupById(groupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, validationExpression, responsibleId);
 
@@ -821,7 +966,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             alias = alias.Trim();
             title = title.Trim();
 
-            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            var parentGroup = this.GetGroupById(groupId);
 
             var questionType = QuestionType.Numeric;
 
@@ -877,7 +1022,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             alias = alias.Trim();
             title = title.Trim();
-            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            var parentGroup = this.GetGroupById(groupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias,
                 isFeatured, validationExpression, responsibleId);
@@ -924,7 +1069,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             alias = alias.Trim();
             title = title.Trim();
 
-            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            var parentGroup = this.GetGroupById(groupId);
             var questionType = QuestionType.Numeric;
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType,
@@ -958,6 +1103,120 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
+
+        public void AddTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var validationExpression = string.Empty;
+
+            variableName = variableName.Trim();
+            title = title.Trim();
+            var parentGroup = this.GetGroupById(groupId);
+
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
+            
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
+
+            this.ApplyEvent(new TextListQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                StataExportCaption = variableName,
+                Mandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        public void CloneTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition,string instructions, Guid sourceQuestionId, int targetIndex,
+            Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var validationExpression = string.Empty;
+            var validationMessage = string.Empty;
+
+            variableName = variableName.Trim();
+            title = title.Trim();
+            var parentGroup = this.GetGroupById(groupId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
+
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
+
+            this.ApplyEvent(new TextListQuestionCloned
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                StataExportCaption = variableName,
+                Mandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        public void UpdateTextListQuestion(Guid questionId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            var questionType = QuestionType.TextList;
+            var isPrefilled = false;
+            var validationExpression = string.Empty;
+            var validationMessage = string.Empty;
+
+
+            variableName = variableName.Trim();
+            title = title.Trim();
+            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
+                isPrefilled, validationExpression, responsibleId);
+
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+
+            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
+
+            this.ApplyEvent(new TextListQuestionChanged
+            {
+                PublicKey = questionId,
+                
+                QuestionText = title,
+                StataExportCaption = variableName,
+                Mandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+                MaxAnswerCount = maxAnswerCount
+            });
+        }
+
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
             string alias, bool isPrefilled, string validationExpression, Guid responsibleId)
         {
@@ -970,6 +1229,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
 
+            this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
         }
 
@@ -996,11 +1256,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var targetGroup = this.innerDocument.Find<IGroup>(targetGroupId);
-            var sourceGroup = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, targetGroup);
+
+            this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(questionId, targetGroup);
-            this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(questionId, sourceGroup, targetGroup);
+            this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(question, targetGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1196,36 +1457,133 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private static Option ConvertAnswerToOption(IAnswer answer)
+        private void ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(IGroup sourceGroup, IGroup targetGroup)
         {
-            return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
+            if (this.IsRosterOrInsideRoster(targetGroup)) return;
+
+            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(sourceGroup).Select(question => question.PublicKey);
+
+            var linkedQuestionSourcesInGroup = this.GetAllLinkedSourceQuestions().Intersect(allQuestionsIdsFromGroup);
+
+            if (linkedQuestionSourcesInGroup.Any())
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "You can't move {0} group to {1} group because it contains linked source question(s): {2}",
+                        FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
+                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument),
+                        string.Join(Environment.NewLine,
+                            linkedQuestionSourcesInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
+            }
         }
 
-        private void ThrowIfGroupsShouldBecomeARosterButCannot(Guid groupId, Guid? rosterSizeQuestionId)
+        private void ThrowIfGroupWithRosterSizeQuestionMovedToRoster(IGroup sourceGroup, IGroup targetGroup)
         {
-            bool groupShouldBecomeARoster = rosterSizeQuestionId.HasValue;
-            if (!groupShouldBecomeARoster)
-                return;
+            if (this.IsRosterOrInsideRoster(sourceGroup)) return;
 
-            var group = this.innerDocument.Find<IGroup>(groupId);
+            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(sourceGroup).Select(question => question.PublicKey);
 
-            bool hasAnyChildSubgroups = group.Children.Any(g => g is IGroup);
-            if (hasAnyChildSubgroups)
-                throw new QuestionnaireException("Group cannot become a roster because it has child subgroups.");
+            var rosterSizeQuestionsInGroup = this.GetAllRosterSizeQuestionIds().Intersect(allQuestionsIdsFromGroup);
+
+            if (this.IsRosterOrInsideRoster(targetGroup) && rosterSizeQuestionsInGroup.Any())
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "You can't move group {0} to roster {1} because it contains roster size question(s): {2}",
+                        FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
+                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument),
+                        string.Join(Environment.NewLine,
+                            rosterSizeQuestionsInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
+            }
         }
 
-        private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
+        private void ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(IGroup sourceGroup, IGroup targetGroup)
         {
-            bool isAddedGroupAChapter = !parentGroupId.HasValue;
-            if (isAddedGroupAChapter)
-                return;
+            if (!IsRosterOrInsideRoster(sourceGroup) && !ContainsRoster(sourceGroup)) return;
 
-            var parentGroup = this.innerDocument.Find<Group>(parentGroupId.Value);
+            IEnumerable<IQuestion> groupQuestions = GetAllQuestionsInGroup(sourceGroup);
 
-            if (parentGroup.IsRoster)
-                throw new QuestionnaireException(string.Format(
-                    "Parent group {0} is a roster and therefore cannot have child groups.",
-                    FormatGroupForException(parentGroupId.Value, this.innerDocument)));
+            var rosterTitleQuestionsWithDependentGroups =
+                from question in groupQuestions
+                let groupsWhereQuestionIsRosterTitle = this.GetGroupsByRosterTitleId(question.PublicKey, sourceGroup.PublicKey)
+                where groupsWhereQuestionIsRosterTitle.Any()
+                select new { RostertTitleQuestion = question, DependentGroups = groupsWhereQuestionIsRosterTitle };
+
+            if (rosterTitleQuestionsWithDependentGroups.All(question => !question.DependentGroups.Any())) return;
+
+            Func<Guid, IEnumerable<IGroup>, string> getWarningMessage = (rosterTitleQuestionId, invalidGroups) =>
+            {
+                return string.Format("Question {0} used as roster title question in group(s):{1}{2}",
+                    this.FormatQuestionForException(rosterTitleQuestionId, this.innerDocument), Environment.NewLine,
+                    string.Join(Environment.NewLine,
+                        invalidGroups.Select(group => FormatGroupForException(@group.PublicKey, this.innerDocument))));
+            };
+
+            if (IsRosterOrInsideRoster(targetGroup))
+            {
+                var rosterForTargetGroup = GetFirstRosterParentGroupOrNull(targetGroup);
+
+                var rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion =
+                    rosterTitleQuestionsWithDependentGroups.Select(
+                        question =>
+                            new
+                            {
+                                RostertTitleQuestion = question.RostertTitleQuestion,
+                                DependentGroups =
+                                    question.DependentGroups.Where(
+                                        group => group.RosterSizeQuestionId != rosterForTargetGroup.RosterSizeQuestionId)
+                            }).Where(question => question.DependentGroups.Any());
+
+                if (!rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion.Any()) return;
+
+                var warningsForRosterTitlesNotInRostersByRosterSize =
+                    rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion.Select(
+                        x => getWarningMessage(x.RostertTitleQuestion.PublicKey, x.DependentGroups));
+
+                throw new QuestionnaireException(
+                    string.Join(
+                        string.Format(
+                            "Group {0} could not be moved to group {1} because contains some questions that used as roster title questions in groups which have roster size question not the same as have target {1} group: ",
+                            FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
+                            FormatGroupForException(targetGroup.PublicKey, this.innerDocument)), Environment.NewLine,
+                        string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
+            }
+            else
+            {
+                if (sourceGroup.IsRoster || ContainsRoster(sourceGroup)) return;
+
+                var warningsForRosterTitlesNotInRostersByRosterSize =
+                    rosterTitleQuestionsWithDependentGroups.Select(
+                        x => getWarningMessage(x.RostertTitleQuestion.PublicKey, x.DependentGroups));
+
+                throw new QuestionnaireException(
+                    string.Join(
+                        string.Format("Group {0} could not be moved to group {1} because: ",
+                            FormatGroupForException(sourceGroup.PublicKey, this.innerDocument), FormatGroupForException(targetGroup.PublicKey, this.innerDocument)),
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
+            }
+        }
+
+        private void ThrowIfRosterMovedToRoster(IGroup sourceGroup, IGroup targetGroup)
+        {
+            var targetIsRoster = IsRosterOrInsideRoster(targetGroup);
+
+            if (targetIsRoster && sourceGroup.IsRoster)
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "You can't move roster {0} into roster {1}",
+                        FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
+                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument)));
+            }
+            if (targetIsRoster && ContainsRoster(sourceGroup))
+            {
+                throw new QuestionnaireException(
+                    string.Format("You can't move group {0} with roster into roster {1}",
+                                  FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
+                                  FormatGroupForException(targetGroup.PublicKey, this.innerDocument)));
+            }
         }
 
         private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(bool isAutopropagating, Guid[] triggeredGroupIds)
@@ -1253,7 +1611,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
-            if (isPrefilled && parentGroup.IsRoster)
+            if (isPrefilled && IsRosterOrInsideRoster(parentGroup))
                 throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
         }
 
@@ -1375,26 +1733,40 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Question type {0} rerouted on QuestionType specific command", type));
         }
 
+        private IEnumerable<IQuestion> GetAllCategoricalLinkedQuestions()
+        {
+            return this.innerDocument.Find<IQuestion>(question => question.LinkedToQuestionId.HasValue);
+        }
+        private IEnumerable<Guid> GetAllLinkedSourceQuestions()
+        {
+            return this.GetAllCategoricalLinkedQuestions().Select(question => question.LinkedToQuestionId.Value);
+        }
+        private IEnumerable<Guid> GetAllRosterSizeQuestionIds()
+        {
+            return
+                this.innerDocument.Find<IGroup>(group => group.RosterSizeQuestionId.HasValue)
+                    .Select(group => group.RosterSizeQuestionId.Value);
+        }
+
         private bool IsUnderPropagatableGroup(IComposite item)
         {
             this.innerDocument.ConnectChildrenWithParent();
 
-            return this.GetFirstRosterParentGroupIdOrNull(item) != null;
+            return this.GetFirstRosterParentGroupOrNull(item) != null;
         }
 
-        private Guid? GetFirstRosterParentGroupIdOrNull(IComposite item)
+        private IGroup GetFirstRosterParentGroupOrNull(IComposite item)
         {
-            if (item == null)
-                return null;
-
-            var itemAsGroup = item as IGroup;
-            if (itemAsGroup != null)
+            while (item != null)
             {
-                if (itemAsGroup.IsRoster)
-                    return itemAsGroup.PublicKey;
+                var parentGroup = item as IGroup;
+                if (parentGroup != null && parentGroup.IsRoster)
+                    return parentGroup;
+
+                item = item.GetParent();
             }
 
-            return this.GetFirstRosterParentGroupIdOrNull(item.GetParent());
+            return null;
         }
 
         private List<Guid> GetAllAutopropagationQuestionsAsVector(IComposite item)
@@ -1648,6 +2020,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return elements.Distinct().Count() == elements.Count();
         }
 
+
+        private static void ThrowIfMaxAnswerCountNotInRange1to40(int? maxAnswerCount)
+        {
+            if (maxAnswerCount.HasValue && !Enumerable.Range(1, 40).Contains(maxAnswerCount.Value))
+            {
+                throw new  QuestionnaireException(
+                    DomainExceptionType.MaxAnswerCountNotInRange,
+                    "Maximum number of answers should be in range ftom 1 to 40");
+            }
+        }
+
         private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
         {
             this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IQuestion>(
@@ -1766,7 +2149,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(exceptionType, getExceptionDescription(elementsWithSameId));
             }
-        }
+         }
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId)
         {
@@ -1905,7 +2288,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid groupId)
         {
-            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x.PublicKey));
+            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x));
 
             var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
                 question =>
@@ -1929,7 +2312,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(Guid groupId)
         {
-            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x.PublicKey));
+            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x));
 
             var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
                 question => this.GetGroupsByRosterTitleId(question.PublicKey, groupId).Select(GetTitle));
@@ -1950,26 +2333,99 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 group => !exceptGroups.Contains(group.PublicKey) && (group.RosterTitleQuestionId == questionId));
         }
 
-        private void ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(Guid questionId, IGroup sourceGroup,
-            IGroup targetGroup)
+        private void ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(IQuestion question, IGroup targetGroup)
         {
-            var groupsByRosterTitleId = this.GetGroupsByRosterTitleId(questionId);
 
-            if (!groupsByRosterTitleId.Any()) return;
+            if (!GetGroupsByRosterTitleId(question.PublicKey).Any())
+                return;
 
-            if (!targetGroup.RosterSizeQuestionId.HasValue ||
-                (targetGroup.RosterSizeQuestionId.Value != groupsByRosterTitleId.FirstOrDefault().RosterSizeQuestionId.Value))
+            this.innerDocument.ConnectChildrenWithParent();
+
+            IGroup sourceRoster = GetFirstRosterParentGroupOrNull(question);
+            IGroup targetRoster = GetFirstRosterParentGroupOrNull(targetGroup);
+
+            if (targetRoster == null || (sourceRoster != null && targetRoster != null && sourceRoster.RosterSizeQuestionId.HasValue && 
+                targetRoster.RosterSizeQuestionId.HasValue && sourceRoster.RosterSizeQuestionId != targetRoster.RosterSizeQuestionId))
                 throw new QuestionnaireException(
-                    string.Format("You can move a roster title question {0} only to a roster group that has a roster size question {1}",
-                        this.FormatQuestionForException(questionId, this.innerDocument),
-                        this.FormatQuestionForException(sourceGroup.RosterSizeQuestionId.Value, this.innerDocument)));
+                    string.Format(
+                        "You can move a roster title question {0} only to a roster group that has a roster size question {1}",
+                        this.FormatQuestionForException(question.PublicKey, this.innerDocument),
+                        this.FormatQuestionForException(sourceRoster.RosterSizeQuestionId.Value, this.innerDocument)));
         }
 
         private void ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(Guid questionId, IGroup parentGroup)
         {
-            if (this.IsRosterSizeQuestion(questionId) && parentGroup.IsRoster)
+            if (this.IsRosterSizeQuestion(questionId) && IsRosterOrInsideRoster(parentGroup))
                 throw new QuestionnaireException(string.Format("Roster size question {0} cannot be placed inside roster group.",
                     this.FormatQuestionForException(questionId, this.innerDocument)));
+        }
+
+        private void ThrowIfRosterPlacedInsideRoster(Guid? parentGroupId,bool isRoster)
+        {
+            if (!isRoster || !parentGroupId.HasValue) return;
+
+            var parentGroup = this.GetGroupById(parentGroupId.Value);
+
+            var parentRoster = this.GetFirstRosterParentGroupOrNull(parentGroup);
+            if (parentRoster != null)
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "You can't place {0} roster inside {1} roster",
+                        FormatGroupForException(parentGroup.PublicKey, this.innerDocument),
+                        FormatGroupForException(parentRoster.PublicKey, this.innerDocument)));
+            }
+        }
+
+        private void ThrowIfGroupCantBecomeARosterBecausePlacedInsideRoster(IGroup group)
+        {
+            var parentRoster = this.GetFirstRosterParentGroupOrNull(@group);
+            if (parentRoster != null)
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "This {0} group can't become a roster because placed inside {1} roster",
+                        FormatGroupForException(group.PublicKey, this.innerDocument),
+                        FormatGroupForException(parentRoster.PublicKey, this.innerDocument)));
+            }
+        }
+
+        private void ThrowIfGroupCantBecomeARosterBecauseContainsRoster(IGroup group)
+        {
+            if (this.ContainsRoster(@group))
+            {
+                throw new QuestionnaireException(string.Format("This {0} group can't become a roster because contains roster",
+                    FormatGroupForException(group.PublicKey, this.innerDocument)));
+            }
+        }
+
+        private bool IsRosterOrInsideRoster(IGroup group)
+        {
+            while (group != null)
+            {
+                if (group.IsRoster)
+                    return true;
+
+                group = (IGroup) group.GetParent();
+            }
+
+            return false;
+        }
+
+        private bool ContainsRoster(IGroup group)
+        {
+            if (group != null)
+            {
+                foreach (var subGroup in group.Children.OfType<IGroup>())
+                {
+                    if (subGroup.IsRoster || ContainsRoster(subGroup))
+                    {
+                        return true;
+                    }
+                }    
+            }
+
+            return false;
         }
 
         private bool IsRosterSizeQuestion(Guid questionId)
@@ -1985,7 +2441,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             switch (rosterSizeSource)
             {
                 case RosterSizeSourceType.Question:
-                    this.ThrowIfRosterByQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles);
+                    this.ThrowIfRosterSizeQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles);
                     break;
                 case RosterSizeSourceType.FixedTitles:
                     this.ThrowIfRosterByFixedTitlesIsIncorrect(rosterSizeQuestionId, rosterTitleQuestionId, rosterFixedTitles);
@@ -2021,7 +2477,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfRosterByQuestionIsIncorrect(Guid groupId,Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
+        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles)
         {
             var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
 
@@ -2047,11 +2503,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
-            {
                 throw new QuestionnaireException(string.Format(
-                    "Categorical multy answers question {0} as roster size question cannot have roster title question.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
-            }
+                    "Roster having categorical multiple answers question {0} as roster size source cannot have roster title question.",
+                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+
+            if (rosterSizeQuestion.QuestionType == QuestionType.TextList && rosterTitleQuestionId.HasValue)
+                throw new QuestionnaireException(string.Format(
+                    "Roster having list question {0} as roster size source cannot have roster title question.",
+                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.Numeric)
             {
@@ -2070,11 +2529,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         throw new QuestionnaireException(string.Format(
                             "Roster title question {0} is missing in questionnaire.", rosterTitleQuestionId));
 
-                    var groupsByRosterSizeQuestion =
-                        this.innerDocument.Find<IGroup>(x => x.RosterSizeQuestionId == rosterSizeQuestionId).Select(x => x.PublicKey);
-
-                    IComposite parentOfTitleQuestion = rosterTitleQuestion.GetParent();
-                    if (parentOfTitleQuestion == null || !groupsByRosterSizeQuestion.Contains(parentOfTitleQuestion.PublicKey))
+                    if (!IsRosterTitleInRosterByRosterSize(rosterTitleQuestion:rosterTitleQuestion, rosterSizeQuestionId:rosterSizeQuestionId))
                         throw new QuestionnaireException(string.Format(
                             "Question for roster titles {0} should be placed only inside groups where roster size question is {1}",
                             FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
@@ -2087,6 +2542,62 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(string.Format("Roster fixed titles should be empty for roster group by question: {0}.",
                     FormatGroupForException(groupId, this.innerDocument)));
             }
+        }
+
+        private bool IsRosterTitleInRosterByRosterSize(IQuestion rosterTitleQuestion, Guid rosterSizeQuestionId)
+        {
+            var groupsByRosterSizeQuestion =
+                this.GetGroupsByRosterSizeQuestion(rosterSizeQuestionId).Select(x => x.PublicKey);
+
+            var parentForRosterTitleQuestion = rosterTitleQuestion.GetParent();
+            while (parentForRosterTitleQuestion != null)
+            {
+                if (groupsByRosterSizeQuestion.Contains(parentForRosterTitleQuestion.PublicKey))
+                    return true;
+
+                parentForRosterTitleQuestion = parentForRosterTitleQuestion.GetParent();
+            }
+
+            return false;
+        }
+
+        private IEnumerable<IGroup> GetGroupsByRosterSizeQuestion(Guid rosterSizeQuestionId)
+        {
+            return this.innerDocument.Find<IGroup>(
+                group => IsGroupOrRosterByRosterSizeQuestion(group, rosterSizeQuestionId));
+        }
+
+
+        private bool IsGroupOrRosterByRosterSizeQuestion(IGroup group, Guid rosterSizeQuestionId)
+        {
+            while (group != null)
+            {
+                if (group.RosterSizeQuestionId == rosterSizeQuestionId)
+                    return true;
+                group = (IGroup) group.GetParent();
+            }
+            return false;
+        }
+
+        private IEnumerable<IQuestion> GetAllQuestionsInGroup(IGroup group)
+        {
+            var questionsInGroup = new List<IQuestion>();
+
+            foreach (var groupItem in group.Children)
+            {
+                var itemAsGroup = groupItem as IGroup;
+                if (itemAsGroup != null)
+                {
+                    questionsInGroup.AddRange(GetAllQuestionsInGroup(itemAsGroup));
+                }
+
+                var itemAsQuestion = groupItem as IQuestion;
+                if (itemAsQuestion != null)
+                {
+                    questionsInGroup.Add(itemAsQuestion);
+                }
+            }
+            return questionsInGroup;
         }
 
         private void ThrowIfQuestionIsUsedAsRosterSize(Guid questionId)
@@ -2111,38 +2622,30 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     FormatGroupForException(referencingRosterTitle.PublicKey, this.innerDocument)));
         }
 
-        private void ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(Guid groupId, bool isRoster)
+        private void ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(IGroup group)
         {
-            var group = this.innerDocument.Find<IGroup>(groupId);
+            var allRosterTitleQuestions =
+                this.innerDocument.Find<IGroup>(g => g.PublicKey != group.PublicKey && g.RosterTitleQuestionId.HasValue)
+                    .Select(g => g.RosterTitleQuestionId.Value);
 
-            var wasRosterAndBecomeAGroup = @group.IsRoster && !isRoster;
+            
+            if (!allRosterTitleQuestions.Any()) return;
 
-            if (!wasRosterAndBecomeAGroup)
-                return;
+            var allQuestionsInGroup = GetAllQuestionsInGroup(group).Select(q => q.PublicKey);
 
-            var groupsWithRosterTitleQuestionExceptInnerGroup =
-                this.innerDocument.Find<IGroup>(
-                    x =>
-                        x.PublicKey != groupId && x.RosterTitleQuestionId.HasValue &&
-                            this.IsQuestionParent(groupId, x.RosterTitleQuestionId.Value));
-
-            if (!groupsWithRosterTitleQuestionExceptInnerGroup.Any()) return;
+            var rosterTitleQuestionsOfOtherGroups =
+                allQuestionsInGroup.Intersect(allRosterTitleQuestions);
 
             throw new QuestionnaireException(
                 string.Format(
-                    "This roster can't become a group because contains a question that used as roster title question of other group(s): {0}",
+                    "This roster can't become a group because contains a roster title questions of other group(s): {0}",
                     string.Join(Environment.NewLine,
-                        groupsWithRosterTitleQuestionExceptInnerGroup.Select(g => FormatGroupForException(g.PublicKey, this.innerDocument)))));
+                                rosterTitleQuestionsOfOtherGroups.Select(
+                                    questionId => FormatQuestionForException(questionId, this.innerDocument)))));
         }
 
-        private void ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(Guid groupId, bool isRoster)
+        private void ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(IGroup group)
         {
-            var group = this.innerDocument.Find<IGroup>(groupId);
-
-            var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
-
-            if (!wasGroupAndBecomeARoster) return;
-
             var hasAnyPrefilledQuestion = this.innerDocument.GetAllQuestions<AbstractQuestion>(@group).Any(question => question.Featured);
 
             if (!hasAnyPrefilledQuestion) return;
@@ -2153,6 +2656,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 string.Format(
                     "This group can't become a roster because contains pre-filled questions: {0}. Toggle pre-filled property for that questions to complete this operation",
                     string.Join(Environment.NewLine, questionVariables)));
+        }
+
+        private void ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(IGroup group)
+        {
+            if (!this.IsRosterOrInsideRoster(@group)) return;
+
+            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(@group).Select(question => question.PublicKey);
+
+            var linkedQuestionSourcesInGroup = this.GetAllLinkedSourceQuestions().Intersect(allQuestionsIdsFromGroup);
+
+            if (linkedQuestionSourcesInGroup.Any())
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "This {0} roster can't become a group because contains linked source question(s): {1}",
+                        FormatGroupForException(@group.PublicKey, this.innerDocument),
+                        string.Join(Environment.NewLine,
+                            linkedQuestionSourcesInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
+            }
+        }
+
+        private void ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(IGroup group)
+        {
+            if (!this.IsRosterOrInsideRoster(@group)) return;
+
+            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(@group).Select(question => question.PublicKey);
+
+            var linkedQuestionSourcesInGroup = this.GetAllLinkedSourceQuestions().Intersect(allQuestionsIdsFromGroup);
+
+            if (linkedQuestionSourcesInGroup.Any())
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "You can't delete {0} group because it contains linked source question(s): {1}",
+                        FormatGroupForException(@group.PublicKey, this.innerDocument),
+                        string.Join(Environment.NewLine,
+                            linkedQuestionSourcesInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
+            }
         }
 
         private string[] GetFilteredQuestionForException(IGroup @group, Func<AbstractQuestion, bool> filter)
@@ -2184,10 +2725,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private bool IsQuestionParent(Guid groupId, Guid questionId)
+        private bool IsQuestionParent(Guid groupId, IQuestion question)
         {
-            var parentOfQuestion = this.innerDocument.GetParentOfQuestion(questionId);
-            return parentOfQuestion != null && parentOfQuestion.PublicKey == groupId;
+            return GetAllParentGroups(question).Any(x => x.PublicKey == groupId);
+        }
+
+        private IGroup GetGroupById(Guid groupId)
+        {
+            return this.innerDocument.Find<IGroup>(groupId);
         }
 
         private static string[] GetTitleList(IEnumerable<IComposite> groupsAndQuestions)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
@@ -64,6 +65,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             }
 
             return questionnaire;
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
+        {
+            return new QuestionnaireDocument
+            {
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000FFF"),
+                        Children = chapterChildren.ToList(),
+                    }
+                }
+            };
         }
 
         protected static InterviewData CreateInterviewData()

@@ -49,9 +49,12 @@ namespace Main.Core.Entities.SubEntities
 
         public string ConditionExpression { get; set; }
 
-        public List<Guid> ConditionalDependentGroups { get; set; }
-
         public List<Guid> ConditionalDependentQuestions { get; set; }
+        public List<Guid> ConditionalDependentGroups { get; set; }
+        public List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
+
+        public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfQuestion { get; set; }
+        public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomValidationOfQuestion { get; set; }
 
         public bool Featured { get; set; }
 
