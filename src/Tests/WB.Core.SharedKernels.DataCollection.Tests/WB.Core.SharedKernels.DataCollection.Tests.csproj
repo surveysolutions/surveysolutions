@@ -84,6 +84,7 @@
     <Compile Include="InterviewTests\when_answering_real_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_1_with_a_half.cs" />
     <Compile Include="InterviewTests\when_answering_single_option_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\when_answering_text_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\when_answer_on_multy_option_question_increases_roster_size.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_on_the_third_level.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
     <Compile Include="InterviewTests\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="InterviewTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
     <Compile Include="InterviewTests\when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_with_3_fixed_titles.cs" />
+    <Compile Include="InterviewTests\when_interview_restored_after_synchronization_and_contains_answer_on_linked_question.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_more_than_max_for_selected_answer_options_for_multiquestion_throw_interview_exception.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="InterviewTests\when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_rost___.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_unanswered_mandatory_question_with_validation.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
+    <Compile Include="QuestionnaireDocumentCacheWarmerTests\when_question_has_enablement_condition.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_question_with_not_existing_group_in_triggers_then_GetRosterGroupsByRosterSizeQuestion_should_t___.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_groups_and_GetRosterGroupsByRosterSizeQuestion_return_them.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
