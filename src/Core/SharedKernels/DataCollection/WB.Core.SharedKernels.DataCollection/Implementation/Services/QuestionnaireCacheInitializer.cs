@@ -64,7 +64,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 questionId => this.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId)
             };
 
-
             foreach (IGroup group in this.GroupCache.Values)
             {
                 try
@@ -86,6 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     catch {}
                 }
             }
+
             this.document.IsCacheWarmed = true;
         }
 
