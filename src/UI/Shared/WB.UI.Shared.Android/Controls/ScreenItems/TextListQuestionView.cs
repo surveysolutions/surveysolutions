@@ -12,16 +12,21 @@ using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
-    public class TextListQuestionView :  AbstractQuestionView
+    public class TextListQuestionView : AbstractQuestionView
     {
         protected LinearLayout AnswersContainer;
-        protected LinearLayout ActionsContainer;
-        protected Button AddItemView;
-        protected int ItemsCount;
         
+        protected Button AddItemView;
+
+        protected int ItemsCountInUI;
+
+        private HashSet<decimal> answersTreatedAsSaved;
+        private string valueBeforeEditing;
+
         private const string AddListItemText = "+";
         private const string RemoveListItemText = "-";
 
@@ -29,8 +34,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             QuestionViewModel source, Guid questionnairePublicKey,
             ICommandService commandService, IAnswerOnQuestionCommandService answerCommandService,
             IAuthentication membership)
-            : base(
-                context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService,
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService,
                 membership)
         {
         }
@@ -50,107 +54,90 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             get { return TypedModel.MaxAnswerCount; }
         }
 
-        protected string GetAnswerId(TextListAnswerViewModel answer)
+        private void TextAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            return answer.Value.ToString();
+            var editor = sender as EditText;
+            if (editor != null)
+                editor.ClearFocus();
         }
 
-        protected string GetAnswerTitle(TextListAnswerViewModel answer)
+        private void RemoveTextListItemButton_Click(object sender, EventArgs e)
         {
-            return answer.Answer;
-        }
+            var button = sender as Button;
+            if (button == null)
+                return;
 
-        protected AnswerQuestionCommand CreateSaveAnswerCommand(TextListAnswerViewModel[] selectedAnswers)
-        {
-            List<Tuple<decimal, string>> answers =
-                selectedAnswers.Select(a => new Tuple<decimal, string>(a.Value, a.Answer)).ToList();
-
-            return new AnswerTextListQuestionCommand(QuestionnairePublicKey, Membership.CurrentUser.Id,
-                Model.PublicKey.Id, Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, answers.ToArray());
-        }
-
-        protected bool DoesModelHaveItem(string tagName, string newAnswer)
-        {
-            decimal value = decimal.Parse(tagName);
-            return ListAnswers.Any(i => i.Value == value && i.Answer == newAnswer);
-        }
-
-        /*protected IEnumerable<TextListAnswerViewModel> GetNewListAnswersToSave(string tagName, string newAnswer,
-            bool addOrRemove)
-        {
-            decimal value = decimal.Parse(tagName);
-
-            if (!addOrRemove)
-                return ListAnswers.Where(i => i.Value != value).ToList();
-
-            List<TextListAnswerViewModel> newListAnswers = ListAnswers.ToList();
-            TextListAnswerViewModel item = ListAnswers.FirstOrDefault(i => i.Value == value);
-            if (item != null)
-                item.Answer = newAnswer;
-            else
+            string buttonTag = button.GetTag(Resource.Id.AnswerId).ToString();
+            decimal listItemValue;
+            if (!decimal.TryParse(buttonTag, out listItemValue))
             {
-                newListAnswers.Add(new TextListAnswerViewModel(decimal.Parse(tagName), newAnswer));
+                return; //ignore unknown tag
             }
 
-            return newListAnswers;
-        }*/
-
-        protected TextListAnswerViewModel FindAnswerInModelByTag(string tag)
-        {
-            decimal answerGuid = decimal.Parse(tag);
-            return TypedModel.ListAnswers.FirstOrDefault(a => a.Value == answerGuid);
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Orientation = Orientation.Vertical;
-            AddItemView = CreateAddListButton();
-            AnswersContainer = CreateContainer();
-            ActionsContainer = CreateActionContainer(AddItemView);
-
-            llWrapper.AddView(AnswersContainer);
-            llWrapper.AddView(ActionsContainer);
-
-            PutAnswerStoredInModelToUI();
-
-            ItemsCount = ListAnswers.Count();
-            if (IsMaxAnswerCountExceeded(ItemsCount))
-                AddItemView.Enabled = false;
-        }
-
-        protected override string GetAnswerStoredInModelAsString()
-        {
-            return FormatSelectedAnswersAsString(ListAnswers);
-        }
-
-        protected override void PutAnswerStoredInModelToUI()
-        {
-            AnswersContainer.RemoveAllViews();
-
-            foreach (TextListAnswerViewModel answer in ListAnswers)
+            if (answersTreatedAsSaved.Contains(listItemValue))
             {
-                LinearLayout answerBlock = CreateAnswerBlock(GetAnswerId(answer), GetAnswerTitle(answer));
-                AnswersContainer.AddView(answerBlock);
+                TextListAnswerViewModel[] answersToSave =
+                    GetAnswersFromUI()
+                        .Where(item => !String.IsNullOrWhiteSpace(item.Answer) && item.Value != listItemValue)
+                        .ToArray();
+
+                SaveAnswer(FormatSelectedAnswersAsString(answersToSave),
+                    CreateSaveAnswerCommand(answersToSave.ToArray()));
+
+                answersTreatedAsSaved.Remove(listItemValue);
+            }
+
+            RemoveFirstChildByTag(AnswersContainer, buttonTag);
+            ItemsCountInUI--;
+
+            if (!IsMaxAnswerCountExceeded(ItemsCountInUI))
+                AddItemView.Enabled = true;
+        }
+
+        private void TextListItemEditor_FocusChange(object sender, FocusChangeEventArgs e)
+        {
+            var editor = sender as EditText;
+            if (editor == null)
+                return;
+
+            string newAnswer = editor.Text.Trim();
+
+            if (e.HasFocus)
+            {
+                this.valueBeforeEditing = newAnswer;
+                return;
+            }
+
+            string tagName = editor.GetTag(Resource.Id.AnswerId).ToString();
+            decimal answerValue = decimal.Parse(tagName);
+            
+            if (!answersTreatedAsSaved.Contains(answerValue)) // new value, only create
+            {
+                if (!string.IsNullOrWhiteSpace(newAnswer))
+                {
+                    HideKeyboardAndSaveState(editor);
+                    answersTreatedAsSaved.Add(answerValue);
+                }
+            }
+            else // old value, may be deleted or updated
+            {
+                if (!string.IsNullOrWhiteSpace(newAnswer)) // value should be deleted 
+                {
+
+                    if (this.valueBeforeEditing != newAnswer)
+                    {
+                        this.HideKeyboardAndSaveState(editor);
+                    }
+                }
+                else
+                {
+                    this.HideKeyboardAndSaveState(editor);
+                    answersTreatedAsSaved.Remove(answerValue); 
+                }
             }
         }
 
-        private Button CreateAddListButton()
-        {
-            var button = new Button(Context);
-            var cbLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                ViewGroup.LayoutParams.WrapContent);
-
-            cbLayoutParams.AddRule(LayoutRules.AlignParentRight);
-            button.LayoutParameters = cbLayoutParams;
-            button.Text = AddListItemText;
-            button.SetTypeface(null, TypefaceStyle.Bold);
-            button.Click += AddListItemButtonClick;
-
-            return button;
-        }
-
-        private void AddListItemButtonClick(object sender, EventArgs e)
+        private void CreateNewTextListItemButton_Click(object sender, EventArgs e)
         {
             var button = sender as Button;
             if (button == null)
@@ -170,60 +157,61 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 ShowKeyboard(newEditor);
             }
 
-            ItemsCount++;
-            if (IsMaxAnswerCountExceeded(ItemsCount))
+            ItemsCountInUI++;
+            if (IsMaxAnswerCountExceeded(ItemsCountInUI))
                 AddItemView.Enabled = false;
         }
 
-        private void RemoveListItemClick(object sender, EventArgs e)
+        protected override void Initialize()
         {
-            var button = sender as Button;
-            if (button == null)
-                return;
+            base.Initialize();
+            answersTreatedAsSaved = new HashSet<decimal>();
 
-            string buttonTag = button.GetTag(Resource.Id.AnswerId).ToString();
-            decimal listItemValue;
-            if (!decimal.TryParse(buttonTag, out listItemValue))
-            {
-                return; //ignore unknown tag
-            }
+            Orientation = Orientation.Vertical;
+            AddItemView = CreateAddListButton();
+            AnswersContainer = CreateContainer();
+            var actionsContainer = CreateActionContainer(AddItemView);
 
-            var answersToSave = GetAnswersFromUI().Where(item => !String.IsNullOrWhiteSpace(item.Answer) && item.Value != listItemValue).ToArray();
-            SaveAnswer(FormatSelectedAnswersAsString(answersToSave), CreateSaveAnswerCommand(answersToSave.ToArray()));
-            
-            //TextListAnswerViewModel itemFromModel = FindAnswerInModelByTag(buttonTag);
+            llWrapper.AddView(AnswersContainer);
+            llWrapper.AddView(actionsContainer);
 
-            /*if (itemFromModel != null)
-            {
-                //TextListAnswerViewModel[] answersToSave = GetNewListAnswersToSave(buttonTag, "", false).ToArray();
+            PutAnswerStoredInModelToUI();
 
-                var answersToSave = GetAnswersFromUI().Where(item => !String.IsNullOrWhiteSpace(item.Answer)).ToArray();
+            ItemsCountInUI = ListAnswers.Count();
 
-                SaveAnswer(FormatSelectedAnswersAsString(answersToSave), CreateSaveAnswerCommand(answersToSave.ToArray()));
-            }*/
-
-            RemoveFirstChildByTag(AnswersContainer, buttonTag);
-            ItemsCount--;
-
-            if (!IsMaxAnswerCountExceeded(ItemsCount))
-                AddItemView.Enabled = true;
+            if (IsMaxAnswerCountExceeded(ItemsCountInUI))
+                AddItemView.Enabled = false;
         }
 
-        private void RemoveFirstChildByTag(LinearLayout container, string itemTagToRevove)
+        private Button CreateRemoveListItemButton(string answerTag)
         {
-            for (int i = 0; i < container.ChildCount; i++)
-            {
-                var itemContainer = container.GetChildAt(i) as ViewGroup;
-                if (itemContainer == null)
-                    continue;
+            var removeTextListItemButton = new Button(Context);
 
-                string tag = itemContainer.GetTag(Resource.Id.AnswerId).ToString();
-                if (itemTagToRevove == tag)
-                {
-                    container.RemoveView(itemContainer);
-                    return;
-                }
-            }
+            var layoutParams = new LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent);
+
+            removeTextListItemButton.LayoutParameters = layoutParams;
+            removeTextListItemButton.SetTypeface(null, TypefaceStyle.Bold);
+            removeTextListItemButton.Text = RemoveListItemText;
+            removeTextListItemButton.Click += RemoveTextListItemButton_Click;
+            removeTextListItemButton.SetTag(Resource.Id.AnswerId, answerTag);
+
+            return removeTextListItemButton;
+        }
+
+        private Button CreateAddListButton()
+        {
+            var createNewTextListItemButton = new Button(Context);
+            var cbLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent);
+
+            cbLayoutParams.AddRule(LayoutRules.AlignParentRight);
+            createNewTextListItemButton.LayoutParameters = cbLayoutParams;
+            createNewTextListItemButton.Text = AddListItemText;
+            createNewTextListItemButton.SetTypeface(null, TypefaceStyle.Bold);
+            createNewTextListItemButton.Click += CreateNewTextListItemButton_Click;
+
+            return createNewTextListItemButton;
         }
 
         protected LinearLayout CreateContainer()
@@ -256,99 +244,87 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             container.SetTag(Resource.Id.AnswerId, answerValueTag);
 
-            EditText text = CreateValueEditor(answerValueTag, answerTitle);
+            EditText textListEditor = CreateValueEditor(answerValueTag, answerTitle);
 
-            Button button = CreateRemoveListItemButton(answerValueTag);
+            Button removeTextListItemButton = CreateRemoveListItemButton(answerValueTag);
 
-            container.AddView(text);
-            container.AddView(button);
+            container.AddView(textListEditor);
+            container.AddView(removeTextListItemButton);
 
             return container;
         }
 
         private EditText CreateValueEditor(string answerValueTag, string answerTitle)
         {
-            var text = new EditText(Context);
-            text.SetSelectAllOnFocus(true);
-            text.ImeOptions = ImeAction.Done;
-            text.SetSingleLine(true);
-            text.FocusChange += textAnswer_FocusChange;
-            text.EditorAction += textAnswer_EditorAction;
+            var textListItemEditor = new EditText(Context);
+            textListItemEditor.SetSelectAllOnFocus(true);
+            textListItemEditor.ImeOptions = ImeAction.Done;
+            textListItemEditor.SetSingleLine(true);
+            textListItemEditor.FocusChange += TextListItemEditor_FocusChange;
+            textListItemEditor.EditorAction += TextAnswer_EditorAction;
 
             var layoutParams = new LayoutParams(ViewGroup.LayoutParams.FillParent,
                 ViewGroup.LayoutParams.WrapContent);
 
             layoutParams.Weight = 1.0f;
-            text.LayoutParameters = layoutParams;
+            textListItemEditor.LayoutParameters = layoutParams;
 
-            text.Text = answerTitle;
-            text.SetTag(Resource.Id.AnswerId, answerValueTag);
-            return text;
+            textListItemEditor.Text = answerTitle;
+            textListItemEditor.SetTag(Resource.Id.AnswerId, answerValueTag);
+            return textListItemEditor;
         }
 
-        private void textAnswer_FocusChange(object sender, FocusChangeEventArgs e)
+        protected override string GetAnswerStoredInModelAsString()
         {
-            if (e.HasFocus)
+            return FormatSelectedAnswersAsString(ListAnswers);
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            AnswersContainer.RemoveAllViews();
+
+            foreach (TextListAnswerViewModel answer in ListAnswers)
             {
-                return;
-            }
+                LinearLayout answerBlock = CreateAnswerBlock(answer.Value.ToString(), answer.Answer);
+                AnswersContainer.AddView(answerBlock);
 
-            var editor = sender as EditText;
-            if (editor == null)
-                return;
-
-            string newAnswer = editor.Text.Trim();
-            if (String.IsNullOrWhiteSpace(newAnswer))
-                return;
-
-            string tagName = editor.GetTag(Resource.Id.AnswerId).ToString();
-
-
-
-            if (!DoesModelHaveItem(tagName, newAnswer))
-            {
-                if (!IsCommentsEditorFocused)
-                    HideKeyboard(editor);
-
-                var answers = GetAnswersFromUI().Where(item => !String.IsNullOrWhiteSpace(item.Answer)).ToArray();
-                
-                SaveAnswer(FormatSelectedAnswersAsString(answers), CreateSaveAnswerCommand(answers));
+                answersTreatedAsSaved.Add(answer.Value);
             }
         }
 
-        private void textAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        private void RemoveFirstChildByTag(LinearLayout container, string itemTagToRevove)
         {
-            var editor = sender as EditText;
-            if (editor != null)
-                editor.ClearFocus();
+            if (container == null)
+                return;
+
+            ViewGroup childToRemove = container.GetChildren()
+                .Where(child => child is ViewGroup)
+                .Cast<ViewGroup>()
+                .SingleOrDefault(view => view.GetTag(Resource.Id.AnswerId).ToString() == itemTagToRevove);
+
+            if (childToRemove != null)
+                container.RemoveView(childToRemove);
         }
 
-        private Button CreateRemoveListItemButton(string answerTag)
+        private void HideKeyboardAndSaveState(EditText editor)
         {
-            var button = new Button(Context);
+            if (!IsCommentsEditorFocused)
+                HideKeyboard(editor);
 
-            var layoutParams = new LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                ViewGroup.LayoutParams.WrapContent);
+            TextListAnswerViewModel[] answers =
+                GetAnswersFromUI().Where(item => !string.IsNullOrWhiteSpace(item.Answer)).ToArray();
 
-            button.LayoutParameters = layoutParams;
-
-            button.SetTypeface(null, TypefaceStyle.Bold);
-            button.Text = RemoveListItemText;
-
-            button.Click += RemoveListItemClick;
-            button.SetTag(Resource.Id.AnswerId, answerTag);
-
-            return button;
+            SaveAnswer(FormatSelectedAnswersAsString(answers), CreateSaveAnswerCommand(answers));
         }
-
+        
         private T GetFirstChildTypeOf<T>(ViewGroup layout) where T : class
         {
             if (layout == null)
                 return null;
 
-            for (int i = 0; i < layout.ChildCount; i++)
+            for (int childIndex = 0; childIndex < layout.ChildCount; childIndex++)
             {
-                var child = layout.GetChildAt(i) as T;
+                var child = layout.GetChildAt(childIndex) as T;
                 if (child != null)
                     return child;
             }
@@ -363,9 +339,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private List<TextListAnswerViewModel> GetAnswersFromUI()
         {
             var answers = new List<TextListAnswerViewModel>();
-            for (int i = 0; i < AnswersContainer.ChildCount; i++)
+            for (int childindex = 0; childindex < AnswersContainer.ChildCount; childindex++)
             {
-                var itemContainer = AnswersContainer.GetChildAt(i) as ViewGroup;
+                var itemContainer = AnswersContainer.GetChildAt(childindex) as ViewGroup;
                 var editText = GetFirstChildTypeOf<EditText>(itemContainer);
 
                 if (editText == null)
@@ -373,16 +349,26 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
                 decimal listItemValue = decimal.Parse(editText.GetTag(Resource.Id.AnswerId).ToString());
 
-                var item = new TextListAnswerViewModel(listItemValue.ToString(), editText.Text.Trim());
+                var item = new TextListAnswerViewModel(listItemValue, editText.Text.Trim());
 
                 answers.Add(item);
             }
+
             return answers;
+        }
+
+        protected AnswerQuestionCommand CreateSaveAnswerCommand(TextListAnswerViewModel[] selectedAnswers)
+        {
+            List<Tuple<decimal, string>> answers =
+                selectedAnswers.Select(a => new Tuple<decimal, string>(a.Value, a.Answer)).ToList();
+
+            return new AnswerTextListQuestionCommand(QuestionnairePublicKey, Membership.CurrentUser.Id,
+                Model.PublicKey.Id, Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, answers.ToArray());
         }
 
         private string FormatSelectedAnswersAsString(IEnumerable<TextListAnswerViewModel> selectedAnswers)
         {
-            return string.Join(",", selectedAnswers.Select(GetAnswerTitle));
+            return string.Join(",", selectedAnswers.Select(answer => answer.Answer));
         }
     }
 }
