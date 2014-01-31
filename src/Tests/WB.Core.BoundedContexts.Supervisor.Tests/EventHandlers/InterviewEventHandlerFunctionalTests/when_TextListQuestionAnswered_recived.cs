@@ -34,16 +34,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
                     answer)));
 
         It should_answer_on_text_list_be_type_of_InterviewTextListAnswers = () =>
-            viewState.Document.Levels["#"].GetAllQuestions().First(q => q.Id == textListQuestionId).Answer.ShouldBeOfType<InterviewTextListAnswers>();
+            GetTextListAnswers().ShouldBeOfType<InterviewTextListAnswers>();
 
         It should_answer_on_text_list_have_2_options = () =>
-          ((InterviewTextListAnswers)viewState.Document.Levels["#"].GetAllQuestions().First(q => q.Id == textListQuestionId).Answer).Answers.Length.ShouldEqual(2);
+           GetTextListAnswers().Answers.Length.ShouldEqual(2);
 
         It should_answer_on_text_list_first_option_answer_be_equal_to_first_passed_option = () =>
-         ((InterviewTextListAnswers)viewState.Document.Levels["#"].GetAllQuestions().First(q => q.Id == textListQuestionId).Answer).Answers[0].Answer.ShouldEqual(answer[0].Item2);
+           GetTextListAnswers().Answers[0].Answer.ShouldEqual(answer[0].Item2);
 
         It should_answer_on_text_list_first_option_value_be_equal_to_first_passed_option = () =>
-            ((InterviewTextListAnswers)viewState.Document.Levels["#"].GetAllQuestions().First(q => q.Id == textListQuestionId).Answer).Answers[0].Value.ShouldEqual(answer[0].Item1);
+           GetTextListAnswers().Answers[0].Value.ShouldEqual(answer[0].Item1);
+
+        private static InterviewTextListAnswers GetTextListAnswers()
+        {
+            return ((InterviewTextListAnswers)viewState.Document.Levels["#"].GetAllQuestions().First(q => q.Id == textListQuestionId).Answer);
+        }
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
         private static ViewWithSequence<InterviewData> viewState;
