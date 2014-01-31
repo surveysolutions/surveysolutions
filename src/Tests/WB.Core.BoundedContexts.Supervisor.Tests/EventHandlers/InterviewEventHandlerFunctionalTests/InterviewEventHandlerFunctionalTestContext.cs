@@ -59,9 +59,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
         }
+
         protected static ViewWithSequence<InterviewData> CreateViewWithSequenceOfInterviewData()
         {
-            return new ViewWithSequence<InterviewData>(new InterviewData(), 1);
+            var result = new ViewWithSequence<InterviewData>(new InterviewData(), 1);
+            result.Document.Levels.Add("#", new InterviewLevel(result.Document.InterviewId, null, new decimal[0]));
+            return result;
         }
 
         protected static IPublishedEvent<T> CreatePublishableEvent<T>(T payload)
