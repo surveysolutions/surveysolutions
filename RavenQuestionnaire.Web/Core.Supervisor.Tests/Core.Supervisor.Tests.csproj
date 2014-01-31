@@ -139,6 +139,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
     <Compile Include="Merger\InterviewDataAndQuestionnaireMergerTestContext.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_inside_roster.cs" />
