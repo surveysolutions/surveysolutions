@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
