@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Android.Content;
 using Android.Graphics;
@@ -147,7 +148,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             List<TextListAnswerViewModel> listAnswers = GetAnswersFromUI();
             decimal maxValue = listAnswers.Count == 0 ? 0 : listAnswers.Max(i => i.Value);
 
-            LinearLayout newBlock = CreateAnswerBlock((maxValue + 1).ToString(), "");
+            LinearLayout newBlock = CreateAnswerBlock((maxValue + 1).ToString(CultureInfo.InvariantCulture), "");
             AnswersContainer.AddView(newBlock);
 
             var newEditor = GetFirstChildTypeOf<EditText>(newBlock);
@@ -292,7 +293,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             }
         }
 
-        private void RemoveFirstChildByTag(LinearLayout container, string itemTagToRevove)
+        private void RemoveFirstChildByTag(LinearLayout container, string itemTagToRemove)
         {
             if (container == null)
                 return;
@@ -300,7 +301,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             ViewGroup childToRemove = container.GetChildren()
                 .Where(child => child is ViewGroup)
                 .Cast<ViewGroup>()
-                .SingleOrDefault(view => view.GetTag(Resource.Id.AnswerId).ToString() == itemTagToRevove);
+                .SingleOrDefault(view => view.GetTag(Resource.Id.AnswerId).ToString() == itemTagToRemove);
 
             if (childToRemove != null)
                 container.RemoveView(childToRemove);
