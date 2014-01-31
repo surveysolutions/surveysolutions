@@ -18,12 +18,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
     public class TextListQuestionView : AbstractQuestionView
     {
-        protected LinearLayout AnswersContainer;
-        
-        protected Button AddItemView;
+        private LinearLayout AnswersContainer;
+        private Button AddItemView;
 
-        protected int ItemsCountInUI;
-
+        private int ItemsCountInUI;
         private HashSet<decimal> answersTreatedAsSaved;
         private string valueBeforeEditing;
 
