@@ -79,9 +79,9 @@ namespace WB.UI.Shared.Android.Controls.Roster
             scrollPane.AddView(questionView);
 
             setAnswerPopup.SetView(scrollPane);
-            
             this.dialog = setAnswerPopup.Create();
             
+            dialog.Window.SetSoftInputMode(SoftInput.AdjustResize);
         }
 
         private void questionView_AnswerSet(object sender, AnswerSetEventArgs e)
