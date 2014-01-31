@@ -311,6 +311,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\AppSettings.cs" />
     <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
