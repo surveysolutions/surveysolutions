@@ -87,6 +87,10 @@
     <Compile Include="MembershipProviderTests\MembershipProviderTestsContext.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\PdfQuestionnaireDenormalizerTestContext.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="PdfTests\PdfQuestionViewTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionFactoryTests\QuestionFactoryTestContext.cs" />
