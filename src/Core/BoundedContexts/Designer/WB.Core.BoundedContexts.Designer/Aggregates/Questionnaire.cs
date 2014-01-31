@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
-            this.innerDocument.Add(question, e.GroupPublicKey, null);
+            this.innerDocument.Add(question, e.GroupId, null);
             
         }
 
@@ -414,7 +414,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
-            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupId);
 
         }
 
@@ -1128,7 +1128,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new TextListQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = groupId,
+                GroupId = groupId,
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
@@ -1165,7 +1165,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new TextListQuestionCloned
             {
                 PublicKey = questionId,
-                GroupPublicKey = groupId,
+                GroupId = groupId,
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
