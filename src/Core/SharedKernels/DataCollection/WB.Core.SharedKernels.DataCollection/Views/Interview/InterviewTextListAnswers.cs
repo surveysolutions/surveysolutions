@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
+namespace WB.Core.SharedKernels.DataCollection.Views.Interview
 {
     public class InterviewTextListAnswers
     {
-        public InterviewTextListAnswers() {}
+        public InterviewTextListAnswers() { }
 
         public InterviewTextListAnswers(IEnumerable<Tuple<decimal, string>> answers)
         {
