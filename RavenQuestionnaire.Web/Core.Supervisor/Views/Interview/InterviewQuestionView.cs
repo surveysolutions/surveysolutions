@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
@@ -57,15 +58,6 @@ namespace Core.Supervisor.Views.Interview
                 };
             }
 
-            var listQuestion = question as ITextListQuestion;
-            if (listQuestion != null)
-            {
-                this.Settings = new
-                {
-                    MaxAllowedAnswers = listQuestion.MaxAnswerCount
-                };
-            }
-
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;
@@ -85,9 +77,16 @@ namespace Core.Supervisor.Views.Interview
             var textListQuestion = question as ITextListQuestion;
             if (textListQuestion != null)
             {
-                var typedAnswer = Answer as InterviewTextListAnswers;
+                this.Answer = null;
+                var typedAnswer = answeredQuestion.Answer as InterviewTextListAnswers;
                 if (typedAnswer != null)
-                    this.Answer = string.Join(", ", typedAnswer.Answers.Select(a => a.Answer));
+                {
+                    this.Options = typedAnswer.Answers.Select(a => new QuestionOptionView
+                    {
+                        Value = a.Value,
+                        Label = a.Answer
+                    }).ToList();
+                }
             }
         }
 

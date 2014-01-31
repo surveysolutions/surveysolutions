@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {

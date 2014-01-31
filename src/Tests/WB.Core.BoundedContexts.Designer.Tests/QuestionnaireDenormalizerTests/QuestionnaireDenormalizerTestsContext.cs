@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             return ToPublishedEvent(new TextListQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = parentGroupId
+                GroupId = parentGroupId
             });
         }
 
@@ -305,7 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             return ToPublishedEvent(new TextListQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                GroupId = parentGroupId ?? Guid.NewGuid(),
                 MaxAnswerCount = maxAnswerCount
             });
         }
@@ -317,7 +317,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 PublicKey = questionId,
                 SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
+                GroupId = parentGroupId ?? Guid.NewGuid(),
                 MaxAnswerCount = maxAnswerCount
             });
         }

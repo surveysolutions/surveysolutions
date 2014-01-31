@@ -84,9 +84,17 @@
     <script type="text/html" id="DateTimeFull">
         <span data-bind=" text: moment(answer()).format('l')"></span>
     </script>
-<script type="text/html" id="TextListFull">
-    <span data-bind=" text: answer"></span>
-</script>
+    <script type="text/html" id="TextListFull">
+        <div class="control-group">
+            <div class="controls">
+                <div data-bind="foreach: options">
+                    <label class="checkbox">
+                        <span data-bind="html: label"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </script>
     <script type="text/html" id="AutoPropagateFull">
         <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
@@ -111,7 +119,9 @@
         <span data-bind="html: answer"></span>
     </script>
     <script type="text/html" id="TextList">
-        <span data-bind="html: answer"></span>
+        <div data-bind="foreach: options">
+            <div><span data-bind="text: label"></span></div>
+        </div>
     </script>
     <script type="text/html" id="MultyOption">
         <span data-bind="html: answer"></span>
