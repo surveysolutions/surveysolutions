@@ -24,7 +24,7 @@
                                     Converters = new List<JsonConverter>()
                                         {
                                             new EnumToStringConverter(),
-                                            new HtmlEncodeStringPropertiesConverter()
+                                            //new HtmlEncodeStringPropertiesConverter()
                                         }
                                 }));
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
