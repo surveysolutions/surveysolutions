@@ -53,5 +53,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
  
             base.SetAnswer(answer);
         }
+
+        public override string AnswerString
+        {
+            get
+            {
+                var selectedAnswers = this.ListAnswers.Select(answer => answer.Answer).ToList();
+                return string.Join(", ", selectedAnswers);
+            }
+        }
     }
 }
