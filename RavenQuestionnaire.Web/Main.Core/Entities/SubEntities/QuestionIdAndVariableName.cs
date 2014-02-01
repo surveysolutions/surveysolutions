@@ -2,6 +2,7 @@ using System;
 
 namespace Main.Core.Entities.SubEntities
 {
+    [Obsolete("old class which is left only for backward compatibility")]
     public struct QuestionIdAndVariableName
     {
         public QuestionIdAndVariableName(Guid id, string variableName)

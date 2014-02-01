@@ -20,18 +20,21 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDD0000000000000000");
             userId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-            var textListQuestion = new QuestionIdAndVariableName(Guid.Parse("11111111111111111111111111111111"), "textlist");
-            answeredQuestion = new QuestionIdAndVariableName(Guid.Parse("22222222222222222222222222222222"), "text");
+            var textListQuestion = Guid.Parse("11111111111111111111111111111111");
+            answeredQuestion = Guid.Parse("22222222222222222222222222222222");
 
             var questionnaire = Mock.Of<IQuestionnaire>
             (_
-                => _.HasQuestion(textListQuestion.Id) == true
-                && _.GetQuestionType(textListQuestion.Id) == QuestionType.TextList
+                => _.HasQuestion(textListQuestion) == true
+                && _.GetQuestionType(textListQuestion) == QuestionType.TextList
 
-                && _.HasQuestion(answeredQuestion.Id) == true
-                && _.GetQuestionType(answeredQuestion.Id) == QuestionType.Text
-                && _.IsCustomValidationDefined(answeredQuestion.Id) == true
-                && _.GetQuestionsInvolvedInCustomValidation(answeredQuestion.Id) == new[] { textListQuestion, answeredQuestion }
+                && _.HasQuestion(answeredQuestion) == true
+                && _.GetQuestionType(answeredQuestion) == QuestionType.Text
+                && _.IsCustomValidationDefined(answeredQuestion) == true
+                && _.GetQuestionsInvolvedInCustomValidation(answeredQuestion) == new[] { textListQuestion, answeredQuestion }
+
+                && _.GetQuestionVariableName(answeredQuestion) == answeredQuestiontVariableName
+                && _.GetQuestionVariableName(textListQuestion) == textlistVariableName
             );
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
@@ -43,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
                 .Setup(_ => _.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))
                 .Callback<string, Func<string, object>>((expression, getValueForIdentifier) =>
                 {
-                    textListAnswerProvidedToExpressionProcessor = getValueForIdentifier(textListQuestion.VariableName);
+                    textListAnswerProvidedToExpressionProcessor = getValueForIdentifier(textlistVariableName);
                 });
 
             SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
@@ -53,14 +56,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             InterviewSynchronizationDto interviewSynchronizationData = CreateInterviewSynchronizationDto(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaire.Version,
-                answers: new[] { new AnsweredQuestionSynchronizationDto(textListQuestion.Id, EmptyRosterVector, textListAnswer, null) });
+                answers: new[] { new AnsweredQuestionSynchronizationDto(textListQuestion, EmptyRosterVector, textListAnswer, null) });
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new InterviewSynchronized(interviewSynchronizationData));
         };
 
         Because of = () =>
-            interview.AnswerTextQuestion(userId, answeredQuestion.Id, EmptyRosterVector, DateTime.Now, "answer");
+            interview.AnswerTextQuestion(userId, answeredQuestion, EmptyRosterVector, DateTime.Now, "answer");
 
         It should_specify_null_as_value_of_textlist_answer_to_expression_processor = () =>
             textListAnswerProvidedToExpressionProcessor.ShouldBeNull();
@@ -69,7 +72,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
         private static Interview interview;
 
         private static Guid userId;
-        private static QuestionIdAndVariableName answeredQuestion;
+        private static Guid answeredQuestion;
         private static readonly decimal[] EmptyRosterVector = new decimal[]{};
+        private static string textlistVariableName = "textlist";
+        private static string answeredQuestiontVariableName = "text";
     }
 }

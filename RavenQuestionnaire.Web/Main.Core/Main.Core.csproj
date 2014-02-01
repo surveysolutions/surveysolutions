@@ -201,9 +201,7 @@
     <Compile Include="Entities\SubEntities\InterviewTextListAnswer.cs" />
     <Compile Include="Entities\SubEntities\InterviewTextListAnswers.cs" />
     <Compile Include="Entities\SubEntities\NumericQuestionUtils.cs" />
-    <Compile Include="Entities\SubEntities\QuestionIdAndVariableName.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Entities\SubEntities\QuestionIdAndVariableName.cs" />
     <Compile Include="Entities\SubEntities\Question\IAutoPropagate.cs" />
     <Compile Include="Entities\SubEntities\Question\IAutoPropagateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Group.cs">

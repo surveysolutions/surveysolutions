@@ -98,6 +98,8 @@ namespace Main.Core.Documents
             get { return null; }
         }
 
+        public List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfGroup { get; set; }
+        [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfGroup instead")]
         public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
 
         public List<Guid> SharedPersons { get; set; }
