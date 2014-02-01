@@ -253,10 +253,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return IsExpressionDefined(validationExpression);
         }
 
-        public IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomValidation(Guid questionId)
+        public IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId)
         {
             var question = this.GetQuestionOrThrow(questionId);
-            return question.QuestionsInvolvedInCustomValidationOfQuestion;
+            return question.QuestionIdsInvolvedInCustomValidationOfQuestion;
         }
 
         public IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions()
@@ -299,17 +299,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return group.ConditionExpression;
         }
 
-        public IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId)
+        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId)
         {
             var group = this.GetGroupOrThrow(groupId);
-            return group.QuestionsInvolvedInCustomEnablementConditionOfGroup;
+            return group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup;
         }
 
 
-        public IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
+        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            return question.QuestionsInvolvedInCustomEnablementConditionOfQuestion;
+            return question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion;
         }
 
         public IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
