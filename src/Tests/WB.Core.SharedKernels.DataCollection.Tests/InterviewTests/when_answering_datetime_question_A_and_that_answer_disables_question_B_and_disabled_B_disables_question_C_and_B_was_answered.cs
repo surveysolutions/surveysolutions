@@ -43,8 +43,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new [] { questionCId }
                 && _.GetCustomEnablementConditionForQuestion(questionBId) == questionBEnablementCondition
                 && _.GetCustomEnablementConditionForQuestion(questionCId) == questionCEnablementCondition
-                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new [] { new QuestionIdAndVariableName(questionAId, questionAVariableName) }
-                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionCId) == new[] { new QuestionIdAndVariableName(questionBId, questionBVariableName) }
+                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new [] { questionAId }
+                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionCId) == new[] { questionBId }
+
+                && _.GetQuestionVariableName(questionAId) == questionAVariableName
+                && _.GetQuestionVariableName(questionBId) == questionBVariableName
             );
 
             expressionProcessor = Mock.Of<IExpressionProcessor>
