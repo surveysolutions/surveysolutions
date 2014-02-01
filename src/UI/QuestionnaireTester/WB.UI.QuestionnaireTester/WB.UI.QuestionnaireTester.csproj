@@ -137,7 +137,7 @@
     <Compile Include="QuestionnaireListActivity.cs" />
     <Compile Include="Services\DesignerService.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="SplashScreen.cs" />
+    <Compile Include="SplashScreenActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -177,6 +177,8 @@
     </Content>
     <AndroidResource Include="Resources\Drawable\capi.png" />
     <AndroidResource Include="Resources\Drawable\splash.png" />
+    <AndroidResource Include="Resources\Drawable\tester_icon.png" />
+    <AndroidResource Include="Resources\Drawable\tester_splash.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
