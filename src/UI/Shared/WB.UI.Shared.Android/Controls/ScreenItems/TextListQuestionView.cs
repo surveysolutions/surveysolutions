@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
     public class TextListQuestionView : AbstractQuestionView
     {
         private LinearLayout AnswersContainer;
-        private Button AddItemView;
+        private Button AddTextListItemButton;
 
         private int ItemsCountInUI;
         private HashSet<decimal> answersTreatedAsSaved;
@@ -38,19 +38,24 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
         }
 
-        protected IEnumerable<TextListAnswerViewModel> ListAnswers
+        private IEnumerable<TextListAnswerViewModel> ListAnswers
         {
             get { return TypedModel.ListAnswers; }
         }
 
-        protected TextListQuestionViewModel TypedModel
+        private TextListQuestionViewModel TypedModel
         {
             get { return Model as TextListQuestionViewModel; }
         }
 
-        protected int? MaxAnswerCount
+        private int? MaxAnswerCount
         {
             get { return TypedModel.MaxAnswerCount; }
+        }
+
+        private int MaxAnswerCountLimit
+        {
+            get { return TypedModel.MaxAnswerCountLimit; }
         }
 
         private void TextAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
@@ -89,8 +94,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             RemoveFirstChildByTag(AnswersContainer, buttonTag);
             ItemsCountInUI--;
 
-            if (!IsMaxAnswerCountExceeded(ItemsCountInUI))
-                AddItemView.Enabled = true;
+            AddTextListItemButton.Visibility = IsAddingAnswerAllowed(ItemsCountInUI) ? 
+                                               ViewStates.Visible :
+                                               ViewStates.Gone;
         }
 
         private void TextListItemEditor_FocusChange(object sender, FocusChangeEventArgs e)
@@ -142,6 +148,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (button == null)
                 return;
 
+            if(!IsAddingAnswerAllowed(ItemsCountInUI))
+                return;
+
             //change value generation
             List<TextListAnswerViewModel> listAnswers = GetAnswersFromUI();
             decimal maxValue = listAnswers.Count == 0 ? 0 : listAnswers.Max(i => i.Value);
@@ -157,8 +166,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             }
 
             ItemsCountInUI++;
-            if (IsMaxAnswerCountExceeded(ItemsCountInUI))
-                AddItemView.Enabled = false;
+
+            AddTextListItemButton.Visibility = IsAddingAnswerAllowed(ItemsCountInUI) ?
+                                   ViewStates.Visible :
+                                   ViewStates.Gone;
         }
 
         protected override void Initialize()
@@ -167,9 +178,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             answersTreatedAsSaved = new HashSet<decimal>();
 
             Orientation = Orientation.Vertical;
-            AddItemView = CreateAddListButton();
+            AddTextListItemButton = CreateAddListItemButton();
             AnswersContainer = CreateContainer();
-            var actionsContainer = CreateActionContainer(AddItemView);
+            
+            var actionsContainer = CreateActionContainer(AddTextListItemButton);
 
             llWrapper.AddView(AnswersContainer);
             llWrapper.AddView(actionsContainer);
@@ -178,8 +190,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             ItemsCountInUI = ListAnswers.Count();
 
-            if (IsMaxAnswerCountExceeded(ItemsCountInUI))
-                AddItemView.Enabled = false;
+            AddTextListItemButton.Visibility = IsAddingAnswerAllowed(ItemsCountInUI) ?
+                                   ViewStates.Visible :
+                                   ViewStates.Gone;
         }
 
         private Button CreateRemoveListItemButton(string answerTag)
@@ -198,9 +211,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return removeTextListItemButton;
         }
 
-        private Button CreateAddListButton()
+        private Button CreateAddListItemButton()
         {
             var createNewTextListItemButton = new Button(Context);
+
             var cbLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                 ViewGroup.LayoutParams.WrapContent);
 
@@ -330,9 +344,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return null;
         }
 
-        private bool IsMaxAnswerCountExceeded(int valueToCheck)
+        private bool IsAddingAnswerAllowed(int valueToCheck)
         {
-            return MaxAnswerCount.HasValue && valueToCheck >= MaxAnswerCount;
+            if (valueToCheck >= MaxAnswerCountLimit)
+                return false;
+
+            if (MaxAnswerCount.HasValue)
+                return valueToCheck < MaxAnswerCount;
+
+            return true;
         }
 
         private List<TextListAnswerViewModel> GetAnswersFromUI()
