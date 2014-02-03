@@ -12,17 +12,20 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public TextListQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType,
             bool enabled, string instructions, string comments, bool valid, bool mandatory,
             string validationMessage, string variable, IEnumerable<string> substitutionReferences,
-            int? maxAnswerCount) 
+            int? maxAnswerCount, int maxAnswerCountLimit) 
             : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory,null, 
                    validationMessage, variable, substitutionReferences)
         {
             this.ListAnswers = Enumerable.Empty<TextListAnswerViewModel>();
             this.MaxAnswerCount = maxAnswerCount;
+            this.MaxAnswerCountLimit = maxAnswerCountLimit;
         }
 
         public IEnumerable<TextListAnswerViewModel> ListAnswers { get; private set; }
 
         public int? MaxAnswerCount { get; private set; }
+
+        public int MaxAnswerCountLimit { get; private set; }
 
         public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
@@ -32,7 +35,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                                                    this.Mandatory,
                                                    this.ValidationMessage, this.Variable, this.SubstitutionReferences,
-                                                   this.MaxAnswerCount);
+                                                   this.MaxAnswerCount, this.MaxAnswerCountLimit);
         }
 
         public override void SetAnswer(object answer)
