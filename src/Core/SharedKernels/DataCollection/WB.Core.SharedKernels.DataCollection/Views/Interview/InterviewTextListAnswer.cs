@@ -1,7 +1,4 @@
-﻿using System.Text;
-using System.Threading.Tasks;
-
-namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
+﻿namespace WB.Core.SharedKernels.DataCollection.Views.Interview
 {
     public class InterviewTextListAnswer
     {
@@ -12,6 +9,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         }
 
         public decimal Value { get; private set; }
+
         public string Answer { get; private set; }
     }
 }

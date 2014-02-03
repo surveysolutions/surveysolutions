@@ -29,8 +29,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             viewState = interviewEventHandlerFunctional.Update(viewState,
                 CreatePublishableEvent(new GroupPropagated(rosterGroupId, new decimal[0], 0)));
 
-        It should_interview_levels_count_be_equal_to_0 = () =>
-            viewState.Document.Levels.Keys.Count.ShouldEqual(0);
+        It should_interview_levels_count_be_equal_to_1 = () =>
+            viewState.Document.Levels.Keys.Count.ShouldEqual(1);
 
         It should_interview_level_with_id_0_be_present = () =>
             viewState.Document.Levels.Keys.ShouldNotContain("0");

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -10,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandler
 {

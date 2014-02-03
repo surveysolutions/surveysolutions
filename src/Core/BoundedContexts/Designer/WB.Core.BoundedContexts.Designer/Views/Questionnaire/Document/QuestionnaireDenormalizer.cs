@@ -390,7 +390,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
         {
             TextListQuestionAdded e = evnt.Payload;
-            AddQuestion(evnt, evnt.Payload.GroupPublicKey,
+            AddQuestion(evnt, evnt.Payload.GroupId,
                 new QuestionData(
                     e.PublicKey,
                     QuestionType.TextList,
@@ -419,7 +419,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
         {
             TextListQuestionCloned e = evnt.Payload;
-            CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
+            CloneQuestion(evnt, e.GroupId, e.TargetIndex,
                 new QuestionData(
                     e.PublicKey,
                     QuestionType.TextList,

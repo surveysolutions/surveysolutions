@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization
 {

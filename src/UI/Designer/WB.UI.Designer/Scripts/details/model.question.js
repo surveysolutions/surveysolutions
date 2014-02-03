@@ -48,21 +48,7 @@
                self.validationMessage = ko.observable('');
                self.instruction = ko.observable('');
                self.isInteger = ko.observable(1);
-               self.countOfDecimalPlaces = ko.observable('').extend({
-                   digit: true,
-                   min: {
-                       params: 1,
-                       onlyIf: function () {
-                           return self.qtype() == config.questionTypes.Numeric && self.isInteger() == false;
-                       }
-                   },
-                   max: {
-                       params: 16,
-                       onlyIf: function () {
-                           return self.qtype() == config.questionTypes.Numeric && self.isInteger() == false;
-                       }
-                   }
-               });
+               self.countOfDecimalPlaces = ko.observable('');
                self.isLinked = ko.observable(0);
                self.isLinkedAsBool = ko.computed(function () {
                    return self.isLinked() == 1;
@@ -78,27 +64,10 @@
                });
 
                self.areAnswersOrdered = ko.observable(false);
-               self.maxAllowedAnswers = ko.observable('').extend({
-                   digit: true,
-                   min: 1,
-                   validation: [
-                       {
-                           validator: function (val) {
-                               var parsedMaxAllowedAnswers = parseInt(val);
-                               if (self.isLinked() == 1 || isNaN(parsedMaxAllowedAnswers)) {
-                                   return true;
-                               }
-                               return parsedMaxAllowedAnswers <= self.answerOptions().length;
-                           },
-                           message: 'could not be more than categories count'
-                       }]
-               });
 
-               self.maxAnswerCount = ko.observable('').extend({
-                   digit: true,
-                   min: 1,
-                   max: 40
-               });
+               self.maxAllowedAnswers = ko.observable('');
+
+               self.maxAnswerCount = ko.observable('');
 
                self.answerOptions = ko.observableArray([]);
 
@@ -115,6 +84,7 @@
                    }
                    return false;
                });
+
                self.addAnswer = function () {
                    var answer = new answerOption().id(Math.uuid()).title('').value('');
 
@@ -141,6 +111,7 @@
                    self.validationMessage, self.instruction, self.answerOptions, self.maxValue,
                    self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces,
                    self.areAnswersOrdered, self.maxAllowedAnswers, self.maxAnswerCount]);
+
                self.dirtyFlag().reset();
                self.errors = ko.validation.group(self);
                this.cache = function () {
@@ -155,8 +126,47 @@
                self.wasValidationAttached = false;
 
                self.attachValidation = function () {
+                   
                    if (self.wasValidationAttached)
                        return;
+
+                   self.countOfDecimalPlaces.extend({
+                       digit: true,
+                       min: {
+                           params: 1,
+                           onlyIf: function () {
+                               return self.qtype() == config.questionTypes.Numeric && self.isInteger() == false;
+                           }
+                       },
+                       max: {
+                           params: 16,
+                           onlyIf: function () {
+                               return self.qtype() == config.questionTypes.Numeric && self.isInteger() == false;
+                           }
+                       }
+                   });
+
+                   self.maxAllowedAnswers.extend({
+                       digit: true,
+                       min: 1,
+                       validation: [
+                           {
+                               validator: function (val) {
+                                   var parsedMaxAllowedAnswers = parseInt(val);
+                                   if (self.isLinked() == 1 || isNaN(parsedMaxAllowedAnswers)) {
+                                       return true;
+                                   }
+                                   return parsedMaxAllowedAnswers <= self.answerOptions().length;
+                               },
+                               message: 'could not be more than categories count'
+                           }]
+                   });
+
+                   self.maxAnswerCount.extend({
+                       digit: true,
+                       min: 1,
+                       max: 40
+                   });
 
                    self.maxValue.extend({
                        digit: {
@@ -166,7 +176,7 @@
                            }
                        }
                    });
-
+                   
                    self.alias.extend({
                        validatable: true,
                        required: true,
@@ -177,7 +187,8 @@
                        },
                        notEqual: 'this'
                    });
-
+                  
+                  
                    self.qtype.extend({
                        validatable: true,
                        validation: [{
@@ -214,6 +225,8 @@
                            }]
                    }); // Questoin type
 
+                 
+
                    self.selectedLinkTo.extend({
                        validatable: true,
                        required: {
@@ -222,6 +235,9 @@
                            }
                        }
                    });
+
+
+                  
 
                    self.answerOptions.extend({
                        validatable: true,
@@ -237,6 +253,8 @@
                            }
                        }
                    });
+
+                   
 
                    self.isFeatured.subscribe(function (value) {
                        if (value && _.isEmpty(self.condition()) == false) {
@@ -269,6 +287,7 @@
                        }
                    });
 
+                 
                    self.isSupervisorQuestion.subscribe(function (value) {
                        if (value && (_.isEmpty(self.validationExpression()) == false)) {
                            var weWillClearValidation = config.warnings.weWillClearValidation;
@@ -284,6 +303,8 @@
                                });
                        }
                    });
+
+
 
                    self.validationExpression.extend({
                        validatable: true,
@@ -310,6 +331,10 @@
                        }],
                        throttle: 1000
                    });
+
+
+
+                
 
                    self.validationMessage.extend({
                        validatable: true,
@@ -357,6 +382,7 @@
                        }]
                    });
 
+                 
                    self.title.extend({
                        validatable: true,
                        validation: [{
@@ -372,17 +398,15 @@
                        }]
                    });
 
-                   self.alias.valueHasMutated();
-                   self.qtype.valueHasMutated();
-                   self.selectedLinkTo.valueHasMutated();
-                   self.answerOptions.valueHasMutated();
-                   self.validationExpression.valueHasMutated();
-                   self.condition.valueHasMutated();
-                   self.title.valueHasMutated();
-
                    self.errors = ko.validation.group(self);
 
                    self.wasValidationAttached = true;
+
+                   return;
+
+                 
+                  
+                  
                };
                return self;
            };
