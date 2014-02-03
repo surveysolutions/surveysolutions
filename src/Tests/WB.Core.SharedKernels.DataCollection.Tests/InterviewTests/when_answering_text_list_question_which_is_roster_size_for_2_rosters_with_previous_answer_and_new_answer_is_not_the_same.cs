@@ -42,12 +42,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.Apply(new TextListQuestionAnswered(userId, textListQuestionId, new decimal[] { }, DateTime.Now, previousAnswer));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 1, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 2, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 3, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 1, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 2, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 3, sortIndex: null));
+            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 1, sortIndex: 1));
+            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 2, sortIndex: 2));
+            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 3, sortIndex: 3));
+            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 1, sortIndex: 1));
+            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 2, sortIndex: 2));
+            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 3, sortIndex: 3));
 
             eventContext = new EventContext();
         };
@@ -96,9 +96,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvents<RosterRowRemoved>()
                 .ShouldEachConformTo(@event => Enumerable.SequenceEqual(@event.OuterRosterVector, emptyRosterVector));
 
-        It should_set_null_in_SortIndex_to_all_RosterRowAdded_events = () =>
-            eventContext.GetEvents<RosterRowAdded>()
-                .ShouldEachConformTo(@event => @event.SortIndex == null);
+        It should_not_set_null_in_SortIndex_to_all_RosterRowAdded_events = () =>
+             eventContext.GetEvents<RosterRowAdded>()
+                 .ShouldEachConformTo(@event => @event.SortIndex != null);
+
+        It should_raise_2_RosterRowAdded_events_with_sort_index_equals_to_5 = () =>
+            eventContext.GetEvents<RosterRowAdded>().Where(@event => @event.SortIndex == 5).Count().ShouldEqual(2);
 
         It should_raise_2_RosterRowTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 2);

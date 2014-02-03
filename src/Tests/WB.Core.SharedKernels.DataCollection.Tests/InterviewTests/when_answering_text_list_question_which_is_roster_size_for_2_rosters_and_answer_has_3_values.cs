@@ -83,9 +83,18 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvents<RosterRowAdded>()
                 .ShouldEachConformTo(@event => Enumerable.SequenceEqual(@event.OuterRosterVector, emptyRosterVector));
 
-        It should_set_null_in_SortIndex_to_all_RosterRowAdded_events = () =>
+        It should_not_set_null_in_SortIndex_to_all_RosterRowAdded_events = () =>
             eventContext.GetEvents<RosterRowAdded>()
-                .ShouldEachConformTo(@event => @event.SortIndex == null);
+                .ShouldEachConformTo(@event => @event.SortIndex != null);
+
+        It should_raise_2_RosterRowAdded_events_with_sort_index_equals_to_1 = () =>
+            eventContext.GetEvents<RosterRowAdded>().Where(@event => @event.SortIndex == 1).Count().ShouldEqual(2);
+
+        It should_raise_2_RosterRowAdded_events_with_sort_index_equals_to_2 = () =>
+            eventContext.GetEvents<RosterRowAdded>().Where(@event => @event.SortIndex == 2).Count().ShouldEqual(2);
+
+        It should_raise_2_RosterRowAdded_events_with_sort_index_equals_to_3 = () =>
+            eventContext.GetEvents<RosterRowAdded>().Where(@event => @event.SortIndex == 3).Count().ShouldEqual(2);
 
         It should_raise_6_RosterRowTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 6);
