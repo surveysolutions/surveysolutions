@@ -74,10 +74,14 @@ namespace WB.UI.Shared.Android.Controls.Roster
             var setAnswerPopup = new AlertDialog.Builder(this.context);
             this.questionView = this.questionViewFactory.CreateQuestionView(this.context, this.Model, this.questionnaireId);
             this.questionView.AnswerSet += this.questionView_AnswerSet;
-            setAnswerPopup.SetView(this.questionView);
             
+            ScrollView scrollPane = new ScrollView(this.context);
+            scrollPane.AddView(questionView);
+
+            setAnswerPopup.SetView(scrollPane);
             this.dialog = setAnswerPopup.Create();
             
+            dialog.Window.SetSoftInputMode(SoftInput.AdjustResize);
         }
 
         private void questionView_AnswerSet(object sender, AnswerSetEventArgs e)
