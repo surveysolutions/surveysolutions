@@ -167,6 +167,12 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f02000c
 			public const int statistics_row_style = 2130837516;
 			
+			// aapt resource value: 0x7f02000d
+			public const int tester_icon = 2130837517;
+			
+			// aapt resource value: 0x7f02000e
+			public const int tester_splash = 2130837518;
+			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -186,9 +192,6 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040006
 			public const int ElementId = 2130968582;
 			
-			// aapt resource value: 0x7f04002e
-			public const int ImageSwitcher01 = 2130968622;
-			
 			// aapt resource value: 0x7f040005
 			public const int Index = 2130968581;
 			
@@ -207,17 +210,17 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f04002f
-			public const int btnAnswered = 2130968623;
+			// aapt resource value: 0x7f04002e
+			public const int btnAnswered = 2130968622;
 			
-			// aapt resource value: 0x7f040033
-			public const int btnComplete = 2130968627;
+			// aapt resource value: 0x7f040032
+			public const int btnComplete = 2130968626;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f040032
-			public const int btnInvalid = 2130968626;
+			// aapt resource value: 0x7f040031
+			public const int btnInvalid = 2130968625;
 			
 			// aapt resource value: 0x7f040025
 			public const int btnLogin = 2130968613;
@@ -237,8 +240,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04001b
 			public const int btnStart = 2130968603;
 			
-			// aapt resource value: 0x7f040030
-			public const int btnUnanswered = 2130968624;
+			// aapt resource value: 0x7f04002f
+			public const int btnUnanswered = 2130968623;
 			
 			// aapt resource value: 0x7f04000e
 			public const int etComments = 2130968590;
@@ -273,8 +276,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04001a
 			public const int llNavigationHolder = 2130968602;
 			
-			// aapt resource value: 0x7f040034
-			public const int llQuestionnairie = 2130968628;
+			// aapt resource value: 0x7f040033
+			public const int llQuestionnairie = 2130968627;
 			
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
@@ -312,8 +315,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04001f
 			public const int topView = 2130968607;
 			
-			// aapt resource value: 0x7f040035
-			public const int tvArrow = 2130968629;
+			// aapt resource value: 0x7f040034
+			public const int tvArrow = 2130968628;
 			
 			// aapt resource value: 0x7f04000c
 			public const int tvComments = 2130968588;
@@ -327,8 +330,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04000a
 			public const int tvError = 2130968586;
 			
-			// aapt resource value: 0x7f040031
-			public const int tvErrorWarning = 2130968625;
+			// aapt resource value: 0x7f040030
+			public const int tvErrorWarning = 2130968624;
 			
 			// aapt resource value: 0x7f04001d
 			public const int tvITem = 2130968605;

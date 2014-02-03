@@ -65,15 +65,6 @@ namespace Core.Supervisor.Views.TakeNew
                     multyoptionQuestion.MaxAllowedAnswers
                 };
             }
-
-            var listQuestion = doc as ITextListQuestion;
-            if (listQuestion != null)
-            {
-                this.Settings = new
-                {
-                    MaxAllowedAnswers = listQuestion.MaxAnswerCount
-                };
-            }
         }
 
         public Guid? ParentId { get; set; }

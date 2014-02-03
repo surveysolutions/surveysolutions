@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.BindingContext;
 
@@ -62,7 +63,12 @@ namespace WB.UI.Shared.Android.Extensions
                     EnableDisableView(@group.GetChildAt(idx), enabled);
                 }
             }
+        }
 
+        public static IEnumerable<View> GetChildren(this ViewGroup container)
+        {
+            return Enumerable.Range(0, container.ChildCount)
+                             .Select(container.GetChildAt);
         }
     }
 }

@@ -166,12 +166,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Image.cs">
       <Link>Entities\SubEntities\Image.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\InterviewTextListAnswer.cs">
-      <Link>Entities\SubEntities\InterviewTextListAnswer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\InterviewTextListAnswers.cs">
-      <Link>Entities\SubEntities\InterviewTextListAnswers.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IQuestion.cs">
       <Link>Entities\SubEntities\IQuestion.cs</Link>
     </Compile>

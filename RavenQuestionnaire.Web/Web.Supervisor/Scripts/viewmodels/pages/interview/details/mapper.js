@@ -39,9 +39,17 @@
                 item.answer(_.unescape(dto.Answer));
                 break;
            case "TextList":
-                    item = new model.TextListQuestion();
-                    item.answer(_.unescape(dto.Answer));
-                    break;
+               item = new model.TextListQuestion();
+
+               item.options(_.map(dto.Options, function(option) {
+                   var o = new model.Option(uiId);
+                   o.value(option.Value + "");
+                   o.label(_.unescape(option.Label) + "");
+
+                   return o;
+               }));
+
+               break;
             case "Numeric":
             case "AutoPropagate":
                 item = new model.NumericQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger, _.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
