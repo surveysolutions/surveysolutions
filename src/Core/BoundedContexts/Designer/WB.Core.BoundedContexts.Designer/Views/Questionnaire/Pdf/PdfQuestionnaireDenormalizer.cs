@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 };
                 
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                questionnaire.AddQuestion(newQuestion, @event.GroupId);
                 return questionnaire;
             });
         }
@@ -294,7 +294,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 };
 
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                questionnaire.AddQuestion(newQuestion, @event.GroupId);
                 return questionnaire;
             });
         }
