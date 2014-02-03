@@ -69,7 +69,7 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult Revalidate(RevalidateModel input)
         {
-            return this.RedirectToAction("ConfirmRevalidation", new {id = input.InterviewId });
+            return this.RedirectToAction("ConfirmInterviewRevalidation", new {id = input.InterviewId });
         }
 
         [Authorize(Roles = "Headquarter")]
@@ -81,30 +81,11 @@ namespace Web.Supervisor.Controllers
 
         [Authorize(Roles = "Headquarter")]
         [HttpPost]
-        public ActionResult ConfirmRevalidation(Guid interviewId, Guid QuestionnairePublicKey)
+        public ActionResult ConfirmInterviewRevalidation(Guid interviewId)
         {
             this.CommandService.Execute(new ReevaluateSynchronizedInterview(interviewId));
             var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = interviewId });
-            return this.View(model);
-        }
-
-        public ActionResult ChangeState(Guid id)
-        {
-            if (this.GlobalInfo.IsHeadquarter)
-            {
-                return new HttpForbiddenResult("Only supervisors have access to page for interview change state");
-            }
-
-            ChangeStatusView model = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
-
-            if (model.Status != InterviewStatus.Completed)
-            {
-                return new HttpForbiddenResult("You can change state for interviews with status \"Complete\" only");
-            }
-
-            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
-            return this.View(model);
+            return this.View("ConfirmRevalidation", model);
         }
 
         private ActionResult RedirectToInterviewList(string templateId)
