@@ -75,7 +75,7 @@
 
                // UI stuff
                self.isValidationVisible = ko.computed(function() {
-                   var validationFieldsAreEmpty = _.isEmpty("" + self.validationExpression() + self.validationMessage());
+                   var validationFieldsAreEmpty = _.isEmpty((self.validationExpression() || "") + (self.validationMessage() || ""));
                    if (self.isSupervisorQuestion() == false) {
                        if (self.qtype() == 'TextList') {
                            return !validationFieldsAreEmpty;
