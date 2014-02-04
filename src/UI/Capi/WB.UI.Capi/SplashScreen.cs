@@ -4,13 +4,10 @@ using Cirrious.MvvmCross.Droid.Views;
 
 namespace WB.UI.Capi
 {
-    [Activity(Label = "CAPI",  MainLauncher = true, NoHistory = true,
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(MainLauncher = true, NoHistory = true, Theme = "@style/Theme.SplashBackground")]
     public class SplashScreen : MvxSplashScreenActivity
     {
         public SplashScreen()
-            : base(Resource.Layout.SplashScreen)
-        {
-        }
-   }
+            : base(Resource.Layout.SplashScreen) {}
+    }
 }

@@ -880,7 +880,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 textListQuestion.ValidationMessage,
                 textListQuestion.StataExportCaption,
                 textListQuestion.GetVariablesUsedInTitle(),
-                textListQuestion.MaxAnswerCount);
+                textListQuestion.MaxAnswerCount,
+                TextListQuestion.MaxAnswerCountLimit);
         }
 
 
