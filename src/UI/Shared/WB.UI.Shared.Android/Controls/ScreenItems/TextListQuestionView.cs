@@ -72,12 +72,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
 
             string buttonTag = button.GetTag(Resource.Id.AnswerId).ToString();
-            decimal listItemValue;
-            if (!decimal.TryParse(buttonTag, out listItemValue))
-            {
-                return; //ignore unknown tag
-            }
-
+            decimal listItemValue = decimal.Parse(buttonTag, CultureInfo.InvariantCulture); 
+            
             if (answersTreatedAsSaved.Contains(listItemValue))
             {
                 TextListAnswerViewModel[] answersToSave =
@@ -114,7 +110,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             }
 
             string tagName = editor.GetTag(Resource.Id.AnswerId).ToString();
-            decimal answerValue = decimal.Parse(tagName);
+            decimal answerValue = decimal.Parse(tagName, CultureInfo.InvariantCulture);
             
             if (!answersTreatedAsSaved.Contains(answerValue)) // new value, only create
             {
@@ -366,7 +362,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 if (editText == null)
                     continue;
 
-                decimal listItemValue = decimal.Parse(editText.GetTag(Resource.Id.AnswerId).ToString());
+                decimal listItemValue = decimal.Parse(editText.GetTag(Resource.Id.AnswerId).ToString(), CultureInfo.InvariantCulture);
 
                 var item = new TextListAnswerViewModel(listItemValue, editText.Text.Trim());
 
