@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_updating_empty_group_and_roster_become_a_group_and_have_roster_title_question_of_other_group :
+    internal class when_updating_empty_roster_making_it_a_group_and_another_roster_has_roster_title_question_inside_it :
         QuestionnaireTestsContext
     {
         private Establish context = () =>
