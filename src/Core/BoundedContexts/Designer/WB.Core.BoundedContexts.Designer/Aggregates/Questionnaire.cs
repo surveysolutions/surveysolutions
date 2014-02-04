@@ -1469,9 +1469,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     string.Format(
-                        "You can't move {0} group to {1} group because it contains linked source question(s): {2}",
+                        "You can't move {0} group to another group because it contains linked source question(s): {1}",
                         FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
-                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument),
                         string.Join(Environment.NewLine,
                             linkedQuestionSourcesInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
             }
