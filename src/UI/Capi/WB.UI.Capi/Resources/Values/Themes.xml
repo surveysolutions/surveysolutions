@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="Theme.SplashBackground" parent="android:Theme.DeviceDefault.Light">
+    <item name="android:windowBackground">@drawable/capi_splash</item>
+  </style>
+</resources>
