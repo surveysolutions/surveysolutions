@@ -23,7 +23,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private Button AddTextListItemButton;
 
         private int ItemsCountInUI;
-        private HashSet<decimal> answersTreatedAsSaved;
+
+        private List<decimal> answersTreatedAsSaved;
         private string valueBeforeEditing;
 
         private const string AddListItemText = "+";
@@ -72,7 +73,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
 
             string buttonTag = button.GetTag(Resource.Id.AnswerId).ToString();
-            decimal listItemValue = decimal.Parse(buttonTag, CultureInfo.InvariantCulture); 
+            decimal listItemValue = decimal.Parse(buttonTag); 
             
             if (answersTreatedAsSaved.Contains(listItemValue))
             {
@@ -110,7 +111,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             }
 
             string tagName = editor.GetTag(Resource.Id.AnswerId).ToString();
-            decimal answerValue = decimal.Parse(tagName, CultureInfo.InvariantCulture);
+            decimal answerValue = decimal.Parse(tagName);
             
             if (!answersTreatedAsSaved.Contains(answerValue)) // new value, only create
             {
@@ -151,7 +152,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             List<TextListAnswerViewModel> listAnswers = GetAnswersFromUI();
             decimal maxValue = listAnswers.Count == 0 ? 0 : listAnswers.Max(i => i.Value);
 
-            LinearLayout newBlock = CreateAnswerBlock((maxValue + 1).ToString(CultureInfo.InvariantCulture), "");
+            LinearLayout newBlock = CreateAnswerBlock((maxValue + 1).ToString(), "");
             AnswersContainer.AddView(newBlock);
 
             var newEditor = GetFirstChildTypeOf<EditText>(newBlock);
@@ -171,7 +172,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            answersTreatedAsSaved = new HashSet<decimal>();
+            answersTreatedAsSaved = new List<decimal>();
 
             Orientation = Orientation.Vertical;
             AddTextListItemButton = CreateAddListItemButton();
@@ -337,6 +338,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 if (child != null)
                     return child;
             }
+
             return null;
         }
 
@@ -362,7 +364,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 if (editText == null)
                     continue;
 
-                decimal listItemValue = decimal.Parse(editText.GetTag(Resource.Id.AnswerId).ToString(), CultureInfo.InvariantCulture);
+                decimal listItemValue = decimal.Parse(editText.GetTag(Resource.Id.AnswerId).ToString());
 
                 var item = new TextListAnswerViewModel(listItemValue, editText.Text.Trim());
 
