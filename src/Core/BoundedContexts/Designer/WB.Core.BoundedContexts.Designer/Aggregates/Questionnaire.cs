@@ -2637,6 +2637,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var rosterTitleQuestionsOfOtherGroups =
                 allQuestionsInGroup.Intersect(allRosterTitleQuestions);
 
+            if (!rosterTitleQuestionsOfOtherGroups.Any()) return;
+
             throw new QuestionnaireException(
                 string.Format(
                     "This roster can't become a group because contains a roster title questions of other group(s): {0}",

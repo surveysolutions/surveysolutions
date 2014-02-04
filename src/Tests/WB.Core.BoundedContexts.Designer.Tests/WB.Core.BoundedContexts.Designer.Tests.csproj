@@ -136,6 +136,7 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_empty_roster_making_it_a_group_and_another_roster_has_roster_title_question_inside_it.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_group_become_a_roster_with_roster_size_question_inside.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_to_root_of_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_adding_prefilled_numeric_question_to_group_under_roster.cs" />
