@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Capi.Extensions;
+using WB.UI.Capi.Implementations.TabletInformation;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
 
@@ -42,6 +43,11 @@ namespace WB.UI.Capi
             get { return this.FindViewById<Button>(Resource.Id.btnBackup); }
         }
 
+        protected Button btnSendTabletInfo
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnSendTabletInfo); }
+        }
+
         protected Button btnRestore
         {
             get { return this.FindViewById<Button>(Resource.Id.btnRestore); }
@@ -54,7 +60,11 @@ namespace WB.UI.Capi
 
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
+        protected TabletInformationSender tabletInformationSender;
         protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        private Operation? currentOperation;
+        private IBackup backupManager;
+        private ICapiInformationService capiInformationService;
 
         #endregion
 
@@ -68,6 +78,7 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.sync_dialog);
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
+            this.capiInformationService = CapiApplication.Kernel.Get<ICapiInformationService>();
             this.btnSync.Click += this.ButtonSyncClick;
 
             //btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
@@ -75,6 +86,7 @@ namespace WB.UI.Capi
 
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;
+            this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
         }
@@ -93,7 +105,7 @@ namespace WB.UI.Capi
             }
         }
 
-       
+
         private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
         {
             try
@@ -114,14 +126,8 @@ namespace WB.UI.Capi
             }
         }
 
-        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
-        {
-            
-        }
-
         private void btnRestore_Click(object sender, EventArgs e)
         {
-
             AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
             alertWarningAboutRestore.SetTitle("Warning");
             alertWarningAboutRestore.SetMessage(
@@ -131,19 +137,59 @@ namespace WB.UI.Capi
             alertWarningAboutRestore.SetPositiveButton("Yes", this.btnRestoreConfirmed_Click);
             alertWarningAboutRestore.SetNegativeButton("No", this.btnRestoreDeclined_Click);
             alertWarningAboutRestore.Show();
+        }
 
-
-
+        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
+        {
         }
 
         void btnBackup_Click(object sender, EventArgs e)
         {
-
             var path = this.backupManager.Backup();
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.SetTitle("Success");
             alert.SetMessage(string.Format("Backup was saved to {0}", path));
             alert.Show();
+        }
+
+        private void btnSendTabletInfo_Click(object sender, EventArgs e)
+        {
+            this.ThrowExeptionIfDialogIsOpened();
+
+            this.PreperaUI();
+
+            tabletInformationSender = new TabletInformationSender(this, capiInformationService);
+            tabletInformationSender.InformationPackageCreated += processor_InformationPackageCreated;
+            tabletInformationSender.ProcessCanceled += processor_ProcessCanceled;
+            tabletInformationSender.ProcessFinished += processor_ProcessFinished;
+            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", true, "Creating information package report");
+            tabletInformationSender.Run();
+        }
+
+        void processor_ProcessFinished(object sender, EventArgs e)
+        {
+            this.RunOnUiThread(() =>
+            {
+                this.DestroyDialog();
+                this.tvSyncResult.Text = "Report sending is finished.";
+            });
+            this.DestroyReportSending();
+        }
+
+        void processor_ProcessCanceled(object sender, EventArgs e)
+        {
+            this.RunOnUiThread(() =>
+            {
+                this.DestroyDialog();
+
+                this.tvSyncResult.Text = "Report sending is canceled.";
+            });
+            this.DestroyReportSending();
+        }
+
+        void processor_InformationPackageCreated(object sender, EventArgs e)
+        {
+            this.RunOnUiThread(() => this.progressDialog.SetMessage("Sending report"));
         }
 
         protected override void OnStart()
@@ -185,7 +231,6 @@ namespace WB.UI.Capi
 
             this.synchronizer.Run();
         }
-
 
 
         protected ISyncAuthenticator CreateAuthenticator()
@@ -298,8 +343,15 @@ namespace WB.UI.Capi
             this.synchronizer = null;
         }
 
-        private Operation? currentOperation;
-        private IBackup backupManager;
+
+
+        private void DestroyReportSending()
+        {
+            tabletInformationSender.InformationPackageCreated -= this.processor_InformationPackageCreated;
+            tabletInformationSender.ProcessCanceled -= this.processor_ProcessCanceled;
+            tabletInformationSender.ProcessFinished -= this.processor_ProcessFinished;
+            tabletInformationSender = null;
+        }
 
         private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {
@@ -329,14 +381,14 @@ namespace WB.UI.Capi
 
         #region diialog manipulation
 
-        private void CreateDialog(ProgressDialogStyle style, string title, bool cancelable)
+        private void CreateDialog(ProgressDialogStyle style, string message, bool cancelable, string title = "Synchronizing")
         {
             this.DestroyDialog();
             this.progressDialog = new ProgressDialog(this);
-            
-            this.progressDialog.SetTitle("Synchronizing");
+
+            this.progressDialog.SetTitle(title);
             this.progressDialog.SetProgressStyle(style);
-            this.progressDialog.SetMessage(title);
+            this.progressDialog.SetMessage(message);
             this.progressDialog.SetCancelable(false);
 
             if (cancelable)
