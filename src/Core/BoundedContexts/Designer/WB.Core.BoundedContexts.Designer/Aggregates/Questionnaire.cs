@@ -820,9 +820,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (wasGroupAndBecomeARoster)
             {
+                this.ThrowIfGroupCantBecomeARosterBecauseContainsRosterSizeQuestions(group);
                 this.ThrowIfGroupCantBecomeARosterBecausePlacedInsideRoster(group);
                 this.ThrowIfGroupCantBecomeARosterBecauseContainsRoster(group);
-                this.ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(group);    
+                this.ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(group);
             }
             if (wasRosterAndBecomeAGroup)
             {
@@ -2636,12 +2637,36 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var rosterTitleQuestionsOfOtherGroups =
                 allQuestionsInGroup.Intersect(allRosterTitleQuestions);
 
+            if (!rosterTitleQuestionsOfOtherGroups.Any()) return;
+
             throw new QuestionnaireException(
                 string.Format(
                     "This roster can't become a group because contains a roster title questions of other group(s): {0}",
                     string.Join(Environment.NewLine,
                                 rosterTitleQuestionsOfOtherGroups.Select(
                                     questionId => FormatQuestionForException(questionId, this.innerDocument)))));
+        }
+
+        private void ThrowIfGroupCantBecomeARosterBecauseContainsRosterSizeQuestions(IGroup @group)
+        {
+            var allQuestionsInGroup = GetAllQuestionsInGroup(group).Select(q => q.PublicKey);
+
+            if (!allQuestionsInGroup.Any()) return;
+
+            var rosterSizeQuestions = this.GetAllRosterSizeQuestionIds();
+
+            if (!rosterSizeQuestions.Any()) return;
+
+            var rosterSizeQuestionsInGroup = allQuestionsInGroup.Intersect(rosterSizeQuestions);
+
+            if (!rosterSizeQuestionsInGroup.Any()) return;
+
+            throw new QuestionnaireException(
+                string.Format(
+                    "This group can't become a roster because contains roster size questions: {0}",
+                    string.Join(Environment.NewLine,
+                        rosterSizeQuestionsInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
+
         }
 
         private void ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(IGroup group)
