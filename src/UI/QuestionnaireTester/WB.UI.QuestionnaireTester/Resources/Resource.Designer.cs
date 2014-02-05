@@ -426,6 +426,22 @@ namespace WB.UI.QuestionnaireTester
 			}
 		}
 		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f060000
+			public const int Theme_SplashBackground = 2131099648;
+			
+			static Style()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Style()
+			{
+			}
+		}
+		
 		public partial class Styleable
 		{
 			
