@@ -21,11 +21,13 @@ namespace WB.UI.Capi.Implementations.TabletInformation
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
-        private readonly Context context;
+        
         private CancellationToken ct;
         private CancellationTokenSource tokenSource2;
         private Task task;
-        private ICapiInformationService capiInformationService;
+        
+        private readonly Context context;
+        private readonly ICapiInformationService capiInformationService;
         private readonly IRestUrils webExecutor;
         private const string postInfoPackagePath = "sync/PostInfoPackage";
 
@@ -127,7 +129,7 @@ namespace WB.UI.Capi.Implementations.TabletInformation
         {
             if (this.tokenSource2.IsCancellationRequested)
                 return;
-            Task.Factory.StartNew(this.CancelInternal);
+            CancelInternal();
         }
 
         private void CancelInternal()
@@ -145,7 +147,6 @@ namespace WB.UI.Capi.Implementations.TabletInformation
             {
                 foreach (var exception in e.InnerExceptions)
                 {
-
                     this.Logger.Error("Error occurred during the process. Process is being canceled.", exception);
                 }
               //  exceptions = e.InnerExceptions.ToList();

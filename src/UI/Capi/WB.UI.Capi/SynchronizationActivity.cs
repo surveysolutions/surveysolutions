@@ -159,37 +159,37 @@ namespace WB.UI.Capi
             this.PreperaUI();
 
             tabletInformationSender = new TabletInformationSender(this, capiInformationService);
-            tabletInformationSender.InformationPackageCreated += processor_InformationPackageCreated;
-            tabletInformationSender.ProcessCanceled += processor_ProcessCanceled;
-            tabletInformationSender.ProcessFinished += processor_ProcessFinished;
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", true, "Creating information package report");
+            tabletInformationSender.InformationPackageCreated += this.tabletInformationSender_InformationPackageCreated;
+            tabletInformationSender.ProcessCanceled += this.tabletInformationSender_ProcessCanceled;
+            tabletInformationSender.ProcessFinished += this.tabletInformationSender_ProcessFinished;
+            this.CreateDialog(ProgressDialogStyle.Spinner, "Creating information package", true, tabletInformationSender_Cancel, "Sending information package");
             tabletInformationSender.Run();
         }
 
-        void processor_ProcessFinished(object sender, EventArgs e)
+        void tabletInformationSender_ProcessFinished(object sender, EventArgs e)
         {
             this.RunOnUiThread(() =>
             {
                 this.DestroyDialog();
-                this.tvSyncResult.Text = "Report sending is finished.";
+                this.tvSyncResult.Text = "Information package is sent successfully.";
             });
             this.DestroyReportSending();
         }
 
-        void processor_ProcessCanceled(object sender, EventArgs e)
+        void tabletInformationSender_ProcessCanceled(object sender, EventArgs e)
         {
             this.RunOnUiThread(() =>
             {
                 this.DestroyDialog();
 
-                this.tvSyncResult.Text = "Report sending is canceled.";
+                this.tvSyncResult.Text = "Information package sending is canceled.";
             });
             this.DestroyReportSending();
         }
 
-        void processor_InformationPackageCreated(object sender, EventArgs e)
+        void tabletInformationSender_InformationPackageCreated(object sender, EventArgs e)
         {
-            this.RunOnUiThread(() => this.progressDialog.SetMessage("Sending report"));
+            this.RunOnUiThread(() => this.progressDialog.SetMessage("Sending created information package to Supervisor"));
         }
 
         protected override void OnStart()
@@ -227,7 +227,7 @@ namespace WB.UI.Capi
             this.synchronizer.ProcessCanceling += this.synchronizer_ProcessCanceling;
             this.synchronizer.ProcessCanceled += this.synchronizer_ProcessCanceled;
 
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false);
+            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false, this.progressDialog_Cancel);
 
             this.synchronizer.Run();
         }
@@ -311,7 +311,7 @@ namespace WB.UI.Capi
 
         void synchronizer_ProcessCanceling(object sender, EventArgs e)
         {
-            this.RunOnUiThread(() => this.CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false));
+            this.RunOnUiThread(() => this.CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false, null));
         }
 
         private void synchronizer_ProcessCanceled(object sender, SynchronizationCanceledEventArgs evt)
@@ -347,9 +347,9 @@ namespace WB.UI.Capi
 
         private void DestroyReportSending()
         {
-            tabletInformationSender.InformationPackageCreated -= this.processor_InformationPackageCreated;
-            tabletInformationSender.ProcessCanceled -= this.processor_ProcessCanceled;
-            tabletInformationSender.ProcessFinished -= this.processor_ProcessFinished;
+            tabletInformationSender.InformationPackageCreated -= this.tabletInformationSender_InformationPackageCreated;
+            tabletInformationSender.ProcessCanceled -= this.tabletInformationSender_ProcessCanceled;
+            tabletInformationSender.ProcessFinished -= this.tabletInformationSender_ProcessFinished;
             tabletInformationSender = null;
         }
 
@@ -365,7 +365,7 @@ namespace WB.UI.Capi
 
 
                     if (this.currentOperation != e.OperationType)
-                        this.CreateDialog(currentStyle, e.OperationTitle, e.Cancelable);
+                        this.CreateDialog(currentStyle, e.OperationTitle, e.Cancelable, this.progressDialog_Cancel);
                     else
                         this.progressDialog.SetMessage(e.OperationTitle);
 
@@ -381,7 +381,7 @@ namespace WB.UI.Capi
 
         #region diialog manipulation
 
-        private void CreateDialog(ProgressDialogStyle style, string message, bool cancelable, string title = "Synchronizing")
+        private void CreateDialog(ProgressDialogStyle style, string message, bool cancelable, EventHandler<DialogClickEventArgs> cancelHandler, string title = "Synchronizing")
         {
             this.DestroyDialog();
             this.progressDialog = new ProgressDialog(this);
@@ -392,7 +392,7 @@ namespace WB.UI.Capi
             this.progressDialog.SetCancelable(false);
 
             if (cancelable)
-                this.progressDialog.SetButton("Cancel", this.progressDialog_Cancel);
+                this.progressDialog.SetButton("Cancel",cancelHandler);
 
             this.progressDialog.Show();
         }
@@ -400,6 +400,11 @@ namespace WB.UI.Capi
         private void progressDialog_Cancel(object sender, DialogClickEventArgs e)
         {
             this.synchronizer.Cancel();
+        }
+
+        private void tabletInformationSender_Cancel(object sender, DialogClickEventArgs e)
+        {
+            this.tabletInformationSender.Cancel();
         }
 
         private void DestroyDialog()

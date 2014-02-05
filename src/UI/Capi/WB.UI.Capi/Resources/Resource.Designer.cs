@@ -264,11 +264,11 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04001c
 			public const int btnNavigation = 2130968604;
 			
-			// aapt resource value: 0x7f04003c
-			public const int btnRestore = 2130968636;
-			
 			// aapt resource value: 0x7f04003d
-			public const int btnSendTabletInfo = 2130968637;
+			public const int btnRestore = 2130968637;
+			
+			// aapt resource value: 0x7f04003c
+			public const int btnSendTabletInfo = 2130968636;
 			
 			// aapt resource value: 0x7f04003a
 			public const int btnSync = 2130968634;
