@@ -22,6 +22,12 @@ namespace Mono.Android.Crasher.Data.Submit
             this.appName = appName;
             this.infoFileSupplierRegistry = infoFileSupplierRegistry;
         }
+
+        public FileReportSender(string appName)
+            : this(appName,null)
+        {
+        }
+
         private readonly IInfoFileSupplierRegistry infoFileSupplierRegistry;
         private readonly string appName;
         private string filePath;
@@ -60,7 +66,9 @@ namespace Mono.Android.Crasher.Data.Submit
                     stOut.Write(pwBytesDate, 0, pwBytesDate.Length);
                 }
             }
-            infoFileSupplierRegistry.RegisterConstant(filePath);
+
+            if (infoFileSupplierRegistry!=null)
+                infoFileSupplierRegistry.RegisterConstant(filePath);
         }
 
         public void Send(ReportData errorContent)
