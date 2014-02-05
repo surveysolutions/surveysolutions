@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
+using WB.Core.Infrastructure.InformationSupplier;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
@@ -200,9 +201,7 @@ namespace WB.UI.Capi
         {
             base.OnCreate();
 
-            CrashManager.Initialize(this);
-            CrashManager.AttachSender(() => new FileReportSender("CAPI"));
-            this.RestoreAppState();
+             this.RestoreAppState();
 
              // initialize app if necessary
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
@@ -216,6 +215,9 @@ namespace WB.UI.Capi
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule());
 
+            CrashManager.Initialize(this);
+            CrashManager.AttachSender(() => new FileReportSender("CAPI", this.kernel.Get<IInfoFileSupplierRegistry>()));
+         
             this.kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
