@@ -15,7 +15,6 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
         private string Tag;
         private const string CapiFolderName = "CAPI";
         private const string LogFolderName = "Logs";
-        private readonly IInfoFileSupplierRegistry infoFileSupplierRegistry;
         private string LogFilePath;
 
         private static string GetLogDirectory()
@@ -41,11 +40,10 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
             return storageDirectory;
         }
 
-        public FileLogger(string appName, IInfoFileSupplierRegistry infoFileSupplierRegistry) 
+        public FileLogger(string appName)
         {
             Tag = appName;
             LogFilePath = Path.Combine(GetLogDirectory(), appName + ".log.txt");
-            infoFileSupplierRegistry.RegisterConstant(LogFilePath);
 #if DEBUG
             this.IsDebugEnabled = true;
             this.IsInfoEnabled = true;
@@ -57,6 +55,11 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
 #endif
             this.IsErrorEnabled = true;
             this.IsFatalEnabled = true;
+        }
+
+        public FileLogger(string appName, IInfoFileSupplierRegistry infoFileSupplierRegistry):this(appName) 
+        {
+            infoFileSupplierRegistry.RegisterConstant(LogFilePath);
         }
 
         public void Debug(string message, Exception exception = null)
