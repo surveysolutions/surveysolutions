@@ -23,18 +23,19 @@
             android:layout_height="wrap_content"
             android:layout_margin="15px"
             android:text="Backup" />
-        <Button
-            android:id="@+id/btnRestore"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15px" android:visibility="gone"
-            android:text="Restore" />
+      
       <Button
            android:id="@+id/btnSendTabletInfo"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_margin="15px"
            android:text="Send tablet's information" />
+      <Button
+          android:id="@+id/btnRestore"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="15px" android:visibility="gone"
+          android:text="Restore" />
         <TextView
             android:id="@+id/tvSyncResult"
             android:padding="10px"
