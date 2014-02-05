@@ -10,17 +10,19 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using WB.Core.Infrastructure.InformationSupplier;
 using Environment = Android.OS.Environment;
 
 namespace Mono.Android.Crasher.Data.Submit
 {
     public class FileReportSender : IReportSender
     {
-        public FileReportSender(string appName)
+        public FileReportSender(string appName, IInfoFileSupplierRegistry infoFileSupplierRegistry)
         {
             this.appName = appName;
+            this.infoFileSupplierRegistry = infoFileSupplierRegistry;
         }
-
+        private readonly IInfoFileSupplierRegistry infoFileSupplierRegistry;
         private readonly string appName;
         private string filePath;
         private const string FILE_NAME = "CAPI_log.txt";
@@ -58,13 +60,13 @@ namespace Mono.Android.Crasher.Data.Submit
                     stOut.Write(pwBytesDate, 0, pwBytesDate.Length);
                 }
             }
+            infoFileSupplierRegistry.RegisterConstant(filePath);
         }
 
         public void Send(ReportData errorContent)
         {
             using (FileStream stOut = File.Open(filePath, FileMode.Append))
             {
-
                 byte[] pwBytesDate = System.Text.Encoding.UTF8.GetBytes(errorContent[ReportField.UserCrashDate]);
                 stOut.Write(pwBytesDate, 0, pwBytesDate.Length);
                 byte[] pwBytes = System.Text.Encoding.UTF8.GetBytes(errorContent[ReportField.StackTrace]);

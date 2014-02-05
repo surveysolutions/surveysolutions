@@ -42,6 +42,11 @@ namespace WB.UI.Capi
             get { return this.FindViewById<Button>(Resource.Id.btnBackup); }
         }
 
+        protected Button btnSendTabletInfo
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnSendTabletInfo); }
+        }
+
         protected Button btnRestore
         {
             get { return this.FindViewById<Button>(Resource.Id.btnRestore); }
@@ -55,6 +60,9 @@ namespace WB.UI.Capi
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
         protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        private Operation? currentOperation;
+        private IBackup backupManager;
+        private ICapiInformationService capiInformationService;
 
         #endregion
 
@@ -68,6 +76,7 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.sync_dialog);
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
+            this.capiInformationService = CapiApplication.Kernel.Get<ICapiInformationService>();
             this.btnSync.Click += this.ButtonSyncClick;
 
             //btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
@@ -75,6 +84,7 @@ namespace WB.UI.Capi
 
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;
+            this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
         }
@@ -93,7 +103,7 @@ namespace WB.UI.Capi
             }
         }
 
-       
+
         private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
         {
             try
@@ -114,14 +124,8 @@ namespace WB.UI.Capi
             }
         }
 
-        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
-        {
-            
-        }
-
         private void btnRestore_Click(object sender, EventArgs e)
         {
-
             AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
             alertWarningAboutRestore.SetTitle("Warning");
             alertWarningAboutRestore.SetMessage(
@@ -131,18 +135,28 @@ namespace WB.UI.Capi
             alertWarningAboutRestore.SetPositiveButton("Yes", this.btnRestoreConfirmed_Click);
             alertWarningAboutRestore.SetNegativeButton("No", this.btnRestoreDeclined_Click);
             alertWarningAboutRestore.Show();
+        }
 
-
-
+        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
+        {
         }
 
         void btnBackup_Click(object sender, EventArgs e)
         {
-
             var path = this.backupManager.Backup();
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.SetTitle("Success");
             alert.SetMessage(string.Format("Backup was saved to {0}", path));
+            alert.Show();
+        }
+
+        private void btnSendTabletInfo_Click(object sender, EventArgs e)
+        {
+            var pathToInfoArchive = capiInformationService.CreateInformationPackage();
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle("Success");
+            alert.SetMessage(string.Format("Info was saved to {0}", pathToInfoArchive));
             alert.Show();
         }
 
@@ -185,7 +199,6 @@ namespace WB.UI.Capi
 
             this.synchronizer.Run();
         }
-
 
 
         protected ISyncAuthenticator CreateAuthenticator()
@@ -297,9 +310,6 @@ namespace WB.UI.Capi
             this.synchronizer.ProcessCanceling -= this.synchronizer_ProcessCanceling;
             this.synchronizer = null;
         }
-
-        private Operation? currentOperation;
-        private IBackup backupManager;
 
         private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {

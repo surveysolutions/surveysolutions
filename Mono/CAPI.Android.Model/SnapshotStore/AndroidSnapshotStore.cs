@@ -118,23 +118,19 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             this.DeleteItem(eventSourceId);
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return null;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
             _snapshots = new Dictionary<Guid, Snapshot>();
 
-            var dirWithCahngelog = Path.Combine(path, _basePath);
             foreach (var file in Directory.EnumerateFiles(_basePath))
             {
                 File.Delete(file);
             }
-
-            foreach (var file in Directory.GetFiles(dirWithCahngelog))
-                File.Copy(file, Path.Combine(_basePath, Path.GetFileName(file)));
         }
     }
 }

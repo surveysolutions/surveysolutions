@@ -140,7 +140,7 @@ namespace CapiDataGenerator
         {
             foreach (var store in stores)
             {
-                var storePath = store.GetPathToBakupFile();
+                var storePath = store.GetPathToBackupFile();
                 try
                 {
                     FileAttributes attr = File.GetAttributes(storePath);
