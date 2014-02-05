@@ -22,6 +22,7 @@ namespace CAPI.Android.Core.Model.ReadSideStore
         where TEntity : class, IReadSideRepositoryEntity
     {
         private Dictionary<Guid, TEntity> memcache = new Dictionary<Guid, TEntity>();
+
         public FileReadSideRepositoryWriter()
         {
             if (!Directory.Exists(StoreDirPath))
@@ -65,22 +66,21 @@ namespace CAPI.Android.Core.Model.ReadSideStore
             memcache[id] = view;
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return StoreDirPath;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
+            var dirWithReadSide = Path.Combine(path, typeof (TEntity).Name);
             foreach (var file in Directory.EnumerateFiles(StoreDirPath))
             {
                 File.Delete(file);
             }
 
-            var dirWithReadSide = Path.Combine(path, typeof (TEntity).Name);
             if (!Directory.Exists(dirWithReadSide))
                 return;
-
 
             foreach (var file in Directory.GetFiles(dirWithReadSide))
                 File.Copy(file, Path.Combine(StoreDirPath, Path.GetFileName(file)));

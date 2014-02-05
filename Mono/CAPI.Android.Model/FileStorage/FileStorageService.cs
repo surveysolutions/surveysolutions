@@ -17,7 +17,7 @@ namespace CAPI.Android.Core.Model.FileStorage
                 Directory.CreateDirectory(_basePath);
             }
         }
-        
+
 
         public void DeleteFile(string filename)
         {
@@ -65,20 +65,23 @@ namespace CAPI.Android.Core.Model.FileStorage
             return Path.Combine(_basePath, fileName);
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return _basePath;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
-             var dirWithImeges = Path.Combine(path, ImageFolder);
+            var dirWithImages = Path.Combine(path, ImageFolder);
             foreach (var file in Directory.EnumerateFiles(_basePath))
             {
                 File.Delete(file);
             }
 
-            foreach (var file in Directory.GetFiles(dirWithImeges))
+            if (!Directory.Exists(dirWithImages))
+                return;
+
+            foreach (var file in Directory.GetFiles(dirWithImages))
                 File.Copy(file, Path.Combine(_basePath, Path.GetFileName(file)));
         }
     }

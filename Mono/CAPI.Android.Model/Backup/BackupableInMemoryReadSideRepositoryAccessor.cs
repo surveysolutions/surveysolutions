@@ -6,12 +6,12 @@ namespace CAPI.Android.Core.Model.Backup
 {
     public class BackupableInMemoryReadSideRepositoryAccessor<TView> : InMemoryReadSideRepositoryAccessor<TView>,IBackupable where TView : class, IView
     {
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return null;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
            this.Clear();
         }

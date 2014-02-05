@@ -105,17 +105,21 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
                 });
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return FullPathToDataBase;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
+            var pathToEventStore = Path.Combine(path, dbName);
+
             lock (locker)
             {
-
-                File.Copy(Path.Combine(path, dbName), FullPathToDataBase, true);
+                if (!File.Exists(pathToEventStore))
+                    File.Delete(FullPathToDataBase);
+                else
+                    File.Copy(pathToEventStore, FullPathToDataBase, true);
             }
         }
     }

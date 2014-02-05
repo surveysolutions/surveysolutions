@@ -98,12 +98,14 @@
     <Compile Include="Backup\AndroidZipUtility.cs" />
     <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="Backup\DefaultBackup.cs" />
+    <Compile Include="CapiInformation\CapiInformationService.cs" />
     <Compile Include="ChangeLog\ChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
+    <Compile Include="ICapiInformationService.cs" />
     <Compile Include="IDataCollectionAuthentication.cs" />
     <Compile Include="IChangeLogManipulator.cs" />
     <Compile Include="IChangeLogStore.cs" />
@@ -147,6 +149,10 @@
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.InformationSupplier\WB.Core.Infrastructure.InformationSupplier.csproj">
+      <Project>{1305e354-a9a9-4b30-9e8e-7d3412a86eff}</Project>
+      <Name>WB.Core.Infrastructure.InformationSupplier</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>

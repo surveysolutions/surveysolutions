@@ -240,8 +240,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04003b
 			public const int btnBackup = 2130968635;
 			
-			// aapt resource value: 0x7f04003e
-			public const int btnCancel = 2130968638;
+			// aapt resource value: 0x7f04003f
+			public const int btnCancel = 2130968639;
 			
 			// aapt resource value: 0x7f040031
 			public const int btnCollect = 2130968625;
@@ -266,6 +266,9 @@ namespace WB.UI.Capi
 			
 			// aapt resource value: 0x7f04003c
 			public const int btnRestore = 2130968636;
+			
+			// aapt resource value: 0x7f04003d
+			public const int btnSendTabletInfo = 2130968637;
 			
 			// aapt resource value: 0x7f04003a
 			public const int btnSync = 2130968634;
@@ -378,8 +381,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04001e
 			public const int tvITem = 2130968606;
 			
-			// aapt resource value: 0x7f04003d
-			public const int tvSyncResult = 2130968637;
+			// aapt resource value: 0x7f04003e
+			public const int tvSyncResult = 2130968638;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvTitle = 2130968587;

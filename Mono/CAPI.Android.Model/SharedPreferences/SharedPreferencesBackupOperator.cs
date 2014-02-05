@@ -37,28 +37,29 @@ namespace CAPI.Android.Settings
 
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             ExportSettingsToFile();
             
             return PreferencesFullPathToExport;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
             string pathToPreferences = Path.Combine(path, PreferencesFileName);
-            if (!File.Exists(pathToPreferences))
-                return;
 
-            var preferencesAsText = File.ReadAllText(pathToPreferences);
-            Dictionary<string, object> preferences = null;
+            var preferences = new Dictionary<string, object>();
 
-            preferences = JsonConvert.DeserializeObject<Dictionary<string, object>>(preferencesAsText,
-                                                                       new JsonSerializerSettings
-                                                                       {
-                                                                           TypeNameHandling = TypeNameHandling.Objects
-                                                                       });
-            
+            if (File.Exists(pathToPreferences))
+            {
+                var preferencesAsText = File.ReadAllText(pathToPreferences);
+
+                preferences = JsonConvert.DeserializeObject<Dictionary<string, object>>(preferencesAsText,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Objects
+                    });
+            }
 
             ISharedPreferences sharedPreferences = Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private);
             ISharedPreferencesEditor prefEditor = sharedPreferences.Edit();

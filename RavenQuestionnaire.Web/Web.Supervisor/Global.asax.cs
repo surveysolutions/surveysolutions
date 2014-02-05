@@ -1,4 +1,5 @@
-﻿using System.Web.SessionState;
+﻿using System.Web.Http.Filters;
+using System.Web.SessionState;
 using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
@@ -19,9 +20,6 @@ namespace Web.Supervisor
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
-    /// <summary>
-    /// The mvc application.
-    /// </summary>
     public class MvcApplication : HttpApplication
     {
         /// <summary>
@@ -32,28 +30,18 @@ namespace Web.Supervisor
             SetupNConfig();
         }
 
-        /// <summary>
-        /// The logger.
-        /// </summary>
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
         
-        /// <summary>
-        /// The register global filters.
-        /// </summary>
-        /// <param name="filters">
-        /// The filters.
-        /// </param>
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
         }
 
-        /// <summary>
-        /// The register routes.
-        /// </summary>
-        /// <param name="routes">
-        /// The routes.
-        /// </param>
+        public static void RegisterHttpFilters(HttpFilterCollection filters)
+        {
+            filters.Add(new ElmahHandledErrorLoggerFilter());
+        }
+
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -65,9 +53,6 @@ namespace Web.Supervisor
             );
         }
 
-        /// <summary>
-        /// The application_ error.
-        /// </summary>
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
@@ -78,9 +63,6 @@ namespace Web.Supervisor
             }
         }
 
-        /// <summary>
-        /// The application_ start.
-        /// </summary>
         protected void Application_Start()
         {
             this.logger.Info("Starting application.");
@@ -95,6 +77,7 @@ namespace Web.Supervisor
             // RouteTable.Routes.Add(new ServiceRoute("", new Ninject.Extensions.Wcf.NinjectServiceHostFactory(), typeof(API)));
 
             RegisterGlobalFilters(GlobalFilters.Filters);
+            RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterRoutes(RouteTable.Routes);
 
             ViewEngines.Engines.Clear();
@@ -102,15 +85,6 @@ namespace Web.Supervisor
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
-        /// <summary>
-        /// The current_ unhandled exception.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             try

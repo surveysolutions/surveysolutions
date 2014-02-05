@@ -70,18 +70,22 @@ namespace CAPI.Android.Core.Model.ChangeLog
         }
 
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return changelogPath;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
             var dirWithCahngelog = Path.Combine(path, ChangelogFolder);
+            
             foreach (var file in Directory.EnumerateFiles(changelogPath))
             {
                 File.Delete(file);
             }
+
+            if (!Directory.Exists(dirWithCahngelog))
+                return;
 
             foreach (var file in Directory.GetFiles(dirWithCahngelog))
                 File.Copy(file, Path.Combine(changelogPath, Path.GetFileName(file)));

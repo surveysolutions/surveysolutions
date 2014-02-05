@@ -311,6 +311,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\AppSettings.cs" />
     <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
@@ -596,8 +597,8 @@
     <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
     <Content Include="Views\Interview\Revalidate.cshtml" />
-    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
+    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
