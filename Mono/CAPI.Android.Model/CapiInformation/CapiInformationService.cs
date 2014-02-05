@@ -39,10 +39,10 @@ namespace CAPI.Android.Core.Model.CapiInformation
             {
                 CopyFileOrDirectory(infoFilePath, infoPackageFolderPath);
             }
-
-            AndroidZipUtility.ZipDirectory(infoPackageFolderPath, Path.Combine(infoPackagesPath, infoPackageFolderName + ".zip"));
+            var infoPackageFilePath = Path.Combine(infoPackagesPath, infoPackageFolderName + ".zip");
+            AndroidZipUtility.ZipDirectory(infoPackageFolderPath, infoPackageFilePath);
             Directory.Delete(infoPackageFolderPath, true);
-            return infoPackageFolderPath;
+            return infoPackageFilePath;
         }
 
         private string CreateNewInfoPackageFolderName()
