@@ -224,7 +224,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return createNewTextListItemButton;
         }
 
-        protected LinearLayout CreateContainer()
+        private LinearLayout CreateContainer()
         {
             var optionsWrapper = new LinearLayout(Context);
             optionsWrapper.Orientation = Orientation.Vertical;
@@ -234,7 +234,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return optionsWrapper;
         }
 
-        protected LinearLayout CreateActionContainer(Button addButton)
+        private LinearLayout CreateActionContainer(Button addButton)
         {
             LinearLayout optionsWrapper = CreateContainer();
             var container = new RelativeLayout(Context);
@@ -374,7 +374,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return answers;
         }
 
-        protected AnswerQuestionCommand CreateSaveAnswerCommand(TextListAnswerViewModel[] selectedAnswers)
+        private AnswerQuestionCommand CreateSaveAnswerCommand(TextListAnswerViewModel[] selectedAnswers)
         {
             List<Tuple<decimal, string>> answers =
                 selectedAnswers.Select(a => new Tuple<decimal, string>(a.Value, a.Answer)).ToList();

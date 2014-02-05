@@ -2169,7 +2169,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             string validationExpression = questionnaire.GetCustomValidationExpression(question.Id);
 
-            IEnumerable<QuestionIdAndVariableName> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
+            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
             IEnumerable<KeyValuePair<string, Identity>> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperRosterLevelOrThrow(involvedQuestionIds, question.RosterVector, questionnaire);
 
             return this.EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(
@@ -2357,7 +2357,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 getAnswer);
         }
 
-        private bool ShouldBeEnabledByCustomEnablementCondition(string enablementCondition, decimal[] rosterVector, IEnumerable<QuestionIdAndVariableName> involvedQuestionIds, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        private bool ShouldBeEnabledByCustomEnablementCondition(string enablementCondition, decimal[] rosterVector, IEnumerable<Guid> involvedQuestionIds, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
             const bool ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered = false;
 
@@ -2383,25 +2383,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private static IEnumerable<KeyValuePair<string, Identity>> GetInstancesOfQuestionsWithSameAndUpperRosterLevelOrThrow(
-            IEnumerable<QuestionIdAndVariableName> questionIds, decimal[] rosterVector, IQuestionnaire questionnare)
+            IEnumerable<Guid> questionIds, decimal[] rosterVector, IQuestionnaire questionnare)
         {
             return questionIds.Select(
                 questionId => GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(questionId, rosterVector, questionnare));
         }
 
-        private static KeyValuePair<string, Identity> GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(QuestionIdAndVariableName questionId, decimal[] rosterVector, IQuestionnaire questionnare)
+        private static KeyValuePair<string, Identity> GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare)
         {
             int vectorRosterLevel = rosterVector.Length;
-            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId.Id);
+            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
 
             if (questionRosterLevel > vectorRosterLevel)
                 throw new InterviewException(string.Format(
                     "Question {0} expected to have roster level not deeper than {1} but it is {2}.",
-                    FormatQuestionForException(questionId.Id, questionnare), vectorRosterLevel, questionRosterLevel));
+                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
 
             decimal[] questionRosterVector = ShrinkRosterVector(rosterVector, questionRosterLevel);
 
-            return new KeyValuePair<string, Identity>(questionId.VariableName, new Identity(questionId.Id, questionRosterVector));
+            return new KeyValuePair<string, Identity>(questionnare.GetQuestionVariableName(questionId), new Identity(questionId, questionRosterVector));
         }
 
         private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
