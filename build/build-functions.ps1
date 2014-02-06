@@ -131,7 +131,7 @@ function PathToFinalCapi($CapiProject, $FinalPackageName) {
 	return $PathToFinalCapi
 }
 
-function CopyCapi($Project, $PahToFinalCapi) {
+function CopyCapi($Project, $PathToFinalCapi) {
 
 	$file = get-childitem $Project
 	$SourceFolder = $file.directoryname + "\Externals\Capi"
@@ -143,7 +143,7 @@ function CopyCapi($Project, $PahToFinalCapi) {
 		New-Item -ItemType directory -Path "$SourceFolder"
 	}
 	New-Item -ItemType directory -Path "$SourceFolder\$BuildNumber"
-	Copy-Item "$PahToFinalCapi" "$SourceFolder\$BuildNumber" -Recurse
+	Copy-Item "$PathToFinalCapi" "$SourceFolder\$BuildNumber" -Recurse
 }
 
 function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
@@ -157,15 +157,15 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	$FinalPackageName = "WBCapi.apk"
-	$PahToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
+	$PathToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
 
 	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiProject `
 					-TempPackageNamePrefixWithPath "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 
-	Write-Host "##teamcity[publishArtifacts '$PahToFinalCapi']"
-	CopyCapi -Project $Project -PahToFinalCapi $PahToFinalCapi
+	Write-Host "##teamcity[publishArtifacts '$PathToFinalCapi']"
+	CopyCapi -Project $Project -PathToFinalCapi $PathToFinalCapi
 
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
@@ -182,16 +182,16 @@ function BuildDesigner($Solution, $Project, $CapiTesterProject, $BuildConfigurat
 	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest
 	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-	$FinalPackageName = "WBCapiTester.apk"
-	$PahToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
+	$FinalPackageName = "CAPI.Android.Tester.apk"
+	$PathToFinalCapi = PathToFinalCapi -CapiProject $CapiTesterProject -FinalPackageName $FinalPackageName
 
 	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiTesterProject `
 					-TempPackageNamePrefixWithPath "src/UI/QuestionnaireTester/WB.UI.QuestionnaireTester/bin/$BuildConfiguration/CAPI.Android.Tester" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 
-	Write-Host "##teamcity[publishArtifacts '$PahToFinalCapi']"
-	CopyCapi -Project $Project -PahToFinalCapi $PahToFinalCapi
+	Write-Host "##teamcity[publishArtifacts '$PathToFinalCapi']"
+	CopyCapi -Project $Project -PathToFinalCapi $PathToFinalCapi
 
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
