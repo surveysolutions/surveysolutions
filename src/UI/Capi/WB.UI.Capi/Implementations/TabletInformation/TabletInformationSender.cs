@@ -1,17 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
+using Android.Graphics;
+using Android.Media;
 using Android.Widget;
 using CAPI.Android.Core.Model;
+using CAPI.Android.Settings;
 using Java.IO;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Utils;
 using WB.UI.Shared.Android.RestUtils;
+using Path = System.IO.Path;
 
 namespace WB.UI.Capi.Implementations.TabletInformation
 {
@@ -29,7 +36,7 @@ namespace WB.UI.Capi.Implementations.TabletInformation
         private readonly Context context;
         private readonly ICapiInformationService capiInformationService;
         private readonly IRestUrils webExecutor;
-        private const string postInfoPackagePath = "sync/PostInfoPackage";
+        private const string postInfoPackagePath = "TabletReport/PostInfoPackage";
 
         public TabletInformationSender(Context context, ICapiInformationService capiInformationService)
         {
@@ -73,10 +80,18 @@ namespace WB.UI.Capi.Implementations.TabletInformation
 
             this.CancelIfException(() =>
             {
+                var content = System.IO.File.ReadAllBytes(pathToInfoArchive);
+
+                var tabletInformationPackage = new TabletInformationPackage(Path.GetFileName(pathToInfoArchive), content,
+                    SettingsManager.AndroidId, SettingsManager.GetSetting(SettingsNames.RegistrationKeyName));
+
                 var result = this.webExecutor.ExcecuteRestRequestAsync<bool>(postInfoPackagePath, ct,
-                    System.IO.File.ReadAllText(pathToInfoArchive),
-                    null, null);
+                    JsonUtils.GetJsonData(tabletInformationPackage), null, null);
+
+                if(!result)
+                    throw new NotImplementedException("");
             });
+
             OnProcessFinished();
         }
 
@@ -129,7 +144,7 @@ namespace WB.UI.Capi.Implementations.TabletInformation
         {
             if (this.tokenSource2.IsCancellationRequested)
                 return;
-            CancelInternal();
+            Task.Factory.StartNew(this.CancelInternal);
         }
 
         private void CancelInternal()

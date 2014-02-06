@@ -8,6 +8,6 @@ namespace WB.UI.Shared.Android.RestUtils
     {
         void ExcecuteRestRequest(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams);
         T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams);
-        T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams);
+        T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams);
     }
 }
