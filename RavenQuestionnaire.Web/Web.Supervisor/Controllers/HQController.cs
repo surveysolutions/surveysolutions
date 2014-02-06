@@ -178,6 +178,13 @@ namespace Web.Supervisor.Controllers
             return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
+        public ActionResult MapReport()
+        {
+            this.ViewBag.ActivePage = MenuItem.MapReport;
+
+            return this.View();
+        }
+
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;

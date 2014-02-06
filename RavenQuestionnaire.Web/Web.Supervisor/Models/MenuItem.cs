@@ -52,6 +52,8 @@
 
         Summary = 10,
 
-        Questionnaires = 11
+        Questionnaires = 11,
+
+        MapReport = 12
     }
 }

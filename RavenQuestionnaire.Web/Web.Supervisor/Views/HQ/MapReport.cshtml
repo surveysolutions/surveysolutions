@@ -1,0 +1,56 @@
+﻿@using Web.Supervisor.Code
+@using AppSettings = Web.Supervisor.Code.AppSettings
+@{
+    ViewBag.Title = "MapReport";
+}
+
+<h2>MapReport</h2>
+<div id="map-canvas" class="google-maps" />
+
+@section scripts
+{
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
+    </script>
+
+    <script type="text/javascript">
+        function initialize() {
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error);
+            } else {
+                error();
+            }
+
+            function success(position) {
+                var center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                createMap(center);
+            }
+
+            function error() {
+                var center = new google.maps.LatLng(38.895111, -77.036667); // Washington
+                createMap(center);
+            }
+
+            function createMap(center) {
+                var mapOptions = {
+                    center: center,
+                    zoom: 9,
+                    mapTypeControl: false
+                };
+                var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                window.map = map;
+            }
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+}
+
+@section styles
+{
+    <style type="text/css">
+        #map-canvas {
+            height: 400px;
+        }
+    </style>
+}
