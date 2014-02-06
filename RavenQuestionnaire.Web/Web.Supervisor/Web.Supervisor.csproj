@@ -604,6 +604,7 @@
     <Content Include="Views\Interview\Revalidate.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
+    <Content Include="Views\TabletReport\Packages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

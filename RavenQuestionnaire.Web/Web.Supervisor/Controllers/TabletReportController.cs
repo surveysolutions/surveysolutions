@@ -10,6 +10,7 @@ using System.Web.WebPages;
 using Ionic.Zip;
 using Main.Core;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.TabletInformation;
@@ -20,10 +21,12 @@ namespace Web.Supervisor.Controllers
     public class TabletReportController : AsyncController
     {
         private readonly ILogger logger;
+        private readonly ITabletInformationService tabletInformationService;
 
-        public TabletReportController(ILogger logger)
+        public TabletReportController(ILogger logger, ITabletInformationService tabletInformationService)
         {
             this.logger = logger;
+            this.tabletInformationService = tabletInformationService;
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -31,16 +34,23 @@ namespace Web.Supervisor.Controllers
         {
             try
             {
-                var stringData = new StreamReader(this.Request.InputStream).ReadToEnd();
-                var tabletInformationPackage = JsonConvert.DeserializeObject<TabletInformationPackage>(stringData,
-                    new JsonSerializerSettings
-                    {
-                        TypeNameHandling =
-                            TypeNameHandling.Objects
-                    });
-                var dirPath = Path.Combine(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
-                          tabletInformationPackage.PackageName);
-                System.IO.File.WriteAllBytes(dirPath, tabletInformationPackage.Content);
+                TabletInformationPackage tabletInformationPackage = null;
+                using (var streamReader = new StreamReader(this.Request.InputStream))
+                {
+                    var stringData = streamReader.ReadToEnd();
+                    tabletInformationPackage = JsonConvert.DeserializeObject<TabletInformationPackage>(stringData,
+                        new JsonSerializerSettings
+                        {
+                            TypeNameHandling =
+                                TypeNameHandling.Objects
+                        });
+                }
+                if (tabletInformationPackage == null)
+                    return this.Json(false, JsonRequestBehavior.AllowGet);
+
+                tabletInformationService.SaveTabletInformation(tabletInformationPackage.PackageName, tabletInformationPackage.Content,
+                    tabletInformationPackage.AndroidId, tabletInformationPackage.RegistrationId);
+
                 return this.Json(true, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -48,6 +58,18 @@ namespace Web.Supervisor.Controllers
                 logger.Error(e.Message, e);
                 return this.Json(false, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [Authorize(Roles = "Headquarter")]
+        public ActionResult Packages()
+        {
+            return this.View(tabletInformationService.GetAllTabletInformationPackages());
+        }
+
+        [Authorize(Roles = "Headquarter")]
+        public ActionResult DownloadPackages(string fileName)
+        {
+            return this.File(tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
         }
     }
 }
