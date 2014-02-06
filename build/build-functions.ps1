@@ -29,7 +29,7 @@ function AddArtifacts($Project, $BuildConfiguration) {
 	$filename = $packagepath + $file.basename
 	$zipfile = $filename + ".zip"
 	$cmdfile = $filename + ".deploy.cmd"
-	$paramfile =$filename + ".SetParameters.xml"
+	$paramfile = $filename + ".SetParameters.xml"
 	$manifestfile = $filename + ".SourceManifest.xml"
 	Write-Host "##teamcity[publishArtifacts '$zipfile']"
 	Write-Host "##teamcity[publishArtifacts '$cmdfile']"
@@ -125,14 +125,13 @@ function SignAndPackCapi($KeyStorePass, $CapiProject, $TempPackageNamePrefixWith
 }
 
 function PathToFinalCapi($CapiProject, $FinalPackageName) {
-	
+
 	$file = get-childitem $CapiProject
 	$PathToFinalCapi = $file.directoryname + "\bin\" + $BuildConfiguration + "\$FinalPackageName"
 	return $PathToFinalCapi
 }
 
-function CopyCapi($Project, $CapiProject, $FinalPackageName) {
-	$PahToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
+function CopyCapi($Project, $PahToFinalCapi) {
 
 	$file = get-childitem $Project
 	$SourceFolder = $file.directoryname + "\Externals\Capi"
@@ -158,15 +157,15 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	$FinalPackageName = "WBCapi.apk"
+	$PahToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
 
 	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiProject `
 					-TempPackageNamePrefixWithPath "src/UI/Capi/WB.UI.Capi/bin/$BuildConfiguration/CAPI.Android" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 
-	CopyCapi -Project $Project `
-			 -CapiProject $CapiProject `
-			 -FinalPackageName $FinalPackageName
+	Write-Host "##teamcity[publishArtifacts '$PahToFinalCapi']"
+	CopyCapi -Project $Project -PahToFinalCapi $PahToFinalCapi
 
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
@@ -183,16 +182,16 @@ function BuildDesigner($Solution, $Project, $CapiTesterProject, $BuildConfigurat
 	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest
 	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-	$FinalPackageName = "WBCapiTester.apk" 
+	$FinalPackageName = "WBCapiTester.apk"
+	$PahToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
 
 	SignAndPackCapi -KeyStorePass $KeystorePassword `
 					-CapiProject $CapiTesterProject `
 					-TempPackageNamePrefixWithPath "src/UI/QuestionnaireTester/WB.UI.QuestionnaireTester/bin/$BuildConfiguration/CAPI.Android.Tester" `
 					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
 
-	CopyCapi -Project $Project `
-			 -CapiProject $CapiTesterProject `
-			 -FinalPackageName $FinalPackageName
+	Write-Host "##teamcity[publishArtifacts '$PahToFinalCapi']"
+	CopyCapi -Project $Project -PahToFinalCapi $PahToFinalCapi
 
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
