@@ -1217,6 +1217,97 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
+        public void AddQRBarcodeQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId)
+        {
+            this.PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: groupId, title: title,
+                variableName: variableName, condition: condition, responsibleId: responsibleId);
+
+            this.ApplyEvent(new QRBarcodeQuestionAdded()
+            {
+                QuestionId = questionId,
+                ParentGroupId = groupId,
+                Title = title,
+                VariableName = variableName,
+                IsMandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId
+            });
+        }
+
+        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid responsibleId)
+        {
+            this.PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
+                variableName: variableName, condition: condition, responsibleId: responsibleId);
+
+            this.ApplyEvent(new QRBarcodeQuestionUpdated()
+            {
+                QuestionId = questionId,
+                Title = title,
+                VariableName = variableName,
+                IsMandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId
+            });
+        }
+
+        public void CloneQRBarcodeQuestion(Guid questionId, Guid groupId, string title, string variableName,
+           bool isMandatory, string condition, string instructions, Guid sourceQuestionId, int targetIndex,
+            Guid responsibleId)
+        {
+            this.PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: groupId, title: title,
+                variableName: variableName, condition: condition, responsibleId: responsibleId);
+
+            this.ApplyEvent(new QRBarcodeQuestionCloned()
+            {
+                QuestionId = questionId,
+                ParentGroupId = groupId,
+                Title = title,
+                VariableName = variableName,
+                IsMandatory = isMandatory,
+                ConditionExpression = condition,
+                Instructions = instructions,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
+            });
+        }
+
+        private void PrepareGeneralProperties(ref string title, ref string variableName)
+        {
+            variableName = variableName.Trim();
+            title = title.Trim();
+        }
+
+        private void ThrowIfGeneralQuestionSettingsAreInvalid(Guid questionId, Guid? parentGroupId, string title, string variableName,
+            string condition, Guid responsibleId)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName);
+            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
+
+            var parentGroup = parentGroupId.HasValue
+                ? this.GetGroupById(parentGroupId.Value)
+                : this.innerDocument.GetParentOfQuestion(questionId);
+
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, false, parentGroup);
+        }
+
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
             string alias, bool isPrefilled, string validationExpression, Guid responsibleId)
         {
