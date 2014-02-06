@@ -124,6 +124,12 @@
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\AbstractQuestionAdded.cs" />
+    <Compile Include="Events\Questionnaire\AbstractQuestionUpdated.cs" />
+    <Compile Include="Events\Questionnaire\AbstractQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\QRBarcodeQuestionUpdated.cs" />
+    <Compile Include="Events\Questionnaire\QRBarcodeQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
     <Compile Include="Events\Questionnaire\GroupEvent.cs" />
     <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
