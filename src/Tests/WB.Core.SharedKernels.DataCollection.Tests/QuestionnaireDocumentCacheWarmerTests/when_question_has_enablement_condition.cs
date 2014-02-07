@@ -49,8 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireDocumentCacheW
 
         It should_QuestionsInvolvedInCustomEnablementConditionOfQuestion_contain_referenced_in_conditions_question = () =>
             questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == questionWithConditionQuestionId)
-                .QuestionsInvolvedInCustomEnablementConditionOfQuestion[0].ShouldEqual(
-                    new QuestionIdAndVariableName(referencedInConditionQuestionId, referencedInConditionQuestionsVariableName));
+                .QuestionIdsInvolvedInCustomEnablementConditionOfQuestion[0].ShouldEqual(
+                    referencedInConditionQuestionId);
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
         {

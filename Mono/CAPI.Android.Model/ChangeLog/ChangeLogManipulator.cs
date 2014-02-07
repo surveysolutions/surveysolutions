@@ -195,12 +195,12 @@ namespace CAPI.Android.Core.Model.ChangeLog
             return record;
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             throw new NotImplementedException();
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
             throw new NotImplementedException();
         }

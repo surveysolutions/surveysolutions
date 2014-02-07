@@ -23,22 +23,28 @@ namespace Web.Supervisor.Controllers
     {
         private IPublicService DesignerService
         {
-            get { return this.DesignerServiceClient; }
-        }
-
-        private PublicServiceClient DesignerServiceClient
-        {
-            get { return (PublicServiceClient)HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name]; }
-            set { HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name] = value; }
+            get { return getDesignerService(this.GlobalInfo); }
         }
 
         private readonly IStringCompressor zipUtils;
+        private readonly Func<IGlobalInfoProvider, IPublicService> getDesignerService;
 
-        public DesignerQuestionnairesApiController(ICommandService commandService, IGlobalInfoProvider globalInfo,
-                                                   IStringCompressor zipUtils, ILogger logger)
+        public DesignerQuestionnairesApiController(
+            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
+            : this(commandService, globalInfo, zipUtils, logger, GetDesignerService) { }
+
+        internal DesignerQuestionnairesApiController(
+            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
+            Func<IGlobalInfoProvider, IPublicService> getDesignerService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
+            this.getDesignerService = getDesignerService;
+        }
+
+        private static IPublicService GetDesignerService(IGlobalInfoProvider globalInfoProvider)
+        {
+            return (PublicServiceClient) HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
         }
 
         public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
@@ -81,7 +87,7 @@ namespace Web.Supervisor.Controllers
                 {
                     this.Logger.Error(
                         string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
-                    return new QuestionnaireVerificationResponse(false);
+                    throw;
                 }
 
                 var response = new QuestionnaireVerificationResponse(true, document.Title);

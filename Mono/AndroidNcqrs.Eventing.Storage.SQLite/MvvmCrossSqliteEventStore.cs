@@ -78,20 +78,24 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                 System.IO.Path.Combine(FullPathToFolder, id.ToString()));
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return FullPathToFolder;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
-            var dirWithImeges = Path.Combine(path, folderName);
+            var dirWithImages = Path.Combine(path, folderName);
+           
             foreach (var file in Directory.EnumerateFiles(FullPathToFolder))
             {
                 File.Delete(file);
-            }
+            } 
+            
+            if (!Directory.Exists(dirWithImages))
+                return;
 
-            foreach (var file in Directory.GetFiles(dirWithImeges))
+            foreach (var file in Directory.GetFiles(dirWithImages))
                 File.Copy(file, Path.Combine(FullPathToFolder, Path.GetFileName(file)));
         }
     }

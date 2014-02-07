@@ -21,7 +21,8 @@ namespace CAPI.Android.Core.Model.ReadSideStore
     public class FileReadSideRepositoryWriter<TEntity> : IReadSideRepositoryWriter<TEntity>, IBackupable
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private Dictionary<Guid, TEntity> memcache = new Dictionary<Guid, TEntity>();
+        private Dictionary<string, TEntity> memcache = new Dictionary<string, TEntity>();
+
         public FileReadSideRepositoryWriter()
         {
             if (!Directory.Exists(StoreDirPath))
@@ -33,12 +34,12 @@ namespace CAPI.Android.Core.Model.ReadSideStore
             get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), typeof (TEntity).Name); }
         }
 
-        private string GetFileName(Guid id)
+        private string GetFileName(string id)
         {
-            return Path.Combine(StoreDirPath, id.ToString());
+            return Path.Combine(StoreDirPath, id);
         }
 
-        public TEntity GetById(Guid id)
+        public TEntity GetById(string id)
         {
             if (!memcache.ContainsKey(id))
             {
@@ -50,14 +51,14 @@ namespace CAPI.Android.Core.Model.ReadSideStore
             return memcache[id];
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
             if (memcache.ContainsKey(id))
                 memcache.Remove(id);
             File.Delete(GetFileName(id));
         }
 
-        public void Store(TEntity view, Guid id)
+        public void Store(TEntity view, string id)
         {
             var path = GetFileName(id);
             File.WriteAllText(path, JsonUtils.GetJsonData(view));
@@ -65,26 +66,25 @@ namespace CAPI.Android.Core.Model.ReadSideStore
             memcache[id] = view;
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return StoreDirPath;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
+            var dirWithReadSide = Path.Combine(path, typeof (TEntity).Name);
             foreach (var file in Directory.EnumerateFiles(StoreDirPath))
             {
                 File.Delete(file);
             }
 
-            var dirWithReadSide = Path.Combine(path, typeof (TEntity).Name);
             if (!Directory.Exists(dirWithReadSide))
                 return;
 
-
             foreach (var file in Directory.GetFiles(dirWithReadSide))
                 File.Copy(file, Path.Combine(StoreDirPath, Path.GetFileName(file)));
-            memcache = new Dictionary<Guid, TEntity>();
+            memcache = new Dictionary<string, TEntity>();
         }
     }
 }

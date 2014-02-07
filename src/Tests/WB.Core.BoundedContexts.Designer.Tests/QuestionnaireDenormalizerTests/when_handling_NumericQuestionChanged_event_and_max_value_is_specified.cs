@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             @event = CreateNumericQuestionChangedEvent(questionId: questionId, maxValue: maxValue);
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
-                => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
+                => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
             updatedQuestionWithMaxValue = Mock.Of<IQuestion>(question
                 => question.PublicKey == questionId);
