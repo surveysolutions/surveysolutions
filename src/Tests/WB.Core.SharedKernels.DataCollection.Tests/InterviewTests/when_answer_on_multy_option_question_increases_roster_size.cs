@@ -31,18 +31,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                                                        => _.HasQuestion(multyOptionRosterSizeId) == true
-                                                        && _.GetQuestionType(multyOptionRosterSizeId) == QuestionType.MultyOption
-                                                        && _.GetRosterGroupsByRosterSizeQuestion(multyOptionRosterSizeId) == new Guid[] { rosterGroupId }
-                                                        && _.GetAnswerOptionsAsValues(multyOptionRosterSizeId) == new decimal[] { 1,2,3}
+                => _.HasQuestion(multyOptionRosterSizeId) == true
+                && _.GetQuestionType(multyOptionRosterSizeId) == QuestionType.MultyOption
+                && _.GetRosterGroupsByRosterSizeQuestion(multyOptionRosterSizeId) == new Guid[] { rosterGroupId }
+                && _.GetAnswerOptionsAsValues(multyOptionRosterSizeId) == new decimal[] { 1,2,3}
 
-                                                        && _.HasGroup(rosterGroupId) == true
-                                                        && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                                                        && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(rosterGroupId) == new Guid[] { rosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
+                && _.HasGroup(rosterGroupId) == true
+                && _.GetRosterLevelForGroup(rosterGroupId) == 1
+                && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(rosterGroupId) == new Guid[] { rosterGroupId }
+                && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
@@ -50,22 +49,24 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.SynchronizeInterview(userId,
+            interview.SynchronizeInterview(
+                userId,
                 new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, userId, questionnaireId,
                     questionnaire.Version,
-                    new[]
-                    { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[0], new decimal[] { 1 }, string.Empty) },
+                    new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] {}, new decimal[] { 1 }, string.Empty) },
                     new HashSet<InterviewItemId>(),
                     new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), null,
                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {
-                            new InterviewItemId(rosterGroupId, new decimal[0]), new[]
+                            new InterviewItemId(rosterGroupId, new decimal[] {}),
+                            new[]
                             {
-                                new RosterSynchronizationDto(rosterGroupId, new decimal[0], 1.0m, null, string.Empty),
+                                new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1.0m, null, string.Empty),
                             }
                         }
-                    }, true));
+                    },
+                    true));
 
             eventContext = new EventContext();
         };

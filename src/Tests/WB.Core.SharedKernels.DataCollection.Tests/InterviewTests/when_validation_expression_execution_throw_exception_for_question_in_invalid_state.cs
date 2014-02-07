@@ -30,8 +30,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
                                                         => _.HasQuestion(validatingQuestionId) == true
                                                         && _.GetQuestionType(validatingQuestionId) == QuestionType.Numeric
-                                                        && _.GetQuestionsInvolvedInCustomValidation(validatingQuestionId) == new [] { new QuestionIdAndVariableName(validatingQuestionId,"var name") }
+                                                        && _.GetQuestionsInvolvedInCustomValidation(validatingQuestionId) == new [] { validatingQuestionId }
                                                         && _.IsCustomValidationDefined(validatingQuestionId)==true
+
+                                                        && _.GetQuestionVariableName(validatingQuestionId) == "var name"
                                                         );
             var expressionProcessor = new Mock<IExpressionProcessor>();
 

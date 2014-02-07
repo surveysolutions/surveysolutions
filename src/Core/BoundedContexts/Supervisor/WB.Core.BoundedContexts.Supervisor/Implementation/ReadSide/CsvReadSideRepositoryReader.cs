@@ -23,17 +23,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             this.dataExportService = dataExportService;
         }
 
-        InterviewDataExportView IReadSideRepositoryWriter<InterviewDataExportView>.GetById(Guid id)
+        InterviewDataExportView IReadSideRepositoryWriter<InterviewDataExportView>.GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
             throw new NotImplementedException();
         }
 
-        public void Store(InterviewDataExportView view, Guid id)
+        public void Store(InterviewDataExportView view, string id)
         {
             dataExportService.AddExportedDataByInterview(view);
         }
