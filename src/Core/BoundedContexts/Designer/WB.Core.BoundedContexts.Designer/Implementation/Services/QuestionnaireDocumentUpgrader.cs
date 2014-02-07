@@ -19,9 +19,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             _questionFactory = questionFactory;
         }
 
-        public QuestionnaireDocument TranslatePropagatePropertiesToRosterProperties(QuestionnaireDocument originalDcument)
+        public QuestionnaireDocument TranslatePropagatePropertiesToRosterProperties(QuestionnaireDocument originalDocument)
         {
-            var document = originalDcument.Clone();
+            var document = originalDocument.Clone();
 
             var questions = document.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.AutoPropagate).ToList();
             foreach (var question in questions)
@@ -42,6 +42,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             MarkAllNonReferencedAutoPropagatedGroupsAsNotPropagated(document);
 
             FindHeadQuestionsAndUpdateThemToRosterTitles(document);
+
+            return document;
+        }
+
+        public QuestionnaireDocument CleanExpressionCaches(QuestionnaireDocument originalDocument)
+        {
+            var document = originalDocument.Clone();
+
+            var allQuestions = document.Find<IQuestion>(_ => true).ToList();
+
+            foreach (var question in allQuestions)
+            {
+                question.ConditionalDependentQuestions = null;
+                question.ConditionalDependentGroups = null;
+                question.QuestionsWhichCustomValidationDependsOnQuestion = null;
+                question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion = null;
+                question.QuestionIdsInvolvedInCustomValidationOfQuestion = null;
+            }
 
             return document;
         }

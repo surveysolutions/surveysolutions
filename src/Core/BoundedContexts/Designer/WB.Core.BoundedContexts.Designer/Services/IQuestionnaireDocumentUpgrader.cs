@@ -10,6 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IQuestionnaireDocumentUpgrader
     {
-        QuestionnaireDocument TranslatePropagatePropertiesToRosterProperties(QuestionnaireDocument document);
+        QuestionnaireDocument TranslatePropagatePropertiesToRosterProperties(QuestionnaireDocument originalDocument);
+
+        QuestionnaireDocument CleanExpressionCaches(QuestionnaireDocument originalDocument);
     }
 }
