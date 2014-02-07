@@ -43,15 +43,6 @@ namespace WB.Core.Synchronization.SyncStorage
             }
         }
 
-        public void RemoveChunk(Guid Id)
-        {
-            lock (myLock)
-            {
-                storage.Remove(Id);
-            }
-        }
-
-
         protected long CurrentSequence
         {
             get

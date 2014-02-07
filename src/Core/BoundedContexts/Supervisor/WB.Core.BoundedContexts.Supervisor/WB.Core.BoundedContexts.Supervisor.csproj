@@ -63,7 +63,6 @@
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedDataEventHandler.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
-    <Compile Include="EventHandler\InterviewSynchronizationEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireExportStructureEventHandler.cs" />
