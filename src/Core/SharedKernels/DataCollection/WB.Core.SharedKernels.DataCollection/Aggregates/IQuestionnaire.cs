@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsCustomValidationDefined(Guid questionId);
 
-        IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomValidation(Guid questionId);
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId);
 
         string GetCustomValidationExpression(Guid questionId);
 
@@ -50,9 +50,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
 
-        IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId);
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId);
 
-        IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId);
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId);
 
         IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
 
