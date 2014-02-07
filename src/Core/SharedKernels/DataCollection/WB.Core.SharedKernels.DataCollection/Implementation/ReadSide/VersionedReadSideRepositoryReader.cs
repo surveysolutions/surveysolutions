@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Utility;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 
@@ -25,14 +20,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
             return this.internalRepositoryReader.Count();
         }
 
-        public TEntity GetById(Guid id)
+        public TEntity GetById(string id)
         {
             return this.internalRepositoryReader.GetById(id);
         }
 
-        public TEntity GetById(Guid id, long version)
+        public TEntity GetById(string id, long version)
         {
-            var entity = internalRepositoryReader.GetById(id.Combine(version));
+            var entity = internalRepositoryReader.GetById(RepositoryKeysHelper.GetVersionedKey(id, version));
             if (entity != null)
                 return entity;
             entity = internalRepositoryReader.GetById(id);
@@ -43,4 +38,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
             return null;
         }
     }
+
+   
 }
