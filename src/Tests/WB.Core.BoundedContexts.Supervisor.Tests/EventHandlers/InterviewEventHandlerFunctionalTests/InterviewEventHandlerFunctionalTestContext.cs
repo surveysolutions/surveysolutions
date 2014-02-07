@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventHandlerFunctionalTests
 {
@@ -26,7 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             return new InterviewEventHandlerFunctional(
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object,
                 questionnaireRosterStructureMockStorage.Object,
-                new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object);
+                new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object,new Mock<ISynchronizationDataStorage>().Object);
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
