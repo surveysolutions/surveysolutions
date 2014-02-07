@@ -377,7 +377,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             if (tempFileImportData != null)
                 tempStorage.Store(tempFileImportData, tempFileImportData.PublicKey.ToString());
             var bigTemplateRepositoryMock = new Mock<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>();
-            bigTemplateRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>()))
+            bigTemplateRepositoryMock.Setup(x => x.GetById(It.IsAny<string>()))
                 .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = questionnaireDocumentVersion });
 
             var smallTemplateRepository = new InMemoryTemporaryDataRepositoryAccessor<SampleCreationStatus>();

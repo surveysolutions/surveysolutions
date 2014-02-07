@@ -1,4 +1,3 @@
-using System;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -13,17 +12,17 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
             this.writer = writer;
         }
 
-        public T Select(Guid id)
+        public T Select(string id)
         {
             return this.writer.GetById(id);
         }
 
-        public void AddOrUpdate(T projection, Guid id)
+        public void AddOrUpdate(T projection, string id)
         {
             this.writer.Store(projection, id);
         }
 
-        public void Delete(T projection, Guid id)
+        public void Delete(T projection, string id)
         {
             this.writer.Remove(id);
         }

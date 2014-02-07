@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 CreateGroup(groupId: parentGroupId)
             });
 
-            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer => writer.GetById(Moq.It.IsAny<Guid>()) == questionnaireDocument);
+            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer => writer.GetById(Moq.It.IsAny<string>()) == questionnaireDocument);
 
             var questionFactory = new Mock<IQuestionFactory>();
 

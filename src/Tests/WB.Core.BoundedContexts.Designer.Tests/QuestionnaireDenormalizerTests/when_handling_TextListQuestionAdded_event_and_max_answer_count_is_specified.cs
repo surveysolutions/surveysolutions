@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             @event = CreateTextListQuestionAddedEvent(questionId: questionId, parentGroupId: parentGroupId, maxAnswerCount: maxValue);
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
-                => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
+                => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
             var questionFactory = new Mock<IQuestionFactory>();
 
