@@ -8,7 +8,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
         IReadSideRepositoryEntity
     {
         private  T view;
-        private readonly Guid id;
+        private readonly string id;
         private readonly IReadSideRepositoryWriter<T> readSideRepositoryWriter;
 
         public bool IsDisposed
@@ -17,7 +17,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
             private set;
         }
 
-        public InMemoryViewStorage(IReadSideRepositoryWriter<T> readSideRepositoryWriter, Guid id)
+        public InMemoryViewStorage(IReadSideRepositoryWriter<T> readSideRepositoryWriter, string id)
         {
             this.IsDisposed = false;
             this.readSideRepositoryWriter = readSideRepositoryWriter;
@@ -25,17 +25,17 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
             this.view = readSideRepositoryWriter.GetById(id);
         }
 
-        public T Select(Guid id)
+        public T Select(string id)
         {
             return this.view;
         }
 
-        public void AddOrUpdate(T projection, Guid id)
+        public void AddOrUpdate(T projection, string id)
         {
             this.view = projection;
         }
 
-        public void Delete(T projection, Guid id)
+        public void Delete(T projection, string id)
         {
             this.view = null;
         }

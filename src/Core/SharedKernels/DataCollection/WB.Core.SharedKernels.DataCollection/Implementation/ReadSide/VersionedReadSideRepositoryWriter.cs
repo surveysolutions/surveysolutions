@@ -26,17 +26,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
             this.internalRepositoryWroter = internalRepositoryWroter;
         }
 
-        public TEntity GetById(Guid id)
+        public TEntity GetById(string id)
         {
             return internalRepositoryWroter.GetById(id);
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
             internalRepositoryWroter.Remove(id);
         }
 
-        public void Store(TEntity view, Guid id)
+        public void Store(TEntity view, string id)
         {
             TEntity previousEntity = null;
             try
@@ -49,15 +49,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
             }
             if (previousEntity != null)
             {
-                internalRepositoryWroter.Store(previousEntity, id.Combine(previousEntity.Version));
+                internalRepositoryWroter.Store(previousEntity, RepositoryKeysHelper.GetVersionedKey(id, previousEntity.Version));
             }
             internalRepositoryWroter.Store(view, id);
         }
 
-        public TEntity GetById(Guid id, long version)
+        public TEntity GetById(string id, long version)
         {
-       //     return internalRepositoryWroter.GetById(id.Combine(version));
-            var entity = internalRepositoryWroter.GetById(id.Combine(version));
+            var entity = internalRepositoryWroter.GetById(RepositoryKeysHelper.GetVersionedKey(id, version));
             if (entity != null)
                 return entity;
             entity = internalRepositoryWroter.GetById(id);
@@ -68,9 +67,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
             return null;
         }
 
-        public void Remove(Guid id, long version)
+        public void Remove(string id, long version)
         {
-            internalRepositoryWroter.Remove(id.Combine(version));
+            internalRepositoryWroter.Remove(RepositoryKeysHelper.GetVersionedKey(id, version));
         }
     }
 }
