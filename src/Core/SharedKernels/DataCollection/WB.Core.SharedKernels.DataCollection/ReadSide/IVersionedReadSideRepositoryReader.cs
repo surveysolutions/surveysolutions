@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +10,6 @@ namespace WB.Core.SharedKernels.DataCollection.ReadSide
     public interface IVersionedReadSideRepositoryReader<TEntity> : IReadSideRepositoryReader<TEntity>
         where TEntity : class, IVersionedView
     {
-        TEntity GetById(Guid id, long version);
+        TEntity GetById(string id, long version);
     }
 }

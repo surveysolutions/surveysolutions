@@ -1,5 +1,3 @@
-using System;
-
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
     /// <summary>
@@ -9,12 +7,11 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
     /// </summary>
     public interface IReadSideRepositoryWriter<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
-    #warning TLK: make string identifiers here after switch to new storage
     {
-        TEntity GetById(Guid id);
+        TEntity GetById(string id);
 
-        void Remove(Guid id);
+        void Remove(string id);
 
-        void Store(TEntity view, Guid id);
+        void Store(TEntity view, string id);
     }
 }

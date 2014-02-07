@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
             // assert
             questionnaireStorageMock.Verify(
-              x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId));
+              x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId.ToString()));
             
         }
         [Test]
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
             var updrader = Mock.Of<IQuestionnaireDocumentUpgrader>(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()) == documentReplacement);
 
-            questionnaireStorageMock.Setup(x => x.GetById(questionnaireId)).Returns(currentItem);
+            questionnaireStorageMock.Setup(x => x.GetById(questionnaireId.ToString())).Returns(currentItem);
 
             QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(updrader);
             // act
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
             // assert
             questionnaireStorageMock.Verify(
-                x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId));
+                x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId.ToString()));
         }
 
 

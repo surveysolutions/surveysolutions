@@ -169,6 +169,8 @@
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
+    <Compile Include="ReadSide\VersionedReadSideRepositoryReaderExtension.cs" />
+    <Compile Include="ReadSide\VersionedReadSideRepositoryWriterExtension.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
