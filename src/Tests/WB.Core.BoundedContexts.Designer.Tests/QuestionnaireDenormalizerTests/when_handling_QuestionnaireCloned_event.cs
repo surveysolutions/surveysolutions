@@ -21,9 +21,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
             questionnaireClonedEvent = CreateQuestionnaireClonedEvent(initialDocument);
 
-            upgradeResult = CreateQuestionnaireDocument();
+            sequenceUpgradeResult = CreateQuestionnaireDocument();
+            var translatedDocument = CreateQuestionnaireDocument();
 
-            var upgrader = Mock.Of<IQuestionnaireDocumentUpgrader>(u => u.TranslatePropagatePropertiesToRosterProperties(initialDocument) == upgradeResult);
+            var upgrader = Mock.Of<IQuestionnaireDocumentUpgrader>(u
+                => u.TranslatePropagatePropertiesToRosterProperties(initialDocument) == translatedDocument
+                && u.CleanExpressionCaches(translatedDocument) == sequenceUpgradeResult);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, upgrader: upgrader);
         };
@@ -31,14 +34,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(questionnaireClonedEvent);
 
-        It should_pass_result_of_QuestionnaireDocumentUpgrader_to_document_storages_Store_method = () =>
+        It should_pass_result_of_sequence_of_calls_to_QuestionnaireDocumentUpgrader_to_document_storages_Store_method = () =>
             documentStorage.Verify(s => s.Store(
-                Moq.It.Is<QuestionnaireDocument>(d => d == upgradeResult),
-                Moq.It.Is<Guid>(g => g == upgradeResult.PublicKey)));
+                Moq.It.Is<QuestionnaireDocument>(d => d == sequenceUpgradeResult),
+                Moq.It.Is<Guid>(g => g == sequenceUpgradeResult.PublicKey.ToString())));
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<QuestionnaireCloned> questionnaireClonedEvent;
-        private static QuestionnaireDocument upgradeResult;
+        private static QuestionnaireDocument sequenceUpgradeResult;
         private static Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> documentStorage;
     }
 }
