@@ -316,10 +316,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             if (IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
             {
-                ResendInterviewInNewStatus(currentState.Document);
+                ResendInterviewInNewStatus(currentState.Document, newStatus);
             }
-
-            if (IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
+            else if (IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
             {
                 syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
             }
@@ -329,7 +328,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private bool IsInterviewWithStatusNeedToBeResendToCapi(InterviewStatus newStatus)
         {
-            return newStatus == InterviewStatus.RejectedBySupervisor || newStatus == InterviewStatus.InterviewerAssigned;
+            return newStatus == InterviewStatus.RejectedBySupervisor;
         }
 
         private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus)
@@ -337,9 +336,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
         }
 
-        public void ResendInterviewInNewStatus(InterviewData interview)
+        public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus)
         {
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, interview.Status);
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus);
+
+            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+        }
+
+        public void ResendInterviewForPerson(InterviewData interview, Guid responsibleId)
+        {
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned);
 
             syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
@@ -357,6 +363,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             currentState.Document.ResponsibleId = evnt.Payload.InterviewerId;
             currentState.Document.ResponsibleRole = UserRoles.Operator;
             currentState.Sequence = evnt.EventSequence;
+            this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId);
             return currentState;
         }
 
