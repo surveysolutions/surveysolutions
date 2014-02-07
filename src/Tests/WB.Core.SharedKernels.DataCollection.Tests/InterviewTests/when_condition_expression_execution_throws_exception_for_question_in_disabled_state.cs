@@ -33,11 +33,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                                                         => _.HasQuestion(conditionallyDisabledQuestionId) == true
                                                         && _.GetQuestionType(conditionallyDisabledQuestionId) == QuestionType.Text
-                                                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyDisabledQuestionId) == new [] { new QuestionIdAndVariableName(answeringQuestionId, "var name") }
+                                                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyDisabledQuestionId) == new [] { answeringQuestionId }
 
                                                         && _.HasQuestion(answeringQuestionId) == true
                                                         && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric
-                                                        && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new Guid[] { conditionallyDisabledQuestionId });
+                                                        && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new Guid[] { conditionallyDisabledQuestionId }
+
+                                                        && _.GetQuestionVariableName(answeringQuestionId) == "var name"
+                                                        );
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 

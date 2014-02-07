@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 using Java.Lang;
+using WB.Core.Infrastructure.InformationSupplier;
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
 
@@ -14,7 +15,6 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
         private string Tag;
         private const string CapiFolderName = "CAPI";
         private const string LogFolderName = "Logs";
-
         private string LogFilePath;
 
         private static string GetLogDirectory()
@@ -40,11 +40,10 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
             return storageDirectory;
         }
 
-        public FileLogger(string appName) 
+        public FileLogger(string appName)
         {
             Tag = appName;
             LogFilePath = Path.Combine(GetLogDirectory(), appName + ".log.txt");
-        
 #if DEBUG
             this.IsDebugEnabled = true;
             this.IsInfoEnabled = true;
@@ -56,6 +55,11 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
 #endif
             this.IsErrorEnabled = true;
             this.IsFatalEnabled = true;
+        }
+
+        public FileLogger(string appName, IInfoFileSupplierRegistry infoFileSupplierRegistry):this(appName) 
+        {
+            infoFileSupplierRegistry.RegisterConstant(LogFilePath);
         }
 
         public void Debug(string message, Exception exception = null)
