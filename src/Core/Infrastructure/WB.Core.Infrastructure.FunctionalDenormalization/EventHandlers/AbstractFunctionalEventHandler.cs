@@ -113,7 +113,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 
         public abstract Type[] UsesViews { get; }
 
-        public Type[] BuildsViews
+        public virtual Type[] BuildsViews
         {
             get { return new[] { typeof(T) }; }
         }
