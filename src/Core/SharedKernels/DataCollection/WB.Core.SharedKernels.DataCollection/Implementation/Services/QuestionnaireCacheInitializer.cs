@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         private void GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
         {
             var targetQuestion = this.GetQuestion(questionId);
-            targetQuestion.ConditionalDependentQuestions = Enumerable.ToList(
+            targetQuestion.QuestionsWithDependentEnablementConditions = Enumerable.ToList(
                 from question in this.QuestionCache.Values
                 where this.DoesQuestionCustomEnablementDependOnSpecifiedQuestion(question.PublicKey, specifiedQuestionId: questionId)
                     && questionId != question.PublicKey
@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         private void GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
         {
             var targetQuestion = this.GetQuestion(questionId);
-            targetQuestion.ConditionalDependentGroups = Enumerable.ToList(
+            targetQuestion.GroupsWithDependentEnablementConditions = Enumerable.ToList(
                 from @group in this.GroupCache.Values
                 where this.DoesGroupCustomEnablementDependOnSpecifiedQuestion(@group.PublicKey, specifiedQuestionId: questionId)
                 select @group.PublicKey
