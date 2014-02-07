@@ -27,7 +27,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             return this.documentStore.Count<TView>();
         }
 
-        public TView GetById(Guid id)
+        public TView GetById(string id)
         {
             return this.documentStore.GetById<TView>(id);
         }
@@ -37,12 +37,12 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             return this.documentStore.Filter(predExpr);
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
             this.documentStore.Remove<TView>(id);
         }
 
-        public void Store(TView view, Guid id)
+        public void Store(TView view, string id)
         {
             this.documentStore.Store<TView>(view,id);
         }

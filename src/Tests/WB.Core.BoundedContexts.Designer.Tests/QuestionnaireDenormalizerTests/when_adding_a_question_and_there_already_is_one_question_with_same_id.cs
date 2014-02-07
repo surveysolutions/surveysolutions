@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<Guid>()) == questionnaire);
+                => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             var textQuestion = CreateTextQuestion(questionId: questionId, title: addedQuestionTitle);
 

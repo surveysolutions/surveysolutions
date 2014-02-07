@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         It should_pass_result_of_QuestionnaireDocumentUpgrader_to_document_storages_Store_method = () =>
             documentStorage.Verify(s => s.Store(
                 Moq.It.Is<QuestionnaireDocument>(d => d == upgradeResult),
-                Moq.It.Is<Guid>(g => g == upgradeResult.PublicKey)));
+                Moq.It.Is<string>(g => g == upgradeResult.PublicKey.ToString())));
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<QuestionnaireCloned> questionnaireClonedEvent;
