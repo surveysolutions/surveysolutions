@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.Infrastructure.ReadSide;
@@ -31,7 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
                 Directory.CreateDirectory(path);
         }
 
-        public QuestionnaireExportStructure GetById(Guid id)
+        public QuestionnaireExportStructure GetById(string id)
         {
             var questionnaireFileName = GetQuestionnaireFileName(id);
             if (!File.Exists(questionnaireFileName))
@@ -39,26 +34,31 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             return this.jsonSerializer.Deserrialize<QuestionnaireExportStructure>(File.ReadAllText(questionnaireFileName));
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
-            dataExportService.DeleteExportedData(id, 1);
+            dataExportService.DeleteExportedData(ToGuestionnaireId(id), 1);
             File.Delete(GetQuestionnaireFileName(id));
-        }
-
-        public void Store(QuestionnaireExportStructure view, Guid id)
-        {
-            dataExportService.CreateExportedDataStructureByTemplate(view);
-            File.WriteAllText(GetQuestionnaireFileName(id), this.jsonSerializer.GetItemAsContent(view));
-        }
-
-        private string GetQuestionnaireFileName(Guid id)
-        {
-            return Path.Combine(path, string.Format("{0}.txt", id));
         }
 
         public void Clear()
         {
-            Array.ForEach(Directory.GetFiles(path), File.Delete);
+            Array.ForEach(Directory.GetFiles(this.path), File.Delete);
+        }
+
+        public void Store(QuestionnaireExportStructure view, string id)
+        {
+            this.dataExportService.CreateExportedDataStructureByTemplate(view);
+            File.WriteAllText(this.GetQuestionnaireFileName(id), this.jsonSerializer.GetItemAsContent(view));
+        }
+
+        private static Guid ToGuestionnaireId(string stringId)
+        {
+            return Guid.Parse(stringId);
+        }
+
+        private string GetQuestionnaireFileName(string id)
+        {
+            return Path.Combine(path, string.Format("{0}.txt", id));
         }
     }
 }
