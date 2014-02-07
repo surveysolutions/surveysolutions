@@ -46,18 +46,6 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, responsibleId);
         }
 
-        public void SaveQuestionnaire(QuestionnaireDocument doc, long version)
-        {
-            var syncItem = new SyncItem
-            {
-                Id = doc.PublicKey.Combine(version),
-                ItemType = SyncItemType.Template,
-                IsCompressed = UseCompression,
-                Content = GetItemAsContent(doc)
-            };
-            chunkStorageWriter.StoreChunk(syncItem, null);
-        }
-
         public void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId)
         {
             var syncItem = new SyncItem
@@ -70,9 +58,16 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, responsibleId);
         }
 
-        public void DeleteInterview(Guid id)
+        public void SaveQuestionnaire(QuestionnaireDocument doc, long version)
         {
-            chunkStorageWriter.RemoveChunk(id);
+            var syncItem = new SyncItem
+            {
+                Id = doc.PublicKey.Combine(version),
+                ItemType = SyncItemType.Template,
+                IsCompressed = UseCompression,
+                Content = GetItemAsContent(doc)
+            };
+            chunkStorageWriter.StoreChunk(syncItem, null);
         }
 
         public void SaveImage(Guid publicKey, string title, string desc, string origData)
