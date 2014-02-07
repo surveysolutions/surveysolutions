@@ -361,7 +361,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            return question.GroupsWithDependentEnablementConditions ?? GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestionOld(questionId);
+            return question.ConditionalDependentGroups ?? GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestionOld(questionId);
         }
 
         public IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestionOld(Guid questionId)
@@ -376,7 +376,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            return question.QuestionsWithDependentEnablementConditions ?? GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestionOld(questionId);
+            return question.ConditionalDependentQuestions ?? GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestionOld(questionId);
         }
 
         public IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestionOld(Guid questionId)
