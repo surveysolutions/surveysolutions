@@ -23,12 +23,9 @@ namespace Main.Core.Entities.SubEntities
         string ValidationExpression { get; set; }
         string ValidationMessage { get; set; }
 
-        #warning TLK: no data is added to following dependent questions and groups, they should be deleted
-
-        List<Guid> ConditionalDependentQuestions { get; set; }
-        List<Guid> ConditionalDependentGroups { get; set; }
+        List<Guid> QuestionsWithDependentEnablementConditions { get; set; }
+        List<Guid> GroupsWithDependentEnablementConditions { get; set; }
         List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfQuestion { get; set; }
-
         List<QuestionIdAndVariableName> QuestionsInvolvedInCustomValidationOfQuestion { get; set; }
         List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
 
