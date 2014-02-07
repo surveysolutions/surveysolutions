@@ -59,6 +59,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 question.QuestionsWhichCustomValidationDependsOnQuestion = null;
                 question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion = null;
                 question.QuestionIdsInvolvedInCustomValidationOfQuestion = null;
+                question.QuestionsInvolvedInCustomEnablementConditionOfQuestion = null;
+                question.QuestionsInvolvedInCustomValidationOfQuestion = null;
             }
 
             return document;
