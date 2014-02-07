@@ -40,9 +40,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             return this.ravenStore.OpenSession("Views");
         }
 
-        protected static string ToRavenId(Guid id)
+        protected static string ToRavenId(string id)
         {
-            return string.Format("{0}${1}", ViewName, id.ToString());
+            return string.Format("{0}${1}", ViewName, id);
         }
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)

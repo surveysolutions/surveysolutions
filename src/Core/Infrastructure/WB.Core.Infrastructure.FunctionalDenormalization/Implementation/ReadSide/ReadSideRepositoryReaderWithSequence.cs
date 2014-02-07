@@ -32,6 +32,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             return this.readsideReader.Count();
         }
 
+        public T GetById(string id)
+        {
+            return this.GetById(Guid.Parse(id));
+        }
+
         public T GetById(Guid id)
         {
             var view = this.readsideReader.GetById(id);
@@ -62,12 +67,12 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             try
             {
                 this.additionalEventChecker(id, sequence);
-
+                
                 var eventStream = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
 
                 if (!eventStream.IsEmpty)
                 {
-                    using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<T>>(this.readsideWriter, id))
+                    using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<T>>(this.readsideWriter, id.ToString()))
                     {
                         bus.PublishByEventSource(eventStream, inMemoryStorage);
                     }
