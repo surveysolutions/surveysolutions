@@ -14,8 +14,6 @@ namespace Main.Core.Entities.SubEntities
         {
             this.Cards = new List<Image>();
             this.Answers = new List<IAnswer>();
-            this.ConditionalDependentGroups = new List<Guid>();
-            this.ConditionalDependentQuestions = new List<Guid>();
         }
 
         protected AbstractQuestion(string text)
@@ -49,8 +47,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string ConditionExpression { get; set; }
 
-        public List<Guid> ConditionalDependentQuestions { get; set; }
-        public List<Guid> ConditionalDependentGroups { get; set; }
+        public List<Guid> QuestionsWithDependentEnablementConditions { get; set; }
+        public List<Guid> GroupsWithDependentEnablementConditions { get; set; }
         public List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
 
         public List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfQuestion
@@ -150,14 +148,14 @@ namespace Main.Core.Entities.SubEntities
                 question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
             }
 
-            if (this.ConditionalDependentGroups != null)
+            if (this.GroupsWithDependentEnablementConditions != null)
             {
-                question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
+                question.GroupsWithDependentEnablementConditions = new List<Guid>(this.GroupsWithDependentEnablementConditions);
             }
 
-            if (this.ConditionalDependentQuestions != null)
+            if (this.QuestionsWithDependentEnablementConditions != null)
             {
-                question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+                question.QuestionsWithDependentEnablementConditions = new List<Guid>(this.QuestionsWithDependentEnablementConditions);
             }
 
             // handle reference part
