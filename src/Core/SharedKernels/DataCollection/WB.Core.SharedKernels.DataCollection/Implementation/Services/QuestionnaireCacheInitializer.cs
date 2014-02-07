@@ -64,7 +64,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 questionId => this.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId)
             };
 
-
             foreach (IGroup group in this.GroupCache.Values)
             {
                 try
@@ -86,25 +85,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     catch {}
                 }
             }
+
             this.document.IsCacheWarmed = true;
         }
 
         private void GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            question.QuestionsInvolvedInCustomEnablementConditionOfQuestion = this.GetQuestionsInvolvedInExpression(question.PublicKey, question.ConditionExpression).ToList();
+            question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion = this.GetQuestionsInvolvedInExpression(question.PublicKey, question.ConditionExpression).ToList();
         }
 
         private void GetQuestionsInvolvedInCustomValidation(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            question.QuestionsInvolvedInCustomValidationOfQuestion = this.GetQuestionsInvolvedInExpression(question.PublicKey,question.ValidationExpression).ToList();
+            question.QuestionIdsInvolvedInCustomValidationOfQuestion = this.GetQuestionsInvolvedInExpression(question.PublicKey, question.ValidationExpression).ToList();
         }
 
         private void GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid questionId)
         {
             IGroup group = this.GetGroup(questionId);
-            group.QuestionsInvolvedInCustomEnablementConditionOfGroup = this.GetQuestionsInvolvedInExpression(group.PublicKey,group.ConditionExpression).ToList();
+            group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup = this.GetQuestionsInvolvedInExpression(group.PublicKey, group.ConditionExpression).ToList();
         }
 
         private void GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId)
@@ -139,10 +139,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 );
         }
 
-        private IEnumerable<QuestionIdAndVariableName> GetQuestionsInvolvedInExpression(Guid contextQuestionId, string expression)
+        private IEnumerable<Guid> GetQuestionsInvolvedInExpression(Guid contextQuestionId, string expression)
         {
             if (!IsExpressionDefined(expression))
-                return Enumerable.Empty<QuestionIdAndVariableName>();
+                return Enumerable.Empty<Guid>();
 
             IEnumerable<string> identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(expression);
 
@@ -165,17 +165,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             return !string.IsNullOrWhiteSpace(expression);
         }
 
-        private IEnumerable<QuestionIdAndVariableName> DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
+        private IEnumerable<Guid> DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
             IEnumerable<string> identifiers, Guid contextQuestionId, string expression)
         {
-            var distinctQuestionIds = new HashSet<QuestionIdAndVariableName>();
+            var distinctQuestionIds = new HashSet<Guid>();
 
             foreach (var identifier in identifiers)
             {
                 if (IsSpecialThisIdentifier(identifier))
                 {
-                    var contextQuestion = this.GetQuestion(contextQuestionId);
-                    distinctQuestionIds.Add(new QuestionIdAndVariableName(contextQuestion.PublicKey, contextQuestion.StataExportCaption));
+                    distinctQuestionIds.Add(contextQuestionId);
                 }
                 else
                 {
@@ -192,7 +191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             return identifier.ToLower() == "this";
         }
 
-        private QuestionIdAndVariableName ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier,
+        private Guid ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier,
             string expression)
         {
             IQuestion question = this.GetQuestionByStringIdOrVariableName(identifier);
@@ -202,7 +201,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     "Identifier '{0}' from expression '{1}' is not valid question identifier. Question with such a identifier is missing.",
                     identifier, expression));
 
-            return new QuestionIdAndVariableName(question.PublicKey, question.StataExportCaption);
+            return question.PublicKey;
         }
 
         private IQuestion GetQuestionByStringIdOrVariableName(string identifier)
@@ -234,9 +233,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             var question = this.GetQuestion(questionId);
 
-            IEnumerable<QuestionIdAndVariableName> involvedQuestions = question.QuestionsInvolvedInCustomValidationOfQuestion;
+            IEnumerable<Guid> involvedQuestions = question.QuestionIdsInvolvedInCustomValidationOfQuestion;
 
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Any(q => q.Id == specifiedQuestionId);
+            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
 
             return isSpecifiedQuestionInvolved;
         }
@@ -245,9 +244,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             var question = this.GetQuestion(questionId);
 
-            IEnumerable<QuestionIdAndVariableName> involvedQuestions = question.QuestionsInvolvedInCustomEnablementConditionOfQuestion;
+            IEnumerable<Guid> involvedQuestions = question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion;
 
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Any(q => q.Id == specifiedQuestionId);
+            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
 
             return isSpecifiedQuestionInvolved;
         }
@@ -256,9 +255,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             var group = this.GetGroup(groupId);
 
-            IEnumerable<QuestionIdAndVariableName> involvedQuestions = group.QuestionsInvolvedInCustomEnablementConditionOfGroup;
+            IEnumerable<Guid> involvedQuestions = group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup;
 
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Any(q => q.Id == specifiedQuestionId);
+            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
 
             return isSpecifiedQuestionInvolved;
         }

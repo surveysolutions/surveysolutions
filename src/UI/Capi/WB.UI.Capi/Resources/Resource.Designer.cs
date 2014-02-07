@@ -213,9 +213,6 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040006
 			public const int ElementId = 2130968582;
 			
-			// aapt resource value: 0x7f040034
-			public const int ImageSwitcher01 = 2130968628;
-			
 			// aapt resource value: 0x7f040005
 			public const int Index = 2130968581;
 			
@@ -234,11 +231,11 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f040035
-			public const int btnAnswered = 2130968629;
+			// aapt resource value: 0x7f040034
+			public const int btnAnswered = 2130968628;
 			
-			// aapt resource value: 0x7f04003b
-			public const int btnBackup = 2130968635;
+			// aapt resource value: 0x7f04003a
+			public const int btnBackup = 2130968634;
 			
 			// aapt resource value: 0x7f04003e
 			public const int btnCancel = 2130968638;
@@ -249,14 +246,14 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040032
 			public const int btnCollectMajor = 2130968626;
 			
-			// aapt resource value: 0x7f040039
-			public const int btnComplete = 2130968633;
+			// aapt resource value: 0x7f040038
+			public const int btnComplete = 2130968632;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f040038
-			public const int btnInvalid = 2130968632;
+			// aapt resource value: 0x7f040037
+			public const int btnInvalid = 2130968631;
 			
 			// aapt resource value: 0x7f040024
 			public const int btnLogin = 2130968612;
@@ -267,14 +264,17 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04003c
 			public const int btnRestore = 2130968636;
 			
-			// aapt resource value: 0x7f04003a
-			public const int btnSync = 2130968634;
+			// aapt resource value: 0x7f04003b
+			public const int btnSendTabletInfo = 2130968635;
+			
+			// aapt resource value: 0x7f040039
+			public const int btnSync = 2130968633;
 			
 			// aapt resource value: 0x7f04002d
 			public const int btnSyncPoint = 2130968621;
 			
-			// aapt resource value: 0x7f040036
-			public const int btnUnanswered = 2130968630;
+			// aapt resource value: 0x7f040035
+			public const int btnUnanswered = 2130968629;
 			
 			// aapt resource value: 0x7f04002e
 			public const int btnVersion = 2130968622;
@@ -372,8 +372,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04000a
 			public const int tvError = 2130968586;
 			
-			// aapt resource value: 0x7f040037
-			public const int tvErrorWarning = 2130968631;
+			// aapt resource value: 0x7f040036
+			public const int tvErrorWarning = 2130968630;
 			
 			// aapt resource value: 0x7f04001e
 			public const int tvITem = 2130968606;

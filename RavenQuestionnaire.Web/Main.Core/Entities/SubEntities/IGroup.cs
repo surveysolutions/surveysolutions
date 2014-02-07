@@ -20,8 +20,12 @@ namespace Main.Core.Entities.SubEntities
         RosterSizeSourceType RosterSizeSource { get; }
 
         string[] RosterFixedTitles { get; }
+
         Guid? RosterTitleQuestionId { get; }
 
+        List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfGroup { get; set; }
+        
+        [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfGroup instead")]
         List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
     }
 }

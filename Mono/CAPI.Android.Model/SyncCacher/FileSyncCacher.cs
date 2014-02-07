@@ -54,18 +54,22 @@ namespace CAPI.Android.Core.Model.SyncCacher
             return Path.Combine(_basePath, fileName);
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return _basePath;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
-            var dirWithCahngelog = Path.Combine(path, _basePath);
+            var dirWithCahngelog = Path.Combine(path, CacheFolder);
+            
             foreach (var file in Directory.EnumerateFiles(_basePath))
             {
                 File.Delete(file);
             }
+
+            if (!Directory.Exists(dirWithCahngelog))
+                return;
 
             foreach (var file in Directory.GetFiles(dirWithCahngelog))
                 File.Copy(file, Path.Combine(_basePath, Path.GetFileName(file)));
