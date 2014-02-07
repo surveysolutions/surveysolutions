@@ -315,13 +315,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            return question.ConditionalDependentGroups;
+            return question.GroupsWithDependentEnablementConditions;
         }
 
         public IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            return question.ConditionalDependentQuestions;
+            return question.QuestionsWithDependentEnablementConditions;
         }
 
         public bool ShouldQuestionSpecifyRosterSize(Guid questionId)
