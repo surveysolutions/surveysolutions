@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Supervisor.Implementation.TemporaryDataStorage;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
@@ -48,6 +49,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IReadSideRepositoryReader<InterviewData>>()
                 .To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope()
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
+
+            this.Bind<ITabletInformationService>().ToMethod(c => new FileBasedTabletInformationService(currentFolderPath));
         }
 
         protected void AdditionalEventChecker(Guid interviewId, long sequence)

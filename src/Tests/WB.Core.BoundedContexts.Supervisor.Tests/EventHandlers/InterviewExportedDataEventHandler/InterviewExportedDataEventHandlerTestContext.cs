@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
 
 
             interviewDataStorageMock.Setup(
-                x => x.GetById(Moq.It.IsAny<Guid>()))
+                x => x.GetById(Moq.It.IsAny<string>()))
                 .Returns(
                     () =>
                     {
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
 
 
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+            questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
                 .Returns(new QuestionnaireExportStructure(questionnaire, 1));
 
             return new EventHandler.InterviewExportedDataEventHandler(

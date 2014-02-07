@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
@@ -55,7 +56,7 @@ namespace WB.UI.Shared.Android.RestUtils
             return this.HandlerResponse<T>(response);
         }
 
-        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator, string method,
+        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, IAuthenticator authenticator, string method,
             params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = BuildRestClient(authenticator);
@@ -109,7 +110,7 @@ namespace WB.UI.Shared.Android.RestUtils
 
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                var exception = new Exception("Target returned unsupported result.");
+                var exception = new Exception(string.Format("Target returned unsupported result with status {0},{1}", response.StatusCode, response.StatusDescription));
 
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     exception = new AuthenticationException("User is not authorized.");
@@ -129,14 +130,14 @@ namespace WB.UI.Shared.Android.RestUtils
             return syncItemsMetaContainer;
         }
 
-        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, string requestBody, RestSharp.Method method)
+        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, object requestBody, RestSharp.Method method)
         {
             var request = new RestRequest(url, method);
             request.RequestFormat = DataFormat.Json;
 
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
-            if (!string.IsNullOrWhiteSpace(requestBody))
+            if (requestBody != null && !string.IsNullOrWhiteSpace(requestBody.ToString()))
             {
                 //request.AddBody(requestBody);
                 request.AddParameter("application/json", requestBody, ParameterType.RequestBody);

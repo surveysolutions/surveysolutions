@@ -16,10 +16,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             interviewTextListAnswers = new InterviewTextListAnswers(textListAnswer);
         };
 
-        private Because of = () =>
+        Because of = () =>
             result = new AnsweredQuestionSynchronizationDto(questionId, EmptyRosterVector, interviewTextListAnswers, String.Empty);
 
-        private It should_answer_value_be_equal_to_provided_answer_value = () =>
+        It should_answer_value_be_equal_to_provided_answer_value = () =>
             result.Answer.ShouldEqual(textListAnswer);
 
         private static Guid questionId;
