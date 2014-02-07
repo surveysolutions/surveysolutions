@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         It should_pass_result_of_sequence_of_calls_to_QuestionnaireDocumentUpgrader_to_document_storages_Store_method = () =>
             documentStorage.Verify(s => s.Store(
                 it.Is<QuestionnaireDocument>(d => d == sequenceUpgradeResult),
-                it.Is<Guid>(g => g == sequenceUpgradeResult.PublicKey.ToString())));
+                it.Is<Guid>(g => g == sequenceUpgradeResult.PublicKey)));
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<TemplateImported> templateImportedEvent;
