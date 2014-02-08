@@ -1,4 +1,5 @@
-﻿@model List<WB.Core.BoundedContexts.Supervisor.Views.TabletInformation.TabletInformationView>
+﻿@using Web.Supervisor.Utils
+@model List<WB.Core.BoundedContexts.Supervisor.Views.TabletInformation.TabletInformationView>
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
@@ -26,7 +27,7 @@
                         </td>
                         <td class="buttons">
                             <div class="btn-group">
-                                <a href="@Url.Action("DownloadPackages", "TabletReport", new { fileName = item.PackageName })" class="btn btn-primary"><i class="icon-white"></i>Upload information package</a>
+                                <a href="@Url.Action("DownloadPackages", "TabletReport", new { fileName = item.PackageName })" class="btn btn-primary"><i class="icon-white"></i>Upload information package (@FileSizeUtils.SizeSuffix(item.Size))</a>
                             </div>
                         </td>
                     </tr>
