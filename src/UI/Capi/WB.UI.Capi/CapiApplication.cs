@@ -44,6 +44,11 @@ using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
 {
+#if DEBUG 
+    [Application(Debuggable=true)] 
+#else
+    [Application(Debuggable = false)]
+#endif
     [Crasher(UseCustomData = false)]
     public class CapiApplication : Application
     {

@@ -14,8 +14,6 @@ namespace Main.Core.Entities.SubEntities
         {
             this.Cards = new List<Image>();
             this.Answers = new List<IAnswer>();
-            this.ConditionalDependentGroups = new List<Guid>();
-            this.ConditionalDependentQuestions = new List<Guid>();
         }
 
         protected AbstractQuestion(string text)
