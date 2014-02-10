@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         }
 
         private bool isCacheEnabled = false;
-        private readonly Dictionary<Guid, CachedEntity> cache = new Dictionary<Guid, CachedEntity>();
+        private readonly Dictionary<string, CachedEntity> cache = new Dictionary<string, CachedEntity>();
 
         public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
             : base(ravenStore)
@@ -53,14 +53,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        public TEntity GetById(Guid id)
+        public TEntity GetById(string id)
         {
             return this.isCacheEnabled
                 ? this.GetByIdUsingCache(id)
                 : this.GetByIdAvoidingCache(id);
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
             if (this.isCacheEnabled)
             {
@@ -72,7 +72,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        public void Store(TEntity view, Guid id)
+        public void Store(TEntity view, string id)
         {
             if (this.isCacheEnabled)
             {
@@ -112,7 +112,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             get { return typeof (TEntity); }
         }
 
-        private TEntity GetByIdUsingCache(Guid id)
+        private TEntity GetByIdUsingCache(string id)
         {
             if (!this.cache.ContainsKey(id))
             {
@@ -126,7 +126,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             return this.cache[id].Entity;
         }
 
-        private void RemoveUsingCache(Guid id)
+        private void RemoveUsingCache(string id)
         {
             if (this.cache.ContainsKey(id))
             {
@@ -135,7 +135,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             this.RemoveAvoidingCache(id);
         }
 
-        private void StoreUsingCache(TEntity entity, Guid id)
+        private void StoreUsingCache(TEntity entity, string id)
         {
             if (this.cache.ContainsKey(id))
             {
@@ -149,7 +149,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        private TEntity GetByIdAvoidingCache(Guid id)
+        private TEntity GetByIdAvoidingCache(string id)
         {
             using (IDocumentSession session = this.OpenSession())
             {
@@ -161,7 +161,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        private void RemoveAvoidingCache(Guid id)
+        private void RemoveAvoidingCache(string id)
         {
             using (IDocumentSession session = this.OpenSession())
             {
@@ -177,7 +177,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        private void StoreAvoidingCache(TEntity entity, Guid id)
+        private void StoreAvoidingCache(TEntity entity, string id)
         {
             using (IDocumentSession session = this.OpenSession())
             {
@@ -198,21 +198,21 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         private void ReduceCache()
         {
-            List<KeyValuePair<Guid, CachedEntity>> bulk = this.GetBulkOfEntitiesForRemovanceFromCache();
+            List<KeyValuePair<string, CachedEntity>> bulk = this.GetBulkOfEntitiesForRemovanceFromCache();
 
             this.StoreBulkOfCachedEntitiesToRepository(bulk);
 
             this.RemoveEntitiesFromCache(bulk.Select(cachedEntityWithId => cachedEntityWithId.Key));
         }
 
-        private List<KeyValuePair<Guid, CachedEntity>> GetBulkOfEntitiesForRemovanceFromCache()
+        private List<KeyValuePair<string, CachedEntity>> GetBulkOfEntitiesForRemovanceFromCache()
         {
             return this.cache.Take(MaxCountOfEntitiesInOneStoreOperation).ToList();
         }
 
-        private void RemoveEntitiesFromCache(IEnumerable<Guid> ids)
+        private void RemoveEntitiesFromCache(IEnumerable<string> ids)
         {
-            foreach (Guid id in ids)
+            foreach (string id in ids)
             {
                 this.cache.Remove(id);
             }
@@ -225,9 +225,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         private void StoreAllCachedEntitiesToRepository()
         {
-            var bulkOfCachedEntities = new List<KeyValuePair<Guid, CachedEntity>>(MaxCountOfEntitiesInOneStoreOperation);
+            var bulkOfCachedEntities = new List<KeyValuePair<string, CachedEntity>>(MaxCountOfEntitiesInOneStoreOperation);
 
-            foreach (KeyValuePair<Guid, CachedEntity> cachedEntityWithId in this.cache)
+            foreach (KeyValuePair<string, CachedEntity> cachedEntityWithId in this.cache)
             {
                 if (cachedEntityWithId.Value.ShouldBeStoredToRepository)
                 {
@@ -248,11 +248,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        private void StoreBulkOfCachedEntitiesToRepository(List<KeyValuePair<Guid, CachedEntity>> bulkOfCachedEntities)
+        private void StoreBulkOfCachedEntitiesToRepository(List<KeyValuePair<string, CachedEntity>> bulkOfCachedEntities)
         {
             using (IDocumentSession session = this.OpenSession())
             {
-                foreach (KeyValuePair<Guid, CachedEntity> cachedEntityWithId in bulkOfCachedEntities)
+                foreach (KeyValuePair<string, CachedEntity> cachedEntityWithId in bulkOfCachedEntities)
                 {
                     if (cachedEntityWithId.Value.ShouldBeStoredToRepository)
                     {
@@ -264,7 +264,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 session.SaveChanges();
             }
 
-            foreach (KeyValuePair<Guid, CachedEntity> cachedEntityWithId in bulkOfCachedEntities)
+            foreach (KeyValuePair<string, CachedEntity> cachedEntityWithId in bulkOfCachedEntities)
             {
                 cachedEntityWithId.Value.ShouldBeStoredToRepository = false;
             }

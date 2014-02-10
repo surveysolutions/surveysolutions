@@ -24,8 +24,8 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                reader.GetById(Guid.Empty));
+            exception = Catch.Exception(() => 
+                reader.GetById(Guid.Empty.ToString()));
 
         It should_throw_maintenance_exception = () =>
             exception.ShouldBeOfType<MaintenanceException>();

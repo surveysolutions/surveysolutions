@@ -36,13 +36,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReferenceInfoFo
         It should_create_one_row_with_mapping_of_linked_question_on_roster_scope = () =>
             referenceInfoForLinkedQuestionsWriter.Verify(s => s.Store(
                 it.Is<ReferenceInfoForLinkedQuestions>(d => d.ReferencesOnLinkedQuestions.Count == 1),
-                it.Is<Guid>(g => g == importeDocument.PublicKey)));
+                it.Is<string>(g => g == importeDocument.PublicKey.ToString())));
 
         It should_put_linkedId_as_key_and_value_should_contains_rosterId_in__ScopeId__field_of_created_row = () =>
             referenceInfoForLinkedQuestionsWriter.Verify(s => s.Store(
                 it.Is<ReferenceInfoForLinkedQuestions>(d => 
                     d.ReferencesOnLinkedQuestions.ContainsKey(linkedId) && d.ReferencesOnLinkedQuestions[linkedId].ScopeId == (rosterId)),
-                it.IsAny<Guid>()));
+                it.IsAny<string>()));
 
         private static Guid rosterId = Guid.Parse("11111111111111111111111111111111");
         private static Guid linkedId = Guid.Parse("22222222222222222222222222222222");

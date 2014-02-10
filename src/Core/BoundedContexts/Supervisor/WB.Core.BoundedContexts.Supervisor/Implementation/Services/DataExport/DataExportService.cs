@@ -51,9 +51,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         public void CreateExportedDataStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure)
         {
             var dataFolderForTemplatePath = GetFolderPathOfDataByQuestionnaire(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
-            
+
             if (Directory.Exists(dataFolderForTemplatePath))
-                Directory.Delete(dataFolderForTemplatePath, true);
+            {
+                return;
+            }
+
             Directory.CreateDirectory(dataFolderForTemplatePath);
 
             var createdFileNames = new HashSet<string>();
@@ -138,7 +141,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         public void Clear()
         {
-            Array.ForEach(Directory.GetFiles(path), File.Delete);
+            Array.ForEach(Directory.GetDirectories(path), (s)=>Directory.Delete(s,true));
         }
     }
 }

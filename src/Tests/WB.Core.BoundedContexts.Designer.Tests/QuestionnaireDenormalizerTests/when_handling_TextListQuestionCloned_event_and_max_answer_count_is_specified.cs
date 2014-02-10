@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             @event = TextListQuestionClonedEvent(questionId: questionId, parentGroupId: parentGroupId, maxAnswerCount: maxAnswerCount);
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
-                => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
+                => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
             var questionFactory = new Mock<IQuestionFactory>();
 

@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInfor
                 if(separatedValues.Length!=3)
                     continue;
 
-                result.Add(new TabletInformationView(fileInfo.Name, separatedValues[0], separatedValues[1], fileInfo.CreationTime));
+                result.Add(new TabletInformationView(fileInfo.Name, separatedValues[0], separatedValues[1], fileInfo.CreationTime, fileInfo.Length));
             }
             return result.OrderBy(r=>r.CreationDate).ToList();
         }
