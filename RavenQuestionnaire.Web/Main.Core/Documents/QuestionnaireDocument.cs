@@ -143,6 +143,14 @@ namespace Main.Core.Documents
             throw new CompositeException();
         }
 
+        public void UpdateQuestion(Guid questionId, Action<IQuestion> update)
+        {
+            var question = this.Find<IQuestion>(questionId);
+
+            if (question != null)
+                update(question);
+        }
+
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
             foreach (IComposite child in this.Children)
