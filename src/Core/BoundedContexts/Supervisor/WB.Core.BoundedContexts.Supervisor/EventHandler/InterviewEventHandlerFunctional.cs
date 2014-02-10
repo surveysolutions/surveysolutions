@@ -8,12 +8,15 @@ using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
@@ -53,11 +56,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
-
+        private readonly ISynchronizationDataStorage syncStorage;
 
         public override Type[] UsesViews
         {
             get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireRosterStructure) }; }
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return base.BuildsViews.Union(new[] { typeof (SynchronizationDelta) }).ToArray(); }
         }
 
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
@@ -267,11 +275,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users, IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
-            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewData)
+            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewData, ISynchronizationDataStorage syncStorage)
             : base(interviewData)
         {
             this.users = users;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
+            this.syncStorage = syncStorage;
         }
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewCreated> evnt)
@@ -300,8 +309,45 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 currentState.Document.WasCompleted = true;
             }
+
             currentState.Sequence = evnt.EventSequence;
+
+            var newStatus = evnt.Payload.Status;
+
+            if (IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
+            {
+                ResendInterviewInNewStatus(currentState.Document, newStatus);
+            }
+            else if (IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
+            {
+                syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
+            }
+        
             return currentState;
+        }
+
+        private bool IsInterviewWithStatusNeedToBeResendToCapi(InterviewStatus newStatus)
+        {
+            return newStatus == InterviewStatus.RejectedBySupervisor;
+        }
+
+        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus)
+        {
+            return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
+        }
+
+        public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus)
+        {
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus);
+
+            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+        }
+
+        public void ResendInterviewForPerson(InterviewData interview, Guid responsibleId)
+        {
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned);
+
+            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<SupervisorAssigned> evnt)
@@ -317,6 +363,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             currentState.Document.ResponsibleId = evnt.Payload.InterviewerId;
             currentState.Document.ResponsibleRole = UserRoles.Operator;
             currentState.Sequence = evnt.EventSequence;
+            this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId);
             return currentState;
         }
 
@@ -563,5 +610,98 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
                 }), evnt.EventSequence);
         }
+
+        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedToUser(InterviewData interview, Guid userId,
+            InterviewStatus status)
+        {
+            var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
+            var disabledGroups = new HashSet<InterviewItemId>();
+            var disabledQuestions = new HashSet<InterviewItemId>();
+            var validQuestions = new HashSet<InterviewItemId>();
+            var invalidQuestions = new HashSet<InterviewItemId>();
+            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
+
+            var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
+                interview.QuestionnaireVersion);
+
+            foreach (var interviewLevel in interview.Levels.Values)
+            {
+                foreach (var interviewQuestion in interviewLevel.GetAllQuestions())
+                {
+                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.RosterVector,
+                        interviewQuestion.Answer,
+                        interviewQuestion.Comments.Any()
+                            ? interviewQuestion.Comments.Last().Text
+                            : null);
+                    answeredQuestions.Add(answeredQuestion);
+                    if (!interviewQuestion.Enabled)
+                        disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+
+#warning TLK: validness flag misses undefined state
+                    if (!interviewQuestion.Valid)
+                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                    if (interviewQuestion.Valid)
+                        validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                }
+                foreach (var disabledGroup in interviewLevel.DisabledGroups)
+                {
+                    disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.RosterVector));
+                }
+
+                FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
+                    propagatedGroupInstanceCounts);
+            }
+            return new InterviewSynchronizationDto(interview.InterviewId,
+                status,
+                userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
+                answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
+                validQuestions, invalidQuestions, null, propagatedGroupInstanceCounts, interview.WasCompleted);
+        }
+
+        private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
+           QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
+           Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts)
+        {
+            if (interviewLevel.RosterVector.Length == 0)
+                return;
+
+            var outerVector = CreateOuterVector(interviewLevel);
+
+            foreach (var scopeId in interviewLevel.ScopeIds)
+            {
+                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key].RosterIdToRosterTitleQuestionIdMap.Keys)
+                {
+                    var groupKey = new InterviewItemId(groupId, outerVector);
+
+                    var rosterTitle = interviewLevel.RosterRowTitles.ContainsKey(groupId)
+                        ? interviewLevel.RosterRowTitles[groupId]
+                        : string.Empty;
+                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, scopeId.Value, rosterTitle, interviewLevel.RosterVector.Last(), groupKey);
+                }
+            }
+        }
+
+        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts,
+            int? sortIndex, string rosterTitle, decimal rosterInstanceId,
+            InterviewItemId groupKey)
+        {
+            List<RosterSynchronizationDto> currentRosterInstances = propagatedGroupInstanceCounts.ContainsKey(groupKey) ? propagatedGroupInstanceCounts[groupKey].ToList() : new List<RosterSynchronizationDto>();
+
+            currentRosterInstances.Add(new RosterSynchronizationDto(groupKey.Id,
+                groupKey.InterviewItemPropagationVector, rosterInstanceId, sortIndex, rosterTitle));
+
+            propagatedGroupInstanceCounts[groupKey] = currentRosterInstances.ToArray();
+        }
+
+        private decimal[] CreateOuterVector(InterviewLevel interviewLevel)
+        {
+            var outerVector = new decimal[interviewLevel.RosterVector.Length - 1];
+            for (int i = 0; i < interviewLevel.RosterVector.Length - 1; i++)
+            {
+                outerVector[i] = interviewLevel.RosterVector[i];
+            }
+            return outerVector;
+        }
+
     }
 }
