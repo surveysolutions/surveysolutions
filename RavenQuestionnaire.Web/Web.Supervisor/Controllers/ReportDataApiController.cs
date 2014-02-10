@@ -24,6 +24,9 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
             supervisorTeamMembersAndStatusesReport;
 
+        private readonly IViewFactory<MapReportInputModel, MapReportView>
+           mapReport;
+
         public ReportDataApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
@@ -35,13 +38,14 @@ namespace Web.Supervisor.Controllers
             IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
                 supervisorTeamMembersAndStatusesReport,
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
-                supervisorSurveysAndStatusesReport)
+                supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
             this.headquarterSupervisorsAndStatusesReport = headquarterSupervisorsAndStatusesReport;
             this.supervisorTeamMembersAndStatusesReport = supervisorTeamMembersAndStatusesReport;
             this.supervisorSurveysAndStatusesReport = supervisorSurveysAndStatusesReport;
+            this.mapReport = mapReport;
         }
 
         [HttpPost]
@@ -66,6 +70,12 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.supervisorTeamMembersAndStatusesReport.Load(input);
+        }
+
+        [HttpPost]
+        public MapReportView MapReport(MapReportInputModel data)
+        {
+            return mapReport.Load(data);
         }
 
         [HttpPost]
