@@ -150,12 +150,12 @@ namespace Web.Supervisor.Code
                                 events = eventContext.Events.ToList();
                             }
 
-                            using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<InterviewData>>(this.interviewsDataWriter, interviewItemId.InterviewId))
+                            using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<InterviewData>>(this.interviewsDataWriter, interviewItemId.InterviewId.ToString()))
                             {
                                 bus.PublishByEventSource(events, inMemoryStorage);
                             }
 
-                            using (var inMemoryStorage = new InMemoryViewStorage<InterviewSummary>(this.interviewsSummaryWriter, interviewItemId.InterviewId))
+                            using (var inMemoryStorage = new InMemoryViewStorage<InterviewSummary>(this.interviewsSummaryWriter, interviewItemId.InterviewId.ToString()))
                             {
                                 bus.PublishByEventSource(events, inMemoryStorage);
                             }

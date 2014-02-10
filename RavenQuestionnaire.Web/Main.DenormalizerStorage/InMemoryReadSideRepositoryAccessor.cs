@@ -10,11 +10,11 @@ namespace Main.DenormalizerStorage
     public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, IQueryableReadSideRepositoryWriter<TView>
         where TView : class, IView
     {
-        private readonly Dictionary<Guid, TView> repository;
+        private readonly Dictionary<string, TView> repository;
         private object locker = new object();
         public InMemoryReadSideRepositoryAccessor()
         {
-            this.repository = new Dictionary<Guid, TView>();
+            this.repository = new Dictionary<string, TView>();
         }
 
         public int Count()
@@ -22,7 +22,7 @@ namespace Main.DenormalizerStorage
             return this.repository.Count;
         }
 
-        public TView GetById(Guid id)
+        public TView GetById(string id)
         {
             if (!this.repository.ContainsKey(id))
             {
@@ -43,15 +43,15 @@ namespace Main.DenormalizerStorage
             repository.Values.Where(query.Compile());
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
             lock (locker)
             {
                 this.repository.Remove(id);
             }
         }
-
-        public void Store(TView view, Guid id)
+        
+        public void Store(TView view, string id)
         {
             lock (locker)
             {

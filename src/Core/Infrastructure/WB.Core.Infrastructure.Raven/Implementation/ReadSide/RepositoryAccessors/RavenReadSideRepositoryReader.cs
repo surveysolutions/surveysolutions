@@ -48,7 +48,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        public TEntity GetById(Guid id)
+        public TEntity GetById(string id)
         {
             this.ThrowIfRepositoryIsNotAccessible();
 
