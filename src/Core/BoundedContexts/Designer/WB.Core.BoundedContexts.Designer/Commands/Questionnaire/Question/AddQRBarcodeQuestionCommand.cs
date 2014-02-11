@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             string condition, string instructions, Guid responsibleId, Guid parentGroupId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, ) {}
+                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions,
+                groupId: parentGroupId) {}
     }
 }
