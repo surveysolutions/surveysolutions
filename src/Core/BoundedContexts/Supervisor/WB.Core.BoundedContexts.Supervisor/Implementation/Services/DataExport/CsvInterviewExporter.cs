@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 writer.Configuration.Delimiter = this.delimiter;
 
                 writer.WriteField("InterviewId");
-                writer.WriteField("Id");
+                writer.WriteField(header.LevelIdColumnName);
 
                 foreach (ExportedHeaderItem question in header.HeaderItems.Values)
                 {

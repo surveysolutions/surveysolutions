@@ -7,7 +7,6 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using Ionic.Zip;
 using Main.Core;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Services;

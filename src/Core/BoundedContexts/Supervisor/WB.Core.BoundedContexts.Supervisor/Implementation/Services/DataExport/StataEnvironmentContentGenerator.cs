@@ -11,22 +11,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     internal class StataEnvironmentContentGenerator
     {
         private readonly HeaderStructureForLevel headerStructureForLevel;
-        private readonly string doFileName;
         private readonly string dataFileName;
 
-        public StataEnvironmentContentGenerator(HeaderStructureForLevel headerStructureForLevel, string doFileName, string dataFileName)
+        public StataEnvironmentContentGenerator(HeaderStructureForLevel headerStructureForLevel, string dataFileName)
         {
             this.headerStructureForLevel = headerStructureForLevel;
-            this.doFileName = doFileName;
             this.dataFileName = dataFileName;
         }
 
-        public string NameOfAdditionalFile
-        {
-            get { return string.Format("{0}.do", doFileName); }
-        }
-
-        public byte[] ContentOfAdditionalFile
+        public string ContentOfAdditionalFile
         {
             get
             {
@@ -38,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
                 doContent.AppendLine("list");
 
-                return new UTF8Encoding().GetBytes(doContent.ToString().ToLower());
+                return doContent.ToString().ToLower();
             }
         }
 
@@ -60,30 +53,44 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 
                 if (hasLabels)
                 {
-                    doContent.AppendFormat("label define {0} ", labelName);
-                    foreach (var label in headerItem.Labels)
-                    {
-                        doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, RemoveNonUnicode(label.Value.Title));
-                    }
-
-                    doContent.AppendLine();
+                    this.AppendLabel(doContent, labelName, headerItem.Labels.Values);
                 }
 
                 for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                 {
                     if (hasLabels)
                     {
-                        if (headerItem.Labels.Count > 0)
-                        {
-                            doContent.AppendLine(string.Format("label values {0} {1}", headerItem.ColumnNames[i], labelName));
-                        }
+                        this.AppendLabelToValuesMatching(doContent, headerItem.ColumnNames[i], labelName);
                     }
 
                     doContent.AppendLine(
                         string.Format("label variable {0} `\"{1}\"'", headerItem.ColumnNames[i], RemoveNonUnicode(headerItem.Titles[i])));
                 }
             }
-        
+
+            if (headerStructureForLevel.LevelLabels != null)
+            {
+                var levelLabelName = this.CreateLabelName(headerStructureForLevel.LevelIdColumnName);
+                this.AppendLabel(doContent, levelLabelName, headerStructureForLevel.LevelLabels);
+                this.AppendLabelToValuesMatching(doContent, headerStructureForLevel.LevelIdColumnName, levelLabelName);
+            }
+
+        }
+
+        private void AppendLabelToValuesMatching(StringBuilder doContent,string columnName, string labelName)
+        {
+            doContent.AppendLine(string.Format("label values {0} {1}", columnName, labelName));
+        }
+
+        private void AppendLabel(StringBuilder doContent, string labelName, IEnumerable<LabelItem> labels)
+        {
+            doContent.AppendFormat("label define {0} ", labelName);
+            foreach (var label in labels)
+            {
+                doContent.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNonUnicode(label.Title));
+            }
+
+            doContent.AppendLine();
         }
 
         protected string CreateLabelName(string columnName)
