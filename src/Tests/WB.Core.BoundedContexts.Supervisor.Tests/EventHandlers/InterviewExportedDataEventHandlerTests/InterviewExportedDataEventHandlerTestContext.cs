@@ -20,12 +20,12 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {
-    [Subject(typeof(InterviewExportedDataEventHandler))]
+    [Subject(typeof(InterviewExportedDataDenormalizer))]
     internal class InterviewExportedDataEventHandlerTestContext
     {
         protected const string firstLevelkey = "#";
 
-        protected static InterviewExportedDataEventHandler CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
+        protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
             Func<QuestionnaireDocument> templateCreationAction,
             Func<InterviewData> dataCreationAction = null, Action<InterviewDataExportView> returnStoredView = null)
         {
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                 dataExportService.Setup(x => x.AddExportedDataByInterview(Moq.It.IsAny<InterviewDataExportView>()))
                     .Callback<InterviewDataExportView>(returnStoredView);
 
-            return new InterviewExportedDataEventHandler(
+            return new InterviewExportedDataDenormalizer(
                 interviewDataStorageMock.Object,
                 questionnaireExportStructureMock.Object, dataExportService.Object);
         }

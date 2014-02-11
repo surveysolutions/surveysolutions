@@ -20,13 +20,13 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewExportedDataEventHandler : IEventHandler<InterviewApproved>, IEventHandler
+    public class InterviewExportedDataDenormalizer : IEventHandler<InterviewApproved>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IDataExportService dataExportService;
 
-        public InterviewExportedDataEventHandler(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter, IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter, IDataExportService dataExportService)
+        public InterviewExportedDataDenormalizer(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter, IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter, IDataExportService dataExportService)
         {
             this.interviewDataWriter = interviewDataWriter;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;

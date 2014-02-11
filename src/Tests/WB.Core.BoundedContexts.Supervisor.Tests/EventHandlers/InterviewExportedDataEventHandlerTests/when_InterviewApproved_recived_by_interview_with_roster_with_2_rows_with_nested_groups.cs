@@ -53,13 +53,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                     }
                 }); 
 
-            interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
+            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
                 CreateInterviewDataWith2PropagatedLevels, r => result = r);
         };
 
         Because of = () =>
-            interviewExportedDataEventHandler.Handle(CreatePublishableEvent());
+            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, rosterSizeQuestionId).Records.Length.ShouldEqual(2);
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             return interview;
         }
 
-        private static EventHandler.InterviewExportedDataEventHandler interviewExportedDataEventHandler;
+        private static EventHandler.InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Guid rosterId;
         private static Guid rosterSizeQuestionId;
