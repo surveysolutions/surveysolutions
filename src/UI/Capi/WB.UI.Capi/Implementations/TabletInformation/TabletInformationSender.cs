@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace WB.UI.Capi.Implementations.TabletInformation
         private CancellationToken ct;
         private CancellationTokenSource tokenSource2;
         private Task task;
+        private string pathToInfoArchive = null;
         
         private readonly Context context;
         private readonly ICapiInformationService capiInformationService;
@@ -45,7 +47,7 @@ namespace WB.UI.Capi.Implementations.TabletInformation
             this.webExecutor = new AndroidRestUrils(SettingsManager.GetSyncAddressPoint());;
         }
 
-        public event EventHandler InformationPackageCreated;
+        public event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
         public event EventHandler ProcessCanceled;
         public event EventHandler ProcessFinished;
 
@@ -65,7 +67,6 @@ namespace WB.UI.Capi.Implementations.TabletInformation
 
             ExitIfCanceled();
 
-            string pathToInfoArchive = null;
             this.CancelIfException(() => { pathToInfoArchive = capiInformationService.CreateInformationPackage(); });
 
             if (string.IsNullOrEmpty(pathToInfoArchive) || !System.IO.File.Exists(pathToInfoArchive))
@@ -74,7 +75,7 @@ namespace WB.UI.Capi.Implementations.TabletInformation
                 return;
             }
 
-            OnInformationPackageCreated();
+            OnInformationPackageCreated(pathToInfoArchive, new FileInfo(pathToInfoArchive).Length);
 
             ExitIfCanceled();
 
@@ -88,11 +89,14 @@ namespace WB.UI.Capi.Implementations.TabletInformation
                 var result = this.webExecutor.ExcecuteRestRequestAsync<bool>(postInfoPackagePath, ct,
                     JsonUtils.GetJsonData(tabletInformationPackage), null, null);
 
-                if(!result)
-                    throw new NotImplementedException("");
+                System.IO.File.Delete(pathToInfoArchive);
+
+                if (!result)
+                    throw new TabletInformationSendException("server didn't get information package");
             });
 
             OnProcessFinished();
+            DeleteInfoPackageIfExists();
         }
 
         protected void OnProcessCanceled()
@@ -102,13 +106,13 @@ namespace WB.UI.Capi.Implementations.TabletInformation
                 handler(this, EventArgs.Empty);
         }
 
-        protected void OnInformationPackageCreated()
+        protected void OnInformationPackageCreated(string filePath, long fileSize)
         {
             if (this.tokenSource2.IsCancellationRequested)
                 return;
             var handler = this.InformationPackageCreated;
             if (handler != null)
-                handler(this, EventArgs.Empty);
+                handler(this, new InformationPackageEventArgs(filePath, fileSize));
         }
 
         protected void OnProcessFinished()
@@ -149,11 +153,8 @@ namespace WB.UI.Capi.Implementations.TabletInformation
 
         private void CancelInternal()
         {
-       //     this.OnProcessCanceling();
-
             this.tokenSource2.Cancel();
 
-         //   List<Exception> exceptions = new List<Exception>();
             try
             {
                 Task.WaitAll(this.task);
@@ -164,10 +165,15 @@ namespace WB.UI.Capi.Implementations.TabletInformation
                 {
                     this.Logger.Error("Error occurred during the process. Process is being canceled.", exception);
                 }
-              //  exceptions = e.InnerExceptions.ToList();
             }
-       //     exceptions.Add(new Exception("Synchronization wasn't completed"));
             this.OnProcessCanceled();
+            this.DeleteInfoPackageIfExists();
+        }
+
+        private void DeleteInfoPackageIfExists()
+        {
+            if (System.IO.File.Exists(this.pathToInfoArchive))
+                System.IO.File.Delete(this.pathToInfoArchive);
         }
     }
 }

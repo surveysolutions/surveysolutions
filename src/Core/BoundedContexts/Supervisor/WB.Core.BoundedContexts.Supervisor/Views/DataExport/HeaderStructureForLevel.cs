@@ -13,6 +13,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
     {
         public Guid LevelId { get; set; }
         public string LevelName { get; set; }
+        public LabelItem[] LevelLabels { get; set; }
+        public string LevelIdColumnName { get; set; }
         public IDictionary<Guid, ExportedHeaderItem> HeaderItems { get; set; }
 
         public HeaderStructureForLevel()
@@ -28,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             : this()
         {
             this.LevelId = levelId;
-
+            this.LevelIdColumnName = "Id";
             if (!groupsInLevel.Any())
                 return;
 
@@ -43,6 +45,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         private void FillHeaderWithQuestionsInsideGroup(IGroup @group, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
+            if (@group.RosterSizeSource == RosterSizeSourceType.FixedTitles && LevelLabels == null)
+            {
+                LevelLabels =
+                    @group.RosterFixedTitles.Select((title, index) => new LabelItem() { Caption = index.ToString(), Title = title })
+                        .ToArray();
+            }
+
             foreach (var groupChild in @group.Children)
             {
                 var question = groupChild as IQuestion;
