@@ -10,16 +10,19 @@ using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ViewModel.Login;
+using Java.IO;
 using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Utils;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Implementations.TabletInformation;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
+using File = System.IO.File;
 
 namespace WB.UI.Capi
 {
@@ -187,9 +190,34 @@ namespace WB.UI.Capi
             this.DestroyReportSending();
         }
 
-        void tabletInformationSender_InformationPackageCreated(object sender, EventArgs e)
+        void tabletInformationSender_InformationPackageCreated(object sender, InformationPackageEventArgs e)
         {
-            this.RunOnUiThread(() => this.progressDialog.SetMessage("Sending created information package to Supervisor"));
+            bool isUserReactedOnWarning = false;
+
+            this.RunOnUiThread(() =>
+            {
+                var builder = new AlertDialog.Builder(this);
+
+                builder.SetMessage(
+                    string.Format("Information package of size {0} will be sent via network. Are you sure you want to send it?",
+                        FileSizeUtils.SizeSuffix(e.FileSize)));
+                builder.SetPositiveButton("Yes", (s, positiveEvt) =>
+                {
+                    this.progressDialog.SetMessage("Sending created information package to Supervisor");
+                    isUserReactedOnWarning = true;
+                });
+                builder.SetNegativeButton("No", (s, negativeEvt) =>
+                {
+                    this.tabletInformationSender.Cancel();
+                    isUserReactedOnWarning = true;
+                });
+                builder.Show();
+            });
+
+            while (!isUserReactedOnWarning)
+            {
+                Thread.Sleep(500);
+            }
         }
 
         protected override void OnStart()
