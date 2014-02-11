@@ -5,7 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandler
+namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {
     internal class when_InterviewApproved_recived_by_interview_with_1_answerd_questions_and_1_unananswered :
         InterviewExportedDataEventHandlerTestContext
@@ -23,11 +23,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             questionnaireDocument = CreateQuestionnaireDocument(variableNameAndQuestionId);
             interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnaireDocument,
-                () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)));
+                () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), r => result = r);
         };
 
         Because of = () =>
-            result = interviewExportedDataEventHandler.Create(CreatePublishableEvent());
+            interviewExportedDataEventHandler.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_1 = () =>
             result.Levels[0].Records.Length.ShouldEqual(1);

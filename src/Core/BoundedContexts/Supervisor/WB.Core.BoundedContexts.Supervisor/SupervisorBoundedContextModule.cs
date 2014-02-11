@@ -3,7 +3,6 @@ using Ncqrs;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInformation;
@@ -35,12 +34,6 @@ namespace WB.Core.BoundedContexts.Supervisor
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IDataExportService>().To<DataExportService>().WithConstructorArgument("folderPath", currentFolderPath);
-
-            this.Unbind<IReadSideRepositoryWriter<InterviewDataExportView>>();
-            this.Bind<IReadSideRepositoryWriter<InterviewDataExportView>>().To<CsvInterviewDataExportViewWriter>();
-
-            this.Unbind<IReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            this.Bind<IReadSideRepositoryWriter<QuestionnaireExportStructure>>().To<FileBaseQuestionnaireExportStructureWriter>().WithConstructorArgument("folderPath", currentFolderPath);
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 

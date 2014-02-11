@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -19,37 +20,41 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewExportedDataEventHandler : AbstractFunctionalEventHandler<InterviewDataExportView>,
-        ICreateHandler<InterviewDataExportView, InterviewApproved>
+    public class InterviewExportedDataEventHandler : IEventHandler<InterviewApproved>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
-        public InterviewExportedDataEventHandler(IReadSideRepositoryWriter<InterviewDataExportView> readSideRepositoryWriter,
-            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter)
-            : base(readSideRepositoryWriter)
+        private readonly IDataExportService dataExportService;
+
+        public InterviewExportedDataEventHandler(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter, IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter, IDataExportService dataExportService)
         {
             this.interviewDataWriter = interviewDataWriter;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
+            this.dataExportService = dataExportService;
         }
 
-        public override Type[] UsesViews
+        public string Name { get { return this.GetType().Name; } }
+
+        public Type[] UsesViews
         {
-            get { return new Type[] { typeof (InterviewData) }; }
+            get { return new Type[] { typeof(InterviewData), typeof(QuestionnaireExportStructure) }; }
         }
 
-        public InterviewDataExportView Create(IPublishedEvent<InterviewApproved> evnt)
+        public Type[] BuildsViews { get { return new Type[] { typeof(InterviewDataExportView) }; } }
+
+        public void Handle(IPublishedEvent<InterviewApproved> evnt)
         {
             var interview = interviewDataWriter.GetById(evnt.EventSourceId);
 
             var exportStructure = questionnaireExportStructureWriter.GetById(interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion);
 
-            return new InterviewDataExportView(interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion,
+            var interviewDataExportView= new InterviewDataExportView(interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion,
              exportStructure.HeaderToLevelMap.Values.Select(
                  exportStructureForLevel =>
-                     new InterviewDataExportLevelView(exportStructureForLevel.LevelId,exportStructureForLevel.LevelName,
+                     new InterviewDataExportLevelView(exportStructureForLevel.LevelId, exportStructureForLevel.LevelName,
                          this.BuildRecordsForHeader(interview.Document, exportStructureForLevel))).ToArray());
+            dataExportService.AddExportedDataByInterview(interviewDataExportView);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
