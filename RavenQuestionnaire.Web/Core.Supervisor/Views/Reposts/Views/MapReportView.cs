@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
 namespace Core.Supervisor.Views.Reposts.Views
 {

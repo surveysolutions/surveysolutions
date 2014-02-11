@@ -9,12 +9,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Questionnaire
 {
     public class QuestionnaireQuestionsInfo : IView
     {
-        public QuestionnaireQuestionsInfo(QuestionnaireDocument questionnaire)
-        {
-            this.GuidToVariableMap = questionnaire.Find<IQuestion>(question => true)
-                .ToDictionary(x => x.PublicKey, x => x.StataExportCaption);
-        }
-
-        public Dictionary<Guid, string> GuidToVariableMap { get; set; }
+        public Dictionary<Guid, string> QuestionIdToVariableMap { get; set; }
     }
 }

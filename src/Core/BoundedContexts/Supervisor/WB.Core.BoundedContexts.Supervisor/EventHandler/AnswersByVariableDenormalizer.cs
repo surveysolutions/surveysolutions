@@ -11,11 +11,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
@@ -28,9 +25,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private readonly IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage;
         private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage;
-
-        private readonly Dictionary<string, QuestionnaireQuestionsInfo> questionsInfoCache =
-            new Dictionary<string, QuestionnaireQuestionsInfo>();
 
         public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
             IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage,
@@ -47,9 +41,25 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             Guid questionId = evnt.Payload.QuestionId;
             decimal[] propagationVector = evnt.Payload.PropagationVector;
 
-            string variableByQuestionnaireKey;
+             var interviewBrief = this.interviewBriefStorage.GetById(interviewId);
 
-            var collectedAnswers = GetAnswersCollection(interviewId, questionId, out variableByQuestionnaireKey);
+            if (interviewBrief == null) return;
+
+            var questionnaireVersiondKey = RepositoryKeysHelper.GetVersionedKey(interviewBrief.QuestionnaireId, interviewBrief.QuestionnaireVersion);
+
+            var variablesInfoStorage = this.variablesStorage.GetById(questionnaireVersiondKey);
+
+            if (variablesInfoStorage == null) 
+                return;
+
+            string variableName = variablesInfoStorage.QuestionIdToVariableMap[questionId];
+
+            if (string.IsNullOrWhiteSpace(variableName))
+                return;
+
+            var variableByQuestionnaireKey = RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
+
+            var collectedAnswers = this.answersByVariableStorage.GetById(variableByQuestionnaireKey);
 
             if (collectedAnswers == null)
                 return;
@@ -73,9 +83,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void UpdateAnswerCollection(Guid interviewId, Guid questionId, decimal[] propagationVector, string answerString)
         {
-            string variableByQuestionnaireKey;
+            var interviewBrief = this.interviewBriefStorage.GetById(interviewId);
 
-            var collectedAnswers = GetAnswersCollection(interviewId, questionId, out variableByQuestionnaireKey) ?? new AnswersByVariableCollection();
+            if (interviewBrief == null) return;
+
+            var questionnaireVersiondKey = RepositoryKeysHelper.GetVersionedKey(interviewBrief.QuestionnaireId, interviewBrief.QuestionnaireVersion);
+
+            var variablesInfoStorage = this.variablesStorage.GetById(questionnaireVersiondKey);
+
+            if (variablesInfoStorage == null) return;
+
+            string variableName = variablesInfoStorage.QuestionIdToVariableMap[questionId];
+
+            var variableByQuestionnaireKey = RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
+
+            var collectedAnswers =  this.answersByVariableStorage.GetById(variableByQuestionnaireKey) ?? new AnswersByVariableCollection();
 
             if (!collectedAnswers.Answers.ContainsKey(interviewId))
             {
@@ -91,37 +113,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 collectedAnswers.Answers[interviewId][levelId] = answerString;
             }
+
             this.answersByVariableStorage.Store(collectedAnswers, variableByQuestionnaireKey);
-        }
-
-        private AnswersByVariableCollection GetAnswersCollection(Guid interviewId, Guid questionId, out string variableByQuestionnaireKey)
-        {
-            variableByQuestionnaireKey = string.Empty;
-
-            var interviewBrief = this.interviewBriefStorage.GetById(interviewId);
-
-            var questionnaireVersiondKey = RepositoryKeysHelper.GetVersionedKey(interviewBrief.QuestionnaireId, interviewBrief.QuestionnaireVersion);
-
-            string variableName = this.GetVariableNameByQuestionId(questionnaireVersiondKey, questionId);
-
-            if (string.IsNullOrWhiteSpace(variableName))
-                return null;
-
-             variableByQuestionnaireKey = RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
-
-            return this.answersByVariableStorage.GetById(variableByQuestionnaireKey);
-        }
-
-        private string GetVariableNameByQuestionId(string questionnaireVersiondKey, Guid questionId)
-        {
-            if (!questionsInfoCache.ContainsKey(questionnaireVersiondKey))
-            {
-                questionsInfoCache[questionnaireVersiondKey] = variablesStorage.GetById(questionnaireVersiondKey);
-            }
-
-            return this.questionsInfoCache[questionnaireVersiondKey] == null 
-                ? null 
-                : this.questionsInfoCache[questionnaireVersiondKey].GuidToVariableMap[questionId];
         }
 
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
@@ -144,14 +137,4 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[] { typeof (InterviewBrief), typeof (SynchronizationDelta) }; }
         }
     }
-
-    public class AnswersByVariableCollection : IReadSideRepositoryEntity
-    {
-        public AnswersByVariableCollection()
-        {
-            this.Answers = new Dictionary<Guid, Dictionary<string, string>>();
-        }
-        public Dictionary<Guid, Dictionary<string, string>> Answers { get; set; }
-    }
-
 }

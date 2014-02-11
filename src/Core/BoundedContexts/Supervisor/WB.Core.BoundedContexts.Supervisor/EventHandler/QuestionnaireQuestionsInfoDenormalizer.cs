@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
@@ -35,8 +36,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var map = new QuestionnaireQuestionsInfo(evnt.Payload.Source);
-         
+            var map = new QuestionnaireQuestionsInfo
+            {
+                QuestionIdToVariableMap = evnt.Payload.Source.Find<IQuestion>(question => true).ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
+            };
+             
             this.questionnaires.Store(map, RepositoryKeysHelper.GetVersionedKey(evnt.EventSourceId, evnt.EventSequence));
         }
     }
