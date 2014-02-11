@@ -616,7 +616,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 StataExportCaption = @event.Payload.VariableName,
                 Mandatory = @event.Payload.IsMandatory,
                 ConditionExpression = @event.Payload.ConditionExpression,
-                Instructions = @event.Payload.Instructions
+                Instructions = @event.Payload.Instructions,
+                QuestionType = QuestionType.QRBarcode
             };
 
             item.Add(c: question, parent: @event.Payload.ParentGroupId, parentPropagationKey: null);
@@ -652,7 +653,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 StataExportCaption = @event.Payload.VariableName,
                 Mandatory = @event.Payload.IsMandatory,
                 ConditionExpression = @event.Payload.ConditionExpression,
-                Instructions = @event.Payload.Instructions
+                Instructions = @event.Payload.Instructions,
+                QuestionType = QuestionType.QRBarcode
             };
 
             item.Insert(index: @event.Payload.TargetIndex, c: question, parent: @event.Payload.ParentGroupId);
