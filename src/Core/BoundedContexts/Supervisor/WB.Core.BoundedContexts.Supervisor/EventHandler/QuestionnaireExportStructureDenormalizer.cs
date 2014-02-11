@@ -14,11 +14,11 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class QuestionnaireExportStructureEventHandler : IEventHandler<TemplateImported>, IEventHandler
+    public class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IDataExportService dataExportService;
-        public QuestionnaireExportStructureEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportService dataExportService)
+        public QuestionnaireExportStructureDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportService dataExportService)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
             this.dataExportService = dataExportService;

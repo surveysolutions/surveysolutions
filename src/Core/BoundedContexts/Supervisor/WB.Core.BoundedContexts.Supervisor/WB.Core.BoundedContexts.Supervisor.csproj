@@ -61,11 +61,11 @@
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
-    <Compile Include="EventHandler\InterviewExportedDataEventHandler.cs" />
+    <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireExportStructureEventHandler.cs" />
+    <Compile Include="EventHandler\QuestionnaireExportStructureDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
     <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />

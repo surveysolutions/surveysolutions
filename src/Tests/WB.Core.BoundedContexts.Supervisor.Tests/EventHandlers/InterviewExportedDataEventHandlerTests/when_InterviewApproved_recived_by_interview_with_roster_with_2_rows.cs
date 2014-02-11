@@ -28,13 +28,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
             questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
-            interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
+            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
                 CreateInterviewDataWith2PropagatedLevels, r => result = r);
         };
 
         Because of = () =>
-            interviewExportedDataEventHandler.Handle(CreatePublishableEvent());
+            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result,propagationScopeKey).Records.Length.ShouldEqual(2);
@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             return interview;
         }
 
-        private static EventHandler.InterviewExportedDataEventHandler interviewExportedDataEventHandler;
+        private static EventHandler.InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid propagatedGroup;
