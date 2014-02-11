@@ -1,16 +1,16 @@
-﻿namespace WB.UI.Designer.Code.MessageHandlers
-{
-    using System;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Security.Principal;
-    using System.Threading;
-    using System.Web;
-    using System.Web.Security;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Principal;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Security;
 
+namespace Web.Supervisor.Code.MessageHandler
+{
     public class BasicAuthMessageHandler : DelegatingHandler
     {
         protected bool Authorize(string username, string password)
@@ -24,7 +24,7 @@
             {
                 var credentials = ParseCredentials(request.Headers.Authorization);
 
-                if (Authorize(credentials.Username, credentials.Password))
+                if (this.Authorize(credentials.Username, credentials.Password))
                 {
                     var identity = new GenericIdentity(credentials.Username, "Basic");
                     var principal = new GenericPrincipal(identity, null);
