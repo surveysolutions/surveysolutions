@@ -42,6 +42,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
         It should_create_header_with_2_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
 
+        It should_create_header_with_2_header_labeles = () =>
+            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels.Length.ShouldEqual(2);
+
+        It should_create_header_with_first_header_label_title_equal_1 = () =>
+            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[0].Title.ShouldEqual("1");
+
+        It should_create_header_with_first_header_label_caption_equal_1 = () =>
+            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[0].Caption.ShouldEqual("0");
+
+        It should_create_header_with_second_header_label_title_equal_1 = () =>
+            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[1].Title.ShouldEqual("2");
+
+        It should_create_header_with_second_header_label_caption_equal_1 = () =>
+            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[1].Caption.ShouldEqual("1");
+
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Guid linkedQuestionId;
         private static Guid referencedQuestionId;

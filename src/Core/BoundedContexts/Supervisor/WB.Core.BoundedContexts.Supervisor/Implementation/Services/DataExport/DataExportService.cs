@@ -66,12 +66,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 string fileName = CreateValidFileName(headerStructureForLevel.Value.LevelName, createdFileNames, 0);
                 createdFileNames.Add(fileName);
                 var dataFileNameWithExtension = string.Format("{0}.csv", fileName);
-                var stataContent = new StataEnvironmentContentGenerator(headerStructureForLevel.Value, fileName,
+                var stataContent = new StataEnvironmentContentGenerator(headerStructureForLevel.Value, 
                     dataFileNameWithExtension);
 
                 File.WriteAllBytes(Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension),
                     csvInterviewExporter.CreateHeader(headerStructureForLevel.Value));
-                File.WriteAllBytes(Path.Combine(dataFolderForTemplatePath, stataContent.NameOfAdditionalFile),
+
+                File.WriteAllText(Path.Combine(dataFolderForTemplatePath, GetNameOfAdditionalContentFileForLevel(fileName)),
                     stataContent.ContentOfAdditionalFile);
             }
         }
@@ -111,6 +112,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         private string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
         {
             return Path.Combine(path, string.Format("exported_data_{0}_{1}", questionnaireId, version));
+        }
+
+        private string GetNameOfAdditionalContentFileForLevel(string fileName)
+        {
+            return string.Format("{0}.do", fileName);
         }
 
         private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i)
