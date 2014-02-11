@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandler
+namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {
     internal class when_InterviewApproved_recived_by_interview_created_from_template_containing_2_questions : InterviewExportedDataEventHandlerTestContext
     {
@@ -17,11 +18,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             });
             interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
-                CreateInterviewData);
+                CreateInterviewData, r => result = r);
         };
 
         Because of = () =>
-           result = interviewExportedDataEventHandler.Create(CreatePublishableEvent());
+           interviewExportedDataEventHandler.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_1 = () =>
             result.Levels[0].Records.Length.ShouldEqual(1);
@@ -32,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_first_record_id_equals_0 = () =>
             result.Levels[0].Records[0].RecordId.ShouldEqual(0);
 
-        private static EventHandler.InterviewExportedDataEventHandler interviewExportedDataEventHandler;
+        private static InterviewExportedDataEventHandler interviewExportedDataEventHandler;
         private static InterviewDataExportView result;
         private static QuestionnaireDocument questionnarie;
     }
