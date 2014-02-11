@@ -38,6 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.AutoPropagate,
             QuestionType.GpsCoordinates,
             QuestionType.TextList,
+            QuestionType.QRBarcode
         };
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
@@ -2338,7 +2339,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                                                              currentQuestion.QuestionType == QuestionType.Numeric ||
                                                              currentQuestion.QuestionType == QuestionType.SingleOption ||
                                                              currentQuestion.QuestionType == QuestionType.Text ||
-                                                             currentQuestion.QuestionType == QuestionType.AutoPropagate);
+                                                             currentQuestion.QuestionType == QuestionType.AutoPropagate ||
+                                                             currentQuestion.QuestionType == QuestionType.QRBarcode);
 
                     if (typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
