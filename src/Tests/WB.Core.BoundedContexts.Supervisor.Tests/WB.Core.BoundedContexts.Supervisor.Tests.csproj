@@ -60,6 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\AnswersByVariableDenormalizerTestContext.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_collection_was_not_created.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_denormalizer_cache_is_not_empty.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_where_is_no_interview_brief_info.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_where_is_no_question_id_to_variable_map.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\InterviewEventHandlerFunctionalTestContext.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_for_two_rosters_triggered_by_numeric___.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_DateTimeQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
