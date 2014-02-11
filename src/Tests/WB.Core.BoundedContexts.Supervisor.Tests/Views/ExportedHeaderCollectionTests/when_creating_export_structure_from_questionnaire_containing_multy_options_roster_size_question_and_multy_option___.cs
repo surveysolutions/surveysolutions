@@ -52,6 +52,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
         It should_create_header_with_2_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[rosterSizeQuestionId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
 
+        It should_create_header_with_nullable_level_labels = () =>
+            questionnaireExportStructure.HeaderToLevelMap[questionnaireDocument.PublicKey].LevelLabels.ShouldBeNull();
+
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Guid linkedQuestionId;
         private static Guid referencedQuestionId;
