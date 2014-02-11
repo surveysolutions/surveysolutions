@@ -6,7 +6,6 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReferenceInfoForLinkedQuestionsDenormalizerTests;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -36,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.QuestionnaireQu
             questionsInfo.ShouldNotBeNull();
 
         It should_contains_all_numeric_keys_and_corresponding_variables_in_stored_view = () =>
-            questionsInfo.GuidToVariableMap.ShouldContain(
+            questionsInfo.QuestionIdToVariableMap.ShouldContain(
                 new KeyValuePair<Guid, string>(textAId, textAVar),
                 new KeyValuePair<Guid, string>(textBId, textBVar),
                 new KeyValuePair<Guid, string>(textCId, textCVar),

@@ -97,6 +97,7 @@
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
+    <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\Interview\InterviewLevel.cs" />
