@@ -16,13 +16,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                 { "q1", Guid.NewGuid() },
                 { "q2", Guid.NewGuid() }
             });
-            interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
+            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
                 CreateInterviewData, r => result = r);
         };
 
         Because of = () =>
-           interviewExportedDataEventHandler.Handle(CreatePublishableEvent());
+           interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_1 = () =>
             result.Levels[0].Records.Length.ShouldEqual(1);
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_first_record_id_equals_0 = () =>
             result.Levels[0].Records[0].RecordId.ShouldEqual(0);
 
-        private static InterviewExportedDataEventHandler interviewExportedDataEventHandler;
+        private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static QuestionnaireDocument questionnarie;
     }

@@ -21,13 +21,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                 { "q2", unansweredQuestionId }
             };
             questionnaireDocument = CreateQuestionnaireDocument(variableNameAndQuestionId);
-            interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
+            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnaireDocument,
                 () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), r => result = r);
         };
 
         Because of = () =>
-            interviewExportedDataEventHandler.Handle(CreatePublishableEvent());
+            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_1 = () =>
             result.Levels[0].Records.Length.ShouldEqual(1);
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_unanswered_question_be_empty = () =>
           result.Levels[0].Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
 
-        private static EventHandler.InterviewExportedDataEventHandler interviewExportedDataEventHandler;
+        private static EventHandler.InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid answeredQuestionId;
