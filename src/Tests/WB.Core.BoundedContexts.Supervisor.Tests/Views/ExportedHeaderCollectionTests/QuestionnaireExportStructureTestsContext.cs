@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
     {
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
         {
-            var exportViewFactory = new ExportViewFactory();
+            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory());
             return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
         }
 

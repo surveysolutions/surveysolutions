@@ -15,6 +15,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
 {
     internal class ExportViewFactory : IExportViewFactory
     {
+        private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
+        
+        public ExportViewFactory(IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory)
+        {
+            this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
+        }
+
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, long version)
         {
             var result = new QuestionnaireExportStructure();
@@ -25,7 +32,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
 
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
             var questionnaireLevelStructure = new QuestionnaireRosterStructure(questionnaire, version);
-            var referenceInfoForLinkedQuestions = new ReferenceInfoForLinkedQuestions(questionnaire, version);
+            
+            var referenceInfoForLinkedQuestions = referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaire, version);
 
             result.HeaderToLevelMap.Add(questionnaire.PublicKey,
                 this.BuildHeaderByTemplate(questionnaire, questionnaire.PublicKey, questionnaireLevelStructure, referenceInfoForLinkedQuestions,
