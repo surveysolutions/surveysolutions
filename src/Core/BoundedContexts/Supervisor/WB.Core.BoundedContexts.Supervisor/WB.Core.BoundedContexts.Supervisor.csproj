@@ -73,11 +73,13 @@
     <Compile Include="Implementation\Services\DataExport\DataExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
-    <Compile Include="Implementation\Services\DataExport\CsvInterviewExporter.cs" />
-    <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentGenerator.cs" />
+    <Compile Include="Implementation\Services\DataExport\CsvInterviewExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentService.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Services\IDataExportService.cs" />
+    <Compile Include="Services\IEnvironmentContentService.cs" />
+    <Compile Include="Services\IInterviewExportService.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
     <Compile Include="SupervisorBoundedContextModule.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
