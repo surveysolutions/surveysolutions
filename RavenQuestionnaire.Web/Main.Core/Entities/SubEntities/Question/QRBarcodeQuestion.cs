@@ -1,10 +1,22 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
     public class QRBarcodeQuestion : AbstractQuestion, IQRBarcodeQuestion {
+
+        public override QuestionType QuestionType
+        {
+            get
+            {
+                return QuestionType.QRBarcode;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public override void AddAnswer(IAnswer answer)
         {
             throw new NotImplementedException();
