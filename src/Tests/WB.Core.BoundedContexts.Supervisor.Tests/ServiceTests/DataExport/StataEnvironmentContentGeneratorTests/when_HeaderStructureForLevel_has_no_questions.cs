@@ -14,15 +14,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.Stata
         Establish context = () =>
         {
             emptyHeaderStructureForLevel = CreateHeaderStructureForLevel();
-            stataEnvironmentContentGenerator = CreateStataEnvironmentContentGenerator(emptyHeaderStructureForLevel, dataFileName);
+            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator();
         };
 
-        Because of = () => stataGeneratedContent = stataEnvironmentContentGenerator.ContentOfAdditionalFile;
+        Because of = () => stataGeneratedContent = stataEnvironmentContentService.BuildContentOfAdditionalFile(emptyHeaderStructureForLevel, dataFileName);
 
         It should_contain_stata_script_for_insheet_file = () =>
             stataGeneratedContent.ShouldEqual(string.Format("insheet using \"{0}\", comma\r\nlist\r\n", dataFileName));
 
-        private static StataEnvironmentContentGenerator stataEnvironmentContentGenerator;
+        private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel emptyHeaderStructureForLevel;
         private static string dataFileName="data file name";
         private static string stataGeneratedContent;
