@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.API
 {
-    //[RoutePrefix("api/v1/interviews")]
+    [RoutePrefix("apis/v1/interviews")]
     [Authorize/*(Roles = "Headquarter")*/]
     public class InterviewsController : BaseApiServiceController
     {
@@ -21,8 +21,9 @@ namespace Web.Supervisor.API
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
-        
-        public AllInterviewsView Get(int limit, int offset)
+
+        [Route("")]
+        public AllInterviewsView Get(int limit = 10, int offset = 1)
         {
             var input = new AllInterviewsInputModel
             {
@@ -33,9 +34,10 @@ namespace Web.Supervisor.API
             return this.allInterviewsViewFactory.Load(input);
         }
 
-        public InterviewDetailsView Details(Guid id)
+        [Route("{id:guid}/details")]
+        public InterviewDetailsView Get(Guid id)
         {
-            InterviewDetailsInputModel inputModel = new InterviewDetailsInputModel()
+            var inputModel = new InterviewDetailsInputModel()
             {
                 CompleteQuestionnaireId = id
             };

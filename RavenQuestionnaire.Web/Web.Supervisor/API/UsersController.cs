@@ -11,7 +11,7 @@ using Web.Supervisor.Models;
 
 namespace Web.Supervisor.API
 {
-    //[RoutePrefix("api/v1/supervisors")]
+    
     [Authorize/*(Roles = "Headquarter")*/]
     public class UsersController : BaseApiServiceController
     {
@@ -30,8 +30,10 @@ namespace Web.Supervisor.API
             this.supervisorsFactory = supervisorsFactory;
             this.userViewFactory = userViewFactory;
         }
-        
-        public UserListView Supervisors(int limit, int offset)
+
+        [HttpGet]
+        [Route("apis/v1/supervisors")]
+        public UserListView Supervisors(int limit = 10, int offset = 1)
         {
             var data = new UsersListViewModel
             {
@@ -49,14 +51,9 @@ namespace Web.Supervisor.API
             return this.supervisorsFactory.Load(input);
         }
 
-        
-        public UserView Supervisors(Guid id)
-        {
-            return this.userViewFactory.Load(new UserViewInputModel(id));
-        }
-
-
-        public InterviewersView Intervievers(Guid supervisorId, int limit, int offset)
+        [HttpGet]
+        [Route("apis/v1/interviewers/{supervisorId:guid}")]
+        public InterviewersView Intervievers(Guid supervisorId, int limit = 10, int offset = 1)
         {
             var input = new InterviewersInputModel(supervisorId)
             {
@@ -67,6 +64,9 @@ namespace Web.Supervisor.API
             return this.interviewersFactory.Load(input);
         }
 
+        [HttpGet]
+        [Route("apis/v1/supervisors/{id:guid}/details")]
+        [Route("apis/v1/interviewers/{id:guid}/details")]
         public UserView Details(Guid id)
         {
             return this.userViewFactory.Load(new UserViewInputModel(id));

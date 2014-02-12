@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
@@ -9,7 +8,7 @@ using Web.Supervisor.Models.API;
 
 namespace Web.Supervisor.API
 {
-    //[RoutePrefix("api/v1/questionnaires")]
+    [RoutePrefix("apis/v1/questionnaires")]
     [Authorize/*(Roles = "Headquarter")*/]
     public class QuestionnairesController : BaseApiServiceController
     {
@@ -26,13 +25,13 @@ namespace Web.Supervisor.API
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
         }
 
-        [HttpGet]
-        public QuestionnaireApiView AllQuestionnaires(int limit = 10, int offset = 1)
+        [Route("")]
+        public QuestionnaireApiView Get(int limit = 10, int offset = 1)
         {
             if (limit < 0 || offset < 0)
                 return null; //add error responses
 
-            var safeLimit = Math.Min(limit, maxPageSize); //move validation to upper level
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
 
             var questionnairesFromStore = this.questionnaireBrowseViewFactory.Load(
                 new QuestionnaireBrowseInputModel()
@@ -44,13 +43,14 @@ namespace Web.Supervisor.API
             return new QuestionnaireApiView(questionnairesFromStore);
         }
 
+        [Route("{id:guid}/{version:int?}")]
         [HttpGet]
         public QuestionnaireApiView Questionnaire(Guid id, int? version, int limit = 10, int offset = 1)
         {
             if (limit < 0 || offset < 0)
                 return null; //add error responses
 
-            var safeLimit = Math.Min(limit, maxPageSize); //move validation to upper level
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
 
             var questionnaires = this.questionnaireBrowseViewFactory.Load(
                 new QuestionnaireBrowseInputModel()
