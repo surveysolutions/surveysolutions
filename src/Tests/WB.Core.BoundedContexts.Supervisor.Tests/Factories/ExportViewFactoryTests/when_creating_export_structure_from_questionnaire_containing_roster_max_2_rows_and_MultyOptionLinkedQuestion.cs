@@ -5,15 +5,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
-using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTests
 {
-    internal class when_creating_questionnaire_export_structure_from_questionnaire_containing_roster_max_2_rows_and_multy_option_linked_question : QuestionnaireExportStructureTestsContext
+    internal class when_creating_export_structure_from_questionnaire_containing_roster_max_2_rows_and_MultyOptionLinkedQuestion : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -45,15 +42,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
                         }
                     }
                 });
+            exportViewFactory = CreateExportViewFactory();
         };
 
         Because of = () =>
-            headerStructureForLevel = CreateQuestionnaireExportStructure(questionnaire);
+            headerStructureForLevel = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
         It should_create_header_with_2_column = () =>
             headerStructureForLevel.HeaderToLevelMap[autoPropagateQuestionId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
 
         private static QuestionnaireExportStructure headerStructureForLevel;
+        private static ExportViewFactory exportViewFactory;
         private static Guid linkedQuestionId;
         private static Guid referencedQuestionId;
         private static QuestionnaireDocument questionnaire;

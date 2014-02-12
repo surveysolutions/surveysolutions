@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTests
 {
-    internal class when_creating_export_structure_from_questionnaire_containing_nested_group_inside_roster : QuestionnaireExportStructureTestsContext
+    internal class when_creating_export_view_factory_from_containing_nested_group_inside_roster : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -50,10 +48,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
                         }
                     }
                 });
+            exportViewFactory = CreateExportViewFactory();
         };
 
         Because of = () =>
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaireDocument);
+            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
 
         It should_create_header_with_1_column_for_question_inside_nested_group = () =>
             questionnaireExportStructure.HeaderToLevelMap[rosterSizeQuestionId].HeaderItems[questionInsideNestedGroupId].ColumnNames.Length.ShouldEqual(1);
@@ -71,6 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
 
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
+        private static ExportViewFactory exportViewFactory;
         private static Guid rosterId;
         private static Guid nestedGroupId;
         private static QuestionnaireDocument questionnaireDocument;

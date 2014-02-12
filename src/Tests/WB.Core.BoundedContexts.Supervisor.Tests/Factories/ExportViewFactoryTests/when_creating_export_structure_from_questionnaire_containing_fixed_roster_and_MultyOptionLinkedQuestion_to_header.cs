@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTests
 {
-    internal class when_creating_structure_from_questionnaire_containing_fixed_roster_and_multy_option_linked_question_to_header : QuestionnaireExportStructureTestsContext
+    internal class when_creating_export_structure_from_questionnaire_containing_fixed_roster_and_MultyOptionLinkedQuestion_to_header : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -34,10 +31,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
                         new MultyOptionsQuestion() { LinkedToQuestionId = referencedQuestionId, PublicKey = linkedQuestionId, QuestionType = QuestionType.MultyOption }
                     }
                 });
+            exportViewFactory = CreateExportViewFactory();
         };
 
-        Because of = () =>
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaire);
+        private Because of = () =>
+            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
         It should_create_header_with_2_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
@@ -58,6 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
             questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[1].Caption.ShouldEqual("1");
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
+        private static ExportViewFactory exportViewFactory;
         private static Guid linkedQuestionId;
         private static Guid referencedQuestionId;
         private static QuestionnaireDocument questionnaire;

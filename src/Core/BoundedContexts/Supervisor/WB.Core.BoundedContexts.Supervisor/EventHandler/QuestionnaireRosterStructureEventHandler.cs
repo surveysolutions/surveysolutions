@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -16,8 +17,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     public class QuestionnaireRosterStructureEventHandler : AbstractFunctionalEventHandler<QuestionnaireRosterStructure>,
         ICreateHandler<QuestionnaireRosterStructure, TemplateImported>
     {
-        public QuestionnaireRosterStructureEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter)
-            : base(readsideRepositoryWriter) {}
+        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
+
+        public QuestionnaireRosterStructureEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
+            : base(readsideRepositoryWriter)
+        {
+            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
+        }
 
         public override Type[] UsesViews
         {
@@ -26,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public QuestionnaireRosterStructure Create(IPublishedEvent<TemplateImported> evnt)
         {
-            return new QuestionnaireRosterStructure(evnt.Payload.Source, evnt.EventSequence);
+            return questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(evnt.Payload.Source, evnt.EventSequence);
         }
     }
 }

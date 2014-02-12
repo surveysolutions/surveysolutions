@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(evnt.Payload.Source, evnt.EventSequence);
             this.dataExportService.CreateExportedDataStructureByTemplate(questionnaireExportStructure);
-            this.readsideRepositoryWriter.Store(questionnaireExportStructure, evnt.EventSourceId.ToString());
+            this.readsideRepositoryWriter.Store(questionnaireExportStructure, evnt.EventSourceId);
         }
     }
 }
