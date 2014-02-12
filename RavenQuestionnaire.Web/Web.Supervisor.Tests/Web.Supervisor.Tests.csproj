@@ -113,6 +113,10 @@
     <Compile Include="HQControllerTests\when_BatchUploadModel_model_contains_property__File__to_upload_file_data.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_correct_file_while_batch_upload_and_model_state_is_valid.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />
+    <Compile Include="ImportExportControllerTests\ImportExportControllerTestContext.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_and_exception_occured.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_empty_id.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_not_empty_id.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
