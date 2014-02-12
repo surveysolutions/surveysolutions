@@ -562,6 +562,50 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
         }
 
+        internal void Apply(QRBarcodeQuestionAdded @event)
+        {
+            var question = new QRBarcodeQuestion()
+            {
+                PublicKey = @event.QuestionId,
+                QuestionText = @event.Title,
+                StataExportCaption = @event.VariableName,
+                Mandatory = @event.IsMandatory,
+                ConditionExpression = @event.ConditionExpression,
+                Instructions = @event.Instructions
+            };
+
+            this.innerDocument.Add(c: question, parent: @event.ParentGroupId, parentPropagationKey: null);
+        }
+
+        internal void Apply(QRBarcodeQuestionUpdated @event)
+        {
+            var question = this.innerDocument.Find<IQRBarcodeQuestion>(@event.QuestionId);
+
+            if (question == null) return;
+
+            question.QuestionText = @event.Title;
+            question.StataExportCaption = @event.VariableName;
+            question.Mandatory = @event.IsMandatory;
+            question.ConditionExpression = @event.ConditionExpression;
+            question.Instructions = @event.Instructions;
+
+        }
+
+        internal void Apply(QRBarcodeQuestionCloned @event)
+        {
+            var question = new QRBarcodeQuestion()
+            {
+                PublicKey = @event.QuestionId,
+                QuestionText = @event.Title,
+                StataExportCaption = @event.VariableName,
+                Mandatory = @event.IsMandatory,
+                ConditionExpression = @event.ConditionExpression,
+                Instructions = @event.Instructions
+            };
+
+            this.innerDocument.Insert(c: question, parent: @event.ParentGroupId, index: @event.TargetIndex);
+        }
+
         public QuestionnaireState CreateSnapshot()
         {
             return new QuestionnaireState
