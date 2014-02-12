@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTests
 {
-    [Subject(typeof(HeaderStructureForLevel))]
-    internal class QuestionnaireExportStructureTestsContext
+    [Subject(typeof(ExportViewFactory))]
+    internal class ExportViewFactoryTestsContext
     {
-        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
+        protected static ExportViewFactory CreateExportViewFactory(
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = null)
         {
-            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory());
-            return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
+            return new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(), questionnaireRosterStructureFactory??new QuestionnaireRosterStructureFactory());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
