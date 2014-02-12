@@ -3,7 +3,8 @@ using Ncqrs;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
+using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInformation;
@@ -32,12 +33,6 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IDataExportService>().To<DataExportService>().WithConstructorArgument("folderPath", currentFolderPath);
 
-            this.Unbind<IReadSideRepositoryWriter<InterviewDataExportView>>();
-            this.Bind<IReadSideRepositoryWriter<InterviewDataExportView>>().To<CsvInterviewDataExportViewWriter>();
-
-            this.Unbind<IReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            this.Bind<IReadSideRepositoryWriter<QuestionnaireExportStructure>>().To<FileBaseQuestionnaireExportStructureWriter>().WithConstructorArgument("folderPath", currentFolderPath);
-
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
             Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;
@@ -47,6 +42,10 @@ namespace WB.Core.BoundedContexts.Supervisor
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
 
             this.Bind<ITabletInformationService>().ToMethod(c => new FileBasedTabletInformationService(currentFolderPath));
+            this.Bind<IInterviewExportService>().To<CsvInterviewExportService>();
+            this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
+            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
+            this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
         }
 
         protected void AdditionalEventChecker(Guid interviewId, long sequence)

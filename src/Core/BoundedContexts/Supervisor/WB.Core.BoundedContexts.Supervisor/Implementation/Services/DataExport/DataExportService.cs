@@ -18,10 +18,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     {
         private const string FolderName = "ExportedData";
         private readonly string path;
-        private readonly CsvInterviewExporter csvInterviewExporter = new CsvInterviewExporter();
+        private readonly IInterviewExportService interviewExportService;
+        private readonly IEnvironmentContentService environmentContentService;
 
-        public DataExportService(IReadSideRepositoryCleanerRegistry cleanerRegistry, string folderPath)
+        public DataExportService(IReadSideRepositoryCleanerRegistry cleanerRegistry, string folderPath, IInterviewExportService interviewExportService, IEnvironmentContentService environmentContentService)
         {
+            this.interviewExportService = interviewExportService;
+            this.environmentContentService = environmentContentService;
             cleanerRegistry.Register(this);
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
@@ -66,14 +69,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 string fileName = CreateValidFileName(headerStructureForLevel.Value.LevelName, createdFileNames, 0);
                 createdFileNames.Add(fileName);
                 var dataFileNameWithExtension = string.Format("{0}.csv", fileName);
-                var stataContent = new StataEnvironmentContentGenerator(headerStructureForLevel.Value, 
-                    dataFileNameWithExtension);
 
-                File.WriteAllBytes(Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension),
-                    csvInterviewExporter.CreateHeader(headerStructureForLevel.Value));
-
+                this.interviewExportService.CreateHeader(headerStructureForLevel.Value, Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension));
                 File.WriteAllText(Path.Combine(dataFolderForTemplatePath, GetNameOfAdditionalContentFileForLevel(fileName)),
-                    stataContent.ContentOfAdditionalFile);
+                    environmentContentService.BuildContentOfAdditionalFile(headerStructureForLevel.Value,
+                    dataFileNameWithExtension));
             }
         }
 
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 string fileName = CreateValidFileName(interviewDataExportLevelView.LevelName, createdFileNames, 0);
                 var dataFileNameWithExtension = string.Format("{0}.csv", fileName);
                 var pathToLevelDataFile = Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension);
-                csvInterviewExporter.AddRecord(pathToLevelDataFile,interviewDataExportLevelView);
+                this.interviewExportService.AddRecord(interviewDataExportLevelView, pathToLevelDataFile);
                 createdFileNames.Add(fileName);
             }
         }

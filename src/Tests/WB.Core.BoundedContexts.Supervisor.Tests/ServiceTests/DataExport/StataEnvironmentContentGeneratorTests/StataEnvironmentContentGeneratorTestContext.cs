@@ -12,9 +12,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.Stata
 {
     internal class StataEnvironmentContentGeneratorTestContext
     {
-        protected static StataEnvironmentContentGenerator CreateStataEnvironmentContentGenerator(HeaderStructureForLevel headerStructureForLevel, string dataFileName = "data_file_name.csv")
+        protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator()
         {
-            return new StataEnvironmentContentGenerator(headerStructureForLevel ?? CreateHeaderStructureForLevel(), dataFileName);
+            return new StataEnvironmentContentService();
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(params ExportedHeaderItem[] exportedHeaderItems)

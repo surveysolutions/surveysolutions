@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandler
+namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {
     class when_InterviewApproved_recived_by_interview_with_roster_with_2_rows : InterviewExportedDataEventHandlerTestContext
     {
@@ -28,13 +28,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
             questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
-            interviewExportedDataEventHandler = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
+            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
-                CreateInterviewDataWith2PropagatedLevels);
+                CreateInterviewDataWith2PropagatedLevels, r => result = r);
         };
 
         Because of = () =>
-            result = interviewExportedDataEventHandler.Create(CreatePublishableEvent());
+            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result,propagationScopeKey).Records.Length.ShouldEqual(2);
@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             return interview;
         }
 
-        private static EventHandler.InterviewExportedDataEventHandler interviewExportedDataEventHandler;
+        private static EventHandler.InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid propagatedGroup;
