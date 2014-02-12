@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "UpdateQRBarcodeQuestionCommand")]
+    [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "UpdateQRBarcodeQuestion")]
     public class UpdateQRBarcodeQuestionCommand : AbstractUpdateQuestionCommand
     {
         public UpdateQRBarcodeQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName, bool isMandatory,

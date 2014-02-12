@@ -13,7 +13,6 @@ namespace Main.Core.Entities.SubEntities.Question
             }
             set
             {
-                throw new NotImplementedException();
             }
         }
 
@@ -29,7 +28,7 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
-            return null;
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)
