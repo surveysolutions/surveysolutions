@@ -3,6 +3,8 @@ using Ncqrs;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
+using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInformation;
@@ -46,6 +48,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<ITabletInformationService>().ToMethod(c => new FileBasedTabletInformationService(currentFolderPath));
             this.Bind<IInterviewExportService>().To<CsvInterviewExportService>();
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
+            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
         }
 
         protected void AdditionalEventChecker(Guid interviewId, long sequence)

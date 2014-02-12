@@ -10,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -48,8 +49,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
 
 
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
+            var exportViewFactory = new ExportViewFactory();
             questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
-                .Returns(new QuestionnaireExportStructure(questionnaire, 1));
+                .Returns(exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1));
 
             var dataExportService = new Mock<IDataExportService>();
 
@@ -106,13 +108,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                 question.Answer = "some answer";
             }
             return interviewData;
-        }
-
-        protected static ExportedQuestion CreateExportedQuestion(Guid questionId, string answer)
-        {
-            var interviewQuestion = new InterviewQuestion(questionId);
-            interviewQuestion.Answer = answer;
-            return new ExportedQuestion(interviewQuestion, new ExportedHeaderItem(new TextQuestion()));
         }
 
         protected static IPublishedEvent<InterviewApproved> CreatePublishableEvent()
