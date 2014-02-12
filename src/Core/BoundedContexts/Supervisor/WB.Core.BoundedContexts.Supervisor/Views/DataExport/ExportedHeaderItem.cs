@@ -11,58 +11,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class ExportedHeaderItem
     {
-        public ExportedHeaderItem() {}
-
-        public ExportedHeaderItem(IQuestion question)
-        {
-            PublicKey = question.PublicKey;
-            QuestionType = question.QuestionType;
-            VariableName = question.StataExportCaption;
-            Titles = new string[]{question.QuestionText};
-            ColumnNames = new string[] { question.StataExportCaption };
-
-            this.Labels = new Dictionary<Guid, LabelItem>();
-            foreach (IAnswer answer in question.Answers)
-            {
-                this.Labels.Add(answer.PublicKey, new LabelItem(answer));
-            }
-        }
-
-        public ExportedHeaderItem(IQuestion question, int columnCount)
-            : this(question)
-        {
-            this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
-            
-            ColumnNames = new string[columnCount];
-            Titles=new string[columnCount];
-
-            for (int i = 0; i < columnCount; i++)
-            {
-                ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, i);
-
-                if (!IsQuestionLinked(question))
-                {
-                    if(question is IMultyOptionsQuestion)
-                        Titles[i] += string.Format(":{0}", question.Answers[i].AnswerText);
-                    if(question is ITextListQuestion)
-                        Titles[i] += string.Format(":{0}", i);
-                }
-            }
-        }
-
-        private static bool IsQuestionLinked(IQuestion question)
-        {
-            return question.LinkedToQuestionId.HasValue;
-        }
-
-        private void ThrowIfQuestionIsNotMultiSelectOrTextList(IQuestion question)
-        {
-            if (question.QuestionType != QuestionType.MultyOption && question.QuestionType != QuestionType.TextList)
-                throw new InvalidOperationException(string.Format(
-                    "question '{1}' with type '{0}' can't be exported as more then one column",
-                    question.QuestionType, question.QuestionText));
-        }
-
         public Guid PublicKey { get; set; }
         public QuestionType QuestionType { get; set; }
         public string[] ColumnNames { get; set; }

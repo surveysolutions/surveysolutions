@@ -2,15 +2,20 @@
 using System.Linq;
 using System.Text;
 using CsvHelper;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class CsvInterviewExporter
+    internal class CsvInterviewExportService : IInterviewExportService
     {
         private readonly string delimiter = ",";
 
-        public void AddRecord(string filePath, InterviewDataExportLevelView items)
+        public CsvInterviewExportService()
+        {
+        }
+
+        public void AddRecord(InterviewDataExportLevelView items, string filePath)
         {
             using (var fileStream = new FileStream(filePath, FileMode.Append))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
@@ -39,10 +44,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             }
         }
 
-        public byte[] CreateHeader(HeaderStructureForLevel header)
+        public void CreateHeader(HeaderStructureForLevel header, string filePath)
         {
-            using (var memoryStream = new MemoryStream())
-            using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
                 writer.Configuration.Delimiter = this.delimiter;
@@ -60,8 +65,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
                 writer.NextRecord();
                 streamWriter.Flush();
-                memoryStream.Position = 0;
-                return memoryStream.ToArray();
             }
         }
     }
