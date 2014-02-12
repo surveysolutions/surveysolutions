@@ -140,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
+    <Compile Include="MapReportTests\MapReportTestContext.cs" />
+    <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_answer_collection.cs" />
+    <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_no_answer_collection.cs" />
     <Compile Include="Merger\InterviewDataAndQuestionnaireMergerTestContext.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_inside_roster.cs" />
