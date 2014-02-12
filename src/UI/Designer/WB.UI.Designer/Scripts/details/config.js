@@ -11,7 +11,8 @@
                 "DateTime": "DateTime",
                 "Text": "Text",
                 "GpsCoordinates": "GpsCoordinates",
-                "TextList": "TextList"
+                "TextList": "TextList",
+                "QRBarcode" : "QRBarcode"
             },
             rosterSizeSourceTypes = {
                 "FixedTitles": "FixedTitles",
@@ -53,6 +54,10 @@
                 {
                     key: "TextList",
                     value: "List"
+                },
+                {
+                    key: "QRBarcode",
+                    value: "QR Barcode"
                 }
             ],
             questionScopes = {
@@ -79,7 +84,10 @@
                 deleteQuestion: "DeleteQuestion",
                 questionMove: "MoveQuestion",
                 addSharedPersonToQuestionnaire: "AddSharedPersonToQuestionnaire",
-                removeSharedPersonFromQuestionnaire: "RemoveSharedPersonFromQuestionnaire"
+                removeSharedPersonFromQuestionnaire: "RemoveSharedPersonFromQuestionnaire",
+                addQRBarcodeQuestion: "AddQRBarcodeQuestion",
+                updateQRBarcodeQuestion: "UpdateQRBarcodeQuestion",
+                cloneQRBarcodeQuestion: "CloneQRBarcodeQuestion"
             },
             hashes = {
                 details: '#/details',
