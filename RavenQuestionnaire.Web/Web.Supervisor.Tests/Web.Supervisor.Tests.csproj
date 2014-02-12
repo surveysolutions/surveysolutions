@@ -114,6 +114,8 @@
     <Compile Include="HQControllerTests\when_hq_controller_gets_correct_file_while_batch_upload_and_model_state_is_valid.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportDataApiControllerTests\ReportDataApiControllerTestContext.cs" />
+    <Compile Include="ReportDataApiControllerTests\when_map_report_data_is_being_queried.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
