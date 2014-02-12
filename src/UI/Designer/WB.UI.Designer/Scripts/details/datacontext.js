@@ -481,7 +481,7 @@
 
         commands[config.commands.createTextListQuestion] = function (question) {
             var command = converQuestionToListCommand(question);
-            command.groupId = question.parent().id();
+            command.parentGroupId = question.parent().id();
             return command;
         };
 
@@ -494,6 +494,23 @@
                 questionnaireId: questionnaire.id(),
                 questionId: question.id()
             };
+        };
+
+        commands[config.commands.addQRBarcodeQuestion] = function(question) {
+            var command = getQuestionCommandBase(question);
+            command.parentGroupId = question.parent().id();
+            return command;
+        };
+        
+        commands[config.commands.updateQRBarcodeQuestion] = function (question) {
+            return getQuestionCommandBase(question);
+        };
+        
+        commands[config.commands.cloneQRBarcodeQuestion] = function (question) {
+            var command = commands[config.commands.addQRBarcodeQuestion](question);
+            command.sourceQuestionId = question.cloneSource().id();
+            command.targetIndex = firstSavedIndexInCollection(question.parent().childrenID(), question.id());
+            return command;
         };
 
         commands[config.commands.questionMove] = function (command) {
@@ -517,6 +534,18 @@
             return {
                 email: sharedUser.userEmail(),
                 questionnaireId: questionnaire.id()
+            };
+        };
+        
+        var getQuestionCommandBase = function (question) {
+            return {
+                questionnaireId: questionnaire.id(),
+                questionId: question.id(),
+                title: question.title(),
+                variableName: question.alias(),
+                isMandatory: question.isMandatory(),
+                condition: question.condition(),
+                instructions: question.instruction()
             };
         };
 
