@@ -49,20 +49,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             var variablesInfoStorage = this.variablesStorage.GetById(questionnaireVersiondKey);
 
-            if (variablesInfoStorage == null) 
-                return;
+            if (variablesInfoStorage == null)  return;
 
             string variableName = variablesInfoStorage.QuestionIdToVariableMap[questionId];
-
-            if (string.IsNullOrWhiteSpace(variableName))
-                return;
 
             var variableByQuestionnaireKey = RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
 
             var collectedAnswers = this.answersByVariableStorage.GetById(variableByQuestionnaireKey);
 
-            if (collectedAnswers == null)
-                return;
+            if (collectedAnswers == null) return;
 
             if (!collectedAnswers.Answers.ContainsKey(interviewId)) return;
 
