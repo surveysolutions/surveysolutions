@@ -5,15 +5,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
-using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTests
 {
-    internal class when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and_multy_option_linked_question_to_header : QuestionnaireExportStructureTestsContext
+    internal class WhenCreatingExportViewFactoryFromContaining2AutopropagatedGroupsWithOneTriggerMax2RowsAndMultyOptionLinkedQuestionToHeader : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -48,10 +45,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
                             }
                         }
                 });
+            exportViewFactory = CreateExportViewFactory();
         };
 
-        Because of = () =>
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaireDocument);
+        private Because of = () =>
+            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
 
         It should_create_header_with_2_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[numericTriggerQuestionId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
@@ -60,6 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
             questionnaireExportStructure.HeaderToLevelMap[questionnaireDocument.PublicKey].LevelLabels.ShouldBeNull();
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
+        private static ExportViewFactory exportViewFactory;
         private static Guid linkedQuestionId;
         private static Guid referencedQuestionId;
         private static QuestionnaireDocument questionnaireDocument;

@@ -10,6 +10,8 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -36,8 +38,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
             Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> versionedStorageStub)
         {
             var denormalizer = new InterviewViewModelDenormalizer(storageStub.Object,
-                versionedStorageStub.Object, 
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
+                versionedStorageStub.Object,
+                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), new QuestionnaireRosterStructureFactory());
 
             return denormalizer;
         }

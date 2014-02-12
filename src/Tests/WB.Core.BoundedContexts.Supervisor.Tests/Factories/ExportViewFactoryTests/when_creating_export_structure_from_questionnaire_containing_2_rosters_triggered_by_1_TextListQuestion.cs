@@ -5,13 +5,14 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectionTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTests
 {
-    internal class when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_text_list_question : QuestionnaireExportStructureTestsContext
+    internal class when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_TextListQuestion : ExportViewFactoryTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new TextListQuestion("text list roster size question")
@@ -42,10 +43,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
                         new NumericQuestion() { PublicKey = questionInsideRoster2Id, QuestionType = QuestionType.Numeric }
                     }
                 });
+            exportViewFactory = CreateExportViewFactory();
         };
 
         Because of = () =>
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaireDocument);
+            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
 
         It should_create_header_with_1_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[rosterSizeQuestionId].HeaderItems[questionInsideRoster1Id].ColumnNames.Length.ShouldEqual(1);
@@ -54,6 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views.ExportedHeaderCollectio
           questionnaireExportStructure.HeaderToLevelMap[questionnaireDocument.PublicKey].HeaderItems[rosterSizeQuestionId].ColumnNames.Length.ShouldEqual(maxAnswerCount);
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
+        private static ExportViewFactory exportViewFactory;
         private static Guid questionInsideRoster1Id = Guid.Parse("CCF000AAA111EE2DD2EE111AAA000FFF");
         private static Guid questionInsideRoster2Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static QuestionnaireDocument questionnaireDocument;
