@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         {
             var storageStub = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
 
-            storageStub.Setup(d => d.GetById(document.PublicKey.ToString())).Returns(document);
+            storageStub.Setup(d => d.GetById(document.PublicKey.FormatGuid())).Returns(document);
 
             return storageStub;
         }
