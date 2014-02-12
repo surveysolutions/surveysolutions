@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IInterviewExportService>().To<CsvInterviewExportService>();
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
+            this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
         }
 
         protected void AdditionalEventChecker(Guid interviewId, long sequence)
