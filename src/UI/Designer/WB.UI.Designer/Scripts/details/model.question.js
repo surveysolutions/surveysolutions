@@ -77,7 +77,7 @@
                self.isValidationVisible = ko.computed(function() {
                    var validationFieldsAreEmpty = _.isEmpty((self.validationExpression() || "") + (self.validationMessage() || ""));
                    if (self.isSupervisorQuestion() == false) {
-                       if (self.qtype() == 'TextList') {
+                       if (self.qtype() == 'TextList' || self.qtype() == 'QRBarcode') {
                            return !validationFieldsAreEmpty;
                        }
                        return true;
@@ -193,10 +193,10 @@
                        validatable: true,
                        validation: [{
                            validator: function (val) {
-                               if (self.isFeatured() == true && (val == config.questionTypes.GpsCoordinates || val == config.questionTypes.TextList)) return false;
+                               if (self.isFeatured() == true && (val == config.questionTypes.GpsCoordinates || val == config.questionTypes.TextList || val == config.questionTypes.QRBarcode)) return false;
                                return true;
                            },
-                           message: 'Geo Location and List questions cannot be pre-filled'
+                           message: 'Geo Location, QR Barcode and List questions cannot be pre-filled'
                        },
                            {
                                validator: function (val) {
@@ -216,12 +216,13 @@
                                            case "AutoPropagate":
                                            case "GpsCoordinates":
                                            case "TextList":
+                                           case "QRBarcode":
                                                return false;
                                        }
                                    }
                                    return true;
                                },
-                               message: 'Date, Auto propagate, Linked categorical, TextList and Geo Location questions cannot be filled by supervisor. '
+                               message: 'Date, Auto propagate, Linked categorical, TextList, QR Barcode and Geo Location questions cannot be filled by supervisor. '
                            }]
                    }); // Questoin type
 
