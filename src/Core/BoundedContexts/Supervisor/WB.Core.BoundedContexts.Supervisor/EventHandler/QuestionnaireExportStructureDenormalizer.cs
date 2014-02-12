@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.Infrastructure.FunctionalDenormalization;
@@ -18,10 +19,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IDataExportService dataExportService;
-        public QuestionnaireExportStructureDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportService dataExportService)
+        private readonly IExportViewFactory exportViewFactory;
+
+        public QuestionnaireExportStructureDenormalizer(
+            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportService dataExportService,
+            IExportViewFactory exportViewFactory)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
             this.dataExportService = dataExportService;
+            this.exportViewFactory = exportViewFactory;
         }
 
         public string Name
@@ -34,17 +40,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[0]; }
         }
 
-        public Type[] BuildsViews { get { return new Type[] { typeof(QuestionnaireExportStructure) }; } }
-
-        public QuestionnaireExportStructure Create(IPublishedEvent<TemplateImported> evnt)
-        {
-            return new QuestionnaireExportStructure(evnt.Payload.Source, evnt.EventSequence);
-        }
+        public Type[] BuildsViews { get { return new [] { typeof(QuestionnaireExportStructure) }; } }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var questionnaireExportStructure = new QuestionnaireExportStructure(evnt.Payload.Source, evnt.EventSequence);
-
+            var questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(evnt.Payload.Source, evnt.EventSequence);
             this.dataExportService.CreateExportedDataStructureByTemplate(questionnaireExportStructure);
             this.readsideRepositoryWriter.Store(questionnaireExportStructure, evnt.EventSourceId.ToString());
         }
