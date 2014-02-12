@@ -24,6 +24,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.AnswersByVariab
                 && publishedEvent.EventSequence == (eventSequence ?? 1));
         }
 
+        protected static IPublishedEvent<AnswerRemoved> CreateAnswerRemovedEvent(Guid interviewId, Guid? questionId = null, decimal[] propagationVector = null)
+        {
+            return ToPublishedEvent(new AnswerRemoved(questionId ?? Guid.NewGuid(), propagationVector ?? new decimal[0]), 10, interviewId);
+        }
+
         protected static IPublishedEvent<GeoLocationQuestionAnswered> CreateGeoLocationQuestionAnsweredEvent(Guid interviewId, Guid? userId = null, Guid? questionId = null,
             decimal[] propagationVector = null, DateTime? answerTime = null, double? latitude = null, double? longitude = null,
             double? accuracy = null, DateTimeOffset? timestamp = null)

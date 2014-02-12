@@ -66,6 +66,12 @@
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_the_same_geo_question_for_the_second_time.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_where_is_no_interview_brief_info.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_where_is_no_question_id_to_variable_map.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_collection_with_answers.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_info_about_income_question.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_info_about_income_question.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_info_about_income_interview.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_interview_brief_info.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_question_id_to_variable_map.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\InterviewEventHandlerFunctionalTestContext.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_for_two_rosters_triggered_by_numeric___.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_DateTimeQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
