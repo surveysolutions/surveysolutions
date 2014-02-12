@@ -11,6 +11,7 @@ using System.Linq;
 
 namespace Web.Supervisor.Controllers
 {
+    [Authorize]
     public class InterviewApiController : BaseApiController
     {
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
