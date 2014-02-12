@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.AddQRBarcodeQuestion(questionId: questionId, groupId: chapterId, title: "title",
+                questionnaire.AddQRBarcodeQuestion(questionId: questionId, parentGroupId: chapterId, title: "title",
                     variableName: longVariableName, isMandatory: false, condition: null, instructions: null,
                     responsibleId: responsibleId));
 
