@@ -70,7 +70,9 @@ namespace Web.Supervisor
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
 
-            WebApiConfig.Register(GlobalConfiguration.Configuration);
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            //WebApiConfig.Register(GlobalConfiguration.Configuration);
+
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
