@@ -8,11 +8,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "AddTextListQuestion")]
     public class AddTextListQuestionCommand : AbstractAddQuestionCommand
     {
-        public AddTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, string title, string variableName,
+        public AddTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid parentGroupId, string title, string variableName,
             bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, groupId: groupId)
+                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, parentGroupId: parentGroupId)
         {
             this.MaxAnswerCount = maxAnswerCount;
         }

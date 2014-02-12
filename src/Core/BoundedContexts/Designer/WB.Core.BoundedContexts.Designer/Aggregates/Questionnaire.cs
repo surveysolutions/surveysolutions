@@ -1150,7 +1150,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void AddTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+        public void AddTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
            bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1161,7 +1161,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             variableName = variableName.Trim();
             title = title.Trim();
-            var parentGroup = this.GetGroupById(groupId);
+            var parentGroup = this.GetGroupById(parentGroupId);
 
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
@@ -1174,7 +1174,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new TextListQuestionAdded
             {
                 PublicKey = questionId,
-                GroupId = groupId,
+                GroupId = parentGroupId,
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
@@ -1186,7 +1186,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneTextListQuestion(Guid questionId, Guid groupId, string title, string variableName,
+        public void CloneTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
            bool isMandatory, string condition,string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId, int? maxAnswerCount)
         {
@@ -1199,7 +1199,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             variableName = variableName.Trim();
             title = title.Trim();
-            var parentGroup = this.GetGroupById(groupId);
+            var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, variableName,
                 isPrefilled, validationExpression, responsibleId);
@@ -1211,7 +1211,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new TextListQuestionCloned
             {
                 PublicKey = questionId,
-                GroupId = groupId,
+                GroupId = parentGroupId,
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
@@ -1263,19 +1263,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void AddQRBarcodeQuestion(Guid questionId, Guid groupId, string title, string variableName,
+        public void AddQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
            bool isMandatory, string condition, string instructions, Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: groupId, title: title,
+            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
                 variableName: variableName, condition: condition, responsibleId: responsibleId);
 
             this.ApplyEvent(new QRBarcodeQuestionAdded()
             {
                 QuestionId = questionId,
-                ParentGroupId = groupId,
+                ParentGroupId = parentGroupId,
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
@@ -1308,20 +1308,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneQRBarcodeQuestion(Guid questionId, Guid groupId, string title, string variableName,
+        public void CloneQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
            bool isMandatory, string condition, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: groupId, title: title,
+            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
                 variableName: variableName, condition: condition, responsibleId: responsibleId);
 
             this.ApplyEvent(new QRBarcodeQuestionCloned()
             {
                 QuestionId = questionId,
-                ParentGroupId = groupId,
+                ParentGroupId = parentGroupId,
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
