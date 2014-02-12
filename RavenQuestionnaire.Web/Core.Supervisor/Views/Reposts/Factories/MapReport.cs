@@ -1,4 +1,5 @@
-﻿using Core.Supervisor.Views.Reposts.InputModels;
+﻿using System.Linq;
+using Core.Supervisor.Views.Reposts.InputModels;
 using Core.Supervisor.Views.Reposts.Views;
 using Main.Core.Utility;
 using Main.Core.View;
@@ -23,7 +24,10 @@ namespace Core.Supervisor.Views.Reposts.Factories
 
             var answersCollection = answersByVariableStorage.GetById(key);
 
-            return new MapReportView(answersCollection);
+            return new MapReportView()
+            {
+                Answers = answersCollection.Answers.Select(x => string.Join(";", x.Value.Values)).ToArray()
+            };
         }
     }
 }
