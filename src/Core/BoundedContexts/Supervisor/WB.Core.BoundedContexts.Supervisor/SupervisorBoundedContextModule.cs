@@ -44,6 +44,8 @@ namespace WB.Core.BoundedContexts.Supervisor
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
 
             this.Bind<ITabletInformationService>().ToMethod(c => new FileBasedTabletInformationService(currentFolderPath));
+            this.Bind<IInterviewExportService>().To<CsvInterviewExportService>();
+            this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
         }
 
         protected void AdditionalEventChecker(Guid interviewId, long sequence)

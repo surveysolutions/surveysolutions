@@ -4,35 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class StataEnvironmentContentGenerator
+    internal class StataEnvironmentContentService : IEnvironmentContentService
     {
-        private readonly HeaderStructureForLevel headerStructureForLevel;
-        private readonly string dataFileName;
-
-        public StataEnvironmentContentGenerator(HeaderStructureForLevel headerStructureForLevel, string dataFileName)
+        public string BuildContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, string dataFileName)
         {
-            this.headerStructureForLevel = headerStructureForLevel;
-            this.dataFileName = dataFileName;
-        }
+            var doContent = new StringBuilder();
 
-        public string ContentOfAdditionalFile
-        {
-            get
-            {
-                var doContent = new StringBuilder();
+            BuildInsheet(dataFileName, doContent);
 
-                BuildInsheet(dataFileName, doContent);
+            BuildLabelsForLevel(headerStructureForLevel, doContent);
 
-                BuildLabelsForLevel(headerStructureForLevel, doContent);
+            doContent.AppendLine("list");
 
-                doContent.AppendLine("list");
-
-                return doContent.ToString().ToLower();
-            }
+            return doContent.ToString().ToLower();
         }
 
         private static void BuildInsheet(string fileName, StringBuilder doContent)
