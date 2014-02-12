@@ -8,12 +8,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "CloneTextListQuestion")]
     public class CloneTextListQuestionCommand : AbstractCloneQuestionCommand
     {
-        public CloneTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, Guid sourceQuestionId, int targetIndex,
+        public CloneTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,
             string title, string variableName, bool isMandatory, string condition, string instructions, Guid responsibleId,
             int? maxAnswerCount)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, groupId: groupId,
+                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, parentGroupId: parentGroupId,
                 sourceQuestionId: sourceQuestionId, targetIndex: targetIndex)
         {
             this.MaxAnswerCount = maxAnswerCount;
