@@ -25,8 +25,9 @@ namespace Web.Supervisor.API
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
         }
 
+        [HttpGet]
         [Route("")]
-        public QuestionnaireApiView Get(int limit = 10, int offset = 1)
+        public QuestionnaireApiView GetQuestionnaires(int limit = 10, int offset = 1)
         {
             if (limit < 0 || offset < 0)
                 return null; //add error responses
@@ -43,8 +44,8 @@ namespace Web.Supervisor.API
             return new QuestionnaireApiView(questionnairesFromStore);
         }
 
-        [Route("{id:guid}/{version:int?}")]
         [HttpGet]
+        [Route("{id:guid}/{version:int?}")]
         public QuestionnaireApiView Questionnaire(Guid id, int? version, int limit = 10, int offset = 1)
         {
             if (limit < 0 || offset < 0)
