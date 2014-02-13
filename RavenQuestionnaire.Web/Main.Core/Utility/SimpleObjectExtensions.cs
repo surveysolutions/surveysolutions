@@ -3,14 +3,6 @@ using System.Linq;
 
 namespace Main.Core.Utility
 {
-    public static class RepositoryKeysHelper
-    {
-        public static string GetVersionedKey(string id, long version)
-        {
-            return string.Format("{0}-{1}", id, version);
-        }
-    }
-
     /// <summary>
     /// The simple object extensions.
     /// </summary>

@@ -160,6 +160,7 @@
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_nested_roster_group_with_not_empty_RosterSizeQuestionId_and_GetRosterGroupsByRosterSizeQuestion_called.cs" />
+    <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="InterviewTests\when_creating_interview.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_does_not_exist.cs" />

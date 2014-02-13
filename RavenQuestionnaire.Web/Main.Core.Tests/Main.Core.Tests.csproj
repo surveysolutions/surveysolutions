@@ -184,7 +184,6 @@
     <Compile Include="SimpleObjectExtensionsTests.cs" />
     <Compile Include="Utils\RavenMockUtils.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
-    <Compile Include="Utils\RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj">
