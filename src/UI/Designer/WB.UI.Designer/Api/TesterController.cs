@@ -17,6 +17,7 @@ using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
 {
+    [Authorize]
     public class TesterController : ApiController
     {
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
