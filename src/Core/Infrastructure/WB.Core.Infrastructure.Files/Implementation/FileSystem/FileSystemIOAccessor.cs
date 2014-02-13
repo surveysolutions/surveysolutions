@@ -16,9 +16,16 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return Path.Combine(pathParts);
         }
 
-        public string GetFileName(string fileName)
+        public string GetFileName(string filePath)
         {
-            return Path.GetFileName(fileName);
+            return Path.GetFileName(filePath);
+        }
+
+        public long GetFileSize(string filePath)
+        {
+            if (!this.IsFileExists(filePath))
+                return -1;
+            return new FileInfo(filePath).Length;
         }
 
         public bool IsDirectoryExists(string pathToDirectory)
@@ -66,6 +73,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         public void WriteAllText(string pathToFile, string content)
         {
             File.WriteAllText(pathToFile, content);
+        }
+
+        public byte[] ReadAllBytes(string pathToFile)
+        {
+            return File.ReadAllBytes(pathToFile);
         }
 
         private string RemoveNonAscii(string s)

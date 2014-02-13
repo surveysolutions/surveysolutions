@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Implementations.TabletInformation;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
 using File = System.IO.File;
@@ -63,11 +64,15 @@ namespace WB.UI.Capi
 
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
-        protected TabletInformationSender tabletInformationSender;
-        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        protected ITabletInformationSender tabletInformationSender;
+        
+        private ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
         private Operation? currentOperation;
         private IBackup backupManager;
-        private ICapiInformationService capiInformationService;
 
         #endregion
 
@@ -81,12 +86,7 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.sync_dialog);
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
-            this.capiInformationService = CapiApplication.Kernel.Get<ICapiInformationService>();
             this.btnSync.Click += this.ButtonSyncClick;
-
-            //btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
-
-
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;
             this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
@@ -155,17 +155,22 @@ namespace WB.UI.Capi
             alert.Show();
         }
 
+        private ITabletInformationSender CreateTabletInformationSender()
+        {
+            return CapiApplication.Kernel.Get<ITabletInformationSender>();
+        }
+
         private void btnSendTabletInfo_Click(object sender, EventArgs e)
         {
             this.ThrowExeptionIfDialogIsOpened();
 
             this.PreperaUI();
 
-            tabletInformationSender = new TabletInformationSender(this, capiInformationService);
+            tabletInformationSender = CreateTabletInformationSender();
             tabletInformationSender.InformationPackageCreated += this.tabletInformationSender_InformationPackageCreated;
             tabletInformationSender.ProcessCanceled += this.tabletInformationSender_ProcessCanceled;
             tabletInformationSender.ProcessFinished += this.tabletInformationSender_ProcessFinished;
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Creating information package", true, tabletInformationSender_Cancel, "Sending information package");
+            this.CreateDialog(ProgressDialogStyle.Spinner, "Creating information package", true, tabletInformationSender_Cancel, "Information package");
             tabletInformationSender.Run();
         }
 
@@ -174,7 +179,7 @@ namespace WB.UI.Capi
             this.RunOnUiThread(() =>
             {
                 this.DestroyDialog();
-                this.tvSyncResult.Text = "Information package is sent successfully.";
+                this.tvSyncResult.Text = "Information package is successfully sent.";
             });
             this.DestroyReportSending();
         }
@@ -185,15 +190,15 @@ namespace WB.UI.Capi
             {
                 this.DestroyDialog();
 
-                this.tvSyncResult.Text = "Information package sending is canceled.";
+                this.tvSyncResult.Text = "Sending of information package is canceled.";
             });
             this.DestroyReportSending();
         }
 
         void tabletInformationSender_InformationPackageCreated(object sender, InformationPackageEventArgs e)
         {
-            bool isUserReactedOnWarning = false;
-
+            var remoteCommandDoneEvent = new AutoResetEvent(false);
+            
             this.RunOnUiThread(() =>
             {
                 var builder = new AlertDialog.Builder(this);
@@ -201,23 +206,17 @@ namespace WB.UI.Capi
                 builder.SetMessage(
                     string.Format("Information package of size {0} will be sent via network. Are you sure you want to send it?",
                         FileSizeUtils.SizeSuffix(e.FileSize)));
-                builder.SetPositiveButton("Yes", (s, positiveEvt) =>
-                {
-                    this.progressDialog.SetMessage("Sending created information package to Supervisor");
-                    isUserReactedOnWarning = true;
-                });
-                builder.SetNegativeButton("No", (s, negativeEvt) =>
+
+                builder.SetPositiveButton("Yes", (s, positiveEvent) => { this.progressDialog.SetMessage("Sending information package"); remoteCommandDoneEvent.Set(); });
+                builder.SetNegativeButton("No", (s, negativeEvent) =>
                 {
                     this.tabletInformationSender.Cancel();
-                    isUserReactedOnWarning = true;
+                    remoteCommandDoneEvent.Set();
                 });
                 builder.Show();
             });
 
-            while (!isUserReactedOnWarning)
-            {
-                Thread.Sleep(500);
-            }
+            remoteCommandDoneEvent.WaitOne();
         }
 
         protected override void OnStart()
@@ -244,8 +243,8 @@ namespace WB.UI.Capi
             }
             catch (Exception ex)
             {
-                
-                this.logger.Error("Error on Sync: " + ex.Message, ex);
+
+                Logger.Error("Error on Sync: " + ex.Message, ex);
                 this.tvSyncResult.Text = ex.Message;
                 return;
             }

@@ -26,6 +26,8 @@ namespace WB.UI.Capi
 		
 		public static void UpdateIdValues()
 		{
+			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
+			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.Capi.Resource.Attribute.MvxBind;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxDropDownItemTemplate = global::WB.UI.Capi.Resource.Attribute.MvxDropDownItemTemplate;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxItemTemplate = global::WB.UI.Capi.Resource.Attribute.MvxItemTemplate;
@@ -481,6 +483,9 @@ namespace WB.UI.Capi
 			
 			// aapt resource value: 0x7f050000
 			public const int ApplicationName = 2131034112;
+			
+			// aapt resource value: 0x7f050001
+			public const int Hello = 2131034113;
 			
 			static String()
 			{
