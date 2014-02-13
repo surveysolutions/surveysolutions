@@ -8,7 +8,8 @@ namespace WB.Core.Infrastructure.FileSystem
     public interface IFileSystemAccessor
     {
         string CombinePath(params string[] pathParts);
-        string GetFileName(string fileName);
+        string GetFileName(string filePath);
+        long GetFileSize(string filePath);
         bool IsDirectoryExists(string pathToDirectory);
         void CreateDirectory(string path);
         void DeleteDirectory(string path);
@@ -22,5 +23,6 @@ namespace WB.Core.Infrastructure.FileSystem
         string[] GetFilesInDirectory(string pathToDirectory);
 
         void WriteAllText(string pathToFile, string content);
+        byte[] ReadAllBytes(string pathToFile);
     }
 }
