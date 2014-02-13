@@ -67,5 +67,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 streamWriter.Flush();
             }
         }
+
+        public string GetInterviewExportedDataFileName(string levelName)
+        {
+            return string.Format("{0}.csv", levelName);
+        }
     }
 }

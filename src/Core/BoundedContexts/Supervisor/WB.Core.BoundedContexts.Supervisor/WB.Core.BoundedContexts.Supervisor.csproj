@@ -74,7 +74,7 @@
     <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\DataExport\DataExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\FileBasedDataExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvInterviewExportService.cs" />
