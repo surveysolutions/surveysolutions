@@ -4610,3 +4610,44 @@ a.pseudo-link:hover {
 #statesHistoryPopover .arrow {
     left: 95%;
 }
+
+.map-report .innerLR {
+    padding: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.map-report #footer-block {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: inline-block;
+    text-align: right;
+}
+.map-report #footer-block * {
+    display: inline-block;
+}
+
+.map-report #footer-block hr {
+    display: none;
+}
+
+.map-report #footer-block footer div:last-child {
+    display: none;
+}
+
+.map-report #footer-block footer div:first-child {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 15px;
+}
+
+#map-canvas {
+     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

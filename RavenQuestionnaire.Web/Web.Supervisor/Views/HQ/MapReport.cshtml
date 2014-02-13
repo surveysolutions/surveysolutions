@@ -1,85 +1,35 @@
-﻿@using Web.Supervisor.Code
+﻿@using System.Web.Optimization
+@using Newtonsoft.Json
+@using Web.Supervisor.Code
 @using AppSettings = Web.Supervisor.Code.AppSettings
 @{
     ViewBag.Title = "MapReport";
 }
 
-<h2>MapReport</h2>
-<div id="map-canvas" class="google-maps" />
+
+    <h2>MapReport</h2>
+    <div id="map-canvas" class="google-maps" />
+
 
 @section scripts
 {
     <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
+            src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
     </script>
-
+    @Scripts.Render("~/Scripts/viewmodels/pages/mapreport.js")
     <script type="text/javascript">
-    function initialize() {
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success, error);
-        } else {
-            error();
-        }
-
-        function success(position) {
-            var center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            createMap(center);
-        }
-
-        function error() {
-            var center = new google.maps.LatLng(38.895111, -77.036667); // Washington
-            createMap(center);
-        }
-
-        function createMap(center) {
-            var mapOptions = {
-                center: center,
-                zoom: 9,
-                mapTypeControl: false
-            };
-            var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-            window.map = map;
-
-            var args = {
-                variable: "GeoLocation",
-                questionnaireId: "ad88a56c-f041-4614-9095-79dda90bfc76",
-                questionnaireVersion: 1
-            };
-
-            var url = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "MapReport" })';
-                $.post( url, args, null, "json").done(function (data) {
-                    var locations = data.Answers;
-                    var bounds = new google.maps.LatLngBounds();
-                    for (i = 0; i < locations.length; i++) {  
-                        var points = locations[i].split(';');
-                        var marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(points[0]*1, points[1]*1),
-                            map: map
-                        });
-                        bounds.extend( marker.getPosition() );
-                    }
-
-                    map.fitBounds( bounds );
-
-                }).fail(function (data) {
-                    console.log(data);
-
-                }).always(function (data) {
-
-                    console.log(data);
-                });
-            }
-        }
-        google.maps.event.addDomListener(window, 'load', initialize);
+            var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+            var $questionnairesListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "Questionnaires" })';
+            $(function () {
+                var model = new Supervisor.VM.MapReport($questionnairesListUrl, commandExecutionUrl);
+                ko.applyBindings(model);
+                model.initializeMap();
+                model.load();
+            });
     </script>
 }
 
 @section styles
 {
-    <style type="text/css">
-        #map-canvas {
-            height: 400px;
-        }
-    </style>
+
 }

@@ -5,6 +5,8 @@ using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -24,6 +26,8 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
             supervisorTeamMembersAndStatusesReport;
 
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+
         private readonly IViewFactory<MapReportInputModel, MapReportView>
            mapReport;
 
@@ -38,7 +42,8 @@ namespace Web.Supervisor.Controllers
             IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
                 supervisorTeamMembersAndStatusesReport,
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
-                supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport)
+                supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport, 
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
@@ -46,6 +51,7 @@ namespace Web.Supervisor.Controllers
             this.supervisorTeamMembersAndStatusesReport = supervisorTeamMembersAndStatusesReport;
             this.supervisorSurveysAndStatusesReport = supervisorSurveysAndStatusesReport;
             this.mapReport = mapReport;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
         [HttpPost]
@@ -76,6 +82,12 @@ namespace Web.Supervisor.Controllers
         public MapReportView MapReport(MapReportInputModel data)
         {
             return mapReport.Load(data);
+        }
+
+        [HttpPost]
+        public QuestionnaireBrowseView Questionnaires(QuestionnaireBrowseInputModel input)
+        {
+            return questionnaireBrowseViewFactory.Load(input);
         }
 
         [HttpPost]

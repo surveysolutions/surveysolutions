@@ -10,6 +10,8 @@ using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using Web.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.ReportDataApiControllerTests
@@ -28,7 +30,8 @@ namespace Web.Supervisor.Tests.ReportDataApiControllerTests
                 supervisorTeamMembersAndStatusesReport = null,
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
                 supervisorSurveysAndStatusesReport = null,
-            IViewFactory<MapReportInputModel, MapReportView> mapReport = null)
+            IViewFactory<MapReportInputModel, MapReportView> mapReport = null,
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory = null)
         {
             return new ReportDataApiController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -42,7 +45,9 @@ namespace Web.Supervisor.Tests.ReportDataApiControllerTests
                     Mock.Of<IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>>(),
                 supervisorSurveysAndStatusesReport ??
                     Mock.Of<IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>>(),
-                mapReport ?? Mock.Of<IViewFactory<MapReportInputModel, MapReportView>>());
+                mapReport ?? Mock.Of<IViewFactory<MapReportInputModel, MapReportView>>(),
+                questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>()
+                );
         }
     }
 }
