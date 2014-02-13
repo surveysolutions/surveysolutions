@@ -212,7 +212,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
       <Project>{C62669D1-2B5F-4976-A33D-A66B674D0149}</Project>
-      <Name>AndroidWB.Core.BoundedContexts.Capi</Name>
+      <Name>WB.Core.BoundedContexts.Capi.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj">
       <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
