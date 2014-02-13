@@ -14,10 +14,18 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly IEventStore eventStore;
+        private readonly Func<InProcessEventBus> getInProcessEventBus;
 
         public NcqrCompatibleEventDispatcher(IEventStore eventStore)
         {
             this.eventStore = eventStore;
+            this.getInProcessEventBus = () => new InProcessEventBus(true);
+        }
+
+        internal NcqrCompatibleEventDispatcher(IEventStore eventStore, Func<InProcessEventBus> getInProcessEventBus)
+        {
+            this.eventStore = eventStore;
+            this.getInProcessEventBus = getInProcessEventBus;
         }
 
         private bool IsEventNeedToBeIgnored(Guid id)
@@ -79,7 +87,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         public void Register(IEventHandler handler)
         {
-            var inProcessBus = new InProcessEventBus(true);
+            var inProcessBus = this.getInProcessEventBus();
             IEnumerable<Type> ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
             foreach (Type ieventHandler in ieventHandlers)
             {
