@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         {
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            return Regex.Replace(name, invalidReStr, "_");
+            return RemoveNonAscii(Regex.Replace(name, invalidReStr, "_"));
         }
 
         public string[] GetDirectoriesInDirectory(string pathToDirectory)
@@ -66,6 +66,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         public void WriteAllText(string pathToFile, string content)
         {
             File.WriteAllText(pathToFile, content);
+        }
+
+        private string RemoveNonAscii(string s)
+        {
+            return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }
     }
 }

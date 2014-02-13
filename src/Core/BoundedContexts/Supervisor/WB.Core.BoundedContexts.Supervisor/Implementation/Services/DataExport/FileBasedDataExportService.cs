@@ -22,17 +22,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public FileBasedDataExportService(IReadSideRepositoryCleanerRegistry cleanerRegistry, string folderPath,
-            IInterviewExportService interviewExportService, IEnvironmentContentService environmentContentService, IFileSystemAccessor fileSystemAccessor)
+        public FileBasedDataExportService(
+            IReadSideRepositoryCleanerRegistry cleanerRegistry, 
+            string folderPath,
+            IInterviewExportService interviewExportService, 
+            IEnvironmentContentService environmentContentService, 
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.interviewExportService = interviewExportService;
             this.environmentContentService = environmentContentService;
             this.fileSystemAccessor = fileSystemAccessor;
-            cleanerRegistry.Register(this);
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(path))
                 fileSystemAccessor.CreateDirectory(path);
+
+            cleanerRegistry.Register(this);
+        }
+
+        public void Clear()
+        {
+            Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.path), (s) => this.fileSystemAccessor.DeleteDirectory(s));
+            Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.path), (s) => this.fileSystemAccessor.DeleteFile(s));
         }
 
         public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version)
@@ -52,6 +63,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 zip.AddDirectory(dataDirectoryPath);
                 zip.Save(archiveFilePath);
             }
+
             return archiveFilePath;
         }
 
@@ -61,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
             if (fileSystemAccessor.IsDirectoryExists(dataFolderForTemplatePath))
             {
-                throw new ArgumentException(
+                throw new InterviewDataExportException(
                     string.Format("export structure for questionnaire with id'{0}' and version '{1}' was build before",
                         questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version));
             }
@@ -104,10 +116,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         private void WriteContentOfAdditionalFile(string contentOfAdditionalFile, string pathToAdditionalFile)
         {
-            fileSystemAccessor.WriteAllText(
-                pathToAdditionalFile,
-                contentOfAdditionalFile
-                );
+            fileSystemAccessor.WriteAllText(pathToAdditionalFile,contentOfAdditionalFile);
         }
 
         private Dictionary<Guid, string> CreateCleanedFileNamesForLevels(Dictionary<Guid, string> allegedLevelNames)
@@ -126,7 +135,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         private void ThrowArgumentExceptionIfDataFolderMissing(Guid questionnaireId, long version, string dataDirectoryPath)
         {
             if (!fileSystemAccessor.IsDirectoryExists(dataDirectoryPath))
-                throw new ArgumentException(
+                throw new InterviewDataExportException(
                     string.Format("data files are absent for questionnaire with id '{0}' and version '{1}'",
                         questionnaireId, version));
         }
@@ -139,22 +148,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i =0)
         {
             string fileNameWithoutInvalidFileNameChars = fileSystemAccessor.MakeValidFileName(name);
-            string fileNameWithNumber = string.Concat(RemoveNonAscii(fileNameWithoutInvalidFileNameChars),
+            string fileNameWithNumber = string.Concat(fileNameWithoutInvalidFileNameChars,
                                                          i == 0 ? (object)string.Empty : i);
 
             return !createdFileNames.Contains(fileNameWithNumber)
                        ? fileNameWithNumber
                        : this.CreateValidFileName(name, createdFileNames, i + 1);
-        }
-
-        private string RemoveNonAscii(string s)
-        {
-            return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
-        }
-
-        public void Clear()
-        {
-            Array.ForEach(fileSystemAccessor.GetDirectoriesInDirectory(path), (s) => fileSystemAccessor.DeleteDirectory(s));
         }
     }
 }
