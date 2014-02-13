@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandlerDescription.cs" />
+    <Compile Include="FileSystem\IFileSystemAccessor.cs" />
     <Compile Include="Implementation\ReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
