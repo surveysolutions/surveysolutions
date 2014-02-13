@@ -14,10 +14,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.Stata
         Establish context = () =>
         {
             emptyHeaderStructureForLevel = CreateHeaderStructureForLevel();
-            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator();
+            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor(contentFilePath, (c) => stataGeneratedContent = c));
         };
 
-        Because of = () => stataGeneratedContent = stataEnvironmentContentService.BuildContentOfAdditionalFile(emptyHeaderStructureForLevel, dataFileName);
+        Because of = () => stataEnvironmentContentService.CreateContentOfAdditionalFile(emptyHeaderStructureForLevel, dataFileName, contentFilePath);
 
         It should_contain_stata_script_for_insheet_file = () =>
             stataGeneratedContent.ShouldEqual(string.Format("insheet using \"{0}\", comma\r\nlist\r\n", dataFileName));
@@ -26,5 +26,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.Stata
         private static HeaderStructureForLevel emptyHeaderStructureForLevel;
         private static string dataFileName="data file name";
         private static string stataGeneratedContent;
+        private static string contentFilePath = "content file path";
     }
 }

@@ -88,12 +88,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 string levelFileName = cleanedFileNamesForLevels[headerStructureForLevel.LevelId];
 
                 var interviewExportedDataFileName = interviewExportService.GetInterviewExportedDataFileName(levelFileName);
+                var contentOfAdditionalFileName = environmentContentService.GetEnvironmentContentFileName(levelFileName);
 
-                this.interviewExportService.CreateHeader(headerStructureForLevel, fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName));
+                this.interviewExportService.CreateHeader(headerStructureForLevel,
+                    fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName));
 
-                this.WriteContentOfAdditionalFile(
-                    environmentContentService.BuildContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName),
-                    fileSystemAccessor.CombinePath(dataFolderForTemplatePath, environmentContentService.GetEnvironmentContentFileName(levelFileName)));
+                this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName,
+                    fileSystemAccessor.CombinePath(dataFolderForTemplatePath, contentOfAdditionalFileName));
             }
         }
 
@@ -112,11 +113,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
                 this.interviewExportService.AddRecord(interviewDataExportLevelView, fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.interviewExportService.GetInterviewExportedDataFileName(levelFileName)));
             }
-        }
-
-        private void WriteContentOfAdditionalFile(string contentOfAdditionalFile, string pathToAdditionalFile)
-        {
-            fileSystemAccessor.WriteAllText(pathToAdditionalFile,contentOfAdditionalFile);
         }
 
         private Dictionary<Guid, string> CreateCleanedFileNamesForLevels(Dictionary<Guid, string> allegedLevelNames)
