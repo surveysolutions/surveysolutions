@@ -10,10 +10,12 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
+using Core.Supervisor.Views.User;
 using Main.Core;
 using Main.Core.Commands;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -80,8 +82,6 @@ namespace CapiDataGenerator
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
 
-            this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
-
             this.Bind<IReadSideRepositoryReader<InterviewData>>().To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope();
             
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
@@ -96,6 +96,8 @@ namespace CapiDataGenerator
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
 
             this.Bind<IBackup>().ToConstant(new DefaultBackup(capiEvenStore, changeLogStore, denormalizerStore, capiTemplateWriter));
+
+            this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
             
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
