@@ -29,6 +29,7 @@ using NinjectAdapter;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation;
@@ -111,24 +112,30 @@ namespace CapiDataGenerator
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            var bus = new CustomInProcessEventDispatcher(true);
+            var inProcessEventDispatcher = new CustomInProcessEventDispatcher(true);
+
+            var bus = new NcqrCompatibleEventDispatcher(eventStore, () => inProcessEventDispatcher);
+
             this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             this.Bind<IEventBus>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
             NcqrsEnvironment.SetDefault<IEventStore>(eventStore);
-           
-            NcqrsInit.RegisterEventHandlers(bus, Kernel);
+
+            foreach (var handler in Kernel.GetAll(typeof(IEventHandler)))
+            {
+                bus.Register(handler as IEventHandler);
+            }
 
             this.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
             
             #region register handlers
 
-            InitCapiTemplateStorage(bus);
-            
-            InitUserStorage(bus);
+            InitCapiTemplateStorage(inProcessEventDispatcher);
 
-            InitDashboard(bus);
+            InitUserStorage(inProcessEventDispatcher);
+
+            InitDashboard(inProcessEventDispatcher);
 
 
             #endregion

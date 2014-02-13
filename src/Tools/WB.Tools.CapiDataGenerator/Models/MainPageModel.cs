@@ -391,7 +391,7 @@ namespace CapiDataGenerator
                 catch (Exception)
                 {
                     
-                    Log("bad template");
+                    Log("bad template (do not forget to unzip it)");
                 }
 
                 if (template != null)
@@ -620,7 +620,7 @@ namespace CapiDataGenerator
                     }
                     break;
                 case QuestionType.Numeric:
-                    answer = new decimal(_rand.Next(100));
+                    answer = ((INumericQuestion)question).IsInteger ? _rand.Next(100) as object : new decimal(_rand.Next(100)) as object;
                     break;
                 case QuestionType.DateTime:
                     answer = new DateTime(_rand.Next(1940, 2003), _rand.Next(1, 13), _rand.Next(1, 29));
