@@ -175,6 +175,7 @@
     <Compile Include="ReadSide\VersionedReadSideRepositoryWriterExtensions.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
+    <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswer.cs" />
