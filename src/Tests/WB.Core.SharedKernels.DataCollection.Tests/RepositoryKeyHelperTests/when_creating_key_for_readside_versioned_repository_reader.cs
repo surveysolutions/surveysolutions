@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
-using Main.Core.Utility;
-using WB.Core.SharedKernels.DataCollection.Utils;
+﻿using Machine.Specifications;
+using RepositoryKeysHelper = Main.Core.Utility.RepositoryKeysHelper;
 
 namespace Main.Core.Tests.Utils
 {
