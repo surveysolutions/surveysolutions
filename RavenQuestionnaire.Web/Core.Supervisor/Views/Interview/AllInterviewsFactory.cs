@@ -1,18 +1,13 @@
 using System;
 using System.Linq.Expressions;
 using Core.Supervisor.Views.Survey;
-using Main.Core.Entities;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using Raven.Client.Linq;
-using Raven.Database.Linq.PrivateExtensions;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.View;
@@ -56,6 +51,8 @@ namespace Core.Supervisor.Views.Interview
 
             return new AllInterviewsView
                 {
+                    Page = input.Page,
+                    PageSize = input.PageSize,
                     TotalCount = this.interviews.Query(_ => _.Count(predicate)),
                     Items = interviewItems.Select(x => new AllInterviewsViewItem()
                         {
@@ -78,9 +75,6 @@ namespace Core.Supervisor.Views.Interview
                                         || x.Status == InterviewStatus.SentToCapi,
                             QuestionnaireId = x.QuestionnaireId,
                             QuestionnaireVersion = x.QuestionnaireVersion
-
-                           
-
                         })
                 };
         }
