@@ -75,8 +75,12 @@ namespace Core.Supervisor.Views.Interview
                             CanDelete =    x.Status == InterviewStatus.Created
                                         || x.Status == InterviewStatus.SupervisorAssigned
                                         || x.Status == InterviewStatus.InterviewerAssigned
-                                        || x.Status == InterviewStatus.SentToCapi
+                                        || x.Status == InterviewStatus.SentToCapi,
+                            QuestionnaireId = x.QuestionnaireId,
+                            QuestionnaireVersion = x.QuestionnaireVersion
+
                            
+
                         })
                 };
         }

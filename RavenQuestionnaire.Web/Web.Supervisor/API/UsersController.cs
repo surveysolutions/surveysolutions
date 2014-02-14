@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
 using Web.Supervisor.Models;
+using Web.Supervisor.Models.API;
 
 namespace Web.Supervisor.API
 {
@@ -33,11 +34,11 @@ namespace Web.Supervisor.API
 
         [HttpGet]
         [Route("apis/v1/supervisors")]
-        public UserListView Supervisors(int limit = 10, int offset = 1)
+        public UserApiView Supervisors(int limit = 10, int offset = 1)
         {
             var data = new UsersListViewModel
             {
-                SortOrder = new List<OrderRequestItem>() { }
+                SortOrder = new List<OrderRequestItem>(){}
             };
 
             var input = new UserListViewInputModel
@@ -47,13 +48,14 @@ namespace Web.Supervisor.API
                 Role = UserRoles.Supervisor,
                 Orders = data.SortOrder
             };
+            var supervisors = this.supervisorsFactory.Load(input);
 
-            return this.supervisorsFactory.Load(input);
+            return new UserApiView(supervisors);
         }
 
         [HttpGet]
-        [Route("apis/v1/interviewers/{supervisorId:guid}")]
-        public InterviewersView Intervievers(Guid supervisorId, int limit = 10, int offset = 1)
+        [Route("apis/v1/supervisors/{supervisorId:guid}/interviewers")]
+        public UserApiView Intervievers(Guid supervisorId, int limit = 10, int offset = 1)
         {
             var input = new InterviewersInputModel(supervisorId)
             {
@@ -61,15 +63,19 @@ namespace Web.Supervisor.API
                 PageSize = limit,
             };
 
-            return this.interviewersFactory.Load(input);
+            var interviewers = this.interviewersFactory.Load(input);
+
+            return new UserApiView(interviewers);
         }
 
         [HttpGet]
         [Route("apis/v1/supervisors/{id:guid}/details")]
         [Route("apis/v1/interviewers/{id:guid}/details")]
-        public UserView Details(Guid id)
+        public UserApiDetails Details(Guid id)
         {
-            return this.userViewFactory.Load(new UserViewInputModel(id));
+            var user = this.userViewFactory.Load(new UserViewInputModel(id));
+
+            return new UserApiDetails(user);
         }
     }
 }

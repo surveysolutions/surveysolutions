@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using Web.Supervisor.Models.API;
@@ -27,7 +30,7 @@ namespace Web.Supervisor.API
 
         [HttpGet]
         [Route("")]
-        public QuestionnaireApiView GetQuestionnaires(int limit = 10, int offset = 1)
+        public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
         {
             if (limit < 0 || offset < 0)
                 return null; //add error responses
@@ -46,7 +49,7 @@ namespace Web.Supervisor.API
 
         [HttpGet]
         [Route("{id:guid}/{version:int?}")]
-        public QuestionnaireApiView Questionnaire(Guid id, int? version, int limit = 10, int offset = 1)
+        public QuestionnaireApiView Questionnaires(Guid id, int? version, int limit = 10, int offset = 1)
         {
             if (limit < 0 || offset < 0)
                 return null; //add error responses
@@ -63,6 +66,34 @@ namespace Web.Supervisor.API
                 });
 
             return new QuestionnaireApiView(questionnaires);
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/{version:int}/details")]
+        public QuestionnaireApiView QuestionnairesDetails(Guid id, int? version, int limit = 10, int offset = 1)
+        {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(
+                new QuestionnaireBrowseInputModel()
+                {
+                    PageSize = safeLimit,
+                    Page = offset,
+                    QuestionnaireId = id,
+                    Version = version
+                });
+
+            return new QuestionnaireApiView(questionnaires);
+        }
+
+        [HttpGet]
+        [Route("statuses")]
+        public IEnumerable<string> QuestionnairesStatuses()
+        {
+            return Enum.GetNames(typeof(InterviewStatus));
         }
     }
 }
