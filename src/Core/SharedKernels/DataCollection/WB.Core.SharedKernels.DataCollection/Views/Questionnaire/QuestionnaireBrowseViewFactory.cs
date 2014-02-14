@@ -43,6 +43,16 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
                         query = query.Where(x => !x.IsDeleted);
                     }
 
+                    if (input.QuestionnaireId.HasValue)
+                    {
+                        query = query.Where(x => x.QuestionnaireId == input.QuestionnaireId.Value);
+                    }
+
+                    if (input.Version.HasValue)
+                    {
+                        query = query.Where(x => x.Version == input.Version.Value);
+                    }
+
                     if (!string.IsNullOrEmpty(input.Filter))
                     {
 #warning ReadLayer: ToList materialization because not supported by Raven

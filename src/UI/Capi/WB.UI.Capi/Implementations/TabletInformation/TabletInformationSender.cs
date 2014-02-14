@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,15 +14,18 @@ using Microsoft.Practices.ServiceLocation;
 using RestSharp;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
+using WB.Core.SharedKernel.Utils.Serialization;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Utils;
+using WB.UI.Shared.Android.Network;
 using WB.UI.Shared.Android.RestUtils;
-using Path = System.IO.Path;
 
 namespace WB.UI.Capi.Implementations.TabletInformation
 {
-    public class TabletInformationSender
+    public class TabletInformationSender : ITabletInformationSender
     {
         private ILogger Logger
         {
@@ -34,17 +36,24 @@ namespace WB.UI.Capi.Implementations.TabletInformation
         private CancellationTokenSource tokenSource2;
         private Task task;
         private string pathToInfoArchive = null;
-        
-        private readonly Context context;
+
+        private readonly ICapiNetworkService capiNetworkService;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICapiInformationService capiInformationService;
         private readonly IRestUrils webExecutor;
-        private const string postInfoPackagePath = "TabletReport/PostInfoPackage";
+        private readonly IJsonUtils jsonUtils;
 
-        public TabletInformationSender(Context context, ICapiInformationService capiInformationService)
+        private const string PostInfoPackagePath = "TabletReport/PostInfoPackage";
+
+        public TabletInformationSender(ICapiInformationService capiInformationService, ICapiNetworkService capiNetworkService,
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils)
         {
-            this.context = context;
             this.capiInformationService = capiInformationService;
-            this.webExecutor = new AndroidRestUrils(SettingsManager.GetSyncAddressPoint());;
+            this.capiNetworkService = capiNetworkService;
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.jsonUtils = jsonUtils;
+
+            this.webExecutor = new AndroidRestUrils(SettingsManager.GetSyncAddressPoint());
         }
 
         public event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
@@ -58,38 +67,45 @@ namespace WB.UI.Capi.Implementations.TabletInformation
             this.task = Task.Factory.StartNew(this.RunInternal, this.ct);
         }
 
+        public void Cancel()
+        {
+            if (this.tokenSource2.IsCancellationRequested)
+                return;
+            Task.Factory.StartNew(this.CancelInternal);
+        }
+
         private void RunInternal()
         {
-            if (!NetworkHelper.IsNetworkEnabled(context))
+            if (!capiNetworkService.IsNetworkEnabled())
             {
-                return;
+                this.Cancel();
             }
 
             ExitIfCanceled();
 
             this.CancelIfException(() => { pathToInfoArchive = capiInformationService.CreateInformationPackage(); });
 
-            if (string.IsNullOrEmpty(pathToInfoArchive) || !System.IO.File.Exists(pathToInfoArchive))
+            if (string.IsNullOrEmpty(pathToInfoArchive) || !fileSystemAccessor.IsFileExists(pathToInfoArchive))
             {
                 OnProcessFinished();
                 return;
             }
 
-            OnInformationPackageCreated(pathToInfoArchive, new FileInfo(pathToInfoArchive).Length);
+            OnInformationPackageCreated(pathToInfoArchive, fileSystemAccessor.GetFileSize(pathToInfoArchive));
 
             ExitIfCanceled();
 
             this.CancelIfException(() =>
             {
-                var content = System.IO.File.ReadAllBytes(pathToInfoArchive);
+                var content = fileSystemAccessor.ReadAllBytes(pathToInfoArchive);
 
-                var tabletInformationPackage = new TabletInformationPackage(Path.GetFileName(pathToInfoArchive), content,
+                var tabletInformationPackage = new TabletInformationPackage(fileSystemAccessor.GetFileName(pathToInfoArchive), content,
                     SettingsManager.AndroidId, SettingsManager.GetSetting(SettingsNames.RegistrationKeyName));
 
-                var result = this.webExecutor.ExcecuteRestRequestAsync<bool>(postInfoPackagePath, ct,
-                    JsonUtils.GetJsonData(tabletInformationPackage), null, null);
+                var result = this.webExecutor.ExcecuteRestRequestAsync<bool>(PostInfoPackagePath, ct,
+                    jsonUtils.GetItemAsContent(tabletInformationPackage), null, null);
 
-                System.IO.File.Delete(pathToInfoArchive);
+                fileSystemAccessor.DeleteFile(pathToInfoArchive);
 
                 if (!result)
                     throw new TabletInformationSendException("server didn't get information package");
@@ -99,14 +115,14 @@ namespace WB.UI.Capi.Implementations.TabletInformation
             DeleteInfoPackageIfExists();
         }
 
-        protected void OnProcessCanceled()
+        private void OnProcessCanceled()
         {
             var handler = this.ProcessCanceled;
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
 
-        protected void OnInformationPackageCreated(string filePath, long fileSize)
+        private void OnInformationPackageCreated(string filePath, long fileSize)
         {
             if (this.tokenSource2.IsCancellationRequested)
                 return;
@@ -115,7 +131,7 @@ namespace WB.UI.Capi.Implementations.TabletInformation
                 handler(this, new InformationPackageEventArgs(filePath, fileSize));
         }
 
-        protected void OnProcessFinished()
+        private void OnProcessFinished()
         {
             if (this.tokenSource2.IsCancellationRequested)
                 return;
@@ -144,13 +160,6 @@ namespace WB.UI.Capi.Implementations.TabletInformation
             }
         }
 
-        public void Cancel()
-        {
-            if (this.tokenSource2.IsCancellationRequested)
-                return;
-            Task.Factory.StartNew(this.CancelInternal);
-        }
-
         private void CancelInternal()
         {
             this.tokenSource2.Cancel();
@@ -172,8 +181,8 @@ namespace WB.UI.Capi.Implementations.TabletInformation
 
         private void DeleteInfoPackageIfExists()
         {
-            if (System.IO.File.Exists(this.pathToInfoArchive))
-                System.IO.File.Delete(this.pathToInfoArchive);
+            if (fileSystemAccessor.IsFileExists(this.pathToInfoArchive))
+                fileSystemAccessor.DeleteFile(this.pathToInfoArchive);
         }
     }
 }
