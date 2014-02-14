@@ -7,8 +7,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CAPI.Android.Core.Model;
 using Main.Core;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.UI.Shared.Android.Network;
 
 namespace WB.UI.Capi.Injections
 {
@@ -18,6 +21,13 @@ namespace WB.UI.Capi.Injections
         {
             return
                 Enumerable.Concat(base.GetAssembliesForRegistration(), new[] { typeof(ImportFromSupervisor).Assembly, this.GetType().Assembly });
+        }
+
+        public override void Load()
+        {
+            base.Load();
+            
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
         }
     }
 }
