@@ -202,6 +202,8 @@
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\MapReport.cs" />
+    <Compile Include="Views\Reposts\Factories\QuestionnaireQuestionInfoFactory.cs" />
+    <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
     <Compile Include="Views\Reposts\Factories\QuestionnairesAndVersionsFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorSurveysAndStatusesReport.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorSurveysAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Reposts\Views\MapReportView.cs" />
+    <Compile Include="Views\Reposts\Views\QuestionnaireQuestionInfoView.cs" />
     <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportView.cs" />

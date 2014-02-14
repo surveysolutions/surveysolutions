@@ -32,7 +32,8 @@ namespace Web.Supervisor.Tests.ReportDataApiControllerTests
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
                 supervisorSurveysAndStatusesReport = null,
             IViewFactory<MapReportInputModel, MapReportView> mapReport = null,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory = null)
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory = null,
+            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory = null)
         {
             return new ReportDataApiController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -47,7 +48,8 @@ namespace Web.Supervisor.Tests.ReportDataApiControllerTests
                 supervisorSurveysAndStatusesReport ??
                     Mock.Of<IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>>(),
                 mapReport ?? Mock.Of<IViewFactory<MapReportInputModel, MapReportView>>(),
-                questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView>>()
+                questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView>>(),
+                questionInforFactory ?? Mock.Of<IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>>()
                 );
         }
     }

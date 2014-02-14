@@ -29,8 +29,9 @@ namespace Web.Supervisor.Controllers
 
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory;
 
-        private readonly IViewFactory<MapReportInputModel, MapReportView>
-           mapReport;
+        private readonly IViewFactory<MapReportInputModel, MapReportView> mapReport;
+
+        private readonly IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -44,7 +45,8 @@ namespace Web.Supervisor.Controllers
                 supervisorTeamMembersAndStatusesReport,
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
                 supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory)
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory, 
+            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
@@ -53,6 +55,7 @@ namespace Web.Supervisor.Controllers
             this.supervisorSurveysAndStatusesReport = supervisorSurveysAndStatusesReport;
             this.mapReport = mapReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionInforFactory = questionInforFactory;
         }
 
         [HttpPost]
