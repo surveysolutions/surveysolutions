@@ -7,9 +7,11 @@ using Main.Core.Commands.Sync;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+using Machine.Specifications;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
+    [Subject(typeof(StataEnvironmentContentService))]
     internal class StataEnvironmentContentGeneratorTestContext
     {
         protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator()

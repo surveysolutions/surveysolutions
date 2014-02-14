@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using It = Machine.Specifications.It;
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.QuestionnaireEx
           questionnaireExportStructureDenormalizer.Handle(CreatePublishableEvent());
 
         It should_QuestionnaireExportStructure_be_stored_readside = () =>
-            questionnaireExportStructureMock.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireExportStructure>(), questionnaireId.ToString()),
+            questionnaireExportStructureMock.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireExportStructure>(), questionnaireId.FormatGuid()),
                 Times.Once());
 
         It should_QuestionnaireExportStructure_be_stored_by_IDataExportService = () =>

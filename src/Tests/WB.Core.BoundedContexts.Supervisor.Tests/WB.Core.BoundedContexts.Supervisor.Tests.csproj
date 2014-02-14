@@ -34,18 +34,24 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.dll</HintPath>
+    <Reference Include="Machine.Specifications, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.Should">
+      <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    <Reference Include="Moq, Version=4.2.1312.1622, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -99,7 +105,13 @@
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\FileBasedDataExportServiceTestContext.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_present.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_CreateExportedDataStructureByTemplate_is_called_and_directory_is_present.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_method_clear_with_one_file_and_one_dir_present.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_level_labels.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_no_questions.cs" />
@@ -107,14 +119,14 @@
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_one_question_with_no_labels.cs" />
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="ServiceTests\SampleImportServiceTests.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_text_list_question.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_nested_group_inside_roster.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_roter_triggered_by_text_list_question.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_structure_from_questionnaire_containing_fixed_roster_and_multy_option_linked_question_to_header.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option___.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\QuestionnaireExportStructureTestsContext.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_questionnaire_export_structure_from_questionnaire_containing_roster_max_2_rows_and_multy_option_linked___.cs" />
-    <Compile Include="Views\ExportedHeaderCollectionTests\when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and__.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_TextListQuestion.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_view_factory_from_containing_nested_group_inside_roster.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roter_triggered_by_TextListQuestion.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_fixed_roster_and_MultyOptionLinkedQuestion_to_header.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option___.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\ExportViewFactoryTestsContext.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roster_max_2_rows_and_MultyOptionLinkedQuestion.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and__.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -157,7 +169,9 @@
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
