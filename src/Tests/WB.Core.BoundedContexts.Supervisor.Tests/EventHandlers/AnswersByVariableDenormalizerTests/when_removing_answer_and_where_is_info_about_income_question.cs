@@ -28,13 +28,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.AnswersByVariab
 
             var interviewBriefMock = Mock.Of<InterviewBrief>(i => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == 1);
 
-            interviewBriefStorage = Mock.Of<IReadSideRepositoryWriter<InterviewBrief>>(x => x.GetById(interviewId.ToString()) == interviewBriefMock);
+            interviewBriefStorage = Mock.Of<IReadSideRepositoryWriter<InterviewBrief>>(x => x.GetById(interviewId.FormatGuid()) == interviewBriefMock);
 
             var questionIdToVariableMap = new Dictionary<Guid, string>() { { questionId, variableName } };
 
             var questionsInfoMock = Mock.Of<QuestionnaireQuestionsInfo>(x => x.QuestionIdToVariableMap == questionIdToVariableMap);
 
-            variablesStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>(x => x.GetById("11111111-1111-1111-1111-111111111111-1") == questionsInfoMock);
+            variablesStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>(x => x.GetById("11111111111111111111111111111111-1") == questionsInfoMock);
 
             denormalizer = CreateAnswersByVariableDenormalizer(interviewBriefStorage, variablesStorage, answersByVariableStorageMock.Object);
 
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.AnswersByVariab
             answersCollection.Answers[interviewId].Count.ShouldEqual(0);
 
         private static AnswersByVariableCollection answersCollection;
-        private static string answersCollectionViewId = "var-11111111-1111-1111-1111-111111111111-1";
+        private static string answersCollectionViewId = "var-11111111111111111111111111111111-1";
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
         private static Guid questionId = Guid.Parse("33333333333333333333333333333333");

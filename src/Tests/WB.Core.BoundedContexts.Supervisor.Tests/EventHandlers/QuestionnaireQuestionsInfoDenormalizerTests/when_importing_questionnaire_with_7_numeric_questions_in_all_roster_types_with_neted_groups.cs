@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.QuestionnaireQu
             questionnaireQuestionsInfoWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>();
 
             questionnaireQuestionsInfoWriter
-                .Setup(x => x.Store(Moq.It.IsAny<QuestionnaireQuestionsInfo>(), "33332222-1111-0000-0000-111122223333-1"))
+                .Setup(x => x.Store(Moq.It.IsAny<QuestionnaireQuestionsInfo>(), "33332222111100000000111122223333-1"))
                 .Callback((QuestionnaireQuestionsInfo info, string id) => questionsInfo = info);
             denormalizer = CreateQuestionnaireQuestionsInfoDenormalizer(questionnaireQuestionsInfoWriter.Object);
             evnt = CreateTemplateImportedEvent(importeDocument);
