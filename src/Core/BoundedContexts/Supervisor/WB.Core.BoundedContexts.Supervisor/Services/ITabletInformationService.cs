@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
 {
     public interface ITabletInformationService
     {
-        void SaveTabletInformation(string packageName, byte[] content, string androidId, string registrationId);
+        void SaveTabletInformation(byte[] content, string androidId, string registrationId);
         List<TabletInformationView> GetAllTabletInformationPackages();
         string GetFullPathToContentFile(string packageName);
     }

@@ -117,6 +117,11 @@
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_no_questions.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_one_question_with_labels.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_one_question_with_no_labels.cs" />
+    <Compile Include="ServiceTests\FileBasedTabletInformationServiceTests\FileBasedTabletInformationServiceTestContext.cs" />
+    <Compile Include="ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_content_file.cs" />
+    <Compile Include="ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_is_empty.cs" />
+    <Compile Include="ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_contains_2_invalid_and_1valid_package.cs" />
+    <Compile Include="ServiceTests\FileBasedTabletInformationServiceTests\when_TabletInformation_is_saving.cs" />
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="ServiceTests\SampleImportServiceTests.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_TextListQuestion.cs" />

@@ -6,12 +6,20 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
     internal class StataEnvironmentContentService : IEnvironmentContentService
     {
-        public string BuildContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, string dataFileName)
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
+        public StataEnvironmentContentService(IFileSystemAccessor fileSystemAccessor)
+        {
+            this.fileSystemAccessor = fileSystemAccessor;
+        }
+
+        public void CreateContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, string dataFileName, string contentFilePath)
         {
             var doContent = new StringBuilder();
 
@@ -21,7 +29,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
             doContent.AppendLine("list");
 
-            return doContent.ToString().ToLower();
+            fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString().ToLower());
         }
 
         public string GetEnvironmentContentFileName(string levelName)
