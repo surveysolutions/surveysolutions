@@ -28,6 +28,13 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return new FileInfo(filePath).Length;
         }
 
+        public DateTime GetCreationTime(string filePath)
+        {
+            if (!this.IsFileExists(filePath))
+                return DateTime.MinValue;
+            return new FileInfo(filePath).CreationTime;
+        }
+
         public bool IsDirectoryExists(string pathToDirectory)
         {
             return Directory.Exists(pathToDirectory);
@@ -73,6 +80,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         public void WriteAllText(string pathToFile, string content)
         {
             File.WriteAllText(pathToFile, content);
+        }
+
+        public void WriteAllBytes(string pathToFile, byte[] content)
+        {
+            File.WriteAllBytes(pathToFile,content);
         }
 
         public byte[] ReadAllBytes(string pathToFile)
