@@ -27,9 +27,9 @@ namespace Web.Supervisor.Models.API
                     item.FeaturedQuestions));
 
 
-            /*this.Limit = questionnaireBrowseView.PageSize;
+            this.Limit = questionnaireBrowseView.PageSize;
             this.Offset = questionnaireBrowseView.Page;
-            this.Order = questionnaireBrowseView.Order;*/
+            /*this.Order = questionnaireBrowseView.Order;*/
         }
 
         public IEnumerable<InterviewApiItem> Interviews { get; private set; }

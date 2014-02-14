@@ -1,18 +1,14 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.User
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
     using Main.Core.View;
-    using Main.DenormalizerStorage;
 
     public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
     {
@@ -49,7 +45,7 @@ namespace Core.Supervisor.Views.User
                                             roles: x.Roles
                                             ));
 
-                        return new UserListView {TotalCount = all.Count(), Items = selection};
+                        return new UserListView {Page = input.Page, PageSize = input.PageSize, TotalCount = all.Count(), Items = selection};
                     });
         }
     }

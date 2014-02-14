@@ -36,6 +36,11 @@ namespace Web.Supervisor.API
         [Route("apis/v1/supervisors")]
         public UserApiView Supervisors(int limit = 10, int offset = 1)
         {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
             var data = new UsersListViewModel
             {
                 SortOrder = new List<OrderRequestItem>(){}
@@ -44,7 +49,7 @@ namespace Web.Supervisor.API
             var input = new UserListViewInputModel
             {
                 Page = offset,
-                PageSize = limit,
+                PageSize = safeLimit,
                 Role = UserRoles.Supervisor,
                 Orders = data.SortOrder
             };
@@ -57,10 +62,15 @@ namespace Web.Supervisor.API
         [Route("apis/v1/supervisors/{supervisorId:guid}/interviewers")]
         public UserApiView Intervievers(Guid supervisorId, int limit = 10, int offset = 1)
         {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
             var input = new InterviewersInputModel(supervisorId)
             {
                 Page = offset,
-                PageSize = limit,
+                PageSize = safeLimit,
             };
 
             var interviewers = this.interviewersFactory.Load(input);

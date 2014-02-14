@@ -48,8 +48,8 @@ namespace Web.Supervisor.API
         }
 
         [HttpGet]
-        [Route("{id:guid}/{version:int?}")]
-        public QuestionnaireApiView Questionnaires(Guid id, int? version, int limit = 10, int offset = 1)
+        [Route("{id:guid}/{version:long?}")]
+        public QuestionnaireApiView Questionnaires(Guid id, long? version = null, int limit = 10, int offset = 1)
         {
             if (limit < 0 || offset < 0)
                 return null; //add error responses
@@ -68,26 +68,15 @@ namespace Web.Supervisor.API
             return new QuestionnaireApiView(questionnaires);
         }
 
-        [HttpGet]
-        [Route("{id:guid}/{version:int}/details")]
-        public QuestionnaireApiView QuestionnairesDetails(Guid id, int? version, int limit = 10, int offset = 1)
+        /*[HttpGet]
+        [Route("{id:guid}/{version:long}/details")]
+        public QuestionnaireApiView QuestionnairesDetails(Guid id, long version)
         {
-            if (limit < 0 || offset < 0)
-                return null; //add error responses
+            var questionnaire = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id));
+                
 
-            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
-
-            var questionnaires = this.questionnaireBrowseViewFactory.Load(
-                new QuestionnaireBrowseInputModel()
-                {
-                    PageSize = safeLimit,
-                    Page = offset,
-                    QuestionnaireId = id,
-                    Version = version
-                });
-
-            return new QuestionnaireApiView(questionnaires);
-        }
+            return new QuestionnaireApiView();
+        }*/
 
         [HttpGet]
         [Route("statuses")]

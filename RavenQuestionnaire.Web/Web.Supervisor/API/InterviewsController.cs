@@ -30,10 +30,16 @@ namespace Web.Supervisor.API
         public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null, 
             InterviewStatus? status = null, Guid? interviewerId = null, int limit = 10, int offset = 1)
         {
+
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
             var input = new AllInterviewsInputModel
             {
                 Page = offset,
-                PageSize = limit,
+                PageSize = safeLimit,
                 QuestionnaireId = templateId,
                 QuestionnaireVersion = templateVersion,
                 Status = status,
@@ -49,10 +55,15 @@ namespace Web.Supervisor.API
         [Route("apis/v1/questionnaires/{id:guid}/{version:long}/interviews")]
         public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
         {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
             var input = new AllInterviewsInputModel
             {
                 Page = offset,
-                PageSize = limit,
+                PageSize = safeLimit,
                 QuestionnaireId = id,
                 QuestionnaireVersion = version
             };
