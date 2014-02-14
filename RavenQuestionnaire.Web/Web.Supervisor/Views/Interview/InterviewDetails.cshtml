@@ -108,6 +108,15 @@
         </div>
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false, enable: errors().length == 0">Save answer</button>
     </script>
+    <script type="text/html" id="QRBarcodeFull">
+        <div class="control-group" data-bind="validationElement: answer">
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+                <span class="help-inline" data-bind="validationMessage: answer"></span>
+            </div>
+        </div>
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false, enable: errors().length == 0">Save answer</button>
+    </script>
     <script type="text/html" id="GpsCoordinatesFull">
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
@@ -136,6 +145,9 @@
         <span data-bind=" text: answer"></span>
     </script>
     <script type="text/html" id="Text">
+        <span data-bind=" text: answer"></span>
+    </script>
+    <script type="text/html" id="QRBarcode">
         <span data-bind=" text: answer"></span>
     </script>
     <script type="text/html" id="GpsCoordinates">

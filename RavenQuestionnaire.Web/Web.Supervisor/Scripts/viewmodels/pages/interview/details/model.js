@@ -90,6 +90,13 @@
             self.errors = ko.validation.group(self);
             self.isValid = ko.observable(true);
         },
+        QRBarcodeQuestion: function () {
+            var self = this;
+            ko.utils.extend(self, new QuestionModel());
+            self.answer = ko.observable();
+            self.errors = ko.validation.group(self);
+            self.isValid = ko.observable(true);
+        },
         TextListQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());

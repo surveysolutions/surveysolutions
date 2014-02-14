@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<InterviewSummary, NumericIntegerQuestionAnswered>,
         IUpdateHandler<InterviewSummary, DateTimeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, AnswerRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
         IUpdateHandler<InterviewSummary, InterviewDeleted>,
@@ -175,6 +176,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             return this.AnswerQuestion(currentState, evnt.Payload.QuestionId,
                             string.Format("{0},{1}[{2}]", evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy), evnt.EventTimeStamp);
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
+        {
+            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswerRemoved> evnt)
