@@ -39,3 +39,7 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Supervisor.Tests")]
+[assembly: InternalsVisibleTo("Core.Supervisor.Tests")]
+[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Capi.Tests")]
+

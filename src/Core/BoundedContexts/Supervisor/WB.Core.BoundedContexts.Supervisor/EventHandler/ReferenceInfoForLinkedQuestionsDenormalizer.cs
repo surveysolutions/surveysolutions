@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
@@ -17,11 +12,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     public class ReferenceInfoForLinkedQuestionsDenormalizer : IEventHandler, IEventHandler<TemplateImported>
     {
         private readonly IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires;
+        private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
 
         public ReferenceInfoForLinkedQuestionsDenormalizer(
-            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires)
+            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires, IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory)
         {
             this.questionnaires = questionnaires;
+            this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
         }
 
         public string Name
@@ -43,9 +40,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             evnt.Payload.Source.ConnectChildrenWithParent();
 
-            var referenceInfoForLinkedQuestions = new ReferenceInfoForLinkedQuestions(evnt.Payload.Source, evnt.EventSequence);
-
-            questionnaires.Store(referenceInfoForLinkedQuestions, evnt.EventSourceId);
+            questionnaires.Store(referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(evnt.Payload.Source, evnt.EventSequence), evnt.EventSourceId);
         }
     }
 }
