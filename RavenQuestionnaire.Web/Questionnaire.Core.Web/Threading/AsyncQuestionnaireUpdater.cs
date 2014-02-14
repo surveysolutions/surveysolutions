@@ -94,8 +94,6 @@ namespace Questionnaire.Core.Web.Threading
             {
                 this.updateQuestionnare = updateQuestionnaire;
 
-                bool hasMail = Interlocked.Increment(ref mCount) % 2 == 0;
-
                 this.mWait = new AutoResetEvent(false);
 
                 this.mThread = new Thread(

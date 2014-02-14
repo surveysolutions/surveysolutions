@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.InformationSupplier;
 using Environment = Android.OS.Environment;
 
 namespace CAPI.Android.Core.Model.Backup
@@ -21,10 +22,10 @@ namespace CAPI.Android.Core.Model.Backup
         }
         private readonly IEnumerable<IBackupable> backupables;
 
-        public DefaultBackup(params IBackupable[] backupables)
+        public DefaultBackup(IInfoFileSupplierRegistry infoFileSupplierRegistry, params IBackupable[] backupables)
         {
             this.backupables = backupables;
-
+            
             rootPath = Directory.Exists(Environment.ExternalStorageDirectory.AbsolutePath)
                              ? Environment.ExternalStorageDirectory.AbsolutePath
                              : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
@@ -40,7 +41,8 @@ namespace CAPI.Android.Core.Model.Backup
             restorePath = System.IO.Path.Combine(rootPath, RestoreFolder);
             if (!Directory.Exists(restorePath))
                 Directory.CreateDirectory(restorePath);
-
+            
+            infoFileSupplierRegistry.Register(this.Backup);
         }
 
         public string Backup()
@@ -51,15 +53,16 @@ namespace CAPI.Android.Core.Model.Backup
 
             foreach (var backupable in backupables)
             {
-                var path = backupable.GetPathToBakupFile();
+                var path = backupable.GetPathToBackupFile();
                 if(string.IsNullOrEmpty(path))
                     continue;
                 
                 CopyFileOrDirectory(path, backupFolderPath);
             }
-            AndroidZipUtility.ZipDirectory(backupFolderPath, Path.Combine(backupPath, backupFolderName + ".zip"));
+            var backupArchiveName = Path.Combine(backupPath, backupFolderName + ".zip");
+            AndroidZipUtility.ZipDirectory(backupFolderPath, backupArchiveName);
             Directory.Delete(backupFolderPath, true);
-            return backupFolderPath;
+            return backupArchiveName;
         }
 
         private void CopyDb(string sourcePath, string backupFolderPath)
@@ -72,6 +75,9 @@ namespace CAPI.Android.Core.Model.Backup
 
         private void CopyFileOrDirectory(string sourceDir, string targetDir)
         {
+            if (!File.Exists(sourceDir) && !Directory.Exists(sourceDir))
+                return;
+            
             FileAttributes attr = File.GetAttributes(sourceDir);
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
@@ -103,7 +109,7 @@ namespace CAPI.Android.Core.Model.Backup
             AndroidZipUtility.Unzip(firstFile, restorePath);
             foreach (var backupable in backupables)
             {
-                backupable.RestoreFromBakupFolder(unziperFolder);
+                backupable.RestoreFromBackupFolder(unziperFolder);
             }
             Directory.Delete(unziperFolder, true);
         }

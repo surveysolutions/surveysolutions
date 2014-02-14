@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -16,7 +17,7 @@ namespace Core.Supervisor.Tests.Merger
     {
         internal static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(QuestionnaireDocument document)
         {
-            return new QuestionnaireRosterStructure(document, 1);
+            return new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1);
         }
 
         internal static QuestionnaireRosterStructure CreateQuestionnaireRosterStructureWithOneFixedRoster(Guid fixedRosterId)

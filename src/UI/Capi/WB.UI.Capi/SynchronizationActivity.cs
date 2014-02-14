@@ -10,15 +10,19 @@ using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ViewModel.Login;
+using Java.IO;
 using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Utils;
 using WB.UI.Capi.Extensions;
+using WB.UI.Capi.Implementations.TabletInformation;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
+using File = System.IO.File;
 
 namespace WB.UI.Capi
 {
@@ -42,6 +46,11 @@ namespace WB.UI.Capi
             get { return this.FindViewById<Button>(Resource.Id.btnBackup); }
         }
 
+        protected Button btnSendTabletInfo
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnSendTabletInfo); }
+        }
+
         protected Button btnRestore
         {
             get { return this.FindViewById<Button>(Resource.Id.btnRestore); }
@@ -54,7 +63,11 @@ namespace WB.UI.Capi
 
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
+        protected TabletInformationSender tabletInformationSender;
         protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        private Operation? currentOperation;
+        private IBackup backupManager;
+        private ICapiInformationService capiInformationService;
 
         #endregion
 
@@ -68,6 +81,7 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.sync_dialog);
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
+            this.capiInformationService = CapiApplication.Kernel.Get<ICapiInformationService>();
             this.btnSync.Click += this.ButtonSyncClick;
 
             //btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
@@ -75,6 +89,7 @@ namespace WB.UI.Capi
 
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;
+            this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
         }
@@ -93,7 +108,7 @@ namespace WB.UI.Capi
             }
         }
 
-       
+
         private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
         {
             try
@@ -114,14 +129,8 @@ namespace WB.UI.Capi
             }
         }
 
-        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
-        {
-            
-        }
-
         private void btnRestore_Click(object sender, EventArgs e)
         {
-
             AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
             alertWarningAboutRestore.SetTitle("Warning");
             alertWarningAboutRestore.SetMessage(
@@ -131,19 +140,84 @@ namespace WB.UI.Capi
             alertWarningAboutRestore.SetPositiveButton("Yes", this.btnRestoreConfirmed_Click);
             alertWarningAboutRestore.SetNegativeButton("No", this.btnRestoreDeclined_Click);
             alertWarningAboutRestore.Show();
+        }
 
-
-
+        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
+        {
         }
 
         void btnBackup_Click(object sender, EventArgs e)
         {
-
             var path = this.backupManager.Backup();
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.SetTitle("Success");
             alert.SetMessage(string.Format("Backup was saved to {0}", path));
             alert.Show();
+        }
+
+        private void btnSendTabletInfo_Click(object sender, EventArgs e)
+        {
+            this.ThrowExeptionIfDialogIsOpened();
+
+            this.PreperaUI();
+
+            tabletInformationSender = new TabletInformationSender(this, capiInformationService);
+            tabletInformationSender.InformationPackageCreated += this.tabletInformationSender_InformationPackageCreated;
+            tabletInformationSender.ProcessCanceled += this.tabletInformationSender_ProcessCanceled;
+            tabletInformationSender.ProcessFinished += this.tabletInformationSender_ProcessFinished;
+            this.CreateDialog(ProgressDialogStyle.Spinner, "Creating information package", true, tabletInformationSender_Cancel, "Sending information package");
+            tabletInformationSender.Run();
+        }
+
+        void tabletInformationSender_ProcessFinished(object sender, EventArgs e)
+        {
+            this.RunOnUiThread(() =>
+            {
+                this.DestroyDialog();
+                this.tvSyncResult.Text = "Information package is sent successfully.";
+            });
+            this.DestroyReportSending();
+        }
+
+        void tabletInformationSender_ProcessCanceled(object sender, EventArgs e)
+        {
+            this.RunOnUiThread(() =>
+            {
+                this.DestroyDialog();
+
+                this.tvSyncResult.Text = "Information package sending is canceled.";
+            });
+            this.DestroyReportSending();
+        }
+
+        void tabletInformationSender_InformationPackageCreated(object sender, InformationPackageEventArgs e)
+        {
+            bool isUserReactedOnWarning = false;
+
+            this.RunOnUiThread(() =>
+            {
+                var builder = new AlertDialog.Builder(this);
+
+                builder.SetMessage(
+                    string.Format("Information package of size {0} will be sent via network. Are you sure you want to send it?",
+                        FileSizeUtils.SizeSuffix(e.FileSize)));
+                builder.SetPositiveButton("Yes", (s, positiveEvt) =>
+                {
+                    this.progressDialog.SetMessage("Sending created information package to Supervisor");
+                    isUserReactedOnWarning = true;
+                });
+                builder.SetNegativeButton("No", (s, negativeEvt) =>
+                {
+                    this.tabletInformationSender.Cancel();
+                    isUserReactedOnWarning = true;
+                });
+                builder.Show();
+            });
+
+            while (!isUserReactedOnWarning)
+            {
+                Thread.Sleep(500);
+            }
         }
 
         protected override void OnStart()
@@ -181,11 +255,10 @@ namespace WB.UI.Capi
             this.synchronizer.ProcessCanceling += this.synchronizer_ProcessCanceling;
             this.synchronizer.ProcessCanceled += this.synchronizer_ProcessCanceled;
 
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false);
+            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false, this.progressDialog_Cancel);
 
             this.synchronizer.Run();
         }
-
 
 
         protected ISyncAuthenticator CreateAuthenticator()
@@ -266,7 +339,7 @@ namespace WB.UI.Capi
 
         void synchronizer_ProcessCanceling(object sender, EventArgs e)
         {
-            this.RunOnUiThread(() => this.CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false));
+            this.RunOnUiThread(() => this.CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false, null));
         }
 
         private void synchronizer_ProcessCanceled(object sender, SynchronizationCanceledEventArgs evt)
@@ -298,8 +371,15 @@ namespace WB.UI.Capi
             this.synchronizer = null;
         }
 
-        private Operation? currentOperation;
-        private IBackup backupManager;
+
+
+        private void DestroyReportSending()
+        {
+            tabletInformationSender.InformationPackageCreated -= this.tabletInformationSender_InformationPackageCreated;
+            tabletInformationSender.ProcessCanceled -= this.tabletInformationSender_ProcessCanceled;
+            tabletInformationSender.ProcessFinished -= this.tabletInformationSender_ProcessFinished;
+            tabletInformationSender = null;
+        }
 
         private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {
@@ -313,7 +393,7 @@ namespace WB.UI.Capi
 
 
                     if (this.currentOperation != e.OperationType)
-                        this.CreateDialog(currentStyle, e.OperationTitle, e.Cancelable);
+                        this.CreateDialog(currentStyle, e.OperationTitle, e.Cancelable, this.progressDialog_Cancel);
                     else
                         this.progressDialog.SetMessage(e.OperationTitle);
 
@@ -329,18 +409,18 @@ namespace WB.UI.Capi
 
         #region diialog manipulation
 
-        private void CreateDialog(ProgressDialogStyle style, string title, bool cancelable)
+        private void CreateDialog(ProgressDialogStyle style, string message, bool cancelable, EventHandler<DialogClickEventArgs> cancelHandler, string title = "Synchronizing")
         {
             this.DestroyDialog();
             this.progressDialog = new ProgressDialog(this);
-            
-            this.progressDialog.SetTitle("Synchronizing");
+
+            this.progressDialog.SetTitle(title);
             this.progressDialog.SetProgressStyle(style);
-            this.progressDialog.SetMessage(title);
+            this.progressDialog.SetMessage(message);
             this.progressDialog.SetCancelable(false);
 
             if (cancelable)
-                this.progressDialog.SetButton("Cancel", this.progressDialog_Cancel);
+                this.progressDialog.SetButton("Cancel",cancelHandler);
 
             this.progressDialog.Show();
         }
@@ -348,6 +428,11 @@ namespace WB.UI.Capi
         private void progressDialog_Cancel(object sender, DialogClickEventArgs e)
         {
             this.synchronizer.Cancel();
+        }
+
+        private void tabletInformationSender_Cancel(object sender, DialogClickEventArgs e)
+        {
+            this.tabletInformationSender.Cancel();
         }
 
         private void DestroyDialog()

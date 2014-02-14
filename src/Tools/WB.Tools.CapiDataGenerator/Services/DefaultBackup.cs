@@ -48,7 +48,7 @@ namespace CapiDataGenerator
 
             foreach (var backupable in backupables)
             {
-                var path = backupable.GetPathToBakupFile();
+                var path = backupable.GetPathToBackupFile();
                 if (string.IsNullOrEmpty(path))
                     continue;
 

@@ -42,6 +42,23 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid? RosterTitleQuestionId { get; set; }
 
+        public List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfGroup
+        {
+            get
+            {
+                if (questionIdsInvolvedInCustomEnablementConditionOfGroup == null &&
+                    QuestionsInvolvedInCustomEnablementConditionOfGroup != null)
+                {
+                    questionIdsInvolvedInCustomEnablementConditionOfGroup =
+                        QuestionsInvolvedInCustomEnablementConditionOfGroup.Select(q => q.Id).ToList();
+                }
+                return questionIdsInvolvedInCustomEnablementConditionOfGroup;
+            }
+            set { questionIdsInvolvedInCustomEnablementConditionOfGroup = value; }
+        }
+        private List<Guid> questionIdsInvolvedInCustomEnablementConditionOfGroup;
+
+        [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfGroup instead")]
         public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
 
         private IComposite parent;

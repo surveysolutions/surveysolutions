@@ -311,6 +311,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\AppSettings.cs" />
     <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
+    <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
@@ -596,8 +598,9 @@
     <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
     <Content Include="Views\Interview\Revalidate.cshtml" />
-    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
+    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
+    <Content Include="Views\TabletReport\Packages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -620,6 +623,10 @@
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
+      <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
+      <Name>WB.Core.Infrastructure.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>

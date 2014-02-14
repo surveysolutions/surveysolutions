@@ -73,7 +73,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             return WrapConnectionWithQuery<int, TView>((_) => _.Count());
         }
 
-        public TView GetById<TView>(Guid id) where TView : DenormalizerRow, new()
+        public TView GetById<TView>(string id) where TView : DenormalizerRow, new()
         {
             var idString = id.ToString();
              return WrapConnectionWithQuery<TView, TView>((_) => _.Where((i) => i.Id == idString).FirstOrDefault());
@@ -84,12 +84,12 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             return WrapConnectionWithQuery<IEnumerable<TView>, TView>((table) => table.Where(predExpr).ToList());
         }
 
-        public void Remove<TView>(Guid id)where TView : DenormalizerRow, new()
+        public void Remove<TView>(string id) where TView : DenormalizerRow, new()
         {
             WrapConnection<TView>((c)=>c.Delete<TView>(id.ToString()));
         }
 
-        public void Store<TView>(TView view, Guid id) where TView : DenormalizerRow, new()
+        public void Store<TView>(TView view, string id) where TView : DenormalizerRow, new()
         {
             WrapConnection<TView>((connection) =>
                 {
@@ -105,17 +105,21 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
                 });
         }
 
-        public string GetPathToBakupFile()
+        public string GetPathToBackupFile()
         {
             return FullPathToDataBase;
         }
 
-        public void RestoreFromBakupFolder(string path)
+        public void RestoreFromBackupFolder(string path)
         {
+            var pathToEventStore = Path.Combine(path, dbName);
+
             lock (locker)
             {
-
-                File.Copy(Path.Combine(path, dbName), FullPathToDataBase, true);
+                if (!File.Exists(pathToEventStore))
+                    File.Delete(FullPathToDataBase);
+                else
+                    File.Copy(pathToEventStore, FullPathToDataBase, true);
             }
         }
     }

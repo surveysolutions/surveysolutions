@@ -22,8 +22,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
         protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(QuestionnaireRosterStructure rosterStructure=null)
         {
             var questionnaireRosterStructureMockStorage = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>();
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(rosterStructure);
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<Guid>(), It.IsAny<long>())).Returns(rosterStructure);
+            questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(rosterStructure);
+            questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<long>())).Returns(rosterStructure);
             return new InterviewEventHandlerFunctional(
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object,
                 questionnaireRosterStructureMockStorage.Object,

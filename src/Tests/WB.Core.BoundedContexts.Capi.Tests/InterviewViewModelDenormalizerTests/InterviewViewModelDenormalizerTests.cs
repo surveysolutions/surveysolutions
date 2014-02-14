@@ -10,6 +10,8 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -36,8 +38,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
             Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> versionedStorageStub)
         {
             var denormalizer = new InterviewViewModelDenormalizer(storageStub.Object,
-                versionedStorageStub.Object, 
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
+                versionedStorageStub.Object,
+                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), new QuestionnaireRosterStructureFactory());
 
             return denormalizer;
         }
@@ -47,7 +49,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
         {
             var storageStub = new Mock<IReadSideRepositoryWriter<InterviewViewModel>>();
 
-            storageStub.Setup(d => d.GetById(document.PublicKey)).Returns(document);
+            storageStub.Setup(d => d.GetById(document.PublicKey.FormatGuid())).Returns(document);
 
             return storageStub;
         }
@@ -56,7 +58,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
             QuestionnaireDocument document)
         {
             var questionnaireStorageMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>();
-            questionnaireStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+            questionnaireStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
                 .Returns(new QuestionnaireDocumentVersioned()
                 {
                     Questionnaire = document
@@ -99,7 +101,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
 
             //Assert
             interviewViewModelStub.Verify(
-                x => x.Store(It.Is<InterviewViewModel>(i => i.PublicKey == questionnaireId), questionnaireId));
+                x => x.Store(It.Is<InterviewViewModel>(i => i.PublicKey == questionnaireId), questionnaireId.FormatGuid()));
         }
 
         [Test]
@@ -124,7 +126,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
 
             //Assert
             interviewViewModelStub.Verify(
-                x => x.Remove(It.Is<Guid>(i => i== questionnaireId)));
+                x => x.Remove(It.Is<string>(i => i == questionnaireId.FormatGuid())));
         }
 
         [Test]

@@ -69,15 +69,24 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.dll</HintPath>
-    </Reference>
-    <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+      <HintPath>..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.Should">
+      <HintPath>..\..\packages\Machine.Specifications.Should.0.7.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1312.1622, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -93,6 +102,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
@@ -101,10 +111,17 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyContext.cs" />
+    <Compile Include="DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
+    <Compile Include="DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="HQControllerTests\HQControllerTestContext.cs" />
     <Compile Include="HQControllerTests\when_BatchUploadModel_model_contains_property__File__to_upload_file_data.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_correct_file_while_batch_upload_and_model_state_is_valid.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />
+    <Compile Include="ImportExportControllerTests\ImportExportControllerTestContext.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_and_exception_occured.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_empty_id.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_not_empty_id.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +144,10 @@
     <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>

@@ -2,6 +2,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.Backup;
+using CAPI.Android.Core.Model.CapiInformation;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ReadSideStore;
@@ -19,6 +20,7 @@ using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.InformationSupplier;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -73,9 +75,14 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
 
-            this.Bind<IBackup>()
-                .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore,
-                                              bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore));
+            this.Bind<IBackup>().To<DefaultBackup>().InSingletonScope().WithConstructorArgument("backupables", new IBackupable[]{evenStore, changeLogStore, fileSystem, denormalizerStore,
+                                              bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore});
+
+            this.Bind<IInfoFileSupplierRegistry>().ToConstant(new InfoFileSupplierRegistryFactory().CreateInfoFileSupplierRegistry());
+
+            this.Bind<ICapiInformationService>()
+                .To<CapiInformationService>()
+                .InSingletonScope();
 
         }
     }

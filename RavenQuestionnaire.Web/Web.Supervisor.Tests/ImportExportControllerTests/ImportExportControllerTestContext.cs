@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Moq;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Synchronization;
+using Web.Supervisor.Controllers;
+
+namespace Web.Supervisor.Tests.ImportExportControllerTests
+{
+    internal class ImportExportControllerTestContext
+    {
+        protected static ImportExportController CreateImportExportController(IDataExportService dataExportService = null)
+        {
+            return new ImportExportController(Mock.Of<ILogger>(), dataExportService ?? Mock.Of<IDataExportService>(), Mock.Of<IBackupManager>());
+        }
+
+        public static void ExecuteAsync(AsyncController asyncController,
+                                       Action actionAsync,
+                                       Action actionCompleted)
+        {
+            var trigger = new AutoResetEvent(false);
+            asyncController.AsyncManager.Finished += (sender, ev) =>
+            {
+                actionCompleted();
+                trigger.Set();
+            };
+            actionAsync();
+            trigger.WaitOne();
+        }
+    }
+}

@@ -22,6 +22,7 @@ using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -36,11 +37,11 @@ using WB.UI.Shared.Android.Controls.ScreenItems;
 
 namespace WB.UI.QuestionnaireTester
 {
-    #if RELEASE 
-    [Application(Debuggable=false)] 
-    #else
-    [Application(Debuggable = true)]
-    #endif
+#if DEBUG 
+    [Application(Debuggable=true)] 
+#else
+    [Application(Debuggable = false)]
+#endif
     [Crasher(UseCustomData = false)]
     public class CapiTesterApplication : Application
     {
@@ -112,7 +113,7 @@ namespace WB.UI.QuestionnaireTester
             var eventHandler =
                 new InterviewViewModelDenormalizer(
                     this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), this.kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -163,7 +164,7 @@ namespace WB.UI.QuestionnaireTester
             
             var propagationStructureDenormalizer =
                 new QuestionnaireRosterStructureDenormalizer(
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), this.kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
         }
