@@ -47,7 +47,7 @@ namespace Web.Supervisor.Controllers
                 if (tabletInformationPackage == null)
                     return this.Json(false, JsonRequestBehavior.AllowGet);
 
-                tabletInformationService.SaveTabletInformation(tabletInformationPackage.PackageName, tabletInformationPackage.Content,
+                tabletInformationService.SaveTabletInformation(tabletInformationPackage.Content,
                     tabletInformationPackage.AndroidId, tabletInformationPackage.RegistrationId);
 
                 return this.Json(true, JsonRequestBehavior.AllowGet);
