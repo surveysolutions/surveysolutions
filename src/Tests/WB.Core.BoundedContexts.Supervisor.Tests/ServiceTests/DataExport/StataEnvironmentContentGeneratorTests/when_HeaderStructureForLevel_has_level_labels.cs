@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Moq;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+using WB.Core.Infrastructure.FileSystem;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
@@ -18,10 +21,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.Stata
 
             oneQuestionHeaderStructureForLevel.LevelLabels = new[] { CreateLabelItem("c1", "t1"), CreateLabelItem("c2", "t2") };
 
-            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator();
+            stataEnvironmentContentService =
+                CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor(contentFilePath, (c) => stataGeneratedContent = c));
         };
 
-        Because of = () => stataGeneratedContent = stataEnvironmentContentService.BuildContentOfAdditionalFile(oneQuestionHeaderStructureForLevel, dataFileName);
+        Because of = () => stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel, dataFileName, contentFilePath);
 
         It should_contain_stata_script_for_insheet_file = () =>
             stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}\", comma\r\n", dataFileName));
@@ -35,7 +39,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.Stata
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel oneQuestionHeaderStructureForLevel;
         private static string dataFileName = "data file name";
-
+        private static string contentFilePath = "content file path";
         private static string stataGeneratedContent;
     }
 }

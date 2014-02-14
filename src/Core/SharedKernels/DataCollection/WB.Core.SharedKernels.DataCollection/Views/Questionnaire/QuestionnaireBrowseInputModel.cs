@@ -77,6 +77,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         /// </summary>
         public string Filter { get; set; }
 
+        public Guid? QuestionnaireId { get; set; }
+
+        public int? Version { get; set; }
+
         #endregion
     }
 }
