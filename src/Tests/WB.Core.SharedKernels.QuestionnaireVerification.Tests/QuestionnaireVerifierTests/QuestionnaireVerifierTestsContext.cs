@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
@@ -26,6 +27,76 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 Children = questionnaireChildren.ToList(),
             };
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireWithRosterAndGroupAfterWithConditionReferencingQuestionInRoster(Guid underDeeperRosterLevelQuestionId, Guid questionWithCustomValidation)
+        {
+            var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
+            var rosterQuestionId = Guid.Parse("13333333333333333333333333333333");
+            var questionnaire = CreateQuestionnaireDocument(new IComposite[]
+                {
+                    new NumericQuestion
+                    {
+                        PublicKey = rosterGroupId, 
+                        IsInteger = true, 
+                        MaxValue = 5
+                    },
+                    new Group
+                    {
+                        PublicKey = rosterGroupId,
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterQuestionId,
+                        Children = new List<IComposite>
+                        {
+                            new NumericQuestion
+                            {
+                                PublicKey = underDeeperRosterLevelQuestionId
+                            }
+                        }
+                    },
+                    new Group
+                    {
+                        PublicKey = questionWithCustomValidation,
+                        ConditionExpression = "some random expression"
+                    }
+                });
+
+            return questionnaire;
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireWithRosterAndQuestionAfterWithConditionReferencingQuestionInRoster(Guid underDeeperRosterLevelQuestionId, Guid questionWithCustomValidation)
+        {
+            var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
+            var rosterQuestionId = Guid.Parse("13333333333333333333333333333333");
+            var questionnaire = CreateQuestionnaireDocument(new IComposite[]
+                {
+                    new NumericQuestion
+                    {
+                        PublicKey = rosterGroupId, 
+                        IsInteger = true, 
+                        MaxValue = 5
+                    },
+                    new Group
+                    {
+                        PublicKey = rosterGroupId,
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterQuestionId,
+                        Children = new List<IComposite>
+                        {
+                            new NumericQuestion
+                            {
+                                PublicKey = underDeeperRosterLevelQuestionId
+                            }
+                        }
+                    },
+                    new SingleQuestion
+                    {
+                        PublicKey = questionWithCustomValidation,
+                        ConditionExpression = "some random expression"
+                    }
+                });
+
+            return questionnaire;
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
