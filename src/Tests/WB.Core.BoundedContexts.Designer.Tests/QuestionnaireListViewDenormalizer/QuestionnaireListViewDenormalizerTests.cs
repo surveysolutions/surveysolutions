@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
             // assert
             questionnaireStorageMock.Verify(
-              x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId.ToString()));
+              x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId.FormatGuid()));
             
         }
         [Test]
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
             // assert
             questionnaireStorageMock.Verify(
-                x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId.ToString()));
+                x => x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle), questionnaireId.FormatGuid()));
         }
 
 

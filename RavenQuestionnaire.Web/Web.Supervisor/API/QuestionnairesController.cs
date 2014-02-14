@@ -1,0 +1,99 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using Main.Core.View;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using Web.Supervisor.Models.API;
+
+namespace Web.Supervisor.API
+{
+    [RoutePrefix("apis/v1/questionnaires")]
+    [Authorize/*(Roles = "Headquarter")*/]
+    public class QuestionnairesController : BaseApiServiceController
+    {
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
+
+
+        public QuestionnairesController(ILogger logger,
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
+            :base(logger)
+        {
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
+        }
+
+        [HttpGet]
+        [Route("")]
+        public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
+        {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
+            var questionnairesFromStore = this.questionnaireBrowseViewFactory.Load(
+                new QuestionnaireBrowseInputModel()
+                {
+                    PageSize = safeLimit,
+                    Page = offset
+                });
+
+            return new QuestionnaireApiView(questionnairesFromStore);
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/{version:int?}")]
+        public QuestionnaireApiView Questionnaires(Guid id, int? version, int limit = 10, int offset = 1)
+        {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(
+                new QuestionnaireBrowseInputModel()
+                {
+                    PageSize = safeLimit,
+                    Page = offset,
+                    QuestionnaireId = id,
+                    Version = version
+                });
+
+            return new QuestionnaireApiView(questionnaires);
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/{version:int}/details")]
+        public QuestionnaireApiView QuestionnairesDetails(Guid id, int? version, int limit = 10, int offset = 1)
+        {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(
+                new QuestionnaireBrowseInputModel()
+                {
+                    PageSize = safeLimit,
+                    Page = offset,
+                    QuestionnaireId = id,
+                    Version = version
+                });
+
+            return new QuestionnaireApiView(questionnaires);
+        }
+
+        [HttpGet]
+        [Route("statuses")]
+        public IEnumerable<string> QuestionnairesStatuses()
+        {
+            return Enum.GetNames(typeof(InterviewStatus));
+        }
+    }
+}
