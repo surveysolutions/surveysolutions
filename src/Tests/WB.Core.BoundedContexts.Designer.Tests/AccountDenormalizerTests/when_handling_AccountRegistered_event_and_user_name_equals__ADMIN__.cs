@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AccountDenormalizerTests
         It should_pass__admin__user_name_to_document_storages_Store_method = () =>
             accountStorageMock.Verify(s => s.Store(
                 Moq.It.Is<AccountDocument>(d => d.UserName == "admin"),
-                Moq.It.Is<string>(g => g == userId.ToString())));
+                Moq.It.Is<string>(g => g == userId.FormatGuid())));
 
         private static Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         private static AccountDenormalizer denormalizer;

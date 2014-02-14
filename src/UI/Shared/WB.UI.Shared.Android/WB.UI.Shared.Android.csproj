@@ -161,12 +161,15 @@
     <Compile Include="GeolocationServices\GeoService.cs" />
     <Compile Include="GeolocationServices\IGeoService.cs" />
     <Compile Include="Helpers\AndroidUIHelper.cs" />
+    <Compile Include="Implementations\Network\AndroidNetworkService.cs" />
+    <Compile Include="Network\ICapiNetworkService.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CapiSharedSetup.cs" />
     <Compile Include="RestUtils\AndroidRestUrils.cs" />
     <Compile Include="RestUtils\IRestUrils.cs" />
     <Compile Include="RestUtils\RestException.cs" />
+    <Compile Include="SharedAndroidUIModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
