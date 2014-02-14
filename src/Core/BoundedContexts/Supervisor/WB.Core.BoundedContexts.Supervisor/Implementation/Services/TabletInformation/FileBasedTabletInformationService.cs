@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInfor
 
         public void SaveTabletInformation(byte[] content, string androidId, string registrationId)
         {
-            fileSystemAccessor.WriteAllBytes(this.CreateFileName(androidId,registrationId), content);
+            fileSystemAccessor.WriteAllBytes(fileSystemAccessor.CombinePath(basePath, this.CreateFileName(androidId, registrationId)),
+                content);
         }
 
         public List<TabletInformationView> GetAllTabletInformationPackages()
