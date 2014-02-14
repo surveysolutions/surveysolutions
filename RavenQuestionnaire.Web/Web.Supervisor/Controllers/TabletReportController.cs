@@ -17,7 +17,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Controllers
 {
-    public class TabletReportController : AsyncController
+    public class TabletReportController : Controller
     {
         private readonly ILogger logger;
         private readonly ITabletInformationService tabletInformationService;
@@ -44,10 +44,8 @@ namespace Web.Supervisor.Controllers
                                 TypeNameHandling.Objects
                         });
                 }
-                if (tabletInformationPackage == null)
-                    return this.Json(false, JsonRequestBehavior.AllowGet);
 
-                tabletInformationService.SaveTabletInformation(tabletInformationPackage.PackageName, tabletInformationPackage.Content,
+                tabletInformationService.SaveTabletInformation(tabletInformationPackage.Content,
                     tabletInformationPackage.AndroidId, tabletInformationPackage.RegistrationId);
 
                 return this.Json(true, JsonRequestBehavior.AllowGet);

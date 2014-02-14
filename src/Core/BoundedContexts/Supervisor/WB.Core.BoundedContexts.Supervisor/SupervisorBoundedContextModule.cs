@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Supervisor
                 .To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope()
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
 
-            this.Bind<ITabletInformationService>().ToMethod(c => new FileBasedTabletInformationService(currentFolderPath));
+            this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", currentFolderPath);
             this.Bind<IInterviewExportService>().To<CsvInterviewExportService>();
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();

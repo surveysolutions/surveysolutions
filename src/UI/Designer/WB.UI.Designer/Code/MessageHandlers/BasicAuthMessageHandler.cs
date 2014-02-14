@@ -13,13 +13,6 @@
 
     public class BasicAuthMessageHandler : DelegatingHandler
     {
-        //private readonly IServiceLocator serviceLocator;
-
-        /*public BasicAuthMessageHandler(IServiceLocator serviceLocator)
-        {
-            this.serviceLocator = serviceLocator;
-        }*/
-
         protected bool Authorize(string username, string password)
         {
             return Membership.ValidateUser(username, password);

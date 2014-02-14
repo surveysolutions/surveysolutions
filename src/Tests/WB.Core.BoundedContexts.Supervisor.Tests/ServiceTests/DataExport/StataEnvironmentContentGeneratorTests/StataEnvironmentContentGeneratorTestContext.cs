@@ -5,18 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Commands.Sync;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using Machine.Specifications;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
     [Subject(typeof(StataEnvironmentContentService))]
     internal class StataEnvironmentContentGeneratorTestContext
     {
-        protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator()
+        protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator(IFileSystemAccessor fileSystemAccessor)
         {
-            return new StataEnvironmentContentService();
+            return new StataEnvironmentContentService(fileSystemAccessor);
+        }
+
+        protected static IFileSystemAccessor CreateFileSystemAccessor(string contentFilePath, Action<string> returnContentAction)
+        {
+            var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
+            fileSystemAccessorMock.Setup(x => x.WriteAllText(contentFilePath, Moq.It.IsAny<string>()))
+                .Callback<string, string>((path, content) => returnContentAction(content));
+
+            return fileSystemAccessorMock.Object;
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(params ExportedHeaderItem[] exportedHeaderItems)
