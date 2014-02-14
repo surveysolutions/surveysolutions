@@ -3,13 +3,13 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using System.Linq;
 
 namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
 
         private static ILogger Logger
         {
@@ -55,11 +56,12 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public InterviewViewModelDenormalizer(
             IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
         {
             this.interviewStorage = interviewStorage;
             this.questionnarieStorage = questionnarieStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
@@ -93,7 +95,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
 #warning it's bad to write data to other storage, but I've wrote this code for backward compatibility with old versions of CAPI where QuestionnaireRosterStructureDenormalizer haven't been running
 
-            propagationStructure = new QuestionnaireRosterStructure(questionnaire.Questionnaire, questionnaire.Version);
+            propagationStructure = questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaire.Questionnaire, questionnaire.Version);
             this.questionnaireRosterStructureStorage.Store(propagationStructure, propagationStructure.QuestionnaireId);
             return propagationStructure;
         }

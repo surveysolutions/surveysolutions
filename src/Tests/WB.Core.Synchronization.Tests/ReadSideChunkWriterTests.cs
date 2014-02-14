@@ -29,7 +29,7 @@ namespace WB.Core.Synchronization.Tests
             var someContent = "some content";
 
             int count = 5;
-            var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
+            IQueryableReadSideRepositoryWriter<SynchronizationDelta> querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
 
             for (int i = 1; i <= count; i++)
             {
@@ -58,7 +58,7 @@ namespace WB.Core.Synchronization.Tests
             Guid chunkId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
             var someContent = "some content";
-            var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
+            IQueryableReadSideRepositoryWriter<SynchronizationDelta> querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock);
 
             // act
@@ -71,7 +71,7 @@ namespace WB.Core.Synchronization.Tests
         }
 
         [Test]
-        public void StoreChunk_When_chunk_with_same_guid_is_present_Then_cunk_is_Stored_with_next_sequence_previous_is_deleted()
+        public void StoreChunk_When_chunk_with_same_guid_is_present_Then_chunk_is_Stored_with_next_sequence_previous_is_deleted()
         {
             // arrange
             Guid chunkId = Guid.NewGuid();
@@ -88,7 +88,7 @@ namespace WB.Core.Synchronization.Tests
             target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2, IsCompressed = false }, userId);
 
             // assert
-            var storedChunck = querableStorageMock.GetById(chunkId);
+            var storedChunck = ((IQueryableReadSideRepositoryWriter<SynchronizationDelta>) querableStorageMock).GetById(chunkId);
             Assert.That(storedChunck.Content, Is.EqualTo(someContent2));
             Assert.That( querableStorageMock.Count(), Is.EqualTo(1));
         }

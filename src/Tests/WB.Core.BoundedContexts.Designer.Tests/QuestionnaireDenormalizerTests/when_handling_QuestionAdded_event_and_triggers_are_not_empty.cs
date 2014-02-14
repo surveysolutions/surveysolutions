@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             @event = CreateNewQuestionAddedEvent(questionId: questionId, groupId: parentGroupId, triggers: new List<Guid> { rosterGroupId });
 
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
-                => writer.GetById(it.IsAny<Guid>()) == questionnaireDocument);
+                => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
             var numericQuestion = CreateNumericQuestion(questionId, "title");
 

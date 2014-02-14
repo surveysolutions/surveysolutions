@@ -1,4 +1,6 @@
 ﻿using Ninject.Modules;
+using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
@@ -21,6 +23,8 @@ namespace WB.Core.SharedKernels.DataCollection
 
             this.Bind(typeof(IVersionedReadSideRepositoryWriter<>)).To(typeof(VersionedReadSideRepositoryWriter<>));
             this.Bind(typeof(IVersionedReadSideRepositoryReader<>)).To(typeof(VersionedReadSideRepositoryReader<>));
+
+            this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
         }
     }
 }
