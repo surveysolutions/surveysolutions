@@ -79,6 +79,7 @@
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireCacheInitializerFactory.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
+    <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
@@ -159,6 +160,7 @@
     </Compile>
     <Compile Include="Implementation\Factories\QuestionnaireCacheInitializerFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
+    <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
@@ -169,10 +171,11 @@
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
-    <Compile Include="ReadSide\VersionedReadSideRepositoryReaderExtension.cs" />
-    <Compile Include="ReadSide\VersionedReadSideRepositoryWriterExtension.cs" />
+    <Compile Include="ReadSide\VersionedReadSideRepositoryReaderExtensions.cs" />
+    <Compile Include="ReadSide\VersionedReadSideRepositoryWriterExtensions.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
+    <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswer.cs" />
