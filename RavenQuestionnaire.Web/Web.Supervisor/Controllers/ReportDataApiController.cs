@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Core.Supervisor.Views.Reposts.Factories;
 using Core.Supervisor.Views.Reposts.InputModels;
 using Core.Supervisor.Views.Reposts.Views;
 using Main.Core.View;
@@ -26,7 +27,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
             supervisorTeamMembersAndStatusesReport;
 
-        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory;
 
         private readonly IViewFactory<MapReportInputModel, MapReportView>
            mapReport;
@@ -42,8 +43,8 @@ namespace Web.Supervisor.Controllers
             IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
                 supervisorTeamMembersAndStatusesReport,
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
-                supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport, 
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory)
+                supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport,
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
@@ -85,7 +86,7 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public QuestionnaireBrowseView Questionnaires(QuestionnaireBrowseInputModel input)
+        public QuestionnaireAndVersionsView Questionnaires(QuestionnaireBrowseInputModel input)
         {
             return questionnaireBrowseViewFactory.Load(input);
         }

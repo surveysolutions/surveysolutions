@@ -6,13 +6,21 @@
     ViewBag.Title = "MapReport";
 }
 
+<div id="report-builder">
+    <div class="row-fluid">
+        <div class="span12">
+            <select class="input-block-level" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+            <select class="input-block-level"  id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : questionnaireVersions"></select>
 
-    <h2>MapReport</h2>
-    <div id="map-canvas" class="google-maps" />
-
+        </div>
+    </div>
+   
+</div>
+<div id="map-canvas" class="google-maps" />
 
 @section scripts
 {
+    @Scripts.Render("~/js/list")
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
     </script>
@@ -21,7 +29,7 @@
             var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
             var $questionnairesListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "Questionnaires" })';
             $(function () {
-                var model = new Supervisor.VM.MapReport($questionnairesListUrl, commandExecutionUrl);
+                window.model = new Supervisor.VM.MapReport($questionnairesListUrl, commandExecutionUrl);
                 ko.applyBindings(model);
                 model.initializeMap();
                 model.load();

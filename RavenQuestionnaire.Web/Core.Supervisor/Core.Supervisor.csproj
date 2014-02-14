@@ -202,6 +202,8 @@
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\MapReport.cs" />
+    <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
+    <Compile Include="Views\Reposts\Factories\QuestionnairesAndVersionsFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorSurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorTeamMembersAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />

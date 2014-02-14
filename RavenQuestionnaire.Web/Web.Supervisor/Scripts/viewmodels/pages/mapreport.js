@@ -78,11 +78,39 @@
     };
 
     self.load = function () {
-        self.IsAjaxComplete(false);
-      
-        self.IsAjaxComplete(true);
-        self.IsPageLoaded(true);
+        self.loadQuestionnaires();
     };
+
+    self.questionnaires = ko.observable(null);
+    self.selectedQuestionnaire = ko.observable();
+    self.selectedVersion = ko.observable();
+
+    self.questionnaireVersions = ko.computed(function () {
+        return self.selectedQuestionnaire() ? self.selectedQuestionnaire().Versions.sort() : null;
+    });
+  
+    self.TotalCount = ko.observable();
+    self.Pager = ko.pager(self.TotalCount);
+    self.Pager().PageSize(20);
+    self.Pager().CurrentPage.subscribe(function () {
+        self.search(self.SortOrder);
+    });
+    self.Pager().CanChangeCurrentPage = ko.computed(function () { return self.IsAjaxComplete(); });
+
+    self.loadQuestionnaires = function () {
+        var params = {
+            Pager: {
+                Page: self.Pager().CurrentPage(),
+                PageSize: self.Pager().PageSize()
+            }
+        };
+
+        self.SendRequest(self.questionnaireUrl, params, function (data) {
+            self.questionnaires(data.Items);
+            self.totalCount(data.TotalCount);
+        });
+    };
+
 
     $('body').addClass('map-report');
 };

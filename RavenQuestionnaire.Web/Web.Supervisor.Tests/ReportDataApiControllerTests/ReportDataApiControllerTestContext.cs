@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Supervisor.Views.Reposts.Factories;
 using Core.Supervisor.Views.Reposts.InputModels;
 using Core.Supervisor.Views.Reposts.Views;
 using Main.Core.View;
@@ -31,7 +32,7 @@ namespace Web.Supervisor.Tests.ReportDataApiControllerTests
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
                 supervisorSurveysAndStatusesReport = null,
             IViewFactory<MapReportInputModel, MapReportView> mapReport = null,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory = null)
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory = null)
         {
             return new ReportDataApiController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -46,7 +47,7 @@ namespace Web.Supervisor.Tests.ReportDataApiControllerTests
                 supervisorSurveysAndStatusesReport ??
                     Mock.Of<IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>>(),
                 mapReport ?? Mock.Of<IViewFactory<MapReportInputModel, MapReportView>>(),
-                questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>()
+                questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView>>()
                 );
         }
     }

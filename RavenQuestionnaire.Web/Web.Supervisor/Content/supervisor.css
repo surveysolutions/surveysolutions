@@ -4651,3 +4651,13 @@ a.pseudo-link:hover {
     left: 0;
     right: 0;
 }
+
+#report-builder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    background: white;
+    z-index: 100;
+}
