@@ -13,109 +13,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
     {
         public Guid LevelId { get; set; }
         public string LevelName { get; set; }
+        public LabelItem[] LevelLabels { get; set; }
+        public string LevelIdColumnName { get; set; }
         public IDictionary<Guid, ExportedHeaderItem> HeaderItems { get; set; }
 
         public HeaderStructureForLevel()
         {
             this.HeaderItems = new Dictionary<Guid, ExportedHeaderItem>();
-        }
-
-        public HeaderStructureForLevel(
-            IEnumerable<IGroup> groupsInLevel, 
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
-            Dictionary<Guid, int> maxValuesForRosterSizeQuestions,
-            Guid levelId)
-            : this()
-        {
-            this.LevelId = levelId;
-
-            if (!groupsInLevel.Any())
-                return;
-
-            this.LevelName = groupsInLevel.First().Title;
-
-            foreach (var rootGroup in groupsInLevel)
-            {
-                FillHeaderWithQuestionsInsideGroup(rootGroup, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
-            }
-        }
-
-        private void FillHeaderWithQuestionsInsideGroup(IGroup @group, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
-            Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
-        {
-            foreach (var groupChild in @group.Children)
-            {
-                var question = groupChild as IQuestion;
-                if (question != null)
-                {
-                    if (this.IsQuestionMultiOption(question))
-                    {
-                        if (question.LinkedToQuestionId.HasValue)
-                            AddHeadersForLinkedMultiOptions(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
-                        else AddHeadersForMultiOptions(question);
-                    }
-                    else if (this.IsQuestionTextList(question))
-                    {
-                        AddHeadersForTextList(question);
-                    }
-                    else
-                        AddHeaderForNotMultiOptions(question);
-                    continue;
-                }
-
-                var innerGroup = groupChild as IGroup;
-                if (innerGroup != null)
-                {
-                    //### old questionnaires supporting        //### roster
-                    if (innerGroup.Propagated != Propagate.None || innerGroup.IsRoster)
-                        continue;
-                    FillHeaderWithQuestionsInsideGroup(innerGroup, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
-                }
-            }
-        }
-
-        private bool IsQuestionMultiOption(IQuestion question)
-        {
-            return question is IMultyOptionsQuestion;
-        }
-
-        private bool IsQuestionTextList(IQuestion question)
-        {
-            return question is ITextListQuestion;
-        }
-
-        private void AddHeadersForLinkedMultiOptions(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
-            Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
-        {
-            this.HeaderItems.Add(question.PublicKey, new ExportedHeaderItem(question, this.GetRosterSizeForLinkedQuestion(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions)));
-        }
-
-        protected void AddHeaderForNotMultiOptions(IQuestion question)
-        {
-            this.HeaderItems.Add(question.PublicKey, new ExportedHeaderItem(question));
-        }
-
-        protected void AddHeadersForMultiOptions(IQuestion question)
-        {
-            var multiOptionQuestion = question as IMultyOptionsQuestion;
-            var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
-            this.HeaderItems.Add(question.PublicKey, new ExportedHeaderItem(question, maxCount));
-        }
-
-        protected void AddHeadersForTextList(IQuestion question)
-        {
-            var textListQuestion = question as ITextListQuestion;
-            var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
-            this.HeaderItems.Add(question.PublicKey, new ExportedHeaderItem(question, maxCount));
-        }
-
-        private int GetRosterSizeForLinkedQuestion(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
-            Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
-        {
-            var rosterSizeQuestionId =
-                referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ScopeId;
-
-            return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
     }
 }

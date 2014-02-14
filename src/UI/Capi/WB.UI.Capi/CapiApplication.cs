@@ -28,7 +28,9 @@ using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
+using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.InformationSupplier;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
@@ -39,6 +41,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Injections;
+using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
 
@@ -110,7 +113,7 @@ namespace WB.UI.Capi
             var eventHandler =
                 new InterviewViewModelDenormalizer(
                     this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), this.kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -160,7 +163,7 @@ namespace WB.UI.Capi
             
             var rosterStructureDenormalizer =
                 new QuestionnaireRosterStructureDenormalizer(
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), this.kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             bus.RegisterHandler(rosterStructureDenormalizer, typeof(TemplateImported));
         }
@@ -210,6 +213,8 @@ namespace WB.UI.Capi
             this.kernel = new StandardKernel(
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
+                new SharedAndroidUiModule(),
+                new FileInfrastructureModule(),
                 new AndroidModelModule(),
                 new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(),
