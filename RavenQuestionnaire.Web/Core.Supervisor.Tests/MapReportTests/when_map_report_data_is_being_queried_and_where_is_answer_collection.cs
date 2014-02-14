@@ -17,7 +17,7 @@ namespace Core.Supervisor.Tests.MapReportTests
         {
             input = Mock.Of<MapReportInputModel>(x
                 => x.Variable == "var"
-                    && x.QuestionnaireId == Guid.Parse("11111111-1111-1111-1111-111111111111")
+                    && x.QuestionnaireId == Guid.Parse("11111111111111111111111111111111")
                     && x.QuestionnaireVersion == 1);
 
             var answersCollectionMock =
@@ -55,7 +55,7 @@ namespace Core.Supervisor.Tests.MapReportTests
         private It should_set_concrete_values_in_views_Answers_property = () =>
             view.Answers.ShouldContainOnly(new[] { "11.11;11.11,22;22", "5555;66666" });
 
-        private static string repositoryId = "var-11111111-1111-1111-1111-111111111111-1";
+        private static string repositoryId = "var-11111111111111111111111111111111-1";
         private static MapReport mapReport;
         private static MapReportInputModel input;
         private static MapReportView view;

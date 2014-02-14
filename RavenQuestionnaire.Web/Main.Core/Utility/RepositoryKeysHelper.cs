@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.Utility
 {
@@ -6,7 +7,7 @@ namespace Main.Core.Utility
     {
         public static string GetVersionedKey(Guid id, long version)
         {
-            return GetVersionedKey(id.ToString(), version);
+            return GetVersionedKey(id.FormatGuid(), version);
         }
 
         public static string GetVersionedKey(string id, long version)
