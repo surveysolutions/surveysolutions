@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
@@ -124,6 +125,7 @@ namespace Web.Supervisor.App_Start
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
+                new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),

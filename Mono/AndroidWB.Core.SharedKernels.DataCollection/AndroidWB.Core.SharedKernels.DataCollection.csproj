@@ -343,6 +343,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Factories\IQuestionnaireFactory.cs">
       <Link>Factories\IQuestionnaireFactory.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Factories\IQuestionnaireRosterStructureFactory.cs">
+      <Link>Factories\IQuestionnaireRosterStructureFactory.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Interview.cs">
       <Link>Implementation\Aggregates\Interview.cs</Link>
     </Compile>
@@ -363,6 +366,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireFactory.cs">
       <Link>Implementation\Factories\QuestionnaireFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireRosterStructureFactory.cs">
+      <Link>Implementation\Factories\QuestionnaireRosterStructureFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryReader.cs">
       <Link>Implementation\ReadSide\VersionedReadSideRepositoryReader.cs</Link>
@@ -388,17 +394,20 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedView.cs">
       <Link>ReadSide\IVersionedView.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\VersionedReadSideRepositoryReaderExtension.cs">
-      <Link>ReadSide\VersionedReadSideRepositoryReaderExtension.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\VersionedReadSideRepositoryReaderExtensions.cs">
+      <Link>ReadSide\VersionedReadSideRepositoryReaderExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\VersionedReadSideRepositoryWriterExtension.cs">
-      <Link>ReadSide\VersionedReadSideRepositoryWriterExtension.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\VersionedReadSideRepositoryWriterExtensions.cs">
+      <Link>ReadSide\VersionedReadSideRepositoryWriterExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Services\IQuestionnaireCacheInitializer.cs">
       <Link>Services\IQuestionnaireCacheInitializer.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Utils\AnswerUtils.cs">
       <Link>Utils\AnswerUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Utils\RepositoryKeysHelper.cs">
+      <Link>Utils\RepositoryKeysHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewItemId.cs">
       <Link>ValueObjects\Interview\InterviewItemId.cs</Link>
@@ -488,7 +497,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

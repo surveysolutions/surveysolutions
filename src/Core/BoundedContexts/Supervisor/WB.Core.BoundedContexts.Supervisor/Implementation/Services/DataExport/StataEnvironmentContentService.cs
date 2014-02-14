@@ -24,6 +24,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return doContent.ToString().ToLower();
         }
 
+        public string GetEnvironmentContentFileName(string levelName)
+        {
+            return string.Format("{0}.do", levelName);
+        }
+
         private static void BuildInsheet(string fileName, StringBuilder doContent)
         {
             doContent.AppendLine(

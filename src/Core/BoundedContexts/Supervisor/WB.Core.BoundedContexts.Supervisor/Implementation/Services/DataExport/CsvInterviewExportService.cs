@@ -11,10 +11,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     {
         private readonly string delimiter = ",";
 
-        public CsvInterviewExportService()
-        {
-        }
-
         public void AddRecord(InterviewDataExportLevelView items, string filePath)
         {
             using (var fileStream = new FileStream(filePath, FileMode.Append))
@@ -66,6 +62,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 writer.NextRecord();
                 streamWriter.Flush();
             }
+        }
+
+        public string GetInterviewExportedDataFileName(string levelName)
+        {
+            return string.Format("{0}.csv", levelName);
         }
     }
 }

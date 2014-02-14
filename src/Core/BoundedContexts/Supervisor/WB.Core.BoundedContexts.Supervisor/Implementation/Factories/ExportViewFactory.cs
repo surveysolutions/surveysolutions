@@ -16,10 +16,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
     internal class ExportViewFactory : IExportViewFactory
     {
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
-        
-        public ExportViewFactory(IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory)
+        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
+
+        public ExportViewFactory(IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
         {
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
+            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, long version)
@@ -31,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
             questionnaire.ConnectChildrenWithParent();
 
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
-            var questionnaireLevelStructure = new QuestionnaireRosterStructure(questionnaire, version);
+            var questionnaireLevelStructure = questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaire, version);
             
             var referenceInfoForLinkedQuestions = referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaire, version);
 
@@ -50,19 +53,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
         }
 
         protected HeaderStructureForLevel CreateHeaderStructureForLevel(
+            string levelTitle,
             IEnumerable<IGroup> groupsInLevel,
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions,
             Guid levelId)
         {
             var headerStructureForLevel = new HeaderStructureForLevel();
-                //groupsInLevel, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions, levelId);
             headerStructureForLevel.LevelId = levelId;
             headerStructureForLevel.LevelIdColumnName = "Id";
-            if (!groupsInLevel.Any())
-                return headerStructureForLevel;
 
-            headerStructureForLevel.LevelName = groupsInLevel.First().Title;
+            headerStructureForLevel.LevelName = levelTitle;
 
             foreach (var rootGroup in groupsInLevel)
             {
@@ -182,7 +183,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             var rootGroups = GetRootGroupsForLevel(questionnaire, questionnaireLevelStructure, levelId);
-            return CreateHeaderStructureForLevel(rootGroups, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions, levelId);
+
+            if(!rootGroups.Any())
+                throw new InvalidOperationException("level is absent in template");
+            
+            var levelTitle = rootGroups.First().Title;
+            return CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
+                maxValuesForRosterSizeQuestions, levelId);
         }
 
         private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid levelId)

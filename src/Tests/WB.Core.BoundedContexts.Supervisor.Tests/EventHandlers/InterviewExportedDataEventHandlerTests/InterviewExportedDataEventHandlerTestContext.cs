@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
 
 
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory());
+            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(), new QuestionnaireRosterStructureFactory());
             questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
                 .Returns(exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1));
 

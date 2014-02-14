@@ -10,6 +10,5 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         string GetFilePathToExportedCompressedData(Guid questionnaireId, long version);
         void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView);
         void CreateExportedDataStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure);
-        void DeleteExportedData(Guid questionnaireId, long version);
     }
 }

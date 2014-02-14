@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor
         public override void Load()
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
-            this.Bind<IDataExportService>().To<DataExportService>().WithConstructorArgument("folderPath", currentFolderPath);
+            this.Bind<IDataExportService>().To<FileBasedDataExportService>().WithConstructorArgument("folderPath", currentFolderPath);
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
