@@ -118,7 +118,7 @@ namespace WB.UI.Designer.App_Start
 
         private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var bus = new NcqrCompatibleEventDispatcher(NcqrsEnvironment.Get<IEventStore>());
+            var bus = new NcqrCompatibleEventDispatcher();
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {
