@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             string fileNameWithNumber = string.Concat(RemoveNonAscii(fileNameWithoutInvalidFileNameChars),
                                                          i == 0 ? (object)string.Empty : i);
 
-            var validFileName = MakeValidFileName(fileNameWithNumber);
+            var validFileName = MakeValidFileName(fileNameWithNumber).Replace(" ","");
 
             return !createdFileNames.Contains(validFileName)
                        ? validFileName

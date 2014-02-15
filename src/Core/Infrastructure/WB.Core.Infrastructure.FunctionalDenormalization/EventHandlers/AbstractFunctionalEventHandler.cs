@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Ncqrs;
@@ -12,9 +13,13 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
     public abstract class AbstractFunctionalEventHandler<T> : IFunctionalEventHandler<T> where T : class, IReadSideRepositoryEntity
     {
         private IStorageStrategy<T> storageStrategy;
+
+        private readonly IReadSideRepositoryWriter<T> readsideRepositoryWriter;
+        
         protected AbstractFunctionalEventHandler(IReadSideRepositoryWriter<T> readsideRepositoryWriter)
         {
             this.storageStrategy = new ReadSideStorageStrategy<T>(readsideRepositoryWriter);
+            this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
 
         public void Handle(IPublishableEvent evt)
@@ -22,10 +27,21 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             Handle(evt, storageStrategy);
         }
 
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+        {
+            using (var inMemoryStorage = new InMemoryViewStorage<T>(this.readsideRepositoryWriter, eventSourceId))
+            {
+                foreach (var publishableEvent in publishableEvents)
+                {
+                    Handle(publishableEvent, inMemoryStorage);
+                }
+            }
+        }
+
         public void Handle(IPublishableEvent evt, IStorageStrategy<T> storage)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-
+            
             if (this.IsUpgrader(evt))
             {
                 T currentState = this.GetViewById(evt.EventSourceId, storage);
