@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    [Ignore]
+    [Ignore("Temporary disabled till code is fixed to respect rosters")]
     class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_in_other_roster_with_same_roster_level : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
