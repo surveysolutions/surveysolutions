@@ -14,10 +14,6 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
 
-        public NcqrCompatibleEventDispatcher()
-        {
-        }
-
         public void Publish(IPublishableEvent eventMessage)
         {
             foreach (var handler in this.registredHandlers.Values.ToList())
@@ -41,26 +37,13 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
                     handler.Bus.Publish(publishableEvent);
                 }
             }
+
             var functionalHandlers =
                this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList();
 
             foreach (var functionalEventHandler in functionalHandlers)
             {
                 functionalEventHandler.Handle(eventMessages, eventMessages.First().EventSourceId);
-            }
-        }
-
-        public void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
-        {
-            var functionalHandlers =
-                this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler<T>).Where(h => h != null).ToList();
-
-            foreach (var publishableEvent in eventStream)
-            {
-                foreach (var handler in functionalHandlers)
-                {
-                    handler.Handle(publishableEvent, storage);
-                }
             }
         }
 
