@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 {
@@ -13,6 +14,6 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
     }
     public interface IFunctionalEventHandler<T> : IFunctionalEventHandler, IEventHandler where T : class, IReadSideRepositoryEntity
     {
-        void Handle(IPublishableEvent evt, IStorageStrategy<T> storage);
+        void Handle(IPublishableEvent evt, IReadSideRepositoryWriter<T> storage);
     }
 }

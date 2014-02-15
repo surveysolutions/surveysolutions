@@ -85,6 +85,18 @@ namespace WB.Core.Synchronization.SyncStorage
             File.Delete(fileName);
         }
 
+        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
+        {
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            var incomeEvents = this.BuildEventStreams(stream, sequence);
+
+            eventStore.Store(incomeEvents);
+            bus.Publish(incomeEvents);
+            commandService.Execute(new ReevaluateSynchronizedInterview(id));
+        }
+
         public IEnumerable<Guid> GetListOfUnhandledPackages()
         {
             var errorPath = Path.Combine(path, ErrorFolderName);
@@ -113,21 +125,6 @@ namespace WB.Core.Synchronization.SyncStorage
                 settings);
 
             return item;
-        }
-
-        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
-        {
-            var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            var incomeEvents = this.BuildEventStreams(stream, sequence);
-
-
-            eventStore.Store(incomeEvents);
-            bus.Publish(incomeEvents);
-
-            commandService.Execute(new ReevaluateSynchronizedInterview(id));
-
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
