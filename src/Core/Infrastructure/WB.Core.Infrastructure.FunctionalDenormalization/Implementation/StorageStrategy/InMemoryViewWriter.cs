@@ -4,11 +4,11 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy
 {
-    public class InMemoryViewStorage<T> : IStorageStrategy<T>, IDisposable where T : class,
+    internal class InMemoryViewWriter<T> : IReadSideRepositoryWriter<T>, IDisposable where T : class,
         IReadSideRepositoryEntity
     {
         private  T view;
-        private readonly Guid id;
+        private readonly Guid viewId;
         private readonly IReadSideRepositoryWriter<T> readSideRepositoryWriter;
 
         public bool IsDisposed
@@ -17,25 +17,25 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
             private set;
         }
 
-        public InMemoryViewStorage(IReadSideRepositoryWriter<T> readSideRepositoryWriter, Guid id)
+        public InMemoryViewWriter(IReadSideRepositoryWriter<T> readSideRepositoryWriter, Guid viewId)
         {
             this.IsDisposed = false;
             this.readSideRepositoryWriter = readSideRepositoryWriter;
-            this.id = id;
-            this.view = readSideRepositoryWriter.GetById(id);
+            this.viewId = viewId;
+            this.view = readSideRepositoryWriter.GetById(viewId);
         }
 
-        public T Select(Guid id)
+        public T GetById(Guid id)
         {
             return this.view;
         }
 
-        public void AddOrUpdate(T projection, Guid id)
+        public void Store(T projection, Guid id)
         {
             this.view = projection;
         }
 
-        public void Delete(T projection, Guid id)
+        public void Remove(Guid id)
         {
             this.view = null;
         }
@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
             GC.SuppressFinalize(this);
         }
 
-        ~InMemoryViewStorage()
+        ~InMemoryViewWriter()
         {
              Dispose(false);
         }
@@ -58,12 +58,12 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
                 if (disposing)
                 {
                     if (view != null)
-                        readSideRepositoryWriter.Store(view, id);
+                        readSideRepositoryWriter.Store(view, this.viewId);
                     else
                     {
-                        view = readSideRepositoryWriter.GetById(id);
+                        view = readSideRepositoryWriter.GetById(this.viewId);
                         if (view != null)
-                            readSideRepositoryWriter.Remove(id);
+                            readSideRepositoryWriter.Remove(this.viewId);
                     }
                 }
 
