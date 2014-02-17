@@ -32,6 +32,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             QuestionType.Text
         };
 
+        private static readonly IEnumerable<QuestionType> QuestionTypesValidToHaveValidationExpressions = new[]
+        {
+            QuestionType.DateTime,
+            QuestionType.Numeric,
+            QuestionType.SingleOption,
+            QuestionType.Text,
+            QuestionType.GpsCoordinates, 
+            QuestionType.MultyOption
+        };
+
         #endregion
 
         #region Types
@@ -84,6 +94,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041",VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
                     Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042",VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
                     Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045",VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionHaveValidationExpression, "WB0047",VerificationMessages.WB0047_QRBarcodeQuestionHaveValidationExpression),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionHaveValidationMessage, "WB0048",VerificationMessages.WB0048_QRBarcodeQuestionHaveValidationExpression),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049",VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050",VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -285,7 +299,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            return question.Featured && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
+            return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
         }
 
         private static bool RosterHasRosterInsideItself(IGroup group, QuestionnaireDocument questionnaire)
@@ -327,7 +341,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool TextListQuestionCannotBePrefilled(ITextListQuestion question)
         {
-            return question.Featured;
+            return IsPreFilledQuestion(question);
         }
 
         private static bool TextListQuestionMaxAnswerNotInRange1And40(ITextListQuestion question)
@@ -355,8 +369,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool TextListQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
         {
-            return question.QuestionScope == QuestionScope.Supervisor;
+            return IsSupervisorQuestion(question);
         }
+
+        private bool QRBarcodeQuestionIsPreFilledQuestion(IQRBarcodeQuestion question)
+        {
+            return IsPreFilledQuestion(question);
+        }
+
+        private bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question)
+        {
+            return IsSupervisorQuestion(question);
+        }
+
+        private bool QRBarcodeQuestionHaveValidationMessage(IQRBarcodeQuestion question)
+        {
+            return !string.IsNullOrEmpty(question.ValidationMessage);
+        }
+
+        private bool QRBarcodeQuestionHaveValidationExpression(IQRBarcodeQuestion question)
+        {
+            return !string.IsNullOrEmpty(question.ValidationExpression);
+        }
+
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestions(QuestionnaireDocument questionnaire)
         {
@@ -397,7 +432,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
             foreach (var questionWithSubstitution in questionsWithSubstitutions)
             {
-                if (questionWithSubstitution.Featured)
+                if (IsPreFilledQuestion(questionWithSubstitution))
                 {
                     errorByAllQuestionsWithSubstitutions.Add(QuestionWithTitleSubstitutionCantBePrefilled(questionWithSubstitution));
                     continue;
@@ -515,6 +550,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (string.IsNullOrWhiteSpace(question.ValidationExpression))
                 return false;
 
+            if (!QuestionTypesValidToHaveValidationExpressions.Contains(question.QuestionType))
+                return false;
+
             return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
         }
 
@@ -530,7 +568,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, QuestionnaireDocument questionnaire)
         {
-            return question.Featured;
+            return IsPreFilledQuestion(question);
         }
 
         private static string GetCustomEnablementCondition(IComposite entity)
@@ -864,6 +902,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static bool IsSpecialThisIdentifier(string identifier)
         {
             return identifier.ToLower() == "this";
+        }
+
+        private static bool IsSupervisorQuestion(IQuestion question)
+        {
+            return question.QuestionScope == QuestionScope.Supervisor;
+        }
+
+        private static bool IsPreFilledQuestion(IQuestion question)
+        {
+            return question.Featured;
         }
     }
 }
