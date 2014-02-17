@@ -64,6 +64,46 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             return questionnaire;
         }
 
+
+        protected static QuestionnaireDocument CreateQuestionnaireWithTwoRosterWithSomeConditionInOneRoster(Guid underDeeperRosterLevelQuestionId, 
+            Guid groupWithCustomValidation, bool isFirstRosterOrSecondHasConditions)
+        {
+            var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
+            var rosterQuestionId = Guid.Parse("a3333333333333333333333333333333");
+            var questionnaire = CreateQuestionnaireDocument(new IComposite[]
+                {
+                    new NumericQuestion
+                    {
+                        PublicKey = rosterQuestionId, 
+                        IsInteger = true, 
+                        MaxValue = 5
+                    },
+                    new Group
+                    {
+                        PublicKey = isFirstRosterOrSecondHasConditions ? groupWithCustomValidation: rosterGroupId,
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterQuestionId,
+                        ConditionExpression = isFirstRosterOrSecondHasConditions ? "some random expression" : "",
+                        Children = new List<IComposite>
+                        {
+                            new NumericQuestion
+                            {
+                                PublicKey = underDeeperRosterLevelQuestionId
+                            }
+                        }
+                    },
+                    new Group
+                    {
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterQuestionId,
+                        PublicKey = isFirstRosterOrSecondHasConditions ? groupWithCustomValidation: rosterGroupId,
+                        ConditionExpression = !isFirstRosterOrSecondHasConditions ? "some random expression" : ""
+                    }
+                });
+
+            return questionnaire;
+        }
+
         protected static QuestionnaireDocument CreateQuestionnaireWithRosterAndQuestionAfterWithConditionReferencingQuestionInRoster(Guid underDeeperRosterLevelQuestionId, Guid questionWithCustomValidation)
         {
             var rosterGroupId = Guid.Parse("13333333333333333333333333333333");

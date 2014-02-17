@@ -83,9 +83,11 @@
     <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
     <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
     <Compile Include="Commands\Account\ValidateAccountCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\AbstractListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\AbstractAddQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\AbstractCloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
@@ -94,6 +96,9 @@
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneTextListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\CloneQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateQRBarcodeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateTextListQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddTextListQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddNumericQuestionCommand.cs" />
@@ -119,6 +124,12 @@
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\AbstractQuestionAdded.cs" />
+    <Compile Include="Events\Questionnaire\AbstractQuestionUpdated.cs" />
+    <Compile Include="Events\Questionnaire\AbstractQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\QRBarcodeQuestionUpdated.cs" />
+    <Compile Include="Events\Questionnaire\QRBarcodeQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
     <Compile Include="Events\Questionnaire\GroupEvent.cs" />
     <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />

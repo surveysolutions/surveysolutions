@@ -317,16 +317,27 @@
                         command = config.commands.updateNumericQuestion;
                     }
                     break;
-                 case config.questionTypes.TextList:
-                     if (question.isNew()) {
-                         if (question.isClone()) {
-                             command = config.commands.cloneTextListQuestion;
-                         } else {
-                             command = config.commands.createTextListQuestion;
-                         }
-                     } else {
-                         command = config.commands.updateTextListQuestion;
-                     }
+                case config.questionTypes.TextList:
+                    if (question.isNew()) {
+                        if (question.isClone()) {
+                            command = config.commands.cloneTextListQuestion;
+                        } else {
+                            command = config.commands.createTextListQuestion;
+                        }
+                    } else {
+                        command = config.commands.updateTextListQuestion;
+                    }
+                    break;
+                case config.questionTypes.QRBarcode:
+                    if (question.isNew()) {
+                        if (question.isClone()) {
+                            command = config.commands.cloneQRBarcodeQuestion;
+                        } else {
+                            command = config.commands.addQRBarcodeQuestion;
+                        }
+                    } else {
+                        command = config.commands.updateQRBarcodeQuestion;
+                    }
                     break;
                 default:
                     if (question.isNew()) {
