@@ -38,6 +38,10 @@
                 item = new model.TextQuestion();
                 item.answer(_.unescape(dto.Answer));
                 break;
+           case "QRBarcode":
+                item = new model.QRBarcodeQuestion();
+                item.answer(_.unescape(dto.Answer));
+                break;
            case "TextList":
                item = new model.TextListQuestion();
 

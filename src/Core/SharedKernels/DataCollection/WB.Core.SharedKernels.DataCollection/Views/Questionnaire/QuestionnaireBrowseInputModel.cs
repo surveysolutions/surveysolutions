@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
         public Guid? QuestionnaireId { get; set; }
 
-        public int? Version { get; set; }
+        public long? Version { get; set; }
 
         #endregion
     }

@@ -340,8 +340,15 @@
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
+    <Compile Include="Models\API\BaseApiView.cs" />
+    <Compile Include="Models\API\InterviewApiDetails.cs" />
+    <Compile Include="Models\API\InterviewApiItem.cs" />
     <Compile Include="Models\API\QuestionnaireApiItem.cs" />
+    <Compile Include="Models\API\InterviewApiView.cs" />
     <Compile Include="Models\API\QuestionnaireApiView.cs" />
+    <Compile Include="Models\API\UserApiDetails.cs" />
+    <Compile Include="Models\API\UserApiItem.cs" />
+    <Compile Include="Models\API\UserApiView.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\HistoryItemView.cs" />

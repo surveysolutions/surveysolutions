@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsLinkedQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, DateTimeQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GeoLocationQuestionAnswered>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, QRBarcodeQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupEnabled>,
@@ -498,6 +499,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             return new ViewWithSequence<InterviewData>(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                     new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Timestamp)), evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                evnt.Payload.Answer), evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerRemoved> evnt)

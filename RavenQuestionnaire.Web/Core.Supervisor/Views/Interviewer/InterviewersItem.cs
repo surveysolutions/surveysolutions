@@ -44,12 +44,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// Gets a value indicatios user is locked or not.
         /// </summary>
         public bool IsLocked { get; private set; }
-
-        /// <summary>
-        /// Gets the completed.
-        /// </summary>
-        public int Completed { get; private set; }
-
+        
         /// <summary>
         /// Gets the creation date.
         /// </summary>

@@ -73,6 +73,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerNumericRealQuestionCommand.cs">
       <Link>Commands\Interview\AnswerNumericRealQuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerQRBarcodeQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerQRBarcodeQuestionCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs">
       <Link>Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs</Link>
     </Compile>
@@ -291,6 +294,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\NumericRealQuestionAnswered.cs">
       <Link>Events\Interview\NumericRealQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QRBarcodeQuestionAnswered.cs">
+      <Link>Events\Interview\QRBarcodeQuestionAnswered.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionDisabled.cs">
       <Link>Events\Interview\QuestionDisabled.cs</Link>

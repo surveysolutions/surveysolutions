@@ -52,49 +52,59 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cirrious.CrossCore">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.CrossCore.dll</HintPath>
+    <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.CrossCore.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.CrossCore.Droid.dll</HintPath>
+    <Reference Include="Cirrious.CrossCore.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Binding, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Droid.Fragging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Localization">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Localization.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.ResourceLoader.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.ResourceLoader.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.ResourceLoader.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.ResourceLoader.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.13\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
-    <Reference Include="Mono.Android.Support.v4" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\Mono\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
@@ -106,20 +116,29 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net">
       <Private>True</Private>
-      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Net.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Net.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows">
       <Private>True</Private>
-      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Windows.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization">
       <Private>True</Private>
-      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Xml.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v4">
+      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\Xamarin.Android.Support.v4.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Mobile">
       <HintPath>..\..\..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.monoandroid">
+      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\zxing.monoandroid.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXing.Net.Mobile">
+      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\ZXing.Net.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

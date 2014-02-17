@@ -3,10 +3,12 @@ using System.Web.Http;
 using Core.Supervisor.Views.Interview;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using Web.Supervisor.Models.API;
 
 namespace Web.Supervisor.API
 {
-    [RoutePrefix("apis/v1/interviews")]
+    
     [Authorize/*(Roles = "Headquarter")*/]
     public class InterviewsController : BaseApiServiceController
     {
@@ -21,28 +23,68 @@ namespace Web.Supervisor.API
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
-
-        [Route("")]
-        public AllInterviewsView Get(int limit = 10, int offset = 1)
+ 
+        //would be extended
+        [HttpGet]
+        [Route("apis/v1/interviews")] //?{templateId}&{templateVersion}&{status}&{interviewerId}&{limit=10}&{offset=1}
+        public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null, 
+            InterviewStatus? status = null, Guid? interviewerId = null, int limit = 10, int offset = 1)
         {
+
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
             var input = new AllInterviewsInputModel
             {
                 Page = offset,
-                PageSize = limit
+                PageSize = safeLimit,
+                QuestionnaireId = templateId,
+                QuestionnaireVersion = templateVersion,
+                Status = status,
+                InterviewId = interviewerId
             };
 
-            return this.allInterviewsViewFactory.Load(input);
-        }
+            var interviews = this.allInterviewsViewFactory.Load(input);
 
-        [Route("{id:guid}/details")]
-        public InterviewDetailsView Get(Guid id)
+            return new InterviewApiView(interviews);
+        }
+        
+        [HttpGet]
+        [Route("apis/v1/questionnaires/{id:guid}/{version:long}/interviews")]
+        public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
+        {
+            if (limit < 0 || offset < 0)
+                return null; //add error responses
+
+            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
+
+            var input = new AllInterviewsInputModel
+            {
+                Page = offset,
+                PageSize = safeLimit,
+                QuestionnaireId = id,
+                QuestionnaireVersion = version
+            };
+
+            var interviews = this.allInterviewsViewFactory.Load(input);
+
+            return new InterviewApiView(interviews);
+        }
+        
+        [HttpGet]
+        [Route("apis/v1/interviews/{id:guid}/details")]
+        public InterviewApiDetails InterviewDetails(Guid id)
         {
             var inputModel = new InterviewDetailsInputModel()
             {
                 CompleteQuestionnaireId = id
             };
 
-            return interviewDetailsViewFactory.Load(inputModel);
+            var interview = interviewDetailsViewFactory.Load(inputModel);
+
+            return new InterviewApiDetails(interview);
         }
     }
 }

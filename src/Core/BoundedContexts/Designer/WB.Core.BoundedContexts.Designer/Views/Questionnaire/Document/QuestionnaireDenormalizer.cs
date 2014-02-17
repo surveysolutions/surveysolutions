@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FunctionalDenormalization;
@@ -44,6 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
+
+        IEventHandler<QRBarcodeQuestionAdded>,
+        IEventHandler<QRBarcodeQuestionUpdated>,
+        IEventHandler<QRBarcodeQuestionCloned>,
 
         IEventHandler
     {
@@ -599,6 +603,61 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
         {
             this.AddNewQuestionnaire(evnt.Payload.QuestionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            var question = new QRBarcodeQuestion()
+            {
+                PublicKey = @event.Payload.QuestionId,
+                QuestionText = @event.Payload.Title,
+                StataExportCaption = @event.Payload.VariableName,
+                Mandatory = @event.Payload.IsMandatory,
+                ConditionExpression = @event.Payload.ConditionExpression,
+                Instructions = @event.Payload.Instructions
+            };
+
+            item.Add(c: question, parent: @event.Payload.ParentGroupId, parentPropagationKey: null);
+
+            this.UpdateQuestionnaire(@event, item);
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            item.UpdateQuestion(@event.Payload.QuestionId, question =>
+            {
+                question.QuestionText = @event.Payload.Title;
+                question.StataExportCaption = @event.Payload.VariableName;
+                question.ConditionExpression = @event.Payload.ConditionExpression;
+                question.Mandatory = @event.Payload.IsMandatory;
+                question.Instructions = @event.Payload.Instructions;
+            });
+
+            this.UpdateQuestionnaire(@event, item);
+
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> @event)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
+
+            var question = new QRBarcodeQuestion()
+            {
+                PublicKey = @event.Payload.QuestionId,
+                QuestionText = @event.Payload.Title,
+                StataExportCaption = @event.Payload.VariableName,
+                Mandatory = @event.Payload.IsMandatory,
+                ConditionExpression = @event.Payload.ConditionExpression,
+                Instructions = @event.Payload.Instructions
+            };
+
+            item.Insert(index: @event.Payload.TargetIndex, c: question, parent: @event.Payload.ParentGroupId);
+
+            this.UpdateQuestionnaire(@event, item);
         }
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)

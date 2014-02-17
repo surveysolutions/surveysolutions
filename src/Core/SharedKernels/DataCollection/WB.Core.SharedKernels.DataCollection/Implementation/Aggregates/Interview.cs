@@ -132,6 +132,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
+        internal void Apply(QRBarcodeQuestionAnswered @event)
+        {
+            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answersSupportedInExpressions[questionKey] = @event.Answer;
+            this.answeredQuestions.Add(questionKey);
+        }
+
         private void Apply(NumericQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -770,6 +778,56 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
+
+            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
+            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+
+            this.ApplyEnablementChangesEvents(enablementChanges);
+
+            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+
+            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answer)));
+        }
+
+        public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer)
+        {
+            var answeredQuestion = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
+
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
+
+            EnablementChanges enablementChanges = this.CalculateEnablementChanges(
+                answeredQuestion, answer, questionnaire, getAnswer, this.GetRosterInstanceIds);
+
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, this.GetRosterInstanceIds);
+
+            Func<Identity, bool?> getNewQuestionState =
+                question =>
+                {
+                    if (enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
+                    if (enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
+                    return null;
+                };
+            Func<Identity, object> getAnswerConcerningDisabling = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question, getNewQuestionState);
+
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
+                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
+                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
+                out answersDeclaredValid, out answersDeclaredInvalid);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+
+
+            this.ApplyEvent(new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));

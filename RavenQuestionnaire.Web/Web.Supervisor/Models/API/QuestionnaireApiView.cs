@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Web.Supervisor.Models.API
 {
-    public class QuestionnaireApiView
+    public class QuestionnaireApiView : BaseApiView
     {
         public QuestionnaireApiView(int page, int pageSize, int totalCount, IEnumerable<QuestionnaireApiItem> questionnaire, string order)
         {
@@ -17,6 +17,9 @@ namespace Web.Supervisor.Models.API
 
         public QuestionnaireApiView(QuestionnaireBrowseView questionnaireBrowseView)
         {
+            if (questionnaireBrowseView == null)
+                return;
+
             this.Offset = questionnaireBrowseView.Page;
             this.TotalCount = questionnaireBrowseView.TotalCount;
             this.Limit = questionnaireBrowseView.PageSize;
@@ -24,16 +27,7 @@ namespace Web.Supervisor.Models.API
                     item => new QuestionnaireApiItem(item.QuestionnaireId, item.Version, item.Title, item.LastEntryDate));
             this.Order = questionnaireBrowseView.Order;
         }
-
-        public IEnumerable<QuestionnaireApiItem> Questionnaires { get; private set; }
-
-        public string Order { get; private set; }
-
-        public int Limit { get; private set; }
-
-        public int TotalCount { get; private set; }
-
-        public int Offset { get; private set; }
         
+        public IEnumerable<QuestionnaireApiItem> Questionnaires { get; private set; }
     }
 }

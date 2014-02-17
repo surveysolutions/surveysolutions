@@ -115,7 +115,7 @@ namespace Main.Core.Entities.SubEntities
 
         public string QuestionText { get; set; }
 
-        public QuestionType QuestionType { get; set; }
+        public virtual QuestionType QuestionType { get; set; }
 
         public string StataExportCaption { get; set; }
 

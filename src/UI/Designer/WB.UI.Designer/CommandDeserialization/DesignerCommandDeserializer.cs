@@ -34,6 +34,9 @@ namespace WB.UI.Designer.CommandDeserialization
                         {"MoveQuestion", typeof (MoveQuestionCommand)},
                         {"AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand)},
                         {"RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand)},
+                        {"AddQRBarcodeQuestion", typeof (AddQRBarcodeQuestionCommand)},
+                        {"UpdateQRBarcodeQuestion", typeof (UpdateQRBarcodeQuestionCommand)},
+                        {"CloneQRBarcodeQuestion", typeof (CloneQRBarcodeQuestionCommand)},
                     };
             }
 

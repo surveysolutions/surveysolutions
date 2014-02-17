@@ -208,6 +208,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\INumericQuestion.cs">
       <Link>Entities\SubEntities\Question\INumericQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IQRBarcodeQuestion.cs">
+      <Link>Entities\SubEntities\Question\IQRBarcodeQuestion.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\ITextListQuestion.cs">
       <Link>Entities\SubEntities\Question\ITextListQuestion.cs</Link>
     </Compile>
@@ -216,6 +219,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\NumericQuestion.cs">
       <Link>Entities\SubEntities\Question\NumericQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\QRBarcodeQuestion.cs">
+      <Link>Entities\SubEntities\Question\QRBarcodeQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\SingleQuestion.cs">
       <Link>Entities\SubEntities\Question\SingleQuestion.cs</Link>

@@ -26,6 +26,8 @@ namespace Main.Core.Entities.SubEntities
         [Obsolete]
         AutoPropagate = 8,
 
-        TextList = 9
+        TextList = 9,
+
+        QRBarcode = 10
     }
 }
