@@ -12,7 +12,7 @@ using WB.UI.Shared.Android.Adapters;
 
 namespace WB.UI.Capi.Implementations.Activities
 {
-    [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DataCollectionDetailsActivity : DetailsActivity
     {
         protected override ContentFrameAdapter CreateFrameAdapter(InterviewItemId? screenId)

@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
@@ -7,17 +6,17 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "AddTextListQuestion")]
-    public class AddTextListQuestionCommand : AbstractListQuestionCommand
+    public class AddTextListQuestionCommand : AbstractAddQuestionCommand
     {
-        public AddTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
-            string title, string variableName,
-            bool isMandatory, string condition, string instructions,
-            Guid responsibleId, int? maxAnswerCount)
-            : base(responsibleId, questionnaireId, questionId, title, variableName, isMandatory, condition, instructions, maxAnswerCount)
+        public AddTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid parentGroupId, string title, string variableName,
+            bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+            : base(
+                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
+                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, parentGroupId: parentGroupId)
         {
-            this.GroupId = groupId;
+            this.MaxAnswerCount = maxAnswerCount;
         }
 
-        public Guid GroupId { get; private set; }
+        public int? MaxAnswerCount { get; private set; }
     }
 }
