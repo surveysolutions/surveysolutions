@@ -597,7 +597,6 @@ namespace CapiDataGenerator
 
         private static object GetAnswerByQuestion(IQuestion question)
         {
-            object answer = null;
             switch (question.QuestionType)
             {
                 case QuestionType.SingleOption:
@@ -605,12 +604,13 @@ namespace CapiDataGenerator
                     {
                         try
                         {
-                            answer = decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
+                            return decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
                                                CultureInfo.InvariantCulture);
                         }
                         catch{}
                     }
                     break;
+
                 case QuestionType.MultyOption:
                     if (question.Answers.Count > 0)
                     {
@@ -621,27 +621,33 @@ namespace CapiDataGenerator
                             try
                             {
                                 answers.Add(decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
-                                                      CultureInfo.InvariantCulture));
+                                    CultureInfo.InvariantCulture));
                             }
-                            catch{}
+                            catch {}
                         }
-                        answer = answers.Distinct().ToArray();
+                        return answers.Distinct().ToArray();
                     }
                     break;
+
                 case QuestionType.Numeric:
-                    answer = ((INumericQuestion)question).IsInteger ? _rand.Next(100) as object : new decimal(_rand.Next(100)) as object;
-                    break;
+                    var numericQuestion = (INumericQuestion) question;
+                    int maxValue = numericQuestion.MaxValue ?? 100;
+
+                    return numericQuestion.IsInteger
+                        ? _rand.Next(maxValue) as object
+                        : new decimal(_rand.Next(maxValue)) as object;
+
                 case QuestionType.DateTime:
-                    answer = new DateTime(_rand.Next(1940, 2003), _rand.Next(1, 13), _rand.Next(1, 29));
-                    break;
+                    return new DateTime(_rand.Next(1940, 2003), _rand.Next(1, 13), _rand.Next(1, 29));
+
                 case QuestionType.Text:
-                    answer = "value " + _rand.Next();
-                    break;
+                    return "value " + _rand.Next();
+
                 case QuestionType.AutoPropagate:
                     return new decimal(_rand.Next(((IAutoPropagate) question).MaxValue));
-                    break;
             }
-            return answer;
+
+            return null;
         }
 
         private void CreateAnswers(int answersCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions, IQuestionnaire questionnaire, State state)
