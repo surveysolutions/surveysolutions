@@ -25,12 +25,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 
         InterviewDataExportView IReadSideRepositoryWriter<InterviewDataExportView>.GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public void Remove(Guid id)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Store(InterviewDataExportView view, Guid id)
