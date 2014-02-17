@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
                     Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
-                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And20, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And20),
+                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And40, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40),
                     Verifier<IGroup>(QuestionnaireHaveAutopropagatedGroups, "WB0027", VerificationMessages.WB0027_QuestionnaireHaveAutopropagatedGroups),
                     Verifier<IQuestion>(QuestionnaireHaveAutopropagatedQuestions, "WB0028", VerificationMessages.WB0028_QuestionnaireHaveAutopropagatedQuestions),
                     Verifier<IGroup>(RosterHasRosterInsideItself, "WB0029", VerificationMessages.WB0029_RosterHasRoster),
@@ -247,7 +247,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 && IsMaxValueMissing(question);
         }
 
-        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And20(IQuestion question, QuestionnaireDocument questionnaire)
+        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And40(IQuestion question, QuestionnaireDocument questionnaire)
         {
             if (!IsRosterSizeQuestion(question, questionnaire))
                 return false;
@@ -256,7 +256,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             var rosterSizeQuestionMaxValue = GetRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
-            return !Enumerable.Range(1, 20).Contains(rosterSizeQuestionMaxValue.Value);
+            return !Enumerable.Range(1, 40).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
