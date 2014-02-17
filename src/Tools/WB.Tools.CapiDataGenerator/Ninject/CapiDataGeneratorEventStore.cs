@@ -38,15 +38,15 @@ namespace WB.Tools.CapiDataGenerator.Models
             var committedEvents = eventStream.Select(x => x.Payload);
             if (committedEvents.Any(isCapiEvent))
             {
-                this.StoreInternal(eventStream: eventStream, eventsequences: capiSequences, eventstore: capiEventStore);
+                StoreInternal(eventStream: eventStream, eventsequences: capiSequences, eventstore: capiEventStore);
             }
             if (committedEvents.Any(isSupervisorEvent))
             {
-                this.StoreInternal(eventStream: eventStream, eventsequences: supervisorSequences, eventstore: supevisorEventStore);
+                StoreInternal(eventStream: eventStream, eventsequences: supervisorSequences, eventstore: supevisorEventStore);
             }
         }
 
-        private void StoreInternal(UncommittedEventStream eventStream, IDictionary<Guid, long> eventsequences, IEventStore eventstore)
+        private static void StoreInternal(UncommittedEventStream eventStream, IDictionary<Guid, long> eventsequences, IEventStore eventstore)
         {
             var eventstream = new UncommittedEventStream(eventStream.CommitId);
 

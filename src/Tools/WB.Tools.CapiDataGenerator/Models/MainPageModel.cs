@@ -27,6 +27,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tools.CapiDataGenerator;
 using WB.UI.Shared.Web;
@@ -434,10 +435,10 @@ namespace CapiDataGenerator
                     {
                         AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
                         var users = CreateUsers(icount);
-                        var interviews = this.CreateInterviews(questionnaireDocument, qcount, users, onlyForSupervisor);
+                        var questionnaire = new Questionnaire(questionnaireDocument);
+                        var state = new State(questionnaire.GetFixedRosterGroups());
 
-                        IQuestionnaire questionnaire = new Questionnaire(questionnaireDocument);
-                        State state = new State(questionnaire.GetFixedRosterGroups());
+                        var interviews = this.CreateInterviews(questionnaireDocument, qcount, users, onlyForSupervisor, questionnaire, state);
 
                         CreateAnswers(acount, interviews, questions, questionnaire, state);
                         CreateComments(ccount, interviews, questions);
@@ -531,7 +532,8 @@ namespace CapiDataGenerator
             return users;
         }
 
-        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users, bool onlyForSupervisor)
+        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int interviewCount, List<UserLight> users, bool onlyForSupervisor,
+            IQuestionnaire questionnaire, State state)
         {
             Log("import template");
             commandService.Execute(new ImportFromDesigner(_headquarterUser.Id, template));
@@ -542,9 +544,9 @@ namespace CapiDataGenerator
             for (int i = 0; i < users.Count; i++)
             {
                 var interviewer = users[i];
-                for (int j = 0; j < questionnariesCount; j++)
+                for (int j = 0; j < interviewCount; j++)
                 {
-                    LogStatus("create interviews", (i * questionnariesCount) + j, questionnariesCount * users.Count);
+                    LogStatus("create interviews", (i * interviewCount) + j, interviewCount * users.Count);
 
                     Guid interviewId = Guid.NewGuid();
 
@@ -567,27 +569,44 @@ namespace CapiDataGenerator
             {
                 LogStatus("synchronize interview", i, interviews.Count);
 
-                var interview = interviews.ElementAt(i);
-                commandService.Execute(new SynchronizeInterviewCommand(interviewId: interview.Key, userId: interview.Value,
-                                                                       sycnhronizedInterview: new InterviewSynchronizationDto(
-                                                                           id: interview.Key,
-                                                                           status: InterviewStatus.InterviewerAssigned,
-                                                                           userId: interview.Value,
-                                                                           questionnaireId: template.PublicKey,
-                                                                           questionnaireVersion: 1,
-                                                                           answers: new AnsweredQuestionSynchronizationDto[0], 
-                                                                           disabledGroups: new HashSet<InterviewItemId>(), 
-                                                                           disabledQuestions: new HashSet<InterviewItemId>(), 
-                                                                           validAnsweredQuestions: new HashSet<InterviewItemId>(), 
-                                                                           invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
-                                                                           propagatedGroupInstanceCounts: null,
-                                                                           rosterGroupInstances: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                                                                           wasCompleted: false)));
-                changeLogManipulator.CreateOrReopenDraftRecord(interview.Key);
+                var interviewData = interviews.ElementAt(i);
+
+                commandService.Execute(new SynchronizeInterviewCommand(
+                    interviewId: interviewData.Key,
+                    userId: interviewData.Value,
+                    sycnhronizedInterview: new InterviewSynchronizationDto(
+                        id: interviewData.Key,
+                        status: InterviewStatus.InterviewerAssigned,
+                        userId: interviewData.Value,
+                        questionnaireId: template.PublicKey,
+                        questionnaireVersion: 1,
+                        answers: new AnsweredQuestionSynchronizationDto[0],
+                        disabledGroups: new HashSet<InterviewItemId>(),
+                        disabledQuestions: new HashSet<InterviewItemId>(),
+                        validAnsweredQuestions: new HashSet<InterviewItemId>(),
+                        invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
+                        propagatedGroupInstanceCounts: null,
+                        rosterGroupInstances: GetRosterGroupInstancesForSynchronization(questionnaire, state),
+                        wasCompleted: false)));
+
+                changeLogManipulator.CreateOrReopenDraftRecord(interviewData.Key);
                 UpdateProgress();
             }
 
             return interviews;
+        }
+
+        private static Dictionary<InterviewItemId, RosterSynchronizationDto[]> GetRosterGroupInstancesForSynchronization(IQuestionnaire questionnaire, State state)
+        {
+            return state
+                .FixedTitlesRosters
+                .ToDictionary(
+                    fixedTitleRosterId => new InterviewItemId(fixedTitleRosterId),
+                    fixedTitleRosterId =>
+                        questionnaire
+                            .GetFixedRosterTitles(fixedTitleRosterId)
+                            .Select((title, index) => new RosterSynchronizationDto(fixedTitleRosterId, EmptyPropagationVector, index, null, title))
+                            .ToArray());
         }
 
         private Dictionary<Guid, object> GetAnswersByFeaturedQuestions(IEnumerable<IQuestion> featuredQuestions)
