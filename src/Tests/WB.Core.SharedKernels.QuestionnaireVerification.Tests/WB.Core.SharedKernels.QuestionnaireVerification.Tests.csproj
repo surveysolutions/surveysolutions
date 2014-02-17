@@ -64,6 +64,13 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_used_as_linked_source_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_used_as_roster_size_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_have_validation_message.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_have_validation_expression.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_marked_as_prefilled.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_marked_as_filled_by_supervisor.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
