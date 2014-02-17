@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
@@ -53,7 +54,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             string variableName = variablesInfoStorage.QuestionIdToVariableMap[questionId];
 
-            var variableByQuestionnaireKey = RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
+            var variableByQuestionnaireKey = SharedKernels.DataCollection.Utils.RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
 
             var collectedAnswers = this.answersByVariableStorage.GetById(variableByQuestionnaireKey);
 
@@ -90,7 +91,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             string variableName = variablesInfoStorage.QuestionIdToVariableMap[questionId];
 
-            var variableByQuestionnaireKey = RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
+            var variableByQuestionnaireKey = SharedKernels.DataCollection.Utils.RepositoryKeysHelper.GetVariableByQuestionnaireKey(variableName, questionnaireVersiondKey);
 
             var collectedAnswers =  this.answersByVariableStorage.GetById(variableByQuestionnaireKey) ?? new AnswersByVariableCollection();
 
