@@ -95,6 +95,12 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
+        public QuestionnaireQuestionInfoView QuestionInfo(QuestionnaireQuestionInfoInputModel input)
+        {
+            return questionInforFactory.Load(input);
+        }
+
+        [HttpPost]
         public SupervisorSurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveyListViewModel data)
         {
             var input = new SupervisorSurveysAndStatusesReportInputModel(this.GlobalInfo.GetCurrentUser().Id);

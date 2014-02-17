@@ -1,5 +1,5 @@
 ﻿using Machine.Specifications;
-using RepositoryKeysHelper = Main.Core.Utility.RepositoryKeysHelper;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace Main.Core.Tests.Utils
 {

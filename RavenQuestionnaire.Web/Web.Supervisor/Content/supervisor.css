@@ -4657,7 +4657,25 @@ a.pseudo-link:hover {
     top: 0;
     bottom: 0;
     left: 0;
-    width: 200px;
+    width: 226px;
     background: white;
     z-index: 100;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+    -webkit-box-shadow: 5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow:    5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+box-shadow:         5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+}
+
+#report-builder .bottom-pane{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+     padding: 10px;
+    -moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
 }

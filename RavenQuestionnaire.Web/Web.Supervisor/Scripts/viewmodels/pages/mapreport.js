@@ -1,11 +1,15 @@
-﻿Supervisor.VM.MapReport = function (questionnaireUrl, commandExecutionUrl) {
+﻿Supervisor.VM.MapReport = function (commandExecutionUrl, questionnaireUrl, questionsUrl, mapReportUrl) {
     Supervisor.VM.MapReport.superclass.constructor.apply(this, [commandExecutionUrl]);
 
     var self = this;
 
     self.questionnaireUrl = questionnaireUrl;
+    self.questionsUrl = questionsUrl;
+    self.mapReportUrl = mapReportUrl;
 
     self.map = null;
+    self.mapClustererOptions = { gridSize: 50, maxZoom: 15 };
+    self.mapClusterer = null;
 
     self.initializeMap = function() {
 
@@ -27,6 +31,8 @@
         };
 
         self.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+       
+        self.mapClusterer = new MarkerClusterer(self.map, [], self.mapClustererOptions);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error);
@@ -46,34 +52,7 @@
 
         function centerMap(center) {
             self.map.setCenter(center);
-            //var args = {
-            //    variable: "GeoLocation",
-            //    questionnaireId: "ad88a56c-f041-4614-9095-79dda90bfc76",
-            //    questionnaireVersion: 1
-            //};
-
-            //var url = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "MapReport" })';
-            //$.post(url, args, null, "json").done(function (data) {
-            //    var locations = data.Answers;
-            //    var bounds = new google.maps.LatLngBounds();
-            //    for (i = 0; i < locations.length; i++) {
-            //        var points = locations[i].split(';');
-            //        var marker = new google.maps.Marker({
-            //            position: new google.maps.LatLng(points[0] * 1, points[1] * 1),
-            //            map: map
-            //        });
-            //        bounds.extend(marker.getPosition());
-            //    }
-
-            //    map.fitBounds(bounds);
-
-            //}).fail(function (data) {
-            //    console.log(data);
-
-            //}).always(function (data) {
-
-            //    console.log(data);
-            //});
+           
         }
     };
 
@@ -84,9 +63,26 @@
     self.questionnaires = ko.observable(null);
     self.selectedQuestionnaire = ko.observable();
     self.selectedVersion = ko.observable();
+    self.selectedVariable = ko.observable();
 
     self.questionnaireVersions = ko.computed(function () {
         return self.selectedQuestionnaire() ? self.selectedQuestionnaire().Versions.sort() : null;
+    });
+
+    self.questionnaireVariables = ko.observableArray(null);
+
+    self.selectedVersion.subscribe(function (value) {
+        self.questionnaireVariables(null);
+
+        var params = {
+            QuestionType: 'GpsCoordinates',
+            QuestionnaireId: self.selectedQuestionnaire().QuestionnaireId,
+            QuestionnaireVersion: self.selectedVersion()
+        };
+
+        self.SendRequest(self.questionsUrl, params, function (data) {
+            self.questionnaireVariables(data.Variables);
+        });
     });
   
     self.TotalCount = ko.observable();
@@ -107,11 +103,62 @@
 
         self.SendRequest(self.questionnaireUrl, params, function (data) {
             self.questionnaires(data.Items);
-            self.totalCount(data.TotalCount);
+            self.TotalCount(data.TotalCount);
         });
     };
 
+    self.markers = {};
+    self.showPointsOnMap = function () {
 
+        var key = self.selectedVariable().Variable + "-" + self.selectedQuestionnaire().QuestionnaireId + "-" + self.selectedVersion();
+
+        if (self.markers[key]) {
+
+        } else {
+            var params = {
+                Variable: self.selectedVariable().Variable,
+                QuestionnaireId: self.selectedQuestionnaire().QuestionnaireId,
+                QuestionnaireVersion: self.selectedVersion()
+            };
+
+            self.SendRequest(self.mapReportUrl, params, function(data) {
+                var locations = data.Answers;
+
+                if (locations.length == 0)
+                    return;
+
+                var bounds = new google.maps.LatLngBounds();
+
+                var markers = [];
+
+                for (i = 0; i < locations.length; i++) {
+                    var points = locations[i].split(';');
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(points[0] * 1, points[1] * 1),
+                        //map: self.map
+                    });
+                    markers.push(marker);
+                    bounds.extend(marker.getPosition());
+                }
+
+                self.mapClusterer.addMarkers(markers);
+                self.markers[key] = markers;
+                self.map.fitBounds(bounds);
+            });
+        }
+    };
+
+    self.clearAllMarkers = function() {
+        for (var markersKey in self.markers) {
+            for (var i = 0; i < self.markers[markersKey].length; i++) {
+                self.markers[markersKey][i].setMap(null);
+            }
+            self.markers[markersKey].length = 0;
+
+        }
+        self.markers = {};
+        self.mapClusterer.clearMarkers();
+    };
     $('body').addClass('map-report');
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.MapReport, Supervisor.VM.BasePage);

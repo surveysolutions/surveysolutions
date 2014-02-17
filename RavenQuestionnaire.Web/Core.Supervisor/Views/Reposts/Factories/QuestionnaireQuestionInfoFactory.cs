@@ -24,14 +24,24 @@ namespace Core.Supervisor.Views.Reposts.Factories
         public QuestionnaireQuestionInfoView Load(QuestionnaireQuestionInfoInputModel input)
         {
             var questionnaire = questionnaireStore.GetById(input.QuestionnaireId, input.QuestionnaireVersion);
-            return new QuestionnaireQuestionInfoView()
+
+            if (questionnaire == null)
+                return new QuestionnaireQuestionInfoView();
+
+            var questionnaireQuestionInfoItems = questionnaire.Questionnaire
+                .Find<IQuestion>(question => true)
+                .Where(x => !input.QuestionType.HasValue || x.QuestionType == input.QuestionType.Value)
+                .Select(x => new QuestionnaireQuestionInfoItem
+                {
+                    Variable = x.StataExportCaption,
+                    Type = x.QuestionType,
+                    Id = x.PublicKey
+                })
+                .ToList();
+
+            return new QuestionnaireQuestionInfoView
             {
-                Variables = questionnaire.Questionnaire.Find<IQuestion>(question => true).ToDictionary(x => x.PublicKey, x =>
-                    new QuestionnaireQuestionInfoItem
-                    {
-                        Variable = x.StataExportCaption,
-                        Type = x.QuestionType
-                    })
+                Variables = questionnaireQuestionInfoItems
             };
         }
     }
