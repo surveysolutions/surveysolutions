@@ -59,7 +59,6 @@
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />
     <Compile Include="Implementation\ReadSide\ViewWithSequence.cs" />
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
-    <Compile Include="Implementation\StorageStrategy\ReadSideStorageStrategyExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

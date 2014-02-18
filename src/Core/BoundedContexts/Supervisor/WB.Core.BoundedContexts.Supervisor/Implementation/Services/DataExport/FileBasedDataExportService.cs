@@ -141,15 +141,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return fileSystemAccessor.CombinePath(path, string.Format("exported_data_{0}_{1}", questionnaireId, version));
         }
 
-        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i =0)
+        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
         {
             string fileNameWithoutInvalidFileNameChars = fileSystemAccessor.MakeValidFileName(name);
-            string fileNameWithNumber = string.Concat(fileNameWithoutInvalidFileNameChars,
-                                                         i == 0 ? (object)string.Empty : i);
+            var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(100).ToArray());
+            string fileNameWithNumber = string.Concat(fileNameShortened,
+                i == 0 ? (object) string.Empty : i);
 
             return !createdFileNames.Contains(fileNameWithNumber)
-                       ? fileNameWithNumber
-                       : this.CreateValidFileName(name, createdFileNames, i + 1);
+                ? fileNameWithNumber
+                : this.CreateValidFileName(name, createdFileNames, i + 1);
         }
     }
 }

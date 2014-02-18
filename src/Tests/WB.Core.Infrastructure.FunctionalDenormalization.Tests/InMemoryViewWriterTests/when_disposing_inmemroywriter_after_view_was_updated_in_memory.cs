@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.InMemoryViewWri
             oldView = Mock.Of<IReadSideRepositoryEntity>();
             baseReadSideRepositoryWriterMock = new Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>>();
 
-            baseReadSideRepositoryWriterMock.Setup(x => x.GetById(viewId)).Returns(oldView);
+            baseReadSideRepositoryWriterMock.Setup(x => x.GetById(viewId.FormatGuid())).Returns(oldView);
 
             newView = Mock.Of<IReadSideRepositoryEntity>();
             inMemoryViewWriter = CreateInMemoryViewWriter(baseReadSideRepositoryWriterMock.Object, viewId);
@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.InMemoryViewWri
         Because of = () => inMemoryViewWriter.Dispose();
 
         It should_call_store_method_with_updated_view_of_base_readSideRepositoryWriter = () =>
-            baseReadSideRepositoryWriterMock.Verify(x => x.Store(newView, viewId), Times.Once());
+            baseReadSideRepositoryWriterMock.Verify(x => x.Store(newView, viewId.FormatGuid()), Times.Once());
 
         private static InMemoryViewWriter<IReadSideRepositoryEntity> inMemoryViewWriter;
         private static Guid viewId;

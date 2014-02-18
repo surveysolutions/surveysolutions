@@ -18,17 +18,17 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.AbstractFunctio
         {
             eventSourceId = Guid.NewGuid();
             readSideRepositoryWriterMock=new Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>>();
-            readSideRepositoryWriterMock.Setup(x => x.GetById(eventSourceId)).Returns(CreateReadSideRepositoryEntity());
+            readSideRepositoryWriterMock.Setup(x => x.GetById(eventSourceId.FormatGuid())).Returns(CreateReadSideRepositoryEntity());
             testableFunctionalEventHandler = CreateAbstractFunctionalEventHandler(readSideRepositoryWriterMock.Object);
         };
 
         Because of = () => testableFunctionalEventHandler.Handle(CreatePublishableEvents(10), eventSourceId);
 
         It should_readSideRepositoryWriters_method_GetById_called_only_once_at_firts_read = () =>
-            readSideRepositoryWriterMock.Verify(x => x.GetById(eventSourceId), Times.Once());
+            readSideRepositoryWriterMock.Verify(x => x.GetById(eventSourceId.FormatGuid()), Times.Once());
 
         It should_readSideRepositoryWriters_method_Store_called_once = () =>
-            readSideRepositoryWriterMock.Verify(x => x.Store(Moq.It.IsAny<IReadSideRepositoryEntity>(), eventSourceId), Times.Once());
+            readSideRepositoryWriterMock.Verify(x => x.Store(Moq.It.IsAny<IReadSideRepositoryEntity>(), eventSourceId.FormatGuid()), Times.Once());
 
         It should_count_of_updates_be_equal_to_10 = () =>
            testableFunctionalEventHandler.CountOfUpdates.ShouldEqual(10);
