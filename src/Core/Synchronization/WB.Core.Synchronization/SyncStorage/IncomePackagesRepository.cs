@@ -9,8 +9,10 @@ using Ncqrs;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -77,10 +79,22 @@ namespace WB.Core.Synchronization.SyncStorage
             var fileContent = File.ReadAllText(fileName);
 
             var items = GetContentAsItem<AggregateRootEvent[]>(fileContent);
-
-            StoreEvents(id, items, sequence);
+            if(items.Length>0)
+                StoreEvents(id, items, sequence);
 
             File.Delete(fileName);
+        }
+
+        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
+        {
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            var incomeEvents = this.BuildEventStreams(stream, sequence);
+
+            eventStore.Store(incomeEvents);
+            bus.Publish(incomeEvents);
+            commandService.Execute(new ReevaluateSynchronizedInterview(id));
         }
 
         public IEnumerable<Guid> GetListOfUnhandledPackages()
@@ -111,25 +125,6 @@ namespace WB.Core.Synchronization.SyncStorage
                 settings);
 
             return item;
-        }
-
-        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
-        {
-            var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            var events = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
-            var latestEventSequence = events.IsEmpty ? sequence : events.Last().EventSequence;
-            var incomeEvents = this.BuildEventStreams(stream, latestEventSequence);
-            
-            if (!incomeEvents.Any())
-                return;
-
-            eventStore.Store(incomeEvents);
-
-            using (new UnpublishedEventContext())
-            {
-                commandService.Execute(new ReevaluateSynchronizedInterview(id));
-            }
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
