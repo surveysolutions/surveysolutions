@@ -234,4 +234,7 @@
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
     <value>Question has option(s) with empty value</value>
   </data>
+  <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>Question has custom enablement condition referencing question with deeper roster level.</value>
+  </data>
 </root>
