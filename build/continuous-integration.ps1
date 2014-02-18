@@ -23,6 +23,6 @@ if ($Deep) {
 }
 catch {
     Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred']"
-    Write-Host "##teamcity[buildStatus status='FAILURE' text='Unexpected error occurred']"
+    Write-Host "##teamcity[buildProblem description='Unexpected error occurred']"
     throw
 }

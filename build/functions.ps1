@@ -45,7 +45,7 @@ function CheckCompilationDebugFlagInWebConfigs() {
     $areAllWebConfigsCorrect = $incorrectWebConfigs.Count -eq 0
 
     if (-not $areAllWebConfigsCorrect) {
-        Write-Host "##teamcity[buildStatus status='FAILURE' text='Following $($incorrectWebConfigs.Count) web.config(s) have compilation debug flag set to true: $($incorrectWebConfigs -join ', ')']"
+        Write-Host "##teamcity[buildProblem description='Following $($incorrectWebConfigs.Count) web.config(s) have compilation debug flag set to true: $($incorrectWebConfigs -join ', ')']"
     }
 
     Write-Host "##teamcity[blockClosed name='Checking web.configs']"
@@ -101,7 +101,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
         Write-Host "##teamcity[message status='ERROR' text='Failed to build solution $Solution']"
 
         if (-not $MultipleSolutions) {
-            Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build solution $Solution']"
+            Write-Host "##teamcity[buildProblem description='Failed to build solution $Solution']"
         }
     }
 
@@ -140,7 +140,7 @@ function BuildSolutions($BuildConfiguration,  [switch] $ClearBinAndObjFoldersBef
 
     $wereAllSolutionsBuiltSuccessfully = $failedSolutions.Count -eq 0
     if (-not $wereAllSolutionsBuiltSuccessfully) {
-        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $($failedSolutions.Count) solution(s): $($failedSolutions -join ', ')']"
+        Write-Host "##teamcity[buildProblem description='Failed to build $($failedSolutions.Count) solution(s): $($failedSolutions -join ', ')']"
     }
 
     Write-Host "##teamcity[blockClosed name='Building solutions']"
