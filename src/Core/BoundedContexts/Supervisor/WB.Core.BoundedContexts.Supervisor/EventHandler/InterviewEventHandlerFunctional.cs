@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -73,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             if (vector.Length == 0)
                 return "#";
-            return string.Join(",", vector);
+            return string.Join(",", vector.Select(v=>v.ToString("0.############################", CultureInfo.InvariantCulture)));
         }
 
         private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId)

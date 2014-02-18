@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Ncqrs;
@@ -11,25 +12,37 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 {
     public abstract class AbstractFunctionalEventHandler<T> : IFunctionalEventHandler<T> where T : class, IReadSideRepositoryEntity
     {
-        private IStorageStrategy<T> storageStrategy;
+        private IReadSideRepositoryWriter<T> readsideRepositoryWriter;
+
         protected AbstractFunctionalEventHandler(IReadSideRepositoryWriter<T> readsideRepositoryWriter)
         {
-            this.storageStrategy = new ReadSideStorageStrategy<T>(readsideRepositoryWriter);
+            this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
 
         public void Handle(IPublishableEvent evt)
         {
-            Handle(evt, storageStrategy);
+            Handle(evt, readsideRepositoryWriter);
         }
 
-        public void Handle(IPublishableEvent evt, IStorageStrategy<T> storage)
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+        {
+            using (var inMemoryStorage = new InMemoryViewWriter<T>(this.readsideRepositoryWriter, eventSourceId))
+            {
+                foreach (var publishableEvent in publishableEvents)
+                {
+                    Handle(publishableEvent, inMemoryStorage);
+                }
+            }
+        }
+
+        public void Handle(IPublishableEvent evt, IReadSideRepositoryWriter<T> storage)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-
+            
             if (this.IsUpgrader(evt))
             {
                 T currentState = this.GetViewById(evt.EventSourceId, storage);
-                var newState = (T)this.GetType().GetMethod("Update", new Type[] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                var newState = (T)this.GetType().GetMethod("Update", new [] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
                 this.SaveView(evt.EventSourceId, newState, storage);
                 return;
             }
@@ -38,7 +51,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             {
                 var newObject =
                     (T)this.GetType()
-                        .GetMethod("Create", new Type[] { eventType })
+                        .GetMethod("Create", new [] { eventType })
                         .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
                 this.SaveView(evt.EventSourceId, newObject, storage);
                 return;
@@ -47,7 +60,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             if (this.IsDeleter(evt))
             {
                 T currentState = this.GetViewById(evt.EventSourceId, storage);
-                this.GetType().GetMethod("Delete", new Type[] { eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                this.GetType().GetMethod("Delete", new [] { eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
                 this.SaveView(evt.EventSourceId, currentState, storage);
             }
         }
@@ -75,14 +88,14 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             oldEventBus.RegisterHandler(evntType, this.Handle);
         }
 
-        private void SaveView(Guid id, T newState, IStorageStrategy<T> storage)
+        private void SaveView(Guid id, T newState, IReadSideRepositoryWriter<T> storage)
         {
-            storage.AddOrUpdate(newState, id);
+            storage.Store(newState, id);
         }
 
-        private T GetViewById(Guid id, IStorageStrategy<T> storage)
+        private T GetViewById(Guid id, IReadSideRepositoryWriter<T> storage)
         {
-            return storage.Select(id);
+            return storage.GetById(id);
         }
 
         protected PublishedEvent CreatePublishedEvent(IPublishableEvent evt)
@@ -111,11 +124,14 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 
         public string Name { get { return this.GetType().Name; } }
 
-        public abstract Type[] UsesViews { get; }
-
         public virtual Type[] BuildsViews
         {
             get { return new[] { typeof(T) }; }
+        }
+
+        public virtual Type[] UsesViews
+        {
+            get { return new Type[0]; }
         }
     }
 }
