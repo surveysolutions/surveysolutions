@@ -228,22 +228,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
         }
 
-        protected static IPublishedEvent<QRBarcodeQuestionAdded> CreateQRBarcodeQuestionAddedEvent(
-            Guid questionId, Guid parentGroupId, string conditionExpression, string instructions, bool isMandatory, string title, string variableName)
-        {
-            return ToPublishedEvent(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = parentGroupId,
-                ConditionExpression = conditionExpression,
-                IsMandatory = isMandatory,
-                Instructions = instructions,
-                Title = title,
-                VariableName = variableName
-            });
-        }
-
-
         protected static IPublishedEvent<TextListQuestionCloned> CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
         {
             return ToPublishedEvent(new TextListQuestionCloned
