@@ -7,12 +7,12 @@ namespace CapiDataGenerator
     internal class State
     {
         public HashSet<Guid> FixedTitlesRosters { get; private set; }
-        public Dictionary<Guid, decimal[]> RosterKeys { get; private set; }
+        public Dictionary<Guid, int> NumericRosterInstanceCounts { get; private set; }
 
         public State(IEnumerable<Guid> fixedTitlesRosters)
         {
-            FixedTitlesRosters = fixedTitlesRosters.ToHashSet();
-            this.RosterKeys = new Dictionary<Guid, decimal[]>();
+            this.FixedTitlesRosters = fixedTitlesRosters.ToHashSet();
+            this.NumericRosterInstanceCounts = new Dictionary<Guid, int>();
         }
     }
 }
