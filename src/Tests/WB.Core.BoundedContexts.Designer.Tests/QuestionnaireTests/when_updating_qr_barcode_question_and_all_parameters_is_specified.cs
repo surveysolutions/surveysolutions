@@ -7,18 +7,28 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_adding_qr_barcode_question_and_all_parameters_is_specified : QuestionnaireTestsContext
+    internal class when_updating_qr_barcode_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-
+            questionnaire.Apply(new QRBarcodeQuestionAdded()
+            {
+                QuestionId = questionId,
+                ParentGroupId = chapterId,
+                Title = "old title",
+                VariableName = "old_variable_name",
+                IsMandatory = false,
+                Instructions = "old instructions",
+                ConditionExpression = "old condition",
+                ResponsibleId = responsibleId
+            });
             eventContext = new EventContext();
         };
 
         Because of = () =>            
-                questionnaire.AddQRBarcodeQuestion(questionId: questionId, parentGroupId: chapterId, title: "title",
+                questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question", isMandatory: isMandatory, condition: condition, instructions: instructions,
                     responsibleId: responsibleId);
 
@@ -29,34 +39,30 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         It should_raise_QRBarcodeQuestionAdded_event = () =>
-            eventContext.ShouldContainEvent<QRBarcodeQuestionAdded>();
+            eventContext.ShouldContainEvent<QRBarcodeQuestionUpdated>();
 
         It should_raise_QRBarcodeQuestionAdded_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .QuestionId.ShouldEqual(questionId);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_ParentGroupId_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
-                .ParentGroupId.ShouldEqual(chapterId);
-
         It should_raise_QRBarcodeQuestionAdded_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .VariableName.ShouldEqual(variableName);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_title_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .Title.ShouldEqual(title);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_condition_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .ConditionExpression.ShouldEqual(condition);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_ismandatory_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .IsMandatory.ShouldEqual(isMandatory);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .Instructions.ShouldEqual(instructions);
 
         private static EventContext eventContext;

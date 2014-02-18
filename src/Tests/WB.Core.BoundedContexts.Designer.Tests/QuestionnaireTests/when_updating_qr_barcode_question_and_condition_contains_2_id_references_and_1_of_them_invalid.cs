@@ -1,22 +1,30 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_adding_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
+    internal class when_updating_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NumericQuestionAdded() { PublicKey = existingQuestionId, GroupPublicKey = chapterId });
+            questionnaire.Apply(new QRBarcodeQuestionAdded()
+            {
+                QuestionId = questionId,
+                ParentGroupId = chapterId,
+                Title = "old title",
+                VariableName = "old_variable_name",
+                IsMandatory = false,
+                Instructions = "old instructions",
+                ConditionExpression = "old condition",
+                ResponsibleId = responsibleId
+            });
 
             RegisterServiceLocator();
             RegisterExpressionProcessorMock(conditionExpression, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
@@ -25,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.AddQRBarcodeQuestion(questionId: questionId, parentGroupId: chapterId, title: "title",
+                questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "var", isMandatory: false, condition: conditionExpression, instructions: null,
                     responsibleId: responsibleId));
 

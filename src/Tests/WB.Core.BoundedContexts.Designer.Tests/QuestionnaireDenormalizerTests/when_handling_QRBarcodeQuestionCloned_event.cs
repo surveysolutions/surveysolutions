@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
@@ -12,24 +13,39 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
-    internal class when_handling_QRBarcodeQuestionAdded_event : QuestionnaireDenormalizerTestsContext
+    internal class when_handling_QRBarcodeQuestionCloned_event : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>
         {
-            @event = ToPublishedEvent(new QRBarcodeQuestionAdded()
+            @event = ToPublishedEvent(new QRBarcodeQuestionCloned()
             {
                 QuestionId = questionId,
-                ParentGroupId = parentGroupId,
                 ConditionExpression = condition,
                 IsMandatory = isMandatory,
                 Instructions = instructions,
                 Title = title,
-                VariableName = variableName
+                VariableName = variableName,
+                ParentGroupId = parentGroupId,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex
             });
 
             var questionnaireDocument = CreateQuestionnaireDocument(new[]
             {
-                CreateGroup(groupId: parentGroupId)
+                CreateGroup(groupId: parentGroupId,
+                    children: new IComposite[]
+                    {
+                        new NumericQuestion(), 
+                        new QRBarcodeQuestion()
+                        { 
+                            PublicKey = sourceQuestionId, 
+                            StataExportCaption = "old_var_name",
+                            Mandatory = false,
+                            QuestionText = "old title",
+                            ConditionExpression = "old condition",
+                            Instructions = "old instructions"
+                        }
+                    })
             });
 
             var documentStorage = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
@@ -51,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should__be_added_new_qr_barcode_question_to_questionnaire_document_view = ()=>
+        It should__not_be_null_qr_barcode_question_from_questionnaire__ = ()=>
             GetQRBarcodeQuestionById().ShouldNotBeNull();
 
         It should_set_questionId_as_default_value_for__PublicKey__field = () =>
@@ -61,7 +77,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
            questionnaireView.Find<IGroup>(parentGroupId).ShouldNotBeNull();
 
         It should_parent_group_contains_qr_barcode_question = () =>
-           questionnaireView.Find<IGroup>(parentGroupId).Children[0].PublicKey.ShouldEqual(questionId);
+           questionnaireView.Find<IGroup>(parentGroupId).Find<IQRBarcodeQuestion>(questionId);
+
+        It should_set_target_index_to_2 = () =>
+           questionnaireView.Find<IGroup>(parentGroupId).Children.IndexOf(GetQRBarcodeQuestionById()).ShouldEqual(targetIndex);
 
         It should_set_null_as_default_value_for__ValidationExpression__field = () =>
            GetQRBarcodeQuestionById().ValidationExpression.ShouldBeNull();
@@ -100,13 +119,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         private static QuestionnaireDocument questionnaireView;
         private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<QRBarcodeQuestionAdded> @event;
+        private static IPublishedEvent<QRBarcodeQuestionCloned> @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid sourceQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string variableName = "qr_barcode_question";
         private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";
+        private static int targetIndex = 2;
     }
 }
