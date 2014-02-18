@@ -76,3 +76,22 @@
   </Target>
   -->
 </Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
