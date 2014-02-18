@@ -575,18 +575,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return null;
             }
 
-            IQuestion questionsReferencedInValidation = GetQuestionByIdentifier(identifier, questionnaire);
+            IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
 
-            if (questionsReferencedInValidation == null)
+            if (questionsReferencedInExpression == null)
             {
                 return notRecognizedParameterError(itemWithExpression);
             }
 
-            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(questionsReferencedInValidation,
-                vectorOfRosterQuestionsForQuestionWithExpression, questionnaire))
+            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(questionsReferencedInExpression, vectorOfRosterQuestionsForQuestionWithExpression, questionnaire))
             {
                 return referencesQuestionWithDeeperPropagationLevelError(
-                    itemWithExpression, questionsReferencedInValidation);
+                    itemWithExpression, questionsReferencedInExpression);
             }
 
             return null;
@@ -822,10 +821,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
         }
 
-        private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IComposite question, QuestionnaireDocument questionnaire)
+        private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IComposite item, QuestionnaireDocument questionnaire)
         {
+            IGroup parent = item is IQuestion
+                ? (IGroup) item.GetParent()
+                : (IGroup) item;
+
             Guid?[] rosterSizeQuestions =
-                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), questionnaire)
+                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parent, questionnaire)
                     .Where(IsRosterGroup)
                     .Select(g => g.RosterSizeQuestionId)
                     .ToArray();
