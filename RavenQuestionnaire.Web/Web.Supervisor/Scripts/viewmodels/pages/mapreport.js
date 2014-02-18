@@ -108,10 +108,11 @@
     };
 
     self.markers = {};
+    self.markersSetsInfo = ko.observableArray([]);
     self.showPointsOnMap = function () {
 
         var key = self.selectedVariable().Variable + "-" + self.selectedQuestionnaire().QuestionnaireId + "-" + self.selectedVersion();
-
+      
         if (self.markers[key]) {
 
         } else {
@@ -144,8 +145,27 @@
                 self.mapClusterer.addMarkers(markers);
                 self.markers[key] = markers;
                 self.map.fitBounds(bounds);
+
+                self.markersSetsInfo.push({
+                    id: key,
+                    variable: self.selectedVariable().Variable,
+                    version: self.selectedVersion(),
+                    title: self.selectedQuestionnaire().Title,
+                    questionnaireId: self.selectedQuestionnaire().QuestionnaireId,
+                    count: markers.length
+                });
             });
         }
+    };
+    self.removeMarkersSet = function (markerSet) {
+        var key = markerSet.id;
+        for (var i = 0; i < self.markers[key].length; i++) {
+            self.mapClusterer.removeMarker(self.markers[key][i]);
+        }
+        self.markers[key].length = 0;
+        delete self.markers[key];
+
+        self.markersSetsInfo.remove(markerSet);
     };
 
     self.clearAllMarkers = function() {
@@ -154,10 +174,11 @@
                 self.markers[markersKey][i].setMap(null);
             }
             self.markers[markersKey].length = 0;
-
+           
         }
         self.markers = {};
         self.mapClusterer.clearMarkers();
+        self.markersSetsInfo.removeAll();
     };
     $('body').addClass('map-report');
 };

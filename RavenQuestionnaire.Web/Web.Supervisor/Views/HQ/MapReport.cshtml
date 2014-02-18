@@ -7,30 +7,43 @@
 }
 
 <div id="report-builder">
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="control-group">
-                <label class="control-label" for="questionnaire">Questionnaire</label>
-                <div class="controls">
-                    <select class="input-block-level" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+    <div class="central-pane">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="control-group">
+                    <label class="control-label" for="questionnaire">Questionnaire</label>
+                    <div class="controls">
+                        <select class="input-block-level" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="version">Version</label>
-                <div class="controls">
-                    <select class="input-block-level" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : questionnaireVersions"></select>
+                <div class="control-group">
+                    <label class="control-label" for="version">Version</label>
+                    <div class="controls">
+                        <select class="input-block-level" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : questionnaireVersions"></select>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="version">Variables</label>
-                <div class="controls">
-                    <select class="input-block-level" id="version" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : questionnaireVariables"></select>
+                <div class="control-group">
+                    <label class="control-label" for="version">Variables</label>
+                    <div class="controls">
+                        <select class="input-block-level" id="version" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : questionnaireVariables"></select>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <button class="input-block-level btn" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
-                    
+                <div class="control-group">
+                    <div class="controls">
+                        <button class="input-block-level btn" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
+
+                    </div>
+                </div>
+                <div class="currently-on-map" data-bind="visible: markersSetsInfo().length > 0">
+                    <h4>Currently on map</h4>
+                    <ul class="unstyled" data-bind="foreach: markersSetsInfo">
+                        <li>
+                            <button class="close" data-bind="click: $root.removeMarkersSet">&times;</button>
+                            <span data-bind="text: title"></span>
+                            (ver.&nbsp;<span data-bind="text: version"></span>, var. <span data-bind="text: variable"></span>)
+                            <span class="label"><span class="label" data-bind="text: count"></span>&nbsp;<span data-bind="visible: count == 1">point</span><span data-bind="visible: count > 1 || count == 0">points</span></span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -47,12 +60,12 @@
 
 @section scripts
 {
-   
+
     @Scripts.Render("~/js/list")
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
     </script>
-@Scripts.Render("~/Scripts/lodash.underscore.min.js", "~/Scripts/markerclusterer_compiled.js")
+    @Scripts.Render("~/Scripts/lodash.underscore.min.js", "~/Scripts/markerclusterer_compiled.js")
     @Scripts.Render("~/Scripts/viewmodels/pages/mapreport.js")
     <script type="text/javascript">
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
