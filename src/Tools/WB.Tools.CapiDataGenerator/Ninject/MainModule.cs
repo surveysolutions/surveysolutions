@@ -114,7 +114,7 @@ namespace CapiDataGenerator
 
             var inProcessEventDispatcher = new CustomInProcessEventDispatcher(true);
 
-            var bus = new NcqrCompatibleEventDispatcher(eventStore, () => inProcessEventDispatcher);
+            var bus = new NcqrCompatibleEventDispatcher(() => inProcessEventDispatcher);
 
             this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
