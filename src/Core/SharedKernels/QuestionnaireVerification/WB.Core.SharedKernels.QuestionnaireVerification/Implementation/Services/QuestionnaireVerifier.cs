@@ -822,10 +822,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
         }
 
-        private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IComposite question, QuestionnaireDocument questionnaire)
+        private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IComposite item, QuestionnaireDocument questionnaire)
         {
+            IGroup parent = item is IQuestion
+                ? (IGroup) item.GetParent()
+                : (IGroup) item;
+
             Guid?[] rosterSizeQuestions =
-                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), questionnaire)
+                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parent, questionnaire)
                     .Where(IsRosterGroup)
                     .Select(g => g.RosterSizeQuestionId)
                     .ToArray();
