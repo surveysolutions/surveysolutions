@@ -142,23 +142,7 @@ namespace Web.Supervisor.Code
 
                             UpdateStatusMessage(string.Format("Revalidated interviews {0}. ", processedInterviewsCount + 1) + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
 
-                            List<CommittedEvent> events;
-
-                            using (var eventContext = new UnpublishedEventContext())
-                            {
-                                this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
-                                events = eventContext.Events.ToList();
-                            }
-
-                            using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<InterviewData>>(this.interviewsDataWriter, interviewItemId.InterviewId))
-                            {
-                                bus.PublishByEventSource(events, inMemoryStorage);
-                            }
-
-                            using (var inMemoryStorage = new InMemoryViewStorage<InterviewSummary>(this.interviewsSummaryWriter, interviewItemId.InterviewId))
-                            {
-                                bus.PublishByEventSource(events, inMemoryStorage);
-                            }
+                            this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
 
                             processedInterviewsCount++;
                         }
