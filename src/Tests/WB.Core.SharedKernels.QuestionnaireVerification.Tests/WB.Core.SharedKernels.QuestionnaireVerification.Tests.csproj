@@ -130,6 +130,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitution_reference_of_not_supported_type.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_referenced_by_question_with_substitutions_does_not_exist.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_which_size_source_is_text_list_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_with_nested_plain_group.cs" />
   </ItemGroup>
