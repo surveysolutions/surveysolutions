@@ -28,7 +28,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.NcqrCompatibleE
 
         Because of = () => ncqrCompatibleEventDispatcher.Publish(eventsToPublish);
 
-        private It should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream = () =>
+        It should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream = () =>
             functionalStyleEventHandlerMock.Verify(x => x.Handle(eventsToPublish, eventSourceId), Times.Never());
 
         private static NcqrCompatibleEventDispatcher ncqrCompatibleEventDispatcher;

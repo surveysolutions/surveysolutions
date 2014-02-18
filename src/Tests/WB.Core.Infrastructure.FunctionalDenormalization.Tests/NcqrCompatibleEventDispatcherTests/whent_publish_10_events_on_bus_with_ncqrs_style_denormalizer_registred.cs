@@ -24,7 +24,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.NcqrCompatibleE
 
         Because of = () => ncqrCompatibleEventDispatcher.Publish(CreatePublishableEvents(10));
 
-        private It should_regitred_denormalizer_method_handle_be_called_10_times = () =>
+        It should_regitred_denormalizer_method_handle_be_called_10_times = () =>
             ncqrsStyleEventHandlerMock.Verify(x => x.Handle(Moq.It.IsAny<IPublishedEvent<object>>()), Times.Exactly(10));
 
         private static NcqrCompatibleEventDispatcher ncqrCompatibleEventDispatcher;

@@ -18,7 +18,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.InMemoryViewWri
         {
             viewId = Guid.NewGuid();
             baseReadSideRepositoryWriterMock=new Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>>();
-            baseReadSideRepositoryWriterMock.Setup(x => x.GetById(viewId)).Returns(Mock.Of<IReadSideRepositoryEntity>());
+            baseReadSideRepositoryWriterMock.Setup(x => x.GetById(viewId.FormatGuid())).Returns(Mock.Of<IReadSideRepositoryEntity>());
 
             inMemoryViewWriter = CreateInMemoryViewWriter(baseReadSideRepositoryWriterMock.Object, viewId);
             inMemoryViewWriter.Remove(viewId);
@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.InMemoryViewWri
         Because of = () => inMemoryViewWriter.Dispose();
 
         It should_call_remove_method_of_base_readSideRepositoryWriter = () =>
-            baseReadSideRepositoryWriterMock.Verify(x => x.Remove(viewId), Times.Once());
+            baseReadSideRepositoryWriterMock.Verify(x => x.Remove(viewId.FormatGuid()), Times.Once());
 
         private static InMemoryViewWriter<IReadSideRepositoryEntity> inMemoryViewWriter;
         private static Guid viewId;
