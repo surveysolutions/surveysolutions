@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -11,22 +13,21 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    [Ignore("Temporary disabled till code is fixed to respect rosters")]
-    class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_in_other_roster_with_same_roster_level : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_in_other_roster_with_same_roster_level : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaireWithTwoRosterWithSomeConditionInOneRoster(
                 underDeeperRosterLevelQuestionId,
-                groupWithCustomCondition,
-                false);
+                groupWithCustomCondition);
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
             expressionProcessor.Setup(x => x.IsSyntaxValid(Moq.It.IsAny<string>())).Returns(true);
 
-            expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))
-                .Returns(new string[] { underDeeperRosterLevelQuestionId.ToString() });
+            expressionProcessor
+                .Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))
+                .Returns(new [] { underDeeperRosterLevelQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_0_error = () =>
             resultErrors.Count().ShouldEqual(0);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
