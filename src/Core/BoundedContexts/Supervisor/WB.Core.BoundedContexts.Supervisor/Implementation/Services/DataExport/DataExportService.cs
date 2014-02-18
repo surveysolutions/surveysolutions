@@ -117,7 +117,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         {
             string fileNameWithoutInvalidFileNameChars = Path.GetInvalidFileNameChars()
                                                              .Aggregate(name, (current, c) => current.Replace(c, '_'));
-            string fileNameWithNumber = string.Concat(RemoveNonAscii(fileNameWithoutInvalidFileNameChars),
+            string fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(100).ToArray());
+            string fileNameWithNumber = string.Concat(RemoveNonAscii(fileNameShortened),
                                                          i == 0 ? (object)string.Empty : i);
 
             var validFileName = MakeValidFileName(fileNameWithNumber);
