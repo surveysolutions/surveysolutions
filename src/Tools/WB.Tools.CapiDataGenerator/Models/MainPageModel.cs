@@ -442,7 +442,7 @@ namespace CapiDataGenerator
                         var interviews = this.CreateInterviews(questionnaireDocument, qcount, users, onlyForSupervisor, questionnaire, state);
 
                         CreateAnswers(acount, interviews, questions, questionnaire, questionnaireDocument, state);
-                        CreateComments(ccount, interviews, questions);
+                        CreateComments(ccount, interviews, questions, questionnaire);
                         ChangeStatuses(scount, interviews, onlyForSupervisor);
 
                         if (!onlyForSupervisor)
@@ -490,7 +490,7 @@ namespace CapiDataGenerator
             }
         }
 
-        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions)
+        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions, IQuestionnaire questionnaire)
         {
             for (int j = 0; j < interviews.Count; j++)
             {
@@ -499,12 +499,20 @@ namespace CapiDataGenerator
                 {
                     var question = questions.ElementAt(_rand.Next(questions.Count()));
 
-                    commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
-                                                                    userId: interview.Value,
-                                                                    questionId: question.PublicKey,
-                                                                    rosterVector: new decimal[0],
-                                                                    commentTime: DateTime.UtcNow,
-                                                                    comment: "auto comment"));
+                    int rosterLevel = questionnaire.GetRosterLevelForQuestion(question.PublicKey);
+
+                    decimal[] rosterVector = Enumerable.Repeat((decimal) 0, rosterLevel).ToArray();
+
+                    try
+                    {
+                        commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
+                            userId: interview.Value,
+                            questionId: question.PublicKey,
+                            rosterVector: rosterVector,
+                            commentTime: DateTime.UtcNow,
+                            comment: "auto comment"));
+                    }
+                    catch {}
 
                     UpdateProgress();
                     LogStatus("set comments", (j*commentsCount) + z, interviews.Count*commentsCount);
