@@ -412,5 +412,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0045_QuestionHasOptionsWithEmptyValue", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has custom enablement condition referencing question with deeper roster level..
+        /// </summary>
+        internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
+            get {
+                return ResourceManager.GetString("WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
+            }
+        }
     }
 }

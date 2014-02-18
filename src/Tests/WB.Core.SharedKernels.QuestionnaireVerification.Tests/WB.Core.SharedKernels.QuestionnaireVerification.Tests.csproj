@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_numeric_question_that_have_2_rosters_by_different_size_questions__.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_MultiAnswer_question.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitution_reference_of_not_supported_type.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_referenced_by_question_with_substitutions_does_not_exist.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_which_size_source_is_text_list_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_with_nested_plain_group.cs" />
   </ItemGroup>
