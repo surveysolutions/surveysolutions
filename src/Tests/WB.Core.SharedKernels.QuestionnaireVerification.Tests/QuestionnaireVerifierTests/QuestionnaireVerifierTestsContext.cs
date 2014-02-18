@@ -29,6 +29,44 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             };
         }
 
+        protected static QuestionnaireDocument CreateQuestionnaireWithTwoRosterWithSomeConditionInFirstRoster(Guid underDeeperRosterLevelQuestionId,
+            Guid groupWithCustomValidation)
+        {
+            var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
+            var rosterQuestionId = Guid.Parse("a3333333333333333333333333333333");
+            var questionnaire = CreateQuestionnaireDocument(new IComposite[]
+                {
+                    new NumericQuestion
+                    {
+                        PublicKey = rosterQuestionId, 
+                        IsInteger = true, 
+                        MaxValue = 5
+                    },
+                    new Group
+                    {
+                        PublicKey =  groupWithCustomValidation,
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterQuestionId,
+                        ConditionExpression = "some random expression",
+                        Children = new List<IComposite>
+                        {
+                            new NumericQuestion
+                            {
+                                PublicKey = underDeeperRosterLevelQuestionId
+                            }
+                        }
+                    },
+                    new Group
+                    {
+                        IsRoster = true,
+                        RosterSizeQuestionId = rosterQuestionId,
+                        PublicKey = groupWithCustomValidation
+                    }
+                });
+
+            return questionnaire;
+        }
+
         protected static QuestionnaireDocument CreateQuestionnaireWithRosterAndGroupAfterWithConditionReferencingQuestionInRoster(Guid underDeeperRosterLevelQuestionId, Guid questionWithCustomValidation)
         {
             var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
