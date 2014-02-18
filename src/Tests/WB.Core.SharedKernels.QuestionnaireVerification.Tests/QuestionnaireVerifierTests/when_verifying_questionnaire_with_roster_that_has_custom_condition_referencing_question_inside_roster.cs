@@ -11,15 +11,14 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    [Ignore]
-    class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster : QuestionnaireVerifierTestsContext
+    [Ignore("Test is broken and will be fixed later")]
+    internal class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireWithTwoRosterWithSomeConditionInOneRoster(
+            questionnaire = CreateQuestionnaireWithTwoRosterWithSomeConditionInFirstRoster(
                 underDeeperRosterLevelQuestionId,
-                groupWithCustomCondition,
-                true);
+                groupWithCustomCondition);
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
