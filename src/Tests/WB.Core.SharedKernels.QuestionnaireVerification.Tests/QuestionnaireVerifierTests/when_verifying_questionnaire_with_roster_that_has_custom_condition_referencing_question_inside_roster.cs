@@ -11,6 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
+    [Ignore]
     class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
