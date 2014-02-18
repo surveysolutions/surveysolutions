@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    [Ignore("Will be finished later")]
     internal class when_adding_qr_barcode_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
@@ -20,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>            
                 questionnaire.AddQRBarcodeQuestion(questionId: questionId, parentGroupId: chapterId, title: "title",
-                    variableName: "qr_barcode_question", isMandatory: false, condition: null, instructions: null,
+                    variableName: "qr_barcode_question", isMandatory: isMandatory, condition: condition, instructions: instructions,
                     responsibleId: responsibleId);
 
         Cleanup stuff = () =>
