@@ -14,13 +14,16 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly Func<InProcessEventBus> getInProcessEventBus;
+
+        public NcqrCompatibleEventDispatcher()
+        {
             this.getInProcessEventBus = () => new InProcessEventBus(true);
         }
 
-        internal NcqrCompatibleEventDispatcher(IEventStore eventStore, Func<InProcessEventBus> getInProcessEventBus)
+        internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus)
         {
-            this.eventStore = eventStore;
             this.getInProcessEventBus = getInProcessEventBus;
+        }
 
         public void Publish(IPublishableEvent eventMessage)
         {
