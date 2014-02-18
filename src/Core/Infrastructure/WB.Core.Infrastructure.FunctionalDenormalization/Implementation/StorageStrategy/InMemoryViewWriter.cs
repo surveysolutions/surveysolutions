@@ -25,17 +25,17 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.Storag
             this.view = readSideRepositoryWriter.GetById(viewId);
         }
 
-        public T GetById(Guid id)
+        public T GetById(string id)
         {
             return this.view;
         }
 
-        public void Store(T projection, Guid id)
+        public void Store(T projection, string id)
         {
             this.view = projection;
         }
 
-        public void Remove(Guid id)
+        public void Remove(string id)
         {
             this.view = null;
         }
