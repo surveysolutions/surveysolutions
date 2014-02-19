@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewSummar
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]
         [TestCase(QuestionType.DateTime, "02/02/2012")]
+        [TestCase(QuestionType.QRBarcode, "some answer")]
         public void Update_When_event_with_answer_on_featured_question_published_Then_answer_value_be_equal_passed_answer(QuestionType type,
             object answer)
         {
@@ -111,6 +112,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewSummar
                     return new NumericRealQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, Convert.ToDecimal(answer));
                 case QuestionType.Text:
                     return new TextQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (string)answer);
+                case QuestionType.QRBarcode:
+                    return new QRBarcodeQuestionAnswered(userId: Guid.NewGuid(), questionId: questionId, propagationVector: new decimal[0],
+                        answerTime: DateTime.Now, answer: (string) answer);
             }
             return null;
         }
