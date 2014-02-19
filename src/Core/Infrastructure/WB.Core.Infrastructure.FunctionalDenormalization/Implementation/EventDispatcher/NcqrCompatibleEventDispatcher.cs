@@ -13,28 +13,9 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
     public class NcqrCompatibleEventDispatcher : IEventDispatcher
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
-        private readonly IEventStore eventStore;
-
-        public NcqrCompatibleEventDispatcher(IEventStore eventStore)
-        {
-            this.eventStore = eventStore;
-        }
-
-        private bool IsEventNeedToBeIgnored(Guid id)
-        {
-            if (this.eventsToBeIgnored.Contains(id))
-            {
-                this.eventsToBeIgnored.Remove(id);
-                return true;
-            }
-            return false;
-        }
 
         public void Publish(IPublishableEvent eventMessage)
         {
-            if(this.IsEventNeedToBeIgnored(eventMessage.EventIdentifier))
-                return;
-
             foreach (var handler in this.registredHandlers.Values.ToList())
             {
                 handler.Bus.Publish(eventMessage);
@@ -43,29 +24,26 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
+            if(!eventMessages.Any())
+                return;
+
+            var oldStyleHandlers =
+               this.registredHandlers.Values.Where(h => !(h.Handler is IFunctionalEventHandler)).ToList();
+
             foreach (var publishableEvent in eventMessages)
             {
-                if (this.IsEventNeedToBeIgnored(publishableEvent.EventIdentifier))
-                    continue;
-
-                foreach (var handler in this.registredHandlers.Values.ToList())
+                foreach (var handler in oldStyleHandlers)
                 {
                     handler.Bus.Publish(publishableEvent);
                 }
             }
-        }
 
-        public void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
-        {
             var functionalHandlers =
-                this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler<T>).Where(h => h != null).ToList();
+               this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList();
 
-            foreach (var publishableEvent in eventStream)
+            foreach (var functionalEventHandler in functionalHandlers)
             {
-                foreach (var handler in functionalHandlers)
-                {
-                    handler.Handle(publishableEvent, storage);
-                }
+                functionalEventHandler.Handle(eventMessages, eventMessages.First().EventSourceId);
             }
         }
 
@@ -114,12 +92,5 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
         {
             return this.registredHandlers.Values.Where(h => enabledHandlers.Contains(h.Handler)).Select(h => h.Bus).ToList();
         }
-
-        public void IgnoreEventWithId(Guid eventIdentifier)
-        {
-            eventsToBeIgnored.Add(eventIdentifier);
-        }
-
-        private readonly HashSet<Guid> eventsToBeIgnored=new HashSet<Guid>();
     }
 }

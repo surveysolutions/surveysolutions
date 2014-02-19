@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
+namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablementConditions
 {
-    class when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
         {

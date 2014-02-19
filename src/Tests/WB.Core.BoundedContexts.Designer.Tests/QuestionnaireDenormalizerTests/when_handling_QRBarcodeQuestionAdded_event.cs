@@ -12,13 +12,20 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
-    [Ignore("Will be finished later")]
     internal class when_handling_QRBarcodeQuestionAdded_event : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>
         {
-            @event = CreateQRBarcodeQuestionAddedEvent(questionId: questionId, parentGroupId: parentGroupId, variableName: variableName,
-                title: title, isMandatory: isMandatory, conditionExpression: condition, instructions: instructions);
+            @event = ToPublishedEvent(new QRBarcodeQuestionAdded()
+            {
+                QuestionId = questionId,
+                ParentGroupId = parentGroupId,
+                ConditionExpression = condition,
+                IsMandatory = isMandatory,
+                Instructions = instructions,
+                Title = title,
+                VariableName = variableName
+            });
 
             var questionnaireDocument = CreateQuestionnaireDocument(new[]
             {
@@ -26,13 +33,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
 
             var documentStorage = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
-            documentStorage.Setup(writer => writer.GetById(Moq.It.IsAny<string>())).Returns(questionnaireDocument);
-            documentStorage.Setup(writer => writer.Store(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Guid>())).Callback(
-                (QuestionnaireDocument document, int eventSourceId) =>
+            
+            documentStorage
+                .Setup(writer => writer.GetById(Moq.It.IsAny<string>()))
+                .Returns(questionnaireDocument);
+            
+            documentStorage
+                .Setup(writer => writer.Store(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>()))
+                .Callback((QuestionnaireDocument document, string id) =>
                 {
-                    questionData =
-                        document.FirstOrDefault<IQRBarcodeQuestion>(
-                            question => question.PublicKey == questionId);
+                    questionnaireView = document;
                 });
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object);
@@ -41,22 +51,54 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(@event);
 
+        It should__be_added_new_qr_barcode_question_to_questionnaire_document_view = ()=>
+            GetQRBarcodeQuestionById().ShouldNotBeNull();
+
+        It should_set_questionId_as_default_value_for__PublicKey__field = () =>
+           GetQRBarcodeQuestionById().PublicKey.ShouldEqual(questionId);
+
+        It should_parent_group_exists_in_questionnaire = () =>
+           questionnaireView.Find<IGroup>(parentGroupId).ShouldNotBeNull();
+
+        It should_parent_group_contains_qr_barcode_question = () =>
+           questionnaireView.Find<IGroup>(parentGroupId).Children[0].PublicKey.ShouldEqual(questionId);
+
         It should_set_null_as_default_value_for__ValidationExpression__field = () =>
-           questionData.ValidationExpression.ShouldBeNull();
+           GetQRBarcodeQuestionById().ValidationExpression.ShouldBeNull();
 
         It should_set_null_as_default_value_for__ValidationMessage__field = () =>
-            questionData.ValidationMessage.ShouldBeNull();
+            GetQRBarcodeQuestionById().ValidationMessage.ShouldBeNull();
 
         It should_set_Interviewer_as_default_value_for__QuestionScope__field = () =>
-            questionData.QuestionScope.ShouldEqual(QuestionScope.Interviewer);
+            GetQRBarcodeQuestionById().QuestionScope.ShouldEqual(QuestionScope.Interviewer);
 
         It should_set_false_as_default_value_for__Featured__field = () =>
-            questionData.Featured.ShouldBeFalse();
+            GetQRBarcodeQuestionById().Featured.ShouldBeFalse();
 
-        It should_set_TextList_as_default_value_for__QuestionType__field = () =>
-            questionData.QuestionType.ShouldEqual(QuestionType.QRBarcode);
+        It should_set_QRBarcode_as_default_value_for__QuestionType__field = () =>
+            GetQRBarcodeQuestionById().QuestionType.ShouldEqual(QuestionType.QRBarcode);
 
-        private static IQRBarcodeQuestion questionData;
+        It should_set_true_as_value_for__Mandatory__field = () =>
+            GetQRBarcodeQuestionById().Mandatory.ShouldEqual(isMandatory);
+
+        It should_set_varibleName_as_value_for__StataExportCaption__field = () =>
+            GetQRBarcodeQuestionById().StataExportCaption.ShouldEqual(variableName);
+
+        It should_set_title_as_value_for__QuestionText__field = () =>
+            GetQRBarcodeQuestionById().QuestionText.ShouldEqual(title);
+
+        It should_set_instructions_as_value_for__Instructions__field = () =>
+            GetQRBarcodeQuestionById().Instructions.ShouldEqual(instructions);
+
+        It should_set_condition_value_for__ConditionExpression__field = () =>
+            GetQRBarcodeQuestionById().ConditionExpression.ShouldEqual(condition);
+
+        private static IQRBarcodeQuestion GetQRBarcodeQuestionById()
+        {
+            return questionnaireView.FirstOrDefault<IQRBarcodeQuestion>(question => question.PublicKey == questionId);
+        }
+
+        private static QuestionnaireDocument questionnaireView;
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<QRBarcodeQuestionAdded> @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

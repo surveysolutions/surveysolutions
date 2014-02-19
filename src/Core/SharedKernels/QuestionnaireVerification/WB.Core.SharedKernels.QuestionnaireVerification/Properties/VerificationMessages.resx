@@ -235,6 +235,21 @@
     <value>Question has option(s) with empty value</value>
   </data>
   <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Question has custom enablement condition referencing question with deeper roster level.</value>
+    <value>Item has custom enablement condition referencing question with deeper roster level.</value>
+  </data>
+  <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+    <value>Groups can not custom enablement  condition referencing child question</value>
+  </data>
+  <data name="WB0047_QRBarcodeQuestionHaveValidationExpression" xml:space="preserve">
+    <value>QR Barcode question has validation expression</value>
+  </data>
+  <data name="WB0048_QRBarcodeQuestionHaveValidationExpression" xml:space="preserve">
+    <value>QR Barcode question has validation message</value>
+  </data>
+  <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+    <value>QR Barcode question used as supervisor question</value>
+  </data>
+  <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+    <value>QR Barcode question used as prefilled question</value>
   </data>
 </root>

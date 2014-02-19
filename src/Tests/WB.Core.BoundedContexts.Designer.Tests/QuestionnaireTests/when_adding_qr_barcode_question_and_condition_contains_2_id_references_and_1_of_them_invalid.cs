@@ -1,9 +1,12 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -15,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NumericQuestionAdded() { PublicKey = existingQuestionId, GroupPublicKey = chapterId });
 
+            RegisterServiceLocator();
             RegisterExpressionProcessorMock(conditionExpression, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };
@@ -25,12 +29,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     variableName: "var", isMandatory: false, condition: conditionExpression, instructions: null,
                     responsibleId: responsibleId));
 
-        //It should_throw_QuestionnaireException = () =>
-        //    exception.ShouldBeOfType<QuestionnaireException>();
+        It should_throw_QuestionnaireException = () =>
+            exception.ShouldBeOfType<QuestionnaireException>();
 
-        //It should_throw_exception_with_message_containting__variable__this__keyword__ = () =>
-        //     new[] { "variable", "keyword" }.ShouldEachConformTo(
-        //            keyword => exception.Message.ToLower().Contains(keyword));
+        It should_throw_exception_with_message_containting__not__valid__expression__ = () =>
+             new[] { "not", "valid", "expression" }.ShouldEachConformTo(
+                    keyword => exception.Message.ToLower().Contains(keyword));
 
         
         private static Questionnaire questionnaire;

@@ -143,6 +143,9 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f04001d
 			public static int btnUnanswered = 2130968605;
 			
+			// aapt resource value: 0x7f040021
+			public static int contentFrame = 2130968609;
+			
 			// aapt resource value: 0x7f04000e
 			public static int etComments = 2130968590;
 			
@@ -230,6 +233,12 @@ namespace WB.UI.Shared.Android
 			
 			// aapt resource value: 0x7f030005
 			public static int StatisticsContent = 2130903045;
+			
+			// aapt resource value: 0x7f030006
+			public static int zxingscanneractivitylayout = 2130903046;
+			
+			// aapt resource value: 0x7f030007
+			public static int zxingscannerfragmentlayout = 2130903047;
 			
 			static Layout()
 			{
