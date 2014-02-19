@@ -394,6 +394,7 @@ namespace CapiDataGenerator
                 try
                 {
                     questionnaireDocument = ReadTemplate(this.TemplatePath);
+                    questionnaireDocument.Title = "(generated) " + questionnaireDocument.Title;
                 }
                 catch (Exception)
                 {
@@ -403,47 +404,47 @@ namespace CapiDataGenerator
 
                 if (questionnaireDocument != null)
                 {
-                    int qcount = 0;
-                    int icount = 0;
-                    int acount = 0;
-                    int ccount = 0;
-                    int scount = 0;
-                    int.TryParse(QuestionnairesCount, out qcount);
-                    int.TryParse(InterviewersCount, out icount);
-                    int.TryParse(AnswersCount, out acount);
-                    int.TryParse(CommentsCount, out ccount);
-                    int.TryParse(StatusesCount, out scount);
+                    int interviewsCount = 0;
+                    int interviewersCount = 0;
+                    int answersCount = 0;
+                    int commentsCount = 0;
+                    int statusesCount = 0;
+                    int.TryParse(QuestionnairesCount, out interviewsCount);
+                    int.TryParse(InterviewersCount, out interviewersCount);
+                    int.TryParse(AnswersCount, out answersCount);
+                    int.TryParse(CommentsCount, out commentsCount);
+                    int.TryParse(StatusesCount, out statusesCount);
 
-                    if (scount > 100)
+                    if (statusesCount > 100)
                     {
-                        scount = 100;
-                        StatusesCount = scount.ToString();
+                        statusesCount = 100;
+                        StatusesCount = statusesCount.ToString();
                     }
 
                     var onlyForSupervisor = this.OnlyForSupervisor;
 
-                    var questions = questionnaireDocument.GetAllQuestions().Where(x => !x.Featured);
+                    var questions = questionnaireDocument.GetAllQuestions().Where(x => !x.Featured).ToList();
                     var questionsCount = questions.Count();
 
-                    acount = (int) (questionsCount*((double) acount/100));
-                    ccount = (int) (questionsCount*((double) ccount/100));
-                    scount = (int) (icount*qcount*((double) scount/100));
+                    answersCount = (int) (questionsCount*((double) answersCount/100));
+                    commentsCount = (int) (questionsCount*((double) commentsCount/100));
+                    statusesCount = (int) (interviewersCount*interviewsCount*((double) statusesCount/100));
 
-                    TotalCount = icount + icount*qcount*(acount + ccount + 2) + scount;
+                    TotalCount = interviewersCount + interviewersCount*interviewsCount*(answersCount + commentsCount + 2) + statusesCount;
 
                     this.EnableCacheInAllRepositoryWriters();
                     try
                     {
                         AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
-                        var users = CreateUsers(icount);
+                        var users = CreateUsers(interviewersCount);
                         var questionnaire = new Questionnaire(questionnaireDocument);
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
-                        var interviews = this.CreateInterviews(questionnaireDocument, qcount, users, onlyForSupervisor, questionnaire, state);
+                        var interviews = this.CreateInterviews(questionnaireDocument, interviewsCount, users, onlyForSupervisor, questionnaire, state);
 
-                        CreateAnswers(acount, interviews, questions, questionnaire, questionnaireDocument, state);
-                        CreateComments(ccount, interviews, questions, questionnaire);
-                        ChangeStatuses(scount, interviews, onlyForSupervisor);
+                        CreateAnswers(answersCount, interviews, questions, questionnaire, questionnaireDocument, state);
+                        CreateComments(commentsCount, interviews, questions, questionnaire);
+                        ChangeStatuses(statusesCount, interviews, onlyForSupervisor);
 
                         if (!onlyForSupervisor)
                         {
