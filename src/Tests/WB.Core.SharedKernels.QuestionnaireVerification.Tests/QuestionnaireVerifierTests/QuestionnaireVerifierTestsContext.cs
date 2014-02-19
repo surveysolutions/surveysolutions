@@ -29,10 +29,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             };
         }
 
-        protected static QuestionnaireDocument CreateQuestionnaireWithTwoRosterWithSomeConditionInFirstRoster(Guid underDeeperRosterLevelQuestionId,
-            Guid groupWithCustomValidation)
+        protected static QuestionnaireDocument CreateQuestionnaireWithRosterWithConditionReferencingQuestionInsideItself(Guid questionIdFromRoster,
+            Guid rosterWithCustomValidation)
         {
-            var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
             var rosterQuestionId = Guid.Parse("a3333333333333333333333333333333");
             var questionnaire = CreateQuestionnaireDocument(new IComposite[]
                 {
@@ -44,7 +43,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     },
                     new Group
                     {
-                        PublicKey =  groupWithCustomValidation,
+                        PublicKey = rosterWithCustomValidation,
                         IsRoster = true,
                         RosterSizeQuestionId = rosterQuestionId,
                         ConditionExpression = "some random expression",
@@ -52,15 +51,45 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                PublicKey = underDeeperRosterLevelQuestionId
+                                PublicKey = questionIdFromRoster
+                            }
+                        }
+                    }
+                });
+
+            return questionnaire;
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireWithTwoRosterWithConditionInLastOneRosterReferencingQuestionFromFirstOne(
+            Guid questionIdFromOtherRosterWithSameLevel, Guid rosterWithCustomCondition)
+        {
+            var questionnaire = CreateQuestionnaireDocument(new IComposite[]
+                {
+                    new NumericQuestion
+                    {
+                        PublicKey = Guid.Parse("a3333333333333333333333333333333"), 
+                        IsInteger = true, 
+                        MaxValue = 5
+                    },
+                    new Group
+                    {
+                        PublicKey = Guid.Parse("13333333333333333333333333333333"),
+                        IsRoster = true,
+                        RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
+                        Children = new List<IComposite>
+                        {
+                            new NumericQuestion
+                            {
+                                PublicKey = questionIdFromOtherRosterWithSameLevel
                             }
                         }
                     },
                     new Group
                     {
                         IsRoster = true,
-                        RosterSizeQuestionId = rosterQuestionId,
-                        PublicKey = groupWithCustomValidation
+                        RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
+                        PublicKey = rosterWithCustomCondition,
+                        ConditionExpression = "some random expression"
                     }
                 });
 
@@ -95,41 +124,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new Group
                     {
                         PublicKey = questionWithCustomValidation,
-                        ConditionExpression = "some random expression"
-                    }
-                });
-
-            return questionnaire;
-        }
-
-        protected static QuestionnaireDocument CreateQuestionnaireWithTwoRosterWithSomeConditionInOneRoster(Guid underDeeperRosterLevelQuestionId, Guid groupWithCustomValidation)
-        {
-            var questionnaire = CreateQuestionnaireDocument(new IComposite[]
-                {
-                    new NumericQuestion
-                    {
-                        PublicKey = Guid.Parse("a3333333333333333333333333333333"), 
-                        IsInteger = true, 
-                        MaxValue = 5
-                    },
-                    new Group
-                    {
-                        PublicKey = Guid.Parse("13333333333333333333333333333333"),
-                        IsRoster = true,
-                        RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
-                        Children = new List<IComposite>
-                        {
-                            new NumericQuestion
-                            {
-                                PublicKey = underDeeperRosterLevelQuestionId
-                            }
-                        }
-                    },
-                    new Group
-                    {
-                        IsRoster = true,
-                        RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
-                        PublicKey = groupWithCustomValidation,
                         ConditionExpression = "some random expression"
                     }
                 });
