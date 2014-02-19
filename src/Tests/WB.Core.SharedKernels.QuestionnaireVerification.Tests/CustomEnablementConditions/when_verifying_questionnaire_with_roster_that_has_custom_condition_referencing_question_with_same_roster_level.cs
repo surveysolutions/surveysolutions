@@ -11,21 +11,20 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_in_other_roster_with_same_roster_level : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_in_other_roster_with_same_roster_level : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireWithTwoRosterWithSomeConditionInOneRoster(
-                underDeeperRosterLevelQuestionId,
-                groupWithCustomCondition,
-                false);
+            questionnaire = CreateQuestionnaireWithTwoRosterWithConditionInLastOneRosterReferencingQuestionFromFirstOne(
+                questionIdFromOtherRosterWithSameLevel,
+                rosterWithCustomCondition);
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
             expressionProcessor.Setup(x => x.IsSyntaxValid(Moq.It.IsAny<string>())).Returns(true);
 
             expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))
-                .Returns(new string[] { underDeeperRosterLevelQuestionId.ToString() });
+                .Returns(new [] { questionIdFromOtherRosterWithSameLevel.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
@@ -40,7 +39,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static Guid groupWithCustomCondition = Guid.Parse("10000000000000000000000000000000");
-        private static Guid underDeeperRosterLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
+        private static Guid rosterWithCustomCondition = Guid.Parse("10000000000000000000000000000000");
+        private static Guid questionIdFromOtherRosterWithSameLevel = Guid.Parse("12222222222222222222222222222222");
     }
 }
