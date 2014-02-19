@@ -1,22 +1,16 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using NUnit.Framework;
+using RavenQuestionnaire.Core.Tests.Utils;
 
-namespace RavenQuestionnaire.Core.Tests.Entities
+namespace Main.Core.Tests.Entities
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Question;
-
-    using NUnit.Framework;
-
-    using RavenQuestionnaire.Core.Tests.Utils;
-
-    /// <summary>
-    /// The question test.
-    /// </summary>
     [TestFixture]
     public class QuestionTest
     {
@@ -26,11 +20,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
-        #region Public Methods and Operators
-        
-        /// <summary>
-        /// The when set condition expression_ expression is added.
-        /// </summary>
         [Test]
         public void WhenSetConditionExpression_ExpressionIsAdded()
         {
@@ -39,13 +28,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Assert.AreEqual(question.ConditionExpression, "some expression");
         }
 
-        /// <summary>
-        /// The cloned qeustion_ target is properly set.
-        /// </summary>
         [Test]
         public void ClonedQeustion_TargetIsProperlySet()
         {
-            // List<IGroup> groups = new List<IGroup>() { new Group("test") };
             var answers = new List<IAnswer> { new Answer() { AnswerText = "hi" }, new Answer(){AnswerText = "there"}, new Answer() };
 
             var question = new SingleQuestion(Guid.NewGuid(), "test")
@@ -55,7 +40,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                     AnswerOrder = Order.Random, 
                     StataExportCaption = "stata", 
                     Answers = answers,
-                    ConditionalDependentGroups = new List<Guid>(){ Guid.NewGuid() }
+                    ConditionalDependentGroups = new List<Guid>() { Guid.NewGuid() },
+                    ConditionalDependentQuestions = new List<Guid>() { Guid.NewGuid() },
+                    QuestionsWhichCustomValidationDependsOnQuestion = new List<Guid>() { Guid.NewGuid() },
+                    QuestionIdsInvolvedInCustomEnablementConditionOfQuestion = new List<Guid>() { Guid.NewGuid() },
+                    QuestionIdsInvolvedInCustomValidationOfQuestion = new List<Guid>() { Guid.NewGuid() }
                 };
 
             var target = question.Clone() as SingleQuestion;
@@ -75,7 +64,5 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                 Assert.IsTrue(!answer.Equals(question.Answers[i])); // they are interfaces and Equals uses Reference equality
             }
         }
-
-        #endregion
     }
 }
