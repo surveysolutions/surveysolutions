@@ -11,15 +11,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    [Ignore("Temporary disabled till code is fixed to respect rosters")]
-    class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_in_other_roster_with_same_roster_level : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_itself : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireWithTwoRosterWithSomeConditionInOneRoster(
+            questionnaire = CreateQuestionnaireWithRosterWithConditionReferencingQuestionInsideItself(
                 underDeeperRosterLevelQuestionId,
-                groupWithCustomCondition,
-                false);
+                groupWithCustomCondition);
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
@@ -35,7 +33,25 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors = verifier.Verify(questionnaire);
 
         It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(0);
+            resultErrors.Count().ShouldEqual(1);
+
+        It should_return_error_with_code__WB0046 = () =>
+            resultErrors.Single().Code.ShouldEqual("WB0051");
+
+        It should_return_error_with_two_references = () =>
+            resultErrors.Single().References.Count().ShouldEqual(2);
+
+        It should_return_first_error_reference_with_type_Group = () =>
+            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+
+        It should_return_first_error_reference_with_id_of_groupWithCustomCondition = () =>
+            resultErrors.Single().References.First().Id.ShouldEqual(groupWithCustomCondition);
+
+        It should_return_last_error_reference_with_type_Question = () =>
+            resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+
+        It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
+            resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;

@@ -40,8 +40,8 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
         public T GetById(Guid id)
         {
             var view = this.readsideReader.GetById(id);
-
-            if (this.IsViewWasUpdatedFromEventStream(id, view == null ? 0 : view.Sequence, view))
+           
+            if (this.IsViewWasUpdatedFromEventStream(id, view == null ? 0 : view.Sequence))
             {
                 view = this.readsideReader.GetById(id);
                 if (view == null)
@@ -51,14 +51,8 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             return view.Document;
         }
 
-        private bool IsViewWasUpdatedFromEventStream(Guid id, long sequence, ViewWithSequence<T> view)
+        private bool IsViewWasUpdatedFromEventStream(Guid id, long sequence)
         {
-            var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
-            if (bus == null)
-                return false;
-            var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            if (eventStore == null)
-                return false;
             if (!this.WaitUntilViewCanBeProcessed(id))
                 return false;
 
@@ -67,18 +61,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             try
             {
                 this.additionalEventChecker(id, sequence);
-                
-                var eventStream = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
-
-                if (!eventStream.IsEmpty)
-                {
-                    using (var inMemoryStorage = new InMemoryViewStorage<ViewWithSequence<T>>(this.readsideWriter, id.ToString()))
-                    {
-                        bus.PublishByEventSource(eventStream, inMemoryStorage);
-                    }
-
-                    result = true;
-                }
+                result = true;
             }
             finally
             {
