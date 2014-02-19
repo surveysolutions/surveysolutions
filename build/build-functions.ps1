@@ -13,7 +13,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
 
     if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to build web package for project $Project']"
-        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build web package for project $Project']"
+        Write-Host "##teamcity[buildProblem description='Failed to build web package for project $Project']"
     }
 
     Write-Host "##teamcity[progressFinish 'Building web package for project $Project']"
@@ -77,7 +77,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration){
 
 	if (-not $wasBuildSuccessfull) {
 		Write-Host "##teamcity[message status='ERROR' text='Failed to build '$AndroidProject' project']"
-		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build '$AndroidProject' project']"
+		Write-Host "##teamcity[buildProblem description='Failed to build '$AndroidProject' project']"
 	}
 
 	Write-Host "##teamcity[progressFinish 'Building '$AndroidProject' project']"
@@ -103,7 +103,7 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $PathToFinalCapi,
 
 	if (-not $wasOperationSuccessfull) {
 		Write-Host "##teamcity[message status='ERROR' text='Failed to sign Android package']"
-		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to sign Android package']"
+		Write-Host "##teamcity[buildProblem description='Failed to sign Android package']"
 
 		Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Android package']"
 		Write-Host "##teamcity[blockClosed name='Signing and Zipaligning Android package']"
@@ -117,7 +117,7 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $PathToFinalCapi,
 
 	if (-not $wasOperationSuccessfull) {
 		Write-Host "##teamcity[message status='ERROR' text='Failed to zipalign Android package']"
-		Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to zipalign Android package']"
+		Write-Host "##teamcity[buildProblem description='Failed to zipalign Android package']"
 	}
 
 	Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Android package']"

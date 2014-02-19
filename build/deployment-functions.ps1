@@ -24,7 +24,7 @@ function PublishZippedWebPackage($SourceFolder, $TargetFile) {
     catch {
         $wasPublishSuccessfull = $false;
         Write-Host "##teamcity[message status='ERROR' text='Failed to publish zipped web package artifact']"
-        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to publish zipped web package artifact']"
+        Write-Host "##teamcity[buildProblem description='Failed to publish zipped web package artifact']"
     }
 
     Write-Host "##teamcity[progressFinish 'Publishing zipped web package artifact']"
@@ -43,7 +43,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
 
     if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to build web package for project $Project']"
-        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build web package for project $Project']"
+        Write-Host "##teamcity[buildProblem description='Failed to build web package for project $Project']"
     }
 
     Write-Host "##teamcity[progressFinish 'Building web package for project $Project']"
