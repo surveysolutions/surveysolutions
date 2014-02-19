@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
-            return vector.Length == 0 ? "#" : string.Join(",", vector);
+            return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
         }
 
         public string Name
