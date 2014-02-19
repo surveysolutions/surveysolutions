@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
         private readonly IQuestionnaireFactory questionnaireFactory;
 
-
         public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository,
                                    IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, 
             ITemporaryDataStorage<TempFileImportData> tempImportStorage,
@@ -88,11 +87,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                 return;
             }
             if (!string.IsNullOrEmpty(item.ErrorMassage))
-                {
-                    result.SetErrorMessage("Parsing wasn't successed");
-                    tempSampleCreationStorage.Store(result, id.ToString());
-                    return;
-                }
+            {
+                result.SetErrorMessage("Parsing wasn't successed");
+                tempSampleCreationStorage.Store(result, id.ToString());
+                return;
+            }
 
             var bigTemplateObject = this.templateRepository.GetById(item.TemplateId);
 
@@ -131,21 +130,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                     return;
                 }
             }
-
             i = 1;
             foreach (var value in item.Values)
             {
                 try
                 {
                     BuiltInterview(Guid.NewGuid(), value, item.Header, questionnarie, bigTemplate.PublicKey, responsibleHeadquarterId,
-                                   responsibleSupervisorId);
+                        responsibleSupervisorId);
                     result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, item.Values.Count));
                     tempSampleCreationStorage.Store(result, id.ToString());
                     i++;
                 }
                 catch
                 {
-                   // result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
+                    // result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
                 }
             }
             result.CompleteProcess();

@@ -50,11 +50,6 @@ namespace CapiDataGenerator
             throw new NotImplementedException();
         }
 
-        public void PublishByEventSource<T>(IEnumerable<CommittedEvent> eventStream, IStorageStrategy<T> storage) where T : class, IReadSideRepositoryEntity
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<IEventHandler> GetAllRegistredEventHandlers()
         {
             throw new NotImplementedException();

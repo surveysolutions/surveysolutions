@@ -14,7 +14,7 @@ using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester.Implementations.Activities
 {
-    [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class TesterDetailsActivity : DetailsActivity
     {
         protected override ContentFrameAdapter CreateFrameAdapter(InterviewItemId? screenId)
