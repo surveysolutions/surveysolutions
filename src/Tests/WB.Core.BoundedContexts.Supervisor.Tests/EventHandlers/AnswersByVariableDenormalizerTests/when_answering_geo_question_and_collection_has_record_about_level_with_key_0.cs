@@ -15,7 +15,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.AnswersByVariableDenormalizerTests
 {
-    [Ignore("Added in order to describe possible bug. Unignore when issue will be fixed.")]
     internal class when_answering_geo_question_and_collection_has_record_about_level_with_key_0 : AnswersByVariableDenormalizerTestContext
     {
         Establish context = () =>

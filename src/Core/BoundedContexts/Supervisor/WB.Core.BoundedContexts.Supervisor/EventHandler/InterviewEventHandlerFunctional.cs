@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             if (vector.Length == 0)
                 return "#";
-            return string.Join(",", vector.Select(v=>v.ToString("0.############################", CultureInfo.InvariantCulture)));
+            return EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
         }
 
         private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
