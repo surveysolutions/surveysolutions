@@ -88,6 +88,13 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
+    <Compile Include="InterviewTests\when_answering_qr_barcode_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\when_answering_qr_barcode_question_and_answer_is_specified.cs" />
+    <Compile Include="InterviewTests\when_answering_qr_barcode_question_and_question_is_disabled.cs" />
+    <Compile Include="InterviewTests\when_answering_qr_barcode_question_and_parent_group_is_disabled.cs" />
+    <Compile Include="InterviewTests\when_answering_qr_barcode_question_which_have_incorrect_type.cs" />
+    <Compile Include="InterviewTests\when_answering_qr_barcode_question_with_incorrect_roster_vector.cs" />
+    <Compile Include="InterviewTests\when_answering_qr_barcode_question_which_is_absent.cs" />
     <Compile Include="InterviewTests\Synchronization\when_creating_new_AnsweredQuestionSynchronizationDto_for_InterviewTextListAnswers.cs" />
     <Compile Include="InterviewTests\Synchronization\when_answering_question_which_validation_involves_textlist_question_which_has_answer_which_appeared_from_synchronization.cs" />
     <Compile Include="InterviewTests\when_answering_datetime_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is__08_Mar_2011__.cs" />
