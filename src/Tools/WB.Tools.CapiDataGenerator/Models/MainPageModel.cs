@@ -273,6 +273,20 @@ namespace CapiDataGenerator
             }
         }
 
+        private bool putAllEventsToSupervisorDB = false;
+        public bool PutAllEventsToSupervisorDB
+        {
+            get
+            {
+                return putAllEventsToSupervisorDB;
+            }
+            set
+            {
+                putAllEventsToSupervisorDB = value;
+                RaisePropertyChanged(() => PutAllEventsToSupervisorDB);
+            }
+        }
+
         private bool _onlyForSupervisor = false;
         public bool OnlyForSupervisor
         {
@@ -421,6 +435,7 @@ namespace CapiDataGenerator
                         StatusesCount = statusesCount.ToString();
                     }
 
+                    AppSettings.Instance.PutAllEventsToSupervisorDB = this.PutAllEventsToSupervisorDB;
                     var onlyForSupervisor = this.OnlyForSupervisor;
 
                     var questions = questionnaireDocument.GetAllQuestions().Where(x => !x.Featured).ToList();
@@ -692,7 +707,7 @@ namespace CapiDataGenerator
 
                     Guid userId = interview.Value;
                     Guid interviewId = interview.Key;
-                    var commands = CreateAnswerCommands(randomQuestion, userId, interviewId, questionnaire, questionnaireDocument, state);
+                    var commands = CreateAnswerCommands(randomQuestion, interviewId, userId, questionnaire, questionnaireDocument, state);
 
                     foreach (ICommand command in commands.Where(command => command != null))
                     {
