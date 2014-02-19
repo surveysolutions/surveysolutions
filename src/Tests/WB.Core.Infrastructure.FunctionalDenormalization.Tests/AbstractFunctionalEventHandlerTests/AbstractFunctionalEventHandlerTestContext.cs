@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
@@ -11,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.AbstractFunctionalEventHandlerTests
 {
+    [Subject(typeof(AbstractFunctionalEventHandler<>))]
     internal class AbstractFunctionalEventHandlerTestContext
     {
         protected static TestableFunctionalEventHandler<T> CreateAbstractFunctionalEventHandler<T>(

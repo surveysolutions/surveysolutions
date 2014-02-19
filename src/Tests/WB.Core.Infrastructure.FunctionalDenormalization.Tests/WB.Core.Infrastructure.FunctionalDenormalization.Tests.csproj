@@ -58,6 +58,15 @@
     <Compile Include="AbstractFunctionalEventHandlerTests\AbstractFunctionalEventHandlerTestContext.cs" />
     <Compile Include="AbstractFunctionalEventHandlerTests\TestableFunctionalEventHandler.cs" />
     <Compile Include="AbstractFunctionalEventHandlerTests\when_batch_of_10_events_is_published_on_event_handler.cs" />
+    <Compile Include="AssemblyContext.cs" />
+    <Compile Include="InMemoryViewWriterTests\InMemoryViewWriterTestContext.cs" />
+    <Compile Include="InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_created_in_memory.cs" />
+    <Compile Include="InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_deleted_in_memory.cs" />
+    <Compile Include="InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_updated_in_memory.cs" />
+    <Compile Include="NcqrCompatibleEventDispatcherTests\NcqrCompatibleEventDispatcherTestContext.cs" />
+    <Compile Include="NcqrCompatibleEventDispatcherTests\whent_publish_0_events_on_bus_with_functional_style_denormalizer_registred.cs" />
+    <Compile Include="NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred.cs" />
+    <Compile Include="NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_ncqrs_style_denormalizer_registred.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
