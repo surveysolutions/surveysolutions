@@ -59,16 +59,18 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_numeric_question_that_have_2_rosters_by_different_size_questions__.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_MultiAnswer_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_prefilled.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_filled_by_supervisor.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_with_custom_validation.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_with_maxAnswer_value_set_in_100.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_MultiAnswer_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_group_where_roster_size_source_is_fixedtitles_and_number_of_titles_more_than_250.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_missing_options_value.cs" />
