@@ -414,7 +414,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has custom enablement condition referencing question with deeper roster level..
+        ///   Looks up a localized string similar to Item has custom enablement condition referencing question with deeper roster level..
         /// </summary>
         internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
@@ -457,5 +457,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0050_QRBarcodeQuestionIsPreFilledQuestion", resourceCulture);
             }
         }
+          /// <summary>
+        ///   Looks up a localized string similar to Groups can not custom enablement  condition referencing child question.
+        /// </summary>
+        internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
+            get {
+                return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
+}
+        }
+
+        
     }
 }
