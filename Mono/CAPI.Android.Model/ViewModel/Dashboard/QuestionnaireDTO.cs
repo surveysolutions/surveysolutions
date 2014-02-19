@@ -4,6 +4,7 @@ using System.Linq;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
@@ -12,11 +13,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     {
         public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IList<FeaturedItem> properties)
         {
-            Id = id.ToString();
+            Id = id.FormatGuid();
             Status = (int)status;
             Properties = JsonUtils.GetJsonData(properties.ToArray());
-            Responsible = responsible.ToString();
-            Survey = survey.ToString();
+            Responsible = responsible.FormatGuid();
+            Survey = survey.FormatGuid();
         }
 
         public QuestionnaireDTO()

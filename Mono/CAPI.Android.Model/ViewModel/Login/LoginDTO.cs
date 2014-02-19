@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.ViewModel.Login
 {
@@ -17,7 +18,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Login
     {
         public LoginDTO(Guid id, string login, string password, bool isLocked)
         {
-            Id = id.ToString();
+            Id = id.FormatGuid();
             Login = login;
             Password = password;
             IsLocked = isLocked;
