@@ -144,19 +144,24 @@ namespace Main.Core.Entities.SubEntities
         public IComposite Clone()
         {
             var newGroup = new Group
-                {
-                    ConditionExpression = this.ConditionExpression,
-                    Description = this.Description,
-                    Enabled = this.Enabled,
-                    Propagated = this.Propagated,
-                    PublicKey = this.PublicKey,
-                    Title = this.Title,
-                    IsRoster = this.IsRoster,
-                    RosterSizeQuestionId = this.RosterSizeQuestionId,
-                    RosterSizeSource =  this.RosterSizeSource,
-                    RosterTitleQuestionId = this.RosterTitleQuestionId,
-                    RosterFixedTitles = this.RosterFixedTitles
-                };
+            {
+                ConditionExpression = this.ConditionExpression,
+                Description = this.Description,
+                Enabled = this.Enabled,
+                Propagated = this.Propagated,
+                PublicKey = this.PublicKey,
+                Title = this.Title,
+                IsRoster = this.IsRoster,
+                RosterSizeQuestionId = this.RosterSizeQuestionId,
+                RosterSizeSource = this.RosterSizeSource,
+                RosterTitleQuestionId = this.RosterTitleQuestionId,
+                RosterFixedTitles = this.RosterFixedTitles
+            };
+            if (this.QuestionIdsInvolvedInCustomEnablementConditionOfGroup != null)
+            {
+                newGroup.QuestionIdsInvolvedInCustomEnablementConditionOfGroup =
+                    new List<Guid>(this.QuestionIdsInvolvedInCustomEnablementConditionOfGroup);
+            }
 
             foreach (var composite in this.Children)
             {

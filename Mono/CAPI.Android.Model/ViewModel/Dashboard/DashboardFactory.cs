@@ -26,7 +26,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public DashboardModel Load(DashboardInput input)
         {
-            var userId = input.UserId.ToString();
+            var userId = input.UserId.FormatGuid();
             var questionnairies =
                 this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
             var result = new DashboardModel(input.UserId);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Android.App;
 using CAPI.Androids.Core.Model.Tests;
+using Main.Core.Tests.Entities;
 using NUnitLite;
 using NUnitLite.MonoDroid;
 using Ncqrs.Eventing.Storage.SQLite.Tests;
@@ -37,7 +38,7 @@ namespace Android.Tests.Runner
         }
         private TestAssemblyInfo MainCoreTests()
         {
-            var assembly = typeof(RavenQuestionnaire.Core.Tests.Entities.QuestionTest).Assembly;
+            var assembly = typeof(QuestionTest).Assembly;
 
             return new TestAssemblyInfo(assembly/*, typeof(CommonInfrastuctureTests)*/);
         }
