@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             if (string.IsNullOrEmpty(s))
                 return string.Empty;
             var onlyUnicode = Regex.Replace(s, @"[^\u0020-\u007E]", string.Empty);
-            return Regex.Replace(onlyUnicode, @"\t|\n|\r", "");
+            return Regex.Replace(onlyUnicode, @"\t|\n|\r|`|'|""", "");
         }
 
         protected string CreateColumnName(string parentTableName, string tableName)
