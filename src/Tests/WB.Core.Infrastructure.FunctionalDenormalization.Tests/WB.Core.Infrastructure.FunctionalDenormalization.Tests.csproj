@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9F1E02A3-79C8-4E9F-8C75-227BF5745575}</ProjectGuid>
+    <ProjectGuid>{67F04C76-E3D4-4767-8082-C24C563FFDCE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.Infrastructure.FunctionalDenormalization.Tests</RootNamespace>
