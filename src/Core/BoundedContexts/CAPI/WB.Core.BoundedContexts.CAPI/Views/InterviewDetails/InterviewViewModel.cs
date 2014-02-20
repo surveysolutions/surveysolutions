@@ -392,11 +392,16 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
 
-            var key = new InterviewItemId(screenId, propagationVector);
-            if (!this.Screens.ContainsKey(key))
+            this.RemoveScreen(new InterviewItemId(screenId, propagationVector));
+            this.UpdateGrid(screenId);
+        }
+
+        private void RemoveScreen(InterviewItemId screenId)
+        {
+            if (!this.Screens.ContainsKey(screenId))
                 return;
 
-            var screen = this.Screens[key] as QuestionnaireScreenViewModel;
+            var screen = this.Screens[screenId] as QuestionnaireScreenViewModel;
             foreach (var item in screen.Items)
             {
                 var question = item as QuestionViewModel;
@@ -406,10 +411,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
                     this.CleanQuestionsParticipationInSubstitutionReferencesBySubscribedQuestion(question);
                 }
+                var group = item as QuestionnaireNavigationPanelItem;
+                if (group != null)
+                {
+                    RemoveScreen(group.PublicKey);
+                }
             }
-            this.Screens.Remove(key);
-            this.UpdateGrid(screenId);
-
+            this.Screens.Remove(screenId);
         }
 
         private void CleanQuestionsParticipationInSubstitutionReferencesBySubscribedQuestion(QuestionViewModel question)

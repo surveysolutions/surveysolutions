@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\AnswersByVariableDenormalizerTestContext.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_collection_has_record_about_level_with_key_0.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_collection_was_not_created.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_that_in_roster_and_collection_has_one_answer.cs" />
