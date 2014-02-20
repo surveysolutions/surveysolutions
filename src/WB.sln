@@ -232,8 +232,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Func
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Files.Android", "Core\Infrastructure\WB.Core.Infrastructure.Files.Android\WB.Core.Infrastructure.Files.Android.csproj", "{8CEACD5D-AB0E-4104-8BCE-DDD7900887E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.FunctionalDenormalization.Tests", "Tests\WB.Core.Infrastructure.FunctionalDenormalization.Tests\WB.Core.Infrastructure.FunctionalDenormalization.Tests.csproj", "{9F1E02A3-79C8-4E9F-8C75-227BF5745575}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Files", "Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj", "{6AC3A080-CECA-4974-9CA1-C239695ED8F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Tests", "Tests\WB.Core.Infrastructure.Tests\WB.Core.Infrastructure.Tests.csproj", "{3D4175CD-A99B-43D0-A69B-54DEA155DD87}"
@@ -1529,21 +1527,6 @@ Global
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8}.Release|x86.ActiveCfg = Release|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575}.Release|x86.ActiveCfg = Release|Any CPU
 		{3D4175CD-A99B-43D0-A69B-54DEA155DD87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3D4175CD-A99B-43D0-A69B-54DEA155DD87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D4175CD-A99B-43D0-A69B-54DEA155DD87}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -1602,7 +1585,6 @@ Global
 		{9071B005-CC4E-416B-B29F-449B7696D7DB} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{C6139AFE-902E-4E59-BBDB-8E8125061548} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{E47C550B-DB7B-49DF-96B7-FE5A106BC3CC} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
-		{9F1E02A3-79C8-4E9F-8C75-227BF5745575} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{67F04C76-E3D4-4767-8082-C24C563FFDCE} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{3D4175CD-A99B-43D0-A69B-54DEA155DD87} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{3464F3AE-094C-4DEC-8725-59506328E597} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
