@@ -21,6 +21,12 @@ namespace Web.Supervisor.Code
             }
         }
 
+        public string GoogleMapApiKey
+        {
+            get { return ConfigurationManager.AppSettings.GetString("Google.Map.ApiKey"); }
+        }
+
+
         public string AdminEmail
         {
             get { return ConfigurationManager.AppSettings.GetString("AdminEmail"); }

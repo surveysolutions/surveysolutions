@@ -5,6 +5,7 @@ using Raven.Client.Embedded;
 using Raven.Client.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace Core.Supervisor.Tests.RavenIndexes
 {
@@ -53,7 +54,7 @@ namespace Core.Supervisor.Tests.RavenIndexes
         protected static readonly TestTemplate Template1 = new TestTemplate { Id = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"), Title = "The first template" };
         protected static readonly TestTemplate Template2 = new TestTemplate { Id = Guid.Parse("EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE"), Title = "The second template" };
 
-        protected static EmbeddableDocumentStore CreateDocumentStore(IEnumerable<StatisticsLineGroupedByUserAndTemplate> documents)
+        protected static EmbeddableDocumentStore CreateDocumentStore(IEnumerable<StatisticsLineGroupedByUserAndTemplate> documents = null, IEnumerable<QuestionnaireBrowseItem> questionnaireBrowseItems = null)
         {
             var documentStore = new EmbeddableDocumentStore
                 {
@@ -77,14 +78,22 @@ namespace Core.Supervisor.Tests.RavenIndexes
             new HeadquarterReportsSurveysAndStatusesGroupByTeam().Execute(documentStore);
             new HeadquarterReportsTeamsAndStatusesGroupByTeam().Execute(documentStore);
 
+            new QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex().Execute(documentStore);
+
             // Insert Documents from Abstract Property
             using (var bulkInsert = documentStore.BulkInsert())
             {
-                foreach (var document in documents)
+                foreach (var document in (documents ?? new StatisticsLineGroupedByUserAndTemplate[0]))
+                {
+                    bulkInsert.Store(document);
+                }
+           
+                foreach (var document in (questionnaireBrowseItems ?? new QuestionnaireBrowseItem[0]))
                 {
                     bulkInsert.Store(document);
                 }
             }
+            
             return documentStore;
         }
 
@@ -99,7 +108,7 @@ namespace Core.Supervisor.Tests.RavenIndexes
                 }
             
         }
-
+        
         protected static IEnumerable<StatisticsLineGroupedByUserAndTemplate> GenerateStatisticDocuments(params SummaryItemSketch[] testSummaryItems)
         {
             return testSummaryItems.Select(x => new StatisticsLineGroupedByUserAndTemplate()

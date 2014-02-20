@@ -26,11 +26,12 @@
                 {
                     <a class="brand" href="@Url.Action("Index", "HQ")"><span>Dashboard<span>headquarters</span></span></a>
                     <ul class="nav" role="menu">
-                        <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
+                        <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a></li>
                                 <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("SupervisorsAndStatuses", "HQ")">Teams and Statuses</a></li>
+                                <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("MapReport", "HQ")">Map Report</a></li>
                             </ul>
                             <li class="@(page == MenuItem.Docs ? "active" : "")">
                                 <a href="@Url.Action("Interviews", "HQ")"><i class="icon-list-alt"></i>Interviews</a>

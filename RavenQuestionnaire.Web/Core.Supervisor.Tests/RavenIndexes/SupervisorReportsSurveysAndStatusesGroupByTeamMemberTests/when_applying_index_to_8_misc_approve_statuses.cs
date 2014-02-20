@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using NUnit.Framework;
 using Raven.Client.Embedded;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
