@@ -1,8 +1,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.InformationSupplier;
 using Environment = Android.OS.Environment;
 
@@ -13,7 +14,9 @@ namespace CAPI.Android.Core.Model.Backup
         private const string Capi = "CAPI";
         private const string BackupFolder = "Backup";
         private const string RestoreFolder = "Restore";
-
+        private const string zipExtension = ".zip";
+        private readonly IArchiveUtils archiveUtils;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string backupPath;
         private readonly string restorePath;
         private readonly string rootPath;
@@ -22,96 +25,69 @@ namespace CAPI.Android.Core.Model.Backup
         }
         private readonly IEnumerable<IBackupable> backupables;
 
-        public DefaultBackup(IInfoFileSupplierRegistry infoFileSupplierRegistry, params IBackupable[] backupables)
+        public DefaultBackup(string basePath, IInfoFileSupplierRegistry infoFileSupplierRegistry, IArchiveUtils archiveUtils,
+            IFileSystemAccessor fileSystemAccessor, params IBackupable[] backupables)
         {
+            this.archiveUtils = archiveUtils;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.backupables = backupables;
-            
-            rootPath = Directory.Exists(Environment.ExternalStorageDirectory.AbsolutePath)
-                             ? Environment.ExternalStorageDirectory.AbsolutePath
-                             : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
 
-            rootPath = System.IO.Path.Combine(rootPath, Capi);
-            if (!Directory.Exists(rootPath))
+            rootPath = fileSystemAccessor.CombinePath(basePath, Capi);
+            if (!fileSystemAccessor.IsDirectoryExists(rootPath))
             {
-                Directory.CreateDirectory(rootPath);
+                fileSystemAccessor.CreateDirectory(rootPath);
             }
-            backupPath = System.IO.Path.Combine(rootPath, BackupFolder);
-            if (!Directory.Exists(backupPath))
-                Directory.CreateDirectory(backupPath);
-            restorePath = System.IO.Path.Combine(rootPath, RestoreFolder);
-            if (!Directory.Exists(restorePath))
-                Directory.CreateDirectory(restorePath);
-            
+
+            backupPath = fileSystemAccessor.CombinePath(rootPath, BackupFolder);
+            if (!fileSystemAccessor.IsDirectoryExists(backupPath))
+                fileSystemAccessor.CreateDirectory(backupPath);
+            restorePath = fileSystemAccessor.CombinePath(rootPath, RestoreFolder);
+            if (!fileSystemAccessor.IsDirectoryExists(restorePath))
+                fileSystemAccessor.CreateDirectory(restorePath);
+
             infoFileSupplierRegistry.Register(this.Backup);
         }
 
         public string Backup()
         {
             var backupFolderName = string.Format("backup-{0}", DateTime.Now.Ticks);
-            var backupFolderPath = Path.Combine(backupPath, backupFolderName);
-            Directory.CreateDirectory(backupFolderPath);
+            var backupFolderPath = fileSystemAccessor.CombinePath(backupPath, backupFolderName);
+            fileSystemAccessor.CreateDirectory(backupFolderPath);
 
             foreach (var backupable in backupables)
             {
                 var path = backupable.GetPathToBackupFile();
                 if(string.IsNullOrEmpty(path))
                     continue;
-                
-                CopyFileOrDirectory(path, backupFolderPath);
+
+                fileSystemAccessor.CopyFileOrDirectory(path, backupFolderPath);
             }
-            var backupArchiveName = Path.Combine(backupPath, backupFolderName + ".zip");
-            AndroidZipUtility.ZipDirectory(backupFolderPath, backupArchiveName);
-            Directory.Delete(backupFolderPath, true);
+            var backupArchiveName = fileSystemAccessor.CombinePath(backupPath, backupFolderName + zipExtension);
+            archiveUtils.ZipDirectory(backupFolderPath, backupArchiveName);
+            fileSystemAccessor.DeleteDirectory(backupFolderPath);
             return backupArchiveName;
-        }
-
-        private void CopyDb(string sourcePath, string backupFolderPath)
-        {
-            var sourceFileName = Path.GetFileName(sourcePath);
-            if(sourceFileName==null)
-                return;
-            File.Copy(sourcePath, Path.Combine(backupFolderPath, sourceFileName), true);
-        }
-
-        private void CopyFileOrDirectory(string sourceDir, string targetDir)
-        {
-            if (!File.Exists(sourceDir) && !Directory.Exists(sourceDir))
-                return;
-            
-            FileAttributes attr = File.GetAttributes(sourceDir);
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-            {
-                var sourceDirectoryName = Path.GetFileName(sourceDir);
-                if (sourceDirectoryName == null)
-                    return;
-                var destDir = Path.Combine(targetDir, sourceDirectoryName);
-                Directory.CreateDirectory(destDir);
-                foreach (var file in Directory.GetFiles(sourceDir))
-                    File.Copy(file, Path.Combine(destDir, Path.GetFileName(file)));
-
-                foreach (var directory in Directory.GetDirectories(sourceDir))
-                    CopyFileOrDirectory(directory, Path.Combine(destDir, sourceDirectoryName));
-            }
-            else
-            {
-                CopyDb(sourceDir, targetDir);
-            }
         }
 
         public void Restore()
         {
-            var files = Directory.GetFiles(restorePath);
-            if(files.Length==0)
+            var files = fileSystemAccessor.GetFilesInDirectory(restorePath).Where(fileName => fileName.EndsWith(zipExtension)).ToArray();
+            if (files.Length == 0)
                 throw new ArgumentException("Restore archive is absent");
 
             var firstFile = files[0];
-            var unziperFolder = Path.Combine(restorePath, Path.GetFileNameWithoutExtension(firstFile));
-            AndroidZipUtility.Unzip(firstFile, restorePath);
+            var unziperFolder = fileSystemAccessor.CombinePath(restorePath, GetArchiveName(firstFile));
+            archiveUtils.Unzip(firstFile, restorePath);
             foreach (var backupable in backupables)
             {
                 backupable.RestoreFromBackupFolder(unziperFolder);
             }
-            Directory.Delete(unziperFolder, true);
+            fileSystemAccessor.DeleteDirectory(unziperFolder);
+        }
+
+        private string GetArchiveName(string pathToFile)
+        {
+            var fileNameWithExtension = fileSystemAccessor.GetFileName(pathToFile);
+            return fileNameWithExtension.Replace(zipExtension, "");
         }
     }
 }

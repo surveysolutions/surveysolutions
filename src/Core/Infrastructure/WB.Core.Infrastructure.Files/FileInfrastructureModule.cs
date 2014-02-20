@@ -14,6 +14,7 @@ namespace WB.Core.Infrastructure.Files
         public override void Load()
         {
             this.Bind<IFileSystemAccessor>().To<FileSystemIoAccessor>();
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
         }
     }
 }

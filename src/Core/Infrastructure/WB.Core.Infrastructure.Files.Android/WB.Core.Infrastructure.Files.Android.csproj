@@ -37,6 +37,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\..\..\ExternalsMonodroid\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -50,6 +53,9 @@
     </Compile>
     <Compile Include="..\WB.Core.Infrastructure.Files\Implementation\FileSystem\FileSystemIOAccessor.cs">
       <Link>Implementation\FileSystem\FileSystemIOAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.Infrastructure.Files\Implementation\FileSystem\ZipArchiveUtils.cs">
+      <Link>Implementation\FileSystem\ZipArchiveUtils.cs</Link>
     </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,7 +82,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="6ac3a080-ceca-4974-9ca1-c239695ed8f8" />
+      <UserProperties ProjectLinkReference="6ac3a080-ceca-4974-9ca1-c239695ed8f8" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

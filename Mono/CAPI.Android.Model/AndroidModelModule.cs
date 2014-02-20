@@ -1,3 +1,5 @@
+using System.IO;
+using Android.OS;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.Authorization;
@@ -34,6 +36,10 @@ namespace CAPI.Android.Core.Model
 
         public override void Load()
         {
+            var basePath = Directory.Exists(Environment.ExternalStorageDirectory.AbsolutePath)
+                             ? Environment.ExternalStorageDirectory.AbsolutePath
+                             : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var snapshotStore = new AndroidSnapshotStore();
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
@@ -75,14 +81,21 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
 
-            this.Bind<IBackup>().To<DefaultBackup>().InSingletonScope().WithConstructorArgument("backupables", new IBackupable[]{evenStore, changeLogStore, fileSystem, denormalizerStore,
-                                              bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore});
+            this.Bind<IBackup>()
+                .To<DefaultBackup>()
+                .InSingletonScope()
+                .WithConstructorArgument("basePath", basePath)
+                .WithConstructorArgument("backupables", new IBackupable[]
+                {
+                    evenStore, changeLogStore, fileSystem, denormalizerStore,
+                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
+                });
 
             this.Bind<IInfoFileSupplierRegistry>().ToConstant(new InfoFileSupplierRegistryFactory().CreateInfoFileSupplierRegistry());
 
             this.Bind<ICapiInformationService>()
                 .To<CapiInformationService>()
-                .InSingletonScope();
+                .InSingletonScope().WithConstructorArgument("basePath", basePath);
 
         }
     }
