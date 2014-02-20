@@ -628,17 +628,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
 
-            item.UpdateQuestion(@event.Payload.QuestionId, question =>
+            var oldQuestion = item.Find<IQuestion>(@event.Payload.QuestionId);
+
+            item.ReplaceQuestionWithNew(oldQuestion, new QRBarcodeQuestion()
             {
-                question.QuestionText = @event.Payload.Title;
-                question.StataExportCaption = @event.Payload.VariableName;
-                question.ConditionExpression = @event.Payload.ConditionExpression;
-                question.Mandatory = @event.Payload.IsMandatory;
-                question.Instructions = @event.Payload.Instructions;
+                PublicKey = @event.Payload.QuestionId,
+                QuestionText = @event.Payload.Title,
+                StataExportCaption = @event.Payload.VariableName,
+                Mandatory = @event.Payload.IsMandatory,
+                ConditionExpression = @event.Payload.ConditionExpression,
+                Instructions = @event.Payload.Instructions
             });
 
             this.UpdateQuestionnaire(@event, item);
-
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> @event)
