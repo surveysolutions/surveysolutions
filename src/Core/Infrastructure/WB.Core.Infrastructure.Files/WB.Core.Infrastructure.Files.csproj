@@ -34,6 +34,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
@@ -48,6 +51,7 @@
   <ItemGroup>
     <Compile Include="FileInfrastructureModule.cs" />
     <Compile Include="Implementation\FileSystem\FileSystemIOAccessor.cs" />
+    <Compile Include="Implementation\FileSystem\ZipArchiveUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

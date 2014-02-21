@@ -92,9 +92,40 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return File.ReadAllBytes(pathToFile);
         }
 
+        public void CopyFileOrDirectory(string sourceDir, string targetDir)
+        {
+            FileAttributes attr = File.GetAttributes(sourceDir);
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                var sourceDirectoryName = GetFileName(sourceDir);
+                if (sourceDirectoryName == null)
+                    return;
+                var destDir = this.CombinePath(targetDir, sourceDirectoryName);
+                CreateDirectory(destDir);
+
+                foreach (var file in GetFilesInDirectory(sourceDir))
+                    File.Copy(file, CombinePath(destDir, GetFileName(file)));
+
+                foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
+                    CopyFileOrDirectory(directory, CombinePath(destDir, sourceDirectoryName));
+            }
+            else
+            {
+                this.CopyFile(sourceDir, targetDir);
+            }
+        }
+
         private string RemoveNonAscii(string s)
         {
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
+        }
+
+        private void CopyFile(string sourcePath, string backupFolderPath)
+        {
+            var sourceFileName = GetFileName(sourcePath);
+            if (sourceFileName == null)
+                return;
+            File.Copy(sourcePath, CombinePath(backupFolderPath, sourceFileName), true);
         }
     }
 }
