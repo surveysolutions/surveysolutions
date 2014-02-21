@@ -30,23 +30,30 @@ namespace WB.Tools.CapiDataGenerator.Models
 
         public void Store(UncommittedEventStream eventStream)
         {
-            Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
-
-            Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || o is NewUserCreated ||
-                                                    o is TemplateImported;
-
-            var committedEvents = eventStream.Select(x => x.Payload);
-            if (committedEvents.Any(isCapiEvent))
+            if (AppSettings.Instance.PutAllEventsToSupervisorDB)
             {
-                this.StoreInternal(eventStream: eventStream, eventsequences: capiSequences, eventstore: capiEventStore);
+                supevisorEventStore.Store(eventStream);
             }
-            if (committedEvents.Any(isSupervisorEvent))
+            else
             {
-                this.StoreInternal(eventStream: eventStream, eventsequences: supervisorSequences, eventstore: supevisorEventStore);
+                Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
+
+                Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || o is NewUserCreated ||
+                                                        o is TemplateImported;
+
+                var committedEvents = eventStream.Select(x => x.Payload);
+                if (committedEvents.Any(isCapiEvent))
+                {
+                    StoreInternal(eventStream: eventStream, eventsequences: capiSequences, eventstore: capiEventStore);
+                }
+                if (committedEvents.Any(isSupervisorEvent))
+                {
+                    StoreInternal(eventStream: eventStream, eventsequences: supervisorSequences, eventstore: supevisorEventStore);
+                }
             }
         }
 
-        private void StoreInternal(UncommittedEventStream eventStream, IDictionary<Guid, long> eventsequences, IEventStore eventstore)
+        private static void StoreInternal(UncommittedEventStream eventStream, IDictionary<Guid, long> eventsequences, IEventStore eventstore)
         {
             var eventstream = new UncommittedEventStream(eventStream.CommitId);
 

@@ -163,7 +163,7 @@ namespace Main.Core
         /// </param>
         internal static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
-            IEnumerable<object> handlers = kernel.GetAll(typeof(IEventHandler<>)).Distinct();
+            IEnumerable<object> handlers = kernel.GetAll(typeof(IEventHandler<>)).Distinct().ToList();
             foreach (object handler in handlers)
             {
                 IEnumerable<Type> ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
