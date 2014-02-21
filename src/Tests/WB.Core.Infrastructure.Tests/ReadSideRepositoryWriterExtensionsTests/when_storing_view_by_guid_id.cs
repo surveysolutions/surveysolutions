@@ -4,21 +4,23 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.Infrastructure.Tests.ReadSideRepositoryWriterTests
+namespace WB.Core.Infrastructure.Tests.ReadSideRepositoryWriterExtensionsTests
 {
-    internal class when_removing_view_by_guid_id
+    internal class when_storing_view_by_guid_id
     {
         Establish context = () =>
         {
             writerMock = new Mock<IReadSideRepositoryWriter<View>>();
+            view = Mock.Of<View>();
         };
 
         Because of = () =>
-            ReadSideRepositoryWriterExtensions.Remove(writerMock.Object, Guid.Parse("11111111111111111111111111111111"));
+            ReadSideRepositoryWriterExtensions.Store(writerMock.Object, view, Guid.Parse("11111111111111111111111111111111"));
 
         It should_pass_string_11111111111111111111111111111111_to_writers_GetById_method = () =>
-            writerMock.Verify(x => x.Remove("11111111111111111111111111111111"), Times.Once);
+            writerMock.Verify(x => x.Store(view, "11111111111111111111111111111111"), Times.Once);
 
         private static Mock<IReadSideRepositoryWriter<View>> writerMock;
+        private static View view;
     }
 }
