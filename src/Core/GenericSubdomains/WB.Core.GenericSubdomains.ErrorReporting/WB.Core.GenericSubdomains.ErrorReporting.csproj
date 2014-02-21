@@ -62,9 +62,7 @@
     <Compile Include="Services\TabletInformationSender\ITabletInformationSenderFactory.cs" />
     <Compile Include="Services\TabletInformationSender\TabletInformationSendException.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Implementation\RestUtils\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
