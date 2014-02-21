@@ -14,13 +14,15 @@ using Java.IO;
 using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
+using WB.Core.GenericSubdomain.Rest;
+using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Implementations.TabletInformation;
 using WB.UI.Capi.Services;
+using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
 using File = System.IO.File;
@@ -65,7 +67,7 @@ namespace WB.UI.Capi
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
         protected ITabletInformationSender tabletInformationSender;
-        
+        protected ITabletInformationSenderFactory tabletInformationSenderFactory;
         private ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -86,6 +88,7 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.sync_dialog);
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
+            this.tabletInformationSenderFactory = CapiApplication.Kernel.Get<ITabletInformationSenderFactory>();
             this.btnSync.Click += this.ButtonSyncClick;
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;
@@ -155,18 +158,16 @@ namespace WB.UI.Capi
             alert.Show();
         }
 
-        private ITabletInformationSender CreateTabletInformationSender()
-        {
-            return CapiApplication.Kernel.Get<ITabletInformationSender>();
-        }
-
         private void btnSendTabletInfo_Click(object sender, EventArgs e)
         {
             this.ThrowExeptionIfDialogIsOpened();
 
             this.PreperaUI();
 
-            tabletInformationSender = CreateTabletInformationSender();
+            tabletInformationSender =
+                this.tabletInformationSenderFactory.CreateTabletInformationSender(SettingsManager.GetSyncAddressPoint(),
+                    SettingsManager.GetRegistrationKey(), SettingsManager.AndroidId);
+
             tabletInformationSender.InformationPackageCreated += this.tabletInformationSender_InformationPackageCreated;
             tabletInformationSender.ProcessCanceled += this.tabletInformationSender_ProcessCanceled;
             tabletInformationSender.ProcessFinished += this.tabletInformationSender_ProcessFinished;
@@ -239,7 +240,8 @@ namespace WB.UI.Capi
             try
             {
                 this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
-                                                            CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IReadSideRepositoryReader<LoginDTO>>());
+                    CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IReadSideRepositoryReader<LoginDTO>>(),
+                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
             }
             catch (Exception ex)
             {

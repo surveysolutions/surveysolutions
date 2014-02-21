@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{04FF9769-AB98-416E-8AA9-89271724582E}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.GenericSubdomains.ErrorReporting</RootNamespace>
+    <AssemblyName>WB.Core.GenericSubdomains.ErrorReporting</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\ErrorReportingModule.cs">
+      <Link>ErrorReportingModule.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\IInfoFileSupplierRegistry.cs">
+      <Link>IInfoFileSupplierRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs">
+      <Link>Implementation\CapiInformation\CapiInformationService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs">
+      <Link>Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Implementation\TabletInformation\TabletInformationSender.cs">
+      <Link>Implementation\TabletInformation\TabletInformationSender.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Implementation\TabletInformation\TabletInformationSenderFactory.cs">
+      <Link>Implementation\TabletInformation\TabletInformationSenderFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Services\CapiInformationService\ICapiInformationService.cs">
+      <Link>Services\CapiInformationService\ICapiInformationService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs">
+      <Link>Services\TabletInformationSender\InformationPackageEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs">
+      <Link>Services\TabletInformationSender\ITabletInformationSender.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Services\TabletInformationSender\ITabletInformationSenderFactory.cs">
+      <Link>Services\TabletInformationSender\ITabletInformationSenderFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.GenericSubdomains.ErrorReporting\Services\TabletInformationSender\TabletInformationSendException.cs">
+      <Link>Services\TabletInformationSender\TabletInformationSendException.cs</Link>
+    </Compile>
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Core.GenericSubdomain.Rest\WB.Core.GenericSubdomain.Rest.csproj">
+      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
+      <Name>WB.Core.GenericSubdomain.Rest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\WB.Core.GenericSubdomains.ErrorReporting\packages.config">
+      <Link>packages.config</Link>
+    </None>
+    <None Include="Resources\AboutResources.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
+      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
+      <Name>AndroidNinject</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementation\RestUtils\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkReference="64ff78f2-775b-4728-9d8a-d3a7b9a7344c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

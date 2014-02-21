@@ -12,6 +12,7 @@ using CAPI.Android.Settings;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomain.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -20,7 +21,6 @@ using WB.UI.Capi.Syncronization.Handshake;
 using WB.UI.Capi.Syncronization.Pull;
 using WB.UI.Capi.Syncronization.Push;
 using WB.UI.Capi.Utils;
-using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization
 {
@@ -60,14 +60,14 @@ namespace WB.UI.Capi.Syncronization
             get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
         }
 
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog, IReadSideRepositoryReader<LoginDTO> userStorage)
+        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog, IReadSideRepositoryReader<LoginDTO> userStorage, IRestServiceWrapperFactory restServiceWrapperFactory)
         {
             this.context = context;
             
             this.Preparation();
             this.authentificator = authentificator;
 
-            var executor = new AndroidRestUrils(SettingsManager.GetSyncAddressPoint());
+            var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             this.pull = new RestPull(executor);
             this.push = new RestPush(executor);
             this.handshake = new RestHandshake(executor);
