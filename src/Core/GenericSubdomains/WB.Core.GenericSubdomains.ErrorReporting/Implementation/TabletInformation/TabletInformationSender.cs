@@ -72,6 +72,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
             if (!this.networkService.IsNetworkEnabled())
             {
                 this.Cancel();
+                return;
             }
 
             this.ExitIfCanceled();
