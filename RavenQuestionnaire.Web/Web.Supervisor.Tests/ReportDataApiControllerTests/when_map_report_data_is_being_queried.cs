@@ -10,6 +10,7 @@ using Main.Core.View;
 using Moq;
 using Web.Supervisor.Controllers;
 using It = Machine.Specifications.It;
+using it = Moq.It;
 
 namespace Web.Supervisor.Tests.ReportDataApiControllerTests
 {
@@ -18,16 +19,22 @@ namespace Web.Supervisor.Tests.ReportDataApiControllerTests
         Establish context = () =>
         {
             mapReportFactoryMock = new Mock<IViewFactory<MapReportInputModel, MapReportView>>();
+            mapReportFactoryMock.Setup(x => x.Load(input)).Returns(view);
             controller = CreateReportDataApiController(mapReport: mapReportFactoryMock.Object);
         };
 
         Because of = () =>
-            controller.MapReport(input);
+             resultView = controller.MapReport(input);
 
         It should_load_data_from_factory_once = () =>
             mapReportFactoryMock.Verify(x => x.Load(input), Times.Once());
 
+        It should_return_same_view_as_was_setted_up = () =>
+            resultView.ShouldBeTheSameAs(view);
+
         private static MapReportInputModel input;
+        private static MapReportView view;
+        private static MapReportView resultView;
         private static ReportDataApiController controller;
         private static Mock<IViewFactory<MapReportInputModel, MapReportView>> mapReportFactoryMock;
 

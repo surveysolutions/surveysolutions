@@ -150,6 +150,12 @@
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_inside_roster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\QuestionnaireQuestionInfoFactoryTestContext.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions_and_questionnaire_is_absent.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_geo_questions.cs" />
+    <Compile Include="QuestionnairesAndVersionsFactoryTests\QuestionnairesAndVersionsFactoryTestContext.cs" />
+    <Compile Include="QuestionnairesAndVersionsFactoryTests\when_loading_second_page_with_data.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_4_misc_questionnaire_browse_items.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_error_statuses.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_approve_statuses.cs" />
