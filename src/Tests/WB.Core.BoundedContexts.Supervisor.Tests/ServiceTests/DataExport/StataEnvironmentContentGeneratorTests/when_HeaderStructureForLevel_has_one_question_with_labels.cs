@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.Stata
         Establish context = () =>
         {
             oneQuestionHeaderStructureForLevel =
-                CreateHeaderStructureForLevel(CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("c1", "t1"), CreateLabelItem("c2", "t2")));
+                CreateHeaderStructureForLevel(CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("c1", "t1`\""), CreateLabelItem("c2", "t2\"'")));
 
             stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor(contentFilePath, (c) => stataGeneratedContent = c));
         };

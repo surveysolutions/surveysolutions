@@ -804,11 +804,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             EnablementChanges enablementChanges = this.CalculateEnablementChanges(
                 answeredQuestion, answer, questionnaire, getAnswer, this.GetRosterInstanceIds);
 
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, this.GetRosterInstanceIds);
-
-            Func<Identity, bool?> getNewQuestionState =
+           Func<Identity, bool?> getNewQuestionState =
                 question =>
                 {
                     if (enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
@@ -833,8 +829,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
             this.ApplyEnablementChangesEvents(enablementChanges);
-
-            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
             rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answer)));
         }

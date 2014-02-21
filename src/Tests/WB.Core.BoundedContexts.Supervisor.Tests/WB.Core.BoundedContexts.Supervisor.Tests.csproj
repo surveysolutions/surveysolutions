@@ -66,6 +66,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\AnswersByVariableDenormalizerTestContext.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_collection_has_record_about_level_with_key_0.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_collection_was_not_created.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_that_in_roster_and_collection_has_one_answer.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_the_same_geo_question_for_the_second_time.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_where_is_no_interview_brief_info.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_where_is_no_question_id_to_variable_map.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_collection_with_answers.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_info_about_income_question.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_info_about_income_question.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_info_about_income_interview.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_interview_brief_info.cs" />
+    <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_question_id_to_variable_map.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\InterviewEventHandlerFunctionalTestContext.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_for_two_rosters_triggered_by_numeric___.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_DateTimeQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
@@ -88,8 +102,10 @@
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows_with_nested_groups.cs" />
     <Compile Include="EventHandlers\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
+    <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
+    <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

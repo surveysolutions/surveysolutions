@@ -11,11 +11,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_itself : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireWithRosterAndGroupAfterWithConditionReferencingQuestionInRoster(
+            questionnaire = CreateQuestionnaireWithRosterWithConditionReferencingQuestionInsideItself(
                 underDeeperRosterLevelQuestionId,
                 groupWithCustomCondition);
 
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors.Count().ShouldEqual(1);
 
         It should_return_error_with_code__WB0046 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0046");
+            resultErrors.Single().Code.ShouldEqual("WB0051");
 
         It should_return_error_with_two_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
