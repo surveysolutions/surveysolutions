@@ -38,15 +38,20 @@
                 <TextBlock HorizontalAlignment="Left" Margin="20,289,0,0" TextWrapping="Wrap" Text="Percentage of complete/approve statuses:" VerticalAlignment="Top" Width="234"/>
                 <TextBox HorizontalAlignment="Left" Height="23" Margin="20,309,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding StatusesCount, Mode=TwoWay}"/>
                 <TextBlock HorizontalAlignment="Left" Margin="73,313,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="20,25,0,0" TextWrapping="Wrap" Text="Select supervisor:" VerticalAlignment="Top"/>
-                <ComboBox HorizontalAlignment="Left" Margin="18,46,0,0" VerticalAlignment="Top" Width="220" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
+                <TextBlock HorizontalAlignment="Left" Margin="18,10,0,0" TextWrapping="Wrap" Text="Select supervisor:" VerticalAlignment="Top"/>
+                <ComboBox HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top" Width="122" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding UserName}"></TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <CheckBox Content="All events only for supervisor" HorizontalAlignment="Left" Margin="18,73,0,0" VerticalAlignment="Top" IsChecked="{Binding OnlyForSupervisor, Mode=TwoWay}"/>
+                <CheckBox Content="Put all event to Supervisor DB (do not split between CAPI/SV)" 
+                          HorizontalAlignment="Left" Margin="18,53,0,0" VerticalAlignment="Top" 
+                          IsChecked="{Binding PutAllEventsToSupervisorDB, Mode=TwoWay}"/>
+                <CheckBox Content="Generate only Supervisor-side events" 
+                          HorizontalAlignment="Left" Margin="18,73,0,0" VerticalAlignment="Top" 
+                          IsChecked="{Binding OnlyForSupervisor, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
 

@@ -110,6 +110,7 @@
     </ApplicationDefinition>
     <Compile Include="AppSettings.cs" />
     <Compile Include="Converters\BoolToNegotiationVisibilityConverter.cs" />
+    <Compile Include="Models\State.cs" />
     <Compile Include="Ninject\CapiDataGeneratorEventStore.cs" />
     <Compile Include="MVVMCross\CapiDataGeneratorApplication.cs" />
     <Compile Include="MVVMCross\DebugTrace.cs" />
@@ -162,6 +163,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Configuration\A.WB.Tools.CapiDataGenerator.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\TLK.WB.Tools.CapiDataGenerator.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

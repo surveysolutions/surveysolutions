@@ -21,10 +21,13 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tools.CapiDataGenerator;
 using WB.UI.Shared.Web;
@@ -35,6 +38,9 @@ namespace CapiDataGenerator
 
     public class MainPageModel : MvxViewModel
     {
+        private const int MaxAllowedRosterCount = 40;
+        private static readonly decimal[] EmptyPropagationVector = new decimal[] { };
+
         private ICommandService commandService
         {
             get
@@ -83,7 +89,7 @@ namespace CapiDataGenerator
             }
         }
 
-        readonly Random _rand = new Random();
+        static readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
         private UserLight _headquarterUser;
@@ -267,6 +273,20 @@ namespace CapiDataGenerator
             }
         }
 
+        private bool putAllEventsToSupervisorDB = false;
+        public bool PutAllEventsToSupervisorDB
+        {
+            get
+            {
+                return putAllEventsToSupervisorDB;
+            }
+            set
+            {
+                putAllEventsToSupervisorDB = value;
+                RaisePropertyChanged(() => PutAllEventsToSupervisorDB);
+            }
+        }
+
         private bool _onlyForSupervisor = false;
         public bool OnlyForSupervisor
         {
@@ -353,6 +373,7 @@ namespace CapiDataGenerator
         }
 
         private TimeSpan _elapsedTime;
+
         public TimeSpan ElapsedTime
         {
             get
@@ -382,57 +403,63 @@ namespace CapiDataGenerator
                 _startTime = DateTime.Now;
                 _timer.Start();
 
-                QuestionnaireDocument template = null;
+                QuestionnaireDocument questionnaireDocument = null;
 
                 try
                 {
-                    template = ReadTemplate(this.TemplatePath);
+                    questionnaireDocument = ReadTemplate(this.TemplatePath);
+                    questionnaireDocument.Title = "(generated) " + questionnaireDocument.Title;
                 }
                 catch (Exception)
                 {
                     
-                    Log("bad template");
+                    Log("bad template (do not forget to unzip it)");
                 }
 
-                if (template != null)
+                if (questionnaireDocument != null)
                 {
-                    int qcount = 0;
-                    int icount = 0;
-                    int acount = 0;
-                    int ccount = 0;
-                    int scount = 0;
-                    int.TryParse(QuestionnairesCount, out qcount);
-                    int.TryParse(InterviewersCount, out icount);
-                    int.TryParse(AnswersCount, out acount);
-                    int.TryParse(CommentsCount, out ccount);
-                    int.TryParse(StatusesCount, out scount);
+                    int interviewsCount = 0;
+                    int interviewersCount = 0;
+                    int answersCount = 0;
+                    int commentsCount = 0;
+                    int statusesCount = 0;
+                    int.TryParse(QuestionnairesCount, out interviewsCount);
+                    int.TryParse(InterviewersCount, out interviewersCount);
+                    int.TryParse(AnswersCount, out answersCount);
+                    int.TryParse(CommentsCount, out commentsCount);
+                    int.TryParse(StatusesCount, out statusesCount);
 
-                    if (scount > 100)
+                    if (statusesCount > 100)
                     {
-                        scount = 100;
-                        StatusesCount = scount.ToString();
+                        statusesCount = 100;
+                        StatusesCount = statusesCount.ToString();
                     }
 
+                    AppSettings.Instance.PutAllEventsToSupervisorDB = this.PutAllEventsToSupervisorDB;
                     var onlyForSupervisor = this.OnlyForSupervisor;
 
-                    var questions = template.GetAllQuestions().Where(x => !x.Featured);
+                    var questions = questionnaireDocument.GetAllQuestions().Where(x => !x.Featured).ToList();
                     var questionsCount = questions.Count();
 
-                    acount = (int) (questionsCount*((double) acount/100));
-                    ccount = (int) (questionsCount*((double) ccount/100));
-                    scount = (int) (icount*qcount*((double) scount/100));
+                    answersCount = (int) (questionsCount*((double) answersCount/100));
+                    commentsCount = (int) (questionsCount*((double) commentsCount/100));
+                    statusesCount = (int) (interviewersCount*interviewsCount*((double) statusesCount/100));
 
-                    TotalCount = icount + icount*qcount*(acount + ccount + 2) + scount;
+                    TotalCount = interviewersCount + interviewersCount*interviewsCount*(answersCount + commentsCount + 2) + statusesCount;
 
                     this.EnableCacheInAllRepositoryWriters();
                     try
                     {
                         AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
-                        var users = CreateUsers(icount);
-                        var questionnaries = this.CreateInterviews(template, qcount, users, onlyForSupervisor);
-                        CreateAnswers(acount, questionnaries, questions);
-                        CreateComments(ccount, questionnaries, questions);
-                        ChangeStatuses(scount, questionnaries, onlyForSupervisor);
+                        var users = CreateUsers(interviewersCount);
+                        var questionnaire = new Questionnaire(questionnaireDocument);
+                        var state = new State(questionnaire.GetFixedRosterGroups());
+
+                        var interviews = this.CreateInterviews(questionnaireDocument, interviewsCount, users, onlyForSupervisor, questionnaire, state);
+
+                        CreateAnswers(answersCount, interviews, questions, questionnaire, questionnaireDocument, state);
+                        CreateComments(commentsCount, interviews, questions, questionnaire);
+                        ChangeStatuses(statusesCount, interviews, onlyForSupervisor);
 
                         if (!onlyForSupervisor)
                         {
@@ -479,7 +506,7 @@ namespace CapiDataGenerator
             }
         }
 
-        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions)
+        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions, IQuestionnaire questionnaire)
         {
             for (int j = 0; j < interviews.Count; j++)
             {
@@ -488,12 +515,20 @@ namespace CapiDataGenerator
                 {
                     var question = questions.ElementAt(_rand.Next(questions.Count()));
 
-                    commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
-                                                                    userId: interview.Value,
-                                                                    questionId: question.PublicKey,
-                                                                    rosterVector: new decimal[0],
-                                                                    commentTime: DateTime.UtcNow,
-                                                                    comment: "auto comment"));
+                    int rosterLevel = questionnaire.GetRosterLevelForQuestion(question.PublicKey);
+
+                    decimal[] rosterVector = Enumerable.Repeat((decimal) 0, rosterLevel).ToArray();
+
+                    try
+                    {
+                        commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
+                            userId: interview.Value,
+                            questionId: question.PublicKey,
+                            rosterVector: rosterVector,
+                            commentTime: DateTime.UtcNow,
+                            comment: "auto comment"));
+                    }
+                    catch {}
 
                     UpdateProgress();
                     LogStatus("set comments", (j*commentsCount) + z, interviews.Count*commentsCount);
@@ -522,7 +557,8 @@ namespace CapiDataGenerator
             return users;
         }
 
-        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users, bool onlyForSupervisor)
+        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int interviewCount, List<UserLight> users, bool onlyForSupervisor,
+            IQuestionnaire questionnaire, State state)
         {
             Log("import template");
             commandService.Execute(new ImportFromDesigner(_headquarterUser.Id, template));
@@ -533,9 +569,9 @@ namespace CapiDataGenerator
             for (int i = 0; i < users.Count; i++)
             {
                 var interviewer = users[i];
-                for (int j = 0; j < questionnariesCount; j++)
+                for (int j = 0; j < interviewCount; j++)
                 {
-                    LogStatus("create interviews", (i * questionnariesCount) + j, questionnariesCount * users.Count);
+                    LogStatus("create interviews", (i * interviewCount) + j, interviewCount * users.Count);
 
                     Guid interviewId = Guid.NewGuid();
 
@@ -558,37 +594,54 @@ namespace CapiDataGenerator
             {
                 LogStatus("synchronize interview", i, interviews.Count);
 
-                var interview = interviews.ElementAt(i);
-                commandService.Execute(new SynchronizeInterviewCommand(interviewId: interview.Key, userId: interview.Value,
-                                                                       sycnhronizedInterview: new InterviewSynchronizationDto(
-                                                                           id: interview.Key,
-                                                                           status: InterviewStatus.InterviewerAssigned,
-                                                                           userId: interview.Value,
-                                                                           questionnaireId: template.PublicKey,
-                                                                           questionnaireVersion: 1,
-                                                                           answers: new AnsweredQuestionSynchronizationDto[0], 
-                                                                           disabledGroups: new HashSet<InterviewItemId>(), 
-                                                                           disabledQuestions: new HashSet<InterviewItemId>(), 
-                                                                           validAnsweredQuestions: new HashSet<InterviewItemId>(), 
-                                                                           invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
-                                                                           propagatedGroupInstanceCounts: null,
-                                                                           rosterGroupInstances: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                                                                           wasCompleted: false)));
-                changeLogManipulator.CreateOrReopenDraftRecord(interview.Key);
+                var interviewData = interviews.ElementAt(i);
+
+                commandService.Execute(new SynchronizeInterviewCommand(
+                    interviewId: interviewData.Key,
+                    userId: interviewData.Value,
+                    sycnhronizedInterview: new InterviewSynchronizationDto(
+                        id: interviewData.Key,
+                        status: InterviewStatus.InterviewerAssigned,
+                        userId: interviewData.Value,
+                        questionnaireId: template.PublicKey,
+                        questionnaireVersion: 1,
+                        answers: new AnsweredQuestionSynchronizationDto[0],
+                        disabledGroups: new HashSet<InterviewItemId>(),
+                        disabledQuestions: new HashSet<InterviewItemId>(),
+                        validAnsweredQuestions: new HashSet<InterviewItemId>(),
+                        invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
+                        propagatedGroupInstanceCounts: null,
+                        rosterGroupInstances: GetRosterGroupInstancesForSynchronization(questionnaire, state),
+                        wasCompleted: false)));
+
+                changeLogManipulator.CreateOrReopenDraftRecord(interviewData.Key);
                 UpdateProgress();
             }
 
             return interviews;
         }
 
-        private Dictionary<Guid, object> GetAnswersByFeaturedQuestions(IEnumerable<IQuestion> featuredQuestions)
+        private static Dictionary<InterviewItemId, RosterSynchronizationDto[]> GetRosterGroupInstancesForSynchronization(IQuestionnaire questionnaire, State state)
         {
-            return featuredQuestions.ToDictionary(featuredQuestion => featuredQuestion.PublicKey, this.GetAnswerByQuestion);
+            return Enumerable
+                .Concat(
+                    state.FixedTitlesRosters.Select(rosterId => new { RosterId = rosterId, InstanceCount = questionnaire.GetFixedRosterTitles(rosterId).Count() }),
+                    state.NumericRosterInstanceCounts.Select(pair => new { RosterId = pair.Key, InstanceCount = pair.Value }))
+                .ToDictionary(
+                    x => new InterviewItemId(x.RosterId),
+                    x => Enumerable
+                        .Range(0, x.InstanceCount)
+                        .Select(instanceIndex => new RosterSynchronizationDto(x.RosterId, EmptyPropagationVector, instanceIndex, null, null))
+                        .ToArray());
         }
 
-        private object GetAnswerByQuestion(IQuestion question)
+        private Dictionary<Guid, object> GetAnswersByFeaturedQuestions(IEnumerable<IQuestion> featuredQuestions)
         {
-            object answer = null;
+            return featuredQuestions.ToDictionary(featuredQuestion => featuredQuestion.PublicKey, GetAnswerByQuestion);
+        }
+
+        private static object GetAnswerByQuestion(IQuestion question)
+        {
             switch (question.QuestionType)
             {
                 case QuestionType.SingleOption:
@@ -596,12 +649,13 @@ namespace CapiDataGenerator
                     {
                         try
                         {
-                            answer = decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
+                            return decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
                                                CultureInfo.InvariantCulture);
                         }
                         catch{}
                     }
                     break;
+
                 case QuestionType.MultyOption:
                     if (question.Answers.Count > 0)
                     {
@@ -612,39 +666,50 @@ namespace CapiDataGenerator
                             try
                             {
                                 answers.Add(decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
-                                                      CultureInfo.InvariantCulture));
+                                    CultureInfo.InvariantCulture));
                             }
-                            catch{}
+                            catch {}
                         }
-                        answer = answers.Distinct().ToArray();
+                        return answers.Distinct().ToArray();
                     }
                     break;
+
                 case QuestionType.Numeric:
-                    answer = new decimal(_rand.Next(100));
-                    break;
+                    var numericQuestion = (INumericQuestion) question;
+                    int maxValue = numericQuestion.MaxValue ?? 100;
+
+                    return numericQuestion.IsInteger
+                        ? _rand.Next(maxValue) as object
+                        : new decimal(_rand.Next(maxValue)) as object;
+
                 case QuestionType.DateTime:
-                    answer = new DateTime(_rand.Next(1940, 2003), _rand.Next(1, 13), _rand.Next(1, 29));
-                    break;
+                    return new DateTime(_rand.Next(1940, 2003), _rand.Next(1, 13), _rand.Next(1, 29));
+
                 case QuestionType.Text:
-                    answer = "value " + _rand.Next();
-                    break;
+                    return "value " + _rand.Next();
+
                 case QuestionType.AutoPropagate:
                     return new decimal(_rand.Next(((IAutoPropagate) question).MaxValue));
-                    break;
             }
-            return answer;
+
+            return null;
         }
 
-        private void CreateAnswers(int answersCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions)
+        private void CreateAnswers(int answersCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions,
+            IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument, State state)
         {
             for (var j = 0; j < interviews.Count; j++)
             {
                 var interview = interviews.ElementAt(j);
                 for (int z = 0; z < answersCount; z++)
                 {
-                    var command = this.SendAnswerCommand(question: questions.ElementAt(_rand.Next(questions.Count())),
-                                                         responsibleId: interview.Value, interviewId: interview.Key);
-                    if (command != null)
+                    IQuestion randomQuestion = questions.ElementAt(_rand.Next(questions.Count()));
+
+                    Guid userId = interview.Value;
+                    Guid interviewId = interview.Key;
+                    var commands = CreateAnswerCommands(randomQuestion, interviewId, userId, questionnaire, questionnaireDocument, state);
+
+                    foreach (ICommand command in commands.Where(command => command != null))
                     {
                         try
                         {
@@ -659,52 +724,139 @@ namespace CapiDataGenerator
             }
         }
 
-        private ICommand SendAnswerCommand(IQuestion question, Guid interviewId, Guid responsibleId)
+        private static IEnumerable<ICommand> CreateAnswerCommands(IQuestion question, Guid interviewId, Guid userId,
+            IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument, State state)
         {
-            ICommand command = null;
+            var rosterLevel = questionnaire.GetRosterLevelForQuestion(question.PublicKey);
 
-            decimal[] emptyPropagationVector = { };
+            if (rosterLevel == 1)
+            {
+                Guid rosterId = questionnaire.GetRostersFromTopToSpecifiedQuestion(question.PublicKey).First();
+
+                Guid? rosterSizeQuestionId = questionnaireDocument.Find<IGroup>(rosterId).RosterSizeQuestionId;
+
+                bool isFixedTitleRoster = state.FixedTitlesRosters.Contains(rosterId);
+                bool isNumericQuestionRoster = rosterSizeQuestionId.HasValue && questionnaire.GetQuestionType(rosterSizeQuestionId.Value) == QuestionType.Numeric;
+
+                if (isFixedTitleRoster)
+                    return CreateAnswerCommandsForQuestionFromFixedTitlesRoster(question, rosterId, interviewId, userId, questionnaire, state);
+
+                if (isNumericQuestionRoster)
+                    return CreateAnswerCommandsForQuestionFromNumericQuestionRoster(
+                        question, rosterId, rosterSizeQuestionId.Value, interviewId, userId, questionnaire, questionnaireDocument, state);
+
+                return Enumerable.Empty<ICommand>();
+            }
+
+            return new[] { CreateAnswerCommand(question, interviewId, userId, EmptyPropagationVector, questionnaire, state) };
+        }
+
+        private static IEnumerable<ICommand> CreateAnswerCommandsForQuestionFromNumericQuestionRoster(
+            IQuestion question, Guid rosterId, Guid rosterSizeQuestionId, Guid interviewId, Guid userId,
+            IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument, State state)
+        {
+            var commands = new List<ICommand>();
+
+            bool isRosterSizeQuestionAnswered = state.NumericRosterInstanceCounts.ContainsKey(rosterId);
+
+            if (!isRosterSizeQuestionAnswered)
+            {
+                commands.Add(
+                    CreateAnswerCommand(questionnaireDocument.Find<IQuestion>(rosterSizeQuestionId), interviewId, userId, EmptyPropagationVector, questionnaire, state));
+            }
+
+            int rosterInstancesCount = state.NumericRosterInstanceCounts[rosterId];
+
+            commands.AddRange(
+                CreateAnswerCommandsForQuestionFromRoster(question, rosterInstancesCount, interviewId, userId, questionnaire, state));
+
+            return commands;
+        }
+
+        private static IEnumerable<ICommand> CreateAnswerCommandsForQuestionFromFixedTitlesRoster(
+            IQuestion question, Guid rosterId, Guid interviewId, Guid userId, IQuestionnaire questionnaire, State state)
+        {
+            int rosterInstancesCount = questionnaire.GetFixedRosterTitles(rosterId).Count();
+
+            return CreateAnswerCommandsForQuestionFromRoster(question, rosterInstancesCount, interviewId, userId, questionnaire, state);
+        }
+
+        private static IEnumerable<ICommand> CreateAnswerCommandsForQuestionFromRoster(
+            IQuestion question, int rosterInstancesCount, Guid interviewId, Guid userId, IQuestionnaire questionnaire, State state)
+        {
+            IEnumerable<decimal> rosterInstanceIds = Enumerable.Range(0, rosterInstancesCount).Select(rosterInstanceIndex => (decimal) rosterInstanceIndex);
+
+            return CreateAnswerCommandsForQuestionFromRoster(question, rosterInstanceIds, interviewId, userId, questionnaire, state);
+        }
+
+        private static IEnumerable<ICommand> CreateAnswerCommandsForQuestionFromRoster(
+            IQuestion question, IEnumerable<decimal> rosterInstanceIds, Guid interviewId, Guid userId, IQuestionnaire questionnaire, State state)
+        {
+            return (
+                from rosterInstanceId in rosterInstanceIds
+                let propagationVector = new[] { rosterInstanceId }
+                select CreateAnswerCommand(question, interviewId, userId, propagationVector, questionnaire, state)
+            ).ToList();
+        }
+
+        private static ICommand CreateAnswerCommand(IQuestion question, Guid interviewId, Guid userId, decimal[] propagationVector,
+            IQuestionnaire questionnaire, State state)
+        {
             Guid questionId = question.PublicKey;
-            Guid userId = responsibleId;
-            DateTime answersTime = DateTime.UtcNow;
 
-            object answer = this.GetAnswerByQuestion(question);
+            bool isNumericRosterSizeQuestion = question.QuestionType == QuestionType.Numeric && questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).Any();
+
+            object answer;
+            if (isNumericRosterSizeQuestion)
+            {
+                var numericQuestion = (INumericQuestion) question;
+                int rosterCount = Math.Min(numericQuestion.MaxValue ?? MaxAllowedRosterCount, 7);
+
+                foreach (Guid rosterId in questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId))
+                {
+                    state.NumericRosterInstanceCounts[rosterId] = rosterCount;
+                }
+
+                answer = rosterCount;
+            }
+            else
+            {
+                answer = GetAnswerByQuestion(question);
+            }
+
+            DateTime answersTime = DateTime.UtcNow;
 
             if (answer != null)
             {
                 switch (question.QuestionType)
                 {
                     case QuestionType.Text:
-                        command = new AnswerTextQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
-                                                                (string) answer);
-                        break;
+                        return new AnswerTextQuestionCommand(interviewId, userId, questionId, propagationVector, answersTime,
+                            (string) answer);
 
                     case QuestionType.AutoPropagate:
                     case QuestionType.Numeric:
-                        command = this.CreateAnswerCommandForAnswerNumericQuestion(question, interviewId, userId, emptyPropagationVector, answersTime, answer);
-                        break;
+                        return CreateAnswerCommandForAnswerNumericQuestion(question, interviewId, userId, propagationVector, answersTime,
+                            answer);
 
                     case QuestionType.DateTime:
-                        command = new AnswerDateTimeQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
-                                                                    (DateTime) answer);
-                        break;
+                        return new AnswerDateTimeQuestionCommand(interviewId, userId, questionId, propagationVector, answersTime,
+                            (DateTime) answer);
 
                     case QuestionType.SingleOption:
-                        command = new AnswerSingleOptionQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
-                                                                        (decimal) answer);
-                        break;
+                        return new AnswerSingleOptionQuestionCommand(interviewId, userId, questionId, propagationVector, answersTime,
+                            (decimal) answer);
 
                     case QuestionType.MultyOption:
-                        command = new AnswerMultipleOptionsQuestionCommand(interviewId, userId, questionId, emptyPropagationVector,
-                                                                           answersTime, (decimal[]) answer);
-                        break;
+                        return new AnswerMultipleOptionsQuestionCommand(interviewId, userId, questionId, propagationVector, answersTime,
+                            (decimal[]) answer);
                 }
             }
 
-            return command;
+            return null;
         }
 
-        private ICommand CreateAnswerCommandForAnswerNumericQuestion(IQuestion question, Guid interviewId, Guid userId,
+        private static ICommand CreateAnswerCommandForAnswerNumericQuestion(IQuestion question, Guid interviewId, Guid userId,
             decimal[] emptyPropagationVector,
             DateTime answersTime, object answer)
         {

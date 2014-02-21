@@ -10,10 +10,12 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
+using Core.Supervisor.Views.User;
 using Main.Core;
 using Main.Core.Commands;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -27,6 +29,7 @@ using NinjectAdapter;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation;
@@ -80,8 +83,6 @@ namespace CapiDataGenerator
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
 
-            this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
-
             this.Bind<IReadSideRepositoryReader<InterviewData>>().To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope();
             
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
@@ -97,6 +98,8 @@ namespace CapiDataGenerator
 
             this.Bind<IBackup>().To<DefaultBackup>().InSingletonScope().WithConstructorArgument("backupables", new IBackupable[]{capiEvenStore, changeLogStore, denormalizerStore, capiTemplateWriter});
 
+            this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
+            
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
@@ -109,24 +112,30 @@ namespace CapiDataGenerator
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            var bus = new CustomInProcessEventDispatcher(true);
+            var inProcessEventDispatcher = new CustomInProcessEventDispatcher(true);
+
+            var bus = new NcqrCompatibleEventDispatcher(() => inProcessEventDispatcher);
+
             this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             this.Bind<IEventBus>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
             NcqrsEnvironment.SetDefault<IEventStore>(eventStore);
-           
-            NcqrsInit.RegisterEventHandlers(bus, Kernel);
+
+            foreach (var handler in Kernel.GetAll(typeof(IEventHandler)))
+            {
+                bus.Register(handler as IEventHandler);
+            }
 
             this.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
             
             #region register handlers
 
-            InitCapiTemplateStorage(bus);
-            
-            InitUserStorage(bus);
+            InitCapiTemplateStorage(inProcessEventDispatcher);
 
-            InitDashboard(bus);
+            InitUserStorage(inProcessEventDispatcher);
+
+            InitDashboard(inProcessEventDispatcher);
 
 
             #endregion

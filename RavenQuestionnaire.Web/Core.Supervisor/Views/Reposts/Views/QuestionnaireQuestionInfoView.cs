@@ -9,6 +9,10 @@ namespace Core.Supervisor.Views.Reposts.Views
 {
     public class QuestionnaireQuestionInfoView
     {
+        public QuestionnaireQuestionInfoView()
+        {
+            Variables = new QuestionnaireQuestionInfoItem[0];
+        }
         public IEnumerable<QuestionnaireQuestionInfoItem> Variables { get; set; }
     }
 
