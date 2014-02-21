@@ -4,7 +4,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.Infrastructure.Tests.ReadSideRepositoryWriterTests
+namespace WB.Core.Infrastructure.Tests.ReadSideRepositoryWriterExtensionsTests
 {
     internal class when_getting_view_by_guid_id
     {
