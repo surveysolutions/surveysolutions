@@ -1,11 +1,10 @@
 using System.Linq;
 using Android.Content;
 using Android.Net;
-using WB.UI.Shared.Android.Network;
 
-namespace WB.UI.Shared.Android.Implementations.Network
+namespace WB.Core.GenericSubdomain.Rest.Android
 {
-    internal class AndroidNetworkService : ICapiNetworkService
+    internal class AndroidNetworkService : INetworkService
     {
         private readonly Context context;
 

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.GenericSubdomains.ErrorReporting</RootNamespace>
+    <AssemblyName>WB.Core.GenericSubdomains.ErrorReporting</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IInfoFileSupplierRegistry.cs" />
+    <Compile Include="Implementation\CapiInformation\CapiInformationService.cs" />
+    <Compile Include="Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs" />
+    <Compile Include="Implementation\TabletInformation\TabletInformationSender.cs" />
+    <Compile Include="Implementation\TabletInformation\TabletInformationSenderFactory.cs" />
+    <Compile Include="ErrorReportingModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CapiInformationService\ICapiInformationService.cs" />
+    <Compile Include="Services\TabletInformationSender\InformationPackageEventArgs.cs" />
+    <Compile Include="Services\TabletInformationSender\ITabletInformationSender.cs" />
+    <Compile Include="Services\TabletInformationSender\ITabletInformationSenderFactory.cs" />
+    <Compile Include="Services\TabletInformationSender\TabletInformationSendException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementation\RestUtils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Core.GenericSubdomain.Rest\WB.Core.GenericSubdomain.Rest.csproj">
+      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
+      <Name>WB.Core.GenericSubdomain.Rest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

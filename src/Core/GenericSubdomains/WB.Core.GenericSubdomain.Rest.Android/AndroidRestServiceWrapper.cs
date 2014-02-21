@@ -1,34 +1,33 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
-using Java.Security.Cert;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Serialization;
 
-namespace WB.UI.Shared.Android.RestUtils
+namespace WB.Core.GenericSubdomain.Rest.Android
 {
-    public class AndroidRestUrils : IRestUrils
+    internal class AndroidRestServiceWrapper : IRestServiceWrapper
     {
         private readonly string baseAddress;
-
+        private readonly IJsonUtils jsonUtils;
         private readonly ILogger logger;
 
-        public AndroidRestUrils(string baseAddress)
+        public AndroidRestServiceWrapper(string baseAddress, IJsonUtils jsonUtils)
         {
             this.baseAddress = baseAddress;
+            this.jsonUtils = jsonUtils;
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
-        public void ExcecuteRestRequest(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams)
+        public void ExecuteRestRequest(string url,  string login, string password, string method, params KeyValuePair<string, string>[] additionalParams)
         {
-            var restClient = BuildRestClient(authenticator);
+            var restClient = this.BuildRestClient(login, password);
 
-            var request = BuildRequest(url, additionalParams, null, GetRequestMethod(method));
+            var request = this.BuildRequest(url, additionalParams, null, this.GetRequestMethod(method));
 
             var response = restClient.Execute(request);
 
@@ -45,23 +44,23 @@ namespace WB.UI.Shared.Android.RestUtils
             }
         }
 
-        public T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, string method, params KeyValuePair<string, string>[] additionalParams)
+        public T ExecuteRestRequest<T>(string url, string login, string password, string method, params KeyValuePair<string, string>[] additionalParams)
         {
-            var restClient = BuildRestClient(authenticator);
+            var restClient = this.BuildRestClient(login, password);
 
-            var request = BuildRequest(url, additionalParams, null, GetRequestMethod(method));
+            var request = this.BuildRequest(url, additionalParams, null, this.GetRequestMethod(method));
 
             var response = restClient.Execute(request);
 
             return this.HandlerResponse<T>(response);
         }
 
-        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, IAuthenticator authenticator, string method,
+        public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
             params KeyValuePair<string, string>[] additionalParams)
         {
-            var restClient = BuildRestClient(authenticator);
+            var restClient = this.BuildRestClient(login,password);
 
-            var request = BuildRequest(url, additionalParams, requestBody, GetRequestMethod(method));
+            var request = this.BuildRequest(url, additionalParams, requestBody, this.GetRequestMethod(method));
             
             IRestResponse response = null;
 
@@ -79,14 +78,14 @@ namespace WB.UI.Shared.Android.RestUtils
             return this.HandlerResponse<T>(response);
         }
 
-        private RestClient BuildRestClient(IAuthenticator authenticator)
+        private RestClient BuildRestClient(string login, string password)
         {
             var restClient = new RestClient(this.baseAddress);
 
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
-            if (authenticator != null)
-                restClient.Authenticator = authenticator;
+            if (!string.IsNullOrEmpty(login) || !string.IsNullOrEmpty(password))
+                restClient.Authenticator = new HttpBasicAuthenticator(login, password);
             return restClient;
         }
 
@@ -120,7 +119,7 @@ namespace WB.UI.Shared.Android.RestUtils
                 throw exception;
             }
 
-            var syncItemsMetaContainer = JsonUtils.GetObject<T>(response.Content);
+            var syncItemsMetaContainer = this.jsonUtils.Deserrialize<T>(response.Content);
 
             if (syncItemsMetaContainer == null)
             {

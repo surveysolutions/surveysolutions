@@ -10,16 +10,15 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Ninject.Modules;
-using WB.UI.Shared.Android.Implementations.Network;
-using WB.UI.Shared.Android.Network;
 
-namespace WB.UI.Shared.Android
+namespace WB.Core.GenericSubdomain.Rest.Android
 {
-    public class SharedAndroidUiModule : NinjectModule
+    public class RestAndroidModule : NinjectModule
     {
         public override void Load()
         {
-            this.Bind<ICapiNetworkService>().To<AndroidNetworkService>();
+            this.Bind<IRestServiceWrapperFactory>().To<AndroidRestServiceWrapperFactory>();
+            this.Bind<INetworkService>().To<AndroidNetworkService>();
         }
     }
 }

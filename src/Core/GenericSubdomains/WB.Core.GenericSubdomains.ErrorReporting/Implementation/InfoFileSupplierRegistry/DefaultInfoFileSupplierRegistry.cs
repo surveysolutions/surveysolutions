@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WB.Core.Infrastructure.InformationSupplier.Implementation.InfoFileSupplierRegistry
+namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.InfoFileSupplierRegistry
 {
     internal class DefaultInfoFileSupplierRegistry : IInfoFileSupplierRegistry
     {
@@ -20,11 +20,11 @@ namespace WB.Core.Infrastructure.InformationSupplier.Implementation.InfoFileSupp
 
         public IEnumerable<string> GetAll()
         {
-            foreach (var infoFilePath in infoFilePaths)
+            foreach (var infoFilePath in this.infoFilePaths)
             {
                 yield return infoFilePath;
             }
-            foreach (var infoFilePathCallback in infoFilePathsCallback)
+            foreach (var infoFilePathCallback in this.infoFilePathsCallback)
             {
                 yield return infoFilePathCallback();
             }
