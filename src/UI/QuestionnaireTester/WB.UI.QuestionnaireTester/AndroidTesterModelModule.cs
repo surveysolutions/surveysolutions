@@ -3,6 +3,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.UI.QuestionnaireTester
@@ -27,6 +28,7 @@ namespace WB.UI.QuestionnaireTester
             
             this.Bind<IReadSideRepositoryWriter<InterviewViewModel>>().ToConstant(bigSurveyStore);
             this.Bind<IReadSideRepositoryReader<InterviewViewModel>>().ToConstant(bigSurveyStore);
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             
         }
     }

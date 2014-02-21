@@ -29,6 +29,10 @@ namespace WB.UI.QuestionnaireTester
 			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.QuestionnaireTester.Resource.Id.contentFrame;
 			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscanneractivitylayout;
 			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscannerfragmentlayout;
+			global::WB.Core.GenericSubdomain.Rest.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::WB.Core.GenericSubdomain.Rest.Android.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxBind;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxDropDownItemTemplate = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxDropDownItemTemplate;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxItemTemplate = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxItemTemplate;
@@ -428,8 +432,11 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f050000
 			public const int ApplicationName = 2131034112;
 			
+			// aapt resource value: 0x7f050002
+			public const int DesignerPath = 2131034114;
+			
 			// aapt resource value: 0x7f050001
-			public const int DesignerPath = 2131034113;
+			public const int Hello = 2131034113;
 			
 			static String()
 			{

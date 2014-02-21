@@ -9,23 +9,30 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Ninject;
 using RestSharp;
+using WB.Core.GenericSubdomain.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.QuestionnaireTester.Authentication;
-using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Services
 {
     public class DesignerService
     {
+        private readonly IRestServiceWrapperFactory restUtilsFactory;
+
+        public DesignerService()
+        {
+            restUtilsFactory = CapiTesterApplication.Kernel.Get<IRestServiceWrapperFactory>();
+        }
+
         public bool Login(string userName, string password, CancellationToken cancellationToken)
         {
-            var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
+            var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                return webExecutor.ExcecuteRestRequestAsync<bool>(
-                    "ValidateCredentials", cancellationToken, null,
-                    new HttpBasicAuthenticator(userName, password), "POST");
+                return webExecutor.ExecuteRestRequestAsync<bool>(
+                    "ValidateCredentials", cancellationToken, null, userName, password, "POST");
             }
             catch (Exception e)
             {
@@ -37,13 +44,12 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return null;
-            var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
+            var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                return webExecutor.ExcecuteRestRequestAsync<QuestionnaireListCommunicationPackage>(
-                    "GetAllTemplates", cancellationToken, null,
-                    new HttpBasicAuthenticator(CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
-                        CapiTesterApplication.DesignerMembership.RemoteUser.Password), "GET");
+                return webExecutor.ExecuteRestRequestAsync<QuestionnaireListCommunicationPackage>(
+                    "GetAllTemplates", cancellationToken, null, CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
+                    CapiTesterApplication.DesignerMembership.RemoteUser.Password, "GET");
             }
             catch (Exception e)
             {
@@ -56,13 +62,13 @@ namespace WB.UI.QuestionnaireTester.Services
             if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return null;
 
-            var webExecutor = new AndroidRestUrils(CapiTesterApplication.GetPathToDesigner());
+            var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                var package = webExecutor.ExcecuteRestRequestAsync<QuestionnaireCommunicationPackage>(
-                    "GetTemplate", cancellationToken, null,
-                    new HttpBasicAuthenticator(CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
-                        CapiTesterApplication.DesignerMembership.RemoteUser.Password), "GET", new KeyValuePair<string, string>("id", id.ToString()));
+                var package = webExecutor.ExecuteRestRequestAsync<QuestionnaireCommunicationPackage>(
+                    "GetTemplate", cancellationToken, null, CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
+                    CapiTesterApplication.DesignerMembership.RemoteUser.Password, "GET",
+                    new KeyValuePair<string, string>("id", id.ToString()));
 
                 return package;
             }

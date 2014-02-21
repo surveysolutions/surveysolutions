@@ -1,15 +1,15 @@
 using System;
 using System.Threading;
 using RestSharp;
-using WB.UI.Shared.Android.RestUtils;
+using WB.Core.GenericSubdomain.Rest;
 
 namespace WB.UI.Capi.Syncronization.Push
 {
     public class RestPush
     {
-        private readonly IRestUrils webExecutor;
+        private readonly IRestServiceWrapper webExecutor;
         private const string getChunckPath = "sync/PostPackage";
-        public RestPush(IRestUrils webExecutor)
+        public RestPush(IRestServiceWrapper webExecutor)
         {
             this.webExecutor = webExecutor;
         }
@@ -22,9 +22,8 @@ namespace WB.UI.Capi.Syncronization.Push
 
             try
             {
-                var result = this.webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct,
-                    content, 
-                    new HttpBasicAuthenticator(login, password), null);
+                var result = this.webExecutor.ExecuteRestRequestAsync<bool>(getChunckPath, ct,
+                    content, login, password, null);
 
                 if (!result)
                     throw new SynchronizationException("Push was failed. Try again later.");
