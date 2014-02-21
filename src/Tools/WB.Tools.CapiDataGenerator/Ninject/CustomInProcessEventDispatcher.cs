@@ -20,17 +20,24 @@ namespace CapiDataGenerator
         {
             return evnt =>
             {
-                bool isCapiHandler = handler.GetType().ToString().Contains("CAPI");
-
-                Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
-
-                Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || o is NewUserCreated ||
-                                                        o is TemplateImported;
-
-                if ((isSupervisorEvent(evnt.Payload) && !isCapiHandler) ||
-                    (isCapiEvent(evnt.Payload) && isCapiHandler))
+                if (AppSettings.Instance.PutAllEventsToSupervisorDB)
                 {
-                    handler.Handle((IPublishedEvent<TEvent>) evnt);
+                    handler.Handle((IPublishedEvent<TEvent>)evnt);
+                }
+                else
+                {
+                    bool isCapiHandler = handler.GetType().ToString().Contains("CAPI");
+
+                    Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
+
+                    Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || o is NewUserCreated ||
+                                                            o is TemplateImported;
+
+                    if ((isSupervisorEvent(evnt.Payload) && !isCapiHandler) ||
+                        (isCapiEvent(evnt.Payload) && isCapiHandler))
+                    {
+                        handler.Handle((IPublishedEvent<TEvent>)evnt);
+                    }
                 }
             };
         }

@@ -7,6 +7,7 @@ using Ninject;
 using System;
 using System.Windows;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
@@ -38,6 +39,7 @@ namespace CapiDataGenerator
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
+                new FileInfrastructureModule(),
                 new MainModelModule());
 
             var start = Mvx.Resolve<IMvxAppStart>();

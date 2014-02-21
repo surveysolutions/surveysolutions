@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using CAPI.Android.Core.Model.Backup;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace CapiDataGenerator
 {
@@ -13,14 +14,16 @@ namespace CapiDataGenerator
         private const string ImagesFolderName = "IMAGES";
         private readonly string backupPath;
         private readonly string rootPath;
+        private readonly IArchiveUtils archiveUtils;
         public string RestorePath
         {
             get { return string.Empty; }
         }
         private readonly IEnumerable<IBackupable> backupables;
 
-        public DefaultBackup(params IBackupable[] backupables)
+        public DefaultBackup(IArchiveUtils archiveUtils, params IBackupable[] backupables)
         {
+            this.archiveUtils = archiveUtils;
             this.backupables = backupables;
 
             rootPath = Directory.Exists(Environment.CurrentDirectory)
@@ -54,7 +57,7 @@ namespace CapiDataGenerator
 
                 CopyFileOrDirectory(path, backupFolderPath);
             }
-            AndroidZipUtility.ZipDirectory(backupFolderPath, Path.Combine(backupPath, backupFolderName + ".zip"));
+            archiveUtils.ZipDirectory(backupFolderPath, Path.Combine(backupPath, backupFolderName + ".zip"));
             Directory.Delete(backupFolderPath, true);
             return backupFolderPath;
         }

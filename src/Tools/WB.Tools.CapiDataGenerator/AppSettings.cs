@@ -12,6 +12,8 @@ namespace WB.Tools.CapiDataGenerator
             get { return _instance ?? (_instance = new AppSettings()); }
         }
 
+        public bool PutAllEventsToSupervisorDB { get; set; }
+
         private AppSettings()
         {
             

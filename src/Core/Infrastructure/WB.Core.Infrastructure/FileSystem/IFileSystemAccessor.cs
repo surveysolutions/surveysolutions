@@ -26,5 +26,6 @@ namespace WB.Core.Infrastructure.FileSystem
         void WriteAllText(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);
         byte[] ReadAllBytes(string pathToFile);
+        void CopyFileOrDirectory(string sourceDir, string targetDir);
     }
 }

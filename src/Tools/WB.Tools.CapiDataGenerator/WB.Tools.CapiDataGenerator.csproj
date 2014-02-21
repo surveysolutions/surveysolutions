@@ -110,6 +110,7 @@
     </ApplicationDefinition>
     <Compile Include="AppSettings.cs" />
     <Compile Include="Converters\BoolToNegotiationVisibilityConverter.cs" />
+    <Compile Include="Models\State.cs" />
     <Compile Include="Ninject\CapiDataGeneratorEventStore.cs" />
     <Compile Include="MVVMCross\CapiDataGeneratorApplication.cs" />
     <Compile Include="MVVMCross\DebugTrace.cs" />
@@ -162,6 +163,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Configuration\A.WB.Tools.CapiDataGenerator.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\TLK.WB.Tools.CapiDataGenerator.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -241,6 +246,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
+      <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
+      <Name>WB.Core.Infrastructure.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
