@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             {
                 this.logger.Warn(string.Format(
                     "Cannot apply event to interview view model because no view model with id {0} exists.",
-                    interviewId.ToString("N")));
+                    interviewId.FormatGuid()));
 
                 return;
             }
