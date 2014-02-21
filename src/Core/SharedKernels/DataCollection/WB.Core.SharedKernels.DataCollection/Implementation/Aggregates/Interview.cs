@@ -1713,7 +1713,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (!rosterInstanceIds.Contains(rosterInstanceId))
                     throw new InterviewException(string.Format(
                         "Roster information for question {0} is incorrect. " +
-                        "Roster vector element with index [{1}] refers to instance of roster group {2} by instance id [{3}]" +
+                        "Roster vector element with index [{1}] refers to instance of roster group {2} by instance id [{3}] " +
                         "but roster group has only following roster instances: {4}.",
                         FormatQuestionForException(questionId, questionnaire), indexOfRosterVectorElement,
                         FormatGroupForException(rosterGroupId, questionnaire), rosterInstanceId,

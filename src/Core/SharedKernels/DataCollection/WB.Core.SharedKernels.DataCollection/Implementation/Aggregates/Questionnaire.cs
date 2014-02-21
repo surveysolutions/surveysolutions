@@ -406,7 +406,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Guid> GetFixedRosterGroups()
         {
-            return this.GetAllGroups().Where(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.FixedTitles).Select(x => x.PublicKey);
+            return this
+                .GetAllGroups()
+                .Where(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                .Select(x => x.PublicKey)
+                .ToList();
         }
 
         public int GetRosterLevelForQuestion(Guid questionId)
