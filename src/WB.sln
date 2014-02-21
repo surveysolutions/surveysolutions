@@ -246,6 +246,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.ErrorReporting.Android", "Core\GenericSubdomains\WB.Core.GenericSubdomains.ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj", "{04FF9769-AB98-416E-8AA9-89271724582E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.ErrorReporting.Tests", "Tests\WB.Core.GenericSubdomains.ErrorReporting.Tests\WB.Core.GenericSubdomains.ErrorReporting.Tests.csproj", "{BE71107E-7F6D-41E1-A858-322AE635A143}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1597,6 +1599,21 @@ Global
 		{04FF9769-AB98-416E-8AA9-89271724582E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{04FF9769-AB98-416E-8AA9-89271724582E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{04FF9769-AB98-416E-8AA9-89271724582E}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BE71107E-7F6D-41E1-A858-322AE635A143}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1642,6 +1659,7 @@ Global
 		{E47C550B-DB7B-49DF-96B7-FE5A106BC3CC} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{67F04C76-E3D4-4767-8082-C24C563FFDCE} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{3D4175CD-A99B-43D0-A69B-54DEA155DD87} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
+		{BE71107E-7F6D-41E1-A858-322AE635A143} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{3464F3AE-094C-4DEC-8725-59506328E597} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
 		{400CDE74-7407-4388-8D57-BF429E7C508D} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
 		{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
