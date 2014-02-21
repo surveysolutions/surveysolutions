@@ -13,6 +13,17 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
     public class NcqrCompatibleEventDispatcher : IEventDispatcher
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
+        private readonly Func<InProcessEventBus> getInProcessEventBus;
+
+        public NcqrCompatibleEventDispatcher()
+        {
+            this.getInProcessEventBus = () => new InProcessEventBus(true);
+        }
+
+        internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus)
+        {
+            this.getInProcessEventBus = getInProcessEventBus;
+        }
 
         public void Publish(IPublishableEvent eventMessage)
         {
@@ -57,7 +68,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         public void Register(IEventHandler handler)
         {
-            var inProcessBus = new InProcessEventBus(true);
+            var inProcessBus = this.getInProcessEventBus();
             IEnumerable<Type> ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
             foreach (Type ieventHandler in ieventHandlers)
             {
