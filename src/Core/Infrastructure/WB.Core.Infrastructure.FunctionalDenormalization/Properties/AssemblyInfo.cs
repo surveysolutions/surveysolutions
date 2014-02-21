@@ -35,4 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
+[assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
 [assembly: InternalsVisibleTo("WB.Core.Infrastructure.FunctionalDenormalization.Tests")]
