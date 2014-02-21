@@ -4610,3 +4610,101 @@ a.pseudo-link:hover {
 #statesHistoryPopover .arrow {
     left: 95%;
 }
+
+.map-report .innerLR {
+    padding: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.map-report #footer-block {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: inline-block;
+    text-align: right;
+}
+.map-report #footer-block * {
+    display: inline-block;
+}
+
+.map-report #footer-block hr {
+    display: none;
+}
+
+.map-report #footer-block footer div:last-child {
+    display: none;
+}
+
+.map-report #footer-block footer div:first-child {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 15px;
+}
+
+#map-canvas {
+     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#report-builder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 226px;
+    background: white;
+    z-index: 100;
+    -webkit-box-shadow: 5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+}
+
+#report-builder .central-pane {
+     position: absolute;
+    top: 0;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+     padding: 10px;
+    padding-bottom: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+#report-builder .central-pane  .currently-on-map {
+    margin-top: 15px;
+}
+
+#report-builder .central-pane  .currently-on-map h4{
+    margin: 0;
+}
+
+#report-builder .central-pane .currently-on-map li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+#report-builder .central-pane .currently-on-map li:last-child {
+    border-bottom: none;
+}
+
+#report-builder .bottom-pane{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+     padding: 10px;
+    -moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+-webkit-box-shadow: 0px -5px 25px 0px rgba(255, 255, 255, 0.75);
+-moz-box-shadow:    0px -5px 25px 0px rgba(255, 255, 255, 0.75);
+box-shadow:         0px -5px 25px 0px rgba(255, 255, 255, 0.75);
+}

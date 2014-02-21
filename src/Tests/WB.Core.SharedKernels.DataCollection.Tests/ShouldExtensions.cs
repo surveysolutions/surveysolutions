@@ -41,5 +41,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     && condition.Invoke((TEvent) @event.Payload));
             }
         }
+
+        public static TEvent GetSingleEvent<TEvent>(this EventContext eventContext)
+        {
+            return (TEvent)eventContext.Events.Single(@event => @event.Payload is TEvent).Payload;
+        }
     }
 }

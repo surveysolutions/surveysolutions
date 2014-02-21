@@ -8,12 +8,13 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
+namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablementConditions
 {
-    class when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_TextList_question : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_TextList_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {

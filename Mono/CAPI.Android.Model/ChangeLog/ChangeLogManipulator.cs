@@ -151,19 +151,6 @@ namespace CAPI.Android.Core.Model.ChangeLog
             
             return true;
         }
-
-        /*public void ReopenDraftRecord(Guid eventSourceId)
-        {
-            var record = GetLastDraftRecord(eventSourceId);
-            if (record == null)
-                return;
-            record.IsClosed = false;
-
-            var recordId = Guid.Parse(record.Id);
-
-            fileChangeLogStore.DeleteDraftChangeSet(recordId);
-            draftChangeLog.Store(record, recordId);
-        }*/
         
         public void CleanUpChangeLogByRecordId(Guid recordId)
         {
@@ -179,7 +166,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public void CleanUpChangeLogByEventSourceId(Guid eventSourceId)
         {
-            string eventSource = eventSourceId.ToString();
+            string eventSource = eventSourceId.FormatGuid();
             var record = draftChangeLog.Filter(c => c.EventSourceId == eventSource).FirstOrDefault();
             if (record == null)
                 return;
@@ -190,7 +177,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         private DraftChangesetDTO GetLastDraftRecord(Guid eventSourceId)
         {
-            var evtIdAsString = eventSourceId.ToString();
+            var evtIdAsString = eventSourceId.FormatGuid();
             var record = draftChangeLog.Filter(c => c.EventSourceId == evtIdAsString).FirstOrDefault();
             return record;
         }

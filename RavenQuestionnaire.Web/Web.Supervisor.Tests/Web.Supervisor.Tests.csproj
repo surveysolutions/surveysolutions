@@ -129,6 +129,8 @@
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_empty_id.cs" />
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_not_empty_id.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportDataApiControllerTests\ReportDataApiControllerTestContext.cs" />
+    <Compile Include="ReportDataApiControllerTests\when_map_report_data_is_being_queried.cs" />
     <Compile Include="TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />

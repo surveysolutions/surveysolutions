@@ -61,7 +61,7 @@ namespace CapiDataGenerator
         {
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
-            var capiEvenStore = new AndroidNcqrs.Eventing.Storage.SQLite.MvvmCrossSqliteEventStore(EventStoreDatabaseName);
+            var capiEvenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
@@ -96,7 +96,7 @@ namespace CapiDataGenerator
             this.Bind<IChangeLogManipulator>().ToConstant(new ChangeLogManipulator(publicStore, draftStore, capiEvenStore, changeLogStore));
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
 
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(capiEvenStore, changeLogStore, denormalizerStore, capiTemplateWriter));
+            this.Bind<IBackup>().To<DefaultBackup>().InSingletonScope().WithConstructorArgument("backupables", new IBackupable[]{capiEvenStore, changeLogStore, denormalizerStore, capiTemplateWriter});
 
             this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
             

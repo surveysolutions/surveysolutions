@@ -26,6 +26,9 @@ namespace WB.UI.QuestionnaireTester
 		
 		public static void UpdateIdValues()
 		{
+			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.QuestionnaireTester.Resource.Id.contentFrame;
+			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscannerfragmentlayout;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxBind;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxDropDownItemTemplate = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxDropDownItemTemplate;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxItemTemplate = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxItemTemplate;
@@ -56,6 +59,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Id.btnInvalid = global::WB.UI.QuestionnaireTester.Resource.Id.btnInvalid;
 			global::WB.UI.Shared.Android.Resource.Id.btnNavigation = global::WB.UI.QuestionnaireTester.Resource.Id.btnNavigation;
 			global::WB.UI.Shared.Android.Resource.Id.btnUnanswered = global::WB.UI.QuestionnaireTester.Resource.Id.btnUnanswered;
+			global::WB.UI.Shared.Android.Resource.Id.contentFrame = global::WB.UI.QuestionnaireTester.Resource.Id.contentFrame;
 			global::WB.UI.Shared.Android.Resource.Id.etComments = global::WB.UI.QuestionnaireTester.Resource.Id.etComments;
 			global::WB.UI.Shared.Android.Resource.Id.lNavigationContainer = global::WB.UI.QuestionnaireTester.Resource.Id.lNavigationContainer;
 			global::WB.UI.Shared.Android.Resource.Id.llButtom = global::WB.UI.QuestionnaireTester.Resource.Id.llButtom;
@@ -81,6 +85,8 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::WB.UI.QuestionnaireTester.Resource.Layout.RosterQuestion;
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.QuestionnaireTester.Resource.Layout.ScreenContentFragment;
 			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::WB.UI.QuestionnaireTester.Resource.Layout.StatisticsContent;
+			global::WB.UI.Shared.Android.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscanneractivitylayout;
+			global::WB.UI.Shared.Android.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscannerfragmentlayout;
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding = global::WB.UI.QuestionnaireTester.Resource.Styleable.MvxBinding;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding_MvxBind = global::WB.UI.QuestionnaireTester.Resource.Styleable.MvxBinding_MvxBind;
@@ -243,6 +249,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04002f
 			public const int btnUnanswered = 2130968623;
 			
+			// aapt resource value: 0x7f040035
+			public const int contentFrame = 2130968629;
+			
 			// aapt resource value: 0x7f04000e
 			public const int etComments = 2130968590;
 			
@@ -396,6 +405,12 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f03000c
 			public const int template_list_item = 2130903052;
+			
+			// aapt resource value: 0x7f03000d
+			public const int zxingscanneractivitylayout = 2130903053;
+			
+			// aapt resource value: 0x7f03000e
+			public const int zxingscannerfragmentlayout = 2130903054;
 			
 			static Layout()
 			{

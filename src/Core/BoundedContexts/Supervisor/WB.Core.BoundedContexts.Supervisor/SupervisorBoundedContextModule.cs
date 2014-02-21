@@ -13,11 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
 

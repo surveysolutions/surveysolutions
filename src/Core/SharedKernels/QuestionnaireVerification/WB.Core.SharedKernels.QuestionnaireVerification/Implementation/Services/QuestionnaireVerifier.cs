@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 questionnaire.Find<IGroup>(
                     g => g.RosterTitleQuestionId.HasValue && (g.RosterTitleQuestionId.Value == group.RosterTitleQuestionId.Value));
 
-            return rostersByRosterTitleQuestion.Any(g =>g.RosterSizeQuestionId.HasValue && (g.RosterSizeQuestionId.Value != group.RosterSizeQuestionId.Value));
+            return rostersByRosterTitleQuestion.Any(g => g.RosterSizeQuestionId.HasValue && (g.RosterSizeQuestionId.Value != group.RosterSizeQuestionId.Value));
         }
 
         private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (!IsRosterGroup(group))
                 return false;
-            
+
             foreach (var nestedGroup in group.Children.OfType<IGroup>())
             {
                 if (HasRosterInsideGroup(nestedGroup))
@@ -474,7 +474,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
                         identifier => GetVerificationErrorByCustomExpressionReferenceOrNull(
                             questionWithValidationExpression, identifier, vectorOfRosterSizeQuestionsForQuestionWithCustomValidation,
-                            questionnaire, 
+                            questionnaire,
                             CustomValidationExpressionUsesNotRecognizedParameter,
                             CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel));
                 }
@@ -506,6 +506,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                             questionnaire,
                             CustomConditionExpressionUsesNotRecognizedParameter,
                             CustomConditionExpressionReferencesQuestionWithDeeperPropagationLevel));
+
+                    VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllItemsWithCustomCondition,
+                     identifier => GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
+                         itemWithConditionExpression, identifier, questionnaire));
                 }
             }
 
@@ -624,6 +628,41 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             {
                 return referencesQuestionWithDeeperPropagationLevelError(
                     itemWithExpression, questionsReferencedInExpression);
+            }
+
+            return null;
+        }
+
+        private static QuestionnaireVerificationError GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
+            IComposite itemWithExpression, string identifier, QuestionnaireDocument questionnaire)
+        {
+            if (itemWithExpression is IQuestion)
+            {
+                return null;
+            }
+
+            if (IsSpecialThisIdentifier(identifier))
+            {
+                return null;
+            }
+
+            IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
+
+            if (questionsReferencedInExpression == null)
+            {
+                return null;
+            }
+
+            var parentIds = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)questionsReferencedInExpression.GetParent(), questionnaire)
+                .Select(x => x.PublicKey)
+                .ToList();
+
+            if (parentIds.Contains(itemWithExpression.PublicKey))
+            {
+                return new QuestionnaireVerificationError("WB0051",
+                    VerificationMessages.WB0051_GroupsCustomConditionExpressionReferencesChildQuestion,
+                    CreateReference(itemWithExpression),
+                    CreateReference(questionsReferencedInExpression));
             }
 
             return null;
@@ -862,8 +901,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static Guid[] GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(IComposite item, QuestionnaireDocument questionnaire)
         {
             IGroup parent = item is IQuestion
-                ? (IGroup) item.GetParent()
-                : (IGroup) item;
+                ? (IGroup)item.GetParent()
+                : (IGroup)item;
 
             Guid?[] rosterSizeQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parent, questionnaire)

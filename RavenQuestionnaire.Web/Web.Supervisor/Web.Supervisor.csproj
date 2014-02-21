@@ -490,6 +490,7 @@
     <Content Include="Scripts\director.js" />
     <Content Include="Scripts\lodash.underscore.js" />
     <Content Include="Scripts\lodash.underscore.min.js" />
+    <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment+langs.js" />
     <Content Include="Scripts\moment+langs.min.js" />
@@ -536,6 +537,7 @@
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
     <Content Include="Scripts\viewmodels\pages\designerquestionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\datacontext.js" />
+    <Content Include="Scripts\viewmodels\pages\mapreport.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\interview\hq.interviews.js" />
@@ -618,6 +620,7 @@
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <Content Include="Views\TabletReport\Packages.cshtml" />
+    <Content Include="Views\HQ\MapReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

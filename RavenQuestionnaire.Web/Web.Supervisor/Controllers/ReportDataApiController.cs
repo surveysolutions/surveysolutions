@@ -1,10 +1,13 @@
 ﻿using System.Web.Http;
+using Core.Supervisor.Views.Reposts.Factories;
 using Core.Supervisor.Views.Reposts.InputModels;
 using Core.Supervisor.Views.Reposts.Views;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -24,6 +27,12 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
             supervisorTeamMembersAndStatusesReport;
 
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory;
+
+        private readonly IViewFactory<MapReportInputModel, MapReportView> mapReport;
+
+        private readonly IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory;
+
         public ReportDataApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
@@ -35,13 +44,18 @@ namespace Web.Supervisor.Controllers
             IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
                 supervisorTeamMembersAndStatusesReport,
             IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
-                supervisorSurveysAndStatusesReport)
+                supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport,
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory, 
+            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
             this.headquarterSupervisorsAndStatusesReport = headquarterSupervisorsAndStatusesReport;
             this.supervisorTeamMembersAndStatusesReport = supervisorTeamMembersAndStatusesReport;
             this.supervisorSurveysAndStatusesReport = supervisorSurveysAndStatusesReport;
+            this.mapReport = mapReport;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionInforFactory = questionInforFactory;
         }
 
         [HttpPost]
@@ -66,6 +80,24 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.supervisorTeamMembersAndStatusesReport.Load(input);
+        }
+
+        [HttpPost]
+        public MapReportView MapReport(MapReportInputModel data)
+        {
+            return mapReport.Load(data);
+        }
+
+        [HttpPost]
+        public QuestionnaireAndVersionsView Questionnaires(QuestionnaireBrowseInputModel input)
+        {
+            return questionnaireBrowseViewFactory.Load(input);
+        }
+
+        [HttpPost]
+        public QuestionnaireQuestionInfoView QuestionInfo(QuestionnaireQuestionInfoInputModel input)
+        {
+            return questionInforFactory.Load(input);
         }
 
         [HttpPost]

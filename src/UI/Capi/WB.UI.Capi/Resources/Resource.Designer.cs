@@ -26,6 +26,9 @@ namespace WB.UI.Capi
 		
 		public static void UpdateIdValues()
 		{
+			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.Capi.Resource.Id.contentFrame;
+			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.Capi.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.Capi.Resource.Layout.zxingscannerfragmentlayout;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.Capi.Resource.Attribute.MvxBind;
@@ -58,6 +61,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.btnInvalid = global::WB.UI.Capi.Resource.Id.btnInvalid;
 			global::WB.UI.Shared.Android.Resource.Id.btnNavigation = global::WB.UI.Capi.Resource.Id.btnNavigation;
 			global::WB.UI.Shared.Android.Resource.Id.btnUnanswered = global::WB.UI.Capi.Resource.Id.btnUnanswered;
+			global::WB.UI.Shared.Android.Resource.Id.contentFrame = global::WB.UI.Capi.Resource.Id.contentFrame;
 			global::WB.UI.Shared.Android.Resource.Id.etComments = global::WB.UI.Capi.Resource.Id.etComments;
 			global::WB.UI.Shared.Android.Resource.Id.lNavigationContainer = global::WB.UI.Capi.Resource.Id.lNavigationContainer;
 			global::WB.UI.Shared.Android.Resource.Id.llButtom = global::WB.UI.Capi.Resource.Id.llButtom;
@@ -83,6 +87,8 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::WB.UI.Capi.Resource.Layout.RosterQuestion;
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.Capi.Resource.Layout.ScreenContentFragment;
 			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::WB.UI.Capi.Resource.Layout.StatisticsContent;
+			global::WB.UI.Shared.Android.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.Capi.Resource.Layout.zxingscanneractivitylayout;
+			global::WB.UI.Shared.Android.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.Capi.Resource.Layout.zxingscannerfragmentlayout;
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding = global::WB.UI.Capi.Resource.Styleable.MvxBinding;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding_MvxBind = global::WB.UI.Capi.Resource.Styleable.MvxBinding_MvxBind;
@@ -284,6 +290,9 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04002f
 			public const int btnWhereAmI = 2130968623;
 			
+			// aapt resource value: 0x7f04003f
+			public const int contentFrame = 2130968639;
+			
 			// aapt resource value: 0x7f04002c
 			public const int editSettingsSyncPoint = 2130968620;
 			
@@ -467,6 +476,12 @@ namespace WB.UI.Capi
 			
 			// aapt resource value: 0x7f030012
 			public const int SyncLogin = 2130903058;
+			
+			// aapt resource value: 0x7f030013
+			public const int zxingscanneractivitylayout = 2130903059;
+			
+			// aapt resource value: 0x7f030014
+			public const int zxingscannerfragmentlayout = 2130903060;
 			
 			static Layout()
 			{

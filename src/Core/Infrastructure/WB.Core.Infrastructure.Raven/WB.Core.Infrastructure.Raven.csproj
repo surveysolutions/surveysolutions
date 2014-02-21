@@ -82,6 +82,7 @@
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />

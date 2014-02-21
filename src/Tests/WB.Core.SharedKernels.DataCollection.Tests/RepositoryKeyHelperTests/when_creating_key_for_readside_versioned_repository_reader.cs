@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
-using Main.Core.Utility;
+﻿using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace Main.Core.Tests.Utils

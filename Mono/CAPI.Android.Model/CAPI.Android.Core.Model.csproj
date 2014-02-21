@@ -95,7 +95,6 @@
     <Compile Include="AndroidModelModule.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\SyncCredentials.cs" />
-    <Compile Include="Backup\AndroidZipUtility.cs" />
     <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="Backup\DefaultBackup.cs" />
     <Compile Include="CapiInformation\CapiInformationService.cs" />
