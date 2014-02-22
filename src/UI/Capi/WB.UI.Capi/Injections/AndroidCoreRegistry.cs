@@ -11,7 +11,6 @@ using CAPI.Android.Core.Model;
 using Main.Core;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.UI.Shared.Android.Network;
 
 namespace WB.UI.Capi.Injections
 {

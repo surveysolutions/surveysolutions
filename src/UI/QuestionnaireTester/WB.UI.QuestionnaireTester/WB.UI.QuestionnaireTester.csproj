@@ -214,6 +214,22 @@
       <Project>{C62669D1-2B5F-4976-A33D-A66B674D0149}</Project>
       <Name>WB.Core.BoundedContexts.Capi.Android</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomain.Rest.Android\WB.Core.GenericSubdomain.Rest.Android.csproj">
+      <Project>{77572d67-d00d-4e26-b2e2-6b7faea92416}</Project>
+      <Name>WB.Core.GenericSubdomain.Rest.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomain.Rest\WB.Core.GenericSubdomain.Rest.csproj">
+      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
+      <Name>WB.Core.GenericSubdomain.Rest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
+      <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
+      <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj">
       <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
       <Name>WB.UI.Shared.Android</Name>

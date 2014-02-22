@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using RestSharp;
+using WB.Core.GenericSubdomain.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization.Pull
 {
     public class RestPull
     {
-        private readonly IRestUrils webExecutor;
+        private readonly IRestServiceWrapper webExecutor;
 
         private const string getChunckPath = "sync/GetSyncPackage";
         private const string getARKeysPath = "sync/GetARKeys";
 
-        public RestPull(IRestUrils webExecutor)
+        public RestPull(IRestServiceWrapper webExecutor)
         {
             this.webExecutor = webExecutor;
         }
@@ -24,8 +24,8 @@ namespace WB.UI.Capi.Syncronization.Pull
         {
             try
             {
-                var package = this.webExecutor.ExcecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
-                    new HttpBasicAuthenticator(login, password), null,
+                var package = this.webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
+                    login, password, null,
                      new KeyValuePair<string, string>("aRKey", id.ToString()),
                      new KeyValuePair<string, string>("aRSequence", sequence.ToString()),
                      new KeyValuePair<string, string>("clientRegistrationId", deviceId));
@@ -44,9 +44,8 @@ namespace WB.UI.Capi.Syncronization.Pull
         {
             try
             {
-                var syncItemsMetaContainer = this.webExecutor.ExcecuteRestRequestAsync<SyncItemsMetaContainer>(
-                                                                       getARKeysPath, ct, null,
-                                                                       new HttpBasicAuthenticator(login, password), null,
+                var syncItemsMetaContainer = this.webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
+                                                                       getARKeysPath, ct, null,login, password, null,
                                                                        new KeyValuePair<string, string>("clientRegistrationId", deviceId),
                                                                        new KeyValuePair<string, string>("sequence", sequence)
                                                                        );

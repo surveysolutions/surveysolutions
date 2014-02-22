@@ -75,9 +75,9 @@
     <Compile Include="Utils\ReportUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.InformationSupplier\WB.Core.Infrastructure.InformationSupplier.csproj">
-      <Project>{1305e354-a9a9-4b30-9e8e-7d3412a86eff}</Project>
-      <Name>WB.Core.Infrastructure.InformationSupplier</Name>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\WB.Core.GenericSubdomains.ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
+      <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
+      <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />

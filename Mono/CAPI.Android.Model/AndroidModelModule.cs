@@ -4,7 +4,6 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.Backup;
-using CAPI.Android.Core.Model.CapiInformation;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ReadSideStore;
@@ -22,7 +21,6 @@ using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.InformationSupplier;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -33,13 +31,15 @@ namespace CAPI.Android.Core.Model
     {
         private const string ProjectionStoreName = "Projections";
         private const string EventStoreDatabaseName = "EventStore";
+        private readonly string basePath;
+
+        public AndroidModelModule(string basePath)
+        {
+            this.basePath = basePath;
+        }
 
         public override void Load()
         {
-            var basePath = Directory.Exists(Environment.ExternalStorageDirectory.AbsolutePath)
-                             ? Environment.ExternalStorageDirectory.AbsolutePath
-                             : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-            
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var snapshotStore = new AndroidSnapshotStore();
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
@@ -90,13 +90,6 @@ namespace CAPI.Android.Core.Model
                     evenStore, changeLogStore, fileSystem, denormalizerStore,
                     bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
                 });
-
-            this.Bind<IInfoFileSupplierRegistry>().ToConstant(new InfoFileSupplierRegistryFactory().CreateInfoFileSupplierRegistry());
-
-            this.Bind<ICapiInformationService>()
-                .To<CapiInformationService>()
-                .InSingletonScope().WithConstructorArgument("basePath", basePath);
-
         }
     }
 }

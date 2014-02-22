@@ -10,7 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using WB.Core.Infrastructure.InformationSupplier;
+using WB.Core.GenericSubdomains.ErrorReporting;
 using Environment = Android.OS.Environment;
 
 namespace Mono.Android.Crasher.Data.Submit
