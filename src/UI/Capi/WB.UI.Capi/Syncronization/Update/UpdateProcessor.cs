@@ -3,9 +3,9 @@ using System.IO;
 using Android.App;
 using Android.Content;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomain.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Capi.Settings;
-using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.Capi.Syncronization.Update
 {
@@ -13,11 +13,12 @@ namespace WB.UI.Capi.Syncronization.Update
     {
         private const string downloadFolder = "download";
         private string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, downloadFolder);
-        
+        private readonly IRestServiceWrapperFactory restServiceWrapperFactory;
         private ILogger logger;
 
-        public UpdateProcessor()
+        public UpdateProcessor(IRestServiceWrapperFactory restServiceWrapperFactory)
         {
+            this.restServiceWrapperFactory = restServiceWrapperFactory;
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
 
             if (!Directory.Exists(this.pathToFolder))
@@ -61,7 +62,7 @@ namespace WB.UI.Capi.Syncronization.Update
 
         public bool? CheckNewVersion()
         {
-            var executor = new AndroidRestUrils(SettingsManager.GetSyncAddressPoint());
+            var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             var checker = new RestVersionUpdate(executor);
             return checker.Execute(SettingsManager.AppVersionName(), SettingsManager.AppVersionCode(), SettingsManager.AndroidVersion());
         }

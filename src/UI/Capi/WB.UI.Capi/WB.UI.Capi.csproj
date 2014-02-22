@@ -162,8 +162,6 @@
     <Compile Include="Implementations\Fragments\DataCollectionGridContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionScreenContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
-    <Compile Include="Implementations\TabletInformation\InformationPackageEventArgs.cs" />
-    <Compile Include="Implementations\TabletInformation\TabletInformationSendException.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -171,7 +169,6 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CleanUpExecutor.cs" />
-    <Compile Include="Services\ITabletInformationSender.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Setup.cs" />
@@ -190,7 +187,6 @@
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
-    <Compile Include="Implementations\TabletInformation\TabletInformationSender.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +308,18 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomain.Rest.Android\WB.Core.GenericSubdomain.Rest.Android.csproj">
+      <Project>{77572d67-d00d-4e26-b2e2-6b7faea92416}</Project>
+      <Name>WB.Core.GenericSubdomain.Rest.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomain.Rest\WB.Core.GenericSubdomain.Rest.csproj">
+      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
+      <Name>WB.Core.GenericSubdomain.Rest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
+      <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
+      <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>
@@ -323,10 +331,6 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.InformationSupplier\WB.Core.Infrastructure.InformationSupplier.csproj">
-      <Project>{1305e354-a9a9-4b30-9e8e-7d3412a86eff}</Project>
-      <Name>WB.Core.Infrastructure.InformationSupplier</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
