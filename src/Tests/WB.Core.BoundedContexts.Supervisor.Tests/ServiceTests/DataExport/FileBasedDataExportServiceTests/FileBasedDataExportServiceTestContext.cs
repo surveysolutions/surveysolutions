@@ -16,9 +16,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
     internal class FileBasedDataExportServiceTestContext
     {
         protected static FileBasedDataExportService CreateFileBasedDataExportService(
-            IFileSystemAccessor fileSystemAccessor = null, IInterviewExportService interviewExportService = null)
+            IFileSystemAccessor fileSystemAccessor = null, IDataFileExportService dataFileExportService = null)
         {
-            return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "", interviewExportService ?? Mock.Of<IInterviewExportService>(),
+            return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "", dataFileExportService ?? Mock.Of<IDataFileExportService>(),
                 Mock.Of<IEnvironmentContentService>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
         }
     }
