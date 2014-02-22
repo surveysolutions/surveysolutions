@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class CsvInterviewExportService : IInterviewExportService
+    internal class CsvDataFileExportService : IDataFileExportService
     {
         private readonly string delimiter = ",";
 

@@ -185,6 +185,7 @@
     <Compile Include="VersionedReadSideRepositoryReaderExtensionsTests\when_getting_view_by_guid_id.cs" />
     <Compile Include="VersionedReadSideRepositoryWriterExtensionsTests\when_getting_view_by_guid_id.cs" />
     <Compile Include="VersionedReadSideRepositoryWriterExtensionsTests\when_removing_view_by_guid_id.cs" />
+    <Compile Include="VersionedReadSideRepositoryWriterExtensionsTests\when_storing_view_by_guid_id.cs" />
     <Compile Include="Views\View.cs" />
   </ItemGroup>
   <ItemGroup>

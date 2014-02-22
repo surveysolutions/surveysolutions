@@ -18,18 +18,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     {
         private const string FolderName = "ExportedData";
         private readonly string path;
-        private readonly IInterviewExportService interviewExportService;
+        private readonly IDataFileExportService dataFileExportService;
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         public FileBasedDataExportService(
             IReadSideRepositoryCleanerRegistry cleanerRegistry, 
             string folderPath,
-            IInterviewExportService interviewExportService, 
+            IDataFileExportService dataFileExportService, 
             IEnvironmentContentService environmentContentService, 
             IFileSystemAccessor fileSystemAccessor)
         {
-            this.interviewExportService = interviewExportService;
+            this.dataFileExportService = dataFileExportService;
             this.environmentContentService = environmentContentService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
@@ -87,10 +87,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             {
                 string levelFileName = cleanedFileNamesForLevels[headerStructureForLevel.LevelId];
 
-                var interviewExportedDataFileName = interviewExportService.GetInterviewExportedDataFileName(levelFileName);
+                var interviewExportedDataFileName = this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName);
                 var contentOfAdditionalFileName = environmentContentService.GetEnvironmentContentFileName(levelFileName);
 
-                this.interviewExportService.CreateHeader(headerStructureForLevel,
+                this.dataFileExportService.CreateHeader(headerStructureForLevel,
                     fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName));
 
                 this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName,
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             {
                 string levelFileName = cleanedFileNamesForLevels[interviewDataExportLevelView.LevelId];
 
-                this.interviewExportService.AddRecord(interviewDataExportLevelView, fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.interviewExportService.GetInterviewExportedDataFileName(levelFileName)));
+                this.dataFileExportService.AddRecord(interviewDataExportLevelView, fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName)));
             }
         }
 
