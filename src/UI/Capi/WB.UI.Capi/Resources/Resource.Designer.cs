@@ -29,10 +29,10 @@ namespace WB.UI.Capi
 			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.Capi.Resource.Id.contentFrame;
 			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.Capi.Resource.Layout.zxingscanneractivitylayout;
 			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.Capi.Resource.Layout.zxingscannerfragmentlayout;
-			global::WB.Core.GenericSubdomain.Rest.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
-			global::WB.Core.GenericSubdomain.Rest.Android.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
+			global::WB.Core.GenericSubdomains.Rest.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
+			global::WB.Core.GenericSubdomains.Rest.Android.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.Capi.Resource.Attribute.MvxBind;

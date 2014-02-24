@@ -3,7 +3,7 @@ using System.IO;
 using Android.App;
 using Android.Content;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomain.Rest;
+using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Capi.Settings;
 

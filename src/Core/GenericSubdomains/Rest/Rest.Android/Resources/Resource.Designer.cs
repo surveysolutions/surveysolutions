@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("WB.Core.GenericSubdomain.Rest.Android.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("WB.Core.GenericSubdomains.Rest.Android.Resource", IsApplication=false)]
 
-namespace WB.Core.GenericSubdomain.Rest.Android
+namespace WB.Core.GenericSubdomains.Rest.Android
 {
 	
 	

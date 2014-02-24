@@ -300,6 +300,10 @@
       <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
       <Name>WB.Core.BoundedContexts.Capi.Android</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
+      <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
+      <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj">
       <Project>{a3369307-fdfa-4cd2-9ff4-6a7e23c47dd6}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.AndroidLogger</Name>
@@ -308,17 +312,13 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomain.Rest.Android\WB.Core.GenericSubdomain.Rest.Android.csproj">
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Rest\Rest.Android\WB.Core.GenericSubdomains.Rest.Android.csproj">
       <Project>{77572d67-d00d-4e26-b2e2-6b7faea92416}</Project>
-      <Name>WB.Core.GenericSubdomain.Rest.Android</Name>
+      <Name>WB.Core.GenericSubdomains.Rest.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomain.Rest\WB.Core.GenericSubdomain.Rest.csproj">
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Rest\Rest\WB.Core.GenericSubdomains.Rest.csproj">
       <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
-      <Name>WB.Core.GenericSubdomain.Rest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
-      <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
-      <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
+      <Name>WB.Core.GenericSubdomains.Rest</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>

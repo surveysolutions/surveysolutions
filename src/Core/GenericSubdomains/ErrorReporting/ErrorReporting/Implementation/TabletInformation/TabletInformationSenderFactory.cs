@@ -1,4 +1,4 @@
-﻿using WB.Core.GenericSubdomain.Rest;
+﻿using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.SharedKernel.Utils.Serialization;

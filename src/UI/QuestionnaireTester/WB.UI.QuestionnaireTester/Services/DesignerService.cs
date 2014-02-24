@@ -11,7 +11,7 @@ using Android.Views;
 using Android.Widget;
 using Ninject;
 using RestSharp;
-using WB.Core.GenericSubdomain.Rest;
+using WB.Core.GenericSubdomains.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.QuestionnaireTester.Authentication;
 

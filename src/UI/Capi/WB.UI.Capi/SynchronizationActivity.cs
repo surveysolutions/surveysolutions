@@ -14,7 +14,7 @@ using Java.IO;
 using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
-using WB.Core.GenericSubdomain.Rest;
+using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;

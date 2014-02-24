@@ -75,7 +75,7 @@
     <Compile Include="Utils\ReportUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\GenericSubdomains\WB.Core.GenericSubdomains.ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
     </ProjectReference>

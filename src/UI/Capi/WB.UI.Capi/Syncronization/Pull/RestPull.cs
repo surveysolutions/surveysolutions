@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using RestSharp;
-using WB.Core.GenericSubdomain.Rest;
+using WB.Core.GenericSubdomains.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Syncronization.Pull

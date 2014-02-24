@@ -11,7 +11,7 @@ using Android.Widget;
 using Android.Content.PM;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
-using WB.Core.GenericSubdomain.Rest;
+using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
