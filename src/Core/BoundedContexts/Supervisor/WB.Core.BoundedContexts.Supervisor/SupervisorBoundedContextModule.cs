@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", currentFolderPath);
-            this.Bind<IInterviewExportService>().To<CsvInterviewExportService>();
+            this.Bind<IDataFileExportService>().To<CsvDataFileExportService>();
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();

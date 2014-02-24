@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
     {
         Establish context = () =>
         {
-            interviewExportServiceMock = new Mock<IInterviewExportService>();
+            interviewExportServiceMock = new Mock<IDataFileExportService>();
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns("1st");
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
 
         private static FileBasedDataExportService fileBasedDataExportService;
         
-        private static Mock<IInterviewExportService> interviewExportServiceMock;
+        private static Mock<IDataFileExportService> interviewExportServiceMock;
         private static InterviewDataExportView interviewToExport;
         private static InterviewDataExportLevelView interviewLevelToExport;
     }

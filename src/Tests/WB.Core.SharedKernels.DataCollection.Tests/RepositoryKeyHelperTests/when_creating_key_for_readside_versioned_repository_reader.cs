@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace Main.Core.Tests.Utils
+namespace WB.Core.SharedKernels.DataCollection.Tests.RepositoryKeyHelperTests
 {
     public class when_creating_key_for_readside_versioned_repository_reader
     {

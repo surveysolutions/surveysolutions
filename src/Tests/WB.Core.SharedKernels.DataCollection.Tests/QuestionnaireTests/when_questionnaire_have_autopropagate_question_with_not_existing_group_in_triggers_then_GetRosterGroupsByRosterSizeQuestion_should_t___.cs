@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("missing");
 
         It should_throw_exception_with_message_containting_autopropagate_question_id = () =>
-            exception.Message.ShouldContain(autopropagateQuestionId.ToString("N"));
+            exception.Message.ShouldContain(autopropagateQuestionId.FormatGuid());
 
         private static Questionnaire questionnaire;
         private static Guid autopropagateQuestionId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
