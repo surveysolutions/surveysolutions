@@ -40,7 +40,7 @@ namespace Web.Supervisor.Models.API
             this.Users = userListView.Items.Select(
                     item => new UserApiItem(item.UserId, item.UserName, item.Email, DateTime.Parse(item.CreationDate), item.IsLocked));
 
-            //this.Offset = questionnaireBrowseView.ItemsSummary.Page;
+            //this.Offset = userListView.ItemsSummary.Page;
             //this.Limit = questionnaireBrowseView.PageSize;
             //this.Order = questionnaireBrowseView.Order;
         }
