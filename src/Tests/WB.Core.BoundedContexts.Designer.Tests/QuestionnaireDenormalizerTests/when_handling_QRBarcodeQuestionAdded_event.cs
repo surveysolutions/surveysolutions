@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 QuestionId = questionId,
                 ParentGroupId = parentGroupId,
-                ConditionExpression = condition,
+                EnablementCondition = condition,
                 IsMandatory = isMandatory,
                 Instructions = instructions,
                 Title = title,

@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             @event = ToPublishedEvent(new QRBarcodeQuestionCloned()
             {
                 QuestionId = questionId,
-                ConditionExpression = condition,
+                EnablementCondition = condition,
                 IsMandatory = isMandatory,
                 Instructions = instructions,
                 Title = title,
