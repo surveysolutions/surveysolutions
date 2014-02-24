@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.GenericSubdomain.Rest
+namespace WB.Core.GenericSubdomains.Rest
 {
     public class RestException:Exception
     {
