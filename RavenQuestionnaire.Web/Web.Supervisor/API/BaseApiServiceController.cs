@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.API
@@ -12,7 +13,16 @@ namespace Web.Supervisor.API
         protected BaseApiServiceController(ILogger logger)
         {
             this.Logger = logger;
+        }
 
+        protected int CheckAndRestrictLimit(int limit)
+        {
+            return limit < 0 ? 1 : Math.Min(limit, this.MaxPageSize);
+        }
+
+        protected int CheckAndRestrictOffset(int offset)
+        {
+            return Math.Max(offset, 1);
         }
     }
 }
