@@ -15,8 +15,11 @@
 
         var mapOptions = {
             zoom: 9,
-            mapTypeControl: false,
-
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_CENTER
+            },
             panControl: true,
             panControlOptions: {
                 position: google.maps.ControlPosition.TOP_RIGHT

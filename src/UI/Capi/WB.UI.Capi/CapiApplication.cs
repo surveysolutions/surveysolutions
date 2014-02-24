@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -29,9 +30,10 @@ using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.GenericSubdomain.Rest.Android;
+using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.Files;
-using WB.Core.Infrastructure.InformationSupplier;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
@@ -210,12 +212,18 @@ namespace WB.UI.Capi
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
+
+            var basePath = Directory.Exists(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)
+                                 ? Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
+                                 : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+
             this.kernel = new StandardKernel(
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
-                new SharedAndroidUiModule(),
+                new RestAndroidModule(),
                 new FileInfrastructureModule(),
-                new AndroidModelModule(),
+                new AndroidModelModule(basePath),
+                new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule());

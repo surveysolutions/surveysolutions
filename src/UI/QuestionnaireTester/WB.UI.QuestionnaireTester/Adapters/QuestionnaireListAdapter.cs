@@ -13,7 +13,6 @@ using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Helpers;
-using WB.UI.Shared.Android.RestUtils;
 
 namespace WB.UI.QuestionnaireTester.Adapters
 {

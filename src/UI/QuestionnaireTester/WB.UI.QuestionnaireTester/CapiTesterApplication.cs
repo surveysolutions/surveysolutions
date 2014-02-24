@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Android.App;
@@ -23,6 +24,7 @@ using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.GenericSubdomain.Rest.Android;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -181,12 +183,14 @@ namespace WB.UI.QuestionnaireTester
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
+
             this.kernel = new StandardKernel(
                 new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
                 new AndroidTesterModelModule(),
                 new TesterLoggingModule(),
                 new DataCollectionSharedKernelModule(),
+                new RestAndroidModule(),
                 new ExpressionProcessorModule());
 
             this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());
