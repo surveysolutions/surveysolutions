@@ -10,6 +10,8 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using Microsoft.Practices.ServiceLocation;
+using Ninject;
+using WB.Core.GenericSubdomain.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
@@ -156,7 +158,7 @@ namespace WB.UI.Capi
             bool? newVersionExists = null;
             try
             {
-                var updater = new UpdateProcessor();
+                var updater = new UpdateProcessor(CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
                 newVersionExists = updater.CheckNewVersion();
             }
             catch (Exception exc)
@@ -199,7 +201,7 @@ namespace WB.UI.Capi
         private void btnUpdateConfirmed_Click(object sender, DialogClickEventArgs e)
         {
             var fileName = "wbcapi.apk";
-            var updater = new UpdateProcessor();
+            var updater = new UpdateProcessor(CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
 
             this.progress = ProgressDialog.Show(this, "Downloading", "Please Wait...", true, true);
 
