@@ -36,7 +36,20 @@ namespace CAPI.Android.Core.Model.ReadSideStore
 
         private string GetFileName(string id)
         {
-            return Path.Combine(StoreDirPath, id);
+            Guid parsedGuid;
+            var fileNameWithoutDashes = Path.Combine(StoreDirPath, id);
+            
+            if (!Guid.TryParse(id, out parsedGuid))
+            {
+                return fileNameWithoutDashes;
+            }
+            // backward compatibility
+            var fileNameWithDashes = Path.Combine(StoreDirPath, parsedGuid.ToString());
+            return File.Exists(fileNameWithDashes)
+                // CAPI has file with dashes in filename
+                ? fileNameWithDashes  
+                // New version will create files in new format if where is no files in old format
+                : fileNameWithoutDashes;
         }
 
         public TEntity GetById(string id)
