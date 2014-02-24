@@ -615,7 +615,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 QuestionText = @event.Payload.Title,
                 StataExportCaption = @event.Payload.VariableName,
                 Mandatory = @event.Payload.IsMandatory,
-                ConditionExpression = @event.Payload.ConditionExpression,
+                ConditionExpression = @event.Payload.EnablementCondition,
                 Instructions = @event.Payload.Instructions
             };
 
@@ -636,7 +636,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 QuestionText = @event.Payload.Title,
                 StataExportCaption = @event.Payload.VariableName,
                 Mandatory = @event.Payload.IsMandatory,
-                ConditionExpression = @event.Payload.ConditionExpression,
+                ConditionExpression = @event.Payload.EnablementCondition,
                 Instructions = @event.Payload.Instructions
             });
 
@@ -653,7 +653,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 QuestionText = @event.Payload.Title,
                 StataExportCaption = @event.Payload.VariableName,
                 Mandatory = @event.Payload.IsMandatory,
-                ConditionExpression = @event.Payload.ConditionExpression,
+                ConditionExpression = @event.Payload.EnablementCondition,
                 Instructions = @event.Payload.Instructions
             };
 
