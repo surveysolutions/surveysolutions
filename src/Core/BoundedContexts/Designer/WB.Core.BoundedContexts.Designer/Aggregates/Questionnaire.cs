@@ -570,7 +570,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = @event.Title,
                 StataExportCaption = @event.VariableName,
                 Mandatory = @event.IsMandatory,
-                ConditionExpression = @event.ConditionExpression,
+                ConditionExpression = @event.EnablementCondition,
                 Instructions = @event.Instructions
             };
 
@@ -586,7 +586,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             question.QuestionText = @event.Title;
             question.StataExportCaption = @event.VariableName;
             question.Mandatory = @event.IsMandatory;
-            question.ConditionExpression = @event.ConditionExpression;
+            question.ConditionExpression = @event.EnablementCondition;
             question.Instructions = @event.Instructions;
 
         }
@@ -599,7 +599,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = @event.Title,
                 StataExportCaption = @event.VariableName,
                 Mandatory = @event.IsMandatory,
-                ConditionExpression = @event.ConditionExpression,
+                ConditionExpression = @event.EnablementCondition,
                 Instructions = @event.Instructions
             };
 
@@ -1279,7 +1279,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
-                ConditionExpression = condition,
+                EnablementCondition = condition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
@@ -1302,7 +1302,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
-                ConditionExpression = condition,
+                EnablementCondition = condition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
@@ -1325,7 +1325,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
-                ConditionExpression = condition,
+                EnablementCondition = condition,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
