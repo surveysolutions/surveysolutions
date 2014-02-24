@@ -30,7 +30,7 @@ using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
-using WB.Core.GenericSubdomain.Rest.Android;
+using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.Files;

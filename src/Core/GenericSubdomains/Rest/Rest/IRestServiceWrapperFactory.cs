@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace WB.Core.GenericSubdomain.Rest
+﻿namespace WB.Core.GenericSubdomains.Rest
 {
     public interface IRestServiceWrapperFactory
     {

@@ -5,10 +5,11 @@ using System.Security.Authentication;
 using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
+using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Serialization;
 
-namespace WB.Core.GenericSubdomain.Rest.Android
+namespace WB.Core.GenericSubdomains.Rest.Android
 {
     internal class AndroidRestServiceWrapper : IRestServiceWrapper
     {

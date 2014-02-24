@@ -1,17 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+using WB.Core.GenericSubdomains.Rest;
 using WB.Core.SharedKernel.Utils.Serialization;
 
-namespace WB.Core.GenericSubdomain.Rest.Android
+namespace WB.Core.GenericSubdomains.Rest.Android
 {
     internal class AndroidRestServiceWrapperFactory : IRestServiceWrapperFactory
     {
@@ -24,7 +15,7 @@ namespace WB.Core.GenericSubdomain.Rest.Android
 
         public IRestServiceWrapper CreateRestServiceWrapper(string baseAddress)
         {
-            return new AndroidRestServiceWrapper(baseAddress, jsonUtils);
+            return new AndroidRestServiceWrapper(baseAddress, this.jsonUtils);
         }
     }
 }

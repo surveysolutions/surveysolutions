@@ -1,8 +1,9 @@
 using System.Linq;
 using Android.Content;
 using Android.Net;
+using WB.Core.GenericSubdomains.Rest;
 
-namespace WB.Core.GenericSubdomain.Rest.Android
+namespace WB.Core.GenericSubdomains.Rest.Android
 {
     internal class AndroidNetworkService : INetworkService
     {

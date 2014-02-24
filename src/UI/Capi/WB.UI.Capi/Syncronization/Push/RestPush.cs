@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using RestSharp;
-using WB.Core.GenericSubdomain.Rest;
+using WB.Core.GenericSubdomains.Rest;
 
 namespace WB.UI.Capi.Syncronization.Push
 {
