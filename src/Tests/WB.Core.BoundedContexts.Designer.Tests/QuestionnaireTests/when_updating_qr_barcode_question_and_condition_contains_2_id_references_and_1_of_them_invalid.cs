@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 VariableName = "old_variable_name",
                 IsMandatory = false,
                 Instructions = "old instructions",
-                ConditionExpression = "old condition",
+                EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
             });
 

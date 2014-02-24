@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 VariableName = "old_variable_name",
                 IsMandatory = false,
                 Instructions = "old instructions",
-                ConditionExpression = "old condition",
+                EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
             });
             eventContext = new EventContext();
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         It should_raise_QRBarcodeQuestionAdded_event_with_condition_specified = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-                .ConditionExpression.ShouldEqual(condition);
+                .EnablementCondition.ShouldEqual(condition);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_ismandatory_specified = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
