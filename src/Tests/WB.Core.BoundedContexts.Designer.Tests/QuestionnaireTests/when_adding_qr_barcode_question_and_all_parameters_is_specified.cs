@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         It should_raise_QRBarcodeQuestionAdded_event_with_condition_specified = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()
-                .ConditionExpression.ShouldEqual(condition);
+                .EnablementCondition.ShouldEqual(condition);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_ismandatory_specified = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionAdded>()

@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 VariableName = "old_variable_name",
                 IsMandatory = false,
                 Instructions = "old instructions",
-                ConditionExpression = "old condition",
+                EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId});
