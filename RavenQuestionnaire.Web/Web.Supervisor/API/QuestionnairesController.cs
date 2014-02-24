@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
@@ -32,17 +31,13 @@ namespace Web.Supervisor.API
         [Route("")]
         public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
         {
-            if (limit < 0 || offset < 0)
-                return null; //add error responses
+            var input = new QuestionnaireBrowseInputModel()
+            {
+                Page = this.CheckAndRestrictOffset(offset),
+                PageSize = this.CheckAndRestrictLimit(limit),
+            };
 
-            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
-
-            var questionnairesFromStore = this.questionnaireBrowseViewFactory.Load(
-                new QuestionnaireBrowseInputModel()
-                {
-                    PageSize = safeLimit,
-                    Page = offset
-                });
+            var questionnairesFromStore = this.questionnaireBrowseViewFactory.Load(input);
 
             return new QuestionnaireApiView(questionnairesFromStore);
         }
@@ -51,33 +46,19 @@ namespace Web.Supervisor.API
         [Route("{id:guid}/{version:long?}")]
         public QuestionnaireApiView Questionnaires(Guid id, long? version = null, int limit = 10, int offset = 1)
         {
-            if (limit < 0 || offset < 0)
-                return null; //add error responses
+            var input = new QuestionnaireBrowseInputModel()
+            {
+                Page = this.CheckAndRestrictOffset(offset),
+                PageSize = this.CheckAndRestrictLimit(limit),
+                QuestionnaireId = id,
+                Version = version
+            };
 
-            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
-
-            var questionnaires = this.questionnaireBrowseViewFactory.Load(
-                new QuestionnaireBrowseInputModel()
-                {
-                    PageSize = safeLimit,
-                    Page = offset,
-                    QuestionnaireId = id,
-                    Version = version
-                });
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(input);
 
             return new QuestionnaireApiView(questionnaires);
         }
-
-        /*[HttpGet]
-        [Route("{id:guid}/{version:long}/details")]
-        public QuestionnaireApiView QuestionnairesDetails(Guid id, long version)
-        {
-            var questionnaire = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id));
-                
-
-            return new QuestionnaireApiView();
-        }*/
-
+        
         [HttpGet]
         [Route("statuses")]
         public IEnumerable<string> QuestionnairesStatuses()

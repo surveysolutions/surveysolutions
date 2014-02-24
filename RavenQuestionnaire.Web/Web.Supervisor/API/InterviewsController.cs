@@ -8,7 +8,6 @@ using Web.Supervisor.Models.API;
 
 namespace Web.Supervisor.API
 {
-    
     [Authorize/*(Roles = "Headquarter")*/]
     public class InterviewsController : BaseApiServiceController
     {
@@ -24,22 +23,15 @@ namespace Web.Supervisor.API
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
  
-        //would be extended
         [HttpGet]
         [Route("apis/v1/interviews")] //?{templateId}&{templateVersion}&{status}&{interviewerId}&{limit=10}&{offset=1}
         public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null, 
             InterviewStatus? status = null, Guid? interviewerId = null, int limit = 10, int offset = 1)
         {
-
-            if (limit < 0 || offset < 0)
-                return null; //add error responses
-
-            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
-
             var input = new AllInterviewsInputModel
             {
-                Page = offset,
-                PageSize = safeLimit,
+                Page = this.CheckAndRestrictOffset(offset),
+                PageSize = this.CheckAndRestrictLimit(limit),
                 QuestionnaireId = templateId,
                 QuestionnaireVersion = templateVersion,
                 Status = status,
@@ -55,15 +47,10 @@ namespace Web.Supervisor.API
         [Route("apis/v1/questionnaires/{id:guid}/{version:long}/interviews")]
         public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
         {
-            if (limit < 0 || offset < 0)
-                return null; //add error responses
-
-            var safeLimit = Math.Min(limit, MaxPageSize); //move validation to upper level
-
             var input = new AllInterviewsInputModel
             {
-                Page = offset,
-                PageSize = safeLimit,
+                Page = this.CheckAndRestrictOffset(offset),
+                PageSize = this.CheckAndRestrictLimit(limit),
                 QuestionnaireId = id,
                 QuestionnaireVersion = version
             };
