@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__group____contains____roster_size_question___ =
             () =>

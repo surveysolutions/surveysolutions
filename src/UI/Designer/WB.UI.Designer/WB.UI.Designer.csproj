@@ -416,6 +416,9 @@
     </Content>
     <Content Include="NLog.Debug.config" />
     <Content Include="NLog.common.config" />
+    <Content Include="Configuration\ANK.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
