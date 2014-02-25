@@ -107,7 +107,7 @@
       <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+    <ProjectReference Include="..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
