@@ -41,26 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\QuestionnaireVerifier.cs">
+    <Compile Include="..\QuestionnaireVerification\Implementation\Services\QuestionnaireVerifier.cs">
       <Link>Implementation\Services\QuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Properties\VerificationMessages.Designer.cs">
+    <Compile Include="..\QuestionnaireVerification\Properties\VerificationMessages.Designer.cs">
       <Link>Properties\VerificationMessages.Designer.cs</Link>
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\QuestionnaireVerificationModule.cs">
+    <Compile Include="..\QuestionnaireVerification\QuestionnaireVerificationModule.cs">
       <Link>QuestionnaireVerificationModule.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Services\IQuestionnaireVerifier.cs">
+    <Compile Include="..\QuestionnaireVerification\Services\IQuestionnaireVerifier.cs">
       <Link>Services\IQuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationError.cs">
+    <Compile Include="..\QuestionnaireVerification\ValueObjects\QuestionnaireVerificationError.cs">
       <Link>ValueObjects\QuestionnaireVerificationError.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReference.cs">
+    <Compile Include="..\QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReference.cs">
       <Link>ValueObjects\QuestionnaireVerificationReference.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReferenceType.cs">
+    <Compile Include="..\QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReferenceType.cs">
       <Link>ValueObjects\QuestionnaireVerificationReferenceType.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,12 +84,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\WB.Core.SharedKernels.QuestionnaireVerification\packages.config">
+    <None Include="..\QuestionnaireVerification\packages.config">
       <Link>packages.config</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Properties\VerificationMessages.resx">
+    <EmbeddedResource Include="..\QuestionnaireVerification\Properties\VerificationMessages.resx">
       <Link>Properties\VerificationMessages.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
