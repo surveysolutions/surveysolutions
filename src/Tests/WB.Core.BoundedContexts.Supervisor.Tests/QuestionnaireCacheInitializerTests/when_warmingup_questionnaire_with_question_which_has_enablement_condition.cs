@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.QuestionnaireCacheInitializer
 {
     internal class when_warmingup_questionnaire_with_question_which_has_enablement_condition
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
@@ -48,10 +48,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.QuestionnaireCacheInitializer
             questionnaireCacheInitializer = new QuestionnaireCacheInitializer(new QuestionnaireFactory());
         };
 
-        private Because of = () =>
+        Because of = () =>
             questionnaireCacheInitializer.InitializeQuestionnaireDocumentWithCaches(questionnaireDocument);
 
-        private It should_QuestionsInvolvedInCustomEnablementConditionOfQuestion_contain_referenced_in_conditions_question = () =>
+        It should_contain_one_item_in_QuestionsInvolvedInCustomEnablementConditionOfQuestion = () =>
+           questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == questionWithConditionQuestionId)
+               .QuestionIdsInvolvedInCustomEnablementConditionOfQuestion.Count.ShouldEqual(1);
+
+        It should_QuestionsInvolvedInCustomEnablementConditionOfQuestion_contain_referenced_in_conditions_question = () =>
             questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == questionWithConditionQuestionId)
                 .QuestionIdsInvolvedInCustomEnablementConditionOfQuestion[0].ShouldEqual(
                     referencedInConditionQuestionId);
