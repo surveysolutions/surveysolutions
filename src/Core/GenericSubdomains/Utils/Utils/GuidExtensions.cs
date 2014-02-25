@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
+namespace WB.Core.GenericSubdomains.Utils
 {
     public static class GuidExtensions
     {
