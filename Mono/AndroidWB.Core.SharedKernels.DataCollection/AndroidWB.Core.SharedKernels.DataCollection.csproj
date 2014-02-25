@@ -492,7 +492,7 @@
       <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
       <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.Android\WB.Core.SharedKernels.QuestionnaireVerification.Android.csproj">
+    <ProjectReference Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification.Android\WB.Core.SharedKernels.QuestionnaireVerification.Android.csproj">
       <Project>{2f566dd5-1692-4890-9ff7-bcb21b8c372b}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification.Android</Name>
     </ProjectReference>
