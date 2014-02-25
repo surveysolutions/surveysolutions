@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     rosterTitleQuestionId: rosterTitleQuestionId, sourceGroupId: groupId, targetIndex: 0));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containing__list__ = () =>
             exception.Message.ToLower().ShouldContain("list");

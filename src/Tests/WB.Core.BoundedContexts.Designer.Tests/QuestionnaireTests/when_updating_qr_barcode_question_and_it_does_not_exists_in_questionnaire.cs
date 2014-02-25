@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     responsibleId: responsibleId));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__question__cant__found__ = () =>
              new[] { "question", "can't", "found" }.ShouldEachConformTo(
