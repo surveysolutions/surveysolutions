@@ -485,6 +485,10 @@
     <Content Include="NLog.Debug.config" />
     <Content Include="NLog.common.config" />
     <Content Include="Configuration\Pakistan.Supervisor.Web.config" />
+    <Content Include="Configuration\ANK.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\t1.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\director.js" />
