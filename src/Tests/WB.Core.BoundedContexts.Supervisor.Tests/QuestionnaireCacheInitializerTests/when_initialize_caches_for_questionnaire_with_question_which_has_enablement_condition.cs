@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -17,10 +18,16 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.QuestionnaireCacheInitializerTests
 {
-    internal class when_warmingup_questionnaire_with_question_which_has_enablement_condition
+    internal class when_initialize_caches_for_questionnaire_with_question_which_has_enablement_condition
     {
         Establish context = () =>
         {
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                  => processor.GetIdentifiersUsedInExpression(expression) == new[] { referencedInConditionQuestionsVariableName });
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            serviceLocatorMock.Setup(x => x.GetInstance<IExpressionProcessor>()).Returns(expressionProcessor);
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new NumericQuestion()
@@ -33,19 +40,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.QuestionnaireCacheInitializer
                 {
                     PublicKey = questionWithConditionQuestionId,
                     QuestionType = QuestionType.Numeric,
-                    ConditionExpression = "some expression"
+                    ConditionExpression = expression
                 }
             });
-
-            var expressionProcessor = new Mock<IExpressionProcessor>();
-            expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))
-                .Returns(new [] { referencedInConditionQuestionsVariableName });
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-                .Returns(expressionProcessor.Object);
-
-            questionnaireCacheInitializer = new QuestionnaireCacheInitializer(new QuestionnaireFactory());
+             
+            questionnaireCacheInitializer = new QuestionnaireCacheInitializer(new QuestionnaireFactory()); 
         };
 
         Because of = () =>
@@ -65,6 +64,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.QuestionnaireCacheInitializer
         private static string referencedInConditionQuestionsVariableName = "var";
         private static QuestionnaireCacheInitializer questionnaireCacheInitializer;
         private static QuestionnaireDocument questionnaireDocument;
+        private static string expression="some expression";
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
         {

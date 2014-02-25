@@ -109,7 +109,7 @@
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionnaireCacheInitializerTests\when_warmingup_questionnaire_with_question_which_has_enablement_condition.cs" />
+    <Compile Include="QuestionnaireCacheInitializerTests\when_initialize_caches_for_questionnaire_with_question_which_has_enablement_condition.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\FileBasedDataExportServiceTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_present.cs" />
