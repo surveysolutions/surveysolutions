@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__roster__ = () =>
             exception.Message.ToLower().ShouldContain("roster");
