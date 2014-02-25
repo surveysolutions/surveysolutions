@@ -1,6 +1,5 @@
 ﻿using System;
-using Main.Core.Utility;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.ReadSide
 {
