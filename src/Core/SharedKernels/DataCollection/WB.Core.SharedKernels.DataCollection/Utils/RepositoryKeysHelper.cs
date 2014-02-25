@@ -1,5 +1,5 @@
 using System;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
