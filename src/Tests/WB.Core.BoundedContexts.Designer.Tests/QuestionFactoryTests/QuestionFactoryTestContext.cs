@@ -13,10 +13,32 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
             return new QuestionFactory();
         }
 
-        protected static QuestionData CreateQuestionData(QuestionType questionType)
+        protected static QuestionData CreateQuestionData(QuestionType questionType, Guid? questionId = null, string title = null,
+            string variable = null, string instructions = null, bool? isMandatory = null, string condition = null)
         {
-            return new QuestionData(Guid.NewGuid(), questionType, QuestionScope.Interviewer, "title", "var", "", "", "",
-                Order.AsIs, false, false, false, "", new List<Guid>(), null, new Answer[0], null, null, null, null, null, null);
+            return new QuestionData(
+                questionId ?? Guid.NewGuid(), 
+                questionType, 
+                QuestionScope.Interviewer, 
+                title ?? "title", 
+                variable ?? "var", 
+                condition ?? "", 
+                "", 
+                "",
+                Order.AsIs,
+                false,
+                isMandatory ?? false, 
+                false, 
+                instructions ?? "", 
+                new List<Guid>(), 
+                null, 
+                new Answer[0], 
+                null, 
+                null, 
+                null, 
+                null, 
+                null, 
+                null);
         }
     }
 }
