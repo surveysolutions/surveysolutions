@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     responsibleId: responsibleId, sourceQuestionId: sourceQuestionId, parentGroupId: chapterId, targetIndex: 1));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__question__exist__ = () =>
              new[] { "question", "exist" }.ShouldEachConformTo(
