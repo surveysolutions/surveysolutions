@@ -135,14 +135,17 @@
 
                 var markers = [];
 
-                for (i = 0; i < locations.length; i++) {
-                    var points = locations[i].split(';');
-                    var marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(points[0] * 1, points[1] * 1),
-                        //map: self.map
-                    });
-                    markers.push(marker);
-                    bounds.extend(marker.getPosition());
+                for (var i = 0; i < locations.length; i++) {
+                    var l = locations[i].split('|');
+                    for (var j = 0; j < l.length; j++) {
+                        var points = l[j].split(';');
+                        var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(points[0] * 1, points[1] * 1),
+                            //map: self.map
+                        });
+                        markers.push(marker);
+                        bounds.extend(marker.getPosition());
+                    }
                 }
 
                 self.mapClusterer.addMarkers(markers);

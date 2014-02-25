@@ -53,7 +53,7 @@ namespace Core.Supervisor.Tests.MapReportTests
             view.Answers.Length.ShouldEqual(2);
 
         private It should_set_concrete_values_in_views_Answers_property = () =>
-            view.Answers.ShouldContainOnly(new[] { "11.11;11.11,22;22", "5555;66666" });
+            view.Answers.ShouldContainOnly(new[] { "11.11;11.11|22;22", "5555;66666" });
 
         private static string repositoryId = "var-11111111111111111111111111111111-1";
         private static MapReport mapReport;

@@ -27,7 +27,7 @@ namespace Core.Supervisor.Views.Reposts.Factories
             {
                 Answers = answersCollection == null
                     ? new string[0]
-                    : answersCollection.Answers.Select(x => string.Join(",", x.Value.Values)).ToArray()
+                    : answersCollection.Answers.Select(x => string.Join("|", x.Value.Values)).ToArray()
             };
         }
     }
