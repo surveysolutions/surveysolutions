@@ -1,15 +1,18 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
+using it = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
@@ -17,6 +20,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
     {
         Establish context = () =>
         {
+            questionFactory = new Mock<IQuestionFactory>();
+
+            questionFactory.Setup(x => x.CreateQuestion(it.IsAny<QuestionData>()))
+                .Returns(CreateQRBarcodeQuestion(
+                    questionId: questionId,
+                    enablementCondition: condition,
+                    isMandatory: isMandatory,
+                    instructions: instructions,
+                    title: title,
+                    variableName: variableName));
+
             @event = ToPublishedEvent(new QRBarcodeQuestionCloned()
             {
                 QuestionId = questionId,
@@ -61,11 +75,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                     questionnaireView = document;
                 });
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, questionFactory: questionFactory.Object);
         };
 
         Because of = () =>
             denormalizer.Handle(@event);
+
+        It should_call_question_factory_ones = () =>
+            questionFactory.Verify(x => x.CreateQuestion(it.IsAny<QuestionData>()), Times.Once);
 
         It should__not_be_null_qr_barcode_question_from_questionnaire__ = ()=>
             GetQRBarcodeQuestionById().ShouldNotBeNull();
@@ -117,6 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             return questionnaireView.FirstOrDefault<IQRBarcodeQuestion>(question => question.PublicKey == questionId);
         }
 
+        private static Mock<IQuestionFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<QRBarcodeQuestionCloned> @event;

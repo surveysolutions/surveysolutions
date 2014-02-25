@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -30,8 +31,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
-            IQuestionFactory questionFactory = null, 
-            ILogger logger = null, 
+            IQuestionFactory questionFactory = null,
+            ILogger logger = null,
             IQuestionnaireDocumentUpgrader upgrader = null)
         {
             return new QuestionnaireDenormalizer(
@@ -78,6 +79,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             }
 
             return group;
+        }
+
+        protected static QRBarcodeQuestion CreateQRBarcodeQuestion(Guid questionId, string enablementCondition, bool isMandatory, string instructions, string title, string variableName)
+        {
+            return new QRBarcodeQuestion
+            {
+                PublicKey = questionId,
+                QuestionText = title,
+                QuestionType = QuestionType.QRBarcode,
+                ConditionExpression = enablementCondition,
+                Mandatory = isMandatory,
+                StataExportCaption = variableName,
+                Instructions = instructions
+            };
         }
 
         protected static TextQuestion CreateTextQuestion(Guid? questionId = null, string title = null)
@@ -328,7 +343,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             {
                 PublicKey = questionId,
                 MaxAnswerCount = maxAnswerCount
-                
+
             });
         }
 

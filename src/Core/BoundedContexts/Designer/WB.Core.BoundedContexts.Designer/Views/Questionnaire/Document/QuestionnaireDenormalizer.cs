@@ -605,61 +605,90 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.AddNewQuestionnaire(evnt.Payload.QuestionnaireDocument);
         }
 
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> @event)
+        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
-
-            var question = new QRBarcodeQuestion()
-            {
-                PublicKey = @event.Payload.QuestionId,
-                QuestionText = @event.Payload.Title,
-                StataExportCaption = @event.Payload.VariableName,
-                Mandatory = @event.Payload.IsMandatory,
-                ConditionExpression = @event.Payload.EnablementCondition,
-                Instructions = @event.Payload.Instructions
-            };
-
-            item.Add(c: question, parent: @event.Payload.ParentGroupId, parentPropagationKey: null);
-
-            this.UpdateQuestionnaire(@event, item);
+            QRBarcodeQuestionAdded e = evnt.Payload;
+            AddQuestion(evnt, evnt.Payload.ParentGroupId,
+              new QuestionData(
+                  e.QuestionId,
+                  QuestionType.QRBarcode,
+                  QuestionScope.Interviewer,
+                  e.Title,
+                  e.VariableName,
+                  e.EnablementCondition,
+                  null,
+                  null,
+                  Order.AZ,
+                  false,
+                  e.IsMandatory,
+                  false,
+                  e.Instructions,
+                  new List<Guid>(),
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null));
         }
 
-        public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> @event)
+        public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
-
-            var oldQuestion = item.Find<IQuestion>(@event.Payload.QuestionId);
-
-            item.ReplaceQuestionWithNew(oldQuestion, new QRBarcodeQuestion()
-            {
-                PublicKey = @event.Payload.QuestionId,
-                QuestionText = @event.Payload.Title,
-                StataExportCaption = @event.Payload.VariableName,
-                Mandatory = @event.Payload.IsMandatory,
-                ConditionExpression = @event.Payload.EnablementCondition,
-                Instructions = @event.Payload.Instructions
-            });
-
-            this.UpdateQuestionnaire(@event, item);
+            QRBarcodeQuestionUpdated e = evnt.Payload;
+            UpdateQuestion(evnt, new QuestionData(
+                e.QuestionId,
+                QuestionType.QRBarcode,
+                QuestionScope.Interviewer,
+                e.Title,
+                e.VariableName,
+                e.EnablementCondition,
+                null,
+                null,
+                Order.AZ,
+                false,
+                e.IsMandatory,
+                false,
+                e.Instructions,
+                new List<Guid>(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null));
         }
 
-        public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> @event)
+        public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
-
-            var question = new QRBarcodeQuestion()
-            {
-                PublicKey = @event.Payload.QuestionId,
-                QuestionText = @event.Payload.Title,
-                StataExportCaption = @event.Payload.VariableName,
-                Mandatory = @event.Payload.IsMandatory,
-                ConditionExpression = @event.Payload.EnablementCondition,
-                Instructions = @event.Payload.Instructions
-            };
-
-            item.Insert(index: @event.Payload.TargetIndex, c: question, parent: @event.Payload.ParentGroupId);
-
-            this.UpdateQuestionnaire(@event, item);
+            QRBarcodeQuestionCloned e = evnt.Payload;
+            CloneQuestion(evnt, e.ParentGroupId, e.TargetIndex,
+                new QuestionData(
+                    e.QuestionId,
+                    QuestionType.QRBarcode,
+                    QuestionScope.Interviewer,
+                    e.Title,
+                    e.VariableName,
+                    e.EnablementCondition,
+                    null,
+                    null,
+                    Order.AZ,
+                    false,
+                    e.IsMandatory,
+                    false,
+                    e.Instructions,
+                    new List<Guid>(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null));
         }
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
