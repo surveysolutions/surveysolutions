@@ -40,25 +40,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\ExpressionProcessorModule.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\ExpressionProcessorModule.cs">
       <Link>ExpressionProcessorModule.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\ExtentionFunctions.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\ExtentionFunctions.cs">
       <Link>ExtentionFunctions.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\Implementation\Services\ExpressionProcessor.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\ExpressionProcessor.cs">
       <Link>Implementation\Services\ExpressionProcessor.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\Implementation\Services\IdentifierCollector.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\IdentifierCollector.cs">
       <Link>Implementation\Services\IdentifierCollector.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\Services\IExpressionProcessor.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Services\IExpressionProcessor.cs">
       <Link>Services\IExpressionProcessor.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\packages.config">
+    <None Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\packages.config">
       <Link>packages.config</Link>
     </None>
   </ItemGroup>

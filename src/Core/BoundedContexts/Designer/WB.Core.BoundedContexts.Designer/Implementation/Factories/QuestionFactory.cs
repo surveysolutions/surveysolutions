@@ -83,6 +83,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 case QuestionType.TextList:
                     return new TextListQuestion();
 
+                case QuestionType.QRBarcode:
+                    return new QRBarcodeQuestion();
+
                 default:
                     throw new NotSupportedException(string.Format("Question type is not supported: {0}", type));
             }
