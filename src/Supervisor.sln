@@ -94,7 +94,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernels", "SharedKern
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataCollection", "DataCollection", "{5B5F5225-7571-4485-AEF0-E0648CCFCBE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection", "Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj", "{89B14B50-5305-45E2-9835-7A05BD0B97A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection", "Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj", "{89B14B50-5305-45E2-9835-7A05BD0B97A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection.Tests", "Tests\WB.Core.SharedKernels.DataCollection.Tests\WB.Core.SharedKernels.DataCollection.Tests.csproj", "{E797439A-61C1-4309-BF62-32E57EE0402A}"
 EndProject
@@ -106,11 +106,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Sup
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExpressionProcessor", "ExpressionProcessor", "{621AD184-AC9C-46B4-B9B0-0E921DD39F0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.ExpressionProcessor", "Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj", "{D55B9582-70FD-4340-A3BC-55A33D49B2E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.ExpressionProcessor", "Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj", "{D55B9582-70FD-4340-A3BC-55A33D49B2E6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuestionnaireVerification", "QuestionnaireVerification", "{17A90D60-A454-4DFC-B246-2C0BF5713894}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification", "Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj", "{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification", "Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj", "{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification.Tests", "Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests.csproj", "{9071B005-CC4E-416B-B29F-449B7696D7DB}"
 EndProject
