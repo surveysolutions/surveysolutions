@@ -39,7 +39,7 @@
                 <TextBox HorizontalAlignment="Left" Height="23" Margin="20,309,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding StatusesCount, Mode=TwoWay}"/>
                 <TextBlock HorizontalAlignment="Left" Margin="73,313,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Left" Margin="18,10,0,0" TextWrapping="Wrap" Text="Select supervisor:" VerticalAlignment="Top"/>
-                <ComboBox HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top" Width="122" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
+                <ComboBox HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top" Width="125" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding UserName}"></TextBlock>
