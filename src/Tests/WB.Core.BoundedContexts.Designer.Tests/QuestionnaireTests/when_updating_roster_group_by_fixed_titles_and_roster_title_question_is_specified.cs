@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                         rosterTitleQuestionId: rosterTitleQuestionId));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
 
         It should_throw_exception_with_message_containting__have__ = () =>
