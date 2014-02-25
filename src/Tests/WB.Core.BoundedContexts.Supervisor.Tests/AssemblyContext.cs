@@ -8,9 +8,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
     {
         public void OnAssemblyStart()
         {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
         public void OnAssemblyComplete() {}
