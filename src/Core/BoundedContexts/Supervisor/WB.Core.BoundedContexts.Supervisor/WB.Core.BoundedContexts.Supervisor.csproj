@@ -83,11 +83,13 @@
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvDataFileExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentService.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireCacheInitializer.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
     <Compile Include="Services\IDataFileExportService.cs" />
+    <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
     <Compile Include="SupervisorBoundedContextModule.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
