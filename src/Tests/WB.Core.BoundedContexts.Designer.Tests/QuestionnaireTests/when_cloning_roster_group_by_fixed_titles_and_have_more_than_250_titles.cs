@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                         targetIndex: 0, parentGroupId: parentGroupId, sourceGroupId: parentGroupId));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
 
         It should_throw_exception_with_message_containting__fixed__ = () =>

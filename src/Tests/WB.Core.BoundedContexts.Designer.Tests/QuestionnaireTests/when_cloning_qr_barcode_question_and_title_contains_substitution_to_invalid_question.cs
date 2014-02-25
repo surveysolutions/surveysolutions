@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     responsibleId: responsibleId, sourceQuestionId:sourceQuestionId, parentGroupId:chapterId, targetIndex: 1));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__title___not_existing_variable_name__as__substitution__ = () =>
              new[] { "title", "contains", "unknown", "substitution" }.ShouldEachConformTo(
