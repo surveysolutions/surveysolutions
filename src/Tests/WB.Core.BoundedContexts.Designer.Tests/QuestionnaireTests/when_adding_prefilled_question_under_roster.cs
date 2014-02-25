@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     responsibleId, null, false, null));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__prefilled__ = () =>
             exception.Message.ToLower().ShouldContain("pre-filled");

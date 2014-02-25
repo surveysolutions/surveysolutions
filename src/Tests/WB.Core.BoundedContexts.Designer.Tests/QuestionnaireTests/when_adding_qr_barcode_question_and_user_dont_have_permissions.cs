@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     responsibleId: notExistinigUserId));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__dont__have__permissions__ = () =>
              new[] { "don't", "have", "permissions" }.ShouldEachConformTo(
