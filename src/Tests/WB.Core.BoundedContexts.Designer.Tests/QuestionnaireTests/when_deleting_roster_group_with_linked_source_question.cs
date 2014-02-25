@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () => exception = Catch.Exception(() => questionnaire.DeleteGroup(rosterId, responsibleId));
 
         It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__contains__ = () =>
             exception.Message.ToLower().ShouldContain("contains");
