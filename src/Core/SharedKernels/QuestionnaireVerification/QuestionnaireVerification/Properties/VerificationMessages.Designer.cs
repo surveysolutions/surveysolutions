@@ -405,7 +405,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has option(s) with empty value.
+        ///   Looks up a localized string similar to Question has option(s) with empty value..
         /// </summary>
         internal static string WB0045_QuestionHasOptionsWithEmptyValue {
             get {
@@ -423,25 +423,25 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question has validation expression.
+        ///   Looks up a localized string similar to QR Barcode question should not have a validation expression..
         /// </summary>
-        internal static string WB0047_QRBarcodeQuestionHaveValidationExpression {
+        internal static string WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression {
             get {
-                return ResourceManager.GetString("WB0047_QRBarcodeQuestionHaveValidationExpression", resourceCulture);
+                return ResourceManager.GetString("WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question has validation message.
+        ///   Looks up a localized string similar to QR Barcode question should not have a validation message..
         /// </summary>
-        internal static string WB0048_QRBarcodeQuestionHaveValidationExpression {
+        internal static string WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage {
             get {
-                return ResourceManager.GetString("WB0048_QRBarcodeQuestionHaveValidationExpression", resourceCulture);
+                return ResourceManager.GetString("WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question used as supervisor question.
+        ///   Looks up a localized string similar to QR Barcode question used as supervisor question..
         /// </summary>
         internal static string WB0049_QRBarcodeQuestionIsSupervisorQuestion {
             get {
@@ -450,22 +450,21 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question used as prefilled question.
+        ///   Looks up a localized string similar to QR Barcode question used as prefilled question..
         /// </summary>
         internal static string WB0050_QRBarcodeQuestionIsPreFilledQuestion {
             get {
                 return ResourceManager.GetString("WB0050_QRBarcodeQuestionIsPreFilledQuestion", resourceCulture);
             }
         }
-          /// <summary>
-        ///   Looks up a localized string similar to Groups can not custom enablement  condition referencing child question.
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Groups can not custom enablement  condition referencing child question..
         /// </summary>
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
                 return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
-}
+            }
         }
-
-        
     }
 }

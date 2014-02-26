@@ -89,15 +89,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
-                    Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039",VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
-                    Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040",VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-                    Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041",VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
-                    Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042",VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
-                    Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045",VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionHaveValidationExpression, "WB0047",VerificationMessages.WB0047_QRBarcodeQuestionHaveValidationExpression),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionHaveValidationMessage, "WB0048",VerificationMessages.WB0048_QRBarcodeQuestionHaveValidationExpression),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049",VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050",VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041", VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
+                    Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042", VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
+                    Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationExpression, "WB0047", VerificationMessages.WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationMessage, "WB0048", VerificationMessages.WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
+                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -372,22 +372,22 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsSupervisorQuestion(question);
         }
 
-        private bool QRBarcodeQuestionIsPreFilledQuestion(IQRBarcodeQuestion question)
+        private static bool QRBarcodeQuestionIsPreFilledQuestion(IQRBarcodeQuestion question)
         {
             return IsPreFilledQuestion(question);
         }
 
-        private bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question)
+        private static bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question)
         {
             return IsSupervisorQuestion(question);
         }
 
-        private bool QRBarcodeQuestionHaveValidationMessage(IQRBarcodeQuestion question)
+        private static bool QRBarcodeQuestionShouldNotHaveValidationMessage(IQRBarcodeQuestion question)
         {
             return !string.IsNullOrEmpty(question.ValidationMessage);
         }
 
-        private bool QRBarcodeQuestionHaveValidationExpression(IQRBarcodeQuestion question)
+        private static bool QRBarcodeQuestionShouldNotHaveValidationExpression(IQRBarcodeQuestion question)
         {
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
