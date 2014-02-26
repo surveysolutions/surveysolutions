@@ -468,20 +468,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode questions cannot be used in validation expressions..
+        ///   Looks up a localized string similar to QR Barcode questions cannot be used in validation expression..
         /// </summary>
-        internal static string WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpressions {
+        internal static string WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression {
             get {
-                return ResourceManager.GetString("WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpressions", resourceCulture);
+                return ResourceManager.GetString("WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode questions cannot be used in enablement conditions..
+        ///   Looks up a localized string similar to QR Barcode questions cannot be used in enablement condition..
         /// </summary>
-        internal static string WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementConditions {
+        internal static string WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition {
             get {
-                return ResourceManager.GetString("WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementConditions", resourceCulture);
+                return ResourceManager.GetString("WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
             }
         }
     }

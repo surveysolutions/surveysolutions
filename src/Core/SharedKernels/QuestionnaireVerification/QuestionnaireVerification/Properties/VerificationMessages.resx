@@ -252,10 +252,10 @@
   <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
     <value>QR Barcode question used as prefilled question.</value>
   </data>
-  <data name="WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpressions" xml:space="preserve">
-    <value>QR Barcode questions cannot be used in validation expressions.</value>
+  <data name="WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression" xml:space="preserve">
+    <value>QR Barcode questions cannot be used in validation expression.</value>
   </data>
-  <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementConditions" xml:space="preserve">
-    <value>QR Barcode questions cannot be used in enablement conditions.</value>
+  <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
+    <value>QR Barcode questions cannot be used in enablement condition.</value>
   </data>
 </root>
