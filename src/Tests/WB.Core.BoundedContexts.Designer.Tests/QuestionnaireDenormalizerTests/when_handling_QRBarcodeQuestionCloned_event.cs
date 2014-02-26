@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             questionFactory = new Mock<IQuestionFactory>();
 
             questionFactory.Setup(x => x.CreateQuestion(it.IsAny<QuestionData>()))
+                .Callback((QuestionData qd) => questionData = qd)
                 .Returns(CreateQRBarcodeQuestion(
                     questionId: questionId,
                     enablementCondition: condition,
@@ -81,6 +82,27 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(@event);
 
+        It should_pass_PublicKey_equals_questionId_to_question_factory = () =>
+            questionData.PublicKey.ShouldEqual(questionId);
+
+        It should_pass_QuestionType_equals_QRBarcode_to_question_factory = () =>
+           questionData.QuestionType.ShouldEqual(QuestionType.QRBarcode);
+
+        It should_pass_QuestionText_equals_questionId_to_question_factory = () =>
+           questionData.QuestionText.ShouldEqual(title);
+
+        It should_pass_StataExportCaption_equals_questionId_to_question_factory = () =>
+           questionData.StataExportCaption.ShouldEqual(variableName);
+
+        It should_pass_ConditionExpression_equals_questionId_to_question_factory = () =>
+           questionData.ConditionExpression.ShouldEqual(condition);
+
+        It should_pass_Mandatory_equals_questionId_to_question_factory = () =>
+           questionData.Mandatory.ShouldEqual(isMandatory);
+
+        It should_pass_Instructions_equals_questionId_to_question_factory = () =>
+           questionData.Instructions.ShouldEqual(instructions);
+
         It should_call_question_factory_ones = () =>
             questionFactory.Verify(x => x.CreateQuestion(it.IsAny<QuestionData>()), Times.Once);
 
@@ -134,6 +156,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             return questionnaireView.FirstOrDefault<IQRBarcodeQuestion>(question => question.PublicKey == questionId);
         }
 
+        private static QuestionData questionData;
         private static Mock<IQuestionFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
         private static QuestionnaireDenormalizer denormalizer;
