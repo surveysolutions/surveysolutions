@@ -721,14 +721,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IQuestion questionWithConditionExpression)
         {
             return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInConditionsExpressions,
+                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInEnablementConditions,
                 CreateReference(questionWithConditionExpression));
         }
 
         private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IGroup groupWithConditionExpression)
         {
             return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInConditionsExpressions,
+                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInEnablementConditions,
                 CreateReference(groupWithConditionExpression));
         }
 
