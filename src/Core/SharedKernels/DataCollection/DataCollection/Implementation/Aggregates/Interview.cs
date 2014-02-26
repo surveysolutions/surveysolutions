@@ -799,36 +799,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
-            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
-
-            EnablementChanges enablementChanges = this.CalculateEnablementChanges(
-                answeredQuestion, answer, questionnaire, getAnswer, this.GetRosterInstanceIds);
-
-           Func<Identity, bool?> getNewQuestionState =
-                question =>
-                {
-                    if (enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
-                    return null;
-                };
-            Func<Identity, object> getAnswerConcerningDisabling = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question, getNewQuestionState);
-
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
-                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
-                out answersDeclaredValid, out answersDeclaredInvalid);
-
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
 
-
             this.ApplyEvent(new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
-
-            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
-            this.ApplyEnablementChangesEvents(enablementChanges);
 
             rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answer)));
         }
