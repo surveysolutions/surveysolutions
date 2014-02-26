@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace Web.Supervisor.Tests.ApiTests
 {
-    internal class when_intervews_controller_interviews_with_not_empty_params : ApiTestContext
+    internal class when_intervews_controller_interviews_filtered_with_not_empty_params : ApiTestContext
     {
         private Establish context = () =>
         {
@@ -19,7 +19,7 @@ namespace Web.Supervisor.Tests.ApiTests
 
         Because of = () =>
         {
-            actionResult = controller.Interviews(questionnaireId, questionnaireVersion);
+            actionResult = controller.InterviewsFiltered(questionnaireId, questionnaireVersion);
         };
 
         It should_return_InterviewApiView = () =>
@@ -36,5 +36,4 @@ namespace Web.Supervisor.Tests.ApiTests
 
         private static Mock<IViewFactory<AllInterviewsInputModel, AllInterviewsView>> allInterviewsViewFactory;
     }
-
 }

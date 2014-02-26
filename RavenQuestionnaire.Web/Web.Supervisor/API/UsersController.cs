@@ -9,7 +9,7 @@ using Web.Supervisor.Models.API;
 
 namespace Web.Supervisor.API
 {
-    [Authorize/*(Roles = "Headquarter")*/]
+    [Authorize(Roles = "Headquarter, Supervisor")]
     public class UsersController : BaseApiServiceController
     {
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;

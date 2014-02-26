@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -107,5 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
+
+        void InitializeQuestionnaireDocument(QuestionnaireDocument source);
     }
 }

@@ -343,9 +343,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Exceptions\QuestionnaireVerificationException.cs">
       <Link>Exceptions\QuestionnaireVerificationException.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Factories\IQuestionnaireCacheInitializerFactory.cs">
-      <Link>Factories\IQuestionnaireCacheInitializerFactory.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Factories\IQuestionnaireFactory.cs">
       <Link>Factories\IQuestionnaireFactory.cs</Link>
     </Compile>
@@ -367,9 +364,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\EnumerableExtensions.cs">
       <Link>Implementation\EnumerableExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Factories\QuestionnaireCacheInitializerFactory.cs">
-      <Link>Implementation\Factories\QuestionnaireCacheInitializerFactory.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Factories\QuestionnaireFactory.cs">
       <Link>Implementation\Factories\QuestionnaireFactory.cs</Link>
     </Compile>
@@ -388,9 +382,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\QuestionnaireRepository.cs">
       <Link>Implementation\Repositories\QuestionnaireRepository.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Services\QuestionnaireCacheInitializer.cs">
-      <Link>Implementation\Services\QuestionnaireCacheInitializer.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ReadSide\IVersionedReadSideRepositoryReader.cs">
       <Link>ReadSide\IVersionedReadSideRepositoryReader.cs</Link>
     </Compile>
@@ -405,9 +396,6 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ReadSide\VersionedReadSideRepositoryWriterExtensions.cs">
       <Link>ReadSide\VersionedReadSideRepositoryWriterExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Services\IQuestionnaireCacheInitializer.cs">
-      <Link>Services\IQuestionnaireCacheInitializer.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Utils\AnswerUtils.cs">
       <Link>Utils\AnswerUtils.cs</Link>
@@ -502,6 +490,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Implementation\Services\" />
+    <Folder Include="Services\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

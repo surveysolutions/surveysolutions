@@ -11,7 +11,7 @@ using Web.Supervisor.Models.API;
 namespace Web.Supervisor.API
 {
     [RoutePrefix("apis/v1/questionnaires")]
-    [Authorize/*(Roles = "Headquarter")*/]
+    [Authorize(Roles = "Headquarter, Supervisor")]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;

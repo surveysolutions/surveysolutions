@@ -2,13 +2,12 @@ using System;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Factories;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.Synchronization;
@@ -20,32 +19,28 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
-        private readonly IQuestionnaireCacheInitializerFactory questionnaireCacheInitializerFactory;
+        private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
 
         public QuestionnaireDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
             ISynchronizationDataStorage synchronizationDataStorage,
-            IQuestionnaireCacheInitializerFactory questionnaireCacheInitializerFactory)
+            IQuestionnaireCacheInitializer questionnaireCacheInitializer)
         {
             this.documentStorage = documentStorage;
             this.synchronizationDataStorage = synchronizationDataStorage;
-            this.questionnaireCacheInitializerFactory = questionnaireCacheInitializerFactory;
+            this.questionnaireCacheInitializer = questionnaireCacheInitializer;
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             var document = evnt.Payload.Source.Clone() as QuestionnaireDocument;
-            if(document==null)
+            if (document == null)
                 return;
 
-            if (!document.IsCacheWarmed)
-            {
-                IQuestionnaireCacheInitializer questionnaireCacheInitializer = this.questionnaireCacheInitializerFactory.CreateQuestionnaireCacheInitializer(document);
-                questionnaireCacheInitializer.WarmUpCaches();
-            }
+            this.questionnaireCacheInitializer.InitializeQuestionnaireDocumentWithCaches(document);
 
             this.documentStorage.Store(
-                new QuestionnaireDocumentVersioned() {Questionnaire = document, Version = evnt.EventSequence},
+                new QuestionnaireDocumentVersioned() { Questionnaire = document, Version = evnt.EventSequence },
                 document.PublicKey);
 
             this.synchronizationDataStorage.SaveQuestionnaire(document, evnt.EventSequence);
