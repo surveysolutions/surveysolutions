@@ -37,6 +37,8 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;
 
+
+            this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
             this.Bind<IReadSideRepositoryReader<InterviewData>>()
                 .To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope()
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
