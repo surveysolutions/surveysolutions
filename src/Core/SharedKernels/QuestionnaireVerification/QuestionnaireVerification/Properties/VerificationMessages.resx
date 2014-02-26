@@ -228,28 +228,34 @@
   <data name="WB0043_TextListQuestionCannotBeUsedInValidationExpressions" xml:space="preserve">
     <value>List question cannot be used in validation expressions.</value>
   </data>
-  <data name="WB0044_TextListQuestionCannotBeUsedInConditionsExpressions" xml:space="preserve">
+  <data name="WB0044_TextListQuestionCannotBeUsedInEnablementConditions" xml:space="preserve">
     <value>List question cannot be used in enablement conditions.</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
-    <value>Question has option(s) with empty value</value>
+    <value>Question has option(s) with empty value.</value>
   </data>
   <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
     <value>Item has custom enablement condition referencing question with deeper roster level.</value>
   </data>
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
-    <value>Groups can not custom enablement  condition referencing child question</value>
+    <value>Groups cannot have enablement condition referencing child question.</value>
   </data>
-  <data name="WB0047_QRBarcodeQuestionHaveValidationExpression" xml:space="preserve">
-    <value>QR Barcode question has validation expression</value>
+  <data name="WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression" xml:space="preserve">
+    <value>QR Barcode question should not have a validation expression.</value>
   </data>
-  <data name="WB0048_QRBarcodeQuestionHaveValidationExpression" xml:space="preserve">
-    <value>QR Barcode question has validation message</value>
+  <data name="WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage" xml:space="preserve">
+    <value>QR Barcode question should not have a validation message.</value>
   </data>
   <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
-    <value>QR Barcode question used as supervisor question</value>
+    <value>QR Barcode question used as supervisor question.</value>
   </data>
   <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
-    <value>QR Barcode question used as prefilled question</value>
+    <value>QR Barcode question used as prefilled question.</value>
+  </data>
+  <data name="WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression" xml:space="preserve">
+    <value>QR Barcode questions cannot be used in validation expression.</value>
+  </data>
+  <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
+    <value>QR Barcode questions cannot be used in enablement condition.</value>
   </data>
 </root>
