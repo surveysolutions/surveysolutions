@@ -182,7 +182,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(NewQuestionAdded e)
         {
             IQuestion question =
-                new QuestionFactory().CreateQuestion(
+                this.questionFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(NumericQuestionAdded e)
         {
             IQuestion question =
-                new QuestionFactory().CreateQuestion(
+                this.questionFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.Numeric,
@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(TextListQuestionAdded e)
         {
             IQuestion question =
-                new QuestionFactory().CreateQuestion(
+               this.questionFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
@@ -303,7 +303,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(QuestionCloned e)
         {
             IQuestion question =
-                new QuestionFactory().CreateQuestion(
+                this.questionFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -343,7 +343,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(NumericQuestionCloned e)
         {
             IQuestion question =
-                new QuestionFactory().CreateQuestion(
+                this.questionFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.Numeric,
@@ -385,7 +385,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(TextListQuestionCloned e)
         {
             IQuestion question =
-                new QuestionFactory().CreateQuestion(
+                this.questionFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
@@ -506,7 +506,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
-                new QuestionFactory().CreateQuestion(
+                this.questionFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
@@ -562,48 +562,113 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
         }
 
-        internal void Apply(QRBarcodeQuestionAdded @event)
+        internal void Apply(QRBarcodeQuestionAdded e)
         {
-            var question = new QRBarcodeQuestion()
-            {
-                PublicKey = @event.QuestionId,
-                QuestionText = @event.Title,
-                StataExportCaption = @event.VariableName,
-                Mandatory = @event.IsMandatory,
-                ConditionExpression = @event.EnablementCondition,
-                Instructions = @event.Instructions
-            };
+            IQuestion question =
+               this.questionFactory.CreateQuestion(
+                   new QuestionData(
+                       e.QuestionId,
+                       QuestionType.QRBarcode,
+                       QuestionScope.Interviewer,
+                       e.Title,
+                       e.VariableName,
+                       e.EnablementCondition,
+                       null,
+                       null,
+                       Order.AZ,
+                       false,
+                       e.IsMandatory,
+                       false,
+                       e.Instructions,
+                       new List<Guid>(),
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null));
 
-            this.innerDocument.Add(c: question, parent: @event.ParentGroupId, parentPropagationKey: null);
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.ParentGroupId, null);
         }
 
-        internal void Apply(QRBarcodeQuestionUpdated @event)
+        internal void Apply(QRBarcodeQuestionUpdated e)
         {
-            var question = this.innerDocument.Find<IQRBarcodeQuestion>(@event.QuestionId);
+            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionId);
+            IQuestion newQuestion =
+                this.questionFactory.CreateQuestion(
+                    new QuestionData(
+                        e.QuestionId,
+                        QuestionType.QRBarcode,
+                        QuestionScope.Interviewer,
+                        e.Title,
+                        e.VariableName,
+                        e.EnablementCondition,
+                        null,
+                       null,
+                        Order.AZ,
+                        false,
+                        e.IsMandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
 
-            if (question == null) return;
+            if (question == null)
+            {
+                return;
+            }
 
-            question.QuestionText = @event.Title;
-            question.StataExportCaption = @event.VariableName;
-            question.Mandatory = @event.IsMandatory;
-            question.ConditionExpression = @event.EnablementCondition;
-            question.Instructions = @event.Instructions;
-
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
-        internal void Apply(QRBarcodeQuestionCloned @event)
+        internal void Apply(QRBarcodeQuestionCloned e)
         {
-            var question = new QRBarcodeQuestion()
-            {
-                PublicKey = @event.QuestionId,
-                QuestionText = @event.Title,
-                StataExportCaption = @event.VariableName,
-                Mandatory = @event.IsMandatory,
-                ConditionExpression = @event.EnablementCondition,
-                Instructions = @event.Instructions
-            };
+            IQuestion question =
+                this.questionFactory.CreateQuestion(
+                    new QuestionData(
+                        e.QuestionId,
+                        QuestionType.QRBarcode,
+                        QuestionScope.Interviewer,
+                        e.Title,
+                        e.VariableName,
+                        e.EnablementCondition,
+                        null,
+                        null,
+                        Order.AZ,
+                        false,
+                        e.IsMandatory,
+                        false,
+                        e.Instructions,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
 
-            this.innerDocument.Insert(c: question, parent: @event.ParentGroupId, index: @event.TargetIndex);
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.ParentGroupId);
         }
 
         public QuestionnaireState CreateSnapshot()
