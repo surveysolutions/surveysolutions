@@ -9,8 +9,8 @@
     </views:MvxWpfView.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -46,7 +46,8 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <CheckBox Content="Put all event to Supervisor DB (do not split between CAPI/SV)" 
+                <CheckBox Content="Put all event to Supervisor DB" 
+                          ToolTip="Do not split between CAPI/SV"
                           HorizontalAlignment="Left" Margin="18,53,0,0" VerticalAlignment="Top" 
                           IsChecked="{Binding PutAllEventsToSupervisorDB, Mode=TwoWay}"/>
                 <CheckBox Content="Generate only Supervisor-side events" 
@@ -79,7 +80,7 @@
             </StatusBarItem>
         </StatusBar>
         <GroupBox Header="Log:" Grid.Row="2" Margin="0,0,10,0" Grid.Column="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <ItemsControl  BorderBrush="{x:Null}" ItemsSource="{Binding LogMessages}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -88,11 +89,21 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <Hyperlink NavigateUri="{Binding Path=Link}" Click="Hyperlink_OnClick">
+                                        <TextBlock Text="{Binding Path=LinkText}" />
+                                    </Hyperlink>
+                                </TextBlock>
+                                <TextBox Text="{Binding Path=Message, Mode=OneWay}" TextWrapping="Wrap" 
+                                     IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0"/>
+                              
+                            </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+
         </GroupBox>
         <GroupBox Header="New interviewers:"  Margin="0,0,10,0" Grid.Column="1" Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto">

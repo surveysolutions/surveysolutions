@@ -110,6 +110,7 @@
     </ApplicationDefinition>
     <Compile Include="AppSettings.cs" />
     <Compile Include="Converters\BoolToNegotiationVisibilityConverter.cs" />
+    <Compile Include="Models\LogMessage.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Ninject\CapiDataGeneratorEventStore.cs" />
     <Compile Include="MVVMCross\CapiDataGeneratorApplication.cs" />

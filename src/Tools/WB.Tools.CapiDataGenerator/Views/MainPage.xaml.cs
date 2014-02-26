@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using System.Windows.Documents;
 using Cirrious.MvvmCross.Wpf.Views;
 
 namespace CapiDataGenerator.Views
@@ -16,6 +20,16 @@ namespace CapiDataGenerator.Views
         public void Connect(int connectionId, object target)
         {
             throw new NotImplementedException();
+        }
+
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        {
+            Hyperlink link = (Hyperlink)sender;
+            string arg = string.Format(@"/select,""{0}""", link.NavigateUri.AbsolutePath.Replace('/','\\'));
+
+        
+
+            Process.Start("explorer", arg);
         }
     }
 }
