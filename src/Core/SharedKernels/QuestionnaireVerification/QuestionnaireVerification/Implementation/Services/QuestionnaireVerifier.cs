@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Properties;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
@@ -98,10 +99,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationMessage, "WB0048", VerificationMessages.WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage),
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
+                    Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInValidationExpression, "WB0052", VerificationMessages.WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression),
+                    Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
+                    Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
-                    ErrorsByEpressionsThatUsesTextListQuestions,
+                    this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                 };
@@ -392,6 +396,49 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
 
+        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                question, question.ValidationExpression, questionnaire,
+                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
+        }
+
+        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                question, question.ConditionExpression, questionnaire,
+                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
+        }
+
+        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                group, group.ConditionExpression, questionnaire,
+                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
+        }
+
+        private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+            IComposite entity, string expression, QuestionnaireDocument questionnaire, Func<IQuestion, bool> isReferencedQuestionIncorrect)
+        {
+            if (string.IsNullOrEmpty(expression))
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            IEnumerable<IQuestion> incorrectReferencedQuestions = this.expressionProcessor
+                .GetIdentifiersUsedInExpression(expression)
+                .Select(identifier => GetQuestionByIdentifier(identifier, questionnaire))
+                .Where(referencedQuestion => referencedQuestion != null)
+                .Where(isReferencedQuestionIncorrect)
+                .ToList();
+
+            if (!incorrectReferencedQuestions.Any())
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            return new EntityVerificationResult<IComposite>
+            {
+                HasErrors = true,
+                ReferencedEntities = Enumerable.Concat(entity.ToEnumerable(), incorrectReferencedQuestions),
+            };
+        }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestions(QuestionnaireDocument questionnaire)
         {
@@ -484,7 +531,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel(
-    QuestionnaireDocument questionnaire)
+            QuestionnaireDocument questionnaire)
         {
             var itemsWithConditionExpression = questionnaire.Find<IComposite>(q => !string.IsNullOrEmpty(GetCustomEnablementCondition(q)));
 
