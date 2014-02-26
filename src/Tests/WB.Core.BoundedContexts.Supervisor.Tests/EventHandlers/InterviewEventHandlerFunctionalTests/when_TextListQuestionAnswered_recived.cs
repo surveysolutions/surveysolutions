@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
+using Moq;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventHandlerFunctionalTests
 {
@@ -21,9 +20,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             textListQuestionId = Guid.Parse("13333333333333333333333333333333");
             viewState = CreateViewWithSequenceOfInterviewData();
 
-            var questionnaireRosterStructure = new QuestionnaireRosterStructure();
+            var questionnaireRosterStructure = new Mock<QuestionnaireRosterStructure>();
 
-            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
+            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure.Object);
 
             viewState = CreateViewWithSequenceOfInterviewData();
         };

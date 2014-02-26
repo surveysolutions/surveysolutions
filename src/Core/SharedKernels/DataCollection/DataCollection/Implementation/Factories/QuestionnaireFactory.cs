@@ -12,5 +12,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
         {
             return new Questionnaire(Guid.Empty, document);
         }
+
+        public IQuestionnaire CreateEmptyInstance()
+        {
+            return new Questionnaire();
+        }
     }
 }
