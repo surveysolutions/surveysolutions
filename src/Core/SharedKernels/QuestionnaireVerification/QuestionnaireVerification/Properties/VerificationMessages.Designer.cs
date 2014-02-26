@@ -398,9 +398,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         /// <summary>
         ///   Looks up a localized string similar to List question cannot be used in enablement conditions..
         /// </summary>
-        internal static string WB0044_TextListQuestionCannotBeUsedInConditionsExpressions {
+        internal static string WB0044_TextListQuestionCannotBeUsedInEnablementConditions {
             get {
-                return ResourceManager.GetString("WB0044_TextListQuestionCannotBeUsedInConditionsExpressions", resourceCulture);
+                return ResourceManager.GetString("WB0044_TextListQuestionCannotBeUsedInEnablementConditions", resourceCulture);
             }
         }
         
@@ -459,11 +459,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Groups can not custom enablement  condition referencing child question..
+        ///   Looks up a localized string similar to Groups cannot have enablement condition referencing child question..
         /// </summary>
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
                 return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QR Barcode questions cannot be used in validation expressions..
+        /// </summary>
+        internal static string WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpressions {
+            get {
+                return ResourceManager.GetString("WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QR Barcode questions cannot be used in enablement conditions..
+        /// </summary>
+        internal static string WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementConditions {
+            get {
+                return ResourceManager.GetString("WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementConditions", resourceCulture);
             }
         }
     }
