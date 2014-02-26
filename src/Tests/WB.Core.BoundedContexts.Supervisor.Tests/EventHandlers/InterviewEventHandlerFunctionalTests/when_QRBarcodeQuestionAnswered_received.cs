@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Moq;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventHandlerFunctionalTests
 {
@@ -13,9 +15,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
     {
         Establish context = () =>
         {
-            var questionnaireRosterStructure = new QuestionnaireRosterStructure();
-            
-            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
+            var questionnaireRosterStructure = new Mock<QuestionnaireRosterStructure>();
+
+            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure.Object);
             viewState = CreateViewWithSequenceOfInterviewData();
         };
 
