@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             doContent.AppendFormat("label define {0} ", labelName);
             foreach (var label in labels)
             {
-                doContent.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNonUnicode(label.Title));
+                doContent.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNotAllowedChars(label.Title));
             }
 
             doContent.AppendLine();
