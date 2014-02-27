@@ -451,7 +451,7 @@ namespace CapiDataGenerator
                     try
                     {
                         AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
-                        var users = CreateUsers(interviewersCount);
+                        var users = CreateInterviewers(interviewersCount);
                         var questionnaire = new Questionnaire(questionnaireDocument);
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
@@ -465,7 +465,8 @@ namespace CapiDataGenerator
                         {
                             Log("create backup");
                             string backupPath = backupService.Backup();
-                            Log(string.Format("Backup was created {0}", backupPath), "Link", backupPath + ".zip");
+                            string backupFileFullPath = backupPath + ".zip";
+                            Log("backup was created ", Path.GetFileName(backupFileFullPath), backupFileFullPath);
                         }
 
                         Log("end");
@@ -537,13 +538,13 @@ namespace CapiDataGenerator
         }
 
 
-        private List<UserLight> CreateUsers(int usersCount)
+        private List<UserLight> CreateInterviewers(int usersCount)
         {
             var users = new List<UserLight>();
-            for (int i = 0; i < usersCount; i++)
+            for (int userIndex = 0; userIndex < usersCount; userIndex++)
             {
                 var uId = Guid.NewGuid();
-                var userName = string.Format("interviewer_{0}_{1}", i, DateTime.Now.Ticks);
+                var userName = string.Format("i{0}_{1}", userIndex, DateTime.Now.ToString("MMddHHmm", CultureInfo.InvariantCulture));
                 users.Add(new UserLight(uId, userName));
                 commandService.Execute(new CreateUserCommand(publicKey: uId, userName: userName,
                     password: SimpleHash.ComputeHash(userName),
@@ -551,7 +552,7 @@ namespace CapiDataGenerator
                     supervsor: new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName)));
                 InvokeOnMainThread(() => InterviewersList.Add(userName));
                 UpdateProgress();
-                LogStatus("create users", i, usersCount);
+                LogStatus("create users", userIndex, usersCount);
             }
 
             return users;
