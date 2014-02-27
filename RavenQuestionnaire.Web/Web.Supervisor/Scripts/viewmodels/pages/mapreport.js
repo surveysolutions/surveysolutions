@@ -74,6 +74,12 @@
 
     self.questionnaireVariables = ko.observableArray(null);
 
+
+    self.selectedQuestionnaire.subscribe(function () {
+        self.selectedVersion(undefined);
+        self.selectedVariable(undefined);
+    });
+
     self.selectedVersion.subscribe(function (value) {
         self.questionnaireVariables(null);
 
@@ -128,8 +134,10 @@
             self.SendRequest(self.mapReportUrl, params, function(data) {
                 var locations = data.Answers;
 
-                if (locations.length == 0)
+                if (locations.length == 0) {
+                    self.ShowNotification(input.settings.messages.notifyNoMarkersTitle, input.settings.messages.notifyNoMarkersText);
                     return;
+                }
 
                 var bounds = new google.maps.LatLngBounds();
 

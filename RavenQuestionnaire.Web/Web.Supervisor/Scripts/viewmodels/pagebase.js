@@ -53,7 +53,11 @@
     });
 
     var notifyHandler;
-    self.ShowNotification = function() {
+    self.ShowNotification = function (title, text) {
+
+        self.NotifyTitle(title || input.settings.messages.notifyDialogTitle);
+        self.NotifyText (text || input.settings.messages.notifyDialogText);
+
         self.IsNotifyVisible(true);
 
         notifyHandler = setTimeout(function() {
@@ -70,7 +74,7 @@
 
     self.CheckForRequestComplete = function() {
         if (!self.IsAjaxComplete()) {
-            self.ShowNotification();
+            self.ShowNotification(input.settings.messages.notifyDialogTitle, input.settings.messages.notifyDialogText);
         }
     };
 
