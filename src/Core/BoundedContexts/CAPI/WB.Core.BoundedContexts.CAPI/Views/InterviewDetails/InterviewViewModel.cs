@@ -8,7 +8,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -24,6 +26,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             this.FeaturedQuestions = new Dictionary<InterviewItemId, QuestionViewModel>();
+        }
+
+        protected ILogger Logger {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
         public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interview)
@@ -463,6 +469,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void SetComment(InterviewItemId key, string comment)
         {
+            if (!this.Questions.ContainsKey(key))
+                return;
+
             var question =
                 this.Questions[key];
             question.SetComment(comment);
@@ -490,6 +499,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void SetScreenStatus(InterviewItemId key, bool enabled)
         {
+            if (!Screens.ContainsKey(key))
+            {
+                Logger.Error(string.Format("screen '{0}', '{1}' is missing", key.Id, string.Join(",", key.InterviewItemPropagationVector)));
+                return;
+            }
+
             var screen =
                 this.Screens[key];
             screen.SetEnabled(enabled);

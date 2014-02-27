@@ -93,11 +93,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                       groupId));
         }
         
-        private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete, Guid scopeId)
+        private void RemoveLevelsFromInterview(InterviewData interview, Dictionary<string, Guid[]> levelKeysForDelete, Guid scopeId)
         {
             foreach (var levelKey in levelKeysForDelete)
             {
-                RemoveLevelFromInterview(interview, levelKey, scopeId);
+                RemoveLevelFromInterview(interview, levelKey.Key, levelKey.Value, scopeId);
             }
         }
 
@@ -109,17 +109,26 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid scopeId)
+        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid[] groupIds, Guid scopeId)
         {
             if (interview.Levels.ContainsKey(levelKey))
             {
                 var level = interview.Levels[levelKey];
+
+                foreach (var groupId in groupIds)
+                {
+                    level.DisabledGroups.Remove(groupId);
+                }
+
                 if (!level.ScopeIds.ContainsKey(scopeId))
                     return;
+
                 if (level.ScopeIds.Count == 1)
                     interview.Levels.Remove(levelKey);
                 else
+                {
                     level.ScopeIds.Remove(scopeId);
+                }
             }
         }
 
@@ -369,8 +378,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return currentState;
         }
 
-
-
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowAdded> evnt)
         {
             var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
@@ -389,7 +396,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
-            this.RemoveLevelFromInterview(currentState.Document, levelKey, scopeOfCurrentGroup.ScopeId);
+            this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { evnt.Payload.GroupId }, scopeOfCurrentGroup.ScopeId);
 
             currentState.Sequence = evnt.EventSequence;
             return currentState;
@@ -418,8 +425,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
             else
             {
-                var keysOfLevelToBeDeleted =
-                    keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(countOfLevelByScope - evnt.Payload.Count);
+                Dictionary<string,Guid[]> keysOfLevelToBeDeleted =
+                    keysOfLevelsByScope.Skip(evnt.Payload.Count)
+                        .Take(countOfLevelByScope - evnt.Payload.Count)
+                        .ToDictionary(keyOfLevelsByScope => keyOfLevelsByScope, keyOfLevelsByScope => scopeOfCurrentGroup.RosterIdToRosterTitleQuestionIdMap.Keys.ToArray());
+
                 RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup.ScopeId);
             }
             currentState.Sequence = evnt.EventSequence;
