@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         private string RemoveNonAscii(string s)
         {
-            return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
+            return Regex.Replace(s, @"[^\u0020-\u007F]", string.Empty);
         }
 
         private string MakeValidFileName(string name)
