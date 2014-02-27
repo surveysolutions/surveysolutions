@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                     }
 
                     doContent.AppendLine(
-                        string.Format("label variable {0} `\"{1}\"'", headerItem.ColumnNames[i], RemoveNonUnicode(headerItem.Titles[i])));
+                        string.Format("label variable {0} `\"{1}\"'", headerItem.ColumnNames[i], RemoveNotAllowedChars(headerItem.Titles[i])));
                 }
             }
 
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             doContent.AppendFormat("label define {0} ", labelName);
             foreach (var label in labels)
             {
-                doContent.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNonUnicode(label.Title));
+                doContent.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNotAllowedChars(label.Title));
             }
 
             doContent.AppendLine();
@@ -100,19 +100,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return string.Format("l{0}", columnName);
         }
 
-        protected string RemoveNonUnicode(string s)
+        private string RemoveNotAllowedChars(string s)
         {
             if (string.IsNullOrEmpty(s))
                 return string.Empty;
-            var onlyUnicode = Regex.Replace(s, @"[^\u0020-\u007E]", string.Empty);
-            return Regex.Replace(onlyUnicode, @"\t|\n|\r|`|'|""", "");
-        }
 
-        protected string CreateColumnName(string parentTableName, string tableName)
-        {
-            return string.IsNullOrEmpty(parentTableName)
-                       ? "PublicKey"
-                       : Regex.Replace(tableName, "[^_a-zA-Z0-9]", string.Empty);
+            //var onlyUnicode = Regex.Replace(s, @"[^\u0020-\u007E]", string.Empty);
+
+            return Regex.Replace(s, @"\t|\n|\r|`|'|""", string.Empty);
         }
     }
 }
