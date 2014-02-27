@@ -7,6 +7,5 @@ namespace WB.Core.SharedKernels.DataCollection.Factories
     public interface IQuestionnaireFactory
     {
         IQuestionnaire CreateTemporaryInstance(QuestionnaireDocument document);
-        IQuestionnaire CreateEmptyInstance();
     }
 }

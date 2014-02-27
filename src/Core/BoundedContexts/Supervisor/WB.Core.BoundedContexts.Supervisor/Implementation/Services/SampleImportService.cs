@@ -104,10 +104,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             }
             IQuestionnaire questionnarie;
 
-            using (new ObliviousEventContext())
-            {
-                questionnarie = questionnaireFactory.CreateTemporaryInstance(bigTemplate);
-            }
+            questionnarie = questionnaireFactory.CreateTemporaryInstance(bigTemplate);
+
             int i = 0;
             foreach (var value in item.Values)
             {

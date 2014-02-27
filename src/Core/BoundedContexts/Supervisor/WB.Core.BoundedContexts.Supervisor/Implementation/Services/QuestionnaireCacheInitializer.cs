@@ -16,8 +16,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         public void InitializeQuestionnaireDocumentWithCaches(QuestionnaireDocument document)
         {
-            var questionnaire = this.questionnaireFactory.CreateEmptyInstance();
-            questionnaire.InitializeQuestionnaireDocument(document);
+            var questionnaire = this.questionnaireFactory.CreateTemporaryInstance(document);
+            questionnaire.InitializeQuestionnaireDocument();
         }
     }
 }

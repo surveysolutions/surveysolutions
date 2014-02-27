@@ -12,6 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        void InitializeQuestionnaireDocument();
+
         [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
 
@@ -108,7 +110,5 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
-
-        void InitializeQuestionnaireDocument(QuestionnaireDocument source);
     }
 }
