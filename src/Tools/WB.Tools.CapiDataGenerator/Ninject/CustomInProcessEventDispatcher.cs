@@ -16,7 +16,14 @@ namespace CapiDataGenerator
         public CustomInProcessEventDispatcher(bool useTransactionScope)
             : base(useTransactionScope) {}
 
-        protected override Action<PublishedEvent> DoActionForHandler<TEvent>(IEventHandler<TEvent> handler)
+        public override void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
+        {
+            var eventDataType = typeof(TEvent);
+
+            RegisterHandler(eventDataType, DoActionForHandler(handler));
+        }
+
+        protected Action<PublishedEvent> DoActionForHandler<TEvent>(IEventHandler<TEvent> handler)
         {
             return evnt =>
             {

@@ -126,16 +126,11 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             }
         }
 
-        public void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
+        public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
         {
             var eventDataType = typeof(TEvent);
 
-            RegisterHandler(eventDataType, this.DoActionForHandler(handler));
-        }
-
-        protected virtual Action<PublishedEvent> DoActionForHandler<TEvent>(IEventHandler<TEvent> handler)
-        {
-            return evnt => handler.Handle((IPublishedEvent<TEvent>)evnt);
+            RegisterHandler(eventDataType, evnt => handler.Handle((IPublishedEvent<TEvent>)evnt));
         }
 
         public void RegisterHandler(Type eventDataType, Action<PublishedEvent> handler)
