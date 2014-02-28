@@ -317,8 +317,8 @@ namespace CapiDataGenerator
             }
         }
 
-        private ObservableCollection<string> _logMessages = new ObservableCollection<string>();
-        public ObservableCollection<string> LogMessages
+        private ObservableCollection<LogMessage> _logMessages = new ObservableCollection<LogMessage>();
+        public ObservableCollection<LogMessage> LogMessages
         {
             get
             {
@@ -451,7 +451,7 @@ namespace CapiDataGenerator
                     try
                     {
                         AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
-                        var users = CreateUsers(interviewersCount);
+                        var users = CreateInterviewers(interviewersCount);
                         var questionnaire = new Questionnaire(questionnaireDocument);
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
@@ -465,7 +465,8 @@ namespace CapiDataGenerator
                         {
                             Log("create backup");
                             string backupPath = backupService.Backup();
-                            Log(string.Format("backup was saved to {0}", backupPath));
+                            string backupFileFullPath = backupPath + ".zip";
+                            Log("backup was created ", Path.GetFileName(backupFileFullPath), backupFileFullPath);
                         }
 
                         Log("end");
@@ -537,13 +538,13 @@ namespace CapiDataGenerator
         }
 
 
-        private List<UserLight> CreateUsers(int usersCount)
+        private List<UserLight> CreateInterviewers(int usersCount)
         {
             var users = new List<UserLight>();
-            for (int i = 0; i < usersCount; i++)
+            for (int userIndex = 0; userIndex < usersCount; userIndex++)
             {
                 var uId = Guid.NewGuid();
-                var userName = string.Format("interviewer_{0}_{1}", i, DateTime.Now.Ticks);
+                var userName = string.Format("i{0}_{1}", userIndex, DateTime.Now.ToString("MMddHHmm", CultureInfo.InvariantCulture));
                 users.Add(new UserLight(uId, userName));
                 commandService.Execute(new CreateUserCommand(publicKey: uId, userName: userName,
                     password: SimpleHash.ComputeHash(userName),
@@ -551,7 +552,7 @@ namespace CapiDataGenerator
                     supervsor: new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName)));
                 InvokeOnMainThread(() => InterviewersList.Add(userName));
                 UpdateProgress();
-                LogStatus("create users", i, usersCount);
+                LogStatus("create users", userIndex, usersCount);
             }
 
             return users;
@@ -887,26 +888,29 @@ namespace CapiDataGenerator
             Progress += 1;
         }
 
-        private void Log(string message)
+        private void Log(string message, string linkText = null, string link = null)
         {
-            InvokeOnMainThread(() => LogMessages.Add(message));
+            var logEntry = new LogMessage(message);
+            logEntry.Link = link;
+            logEntry.LinkText = linkText;
+
+            InvokeOnMainThread(() => LogMessages.Add(logEntry));
         }
 
         private void LogStatus(string message, int progress, int count)
         {
             var output = string.Format("{0}: {1} of {2}", message, progress + 1, count);
-            InvokeOnMainThread(
-                () =>
+            InvokeOnMainThread(() =>  {
+                if (LogMessages.Any(x => x.Message.Contains(message)))
                 {
-                    if (LogMessages.Any(x => x.Contains(message)))
-                    {
-                        LogMessages[LogMessages.Count - 1] = output;
-                    }
-                    else
-                    {
-                        LogMessages.Add(output);
-                    }
-                });
+                    LogMessage logMessage = LogMessages[LogMessages.Count - 1];
+                    logMessage.Message = output;
+                }
+                else
+                {
+                    LogMessages.Add(new LogMessage(output));
+                }
+            });
         }
     }
 }

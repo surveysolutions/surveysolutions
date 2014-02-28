@@ -12,6 +12,7 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide;
