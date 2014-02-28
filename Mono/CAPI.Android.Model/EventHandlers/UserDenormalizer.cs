@@ -1,15 +1,6 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Events.User;
-using Main.Core.View.User;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.EventHandlers
