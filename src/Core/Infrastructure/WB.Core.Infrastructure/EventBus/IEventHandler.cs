@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.Infrastructure.FunctionalDenormalization
+namespace WB.Core.Infrastructure.EventBus
 {
     public interface IEventHandler
     {
