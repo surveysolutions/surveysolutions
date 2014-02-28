@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
@@ -16,7 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 {
-    internal class when_chapter_with_nested_roster_is_disabling : InterviewViewModelTestContext
+    internal class when_roster_row_is_added_to_roster_inside_disabled_chapter : InterviewViewModelTestContext
     {
         Establish context = () =>
         {
@@ -58,31 +57,18 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
 
-            PropagateScreen(interviewViewModel, rosterGroupId, 0);
-            PropagateScreen(interviewViewModel, rosterGroupId, 1);
-            interviewViewModel.SetAnswer(new InterviewItemId(nestedGroupInnterQuestionId, new decimal[] { 0 }), 3);
-        
+            interviewViewModel.SetScreenStatus(new InterviewItemId(chapterId, new decimal[0]), false);
         };
 
-        Because of = () => interviewViewModel.SetScreenStatus(new InterviewItemId(chapterId, new decimal[0]), false);
+        Because of = () =>
+            PropagateScreen(interviewViewModel, rosterGroupId, 0);
 
-        It should_roster_be_disabled = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[0])]).Enabled.ShouldEqual(false);
-
-        It should_roster_be_disabled_as_item_inside_chapter = () =>
-            ((QuestionnaireNavigationPanelItem)((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(chapterId, new decimal[0])]).Items[0]).Enabled.ShouldEqual(false);
 
         It should_first_row_of_Roster_be_disabled_as_screen = () =>
-            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[]{ 0 })]).Enabled.ShouldEqual(false);
+            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 0 })]).Enabled.ShouldEqual(false);
 
-        It should_second_row_of_Roster_be_disabled_as_screen = () =>
-           ((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 1 })]).Enabled.ShouldEqual(false);
-
-        It should_roster_first_row_be_disabled = () =>
+        It should_roster_row_be_disabled = () =>
             ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[0])]).Rows.First().Enabled.ShouldEqual(false);
-
-        It should_roster_second_row_be_disabled = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[0])]).Rows.Last().Enabled.ShouldEqual(false);
 
         It should_roster_total_question_count_be_equal_to_0 = () =>
             ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[0])]).Total.ShouldEqual(0);
