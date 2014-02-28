@@ -1,17 +1,18 @@
+using System;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class UserDenormalizer : IEventHandler<NewUserCreated>, IEventHandler<UserChanged>
+    public class UserDenormalizer : IEventHandler<NewUserCreated>, IEventHandler<UserChanged>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<LoginDTO> documentStorage;
 
         public UserDenormalizer(IReadSideRepositoryWriter<LoginDTO> documentStorage)
         {
-
             this.documentStorage = documentStorage;
         }
 
@@ -30,6 +31,27 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 return;
             this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, user.Login.ToLower(), evnt.Payload.PasswordHash, user.IsLocked),
                                     evnt.EventSourceId);
+        }
+
+        public string Name
+        {
+            get { return typeof (UserDenormalizer).FullName; }
+        }
+
+        public Type[] UsesViews
+        {
+            get
+            {
+                return new Type[0];
+            }
+        }
+
+        public Type[] BuildsViews
+        {
+            get
+            {
+                return new[]{typeof(LoginDTO)};
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,7 +17,9 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer :
+    public class DashboardDenormalizer :                                            
+                                      BaseDenormalizer,
+                                      IEventHandler,
                                       IEventHandler<SynchronizationMetadataApplied>,
                                       IEventHandler<InterviewSynchronized>,
                                       IEventHandler<InterviewDeclaredValid>,
@@ -126,7 +129,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             if(!IsInterviewCompletedOrRestarted(evnt.Payload.Status))
                 return;
 
-            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
             if (questionnaire == null)
                 return;
             questionnaire.Status = (int)evnt.Payload.Status;
@@ -138,6 +141,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
         {
             return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(QuestionnaireDTO) }; }
         }
     }
 }

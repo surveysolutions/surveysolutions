@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
+using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization
 {

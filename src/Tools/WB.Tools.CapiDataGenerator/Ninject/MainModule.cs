@@ -28,6 +28,7 @@ using Ninject.Modules;
 using NinjectAdapter;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
@@ -131,11 +132,11 @@ namespace CapiDataGenerator
             
             #region register handlers
 
-            InitCapiTemplateStorage(inProcessEventDispatcher);
+            InitCapiTemplateStorage(bus);
 
-            InitUserStorage(inProcessEventDispatcher);
+            InitUserStorage(bus);
 
-            InitDashboard(inProcessEventDispatcher);
+            InitDashboard(bus);
 
 
             #endregion
@@ -171,32 +172,27 @@ namespace CapiDataGenerator
             }
         }
 
-        private void InitCapiTemplateStorage(InProcessEventBus bus)
+        private void InitCapiTemplateStorage(NcqrCompatibleEventDispatcher bus)
         {
             var fileSorage = new QuestionnaireDenormalizer(this.capiTemplateVersionedWriter);
-            bus.RegisterHandler(fileSorage, typeof(TemplateImported));
+            bus.Register(fileSorage);
         }
 
-        private void InitUserStorage(InProcessEventBus bus)
+        private void InitUserStorage(NcqrCompatibleEventDispatcher bus)
         {
             var usereventHandler =
                 new UserDenormalizer(Kernel.Get<IReadSideRepositoryWriter<LoginDTO>>());
-            bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
+            bus.Register(usereventHandler);
         }
 
-        private void InitDashboard(InProcessEventBus bus)
+        private void InitDashboard(NcqrCompatibleEventDispatcher bus)
         {
             var dashboardeventHandler =
                 new DashboardDenormalizer(Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                                           Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
                                           this.capiTemplateVersionedWriter);
 
-            bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredInvalid));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredValid));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
-            bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
+            bus.Register(dashboardeventHandler);
         }
         
     }

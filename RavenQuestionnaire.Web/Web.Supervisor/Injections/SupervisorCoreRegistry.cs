@@ -1,6 +1,7 @@
 using System.Web.Configuration;
 using Core.Supervisor.Views.User;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Utils.Serialization;
