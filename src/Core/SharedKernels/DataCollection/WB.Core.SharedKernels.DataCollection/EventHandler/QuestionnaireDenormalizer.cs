@@ -1,12 +1,17 @@
+using System;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.EventHandler
 {
-    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>
+    public class QuestionnaireDenormalizer : 
+        BaseDenormalizer,
+        IEventHandler,
+        IEventHandler<TemplateImported>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
 
@@ -24,6 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
                 };
 
             questionnarieStorage.Store(template, evnt.EventSourceId);
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[]{typeof(QuestionnaireDocumentVersioned)}; }
         }
     }
 }

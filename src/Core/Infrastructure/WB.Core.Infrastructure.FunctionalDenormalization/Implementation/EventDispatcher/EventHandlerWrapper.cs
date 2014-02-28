@@ -1,4 +1,5 @@
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher
 {
