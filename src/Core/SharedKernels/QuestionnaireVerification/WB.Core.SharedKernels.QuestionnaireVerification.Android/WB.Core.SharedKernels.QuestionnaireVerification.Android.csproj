@@ -63,6 +63,9 @@
     <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReferenceType.cs">
       <Link>ValueObjects\QuestionnaireVerificationReferenceType.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVersion.cs">
+      <Link>ValueObjects\QuestionnaireVersion.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

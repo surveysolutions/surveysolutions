@@ -59,6 +59,7 @@
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
