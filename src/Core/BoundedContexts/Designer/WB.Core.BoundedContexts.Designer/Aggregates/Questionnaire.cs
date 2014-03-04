@@ -840,9 +840,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId);
 
-            this.ThrowIfRosterPlacedInsideRoster(parentGroupId, isRoster);
-            
-
             this.ApplyEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
@@ -930,9 +927,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (wasGroupAndBecomeARoster)
             {
-                this.ThrowIfGroupCantBecomeARosterBecauseContainsRosterSizeQuestions(group);
-                this.ThrowIfGroupCantBecomeARosterBecausePlacedInsideRoster(group);
-                this.ThrowIfGroupCantBecomeARosterBecauseContainsRoster(group);
                 this.ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(group);
             }
             if (wasRosterAndBecomeAGroup)
@@ -996,7 +990,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             // if we don't have a target group we would like to move source group into root of questionnaire
             var targetGroup = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
 
-            this.ThrowIfRosterMovedToRoster(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
             this.ThrowIfGroupWithRosterSizeQuestionMovedToRoster(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
@@ -1763,27 +1756,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             FormatGroupForException(sourceGroup.PublicKey, this.innerDocument), FormatGroupForException(targetGroup.PublicKey, this.innerDocument)),
                         Environment.NewLine,
                         string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
-            }
-        }
-
-        private void ThrowIfRosterMovedToRoster(IGroup sourceGroup, IGroup targetGroup)
-        {
-            var targetIsRoster = IsRosterOrInsideRoster(targetGroup);
-
-            if (targetIsRoster && sourceGroup.IsRoster)
-            {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "You can't move roster {0} into roster {1}",
-                        FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
-                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument)));
-            }
-            if (targetIsRoster && ContainsRoster(sourceGroup))
-            {
-                throw new QuestionnaireException(
-                    string.Format("You can't move group {0} with roster into roster {1}",
-                                  FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
-                                  FormatGroupForException(targetGroup.PublicKey, this.innerDocument)));
             }
         }
 
@@ -2562,45 +2534,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     this.FormatQuestionForException(questionId, this.innerDocument)));
         }
 
-        private void ThrowIfRosterPlacedInsideRoster(Guid? parentGroupId,bool isRoster)
-        {
-            if (!isRoster || !parentGroupId.HasValue) return;
-
-            var parentGroup = this.GetGroupById(parentGroupId.Value);
-
-            var parentRoster = this.GetFirstRosterParentGroupOrNull(parentGroup);
-            if (parentRoster != null)
-            {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "You can't place {0} roster inside {1} roster",
-                        FormatGroupForException(parentGroup.PublicKey, this.innerDocument),
-                        FormatGroupForException(parentRoster.PublicKey, this.innerDocument)));
-            }
-        }
-
-        private void ThrowIfGroupCantBecomeARosterBecausePlacedInsideRoster(IGroup group)
-        {
-            var parentRoster = this.GetFirstRosterParentGroupOrNull(@group);
-            if (parentRoster != null)
-            {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "This {0} group can't become a roster because placed inside {1} roster",
-                        FormatGroupForException(group.PublicKey, this.innerDocument),
-                        FormatGroupForException(parentRoster.PublicKey, this.innerDocument)));
-            }
-        }
-
-        private void ThrowIfGroupCantBecomeARosterBecauseContainsRoster(IGroup group)
-        {
-            if (this.ContainsRoster(@group))
-            {
-                throw new QuestionnaireException(string.Format("This {0} group can't become a roster because contains roster",
-                    FormatGroupForException(group.PublicKey, this.innerDocument)));
-            }
-        }
-
         private bool IsRosterOrInsideRoster(IGroup group)
         {
             while (group != null)
@@ -2846,28 +2779,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Join(Environment.NewLine,
                                 rosterTitleQuestionsOfOtherGroups.Select(
                                     questionId => FormatQuestionForException(questionId, this.innerDocument)))));
-        }
-
-        private void ThrowIfGroupCantBecomeARosterBecauseContainsRosterSizeQuestions(IGroup @group)
-        {
-            var allQuestionsInGroup = GetAllQuestionsInGroup(group).Select(q => q.PublicKey);
-
-            if (!allQuestionsInGroup.Any()) return;
-
-            var rosterSizeQuestions = this.GetAllRosterSizeQuestionIds();
-
-            if (!rosterSizeQuestions.Any()) return;
-
-            var rosterSizeQuestionsInGroup = allQuestionsInGroup.Intersect(rosterSizeQuestions);
-
-            if (!rosterSizeQuestionsInGroup.Any()) return;
-
-            throw new QuestionnaireException(
-                string.Format(
-                    "This group can't become a roster because contains roster size questions: {0}",
-                    string.Join(Environment.NewLine,
-                        rosterSizeQuestionsInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
-
         }
 
         private void ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(IGroup group)
