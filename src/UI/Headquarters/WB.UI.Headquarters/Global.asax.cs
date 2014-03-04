@@ -1,7 +1,9 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 using NConfig;
+using WB.UI.Headquarters.App_Start;
 
 namespace WB.UI.Headquarters
 {
@@ -14,6 +16,9 @@ namespace WB.UI.Headquarters
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             SetupNConfig();
         }
