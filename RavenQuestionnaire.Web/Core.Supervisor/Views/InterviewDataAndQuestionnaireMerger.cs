@@ -6,7 +6,6 @@ using System.Linq;
 using Core.Supervisor.Views.Interview;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using NetTopologySuite.Index.Strtree;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
