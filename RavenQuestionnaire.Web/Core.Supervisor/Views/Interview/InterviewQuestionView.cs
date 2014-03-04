@@ -61,7 +61,7 @@ namespace Core.Supervisor.Views.Interview
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;
-            this.IsEnabled = answeredQuestion.Enabled;
+            this.IsEnabled = !isParentGroupDisabled && answeredQuestion.Enabled;
             this.IsFlagged = answeredQuestion.IsFlagged;
             this.Comments = answeredQuestion.Comments.Select(x => new InterviewQuestionCommentView
             {

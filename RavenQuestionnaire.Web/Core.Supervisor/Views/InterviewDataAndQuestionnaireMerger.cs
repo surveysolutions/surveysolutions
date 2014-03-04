@@ -6,6 +6,7 @@ using System.Linq;
 using Core.Supervisor.Views.Interview;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using NetTopologySuite.Index.Strtree;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -156,7 +157,8 @@ namespace Core.Supervisor.Views
                 Dictionary<string, string> answersForTitleSubstitution =
                     GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions);
 
-                bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null && interviewLevel.DisabledGroups.Contains(currentGroup.PublicKey);
+                bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null &&
+                    IsQuestionParentGroupDisabled(interviewLevel, currentGroup);
 
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
                     ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions, isQustionsParentGroupDisabled)
@@ -166,6 +168,18 @@ namespace Core.Supervisor.Views
             }
 
             return completedGroup;
+        }
+
+        private static bool IsQuestionParentGroupDisabled(InterviewLevel interviewLevel, IGroup group)
+        {
+            if (interviewLevel.DisabledGroups.Contains(group.PublicKey))
+                return true;
+
+            var parent = group.GetParent() as IGroup;
+
+            if (parent == null || parent is QuestionnaireDocument)
+                return false;
+            return IsQuestionParentGroupDisabled(interviewLevel, parent);
         }
 
         private static Dictionary<string, string> GetAnswersForTitleSubstitution(IQuestion question, Dictionary<string, Guid> variableToIdMap,
