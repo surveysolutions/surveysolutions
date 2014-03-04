@@ -2627,11 +2627,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 "Roster size question {0} should have Numeric or Categorical Multy Answers type.",
                 FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
-            if (GetAllParentGroups(rosterSizeQuestion).Any(group => group.IsRoster))
-                throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} cannot be placed under another roster group.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
-
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterSizeQuestion.LinkedToQuestionId.HasValue)
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} should not be linked.",

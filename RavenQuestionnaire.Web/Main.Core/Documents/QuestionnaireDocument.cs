@@ -135,6 +135,7 @@ namespace Main.Core.Documents
             var group = this.Find<Group>(parent.Value);
             if (@group != null)
             {
+                c.SetParent(@group);
                 @group.Children.Add(c);
                 return;
             }
