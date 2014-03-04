@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -23,20 +24,41 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
+            eventContext = new EventContext();
         };
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", condition: null,
-                    description: null, parentGroupId: parentRosterId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, 
-                    rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null, rosterTitleQuestionId: null));
+        Cleanup stuff = () =>
+        {
+            eventContext.Dispose();
+            eventContext = null;
+        };
 
-        It should_throw_QuestionnaireException = () =>
-           exception.ShouldBeOfExactType<QuestionnaireException>();
+        Because of = () => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: title, condition: null,
+                    description: description, parentGroupId: parentRosterId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, 
+                    rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
-            exception.Message.ToLower().ShouldContain("roster");
+        It should_raise_NewGroupAdded_event = () =>
+            eventContext.ShouldContainEvent<NewGroupAdded>();
 
-        It should_throw_exception_with_message_containting__inside__ = () =>
-            exception.Message.ToLower().ShouldContain("inside");
+        It should_raise_NewGroupAdded_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .PublicKey.ShouldEqual(groupId);
+
+        It should_raise_NewGroupAdded_event_with_ParentGroupId_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .ParentGroupPublicKey.ShouldEqual(parentRosterId);
+
+        It should_raise_NewGroupAdded_event_with_Title_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .GroupText.ShouldEqual(title);
+
+        It should_raise_NewGroupAdded_event_with_Description_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .Description.ShouldEqual(description);
+
+        It should_raise_NewGroupAdded_event_with_ResponsibleId_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .ResponsibleId.ShouldEqual(responsibleId);
 
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -44,6 +66,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static Guid parentRosterId=Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid rosterSizeQuestionId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static Exception exception;
+        private static EventContext eventContext;
+        private static string title = "title";
+        private static string description = "description";
     }
 }
