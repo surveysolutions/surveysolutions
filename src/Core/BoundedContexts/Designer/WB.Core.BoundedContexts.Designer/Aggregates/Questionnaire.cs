@@ -1455,7 +1455,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
-            this.ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(questionId, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(question, targetGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
@@ -2525,13 +2524,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         "You can move a roster title question {0} only to a roster group that has a roster size question {1}",
                         this.FormatQuestionForException(question.PublicKey, this.innerDocument),
                         this.FormatQuestionForException(sourceRoster.RosterSizeQuestionId.Value, this.innerDocument)));
-        }
-
-        private void ThrowDomainExceptionIfQuestionIsRosterSizeAndParentGroupIsRoster(Guid questionId, IGroup parentGroup)
-        {
-            if (this.IsRosterSizeQuestion(questionId) && IsRosterOrInsideRoster(parentGroup))
-                throw new QuestionnaireException(string.Format("Roster size question {0} cannot be placed inside roster group.",
-                    this.FormatQuestionForException(questionId, this.innerDocument)));
         }
 
         private bool IsRosterOrInsideRoster(IGroup group)
