@@ -77,8 +77,10 @@
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvInterviewExporter.cs" />
     <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentGenerator.cs" />
+    <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Services\IDataExportService.cs" />
+    <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="SupervisorBoundedContextModule.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,6 +132,10 @@
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
