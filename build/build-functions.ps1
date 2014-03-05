@@ -211,6 +211,11 @@ function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPre
 
 	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
 
+	"& packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner `
+							src\UI\Headquarters\WB.UI.Headquarters\Web.config `
+							src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
+							src\UI\Headquarters\WB.UI.Headquarters\Web.config"
+	
 	& packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner `
 							src\UI\Headquarters\WB.UI.Headquarters\Web.config `
 							src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
