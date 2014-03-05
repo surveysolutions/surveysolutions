@@ -6,7 +6,7 @@ function GetPathToMSBuild() {
     return 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe'
 }
 
-function GetPathToConfigTransfromator() {
+function GetPathToConfigTransformator() {
     return "packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner"
 }
 
