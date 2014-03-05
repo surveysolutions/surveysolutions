@@ -204,15 +204,9 @@ function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $
 }
 
 function RunConfigTransform($PathToConfigFile, $PathToTransformFile){
-	Write-Host "$(GetPathToConfigTransformator) `
-		$PathToConfigFile `
-		$PathToTransformFile `
-		$PathToConfigFile'"
-	
-	& (GetPathToConfigTransformator) `
-		"$PathToConfigFile" `
-		"$PathToTransformFile" `
-		"$PathToConfigFile"
+	$command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
+	Write-Host $command
+	iex $command
 }
 
 function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
