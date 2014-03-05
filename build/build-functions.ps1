@@ -203,7 +203,7 @@ function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $
 	AddArtifacts $Project $BuildConfiguration
 }
 
-function($PathToConfigFile, $PathToTransformFile){
+function RunConfigTransform($PathToConfigFile, $PathToTransformFile){
 	'$(GetPathToConfigTransformator) `
 		$PathToConfigFile `
 		$PathToTransformFile `
@@ -222,17 +222,8 @@ function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPre
 
 	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
 
-	
-	"& $(GetPathToConfigTransformator) `
-		src\UI\Headquarters\WB.UI.Headquarters\Web.config `
-		src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
-		src\UI\Headquarters\WB.UI.Headquarters\Web.config"
-	
-	& $(GetPathToConfigTransformator) `
-		src\UI\Headquarters\WB.UI.Headquarters\Web.config `
-		src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
-		src\UI\Headquarters\WB.UI.Headquarters\Web.config
-	
+	RunConfigTransform "src\UI\Headquarters\WB.UI.Headquarters\Web.config" "src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config"
+
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
