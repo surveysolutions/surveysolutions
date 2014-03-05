@@ -453,7 +453,6 @@
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInQuestionnaire = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
-                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.isRoster();
 
                 if (arg.item.isNew()) {
                     arg.cancelDrop = true;
@@ -461,7 +460,7 @@
                     return;
                 }
 
-                if (isDropedOutsideAnyChapter && itemIsAutopropagateGroup) {
+                if (isDropedOutsideAnyChapter) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveAutoPropagatedGroupOutsideGroup);
                     return;
@@ -498,12 +497,6 @@
                         return;
                     }
 
-                    if (isItemRosterSizeQuestion && targetGroupIsRoster) {
-                        arg.cancelDrop = true;
-                        config.logger(config.warnings.cantMoveRosterSizeQuestionIntoRosterGroup);
-                        return;
-                    }
-
                     if (isItemRosterTitleQuestion && !canMoveRosterTitleQuestionToTarget) {
                         arg.cancelDrop = true;
                         config.logger(config.warnings.cantMoveRosterTitleQuestion);
@@ -537,14 +530,6 @@
                     if (moveItemType == "group" && !arg.item.isRoster() && !targetGroupIsRoster && datacontext.groups.hasLinkedQuestion(arg.item)) {
                         arg.cancelDrop = true;
                         config.logger(config.warnings.cantMoveGroupWithLinkedQuestion);
-                        return;
-                    }
-                    
-                    
-                    
-                    if (!isDropedInQuestionnaire && moveItemType == "group" && targetGroupIsRoster && datacontext.groups.isRosterOrContainsRoster(arg.item)) {
-                        arg.cancelDrop = true;
-                        config.logger(config.warnings.cantMoveRosterIntoRoster);
                         return;
                     }
                 }
