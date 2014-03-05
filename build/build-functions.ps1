@@ -202,3 +202,20 @@ function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
+
+
+function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
+	CleanBinAndObjFolders
+	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
+	RunTests $BuildConfiguration
+
+	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
+
+	& packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner `
+							src\UI\Headquarters\WB.UI.Headquarters\Web.config `
+							src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
+							src\UI\Headquarters\WB.UI.Headquarters\Web.config
+	
+	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
+	AddArtifacts $Project $BuildConfiguration
+}
