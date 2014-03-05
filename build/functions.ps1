@@ -41,6 +41,7 @@ function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
     Write-Host "##teamcity[progressStart 'Checking prerequisities']"
 
+    $havePrerequisitesSucceeded = $true
     #$havePrerequisitesSucceeded = CheckCompilationDebugFlagInWebConfigs
 
     Write-Host "##teamcity[progressFinish 'Checking prerequisities']"
