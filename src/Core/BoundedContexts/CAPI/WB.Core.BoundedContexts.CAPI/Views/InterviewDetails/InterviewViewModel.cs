@@ -507,20 +507,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             var screen =
                 this.Screens[key];
+
             screen.SetEnabled(enabled);
-
-            var plainScreen = screen as QuestionnaireScreenViewModel;
-            if (plainScreen == null)
-                return;
-
-            foreach (var child in plainScreen.Items)
-            {
-                var question = child as QuestionViewModel;
-                if (question != null)
-                {
-                    question.SetParentEnabled(enabled);
-                }
-            }
         }
 
         public void UpdateRosterRowTitle(Guid groupId, decimal[] outerScopePropagationVector, decimal index, string rosterTitle)
@@ -742,7 +730,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
             var grid = this.Screens[gridkey] as QuestionnaireGridViewModel;
             if (grid != null)
-                grid.UpdateCounters();
+                grid.UpdateGridAfterRowsWereAdded();
         }
 
         protected IEnumerable<QuestionnairePropagatedScreenViewModel> CollectPropagatedScreen(Guid publicKey)
