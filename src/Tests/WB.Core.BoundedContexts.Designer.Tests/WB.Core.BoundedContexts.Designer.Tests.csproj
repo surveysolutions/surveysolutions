@@ -313,6 +313,10 @@
     <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
     <Compile Include="QuestionnaireTests\when_updating_text_list_question_and_max_answer_count_is_specified.cs" />
+    <Compile Include="QuestionnaireVersionerTests\QuestionnaireVersionerTestContext.cs" />
+    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_without_specific_elements.cs" />
+    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_nested_rosters.cs" />
+    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_qr_questions.cs" />
     <Compile Include="RoleProviderTests\when_adding_roles_to_users_with_non_Guid_userId.cs" />
     <Compile Include="RoleProviderTests\RoleProviderTestsContext.cs" />
     <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
@@ -357,6 +361,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400CDE74-7407-4388-8D57-BF429E7C508D}</Project>
