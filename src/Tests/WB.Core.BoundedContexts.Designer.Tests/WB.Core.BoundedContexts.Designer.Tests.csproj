@@ -144,6 +144,7 @@
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_under_deeper_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_variable_name_not_unique.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_variable_name_is_too_long.cs" />
@@ -159,6 +160,9 @@
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_question_already_exists.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_all_parameters_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_roster_size_question_is_under_deeper_level.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_with_roster_form_roster_to_chapter_but_size_question_in_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_roster_size_question_to_deeper_level.cs" />
     <Compile Include="QuestionnaireTests\when_updating_qr_barcode_question_and_it_does_not_exists_in_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_updating_qr_barcode_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="QuestionnaireTests\when_updating_qr_barcode_question_and_variable_name_not_unique.cs" />
@@ -217,6 +221,7 @@
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_text_list_question_and_max_answer_count_is_specified.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_roster_group_and_roster_size_question_is_under_deeper_level.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
