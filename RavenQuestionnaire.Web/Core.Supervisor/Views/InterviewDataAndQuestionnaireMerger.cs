@@ -148,7 +148,7 @@ namespace Core.Supervisor.Views
                 RosterVector = interviewLevel.RosterVector,
                 ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
             };
-
+            var disabledGroups = interviewLevel.DisabledGroups.Union(upperInterviewLevels.SelectMany(upper => upper.DisabledGroups));
             foreach (var question in currentGroup.Children.OfType<IQuestion>())
             {
                 InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
@@ -157,7 +157,7 @@ namespace Core.Supervisor.Views
                     GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions);
 
                 bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null &&
-                    IsQuestionParentGroupDisabled(interviewLevel, currentGroup);
+                    IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
 
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
                     ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions, isQustionsParentGroupDisabled)
@@ -169,16 +169,16 @@ namespace Core.Supervisor.Views
             return completedGroup;
         }
 
-        private static bool IsQuestionParentGroupDisabled(InterviewLevel interviewLevel, IGroup group)
+        private static bool IsQuestionParentGroupDisabled(IEnumerable<Guid> disabledGroups, IGroup group)
         {
-            if (interviewLevel.DisabledGroups.Contains(group.PublicKey))
+            if (disabledGroups.Contains(group.PublicKey))
                 return true;
 
             var parent = group.GetParent() as IGroup;
 
             if (parent == null || parent is QuestionnaireDocument)
                 return false;
-            return IsQuestionParentGroupDisabled(interviewLevel, parent);
+            return IsQuestionParentGroupDisabled(disabledGroups, parent);
         }
 
         private static Dictionary<string, string> GetAnswersForTitleSubstitution(IQuestion question, Dictionary<string, Guid> variableToIdMap,
