@@ -209,7 +209,7 @@ function RunConfigTransform($PathToConfigFile, $PathToTransformFile){
 		$PathToTransformFile `
 		$PathToConfigFile'"
 	
-	& GetPathToConfigTransformator `
+	& (GetPathToConfigTransformator) `
 		"$PathToConfigFile" `
 		"$PathToTransformFile" `
 		"$PathToConfigFile"
