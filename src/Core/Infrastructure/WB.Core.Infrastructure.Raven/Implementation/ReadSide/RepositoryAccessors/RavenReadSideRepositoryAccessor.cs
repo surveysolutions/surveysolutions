@@ -36,8 +36,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         protected IDocumentSession OpenSession()
         {
-            this.ravenStore.DatabaseCommands.EnsureDatabaseExists("Views");
-            return this.ravenStore.OpenSession("Views");
+            return this.ravenStore.OpenSession();
         }
 
         protected static string ToRavenId(string id)
