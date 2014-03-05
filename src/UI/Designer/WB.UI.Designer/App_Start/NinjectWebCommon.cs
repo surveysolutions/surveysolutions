@@ -68,7 +68,9 @@ namespace WB.UI.Designer.App_Start
 
             var ravenSettings = new RavenConnectionSettings(storagePath: AppSettings.Instance.RavenDocumentStore,
                 username: AppSettings.Instance.RavenUserName, password: AppSettings.Instance.RavenUserPassword,
-                eventsDatabase: string.Empty);
+                eventsDatabase: AppSettings.Instance.RavenEventsDatabase,
+                viewsDatabase: AppSettings.Instance.RavenViewsDatabase,
+                plainDatabase: AppSettings.Instance.RavenPlainDatabase);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),

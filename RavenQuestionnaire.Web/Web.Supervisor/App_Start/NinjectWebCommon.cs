@@ -105,13 +105,15 @@ namespace Web.Supervisor.App_Start
             {
                 isApprovedSended = false;
             }
-            string username = WebConfigurationManager.AppSettings["Raven.Username"];
-            string password = WebConfigurationManager.AppSettings["Raven.Password"];
 
             int? pageSize = GetEventStorePageSize();
 
-            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username, password: password,
-                eventsDatabase: string.Empty);
+            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded,
+                username: WebConfigurationManager.AppSettings["Raven.Username"],
+                password: WebConfigurationManager.AppSettings["Raven.Password"],
+                eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
+                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
+                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
