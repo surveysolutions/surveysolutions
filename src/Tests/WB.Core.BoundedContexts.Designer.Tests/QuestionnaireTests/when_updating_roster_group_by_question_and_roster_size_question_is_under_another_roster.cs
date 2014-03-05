@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
             questionnaire.Apply(new NumericQuestionAdded { PublicKey = rosterSizeQuestionId, IsInteger = true, GroupPublicKey = anotherRosterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = anotherRosterId });
 
             eventContext = new EventContext();
         };
