@@ -204,7 +204,7 @@ function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $
 }
 
 function RunConfigTransform($PathToConfigFile, $PathToTransformFile){
-	$command = "$(GetPathToConfigTransfromator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
+	$command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
 	Write-Host $command
 	iex $command
 }
