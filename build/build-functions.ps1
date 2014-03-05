@@ -202,3 +202,22 @@ function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
+
+function RunConfigTransform($PathToConfigFile, $PathToTransformFile){
+	$command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
+	Write-Host $command
+	iex $command
+}
+
+function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
+	CleanBinAndObjFolders
+	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
+	RunTests $BuildConfiguration
+
+	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
+
+	RunConfigTransform "src\UI\Headquarters\WB.UI.Headquarters\Web.config" "src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config"
+
+	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
+	AddArtifacts $Project $BuildConfiguration
+}
