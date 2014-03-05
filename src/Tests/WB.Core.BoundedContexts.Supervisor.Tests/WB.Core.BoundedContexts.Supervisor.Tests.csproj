@@ -130,6 +130,8 @@
     <Compile Include="ServiceTests\SampleImportServiceTests.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_TextListQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_view_factory_from_containing_nested_group_inside_roster.cs" />
+    <Compile Include="SupportedVersionProviderTests\SupportedVersionProviderTestContext.cs" />
+    <Compile Include="SupportedVersionProviderTests\when_getting_supported_questionnaire_version_for_supervisor_app.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roter_triggered_by_TextListQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_fixed_roster_and_MultyOptionLinkedQuestion_to_header.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option___.cs" />
@@ -180,6 +182,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
