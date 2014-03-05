@@ -15,12 +15,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly DocumentStore ravenStore;
-        private readonly string databaseName;
 
         protected RavenReadSideRepositoryAccessor(DocumentStore ravenStore)
         {
             this.ravenStore = ravenStore;
-            this.databaseName = "Views";
         }
 
         protected abstract TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query);
@@ -38,8 +36,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         protected IDocumentSession OpenSession()
         {
-            this.ravenStore.DatabaseCommands.EnsureDatabaseExists(this.databaseName);
-            return this.ravenStore.OpenSession(this.databaseName);
+            return this.ravenStore.OpenSession();
         }
 
         protected static string ToRavenId(string id)
