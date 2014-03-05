@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.SupportedVersionProviderTests
             supportedVersion.Minor.ShouldEqual(6);
 
         It should_set_Patch_property_to_0 = () =>
-            supportedVersion.Patch.ShouldEqual(0);
+            supportedVersion.Patch.ShouldEqual(2);
 
         private static QuestionnaireVersion supportedVersion;
         private static SupportedVersionProvider versionProvider;
