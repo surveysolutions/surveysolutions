@@ -12,8 +12,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 {
     internal class RavenReadSideRepositoryIndexAccessor : IReadSideRepositoryIndexAccessor
     {
-        private const string Database = "Views";
-
         private readonly DocumentStore ravenStore;
         private readonly Assembly[] assembliesWithIndexes;
         private bool wereIndexesCreated = false;
@@ -43,15 +41,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         private IDocumentSession OpenSession()
         {
-            this.EnsureDatabaseExists();
             this.EnsureIndexesExist();
 
-            return this.ravenStore.OpenSession(Database);
-        }
-
-        private void EnsureDatabaseExists()
-        {
-            this.ravenStore.DatabaseCommands.EnsureDatabaseExists(Database);
+            return this.ravenStore.OpenSession();
         }
 
         private void EnsureIndexesExist()
@@ -70,7 +62,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private void RegisterIndexesFromAssembly(Assembly assembly)
         {
             var catalog = new CompositionContainer(new AssemblyCatalog(assembly));
-            IndexCreation.CreateIndexes(catalog, this.ravenStore.DatabaseCommands.ForDatabase(Database), this.ravenStore.Conventions);
+            IndexCreation.CreateIndexes(catalog, this.ravenStore);
         }
     }
 }

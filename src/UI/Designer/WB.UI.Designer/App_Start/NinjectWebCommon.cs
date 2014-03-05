@@ -67,7 +67,8 @@ namespace WB.UI.Designer.App_Start
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             var ravenSettings = new RavenConnectionSettings(storagePath: AppSettings.Instance.RavenDocumentStore,
-                username: AppSettings.Instance.RavenUserName, password: AppSettings.Instance.RavenUserPassword);
+                username: AppSettings.Instance.RavenUserName, password: AppSettings.Instance.RavenUserPassword,
+                eventsDatabase: string.Empty);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
