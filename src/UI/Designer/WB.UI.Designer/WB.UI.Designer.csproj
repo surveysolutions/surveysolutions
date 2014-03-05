@@ -379,9 +379,6 @@
     <Content Include="Configuration\Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\Dev.Designer.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -390,9 +387,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\TLK.Designer.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Configuration\Dev-Stable.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\Stacy.Designer.Web.config">
