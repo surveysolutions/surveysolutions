@@ -45,6 +45,8 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;
 
+            this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>().InSingletonScope();
+
             this.Bind<IReadSideRepositoryReader<InterviewData>>()
                 .To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope()
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
