@@ -203,6 +203,17 @@ function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $
 	AddArtifacts $Project $BuildConfiguration
 }
 
+function($PathToConfigFile, $PathToTransformFile){
+	'$(GetPathToConfigTransformator) `
+		$PathToConfigFile `
+		$PathToTransformFile `
+		$PathToConfigFile'
+	
+	& $(GetPathToConfigTransformator) `
+		"$PathToConfigFile" `
+		"$PathToTransformFile" `
+		"$PathToConfigFile"
+}
 
 function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
 	CleanBinAndObjFolders
@@ -211,15 +222,16 @@ function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPre
 
 	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
 
-	"& packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner `
-							src\UI\Headquarters\WB.UI.Headquarters\Web.config `
-							src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
-							src\UI\Headquarters\WB.UI.Headquarters\Web.config"
 	
-	& packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner `
-							src\UI\Headquarters\WB.UI.Headquarters\Web.config `
-							src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
-							src\UI\Headquarters\WB.UI.Headquarters\Web.config
+	"& $(GetPathToConfigTransformator) `
+		src\UI\Headquarters\WB.UI.Headquarters\Web.config `
+		src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
+		src\UI\Headquarters\WB.UI.Headquarters\Web.config"
+	
+	& $(GetPathToConfigTransformator) `
+		src\UI\Headquarters\WB.UI.Headquarters\Web.config `
+		src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config `
+		src\UI\Headquarters\WB.UI.Headquarters\Web.config
 	
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
