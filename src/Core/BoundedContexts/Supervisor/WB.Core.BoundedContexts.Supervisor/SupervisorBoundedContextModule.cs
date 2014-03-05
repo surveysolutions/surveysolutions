@@ -39,6 +39,8 @@ namespace WB.Core.BoundedContexts.Supervisor
 
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
+            this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>().InSingletonScope();
+
             this.Bind<IReadSideRepositoryReader<InterviewData>>()
                 .To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope()
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
