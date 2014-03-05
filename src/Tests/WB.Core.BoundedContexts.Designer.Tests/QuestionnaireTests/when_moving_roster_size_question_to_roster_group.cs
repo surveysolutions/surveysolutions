@@ -23,19 +23,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(new NumericQuestionAdded
-            {
-                PublicKey = rosterSizeQuestionId,
-                IsInteger = true,
-                GroupPublicKey = chapterId,
-            });
-
-            AddGroup(questionnaire: questionnaire, groupId: rosterGroupId, parentGroupId: chapterId, condition: null,
-                responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
 
             AddGroup(questionnaire: questionnaire, groupId: targetRosterGroupId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles,
                 rosterTitleQuestionId: null, rosterFixedTitles: new[] { "fixed title 1" });
+
+            questionnaire.Apply(new NumericQuestionAdded
+            {
+                PublicKey = rosterSizeQuestionId,
+                IsInteger = true,
+                GroupPublicKey = targetRosterGroupId,
+            });
+
+            AddGroup(questionnaire: questionnaire, groupId: rosterGroupId, parentGroupId: targetRosterGroupId, condition: null,
+                responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
 
             eventContext = new EventContext();
         };
@@ -47,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.MoveQuestion(rosterSizeQuestionId, targetRosterGroupId, targetIndex: 0, responsibleId: responsibleId);
+            questionnaire.MoveQuestion(rosterSizeQuestionId, chapterId, targetIndex: 0, responsibleId: responsibleId);
 
         It should_raise_QuestionnaireItemMoved_event = () =>
             eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
@@ -56,9 +57,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext.GetSingleEvent<QuestionnaireItemMoved>()
            .PublicKey.ShouldEqual(rosterSizeQuestionId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_roster2Id_specified = () =>
+        It should_raise_QuestionnaireItemMoved_event_with_chapterId_specified = () =>
           eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-            .GroupKey.ShouldEqual(targetRosterGroupId);
+            .GroupKey.ShouldEqual(chapterId);
 
 
         private static EventContext eventContext;
