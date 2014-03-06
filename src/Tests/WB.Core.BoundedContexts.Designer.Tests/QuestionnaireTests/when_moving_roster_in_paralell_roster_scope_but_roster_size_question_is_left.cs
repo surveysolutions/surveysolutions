@@ -42,17 +42,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__group__ = () =>
-            exception.Message.ToLower().ShouldContain("group");
-
-        It should_throw_exception_with_message_containting__with__ = () =>
-            exception.Message.ToLower().ShouldContain("size");
-
-        It should_throw_exception_with_message_containting__into__ = () =>
-            exception.Message.ToLower().ShouldContain("question");
-
-        It should_throw_exception_with_message_containting__roster_twice__ = () =>
-            exception.Message.ToLower().Split().Count(s => s == "roster").ShouldEqual(2);
+        It should_throw_exception_with_message_containting__question_placed_deeper_then_roster = () =>
+            new[] { "roster", "question", "deeper" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

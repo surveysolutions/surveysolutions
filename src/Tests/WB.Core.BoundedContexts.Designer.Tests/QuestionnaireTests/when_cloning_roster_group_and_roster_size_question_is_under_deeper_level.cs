@@ -43,14 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
-            exception.Message.ToLower().ShouldContain("roster");
-
-        It should_throw_exception_with_message_containting__question__ = () =>
-            exception.Message.ToLower().ShouldContain("question");
-
-        It should_throw_exception_with_message_containting__under__ = () =>
-            exception.Message.ToLower().ShouldContain("under");
+        It should_throw_exception_with_message_containting__question_placed_deeper_then_roster = () =>
+            new[] { "roster", "question", "deeper" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;
         private static Questionnaire questionnaire;

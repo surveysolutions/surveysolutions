@@ -2565,7 +2565,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         GetQuestionnaireItemDepthAsVector(groupByRosterSizeQuestion)))
                     //   if (GetQuestionnaireItemDepth(targetGroup.PublicKey) > GetQuestionnaireItemDepth(groupByRosterSizeQuestion) - 1)
                     throw new QuestionnaireException(string.Format(
-                        "Roster size question {0} cannot be placed under another roster group.",
+                        "Roster size question {0} cannot be placed deeper then roster.",
                         FormatQuestionForException(question.PublicKey, this.innerDocument)));
             }
         }
@@ -2661,7 +2661,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (!IsRosterSizeQuestionInSameScopeWithRoster(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId), rosterDepthFunc()))
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} cannot be placed under another roster group.",
+                    "Roster size question {0} cannot be placed deeper then roster.",
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
 
