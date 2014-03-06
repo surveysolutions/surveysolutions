@@ -1,15 +1,20 @@
+using System.Web.Configuration;
+using System.Web.Http;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using Ninject.Web.Common;
+using Ninject.Web.Mvc;
+using System;
+using System.Web;
+using WB.Core.BoundedContexts.Headquarters.Authentication;
+using WB.Core.Infrastructure.Raven;
+
 [assembly: WebActivator.PreApplicationStartMethod(typeof(WB.UI.Headquarters.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(WB.UI.Headquarters.App_Start.NinjectWebCommon), "Stop")]
 
 namespace WB.UI.Headquarters.App_Start
 {
-    using System;
-    using System.Web;
 
-    using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
-    using Ninject;
-    using Ninject.Web.Common;
 
     public static class NinjectWebCommon 
     {
@@ -39,10 +44,22 @@ namespace WB.UI.Headquarters.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
+            var ravenConnectionSettings = new RavenConnectionSettings(
+                WebConfigurationManager.AppSettings["Raven.DocumentStore"], 
+                isEmbedded: false,
+                username: WebConfigurationManager.AppSettings["Raven.Username"],
+                password: WebConfigurationManager.AppSettings["Raven.Password"],
+                eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
+                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
+                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+
+            var kernel = new StandardKernel(
+                new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
+                new AuthenticationModule());
+
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
+
             RegisterServices(kernel);
             return kernel;
         }

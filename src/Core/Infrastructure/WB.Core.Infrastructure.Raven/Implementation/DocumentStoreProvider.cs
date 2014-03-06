@@ -33,6 +33,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation
                 : this.CreateServerStorage(this.settings.EventsDatabase);
         }
 
+        public DocumentStore CreateInstanceForPlainStorage()
+        {
+            return this.CreateServerStorage(this.settings.PlainDatabase);
+        }
+
         protected override DocumentStore CreateInstance(IContext context)
         {
             return this.CreateInstanceForReadSideStore();
