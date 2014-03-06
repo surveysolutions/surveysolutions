@@ -838,7 +838,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
-                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepth(parentGroupId));
+                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(parentGroupId));
             
 
             this.ApplyEvent(new NewGroupAdded
@@ -876,7 +876,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
-                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => this.GetQuestionnaireItemDepth(parentGroupId));
+                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => this.GetQuestionnaireItemDepthAsVector(parentGroupId));
 
 
             this.ApplyEvent(new GroupCloned
@@ -919,7 +919,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
-                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepth(groupId));
+                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(groupId));
 
             var group = this.GetGroupById(groupId);
 
@@ -998,7 +998,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: sourceGroup.IsRoster,
                 rosterSizeSource: sourceGroup.RosterSizeSource,
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId, rosterFixedTitles: sourceGroup.RosterFixedTitles,
-                rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepth(targetGroup.PublicKey));
+                rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey));
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -1949,51 +1949,36 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return null;
         }
 
-        private List<Guid> GetAllAutopropagationQuestionsAsVector(IComposite item)
+        private Guid GetScopeOrRoster(IGroup entityAsGroup)
         {
-            var allQuestion = new List<Guid>();
-            var itemAsGroup = item;
+            if (entityAsGroup.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                return entityAsGroup.PublicKey;
 
-            while (itemAsGroup != null)
-            {
-                IGroup @group = itemAsGroup as IGroup;
-                if (@group.Propagated == Propagate.AutoPropagated || @group.IsRoster)
-                {
-                    if (group.RosterSizeQuestionId.HasValue)
-                    {
-                        allQuestion.Add(group.RosterSizeQuestionId.Value);
-                    }
-                    else
-                    {
-                        var autoPropagationQuestion =
-                            this.innerDocument.Find<AutoPropagateQuestion>(
-                                question => question.Triggers.Contains(@group.PublicKey)).FirstOrDefault();
+            if (!entityAsGroup.RosterSizeQuestionId.HasValue)
+                return entityAsGroup.PublicKey;
 
-                        if (autoPropagationQuestion != null)
-                            allQuestion.Add(autoPropagationQuestion.PublicKey);
-                    }
-                }
+            var rosterSizeQuestion = innerDocument.Find<IQuestion>(entityAsGroup.RosterSizeQuestionId.Value);
+            if (rosterSizeQuestion == null)
+                return entityAsGroup.PublicKey;
 
-                itemAsGroup = itemAsGroup.GetParent();
-            }
-            return allQuestion;
+            return rosterSizeQuestion.PublicKey;
         }
 
-        private int GetQuestionnaireItemDepth(Guid? itemId)
+        private Guid[] GetQuestionnaireItemDepthAsVector(Guid? itemId)
         {
             if (!itemId.HasValue)
-                return 0;
+                return new Guid[0];
 
             var entity = innerDocument.Find<IComposite>(itemId.Value);
             if (entity == null)
-                return 0;
+                return new Guid[0];
 
-            var rosterIds = new List<Guid>();
+            var scopeIds = new List<Guid>();
 
             var entityAsGroup = entity as IGroup;
             if (entityAsGroup != null && entityAsGroup.IsRoster)
             {
-                rosterIds.Add(entityAsGroup.PublicKey);
+                scopeIds.Add(GetScopeOrRoster(entityAsGroup));
             }
 
             this.innerDocument.ConnectChildrenWithParent();
@@ -2001,11 +1986,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             while (currentParent != null)
             {
                 if(currentParent.IsRoster)
-                    rosterIds.Add(currentParent.PublicKey);
+                    scopeIds.Add(GetScopeOrRoster(currentParent));
 
                 currentParent = (IGroup)currentParent.GetParent();
             }
-            return rosterIds.Count;
+            return scopeIds.ToArray();
         }
 
         private void ThrowIfExpressionContainsNotExistingQuestionReference(string expression)
@@ -2436,7 +2421,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                                 .Where(q => q.PublicKey != questionPublicKey)
                                 .ToDictionary(q => q.StataExportCaption, q => q);
 
-            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(@group);
+            var propagationQuestionsVector = GetQuestionnaireItemDepthAsVector(@group.PublicKey);
 
             foreach (var substitutionReference in substitutionReferences)
             {
@@ -2468,11 +2453,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private bool IsReferencedSubstitutionLegal(List<Guid> propagationQuestionsVector, IComposite referencedQuestionGroup)
+        private bool IsReferencedSubstitutionLegal(Guid[] propagationQuestionsVector, IComposite referencedQuestionGroup)
         {
-            List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(referencedQuestionGroup);
+            Guid[] referencedPropagationQuestionsVector = GetQuestionnaireItemDepthAsVector(referencedQuestionGroup.PublicKey);
 
-            if (referencedPropagationQuestionsVector.Count == 0) //referenced Question not in propagation - OK
+            if (referencedPropagationQuestionsVector.Length == 0) //referenced Question not in propagation - OK
                 return true;
 
             if (propagationQuestionsVector.Count() < referencedPropagationQuestionsVector.Count())
@@ -2575,7 +2560,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var groupByRosterSizeQuestion in groupsByRosterSizeQuestion)
             {
-                if (GetQuestionnaireItemDepth(targetGroup.PublicKey) > GetQuestionnaireItemDepth(groupByRosterSizeQuestion) - 1)
+                if (
+                    !IsRosterSizeQuestionInSameScopeWithRoster(GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey),
+                        GetQuestionnaireItemDepthAsVector(groupByRosterSizeQuestion)))
+                    //   if (GetQuestionnaireItemDepth(targetGroup.PublicKey) > GetQuestionnaireItemDepth(groupByRosterSizeQuestion) - 1)
                     throw new QuestionnaireException(string.Format(
                         "Roster size question {0} cannot be placed under another roster group.",
                         FormatQuestionForException(question.PublicKey, this.innerDocument)));
@@ -2612,7 +2600,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Guid? rosterSizeQuestionId,
-            string[] rosterFixedTitles, Guid? rosterTitleQuestionId, Func<int> rosterDepthFunc)
+            string[] rosterFixedTitles, Guid? rosterTitleQuestionId, Func<Guid[]> rosterDepthFunc)
         {
             if (!isRoster) return;
 
@@ -2656,7 +2644,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles, Func<int> rosterDepthFunc)
+        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
         {
             var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
@@ -2671,7 +2659,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 "Roster size question {0} should have Numeric or Categorical Multy Answers type.",
                 FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
-            if (GetQuestionnaireItemDepth(rosterSizeQuestionId) > rosterDepthFunc())
+            if (!IsRosterSizeQuestionInSameScopeWithRoster(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId), rosterDepthFunc()))
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} cannot be placed under another roster group.",
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
@@ -2722,6 +2710,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(string.Format("Roster fixed titles should be empty for roster group by question: {0}.",
                     FormatGroupForException(groupId, this.innerDocument)));
             }
+        }
+
+        private bool IsRosterSizeQuestionInSameScopeWithRoster(Guid[] rosterSizeQuestionScope, Guid[] rosterScope)
+        {
+            if (rosterSizeQuestionScope.Length > rosterScope.Length)
+                return false;
+
+            return rosterSizeQuestionScope.All(rosterScope.Contains);
         }
 
         private bool IsRosterTitleInRosterByRosterSize(IQuestion rosterTitleQuestion, Guid rosterSizeQuestionId)
