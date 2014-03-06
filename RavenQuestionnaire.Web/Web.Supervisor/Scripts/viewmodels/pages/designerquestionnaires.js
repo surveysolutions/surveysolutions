@@ -22,8 +22,11 @@
         var request = { questionnaireId: questionnaireViewItem.Id() };
 
         self.SendCommand(request, function (data) {
-
-            if (!Supervisor.Framework.Objects.isUndefined(data.Errors) && !Supervisor.Framework.Objects.isNull(data.Errors) && data.Errors.length > 0) {
+            if ((data.ImportError || "") != "") {
+                self.ImportFailMessage('Failed to import questionnaire. ' + data.ImportError);
+                self.ShowOutput();
+            }
+            else if (!Supervisor.Framework.Objects.isUndefined(data.Errors) && !Supervisor.Framework.Objects.isNull(data.Errors) && data.Errors.length > 0) {
                 self.VerificationErrors.removeAll();
                 self.ImportFailMessage('Failed to import questionnaire: ' + data.QuestionnaireTitle);
                 $.each(data.Errors, function (index, error) {

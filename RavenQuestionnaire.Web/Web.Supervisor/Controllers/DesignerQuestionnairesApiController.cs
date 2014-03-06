@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Http;
 using Core.Supervisor.Views.Template;
@@ -70,7 +71,8 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var supportedVerstion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
-                RemoteFileInfo docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
+                RemoteFileInfo docSource =
+                    this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
                         new QuestionnaireVersion()
                         {
                             Major = supportedVerstion.Major,
@@ -83,6 +85,14 @@ namespace Web.Supervisor.Controllers
                 this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document));
 
                 return new QuestionnaireVerificationResponse(true);
+            }
+            catch (FaultException ex)
+            {
+                this.Logger.Error(string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                return new QuestionnaireVerificationResponse(true)
+                {
+                    ImportError = ex.Message
+                };
             }
             catch (Exception ex)
             {

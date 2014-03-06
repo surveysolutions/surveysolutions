@@ -49,7 +49,7 @@ namespace WB.UI.Designer.WebServices
             {
                 throw new QuestionnaireException(
                     string.Format(
-                        "Requested questionnaire {0} has version {1}, but Supervisor application supports versions up to {2} only",
+                        "Requested questionnaire \"{0}\" has version {1}, but Supervisor application supports versions up to {2} only",
                         templateTitle,
                         templateInfo.Version,
                         request.SupportedQuestionnaireVersion
