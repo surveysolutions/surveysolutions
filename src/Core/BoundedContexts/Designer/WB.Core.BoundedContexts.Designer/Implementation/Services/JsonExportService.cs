@@ -10,10 +10,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         #warning ViewFactory should be used here
         private readonly IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage;
+        private readonly IQuestionnaireVersioner versioner;
 
-        public JsonExportService(IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage)
+        public JsonExportService(IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage,
+            IQuestionnaireVersioner versioner)
         {
             this.questionnaireStorage = questionnaireStorage;
+            this.versioner = versioner;
         }
 
         public TemplateInfo GetQuestionnaireTemplate(Guid templateId)
@@ -30,7 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new TemplateInfo()
             {
                 Title = template.Title,
-                Source = JsonConvert.SerializeObject(template, Formatting.Indented, settings)
+                Source = JsonConvert.SerializeObject(template, Formatting.Indented, settings),
+                Version = versioner.GetVersion(template)
             };
 
         }
