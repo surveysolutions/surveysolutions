@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\DocumentStoreProvider.cs" />
+    <Compile Include="Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />
+    <Compile Include="PlainStorage\IRavenPlainStorageProvider.cs" />
     <Compile Include="RavenConnectionSettings.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryAccessor.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryIndexAccessor.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Implementation\WriteSide\RavenWriteSideStore.cs" />
     <Compile Include="RavenExtensions.cs" />
     <Compile Include="RavenInfrastructureModule.cs" />
+    <Compile Include="RavenPlainStorageInfrastructureModule.cs" />
     <Compile Include="RavenReadSideInfrastructureModule.cs" />
     <Compile Include="Implementation\ReadSide\RavenReadSideService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
