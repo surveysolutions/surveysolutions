@@ -69,7 +69,7 @@ namespace Web.Supervisor.Controllers
             QuestionnaireDocument document = null;
             try
             {
-                var supportedVerstion = supportedVersionProvider.GetMaximalQuestionnaireVersion();
+                var supportedVerstion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
                 RemoteFileInfo docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
                         new QuestionnaireVersion()
                         {
