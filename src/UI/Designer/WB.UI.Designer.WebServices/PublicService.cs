@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Designer.Services;
+﻿using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.UI.Shared.Web.Extensions;
@@ -42,14 +43,27 @@ namespace WB.UI.Designer.WebServices
                 return null;
             }
 
+            var templateTitle = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName());
+
+            if (templateInfo.Version > request.SupportedQuestionnaireVersion)
+            {
+                throw new QuestionnaireException(
+                    string.Format(
+                        "Requested questionnaire {0} has version {1}, but Supervisor application supports versions up to {2} only",
+                        templateTitle,
+                        templateInfo.Version,
+                        request.SupportedQuestionnaireVersion
+                        ));
+            }
+
             Stream stream = this.zipUtils.Compress(templateInfo.Source);
 
             return new RemoteFileInfo
-                       {
-                           FileName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName()),
-                           Length = stream.Length,
-                           FileByteStream = stream
-                       };
+            {
+                FileName = templateTitle,
+                Length = stream.Length,
+                FileByteStream = stream
+            };
         }
 
         public string DownloadQuestionnaireSource(Guid request)

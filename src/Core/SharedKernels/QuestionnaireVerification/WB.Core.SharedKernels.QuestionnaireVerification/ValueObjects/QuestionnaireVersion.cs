@@ -20,6 +20,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects
             return this.Major == other.Major && this.Minor == other.Minor && this.Patch == other.Patch;
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0}.{1}.{2}", this.Major, this.Minor, this.Patch);
+        }
+
         public override int GetHashCode()
         {
             unchecked

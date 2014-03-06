@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -33,12 +34,15 @@ namespace Web.Supervisor.Controllers
         }
 
         private readonly IStringCompressor zipUtils;
+        private readonly ISupportedVersionProvider supportedVersionProvider;
 
         public DesignerQuestionnairesApiController(ICommandService commandService, IGlobalInfoProvider globalInfo,
-                                                   IStringCompressor zipUtils, ILogger logger)
+            ISupportedVersionProvider supportedVersionProvider,
+            IStringCompressor zipUtils, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
+            this.supportedVersionProvider = supportedVersionProvider;
         }
 
         public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
