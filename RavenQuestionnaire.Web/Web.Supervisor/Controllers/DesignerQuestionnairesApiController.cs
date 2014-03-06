@@ -69,8 +69,14 @@ namespace Web.Supervisor.Controllers
             QuestionnaireDocument document = null;
             try
             {
-                RemoteFileInfo docSource =
-                    this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId));
+                var supportedVerstion = supportedVersionProvider.GetMaximalQuestionnaireVersion();
+                RemoteFileInfo docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
+                        new QuestionnaireVersion()
+                        {
+                            Major = supportedVerstion.Major,
+                            Minor = supportedVerstion.Minor,
+                            Patch = supportedVerstion.Patch
+                        }));
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
