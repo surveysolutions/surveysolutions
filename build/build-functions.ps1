@@ -22,6 +22,12 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     return $wasBuildSuccessfull
 }
 
+function RunConfigTransform($PathToConfigFile, $PathToTransformFile){
+	$command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
+	Write-Host $command
+	iex $command
+}
+
 function AddArtifacts($Project, $BuildConfiguration) {
 	$file = get-childitem $project
 	$packagepath = $file.directoryname + "\obj\" + $BuildConfiguration + "\package\"
@@ -170,6 +176,8 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 		-OutFileName $OutFileName | %{ if (-not $_) { Exit } }
 
 	CopyCapi -Project $Project -PathToFinalCapi $OutFileName
+	
+	RunConfigTransform "RavenQuestionnaire.Web\Web.Supervisor\Web.config" "RavenQuestionnaire.Web\Web.Supervisor\Web.$BuildConfiguration.config"
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
@@ -199,14 +207,10 @@ function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $
 	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
 
 	CopyCapi -Project $Project -PathToFinalCapi $OutFileName
+	
+	RunConfigTransform "src\UI\Designer\WB.UI.Designer\Web.config" "src\UI\Designer\WB.UI.Designer\Web.$BuildConfiguration.config"
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
-}
-
-function RunConfigTransform($PathToConfigFile, $PathToTransformFile){
-	$command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
-	Write-Host $command
-	iex $command
 }
 
 function BuildHeadquarters($Solution, $Project, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
