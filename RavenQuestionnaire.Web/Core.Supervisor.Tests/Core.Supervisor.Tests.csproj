@@ -148,6 +148,7 @@
     <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_no_answer_collection.cs" />
     <Compile Include="Merger\InterviewDataAndQuestionnaireMergerTestContext.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_group_inside_it_.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_roster_inside_i.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_inside_roster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
