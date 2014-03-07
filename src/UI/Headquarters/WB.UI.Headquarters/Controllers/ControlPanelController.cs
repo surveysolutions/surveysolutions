@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
