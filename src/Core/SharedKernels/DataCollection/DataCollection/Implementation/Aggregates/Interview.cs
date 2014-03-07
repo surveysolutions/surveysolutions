@@ -332,10 +332,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewApproved @event) { }
 
+        private void Apply(InterviewApprovedByHQ @event) { }
+
         private void Apply(InterviewRejected @event)
         {
             this.wasCompleted = false;
         }
+
+        private void Apply(InterviewRejectedByHQ @event){}
 
         private void Apply(InterviewDeclaredValid @event) { }
 
@@ -1526,7 +1530,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Approve(Guid userId, string comment)
         {
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor);
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, 
+                                                          InterviewStatus.RejectedBySupervisor, 
+                                                          InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewApproved(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
@@ -1534,13 +1540,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Reject(Guid userId, string comment)
         {
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor);
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, 
+                                                          InterviewStatus.ApprovedBySupervisor, 
+                                                          InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewRejected(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
+        public void HqApprove(Guid userId, string comment)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
+            this.ApplyEvent(new InterviewApprovedByHQ(userId, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment));
+        }
+
+        public void HqReject(Guid userId, string comment)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.ApprovedByHeadquarters);
+
+            this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
+        }
 
         private void ApplyEnablementChangesEvents(EnablementChanges enablementChanges)
         {
