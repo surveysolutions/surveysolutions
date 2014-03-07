@@ -18,6 +18,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
 
         public DocumentStoreProvider(RavenConnectionSettings settings)
         {
+            if (settings == null) throw new ArgumentNullException("settings");
             this.settings = settings;
         }
 

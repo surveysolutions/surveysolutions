@@ -9,13 +9,13 @@ namespace WB.Core.Infrastructure.Raven
     {
         public RavenPlainStorageInfrastructureModule(RavenConnectionSettings settings)
             : base(settings)
-        {
-        }
+        {}
 
         public override void Load()
         {
+            this.BindDocumentStore();
             this.Bind<IRavenPlainStorageProvider>()
-                .ToMethod(ctx => new RavenPlainStorageProvider(this.Kernel.Get<DocumentStoreProvider>().CreateInstanceForPlainStorage()));
+                .ToMethod(ctx => new RavenPlainStorageProvider(this.Kernel.Get<DocumentStoreProvider>().CreateInstanceForPlainStorage())).InSingletonScope();
         }
     }
 }

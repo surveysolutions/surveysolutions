@@ -14,7 +14,6 @@ namespace WB.UI.Headquarters.App_Start
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/content/bootstrap").Include("~/content/bootstrap.css"));
-            // Code removed for clarity.
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
@@ -23,15 +26,57 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
+        //
+        // POST: /Account/Login
         [HttpPost]
-        public ActionResult Login(LoginModel model)
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                
+                var user = await this.userManager.FindAsync(model.Login, model.Password);
+                if (user != null)
+                {
+                    await SignInAsync(user, model.RememberMe);
+                    return RedirectToLocal(returnUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password.");
+                }
             }
 
-            return this.View(model);
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
+        }
+
+
+        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            var identity = await this.userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
     }
 }
