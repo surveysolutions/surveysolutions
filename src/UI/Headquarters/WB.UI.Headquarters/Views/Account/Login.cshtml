@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Login";
+
     Layout = null;
 }
 
@@ -23,68 +24,62 @@
             padding-bottom: 40px;
             background-color: #eee;
         }
-
-        .form-signin {
-            max-width: 330px;
-            padding: 15px;
-            margin: 0 auto;
-        }
-
-            .form-signin .form-signin-heading,
-            .form-signin .checkbox {
-                margin-bottom: 10px;
-            }
-
-            .form-signin .checkbox {
-                font-weight: normal;
-            }
-
-            .form-signin .form-control {
-                position: relative;
-                height: auto;
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-                padding: 10px;
-                font-size: 16px;
-            }
-
-                .form-signin .form-control:focus {
-                    z-index: 2;
-                }
-
-            .form-signin input[type="email"] {
-                margin-bottom: -1px;
-                border-bottom-right-radius: 0;
-                border-bottom-left-radius: 0;
-            }
-
-            .form-signin input[type="password"] {
-                margin-bottom: 10px;
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-            }
     </style>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript" src="~/Scripts/ValidationFix.js">
+    </script>
 </head>
 
 <body>
 
     <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                <h2 class="form-signin-heading">Please sign in</h2>
+                @Html.AntiForgeryToken()
 
-        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-signin", role = "form" }))
-        {
-            <h2 class="form-signin-heading">Please sign in</h2>
-            @Html.AntiForgeryToken()
+                <div class="text-danger">
+                    @Html.ValidationSummary(true)
+                </div>
 
-            @Html.TextBoxFor(x => x.Login, new { @class = "form-control", autofocus = "autofocus", placeholder = "Login" })
-            @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Password" })
+                <div class="form-group">
+                    <label for="@Html.IdFor(x => x.Login)" class="col-sm-4 control-label">Login</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(x => x.Login, new { @class = "form-control", autofocus = "autofocus", placeholder = "Login" })
+                        @Html.ValidationMessageFor(x => x.Login, null, new {@class="help-block"})
+                    </div>
+                </div>
 
-            <label class="checkbox" for="@Html.IdFor(x => x.RememberMe)">
-                @Html.CheckBoxFor(x => x.RememberMe)
-                Remember me test
-            </label>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        }
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Password, new { @class = "col-sm-4 control-label" })
+                    <div class="col-sm-8">
+                        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Password" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <div class="checkbox">
+                            <label>
+                                @Html.CheckBoxFor(x => x.RememberMe) Remember me
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <button class="btn btn-primary" type="submit">Sign in</button>
+                    </div>
+                </div>
+
+
+            }
+        </div>
     </div>
 </body>
 </html>
