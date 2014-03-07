@@ -1,7 +1,9 @@
-﻿using WB.Core.BoundedContexts.Designer.Exceptions;
+﻿using System.ServiceModel;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer.WebServices
@@ -24,7 +26,7 @@ namespace WB.UI.Designer.WebServices
 
         public PublicService(
             IJsonExportService exportService,
-            IStringCompressor zipUtils, 
+            IStringCompressor zipUtils,
             IMembershipUserService userHelper,
             IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory)
         {
@@ -47,13 +49,15 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo.Version > request.SupportedQuestionnaireVersion)
             {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "Requested questionnaire \"{0}\" has version {1}, but Supervisor application supports versions up to {2} only",
-                        templateTitle,
-                        templateInfo.Version,
-                        request.SupportedQuestionnaireVersion
-                        ));
+                throw new InconsistentVersionException
+                {
+                    Reason =
+                        string.Format(
+                            "Requested questionnaire \"{0}\" has version {1}, but Supervisor application supports versions up to {2} only",
+                            templateTitle,
+                            templateInfo.Version,
+                            request.SupportedQuestionnaireVersion)
+                };
             }
 
             Stream stream = this.zipUtils.Compress(templateInfo.Source);
