@@ -83,6 +83,8 @@
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_used_as_linked_source_question.cs" />
