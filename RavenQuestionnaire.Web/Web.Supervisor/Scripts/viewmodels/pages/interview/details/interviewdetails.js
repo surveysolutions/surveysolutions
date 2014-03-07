@@ -174,6 +174,13 @@ Supervisor.VM.InterviewDetails = function (commandExecutionUrl, inputQuestionnai
         self.changeState(config.commands.rejectInterviewCommand);
     };
     
+    self.hQApproveInterview = function () {
+        self.changeState(config.commands.hQApproveInterviewCommand);
+    };
+    self.hQRejectInterview = function () {
+        self.changeState(config.commands.hQRejectInterviewCommand);
+    };
+
     self.changeState = function (commandName) {
         var command = datacontext.getCommand(commandName, { comment: self.changeStateComment() });
         self.SendCommand(command, function () {

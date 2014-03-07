@@ -184,6 +184,22 @@
         };
     };
 
+    commands[config.commands.hQApproveInterviewCommand] = function (args) {
+        return {
+            interviewId: questionnaire.id(),
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+
+    commands[config.commands.hQRejectInterviewCommand] = function (args) {
+        return {
+            interviewId: questionnaire.id(),
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+
     var getCommand = function(commandName, args) {
         return {
             type: commandName,

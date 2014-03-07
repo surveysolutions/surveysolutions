@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Core.Supervisor.Views.Reposts.InputModels;
 using Core.Supervisor.Views.Reposts.Views;
-using Core.Supervisor.Views.Survey;
 using Main.Core.Utility;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -45,6 +43,10 @@ namespace Core.Supervisor.Views.Reposts.Factories
                                    CompletedCount = doc.CompletedCount,
                                    ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
                                    RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
+
+                                   ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
+                                   RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
+
                                    RestoredCount = doc.RestoredCount,
                                    TotalCount = doc.TotalCount,
 

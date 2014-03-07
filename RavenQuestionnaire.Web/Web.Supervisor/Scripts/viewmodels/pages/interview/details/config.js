@@ -13,7 +13,10 @@
         setFlagToAnswer: "SetFlagToAnswerCommand",
         removeFlagFromAnswer: "RemoveFlagFromAnswerCommand",
         approveInterviewCommand: "ApproveInterviewCommand",
-        rejectInterviewCommand: "RejectInterviewCommand"
+        rejectInterviewCommand: "RejectInterviewCommand",
+
+        hQApproveInterviewCommand: "HqApproveInterviewCommand",
+        hQRejectInterviewCommand: "HqRejectInterviewCommand"
     },
         statusMap = {
             Created: "Created",
@@ -27,6 +30,9 @@
             Restarted: "Restarted",
             ApprovedBySupervisor: "Approved by supervisor",
             RejectedBySupervisor: "Rejected by supervisor",
+
+            ApprovedByHeadquarter: "Approved by HQ",
+            RejectedByHeadquarter: "Rejected by HQ"
         };
     return {
         commands: commands,

@@ -57,7 +57,9 @@
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
+    <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
@@ -69,6 +71,8 @@
     <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Interview\InterviewApprovedByHQ.cs" />
+    <Compile Include="Events\Interview\InterviewRejectedByHQ.cs" />
     <Compile Include="Events\Interview\QRBarcodeQuestionAnswered.cs" />
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />

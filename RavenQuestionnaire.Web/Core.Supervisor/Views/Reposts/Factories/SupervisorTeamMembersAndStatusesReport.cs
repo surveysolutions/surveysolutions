@@ -51,6 +51,10 @@ namespace Core.Supervisor.Views.Reposts.Factories
                              CompletedCount = doc.CompletedCount,
                              ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
                              RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
+
+                             ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
+                             RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
+
                              RestoredCount = doc.RestoredCount,
                              TotalCount = doc.TotalCount,
                              QuestionnaireId = doc.QuestionnaireId,

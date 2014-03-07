@@ -79,7 +79,7 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Supervisor, Headquarter")]
         public InverviewChangeStateHistoryView ChangeStateHistory(ChangeStateHistoryViewModel data)
         {
             return new InverviewChangeStateHistoryView()
