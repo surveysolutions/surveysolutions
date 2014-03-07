@@ -171,9 +171,6 @@
   <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
     <value>Roster size source question is incorrect. Only numeric, categorical with multiple answers or text list questions can be used.</value>
   </data>
-  <data name="WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup" xml:space="preserve">
-    <value>Roster size question cannot be inside any roster group.</value>
-  </data>
   <data name="WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty" xml:space="preserve">
     <value>Max value for roster size question could not be empty.</value>
   </data>
@@ -254,5 +251,8 @@
   </data>
   <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
     <value>QR Barcode questions cannot be used in enablement condition.</value>
+  </data>
+  <data name="WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels" xml:space="preserve">
+    <value>Roster size question and dependent roster have different roster levels</value>
   </data>
 </root>

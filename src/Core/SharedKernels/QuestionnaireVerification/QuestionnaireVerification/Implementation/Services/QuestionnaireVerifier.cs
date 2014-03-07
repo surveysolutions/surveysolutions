@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -76,7 +77,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount),
                     Verifier<IMultyOptionsQuestion>(this.CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
                     Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
-                    Verifier<IQuestion>(RosterSizeQuestionCannotBeInsideAnyRosterGroup, "WB0024", VerificationMessages.WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And40, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40),
                     Verifier<IGroup>(QuestionnaireHaveAutopropagatedGroups, "WB0027", VerificationMessages.WB0027_QuestionnaireHaveAutopropagatedGroups),
@@ -101,6 +101,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInValidationExpression, "WB0052", VerificationMessages.WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression),
                     Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
+                    Verifier<IGroup>(RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -252,9 +253,27 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return group.RosterFixedTitles.Length > 250;
         }
 
-        private static bool RosterSizeQuestionCannotBeInsideAnyRosterGroup(IQuestion question, QuestionnaireDocument questionnaire)
+        private static bool RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels(IGroup roster,
+            QuestionnaireDocument questionnaire)
         {
-            return IsRosterSizeQuestion(question, questionnaire) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
+            if (!IsRosterByQuestion(roster)) return false;
+
+            var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
+
+            if (rosterSizeQuestion == null) return false;
+
+            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(roster, questionnaire);
+
+            if (rosterLevelForRoster == null) return false;
+
+            var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
+            if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
+            {
+                rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
+            }
+
+            return QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(rosterSizeQuestion,
+                rosterLevelWithoutOwnRosterSizeQuestion, questionnaire);
         }
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
@@ -980,11 +999,26 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             Guid[] rosterQuestionsAsVectorForQuestionSourceOfSubstitution =
                 GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
 
-            return
-                rosterQuestionsAsVectorForQuestionSourceOfSubstitution != null &&
-                rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length > 0 &&
-                rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Except(
-                    vectorOfRosterSizeQuestions).Any();
+            if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution == null) return false;
+            if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length == 0) return false;
+
+            if (rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Length <= vectorOfRosterSizeQuestions.Length)
+            {
+                //reverse roster vectors 
+                var rosterQuestionsAsVectorForQuestionSourceOfSubstitutionReverse =
+                    rosterQuestionsAsVectorForQuestionSourceOfSubstitution.Reverse();
+                var vectorOfRosterSizeQuestionsReverse = vectorOfRosterSizeQuestions.Reverse().ToArray();
+
+                return
+                    rosterQuestionsAsVectorForQuestionSourceOfSubstitutionReverse.Where(
+                        (rosterSizeQuestionId, indexInArray) =>
+                            vectorOfRosterSizeQuestionsReverse[indexInArray] != rosterSizeQuestionId).Any();
+            }
+            else
+            {
+                return true;
+            }
+            
         }
 
         private static bool IsSpecialThisIdentifier(string identifier)
