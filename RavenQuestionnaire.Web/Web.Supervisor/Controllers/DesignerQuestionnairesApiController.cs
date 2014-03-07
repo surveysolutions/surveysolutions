@@ -13,10 +13,16 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.UI.Designer.WebServices;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Extensions;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
+using Web.Supervisor.Utils;
+using IPublicService = Web.Supervisor.DesignerPublicService.IPublicService;
+using QuestionnaireVersion = Web.Supervisor.DesignerPublicService.QuestionnaireVersion;
+using RemoteFileInfo = Web.Supervisor.DesignerPublicService.RemoteFileInfo;
 
 namespace Web.Supervisor.Controllers
 {
@@ -73,7 +79,7 @@ namespace Web.Supervisor.Controllers
                 var supportedVerstion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
                 RemoteFileInfo docSource =
                     this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
-                        new QuestionnaireVersion()
+                        new QuestionnaireVersion
                         {
                             Major = supportedVerstion.Major,
                             Minor = supportedVerstion.Minor,
@@ -91,7 +97,7 @@ namespace Web.Supervisor.Controllers
                 this.Logger.Error(string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
                 return new QuestionnaireVerificationResponse(true)
                 {
-                    ImportError = ex.Message
+                    ImportError = ex.Reason.ToString()
                 };
             }
             catch (Exception ex)
