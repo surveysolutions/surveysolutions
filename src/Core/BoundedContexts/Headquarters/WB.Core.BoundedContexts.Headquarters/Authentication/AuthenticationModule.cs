@@ -1,4 +1,7 @@
-﻿using AspNet.Identity.RavenDB.Stores;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using AspNet.Identity.RavenDB.Entities;
+using AspNet.Identity.RavenDB.Stores;
 using Microsoft.AspNet.Identity;
 using Ninject;
 using Ninject.Web.Common;
@@ -17,7 +20,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
             Kernel.Bind<IUserStore<ApplicationUser>>()
                 .ToMethod(context => new RavenUserStore<ApplicationUser>(GetSession(), false)).InRequestScope();
 
+
             Kernel.Bind<UserManager<ApplicationUser>>().ToSelf().InTransientScope();
+
+
+            this.RegisterFirstAdmin();
+        }
+
+        private void RegisterFirstAdmin()
+        {
+            var userManager = this.Kernel.Get<UserManager<ApplicationUser>>();
+            var applicationUser = new ApplicationUser
+            {
+                UserName = "Admin"
+            };
+            var adminRole = new RavenUserClaim(new Claim(ClaimTypes.Role, ApplicationRoles.Administrator));
+            applicationUser.Claims.Add(adminRole);
+            userManager.CreateAsync(applicationUser, "123456");
         }
 
         private IAsyncDocumentSession GetSession()

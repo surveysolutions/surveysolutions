@@ -51,6 +51,14 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SignOut()
+        {
+            AuthenticationManager.SignOut();
+            return RedirectToAction("Login");
+        }
+
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
