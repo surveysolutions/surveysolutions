@@ -1,27 +1,22 @@
 ﻿using System;
-using System.Linq;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_hqapprove_interview : InterviewTestsContext
+    internal class when_hqreject_interview_in_incorrect_status : InterviewTestsContext
     {
         private Establish context = () =>
         {
             userId = Guid.Parse("AAAA0000AAAA00000000AAAA0000AAAA");
-            supervisorId = Guid.Parse("BBAA0000AAAA00000000AAAA0000AAAA");
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
-
-            questionId = Guid.Parse("43333333333333333333333333333333");
 
             var questionnaire = Mock.Of<IQuestionnaire>();
 
@@ -29,30 +24,21 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+               .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
+               .Returns(questionnaireRepository);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-
-            interview.AssignInterviewer(supervisorId, userId);
-            interview.Complete(userId, string.Empty);
-            interview.Approve(userId, string.Empty);
+            
 
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
-            interview.HqApprove(userId, string.Empty);
+        Because of = () =>
+            exception = Catch.Exception(() => interview.HqReject(userId, String.Empty));
 
-        private It should_raise_two_events = () =>
-            eventContext.Events.Count().ShouldEqual(2);
-
-        It should_raise_InterviewApprovedByHQ_event = () =>
-            eventContext.ShouldContainEvent<InterviewApprovedByHQ>(@event => @event.UserId == userId);
-
-        It should_raise_InterviewStatusChanged_event = () =>
-            eventContext.ShouldContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.ApprovedByHeadquarters);
-
+        It should_raise_InterviewException = () =>
+           exception.ShouldBeOfType<InterviewException>();
+        
         Cleanup stuff = () =>
         {
             eventContext.Dispose();
@@ -60,11 +46,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         private static Guid userId;
-        private static Guid supervisorId;
 
+        private static Exception exception;
         private static Guid questionnaireId;
-        private static Guid questionId;
-
         private static EventContext eventContext;
         private static Interview interview;
     }

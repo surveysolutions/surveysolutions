@@ -88,6 +88,7 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
+    <Compile Include="InterviewTests\when_hqreject_interview_in_incorrect_status.cs" />
     <Compile Include="InterviewTests\when_hqreject_interview.cs" />
     <Compile Include="InterviewTests\when_hqapprove_interview.cs" />
     <Compile Include="InterviewTests\when_answering_qr_barcode_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
