@@ -2290,8 +2290,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 IEnumerable<Guid> affectedGroupIds = questionnaire.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(rosterId);
 
                 IEnumerable<Identity> affectedGroups = GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
-                        affectedGroupIds, nearestToOuterRosterVector, questionnaire, getRosterInstanceIds)
-                    .Where(group => rosterInstanceIdsBeingAdded.Contains(group.RosterVector[indexOfRosterInRosterVector]));
+                    affectedGroupIds, nearestToOuterRosterVector, questionnaire, getRosterInstanceIds)
+                    .Where(group =>
+                            group.RosterVector.Length > indexOfRosterInRosterVector &&
+                                rosterInstanceIdsBeingAdded.Contains(group.RosterVector[indexOfRosterInRosterVector]));
 
                 foreach (Identity group in affectedGroups)
                 {
