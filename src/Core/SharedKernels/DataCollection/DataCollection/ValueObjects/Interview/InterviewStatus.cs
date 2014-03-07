@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+﻿namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public enum InterviewStatus
     {
@@ -17,7 +11,11 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         SentToCapi = 85,
         Completed = 100,
         Restarted = 95,
+
         ApprovedBySupervisor = 120,
         RejectedBySupervisor = 65,
+
+        RejectedByHeadquarters = 125,
+        ApprovedByHeadquarters = 130
     }
 }

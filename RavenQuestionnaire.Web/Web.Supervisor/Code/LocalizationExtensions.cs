@@ -43,6 +43,12 @@ namespace Web.Supervisor
                     case InterviewStatus.RejectedBySupervisor:
                     returnValue = Strings.InterviewStatus_RejectedBySupervisor;
                     break;
+                    case InterviewStatus.ApprovedByHeadquarters:
+                    returnValue = Strings.InterviewStatus_ApprovedByHeadquarters;
+                    break;
+                    case InterviewStatus.RejectedByHeadquarters:
+                    returnValue = Strings.InterviewStatus_RejectedByHeadquarters;
+                    break;
             }
             return returnValue;
         }

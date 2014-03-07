@@ -180,7 +180,8 @@
         <div class="row-fluid" data-bind="with: questionnaire">
             <h3 class="span10 text-overflow-ellipsis pad-left10" data-bind="html: title"></h3>
 
-            @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
+            @if (((Model.Status == InterviewStatus.Completed || Model.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
+                || (Model.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
             {
                 <h3 class="span2 nowrap pad-right5 text-right-gray-italic"><a class="btn-link" data-bind="text: status, click: $root.showStatesHistory"></a></h3>
                
@@ -216,7 +217,8 @@
         </div>
         <div class="menubar">
             <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
-            @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
+            @if (((Model.Status == InterviewStatus.Completed || Model.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
+                || (Model.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
             {
                 <button class="btn btn-success" data-bind="click: showApproveModal">Approve</button>
                 <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
@@ -314,7 +316,8 @@
         </div>
     </div>
 </div>
-@if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
+@if (((Model.Status == InterviewStatus.Completed || Model.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
+                || (Model.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
 {
     <div id="approveModal" class="modal fade">
         <div class="modal-dialog">
@@ -329,7 +332,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button class="btn btn-success" data-bind="click: approveInterview">Approve</button>
+                    <button class="btn btn-success" data-bind="click: @(GlobalInfo.IsSupervisor ? "approveInterview" : "hQApproveInterview")">Approve</button>
                 </div>
             </div>
         </div>
@@ -348,7 +351,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button class="btn btn-danger" data-bind="click: rejectInterview">Reject</button>
+                    <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview")">Reject</button>
                 </div>
             </div>
         </div>

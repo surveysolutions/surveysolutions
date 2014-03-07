@@ -160,31 +160,28 @@ namespace WB.UI.QuestionnaireTester
 			public const int Icon = 2130837510;
 			
 			// aapt resource value: 0x7f020007
-			public const int monoandroidsplash = 2130837511;
+			public const int questionAnsweredShape = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public const int questionAnsweredShape = 2130837512;
+			public const int questionDisabledShape = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public const int questionDisabledShape = 2130837513;
+			public const int questionInvalidShape = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public const int questionInvalidShape = 2130837514;
+			public const int questionShape = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public const int questionShape = 2130837515;
+			public const int splash = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public const int splash = 2130837516;
+			public const int statistics_row_style = 2130837516;
 			
 			// aapt resource value: 0x7f02000d
-			public const int statistics_row_style = 2130837517;
+			public const int tester_icon = 2130837517;
 			
 			// aapt resource value: 0x7f02000e
-			public const int tester_icon = 2130837518;
-			
-			// aapt resource value: 0x7f02000f
-			public const int tester_splash = 2130837519;
+			public const int tester_splash = 2130837518;
 			
 			static Drawable()
 			{
@@ -455,10 +452,7 @@ namespace WB.UI.QuestionnaireTester
 		{
 			
 			// aapt resource value: 0x7f060000
-			public const int Mono_Android_Theme_Splash = 2131099648;
-			
-			// aapt resource value: 0x7f060001
-			public const int Theme_SplashBackground = 2131099649;
+			public const int Theme_SplashBackground = 2131099648;
 			
 			static Style()
 			{
