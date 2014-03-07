@@ -186,9 +186,6 @@
   <data name="WB0028_QuestionnaireHaveAutopropagatedQuestions" xml:space="preserve">
     <value>Questionnaire have autopropagated questions.</value>
   </data>
-  <data name="WB0029_RosterHasRoster" xml:space="preserve">
-    <value>Roster could not have roster inside itself.</value>
-  </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Pre-filled questions can't be inside of roster.</value>
   </data>
@@ -238,7 +235,7 @@
     <value>Item has custom enablement condition referencing question with deeper roster level.</value>
   </data>
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
-    <value>Groups cannot have enablement condition referencing child question.</value>
+    <value>Groups can not custom enablement  condition referencing child question</value>
   </data>
   <data name="WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression" xml:space="preserve">
     <value>QR Barcode question should not have a validation expression.</value>
@@ -257,11 +254,5 @@
   </data>
   <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
     <value>QR Barcode questions cannot be used in enablement condition.</value>
-  </data>
-  <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Item has custom enablement condition referencing question with deeper roster level.</value>
-  </data>
-  <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
-    <value>Groups can not custom enablement  condition referencing child question</value>
   </data>
 </root>

@@ -269,15 +269,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster could not have roster inside itself..
-        /// </summary>
-        internal static string WB0029_RosterHasRoster {
-            get {
-                return ResourceManager.GetString("WB0029_RosterHasRoster", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Pre-filled questions can&apos;t be inside of roster..
         /// </summary>
         internal static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
@@ -459,7 +450,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Groups cannot have enablement condition referencing child question..
+        ///   Looks up a localized string similar to Groups can not custom enablement  condition referencing child question.
         /// </summary>
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
