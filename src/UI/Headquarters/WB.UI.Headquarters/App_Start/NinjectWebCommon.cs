@@ -1,6 +1,7 @@
 using System.Web.Configuration;
 using System.Web.Http;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using NConfig;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Mvc;
@@ -44,6 +45,7 @@ namespace WB.UI.Headquarters.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            MvcApplication.Initialize();
             var ravenConnectionSettings = new RavenConnectionSettings(
                 WebConfigurationManager.AppSettings["Raven.DocumentStore"], 
                 isEmbedded: false,
