@@ -74,6 +74,7 @@
         @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-signin", role = "form" }))
         {
             <h2 class="form-signin-heading">Please sign in</h2>
+            @Html.AntiForgeryToken()
 
             @Html.TextBoxFor(x => x.Login, new { @class = "form-control", autofocus = "autofocus", placeholder = "Login" })
             @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Password" })
