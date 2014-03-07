@@ -224,15 +224,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size question cannot be inside any roster group..
-        /// </summary>
-        internal static string WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup {
-            get {
-                return ResourceManager.GetString("WB0024_RosterSizeQuestionCannotBeInsideAnyRosterGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Max value for roster size question could not be empty..
         /// </summary>
         internal static string WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty {
@@ -473,6 +464,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         internal static string WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition {
             get {
                 return ResourceManager.GetString("WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster size question and dependent roster have different roster levels.
+        /// </summary>
+        internal static string WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels {
+            get {
+                return ResourceManager.GetString("WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels", resourceCulture);
             }
         }
     }
