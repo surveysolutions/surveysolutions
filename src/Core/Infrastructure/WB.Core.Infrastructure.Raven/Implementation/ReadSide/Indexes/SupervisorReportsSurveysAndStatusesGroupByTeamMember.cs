@@ -31,6 +31,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                            CompletedCount = doc.CompletedCount,
                                                                            ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
                                                                            RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
+                                                                           ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
+                                                                           RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
                                                                            RestoredCount = doc.RestoredCount,
                                                                            TotalCount = doc.TotalCount
                                                                        });
@@ -56,6 +58,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                            CompletedCount = doc.CompletedCount,
                                                                            ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
                                                                            RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
+                                                                           ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
+                                                                           RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
                                                                            RestoredCount = doc.RestoredCount,
                                                                            TotalCount = doc.TotalCount
                                                                        });
@@ -82,6 +86,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                     CompletedCount = g.Sum(x => x.CompletedCount),
                                     ApprovedBySupervisorCount = g.Sum(x => x.ApprovedBySupervisorCount),
                                     RejectedBySupervisorCount = g.Sum(x => x.RejectedBySupervisorCount),
+                                    ApprovedByHeadquartersCount = g.Sum(x => x.ApprovedByHeadquartersCount),
+                                    RejectedByHeadquartersCount = g.Sum(x => x.RejectedByHeadquartersCount),
                                     RestoredCount = g.Sum(x => x.RestoredCount),
                                     TotalCount = g.Sum(x => x.TotalCount),
                                     
