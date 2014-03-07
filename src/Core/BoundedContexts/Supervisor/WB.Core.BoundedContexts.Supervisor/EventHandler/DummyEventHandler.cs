@@ -1,7 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
@@ -23,6 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<SynchronizationMetadataApplied>,
+        IEventHandler<InterviewApproved>,
         IEventHandler
     {
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
@@ -56,6 +56,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) {}
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt) {}
+
+        public void Handle(IPublishedEvent<InterviewApproved> evnt) { }
 
         public string Name
         {
