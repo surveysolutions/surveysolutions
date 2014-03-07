@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -16,6 +20,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             userId = Guid.Parse("AAAA0000AAAA00000000AAAA0000AAAA");
             supervisorId = Guid.Parse("BBAA0000AAAA00000000AAAA0000AAAA");
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
+
+            var questionnaire = Mock.Of<IQuestionnaire>();
+
+            var questionnaireRepository = 
+                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+
+            Mock.Get(ServiceLocator.Current)
+               .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
+               .Returns(questionnaireRepository);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
