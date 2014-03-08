@@ -82,6 +82,8 @@
     <Compile Include="AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventContextExtenstions.cs" />
+    <Compile Include="JsonExportServiceTests\JsonExportServiceTestContext.cs" />
+    <Compile Include="JsonExportServiceTests\when_getting_template_info.cs" />
     <Compile Include="MembershipProviderTests\when_updating_user_with_email_that_used_by_another_user_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\when_creating_user_and_account_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\MembershipProviderTestsContext.cs" />
@@ -298,6 +300,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400CDE74-7407-4388-8D57-BF429E7C508D}</Project>
