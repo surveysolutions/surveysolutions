@@ -77,28 +77,31 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var supportedVerstion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
-                RemoteFileInfo docSource =
-                    this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
-                        new QuestionnaireVersion
-                        {
-                            Major = supportedVerstion.Major,
-                            Minor = supportedVerstion.Minor,
-                            Patch = supportedVerstion.Patch
-                        }));
+                RemoteFileInfo docSource;
+                try
+                {
+                    docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
+                            new QuestionnaireVersion
+                            {
+                                Major = supportedVerstion.Major,
+                                Minor = supportedVerstion.Minor,
+                                Patch = supportedVerstion.Patch
+                            }));
+                }
+                catch (FaultException ex)
+                {
+                    this.Logger.Error(string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                    return new QuestionnaireVerificationResponse(true)
+                    {
+                        ImportError = ex.Reason.ToString()
+                    };
+                }
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
                 this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document));
 
                 return new QuestionnaireVerificationResponse(true);
-            }
-            catch (FaultException ex)
-            {
-                this.Logger.Error(string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
-                return new QuestionnaireVerificationResponse(true)
-                {
-                    ImportError = ex.Reason.ToString()
-                };
             }
             catch (Exception ex)
             {
