@@ -162,6 +162,7 @@
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_mandatory_inside_disabled_group.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
+    <Compile Include="InterviewTests\when_roster_row_with_nested_roster_is_removed.cs" />
     <Compile Include="InterviewTests\when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_rost___.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_unanswered_mandatory_question_with_validation.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
