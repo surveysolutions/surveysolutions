@@ -572,6 +572,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
         }
 
+        public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
+        {
+            var roster = this.GetGroupOrThrow(rosterId);
+            
+            var nestedRosters = new List<Guid>();
+            var nestedGroups = new Queue<IGroup>(roster.Children.OfType<IGroup>());
+
+            while (nestedGroups.Count>0)
+            {
+                var currentGroup = nestedGroups.Dequeue();
+                if (IsRosterGroup(currentGroup))
+                {
+                    nestedRosters.Add(currentGroup.PublicKey);
+                    continue;
+                }
+                foreach (var childGroup in currentGroup.Children.OfType<IGroup>())
+                {
+                    nestedGroups.Enqueue(childGroup);
+                }
+            }
+
+            return nestedRosters;
+        }
+
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))

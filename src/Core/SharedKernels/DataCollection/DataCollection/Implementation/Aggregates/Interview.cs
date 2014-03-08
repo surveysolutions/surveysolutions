@@ -2056,20 +2056,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         existingRosterInstanceIds: this.GetRosterInstanceIds(rosterId, outerVectorForExtend),
                         newRosterInstanceIds: rosterInstanceIds);
 
-                    var rosterInstanceIdsBeingRemoved = GetRosterInstanceIdsBeingRemoved(
-                        existingRosterInstanceIds: this.GetRosterInstanceIds(rosterId, outerVectorForExtend),
-                        newRosterInstanceIds: rosterInstanceIds);
-
                     rosterInstancesToAdd.AddRange(
                         rosterInstanceIdsBeingAdded.Select(rosterInstanceId =>
                             new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId,
                                 sortIndex: rosterInstanceIdsWithSortIndexes[rosterInstanceId])));
 
-                    rosterInstancesToRemove.AddRange(
-                        rosterInstanceIdsBeingRemoved.Select(rosterInstanceId =>
-                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)));
+                    CalculateRostersForDelete(questionnare, rosterInstancesToRemove, rosterId, outerVectorForExtend, rosterInstanceIds);
                 }
+            }
+        }
 
+        private void CalculateRostersForDelete(IQuestionnaire questionnare, List<RosterIdentity> rosterInstancesToRemove, Guid rosterId, decimal[] outerVectorForExtend, DistinctDecimalList rosterInstanceIdsForRemove = null)
+        {
+            var listOfRosterInstanceIdsForRemove = rosterInstanceIdsForRemove == null
+                ? this.GetRosterInstanceIds(rosterId, outerVectorForExtend)
+                : GetRosterInstanceIdsBeingRemoved(this.GetRosterInstanceIds(rosterId, outerVectorForExtend), rosterInstanceIdsForRemove);
+
+            rosterInstancesToRemove.AddRange(
+                listOfRosterInstanceIdsForRemove.Select(rosterInstanceId =>
+                    new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)));
+
+             var nestedRosterIds = questionnare.GetNestedRostersOfRosterById(rosterId);
+
+            foreach (var nestedRosterId in nestedRosterIds)
+            {
+                foreach (var rosterInstanceIdBeingRemoved in listOfRosterInstanceIdsForRemove)
+                {
+                    CalculateRostersForDelete(questionnare, rosterInstancesToRemove, nestedRosterId,
+                        this.ExtendRosterVectorWithOneValue(outerVectorForExtend, rosterInstanceIdBeingRemoved));
+                }
             }
         }
 
@@ -2974,7 +2989,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static decimal[] ExtendRosterVectorWithOneValue(decimal[] rosterVector, decimal value)
+        private decimal[] ExtendRosterVectorWithOneValue(decimal[] rosterVector, decimal value)
         {
             return new List<decimal>(rosterVector) { value }.ToArray();
         }
