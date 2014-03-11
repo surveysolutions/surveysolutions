@@ -29,16 +29,7 @@ namespace Web.Supervisor.Controllers
         internal IPublicService DesignerService
         {
             get { return getDesignerService(this.GlobalInfo); }
-            set { this.DesignerServiceClient = (IPublicService)value; }
-        }
-
-        private IPublicService DesignerServiceClient
-        {
-            get { return (IPublicService)HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name]; }
-            set
-            {
-                HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name] = value;
-            }
+            set { SetDesignerService(this.GlobalInfo, value); }
         }
 
         private readonly IStringCompressor zipUtils;
@@ -48,9 +39,10 @@ namespace Web.Supervisor.Controllers
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
-            : this(commandService, globalInfo, zipUtils, logger, GetDesignerService) { }
+            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerService) { }
 
         internal DesignerQuestionnairesApiController(
+            ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
             Func<IGlobalInfoProvider, IPublicService> getDesignerService)
             : base(commandService, globalInfo, logger)
@@ -62,7 +54,12 @@ namespace Web.Supervisor.Controllers
 
         private static IPublicService GetDesignerService(IGlobalInfoProvider globalInfoProvider)
         {
-            return (PublicServiceClient) HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
+            return (IPublicService)HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
+        }
+
+        private static void SetDesignerService(IGlobalInfoProvider globalInfoProvider, IPublicService publicService)
+        {
+            HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = publicService;
         }
 
         public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
@@ -77,7 +74,7 @@ namespace Web.Supervisor.Controllers
 
             return new DesignerQuestionnairesView()
                 {
-                    Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() {Id = x.Id, Title = x.Title}),
+                    Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() { Id = x.Id, Title = x.Title }),
                     TotalCount = list.TotalCount,
                     ItemsSummary = null
                 };

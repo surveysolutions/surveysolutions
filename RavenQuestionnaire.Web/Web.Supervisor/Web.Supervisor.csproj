@@ -632,7 +632,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    </None>
     <None Include="Service References\DesignerPublicService\PublicService43.xsd">
       <SubType>Designer</SubType>
     </None>

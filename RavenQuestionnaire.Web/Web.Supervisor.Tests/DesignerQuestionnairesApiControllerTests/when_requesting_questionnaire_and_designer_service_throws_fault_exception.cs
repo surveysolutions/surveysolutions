@@ -13,26 +13,24 @@ using QuestionnaireVersion = WB.Core.SharedKernels.QuestionnaireVerification.Val
 
 namespace Web.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
 {
-    internal class when_requesting_questionnaire_and_designer_service_throws_exception : DesignerQuestionnairesApiControllerTestContext
+    internal class when_requesting_questionnaire_and_designer_service_throws_fault_exception : DesignerQuestionnairesApiControllerTestsContext
     {
         Establish context = () =>
         {
-            var user = new UserLight { Name = "Vasya" };
             var supportedVerstion = new QuestionnaireVersion(1, 2, 3);
             request = new DesignerQuestionnairesApiController.ImportQuestionnaireRequest{ QuestionnaireId = questionnaireId };
 
-            var globalInfoProvider = Mock.Of<IGlobalInfoProvider>(x => x.GetCurrentUser() == user);
             var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == supportedVerstion);
 
             var service = new Mock<IPublicService>();
+
             service
                 .Setup(x => x.DownloadQuestionnaire(Moq.It.IsAny<DownloadQuestionnaireRequest>()))
                 .Callback((DownloadQuestionnaireRequest r) => downloadRequest = r)
                 .Throws(new FaultException(someFaultReason));
 
             controller = CreateDesignerQuestionnairesApiController(
-                designerService: service.Object,
-                globalInfo: globalInfoProvider,
+                getDesignerService: x => service.Object,
                 supportedVersionProvider: versionProvider);
         };
 

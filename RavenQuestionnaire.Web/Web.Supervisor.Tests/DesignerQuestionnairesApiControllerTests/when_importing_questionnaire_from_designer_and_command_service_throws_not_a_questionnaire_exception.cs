@@ -1,28 +1,38 @@
 using System;
+using System.ServiceModel;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using Web.Supervisor.Controllers;
+using Web.Supervisor.DesignerPublicService;
 using It = Machine.Specifications.It;
 using it = Moq.It;
+using QuestionnaireVersion = WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.QuestionnaireVersion;
 
 namespace Web.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
 {
     internal class when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception : DesignerQuestionnairesApiControllerTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             importRequest = new DesignerQuestionnairesApiController.ImportQuestionnaireRequest();
+
+            var supportedVerstion = new QuestionnaireVersion(1, 2, 3);
+            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == supportedVerstion);
 
             commandServiceException = new Exception();
 
             var commandService = Mock.Of<ICommandService>();
             Mock.Get(commandService)
-                .Setup(service => service.Execute(it.IsAny<ICommand>()))
+                .Setup(cs => cs.Execute(it.IsAny<ICommand>()))
                 .Throws(commandServiceException);
 
-            controller = CreateDesignerQuestionnairesApiController(commandService: commandService);
+            controller = CreateDesignerQuestionnairesApiController(commandService: commandService,
+                supportedVersionProvider: versionProvider);
         };
 
         Because of = () =>
