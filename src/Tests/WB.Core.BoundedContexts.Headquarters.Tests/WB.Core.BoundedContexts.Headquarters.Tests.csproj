@@ -61,8 +61,11 @@
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventContextExtensions.cs" />
+    <Compile Include="StringExtenstion.cs" />
     <Compile Include="SurveyTests\SurveyTestsContext.cs" />
     <Compile Include="SurveyTests\when_creating_new_survey.cs" />
+    <Compile Include="SurveyTests\when_creating_new_survey_and_survey_name_contains_only_whitespaces.cs" />
+    <Compile Include="SurveyTests\when_creating_new_survey_and_survey_name_is_null.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
