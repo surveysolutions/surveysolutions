@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Shared.Web", "UI\Shar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernel", "SharedKernel", "{665BFDF8-E00D-4102-960A-49585D972FB7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headquarter", "Headquarter", "{5588B946-9AB7-4D72-9932-790ECB71BC36}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headquarters", "Headquarters", "{5588B946-9AB7-4D72-9932-790ECB71BC36}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tools.StorageAnalyzer", "Tools\StorageAnalyzer\WB.Tools.StorageAnalyzer.csproj", "{4BBDA879-33EC-4D79-8548-AD3A8824906D}"
 EndProject
