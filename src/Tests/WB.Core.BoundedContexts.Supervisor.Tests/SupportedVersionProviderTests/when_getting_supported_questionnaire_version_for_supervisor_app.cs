@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.SupportedVersionProviderTests
         };
 
         Because of = () =>
-            supportedVersion = versionProvider.GetMaximalQuestionnaireVersion();
+            supportedVersion = versionProvider.GetSupportedQuestionnaireVersion();
 
         It should_set_Major_property_to_1 = () =>
             supportedVersion.Major.ShouldEqual(1);
