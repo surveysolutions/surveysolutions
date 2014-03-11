@@ -14,7 +14,6 @@ namespace WB.UI.Designer.WebServices
     using Main.Core.View;
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.WebServices.Questionnaire;
-    using WB.UI.Shared.Web;
     using WB.UI.Shared.Web.Membership;
 
     public class PublicService : IPublicService
