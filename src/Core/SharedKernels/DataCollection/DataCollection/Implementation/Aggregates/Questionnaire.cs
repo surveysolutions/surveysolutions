@@ -572,7 +572,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
         }
 
-        public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
+        public IEnumerable<Guid> GetNestedRostersOfRosterById(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
             
