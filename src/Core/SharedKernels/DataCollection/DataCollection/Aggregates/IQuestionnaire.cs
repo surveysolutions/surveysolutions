@@ -110,6 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
+
         IEnumerable<Guid> GetNestedRostersOfRosterById(Guid rosterId);
     }
 }
