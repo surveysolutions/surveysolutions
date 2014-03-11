@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
         {
 
             Kernel.Bind<IUserStore<ApplicationUser>>()
-                .ToMethod(context => new RavenUserStore<ApplicationUser>(GetSession(), false)).InRequestScope();
+                .ToMethod(context => new RavenUserStore<ApplicationUser>(GetSession(), true)).InRequestScope();
 
 
             Kernel.Bind<UserManager<ApplicationUser>>().ToSelf().InTransientScope();
