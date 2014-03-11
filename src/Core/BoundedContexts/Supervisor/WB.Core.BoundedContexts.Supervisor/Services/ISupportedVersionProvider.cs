@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
 {
     public interface ISupportedVersionProvider
     {
-         QuestionnaireVersion GetMaximalQuestionnaireVersion();
+         QuestionnaireVersion GetSupportedQuestionnaireVersion();
     }
 }

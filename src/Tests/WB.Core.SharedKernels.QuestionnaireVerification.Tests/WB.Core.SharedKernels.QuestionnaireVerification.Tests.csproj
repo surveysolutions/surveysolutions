@@ -138,6 +138,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_which_size_source_is_text_list_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_with_nested_plain_group.cs" />
     <Compile Include="QuestionnaireVersionTests\QuestionnaireVersionTestsContext.cs" />
+    <Compile Include="QuestionnaireVersionTests\when_casting_to_string_questionnaire_version.cs" />
     <Compile Include="QuestionnaireVersionTests\when_comparing_questionnaire_versions.cs" />
     <Compile Include="QuestionnaireVersionTests\when_comparing_with_greater_than_operator.cs" />
     <Compile Include="QuestionnaireVersionTests\when_comparing_with_less_than_operator.cs" />
