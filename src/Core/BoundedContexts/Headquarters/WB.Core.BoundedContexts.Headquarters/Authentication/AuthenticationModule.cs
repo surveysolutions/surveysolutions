@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNet.Identity.RavenDB.Entities;
 using AspNet.Identity.RavenDB.Stores;
@@ -8,6 +9,7 @@ using Ninject.Web.Common;
 using Ninject.Modules;
 using Raven.Client;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Raven.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Authentication
@@ -30,12 +32,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
         private void RegisterFirstAdmin()
         {
             var userManager = this.Kernel.Get<UserManager<ApplicationUser>>();
-            var applicationUser = new ApplicationUser
+            var applicationUser = new ApplicationUser(Guid.NewGuid().FormatGuid())
             {
-                UserName = "Admin"
+                UserName = "Admin",
+                IsAdministrator = true
             };
-            var adminRole = new RavenUserClaim(new Claim(ClaimTypes.Role, ApplicationRoles.Administrator));
-            applicationUser.Claims.Add(adminRole);
             userManager.CreateAsync(applicationUser, "123456");
         }
 
