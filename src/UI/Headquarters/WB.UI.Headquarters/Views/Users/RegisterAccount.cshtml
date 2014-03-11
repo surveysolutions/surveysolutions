@@ -4,7 +4,13 @@
     ViewBag.Title = "Register new account";
 }
 
-<div>
+<div class="col-sm-6">
     <h2 class="">Register new account</h2>
+
+    @using (Html.BeginForm("RegisterAccount", "Users", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+       @Html.Partial("AccountForm", Model)
+    }
+
 
 </div>

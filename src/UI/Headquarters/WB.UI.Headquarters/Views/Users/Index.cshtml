@@ -7,8 +7,11 @@
 
 <div>
     <h1>Users</h1>
+    <div>
+        @TempData["Message"]
+    </div>
     <div class="row col-sm-12 bottom-buffer">
-        @Html.ActionLink("Register new account", "RegisterAccount", "Users", null,  new { @class = "btn btn-primary" })
+        @Html.ActionLink("Register new account", "RegisterAccount", "Users", null,  new { @class = "btn btn-default" })
     </div>
     <div class="row col-sm-12">
         <table class="table table-striped">
@@ -18,8 +21,10 @@
             </tr>
             @foreach (var user in Model.Users)
             {
-                <tr>
-                    <td>@user.Login</td>
+                <tr class="@(string.Equals(user.Login, Model.HighlightedUser, StringComparison.CurrentCultureIgnoreCase) ? "success" : "")">
+                    <td>
+                        @Html.ActionLink(user.Login, "EditAccount", "Users", new { id = user.Id }, null)
+                    </td>
                     <td>@user.Role</td>
                 </tr>
             }
