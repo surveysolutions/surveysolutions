@@ -1,6 +1,7 @@
 ﻿using System;
 using Ncqrs.Domain;
 using WB.Core.BoundedContexts.Headquarters.Events.Survey;
+using WB.Core.BoundedContexts.Headquarters.Exceptions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 {
@@ -18,7 +19,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         public Survey(Guid id, string name)
             : base(id)
         {
+            this.ThrowIfSurveyNameIsEmpty(name);
+
             this.ApplyEvent(new NewSurveyStarted(name));
         }
+
+        #region Invariants
+
+        private void ThrowIfSurveyNameIsEmpty(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new SurveyException("Survey name cannot be empty.");
+        }
+
+        #endregion
     }
 }

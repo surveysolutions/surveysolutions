@@ -75,6 +75,7 @@
     <Compile Include="Authentication\Models\ApplicationUser.cs" />
     <Compile Include="Events\Survey\Base\SurveyEvent.cs" />
     <Compile Include="Events\Survey\NewSurveyStarted.cs" />
+    <Compile Include="Exceptions\SurveyException.cs" />
     <Compile Include="Implementation\Aggregates\Survey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
