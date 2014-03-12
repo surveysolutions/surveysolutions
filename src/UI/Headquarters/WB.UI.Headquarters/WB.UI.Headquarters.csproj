@@ -178,6 +178,7 @@
     <Compile Include="Controllers\SurveysController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\NewSurveyModel.cs" />
     <Compile Include="Models\UsersListModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -240,6 +241,7 @@
     <Content Include="Views\Users\EditAccount.cshtml" />
     <Content Include="Views\Users\AccountForm.cshtml" />
     <Content Include="Views\Surveys\Index.cshtml" />
+    <Content Include="Views\Surveys\StartNew.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

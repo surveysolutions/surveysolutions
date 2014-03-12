@@ -6,7 +6,10 @@
 
 
 <div>
-    <h1>Surveys</h1>
+    <h1>@ViewBag.Title</h1>
+    <div class="row col-sm-12 bottom-buffer">
+        @Html.ActionLink("Start new survey", "StartNew", "Surveys", null, new { @class = "btn btn-default" })
+    </div>
     <div class="row col-sm-12">
         <table class="table table-striped">
             <tr>
