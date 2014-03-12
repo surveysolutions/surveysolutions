@@ -7,6 +7,7 @@ using Ninject.Web.Common;
 using Ninject.Web.Mvc;
 using System;
 using System.Web;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.Infrastructure.Raven;
 
@@ -57,7 +58,8 @@ namespace WB.UI.Headquarters.App_Start
 
             var kernel = new StandardKernel(
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
-                new AuthenticationModule());
+                new AuthenticationModule(),
+                new HeadquartersBoundedContextModule());
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();

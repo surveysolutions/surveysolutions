@@ -175,6 +175,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
+    <Compile Include="Controllers\SurveysController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\UsersListModel.cs" />
@@ -211,6 +212,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Configuration\TLK.Headquarters.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -234,6 +239,7 @@
     <Content Include="Views\Users\RegisterAccount.cshtml" />
     <Content Include="Views\Users\EditAccount.cshtml" />
     <Content Include="Views\Users\AccountForm.cshtml" />
+    <Content Include="Views\Surveys\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

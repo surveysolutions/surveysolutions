@@ -1,0 +1,23 @@
+﻿@model WB.Core.BoundedContexts.Headquarters.Views.Survey.SurveyLineView[]
+
+@{
+    ViewBag.Title = "Surveys";
+}
+
+
+<div>
+    <h1>Surveys</h1>
+    <div class="row col-sm-12">
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+            </tr>
+            @foreach (var survey in Model)
+            {
+                <tr>
+                    <td>@survey.Name</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
