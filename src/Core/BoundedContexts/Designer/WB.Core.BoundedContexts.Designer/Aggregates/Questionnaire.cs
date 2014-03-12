@@ -2438,32 +2438,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     var currentQuestion = questions[substitutionReference];
                     bool typeOfRefQuestionIsNotSupported = !(currentQuestion.QuestionType == QuestionType.DateTime ||
-                                                             currentQuestion.QuestionType == QuestionType.Numeric ||
-                                                             currentQuestion.QuestionType == QuestionType.SingleOption ||
-                                                             currentQuestion.QuestionType == QuestionType.Text ||
-                                                             currentQuestion.QuestionType == QuestionType.AutoPropagate ||
-                                                             currentQuestion.QuestionType == QuestionType.QRBarcode);
+                        currentQuestion.QuestionType == QuestionType.Numeric ||
+                        currentQuestion.QuestionType == QuestionType.SingleOption ||
+                        currentQuestion.QuestionType == QuestionType.Text ||
+                        currentQuestion.QuestionType == QuestionType.AutoPropagate ||
+                        currentQuestion.QuestionType == QuestionType.QRBarcode);
 
                     if (typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
 
-                    if (!IsReferencedSubstitutionLegal(propagationQuestionsVector, currentQuestion.GetParent()))
+                    if (!IsRosterSizeQuestionInSameScopeWithRoster(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), propagationQuestionsVector))
                         questionsIllegalPropagationScope.Add(substitutionReference);
                 }
             }
-        }
-
-        private bool IsReferencedSubstitutionLegal(Guid[] propagationQuestionsVector, IComposite referencedQuestionGroup)
-        {
-            Guid[] referencedPropagationQuestionsVector = GetQuestionnaireItemDepthAsVector(referencedQuestionGroup.PublicKey);
-
-            if (referencedPropagationQuestionsVector.Length == 0) //referenced Question not in propagation - OK
-                return true;
-
-            if (propagationQuestionsVector.Count() < referencedPropagationQuestionsVector.Count())
-                return false;
-
-            return propagationQuestionsVector.Except(propagationQuestionsVector).Count() <= propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
         }
 
         private void ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid questionId)
