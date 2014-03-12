@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid sourceQuestionId = Guid.Parse("22222222222222222222222222222222");
-        private static Guid questionFromRosterId = Guid.Parse("22222222222222222222222222222222");
+        private static Guid questionFromRosterId = Guid.Parse("32222222222222222222222222222222");
         private static Guid rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
