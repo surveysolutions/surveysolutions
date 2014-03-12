@@ -45,6 +45,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    @MenuItem("Surveys", "Index", "Surveys")
                     @MenuItem("Users", "Index", "Users")
                 </ul>
                 @using (Html.BeginForm("Signout", "Account", FormMethod.Post, new { @class = "navbar-form navbar-right" }))
