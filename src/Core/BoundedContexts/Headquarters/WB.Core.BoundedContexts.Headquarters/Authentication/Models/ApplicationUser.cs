@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using AspNet.Identity.RavenDB.Entities;
 using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Schema;
 using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Authentication.Models
@@ -29,17 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication.Models
 
             set
             {
-                RavenUserClaim administratorClaim = this.FindRole(ApplicationRoles.Administrator);
-
-                if (administratorClaim != null)
-                {
-                    this.Claims.Remove(administratorClaim);
-                }
-
-                if (value)
-                {
-                    this.AddRole(ApplicationRoles.Administrator);
-                }
+                this.SetHasRoleFlag(value, ApplicationRoles.Administrator);
             }
         }
 
@@ -52,17 +43,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication.Models
             }
             set
             {
-                RavenUserClaim headquarterRole = this.FindRole(ApplicationRoles.Headquarter);
+                this.SetHasRoleFlag(value, ApplicationRoles.Headquarter);
+            }
+        }
 
-                if (headquarterRole != null)
-                {
-                    this.Claims.Remove(headquarterRole);
-                }
+        private void SetHasRoleFlag(bool value, string roleName)
+        {
+            RavenUserClaim administratorClaim = this.FindRole(roleName);
 
-                if (value)
-                {
-                    this.AddRole(ApplicationRoles.Headquarter);
-                }
+            if (administratorClaim != null)
+            {
+                this.Claims.Remove(administratorClaim);
+            }
+
+            if (value)
+            {
+                this.AddRole(roleName);
             }
         }
 

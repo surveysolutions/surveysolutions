@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AspNet.Identity.RavenDB.Entities;
 using AspNet.Identity.RavenDB.Stores;
 using Microsoft.AspNet.Identity;
 using Ninject;
