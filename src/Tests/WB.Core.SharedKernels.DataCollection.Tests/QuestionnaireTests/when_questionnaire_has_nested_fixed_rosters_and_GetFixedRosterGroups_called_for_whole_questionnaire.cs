@@ -12,14 +12,20 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    internal class when_questionnaire_has_nested_rosters_and_GetNestedRostersOfRosterById_called_for_parent_roster : QuestionnaireTestsContext
+    internal class when_questionnaire_has_nested_fixed_rosters_and_GetFixedRosterGroups_called_for_whole_questionnaire : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             IQuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4, QuestionType = QuestionType.Numeric},
+                new NumericQuestion()
+                {
+                    PublicKey = rosterSizeQuestionId,
+                    IsInteger = true,
+                    MaxValue = 4,
+                    QuestionType = QuestionType.Numeric
+                },
                 new Group()
                 {
                     PublicKey = rosterGroupId,
@@ -35,6 +41,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                                 IsRoster = true
                             }
                         }
+                },
+                new Group("fixed roster")
+                {
+                    PublicKey = fixedRosterId,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    IsRoster = true
                 }
             });
 
@@ -42,18 +54,19 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            nestedRosters = questionnaire.GetNestedRostersOfGroupById(rosterGroupId);
+            nestedRosters = questionnaire.GetFixedRosterGroups(null);
 
         It should_rosterGroups_not_be_empty = () =>
             nestedRosters.ShouldNotBeEmpty();
 
         It should_rosterGroups_have_only_1_roster_group = () =>
-            nestedRosters.ShouldContainOnly(nestedRosterId);
+            nestedRosters.ShouldContainOnly(fixedRosterId);
 
         private static IEnumerable<Guid> nestedRosters;
         private static Questionnaire questionnaire;
         private static Guid rosterSizeQuestionId = new Guid("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid nestedRosterId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        private static Guid fixedRosterId =new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid rosterGroupId;
     }
 }

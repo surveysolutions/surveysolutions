@@ -517,7 +517,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 List<Identity> initializedGroupsToBeDisabled, List<Identity> initializedGroupsToBeEnabled,
                 List<Identity> initializedQuestionsToBeDisabled, List<Identity> initializedQuestionsToBeEnabled,
                 List<Identity> initializedQuestionsToBeInvalid,
-                Dictionary<decimal, string> titlesForRosterInstancesToAdd)
+                Dictionary<decimal, string> titlesForRosterInstancesToAdd, List<RosterCalculationData> rosterInstantiatesFromNestedLevels)
             {
 
                 this.RosterInstancesToAdd = rosterInstancesToAdd;
@@ -530,6 +530,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.InitializedQuestionsToBeEnabled = initializedQuestionsToBeEnabled;
                 this.InitializedQuestionsToBeInvalid = initializedQuestionsToBeInvalid;
                 this.TitlesForRosterInstancesToAdd = titlesForRosterInstancesToAdd;
+                this.RosterInstantiatesFromNestedLevels = rosterInstantiatesFromNestedLevels;
             }
 
             public Dictionary<decimal, string> TitlesForRosterInstancesToAdd { get; set; }
@@ -542,6 +543,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             public List<Identity> InitializedQuestionsToBeDisabled { get; private set; }
             public List<Identity> InitializedQuestionsToBeEnabled { get; private set; }
             public List<Identity> InitializedQuestionsToBeInvalid { get; private set; }
+            public List<RosterCalculationData> RosterInstantiatesFromNestedLevels { get; private set; }
         }
 
         private class EnablementChanges
@@ -633,7 +635,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(questionnaire);
 
-            fixedRosterCalculationDatas.ForEach(calculatedRosterData => this.ApplyRosterEvents(calculatedRosterData));
+            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -1573,6 +1575,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             data.InitializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
             data.InitializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
             data.InitializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+            data.RosterInstantiatesFromNestedLevels.ForEach(ApplyRosterEvents);
         }
 
 
@@ -1889,17 +1892,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private List<RosterCalculationData> CalculateFixedRostersData(IQuestionnaire questionnaire)
+        private List<RosterCalculationData> CalculateFixedRostersData(IQuestionnaire questionnaire, decimal[] outerRosterVector = null, Guid? parentRosterId = null)
         {
-            Func<Identity, object> getAnswer = question => string.Empty;
+            if (outerRosterVector == null)
+                outerRosterVector = EmptyRosterVector;
 
-            List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
+            Func<Identity, object> getAnswer = question => string.Empty;
+            
+            List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups(parentRosterId).ToList();
 
             Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
 
             Func<Guid, decimal[], bool> isFixedRoster = (groupId, groupOuterScopeRosterVector)
                 => fixedRosterIds.Contains(groupId)
-                    && AreEqualRosterVectors(groupOuterScopeRosterVector, EmptyRosterVector);
+                    && AreEqualRosterVectors(groupOuterScopeRosterVector, outerRosterVector);
 
             Func<Guid, DistinctDecimalList> getFixedRosterInstanceIds =
                 fixedRosterId => new DistinctDecimalList(rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToList());
@@ -1912,7 +1918,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return fixedRosterIds
                 .Select(fixedRosterId => this.CalculateRosterData(questionnaire,
                     new List<Guid> { fixedRosterId },
-                    EmptyRosterVector,
+                    outerRosterVector,
                     getFixedRosterInstanceIds(fixedRosterId),
                     rosterTitlesGroupedByRosterId[fixedRosterId],
                     questionnaire, getAnswer, getRosterInstanceIds)
@@ -2007,9 +2013,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
                 initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled,
                 initializedQuestionsToBeInvalid;
-
+            List<RosterCalculationData> rosterInstantiatesFromNestedLevels;
             this.CalculateChangesInRosterInstances(questionnare, rosterIds, nearestToOuterRosterVector, rosterInstanceIdsWithSortIndexes,
-                out rosterInstancesToAdd, out rosterInstancesToRemove);
+                out rosterInstancesToAdd, out rosterInstancesToRemove, out rosterInstantiatesFromNestedLevels);
 
             List<decimal> rosterInstanceIdsBeingAdded = rosterInstancesToAdd.Select(instance => instance.RosterInstanceId).ToList();
             List<decimal> rosterInstanceIdsBeingRemoved = rosterInstancesToRemove.Select(instance => instance.RosterInstanceId).ToList();
@@ -2027,24 +2033,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterIds, rosterInstanceIdsBeingAdded, nearestToOuterRosterVector, questionnaire, initializedGroupsToBeDisabled,
                 initializedQuestionsToBeDisabled, getRosterInstanceIds, out initializedQuestionsToBeInvalid);
 
+
             return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToRemove, rosterInstancesToChange,
                 answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
                 initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid,
-                rosterTitles);
+                rosterTitles, rosterInstantiatesFromNestedLevels);
         }
 
-        private void CalculateChangesInRosterInstances(IQuestionnaire questionnare, IEnumerable<Guid> rosterIds, decimal[] nearestToOuterRosterVector,
+        private void CalculateChangesInRosterInstances(IQuestionnaire questionnaire, IEnumerable<Guid> rosterIds, decimal[] nearestToOuterRosterVector,
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes,
-            out List<RosterIdentity> rosterInstancesToAdd, out List<RosterIdentity> rosterInstancesToRemove)
+            out List<RosterIdentity> rosterInstancesToAdd, out List<RosterIdentity> rosterInstancesToRemove, out List<RosterCalculationData> rosterInstantiatesFromNestedLevels)
         {
             rosterInstancesToAdd = new List<RosterIdentity>();
             rosterInstancesToRemove = new List<RosterIdentity>();
+            rosterInstantiatesFromNestedLevels = new List<RosterCalculationData>();
 
             DistinctDecimalList rosterInstanceIds = new DistinctDecimalList(rosterInstanceIdsWithSortIndexes.Keys.ToList());
             foreach (var rosterId in rosterIds)
             {
-                var length = questionnare.GetRosterLevelForGroup(rosterId);
-                Guid[] rosterGroupsStartingFromTop = questionnare.GetRostersFromTopToSpecifiedGroup(rosterId).ToArray();
+                var length = questionnaire.GetRosterLevelForGroup(rosterId);
+                Guid[] rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId).ToArray();
 
                 var outerVectorsForExtend =
                     GetOuterVectorForParentRoster(rosterGroupsStartingFromTop.Skip(rosterGroupsStartingFromTop.Length - length).ToArray(),
@@ -2054,14 +2062,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var rosterInstanceIdsBeingAdded = GetRosterInstanceIdsBeingAdded(
                         existingRosterInstanceIds: this.GetRosterInstanceIds(rosterId, outerVectorForExtend),
-                        newRosterInstanceIds: rosterInstanceIds);
+                        newRosterInstanceIds: rosterInstanceIds).Select(rosterInstanceId =>
+                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId,
+                                sortIndex: rosterInstanceIdsWithSortIndexes[rosterInstanceId])).ToList();
 
                     rosterInstancesToAdd.AddRange(
-                        rosterInstanceIdsBeingAdded.Select(rosterInstanceId =>
-                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId,
-                                sortIndex: rosterInstanceIdsWithSortIndexes[rosterInstanceId])));
+                        rosterInstanceIdsBeingAdded);
 
-                    CalculateRostersForDelete(questionnare, rosterInstancesToRemove, rosterId, outerVectorForExtend, rosterInstanceIds);
+                    foreach (var rosterInstanceIdBeingAdded in rosterInstanceIdsBeingAdded)
+                    {
+                        rosterInstantiatesFromNestedLevels.AddRange(CalculateFixedRostersData(questionnaire,
+                            this.ExtendRosterVectorWithOneValue(rosterInstanceIdBeingAdded.OuterRosterVector,
+                                rosterInstanceIdBeingAdded.RosterInstanceId), rosterId));
+                    }
+
+                    CalculateRostersForDelete(questionnaire, rosterInstancesToRemove, rosterId, outerVectorForExtend, rosterInstanceIds);
                 }
             }
         }
@@ -2076,7 +2091,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 listOfRosterInstanceIdsForRemove.Select(rosterInstanceId =>
                     new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)));
 
-             var nestedRosterIds = questionnare.GetNestedRostersOfRosterById(rosterId);
+             var nestedRosterIds = questionnare.GetNestedRostersOfGroupById(rosterId);
 
             foreach (var nestedRosterId in nestedRosterIds)
             {
