@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId);
 
-        IEnumerable<Guid> GetFixedRosterGroups();
+        IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
 
         int GetRosterLevelForQuestion(Guid questionId);
 
@@ -111,6 +111,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetNestedRostersOfRosterById(Guid rosterId);
+        IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
     }
 }
