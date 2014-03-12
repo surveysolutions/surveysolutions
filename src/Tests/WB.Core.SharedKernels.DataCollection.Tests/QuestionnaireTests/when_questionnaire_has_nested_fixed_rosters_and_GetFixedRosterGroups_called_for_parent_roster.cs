@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    internal class when_questionnaire_has_nested_rosters_and_GetNestedRostersOfRosterById_called_for_parent_roster : QuestionnaireTestsContext
+    internal class when_questionnaire_has_nested_fixed_rosters_and_GetFixedRosterGroups_called_for_parent_roster : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            nestedRosters = questionnaire.GetNestedRostersOfGroupById(rosterGroupId);
+            nestedRosters = questionnaire.GetFixedRosterGroups(rosterGroupId);
 
         It should_rosterGroups_not_be_empty = () =>
             nestedRosters.ShouldNotBeEmpty();

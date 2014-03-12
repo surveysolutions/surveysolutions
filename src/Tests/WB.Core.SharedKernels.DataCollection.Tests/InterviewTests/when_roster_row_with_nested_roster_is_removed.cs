@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
                     && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
                     && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { parentRosterGroupId }
-                    && _.GetNestedRostersOfRosterById(parentRosterGroupId) == new[] { rosterGroupId }
+                    && _.GetNestedRostersOfGroupById(parentRosterGroupId) == new[] { rosterGroupId }
 
                     && _.HasGroup(rosterGroupId) == true
                     && _.GetRosterLevelForGroup(rosterGroupId) == 2
