@@ -2447,7 +2447,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if (typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
 
-                    if (!IsRosterSizeQuestionInSameScopeWithRoster(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), propagationQuestionsVector))
+                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), propagationQuestionsVector))
                         questionsIllegalPropagationScope.Add(substitutionReference);
                 }
             }
@@ -2548,7 +2548,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var groupByRosterSizeQuestion in groupsByRosterSizeQuestion)
             {
                 if (
-                    !IsRosterSizeQuestionInSameScopeWithRoster(GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey),
+                    !this.IsReferencedItemInTheSameScopeWithReferencesItem(GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey),
                         GetQuestionnaireItemDepthAsVector(groupByRosterSizeQuestion)))
                     //   if (GetQuestionnaireItemDepth(targetGroup.PublicKey) > GetQuestionnaireItemDepth(groupByRosterSizeQuestion) - 1)
                     throw new QuestionnaireException(string.Format(
@@ -2646,7 +2646,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 "Roster size question {0} should have Numeric or Categorical Multy Answers type.",
                 FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
-            if (!IsRosterSizeQuestionInSameScopeWithRoster(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId), rosterDepthFunc()))
+            if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId), rosterDepthFunc()))
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} cannot be placed deeper then roster.",
                     FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
@@ -2699,12 +2699,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private bool IsRosterSizeQuestionInSameScopeWithRoster(Guid[] rosterSizeQuestionScope, Guid[] rosterScope)
+        private bool IsReferencedItemInTheSameScopeWithReferencesItem(Guid[] referencedItemRosterVector, Guid[] referencesItemRosterVector)
         {
-            if (rosterSizeQuestionScope.Length > rosterScope.Length)
+            if (referencedItemRosterVector.Length > referencesItemRosterVector.Length)
                 return false;
 
-            return rosterSizeQuestionScope.All(rosterScope.Contains);
+            return referencedItemRosterVector.All(referencesItemRosterVector.Contains);
         }
 
         private bool IsRosterTitleInRosterByRosterSize(IQuestion rosterTitleQuestion, Guid rosterSizeQuestionId)
