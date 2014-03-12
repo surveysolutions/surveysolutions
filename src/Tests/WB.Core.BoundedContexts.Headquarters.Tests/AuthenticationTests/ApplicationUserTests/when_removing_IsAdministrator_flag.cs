@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.AuthenticationTests.Applica
         Establish context = () =>
         {
             user = new ApplicationUser("11");
+            user.IsAdministrator = true;
         };
 
         Because of = () => user.IsAdministrator = false;
