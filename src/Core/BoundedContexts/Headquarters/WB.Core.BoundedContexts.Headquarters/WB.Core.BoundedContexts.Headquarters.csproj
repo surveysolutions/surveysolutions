@@ -83,7 +83,11 @@
     <Compile Include="Events\Survey\NewSurveyStarted.cs" />
     <Compile Include="Exceptions\SurveyException.cs" />
     <Compile Include="Implementation\Aggregates\Survey.cs" />
+    <Compile Include="Implementation\ViewFactories\SurveyViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupervisorBoundedContextModule.cs" />
+    <Compile Include="ViewFactories\ISurveyViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveyLineView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -97,8 +101,14 @@
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
       <Name>WB.Core.Infrastructure.Raven</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewFactories\Survey\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
