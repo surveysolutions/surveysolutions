@@ -75,7 +75,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\ApplicationRoles.cs" />
+    <Compile Include="Authentication\ApplicationUserManager.cs" />
     <Compile Include="Authentication\AuthenticationModule.cs" />
+    <Compile Include="Authentication\CustomPasswordValidator.cs" />
     <Compile Include="Authentication\Models\ApplicationUser.cs" />
     <Compile Include="Events\Survey\Base\SurveyEvent.cs" />
     <Compile Include="Events\Survey\NewSurveyStarted.cs" />
