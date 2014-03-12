@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNet.Identity.RavenDB.Entities;
@@ -18,13 +19,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
     {
         public override void Load()
         {
+            this.Kernel.Bind<IUserStore<ApplicationUser>>()
+                .ToMethod(context => {
+                    var ravenUserStore = new RavenUserStore<ApplicationUser>(this.GetSession(), true);
+                    return ravenUserStore;
+                }).InRequestScope();
 
-            Kernel.Bind<IUserStore<ApplicationUser>>()
-                .ToMethod(context => new RavenUserStore<ApplicationUser>(GetSession(), true)).InRequestScope();
-
-
-            Kernel.Bind<UserManager<ApplicationUser>>().ToSelf().InTransientScope();
-
+            Kernel.Bind<UserManager<ApplicationUser>>().To<ApplicationUserManager>().InTransientScope();
 
             this.RegisterFirstAdmin();
         }
@@ -37,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
                 UserName = "Admin",
                 IsAdministrator = true
             };
-            userManager.CreateAsync(applicationUser, "123456");
+            userManager.CreateAsync(applicationUser, "Qwerty1234");
         }
 
         private IAsyncDocumentSession GetSession()
