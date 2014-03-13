@@ -81,6 +81,7 @@
     <Compile Include="Commands\Survey\Base\SurveyCommand.cs" />
     <Compile Include="Commands\Survey\RegisterSupervisorAccount.cs" />
     <Compile Include="Commands\Survey\StartNewSurvey.cs" />
+    <Compile Include="Events\Survey\SupervisorAccountRegistered.cs" />
     <Compile Include="Events\Survey\Base\SurveyEvent.cs" />
     <Compile Include="Events\Survey\NewSurveyStarted.cs" />
     <Compile Include="Exceptions\SurveyException.cs" />
