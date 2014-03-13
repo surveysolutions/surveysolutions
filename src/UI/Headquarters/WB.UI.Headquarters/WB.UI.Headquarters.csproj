@@ -71,6 +71,9 @@
     <Reference Include="Microsoft.Owin.Security.OAuth">
       <HintPath>..\..\..\..\packages\Microsoft.Owin.Security.OAuth.2.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="NConfig">
       <HintPath>..\..\..\..\packages\NConfig.1.0.16\lib\Net40\NConfig.dll</HintPath>
     </Reference>
@@ -86,6 +89,9 @@
     </Reference>
     <Reference Include="Ninject.Web.Mvc">
       <HintPath>..\..\..\..\packages\Ninject.MVC3.3.0.0.6\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="NinjectAdapter">
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -171,6 +177,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CqrsModule.cs" />
+    <Compile Include="App_Start\ServiceLocationModule.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -260,17 +268,37 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
+      <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
       <Name>WB.Core.Infrastructure.Raven</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

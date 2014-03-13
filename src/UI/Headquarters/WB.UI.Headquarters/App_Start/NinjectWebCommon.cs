@@ -1,23 +1,20 @@
-using System.Web.Configuration;
-using System.Web.Http;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using NConfig;
-using Ninject;
-using Ninject.Web.Common;
-using Ninject.Web.Mvc;
 using System;
 using System.Web;
+using System.Web.Configuration;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
+using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
+using WB.UI.Headquarters;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(WB.UI.Headquarters.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(WB.UI.Headquarters.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
 
-namespace WB.UI.Headquarters.App_Start
+namespace WB.UI.Headquarters
 {
-
-
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -57,7 +54,10 @@ namespace WB.UI.Headquarters.App_Start
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
             var kernel = new StandardKernel(
+                new ServiceLocationModule(),
+                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
+                new CqrsModule(),
                 new AuthenticationModule(),
                 new HeadquartersBoundedContextModule());
 
