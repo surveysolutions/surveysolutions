@@ -36,15 +36,7 @@ namespace Web.Supervisor.Injections
             });
         }
 
-        protected override object GetReadSideRepositoryReader(IContext context)
-        {
-            return this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]));
-        }
-
-        protected override object GetReadSideRepositoryWriter(IContext context)
-        {
-            return this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]));
-        }
+        protected override void RegisterDenormalizers() { }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
         {

@@ -24,15 +24,5 @@ namespace CapiDataGenerator
                 typeof(UserListViewFactory).Assembly
             });
         }
-
-        protected override object GetReadSideRepositoryReader(IContext context)
-        {
-            return this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]));
-        }
-
-        protected override object GetReadSideRepositoryWriter(IContext context)
-        {
-            return this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]));
-        }
     }
 }
