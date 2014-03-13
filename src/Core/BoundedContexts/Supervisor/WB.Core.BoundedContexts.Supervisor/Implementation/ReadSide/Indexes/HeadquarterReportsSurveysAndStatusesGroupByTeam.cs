@@ -4,18 +4,18 @@ using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes
 {
-    public class SupervisorReportsSurveysAndStatusesGroupByTeamMember : AbstractMultiMapIndexCreationTask<StatisticsLineGroupedByUserAndTemplate>
+    public class HeadquarterReportsSurveysAndStatusesGroupByTeam : AbstractMultiMapIndexCreationTask<StatisticsLineGroupedByUserAndTemplate>
     {
-        public SupervisorReportsSurveysAndStatusesGroupByTeamMember()
+        public HeadquarterReportsSurveysAndStatusesGroupByTeam()
         {
-            AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
+            this.AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
                                                                    where doc.TeamLeadId != null
                                                                    select new StatisticsLineGroupedByUserAndTemplate
                                                                        {
-                                                                           ResponsibleId = doc.ResponsibleId,
-                                                                           ResponsibleName = doc.ResponsibleName,
+                                                                           ResponsibleId = (Guid) doc.TeamLeadId,
+                                                                           ResponsibleName = doc.TeamLeadName,
 
                                                                            TeamLeadId = doc.TeamLeadId,
                                                                            TeamLeadName = doc.TeamLeadName,
@@ -37,12 +37,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                            TotalCount = doc.TotalCount
                                                                        });
 
-            AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
-                                                                   where doc.TeamLeadId != null
+            this.AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
                                                                    select new StatisticsLineGroupedByUserAndTemplate
                                                                        {
                                                                            ResponsibleId = Guid.Empty,
-                                                                           ResponsibleName = "",
+                                                                           ResponsibleName = string.Empty,
 
                                                                            TeamLeadId = doc.TeamLeadId,
                                                                            TeamLeadName = doc.TeamLeadName,
@@ -64,38 +63,40 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                            TotalCount = doc.TotalCount
                                                                        });
 
-            Reduce = results => from result in results
-                                group result by new { result.ResponsibleId, result.TeamLeadId, result.QuestionnaireId, result.QuestionnaireVersion } into g
+            this.Reduce = results => from result in results
+                                group result by new {result.ResponsibleId, result.QuestionnaireId, result.QuestionnaireVersion}
+                                into g
                                 where g.Sum(x => x.TotalCount) > 0
                                 select new StatisticsLineGroupedByUserAndTemplate
-                                {
-                                    ResponsibleId = g.Key.ResponsibleId,
-                                    ResponsibleName = g.First().ResponsibleName,
+                                    {
+                                        ResponsibleId = g.Key.ResponsibleId,
+                                        ResponsibleName = g.First().ResponsibleName,
 
-                                    TeamLeadId = g.First().TeamLeadId,
-                                    TeamLeadName = g.First().TeamLeadName,
+                                        QuestionnaireId = g.Key.QuestionnaireId,
+                                        QuestionnaireVersion = g.Key.QuestionnaireVersion,
+                                        QuestionnaireTitle = g.First().QuestionnaireTitle,
 
-                                    QuestionnaireId = g.Key.QuestionnaireId,
-                                    QuestionnaireVersion = g.Key.QuestionnaireVersion,
-                                    QuestionnaireTitle = g.First().QuestionnaireTitle,
-                                    
-                                    CreatedCount = g.Sum(x => x.CreatedCount),
-                                    SupervisorAssignedCount = g.Sum(x => x.SupervisorAssignedCount),
-                                    InterviewerAssignedCount = g.Sum(x => x.InterviewerAssignedCount),
-                                    SentToCapiCount = g.Sum(x => x.SentToCapiCount),
-                                    CompletedCount = g.Sum(x => x.CompletedCount),
-                                    ApprovedBySupervisorCount = g.Sum(x => x.ApprovedBySupervisorCount),
-                                    RejectedBySupervisorCount = g.Sum(x => x.RejectedBySupervisorCount),
-                                    ApprovedByHeadquartersCount = g.Sum(x => x.ApprovedByHeadquartersCount),
-                                    RejectedByHeadquartersCount = g.Sum(x => x.RejectedByHeadquartersCount),
-                                    RestoredCount = g.Sum(x => x.RestoredCount),
-                                    TotalCount = g.Sum(x => x.TotalCount),
-                                    
-                                };
-            Index(x => x.TeamLeadId, FieldIndexing.Analyzed);
-            Index(x => x.QuestionnaireId, FieldIndexing.Analyzed);
-            Index(x => x.QuestionnaireVersion, FieldIndexing.Analyzed);
+                                        TeamLeadId = g.First().TeamLeadId,
+                                        TeamLeadName = g.First().TeamLeadName,
+
+                                        CreatedCount = g.Sum(x => x.CreatedCount),
+                                        SupervisorAssignedCount = g.Sum(x => x.SupervisorAssignedCount),
+                                        InterviewerAssignedCount = g.Sum(x => x.InterviewerAssignedCount),
+                                        SentToCapiCount = g.Sum(x => x.SentToCapiCount),
+                                        CompletedCount = g.Sum(x => x.CompletedCount),
+                                        ApprovedBySupervisorCount = g.Sum(x => x.ApprovedBySupervisorCount),
+                                        RejectedBySupervisorCount = g.Sum(x => x.RejectedBySupervisorCount),
+
+                                        ApprovedByHeadquartersCount = g.Sum(x => x.ApprovedByHeadquartersCount),
+                                        RejectedByHeadquartersCount = g.Sum(x => x.RejectedByHeadquartersCount),
+
+                                        RestoredCount = g.Sum(x => x.RestoredCount),
+                                        TotalCount = g.Sum(x => x.TotalCount)
+                                    };
+            this.Index(x => x.TotalCount, FieldIndexing.Analyzed);
+            this.Index(x => x.TeamLeadId, FieldIndexing.Analyzed);
+            this.Index(x => x.QuestionnaireId, FieldIndexing.Analyzed);
+            this.Index(x => x.QuestionnaireVersion, FieldIndexing.Analyzed);
         }
-
     }
 }
