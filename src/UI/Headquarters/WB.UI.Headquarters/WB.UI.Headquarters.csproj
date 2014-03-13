@@ -332,6 +332,7 @@
     <EmbeddedResource Include="Resources\LoginPageResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginPageResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SupervisorAccountResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
