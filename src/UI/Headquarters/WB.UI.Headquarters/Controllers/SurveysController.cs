@@ -42,5 +42,27 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.RedirectToAction("Index");
         }
+
+        public ActionResult RegisterSupervisorAccount(Guid? id)
+        {
+            return this.View(new SupervisorAccountModel());
+        }
+
+        [HttpPost]
+        public ActionResult RegisterSupervisorAccount(Guid id, SupervisorAccountModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                this.commandService.Execute(new RegisterSupervisorAccount(id) {
+                   Login = model.Login,
+                   Password = model.Password
+                });
+
+                return RedirectToAction("Index"); // todo ank: change when details action available.
+            }
+
+            return View(model);
+        }
+
     }
 }

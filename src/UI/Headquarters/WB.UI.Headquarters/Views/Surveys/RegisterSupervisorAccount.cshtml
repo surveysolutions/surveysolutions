@@ -1,0 +1,37 @@
+﻿@model WB.UI.Headquarters.Models.SupervisorAccountModel
+
+@{
+    ViewBag.Title = string.Format(SurveyResources.RegisterSupervisorTitle, "");
+}
+
+<div>
+    <h1 class="bottom-buffer">@ViewBag.Title</h1>
+
+    <div class="col-sm-6">
+
+        @using (Html.BeginForm("RegisterSupervisorAccount", "Surveys", FormMethod.Post, new { @class = "form-horizontal", role="form" }))
+        {
+            <div class="form-group">
+                @Html.LabelFor(x => x.Login, new { @class = "col-sm-4 control-label" })
+
+                <div class="col-sm-8">
+                    @Html.TextBoxFor(x => x.Login, new { @class = "form-control", autofocus = "autofocus" })
+                    @Html.ValidationMessageFor(x => x.Login, null, new { @class = "help-block" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Password, new { @class = "col-sm-4 control-label" })
+                <div class="col-sm-8">
+                    @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-8">
+                    <button type="submit" class="btn btn-default">
+                        @CommonResources.Submit
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

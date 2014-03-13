@@ -176,7 +176,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_GlobalResources\LoginPageResources.Designer.cs">
+    <Compile Include="Resources\CommonResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LoginPageResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LoginPageResources.resx</DependentUpon>
@@ -194,6 +199,16 @@
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\NewSurveyModel.cs" />
     <Compile Include="Models\UsersListModel.cs" />
+    <Compile Include="Resources\SupervisorAccountResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SupervisorAccountResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SurveyResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SurveyResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -256,6 +271,7 @@
     <Content Include="Views\Users\AccountForm.cshtml" />
     <Content Include="Views\Surveys\Index.cshtml" />
     <Content Include="Views\Surveys\StartNew.cshtml" />
+    <Content Include="Views\Surveys\RegisterSupervisorAccount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -308,10 +324,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_GlobalResources\LoginPageResources.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
+    <EmbeddedResource Include="Resources\CommonResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginPageResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginPageResources.Designer.cs</LastGenOutput>
-    </Content>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SupervisorAccountResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SupervisorAccountResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SurveyResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SurveyResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

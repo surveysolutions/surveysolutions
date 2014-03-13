@@ -1,5 +1,5 @@
 ﻿@using System.Web.Optimization
-@using System.Web.UI.WebControls
+@using WB.Core.BoundedContexts.Headquarters.Authentication
 <!DOCTYPE html>
 
 @helper MenuItem(string text, string action, string controller) {
@@ -45,8 +45,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @MenuItem("Surveys", "Index", "Surveys")
+                    @if (User.IsInRole(ApplicationRoles.Headquarter))
+                    {
+                        @MenuItem("Surveys", "Index", "Surveys")
+                    }
+                    
                     @MenuItem("Users", "Index", "Users")
+                    
                 </ul>
                 @using (Html.BeginForm("Signout", "Account", FormMethod.Post, new { @class = "navbar-form navbar-right" }))
                 {
