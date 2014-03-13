@@ -1,10 +1,12 @@
 using System;
+using System.Web;
 using System.Web.Mvc;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Commands.Survey;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
@@ -40,7 +42,17 @@ namespace WB.UI.Headquarters.Controllers
 
             this.commandService.Execute(new StartNewSurvey(newSurveyId, model.Name));
 
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Details", new { id = newSurveyId.FormatGuid() });
+        }
+
+        public ActionResult Details(string id)
+        {
+            SurveyDetailsView survey = this.surveyViewFactory.GetDetailsView(id);
+
+            if (survey == null)
+                return new HttpNotFoundResult();
+
+            return this.View(survey);
         }
 
         public ActionResult RegisterSupervisorAccount(Guid? id)
