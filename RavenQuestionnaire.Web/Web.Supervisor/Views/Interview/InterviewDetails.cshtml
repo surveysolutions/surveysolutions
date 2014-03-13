@@ -35,7 +35,8 @@
         {
             <text>urlReferrer = '@Html.Raw(Request.UrlReferrer)';</text>
         }
-        var interviewsUrl = '@Url.Action("Interviews", "Survey")';
+        
+        var interviewsUrl = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))';
         $(function () {
             var model = new Supervisor.VM.InterviewDetails(commandExecutionUrl, questionnaire, userName, changeStateHistoryUrl, interviewsUrl, urlReferrer);
             ko.applyBindings(model);
