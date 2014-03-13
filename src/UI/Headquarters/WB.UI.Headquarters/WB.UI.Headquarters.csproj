@@ -272,6 +272,7 @@
     <Content Include="Views\Surveys\Index.cshtml" />
     <Content Include="Views\Surveys\StartNew.cshtml" />
     <Content Include="Views\Surveys\RegisterSupervisorAccount.cshtml" />
+    <Content Include="Views\Surveys\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -340,6 +341,7 @@
     <EmbeddedResource Include="Resources\SurveyResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
