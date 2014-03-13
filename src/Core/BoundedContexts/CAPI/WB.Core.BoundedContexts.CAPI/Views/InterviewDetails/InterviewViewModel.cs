@@ -401,7 +401,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             screen.PropertyChanged += screen_PropertyChanged;
             this.Screens.Add(screen.ScreenId, screen);
-            this.UpdateGrid(screenId);
+            this.UpdateGrid(new InterviewItemId(screenId, outerScopePropagationVector));
         }
 
         public void RemovePropagatedScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal index)
@@ -410,7 +410,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 index);
 
             this.RemoveScreen(new InterviewItemId(screenId, propagationVector));
-            this.UpdateGrid(screenId);
+            this.UpdateGrid(new InterviewItemId(screenId, outerScopePropagationVector));
         }
 
         private void RemoveScreen(InterviewItemId screenId)
@@ -623,7 +623,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
             if (propagatedScreen.ScreenId.IsTopLevel())
                 return;
-            this.UpdateGrid(propagatedScreen.ScreenId.Id);
+            this.UpdateGrid(propagatedScreen.ScreenId);
         }
 
         protected void AddScreen(List<IGroup> rout,
@@ -718,8 +718,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 rosterKey, true,
                 (rosterId) => siblings.Select(
                     g => new InterviewItemId(g.PublicKey, rosterId.InterviewItemPropagationVector)),
-                breadcrumbs.Take(breadcrumbs.Count - 1).ToList(), header,
-                () => this.CollectPropagatedScreen(rosterKey.Id));
+                breadcrumbs.Take(breadcrumbs.Count - 1).ToList(), header,this.CollectPropagatedScreen );
 
             if (isNestedRoster)
                 this.rosterScreenPrototypes.Add(group.PublicKey, roster);
@@ -763,10 +762,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     s => new InterviewItemId(publicKey.Id, s.Key.InterviewItemPropagationVector)).ToList();
         }
 
-        protected void UpdateGrid(Guid key)
+        protected void UpdateGrid(InterviewItemId gridkey)
         {
-            var gridkey = new InterviewItemId(key);
-
             if (!this.Screens.ContainsKey(gridkey))
                 return;
             var grid = this.Screens[gridkey] as QuestionnaireGridViewModel;
@@ -774,13 +771,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 grid.UpdateCounters();
         }
 
-        protected IEnumerable<QuestionnairePropagatedScreenViewModel> CollectPropagatedScreen(Guid publicKey)
+        protected IEnumerable<QuestionnairePropagatedScreenViewModel> CollectPropagatedScreen(InterviewItemId rosterId)
         {
-            return this.Screens
+            var allPropagatedScreens = this.Screens
                 .Select(s => s.Value)
                 .OfType<QuestionnairePropagatedScreenViewModel>()
-                .Where(s => s.ScreenId.Id == publicKey)
-                .OrderBy(x => x.SortIndex)
+                .Where(
+                    s =>
+                        new InterviewItemId(s.ScreenId.Id,
+                            s.ScreenId.InterviewItemPropagationVector.Take(s.ScreenId.InterviewItemPropagationVector.Length - 1).ToArray()) ==
+                            rosterId);
+
+            return allPropagatedScreens.OrderBy(x => x.SortIndex)
                 .ToList();
         }
 
