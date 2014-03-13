@@ -31,9 +31,9 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             return result;
         }
 
-        protected static void PropagateScreen(InterviewViewModel interviewViewModel, Guid screenId, decimal rosterInstanceId)
+        protected static void PropagateScreen(InterviewViewModel interviewViewModel, Guid screenId, decimal rosterInstanceId, decimal[] outerScopePropagationVector=null)
         {
-            interviewViewModel.AddPropagateScreen(screenId, new decimal[0], rosterInstanceId, null);
+            interviewViewModel.AddPropagateScreen(screenId, outerScopePropagationVector??new decimal[0], rosterInstanceId, null);
 
             var newScreen = interviewViewModel.Screens[new InterviewItemId(screenId, new decimal[] { rosterInstanceId })] as QuestionnaireScreenViewModel;
             SubscribeScreen(interviewViewModel, newScreen);
