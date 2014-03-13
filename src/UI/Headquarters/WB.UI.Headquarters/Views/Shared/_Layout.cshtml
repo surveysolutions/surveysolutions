@@ -50,8 +50,10 @@
                         @MenuItem("Surveys", "Index", "Surveys")
                     }
                     
-                    @MenuItem("Users", "Index", "Users")
-                    
+                    @if (User.IsInRole(ApplicationRoles.Administrator))
+                    {
+                        @MenuItem("Users", "Index", "Users")
+                    }
                 </ul>
                 @using (Html.BeginForm("Signout", "Account", FormMethod.Post, new { @class = "navbar-form navbar-right" }))
                 {
@@ -70,5 +72,6 @@
 
     </div>
     @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap", "~/bundles/jqueryval")
+    @RenderSection("scripts", false)
 </body>
 </html>
