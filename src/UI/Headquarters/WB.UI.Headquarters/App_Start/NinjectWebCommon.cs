@@ -59,9 +59,9 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
                 new RavenWriteSideInfrastructureModule(ravenConnectionSettings),
                 new RavenReadSideInfrastructureModule(ravenConnectionSettings),
-                new CqrsModule(),
                 new AuthenticationModule(),
-                new HeadquartersBoundedContextModule());
+                new HeadquartersBoundedContextModule(),
+                new CqrsModule());
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();

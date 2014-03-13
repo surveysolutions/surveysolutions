@@ -45,9 +45,11 @@ namespace WB.UI.Headquarters
             this.Kernel.Bind<IEventBus>().ToConstant(bus);
             this.Kernel.Bind<IEventDispatcher>().ToConstant(bus);
 
-            foreach (var handler in this.Kernel.GetAll(typeof (IEventHandler)))
+            List<IEventHandler> eventHandlers = this.Kernel.GetAll<IEventHandler>().ToList();
+
+            foreach (var eventHandler in eventHandlers)
             {
-                bus.Register(handler as IEventHandler);
+                bus.Register(eventHandler);
             }
         }
 
