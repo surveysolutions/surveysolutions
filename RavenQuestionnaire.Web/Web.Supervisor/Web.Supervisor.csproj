@@ -368,7 +368,6 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\HQController.cs" />
-    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -381,7 +380,6 @@
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
-    <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -641,6 +639,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -779,7 +778,6 @@
     <Content Include="Views\Device\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
-    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\Interviewers.cshtml" />
     <Content Include="Views\Team\AddSupervisor.cshtml" />

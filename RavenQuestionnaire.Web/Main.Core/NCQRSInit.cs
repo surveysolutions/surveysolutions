@@ -71,56 +71,6 @@ namespace Main.Core
 #endif
         }
 
-        public static void EnsureReadLayerIsBuilt()
-        {
-            if (!IsReadLayerBuilt)
-            {
-                lock (lockObject)
-                {
-                    if (!IsReadLayerBuilt)
-                    {
-                        RebuildReadLayer();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// The rebuild read layer.
-        /// </summary>
-        /// <exception cref="Exception">
-        /// </exception>
-        public static void RebuildReadLayer()
-        {
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
-            logger.Info("Read layer rebuilding started.");
-
-            var eventBus = NcqrsEnvironment.Get<IEventBus>();
-            if (eventBus == null)
-            {
-                throw new Exception("IEventBus is not properly initialized.");
-            }
-
-            #warning hello to Vitaliy Balabanov: rebuild read layer by event sources
-            var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
-
-            if (eventStore == null)
-            {
-                throw new Exception("IStreamableEventStore is not correctly initialized.");
-            }
-
-            // store.CreateIndex();
-            // var myEvents = store.GetAllEvents();
-            IEnumerable<IPublishableEvent> events = eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent);
-            eventBus.Publish(events);
-
-            isReadLayerBuilt = true;
-
-            logger.Info("Read layer rebuilding finished.");
-        }
-
-
-
         #endregion
 
         #region Methods

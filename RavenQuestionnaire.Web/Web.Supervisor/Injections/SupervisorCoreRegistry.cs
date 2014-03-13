@@ -22,8 +22,6 @@ namespace Web.Supervisor.Injections
     using Ninject.Activation;
     using Questionnaire.Core.Web.Security;
     using WB.Core.SharedKernel.Utils.Compression;
-    
-    using Web.Supervisor.Filters;
 
     public class SupervisorCoreRegistry : CoreRegistry
     {
@@ -40,16 +38,12 @@ namespace Web.Supervisor.Injections
 
         protected override object GetReadSideRepositoryReader(IContext context)
         {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
+            return this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]));
         }
 
         protected override object GetReadSideRepositoryWriter(IContext context)
         {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
+            return this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]));
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
@@ -59,11 +53,6 @@ namespace Web.Supervisor.Injections
                 { typeof(IExceptionFilter), typeof(HandleUIExceptionAttribute) }
             };
 
-            if (!ShouldUsePersistentReadLayer())
-            {
-                supervisorSpecificTypes.Add(typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider));
-            }
-
             return base.GetTypesForRegistration().Concat(supervisorSpecificTypes);
         }
         protected override void RegisterEventHandlers()
@@ -71,10 +60,6 @@ namespace Web.Supervisor.Injections
             base.RegisterEventHandlers();
 
             BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler), (c) => this.Kernel);
-        }
-        private static bool ShouldUsePersistentReadLayer()
-        {
-            return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
         }
 
         public override void Load()

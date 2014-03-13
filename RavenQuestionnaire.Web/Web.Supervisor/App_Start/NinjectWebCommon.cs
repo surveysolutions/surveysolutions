@@ -19,7 +19,6 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
 using WB.Core.GenericSubdomains.Logging;
@@ -78,7 +77,6 @@ namespace Web.Supervisor.App_Start
         public static void Stop()
         {
             Bootstrapper.ShutDown();
-            SuccessMarker.Stop();
         }
 
         /// <summary>

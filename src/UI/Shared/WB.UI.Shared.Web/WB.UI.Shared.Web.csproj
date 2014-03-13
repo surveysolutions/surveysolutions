@@ -99,9 +99,7 @@
     <Compile Include="Exceptions\HttpStatusException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
-    <Compile Include="Filters\AbstractRequiresReadLayerFilterProvider.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
-    <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountPasswordInfo.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountRepository.cs" />
     <Compile Include="MembershipProvider\Accounts\IMembershipAccount.cs" />

@@ -223,7 +223,6 @@
     <Compile Include="Helpers\IGlobalInfoProvider.cs" />
     <Compile Include="Helpers\InputExtensions.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
-    <Compile Include="Helpers\SuccessMarker.cs" />
     <Compile Include="Helpers\ZipHelper.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />

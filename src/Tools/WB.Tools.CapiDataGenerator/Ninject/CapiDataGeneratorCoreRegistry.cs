@@ -27,21 +27,12 @@ namespace CapiDataGenerator
 
         protected override object GetReadSideRepositoryReader(IContext context)
         {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
+            return this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]));
         }
 
         protected override object GetReadSideRepositoryWriter(IContext context)
         {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
-        }
-
-        private static bool ShouldUsePersistentReadLayer()
-        {
-            return bool.Parse(ConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
+            return this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]));
         }
     }
 }
