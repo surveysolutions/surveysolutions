@@ -4,13 +4,13 @@ using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes
 {
     public class SupervisorReportsTeamMembersAndStatusesGroupByTeamMember : AbstractMultiMapIndexCreationTask<StatisticsLineGroupedByUserAndTemplate>
     {
         public SupervisorReportsTeamMembersAndStatusesGroupByTeamMember()
         {
-            AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
+            this.AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
                                                                    where doc.TeamLeadId != null
                                                                    select new StatisticsLineGroupedByUserAndTemplate
                                                                    {
@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                        TotalCount = doc.TotalCount
                                                                    });
 
-            AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
+            this.AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
                                                                    where doc.TeamLeadId != null
                                                                    select new StatisticsLineGroupedByUserAndTemplate
                                                                    {
@@ -65,7 +65,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                        TotalCount = doc.TotalCount
                                                                    });
 
-            Reduce = results => from result in results
+            this.Reduce = results => from result in results
                                 group result by new { result.ResponsibleId, result.QuestionnaireId, result.QuestionnaireVersion } into g
                                 where g.Sum(x => x.TotalCount) > 0
                                 select new StatisticsLineGroupedByUserAndTemplate
@@ -94,9 +94,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                     TotalCount = g.Sum(x => x.TotalCount),
 
                                 };
-            Index(x => x.TeamLeadId, FieldIndexing.Analyzed);
-            Index(x => x.QuestionnaireId, FieldIndexing.Analyzed);
-            Index(x => x.QuestionnaireVersion, FieldIndexing.Analyzed);
+            this.Index(x => x.TeamLeadId, FieldIndexing.Analyzed);
+            this.Index(x => x.QuestionnaireId, FieldIndexing.Analyzed);
+            this.Index(x => x.QuestionnaireVersion, FieldIndexing.Analyzed);
         }
 
     }

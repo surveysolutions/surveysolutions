@@ -7,13 +7,13 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 

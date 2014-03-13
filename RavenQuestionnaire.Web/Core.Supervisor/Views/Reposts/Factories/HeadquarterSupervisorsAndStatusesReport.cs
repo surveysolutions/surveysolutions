@@ -5,8 +5,8 @@ using Core.Supervisor.Views.Reposts.InputModels;
 using Core.Supervisor.Views.Reposts.Views;
 using Main.Core.Utility;
 using Main.Core.View;
+using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Reposts.Factories

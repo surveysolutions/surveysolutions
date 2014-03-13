@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Views.Survey
 {
