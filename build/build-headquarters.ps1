@@ -27,7 +27,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 try {
 	BuildHeadquarters `
-		-Solution 'src\Supervisor.sln' `
+		-Solution 'src\Headquarters.sln' `
 		-Project 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-VersionPrefix $VersionPrefix `
