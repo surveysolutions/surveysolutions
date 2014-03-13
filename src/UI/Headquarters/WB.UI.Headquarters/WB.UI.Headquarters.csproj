@@ -273,6 +273,7 @@
     <Content Include="Views\Surveys\StartNew.cshtml" />
     <Content Include="Views\Surveys\RegisterSupervisorAccount.cshtml" />
     <Content Include="Views\Surveys\Details.cshtml" />
+    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
