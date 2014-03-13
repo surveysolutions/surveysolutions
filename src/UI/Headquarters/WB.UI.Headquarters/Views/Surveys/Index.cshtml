@@ -1,24 +1,26 @@
 ﻿@model WB.Core.BoundedContexts.Headquarters.Views.Survey.SurveyLineView[]
 
 @{
-    ViewBag.Title = "Surveys";
+    ViewBag.Title = SurveyResources.SurveysIndexPageTitle;
 }
 
 
 <div>
     <h1>@ViewBag.Title</h1>
     <div class="row col-sm-12 bottom-buffer">
-        @Html.ActionLink("Start new survey", "StartNew", "Surveys", null, new { @class = "btn btn-default" })
+        @Html.ActionLink(SurveyResources.StartNewSurveyLink, "StartNew", "Surveys", null, new { @class = "btn btn-default" })
     </div>
     <div class="row col-sm-12">
         <table class="table table-striped">
             <tr>
-                <th>Name</th>
+                <th>@SurveyResources.SurveyListName</th>
+                <th>@CommonResources.Action</th>
             </tr>
             @foreach (var survey in Model)
             {
                 <tr>
                     <td>@survey.Name</td>
+                    <td>@Html.ActionLink(SurveyResources.RegisterSupervisorLinkText, "RegisterSupervisorAccount", "Surveys")</td>
                 </tr>
             }
         </table>
