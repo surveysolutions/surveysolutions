@@ -132,4 +132,7 @@
   <data name="SignIn" xml:space="preserve">
     <value>Sign in</value>
   </data>
+  <data name="IvalidUserNameOrPassword" xml:space="preserve">
+    <value>Invalid username or password.</value>
+  </data>
 </root>

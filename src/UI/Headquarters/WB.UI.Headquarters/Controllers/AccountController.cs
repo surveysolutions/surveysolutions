@@ -1,13 +1,10 @@
 ﻿using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Extensions;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -15,10 +12,13 @@ namespace WB.UI.Headquarters.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IAuthenticationManager authenticationManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(UserManager<ApplicationUser> userManager,
+            IAuthenticationManager authenticationManager)
         {
             this.userManager = userManager;
+            this.authenticationManager = authenticationManager;
         }
 
         public ActionResult Login()
@@ -41,10 +41,8 @@ namespace WB.UI.Headquarters.Controllers
                     await SignInAsync(user, model.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid username or password.");
-                }
+
+                ModelState.AddModelError("", LoginPageResources.IvalidUserNameOrPassword);
             }
 
             // If we got this far, something failed, redisplay form
@@ -55,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignOut()
         {
-            AuthenticationManager.SignOut();
+            authenticationManager.SignOut();
             return RedirectToAction("Login");
         }
 
@@ -63,28 +61,17 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(returnUrl);
+                return this.Redirect(returnUrl);
             }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
-        }
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+            return this.RedirectToAction("Index", "Home");
         }
-
 
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            authenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await this.userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+            authenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, identity);
         }
     }
 }
