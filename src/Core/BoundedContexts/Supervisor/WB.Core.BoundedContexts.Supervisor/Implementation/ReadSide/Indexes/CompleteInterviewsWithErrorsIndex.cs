@@ -4,7 +4,7 @@ using Raven.Client.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes
 {
     public class CompleteInterviewsWithErrorsIndex :
         AbstractIndexCreationTask<InterviewSummary, CompleteInterviewsWithErrorsIndex.CompleteInterviewsWithErrors>
