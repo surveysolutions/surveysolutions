@@ -3,7 +3,7 @@ using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
-    public static class ReadSideRepositoryWðriterExtensions
+    public static class ReadSideRepositoryWriterExtensions
     {
         public static T GetById<T>(this IReadSideRepositoryWriter<T> writer, Guid id) where T : class, IReadSideRepositoryEntity
         {
