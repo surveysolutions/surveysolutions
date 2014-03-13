@@ -57,7 +57,10 @@
                 </ul>
                 @using (Html.BeginForm("Signout", "Account", FormMethod.Post, new { @class = "navbar-form navbar-right" }))
                 {
-                    <button class="btn btn-primary" type="submit">Sign Out</button>
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-primary" type="submit">Sign Out</button>
+                    }
                     @Html.AntiForgeryToken()
                 }
             </div>
