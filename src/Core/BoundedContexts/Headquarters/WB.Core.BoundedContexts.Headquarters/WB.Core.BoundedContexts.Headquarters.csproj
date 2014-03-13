@@ -76,6 +76,7 @@
     <Compile Include="Authentication\CustomPasswordValidator.cs" />
     <Compile Include="Authentication\Models\ApplicationUser.cs" />
     <Compile Include="Commands\Survey\Base\SurveyCommand.cs" />
+    <Compile Include="Commands\Survey\RegisterSupervisorAccount.cs" />
     <Compile Include="Commands\Survey\StartNewSurvey.cs" />
     <Compile Include="Events\Survey\Base\SurveyEvent.cs" />
     <Compile Include="Events\Survey\NewSurveyStarted.cs" />
