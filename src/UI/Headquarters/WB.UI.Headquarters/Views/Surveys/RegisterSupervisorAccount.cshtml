@@ -9,7 +9,7 @@
 
     <div class="col-sm-6">
 
-        @using (Html.BeginForm("RegisterSupervisorAccount", "Surveys", FormMethod.Post, new { @class = "form-horizontal", role="form" }))
+        @using (Html.BeginForm("RegisterSupervisorAccount", "Surveys", new { id = ViewBag.SurveyId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))}
         {
             <div class="form-group">
                 @Html.LabelFor(x => x.Login, new { @class = "col-sm-4 control-label" })
