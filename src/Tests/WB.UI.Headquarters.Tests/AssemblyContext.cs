@@ -1,6 +1,6 @@
 ﻿using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
-using Moq;
+using NSubstitute;
 
 namespace WB.UI.Headquarters.Tests
 {
@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.Tests
     {
         public void OnAssemblyStart()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            ServiceLocator.SetLocatorProvider(() => Substitute.For<IServiceLocator>());
         }
 
         public void OnAssemblyComplete() {}

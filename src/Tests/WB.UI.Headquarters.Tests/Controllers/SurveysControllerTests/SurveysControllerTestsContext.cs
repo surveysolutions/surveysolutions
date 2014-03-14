@@ -1,6 +1,6 @@
 ﻿using Machine.Specifications;
-using Moq;
 using Ncqrs.Commanding.ServiceModel;
+using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.UI.Headquarters.Controllers;
 
@@ -13,8 +13,8 @@ namespace WB.UI.Headquarters.Tests.Controllers.SurveysControllerTests
             ISurveyViewFactory surveyViewFactory = null, ICommandService commandService = null)
         {
             return new SurveysController(
-                surveyViewFactory ?? Mock.Of<ISurveyViewFactory>(),
-                commandService ?? Mock.Of<ICommandService>());
+                surveyViewFactory ?? Substitute.For<ISurveyViewFactory>(),
+                commandService ?? Substitute.For<ICommandService>());
         }
     }
 }
