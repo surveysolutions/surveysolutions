@@ -109,6 +109,8 @@
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
+    <Compile Include="EventHandlers\StatisticsDenormalizerTests\StatisticsDenormalizerTestContext.cs" />
+    <Compile Include="EventHandlers\StatisticsDenormalizerTests\when_handling_interview_status_change_event.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireCacheInitializerTests\when_initialize_caches_for_questionnaire_with_question_which_has_enablement_condition.cs" />
