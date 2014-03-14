@@ -78,6 +78,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="StringExtenstion.cs" />
+    <Compile Include="SurveyDetailsViewDenormalizerTests\SurveyDetailsViewDenormalizerTestsContext.cs" />
+    <Compile Include="SurveyDetailsViewDenormalizerTests\when_applying_NewSurveyStarted_event.cs" />
+    <Compile Include="SurveyLineViewDenormalizerTests\SurveyLineViewDenormalizerTestsContext.cs" />
+    <Compile Include="SurveyLineViewDenormalizerTests\when_applying_NewSurveyStarted_event.cs" />
     <Compile Include="SurveyTests\SurveyTestsContext.cs" />
     <Compile Include="SurveyTests\when_creating_new_survey.cs" />
     <Compile Include="SurveyTests\when_creating_new_survey_and_survey_name_contains_only_whitespaces.cs" />
@@ -98,6 +102,14 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017EC6D-AE4A-4C19-A653-352999592A7E}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
