@@ -22,8 +22,8 @@
 }
 
 @section output{
+    <p data-bind="text: ImportFailMessage" class="importError"></p>
     <div class="verificatonErrors" data-bind="visible: VerificationErrors().length > 0">
-        <p data-bind="text: ImportFailMessage"></p>
         <ul data-bind="foreach: VerificationErrors" class="error-list">
             <li class="error">
                 <b class="error-code" data-bind="text: code"></b><span data-bind="    html: message"></span>

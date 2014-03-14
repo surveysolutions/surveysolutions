@@ -175,8 +175,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -367,7 +368,6 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\HQController.cs" />
-    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -380,7 +380,6 @@
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
-    <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -549,13 +548,13 @@
     <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />
     <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <Content Include="Scripts\viewmodels\listview.js" />
-    <Content Include="Service References\DesignerPublicService\PublicService.disco" />
-    <Content Include="Service References\DesignerPublicService\configuration91.svcinfo" />
-    <Content Include="Service References\DesignerPublicService\configuration.svcinfo" />
-    <Content Include="Service References\DesignerPublicService\Reference.svcmap">
+    <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+    <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
+    <None Include="Service References\DesignerPublicService\PublicService1.disco" />
+    <None Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -631,9 +630,16 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <None Include="Service References\DesignerPublicService\PublicService43.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService44.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -693,6 +699,10 @@
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\UI\Designer\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
+      <Project>{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1}</Project>
+      <Name>WB.UI.Designer.WebServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
@@ -749,10 +759,6 @@
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\Dev.Supervisor.Web.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Configuration\Amazon.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -772,7 +778,6 @@
     <Content Include="Views\Device\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
-    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\Interviewers.cshtml" />
     <Content Include="Views\Team\AddSupervisor.cshtml" />
@@ -796,6 +801,7 @@
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -34,6 +34,9 @@ namespace Web.Supervisor.Code.CommandDeserialization
                         // statuses
                         { "ApproveInterviewCommand", typeof (ApproveInterviewCommand ) },
                         { "RejectInterviewCommand", typeof ( RejectInterviewCommand) },
+
+                        { "HqApproveInterviewCommand", typeof (HqApproveInterviewCommand ) },
+                        { "HqRejectInterviewCommand", typeof ( HqRejectInterviewCommand) },
                     };
             }
         }

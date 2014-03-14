@@ -4562,7 +4562,7 @@ a.pseudo-link:hover {
      background: red;
      z-index: 109999;
  }
- #output .verificatonErrors p {
+ #output p.importError {
      line-height: 20px;
     padding: 6px 4px;
     margin: 0;

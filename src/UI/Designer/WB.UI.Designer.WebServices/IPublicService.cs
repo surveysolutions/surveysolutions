@@ -1,4 +1,7 @@
-﻿namespace WB.UI.Designer.WebServices
+﻿using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+
+namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.ServiceModel;

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Core.Supervisor.Views.Reposts.Views;
 using Main.Core.View;
+using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 

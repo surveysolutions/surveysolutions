@@ -77,20 +77,10 @@ namespace Main.Core
             // currently in-memory repo accessor also contains repository itself as internal dictionary, so we need to create him as singletone
             this.Kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
-            this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
-            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
-            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
-            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
-        }
-
-        protected virtual object GetReadSideRepositoryReader(IContext context)
-        {
-            return this.GetInMemoryReadSideRepositoryAccessor(context);
-        }
-
-        protected virtual object GetReadSideRepositoryWriter(IContext context)
-        {
-            return this.GetInMemoryReadSideRepositoryAccessor(context);
+            this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
         }
 
         protected object GetInMemoryReadSideRepositoryAccessor(IContext context)

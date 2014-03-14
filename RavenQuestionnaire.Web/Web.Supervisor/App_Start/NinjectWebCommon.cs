@@ -19,8 +19,8 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor;
+using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
@@ -29,7 +29,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
@@ -78,7 +77,6 @@ namespace Web.Supervisor.App_Start
         public static void Stop()
         {
             Bootstrapper.ShutDown();
-            SuccessMarker.Stop();
         }
 
         /// <summary>
@@ -105,15 +103,15 @@ namespace Web.Supervisor.App_Start
             {
                 isApprovedSended = false;
             }
-            string username = WebConfigurationManager.AppSettings["Raven.Username"];
-            string password = WebConfigurationManager.AppSettings["Raven.Password"];
-
-            string defaultDatabase = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
 
             int? pageSize = GetEventStorePageSize();
 
-            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username,
-                                                            password: password, defaultDatabase: defaultDatabase);
+            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded,
+                username: WebConfigurationManager.AppSettings["Raven.Username"],
+                password: WebConfigurationManager.AppSettings["Raven.Password"],
+                eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
+                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
+                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Http;
 using Core.Supervisor.Views.Template;
@@ -7,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -15,36 +17,49 @@ using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Extensions;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
+using IPublicService = Web.Supervisor.DesignerPublicService.IPublicService;
+using QuestionnaireVersion = Web.Supervisor.DesignerPublicService.QuestionnaireVersion;
+using RemoteFileInfo = Web.Supervisor.DesignerPublicService.RemoteFileInfo;
 
 namespace Web.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
-        private IPublicService DesignerService
+        internal IPublicService DesignerService
         {
             get { return getDesignerService(this.GlobalInfo); }
+            set { SetDesignerService(this.GlobalInfo, value); }
         }
 
         private readonly IStringCompressor zipUtils;
+        private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly Func<IGlobalInfoProvider, IPublicService> getDesignerService;
 
         public DesignerQuestionnairesApiController(
+            ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
-            : this(commandService, globalInfo, zipUtils, logger, GetDesignerService) { }
+            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerService) { }
 
         internal DesignerQuestionnairesApiController(
+            ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
             Func<IGlobalInfoProvider, IPublicService> getDesignerService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
             this.getDesignerService = getDesignerService;
+            this.supportedVersionProvider = supportedVersionProvider;
         }
 
         private static IPublicService GetDesignerService(IGlobalInfoProvider globalInfoProvider)
         {
-            return (PublicServiceClient) HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
+            return (IPublicService)HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
+        }
+
+        private static void SetDesignerService(IGlobalInfoProvider globalInfoProvider, IPublicService publicService)
+        {
+            HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = publicService;
         }
 
         public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
@@ -59,7 +74,7 @@ namespace Web.Supervisor.Controllers
 
             return new DesignerQuestionnairesView()
                 {
-                    Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() {Id = x.Id, Title = x.Title}),
+                    Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() { Id = x.Id, Title = x.Title }),
                     TotalCount = list.TotalCount,
                     ItemsSummary = null
                 };
@@ -71,8 +86,26 @@ namespace Web.Supervisor.Controllers
             QuestionnaireDocument document = null;
             try
             {
-                RemoteFileInfo docSource =
-                    this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId));
+                var supportedVerstion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
+                RemoteFileInfo docSource;
+                try
+                {
+                    docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
+                            new QuestionnaireVersion
+                            {
+                                Major = supportedVerstion.Major,
+                                Minor = supportedVerstion.Minor,
+                                Patch = supportedVerstion.Patch
+                            }));
+                }
+                catch (FaultException ex)
+                {
+                    this.Logger.Error(string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                    return new QuestionnaireVerificationResponse(true)
+                    {
+                        ImportError = ex.Reason.ToString()
+                    };
+                }
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 

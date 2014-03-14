@@ -22,6 +22,12 @@
 <script type="text/html" id="RejectedBySupervisorCountTemplate">
     <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RejectedBySupervisorCount(), Status : '@InterviewStatus.RejectedBySupervisor' }}"></span>
 </script>
+<script type="text/html" id="ApprovedByHeadquartersCountTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : ApprovedByHeadquartersCount(), Status : '@InterviewStatus.ApprovedByHeadquarters' }}"></span>
+</script>
+<script type="text/html" id="RejectedByHeadquartersCountTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RejectedByHeadquartersCount(), Status : '@InterviewStatus.RejectedByHeadquarters' }}"></span>
+</script>
 <script type="text/html" id="RestoredCountTemplate">
     <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RestoredCount(), Status : '@InterviewStatus.Restored' }}"></span>
 </script>

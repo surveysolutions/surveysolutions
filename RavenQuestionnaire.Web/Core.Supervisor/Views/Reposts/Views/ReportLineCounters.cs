@@ -10,6 +10,10 @@ namespace Core.Supervisor.Views.Reposts.Views
         public int CompletedCount { get; set; }
         public int ApprovedBySupervisorCount { get; set; }
         public int RejectedBySupervisorCount { get; set; }
+
+        public int ApprovedByHeadquartersCount { get; set; }
+        public int RejectedByHeadquartersCount { get; set; }
+
         public int RestoredCount { get; set; }
         public int TotalCount { get; set; }
 

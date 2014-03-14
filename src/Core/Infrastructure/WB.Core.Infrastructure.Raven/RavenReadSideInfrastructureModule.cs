@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Ninject;
+using Ninject.Activation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
@@ -34,6 +35,21 @@ namespace WB.Core.Infrastructure.Raven
 
             // each repository writer should exist in one instance because it might use caching
             this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
+
+            this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
+        }
+
+        protected object GetReadSideRepositoryWriter(IContext context)
+        {
+            return this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]));
+        }
+
+        protected object GetReadSideRepositoryReader(IContext context)
+        {
+            return this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]));
         }
     }
 }

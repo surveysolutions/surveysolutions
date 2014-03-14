@@ -24,24 +24,5 @@ namespace CapiDataGenerator
                 typeof(UserListViewFactory).Assembly
             });
         }
-
-        protected override object GetReadSideRepositoryReader(IContext context)
-        {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
-        }
-
-        protected override object GetReadSideRepositoryWriter(IContext context)
-        {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
-        }
-
-        private static bool ShouldUsePersistentReadLayer()
-        {
-            return bool.Parse(ConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
-        }
     }
 }

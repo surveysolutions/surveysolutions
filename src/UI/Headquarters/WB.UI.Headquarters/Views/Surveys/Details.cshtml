@@ -1,0 +1,23 @@
+﻿@model WB.Core.BoundedContexts.Headquarters.Views.Survey.SurveyDetailsView
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div>
+    <h1>@ViewBag.Title</h1>
+    <div class="row col-sm-12">
+        <table class="table table-striped">
+            <tr>
+                <th>@SurveyResources.SupervisorLogin</th>
+            </tr>
+            @foreach (var survey in Model.Supervisors)
+            {
+                <tr>
+                    <td>@survey.Login</td>
+                </tr>
+            }
+        </table>
+    </div>
+    @Html.ActionLink(SurveyResources.RegisterSupervisorLinkText, "RegisterSupervisor", "Surveys", new {id = Model.SurveyId}, new {@class = "btn btn-default"})
+</div>
