@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Events.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
             return new SurveyDetailsView
             {
                 SurveyId = @event.EventSourceId.FormatGuid(),
-                Name = @event.Payload.Name,
+                Name = @event.Payload.Name
             };
         }
 

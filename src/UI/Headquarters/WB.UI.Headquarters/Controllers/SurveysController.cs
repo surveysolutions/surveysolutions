@@ -55,22 +55,31 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(survey);
         }
 
-        public ActionResult RegisterSupervisorAccount(Guid id)
+        public ActionResult RegisterSupervisorAccount(string id)
         {
-            ViewBag.SurveyId = id;
-            return this.View(new SupervisorAccountModel());
+            SurveyDetailsView survey = this.surveyViewFactory.GetDetailsView(id);
+
+            return this.View(new SupervisorAccountModel()
+            {
+                SurveyId = id,
+                SurveyTitle = survey.Name
+            });
         }
 
         [HttpPost]
-        public ActionResult RegisterSupervisorAccount(Guid id, SupervisorAccountModel model)
+        public ActionResult RegisterSupervisorAccount(string id, SupervisorAccountModel model)
         {
             if (ModelState.IsValid)
             {
-                this.commandService.Execute(new RegisterSupervisorAccount(id, model.Login, model.Password));
+                this.commandService.Execute(new RegisterSupervisorAccount(Guid.Parse(id), model.Login, model.Password));
 
-                return RedirectToAction("Index"); // todo ank: change when details action available.
+                return RedirectToAction("Details", new { id});
             }
 
+            SurveyDetailsView survey = this.surveyViewFactory.GetDetailsView(id);
+
+            model.SurveyId = id;
+            model.SurveyTitle = survey.Name;
             return View(model);
         }
 

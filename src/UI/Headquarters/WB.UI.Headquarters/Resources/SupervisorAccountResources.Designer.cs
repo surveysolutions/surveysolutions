@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SupervisorAccountResources {
+    public class SupervisorAccountResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.SupervisorAccountResources", typeof(SupervisorAccountResources).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,18 +61,45 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Supervisor.
+        /// </summary>
+        public static string AddSupervisor {
+            get {
+                return ResourceManager.GetString("AddSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Password.
+        /// </summary>
+        public static string ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please provide a valid URL.
         /// </summary>
-        internal static string InvalidUrlValidationMessage {
+        public static string InvalidUrlValidationMessage {
             get {
                 return ResourceManager.GetString("InvalidUrlValidationMessage", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User name.
         /// </summary>
-        internal static string UserName {
+        public static string UserName {
             get {
                 return ResourceManager.GetString("UserName", resourceCulture);
             }
@@ -81,7 +108,7 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please provide user name.
         /// </summary>
-        internal static string UserNameRequiredValidationMessage {
+        public static string UserNameRequiredValidationMessage {
             get {
                 return ResourceManager.GetString("UserNameRequiredValidationMessage", resourceCulture);
             }
@@ -90,9 +117,18 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Login cannot have more that {0} symbols.
         /// </summary>
-        internal static string UserNameTooLongValidationMessage {
+        public static string UserNameTooLongValidationMessage {
             get {
                 return ResourceManager.GetString("UserNameTooLongValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password and confirmation password do not match..
+        /// </summary>
+        public static string UserPasswordsShouldMatchValidationMessage {
+            get {
+                return ResourceManager.GetString("UserPasswordsShouldMatchValidationMessage", resourceCulture);
             }
         }
     }
