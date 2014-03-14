@@ -399,7 +399,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(questions);
 
-            screen.PropertyChanged += screen_PropertyChanged;
+            screen.PropertyChanged += this.rosterScreen_PropertyChanged;
             this.Screens.Add(screen.ScreenId, screen);
             this.UpdateGrid(new InterviewItemId(screenId, outerScopePropagationVector));
         }
@@ -616,14 +616,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        private void screen_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void rosterScreen_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var propagatedScreen = sender as QuestionnaireScreenViewModel;
+            var propagatedScreen = sender as QuestionnairePropagatedScreenViewModel;
             if (propagatedScreen == null)
                 return;
-            if (propagatedScreen.ScreenId.IsTopLevel())
-                return;
-            this.UpdateGrid(propagatedScreen.ScreenId);
+
+            this.UpdateGrid(new InterviewItemId(propagatedScreen.ScreenId.Id,
+                propagatedScreen.ScreenId.InterviewItemPropagationVector.Take(
+                    propagatedScreen.ScreenId.InterviewItemPropagationVector.Length - 1).ToArray()));
         }
 
         protected void AddScreen(List<IGroup> rout,
