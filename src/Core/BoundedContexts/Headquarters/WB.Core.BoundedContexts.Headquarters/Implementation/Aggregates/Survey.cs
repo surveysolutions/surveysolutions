@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
         private void Apply(NewSurveyStarted @event) { }
 
-        private void Apply(SupervisorAccountRegistered @event) { }
+        private void Apply(SupervisorRegistered @event) { }
 
         #endregion
 
@@ -37,13 +37,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.ApplyEvent(new NewSurveyStarted(name));
         }
 
-        public void RegisterSupervisorAccount(string login, string password)
+        public void RegisterSupervisor(string login, string password)
         {
             this.ThrowIfSupervisorsLoginIsNotUnique(login);
 
             var passwordHash = PasswordHasher.Hash(password);
 
-            this.ApplyEvent(new SupervisorAccountRegistered(login, passwordHash));
+            this.ApplyEvent(new SupervisorRegistered(login, passwordHash));
         }
 
         #region Invariants

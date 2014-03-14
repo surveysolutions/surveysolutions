@@ -4,7 +4,7 @@ using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Models
 {
-    public class SupervisorAccountModel
+    public class SupervisorModel
     {
         public string SurveyTitle { get; set; }
 

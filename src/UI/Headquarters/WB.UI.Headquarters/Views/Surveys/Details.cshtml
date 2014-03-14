@@ -11,7 +11,7 @@
             <tr>
                 <th>@SurveyResources.SupervisorLogin</th>
             </tr>
-            @foreach (var survey in Model.SupervisorAccounts)
+            @foreach (var survey in Model.Supervisors)
             {
                 <tr>
                     <td>@survey.Login</td>
@@ -19,5 +19,5 @@
             }
         </table>
     </div>
-    @Html.ActionLink(SurveyResources.RegisterSupervisorLinkText, "RegisterSupervisorAccount", "Surveys", new {id = Model.SurveyId}, new {@class = "btn btn-default"})
+    @Html.ActionLink(SurveyResources.RegisterSupervisorLinkText, "RegisterSupervisor", "Surveys", new {id = Model.SurveyId}, new {@class = "btn btn-default"})
 </div>
