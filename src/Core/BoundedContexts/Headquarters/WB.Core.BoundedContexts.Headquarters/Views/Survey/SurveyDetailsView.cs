@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.ReadSide;
+﻿using System.Collections.Generic;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Survey
 {
@@ -6,5 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Survey
     {
         public string SurveyId { get; set; }
         public string Name { get; set; }
+
+        public List<SupervisorAccountView> SupervisorAccounts { get; set; }
     }
 }

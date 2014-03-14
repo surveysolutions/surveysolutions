@@ -55,8 +55,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(survey);
         }
 
-        public ActionResult RegisterSupervisorAccount(Guid? id)
+        public ActionResult RegisterSupervisorAccount(Guid id)
         {
+            ViewBag.SurveyId = id;
             return this.View(new SupervisorAccountModel());
         }
 
@@ -65,10 +66,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.commandService.Execute(new RegisterSupervisorAccount(id) {
-                   Login = model.Login,
-                   Password = model.Password
-                });
+                this.commandService.Execute(new RegisterSupervisorAccount(id, model.Login, model.Password));
 
                 return RedirectToAction("Index"); // todo ank: change when details action available.
             }
