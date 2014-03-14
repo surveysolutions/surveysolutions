@@ -160,6 +160,7 @@
     <Compile Include="Controllers\AccountControllerSpecs\when_user_logges_in_with_valid_credentials.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\when_user_signs_out.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\when_user_tries_to_login_with_invalid_credentials.cs" />
+    <Compile Include="Controllers\MvcExtensions.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_edit_user_action_invoked.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_index_action_invoked.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_RegisterAccount_method_invoked.cs" />
