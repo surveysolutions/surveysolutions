@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Machine.Specifications;
 using Machine.Specifications.Annotations;
 using WB.UI.Headquarters.Models;
 
@@ -14,6 +15,13 @@ namespace WB.UI.Headquarters.Tests.Controllers
             var viewResult = actionResult as ViewResult;
             var model = viewResult.Model as T;
             return model;
+        }
+
+        public static void ShouldBeRedirectToAction(this ActionResult actionResult, string action)
+        {
+            actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
+            var redirectToRouteResult = (RedirectToRouteResult) actionResult;
+            redirectToRouteResult.RouteValues["action"].ShouldEqual(action);
         }
     }
 }
