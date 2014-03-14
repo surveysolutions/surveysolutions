@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor login.
+        /// </summary>
+        public static string SupervisorLogin {
+            get {
+                return ResourceManager.GetString("SupervisorLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string SurveyListName {

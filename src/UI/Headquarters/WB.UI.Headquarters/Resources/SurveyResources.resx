@@ -126,6 +126,9 @@
   <data name="StartNewSurveyLink" xml:space="preserve">
     <value>Start new survey</value>
   </data>
+  <data name="SupervisorLogin" xml:space="preserve">
+    <value>Supervisor login</value>
+  </data>
   <data name="SurveyListName" xml:space="preserve">
     <value>Name</value>
   </data>
