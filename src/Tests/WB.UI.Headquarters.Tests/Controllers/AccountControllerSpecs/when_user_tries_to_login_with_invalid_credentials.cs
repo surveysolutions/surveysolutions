@@ -1,14 +1,12 @@
-﻿using System.Security.Principal;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Machine.Specifications;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
-using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.Controllers.AccountControllerSpecs
 {
@@ -27,12 +25,12 @@ namespace WB.UI.Headquarters.Tests.Controllers.AccountControllerSpecs
                 Password = "password"
             };
 
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-            var userManager = new Mock<UserManager<ApplicationUser>>(userStore.Object);
+            var userStore = Substitute.For<IUserStore<ApplicationUser>>();
+            var userManager = Substitute.For<UserManager<ApplicationUser>>(userStore);
 
-            controller = new AccountController(userManager.Object, Mock.Of<IAuthenticationManager>())
+            controller = new AccountController(userManager, Substitute.For<IAuthenticationManager>())
             {
-                Url = Mock.Of<UrlHelper>()
+                Url = Substitute.For<UrlHelper>()
             };
         };
 

@@ -1,12 +1,12 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Microsoft.AspNet.Identity;
-using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models;
-using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
 {
@@ -15,11 +15,11 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
     {
         Establish context = () =>
         {
-            var userManager = new Mock<UserManager<ApplicationUser>>(Mock.Of<IUserStore<ApplicationUser>>());
-            userManager.Setup(x => x.CreateAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>()))
-                       .ReturnsAsync(IdentityResult.Failed("error"));
+            var userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
+            userManager.CreateAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>())
+                       .Returns(Task.FromResult(IdentityResult.Failed("error")));
 
-            controller = Create.UsersController(userManager.Object);
+            controller = Create.UsersController(userManager);
             model = new AccountModel();
         };
 

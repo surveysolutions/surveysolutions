@@ -1,13 +1,10 @@
 ﻿using System.Linq;
-using System.Security.Principal;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
+using NSubstitute;
 using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.Models;
-using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.Controllers.AccountControllerSpecs
 {
@@ -25,9 +22,9 @@ namespace WB.UI.Headquarters.Tests.Controllers.AccountControllerSpecs
             redirectToRouteResult.RouteValues["action"].ShouldEqual("Index");
         };
 
-        It should_sign_in_provided_identity = () => authenticationManager.Verify(x => x.SignIn(Moq.It.IsAny<AuthenticationProperties>(), testIdentity));
+        It should_sign_in_provided_identity = () => authenticationManager.Received().SignIn(Arg.Any<AuthenticationProperties>(), testIdentity);
 
-        It should_sign_out_any_other_identity = () => authenticationManager.Verify(x => 
-            x.SignOut(Moq.It.Is<string[]>(param => param.Contains(DefaultAuthenticationTypes.ExternalCookie))));
+        It should_sign_out_any_other_identity = () => authenticationManager.Received()
+            .SignOut(Arg.Is<string[]>(param => param.Contains(DefaultAuthenticationTypes.ExternalCookie)));
     }
 }
