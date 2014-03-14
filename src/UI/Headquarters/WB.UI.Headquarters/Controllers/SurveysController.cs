@@ -55,11 +55,11 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(survey);
         }
 
-        public ActionResult RegisterSupervisorAccount(string id)
+        public ActionResult RegisterSupervisor(string id)
         {
             SurveyDetailsView survey = this.surveyViewFactory.GetDetailsView(id);
 
-            return this.View(new SupervisorAccountModel()
+            return this.View(new SupervisorModel()
             {
                 SurveyId = id,
                 SurveyTitle = survey.Name
@@ -67,11 +67,11 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterSupervisorAccount(string id, SupervisorAccountModel model)
+        public ActionResult RegisterSupervisor(string id, SupervisorModel model)
         {
             if (ModelState.IsValid)
             {
-                this.commandService.Execute(new RegisterSupervisorAccount(Guid.Parse(id), model.Login, model.Password));
+                this.commandService.Execute(new RegisterSupervisor(Guid.Parse(id), model.Login, model.Password));
 
                 return RedirectToAction("Details", new { id});
             }

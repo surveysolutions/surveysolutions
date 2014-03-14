@@ -2,9 +2,9 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Events.Survey
 {
-    public class SupervisorAccountRegistered : SurveyEvent
+    public class SupervisorRegistered : SurveyEvent
     {
-        public SupervisorAccountRegistered(string login, string password)
+        public SupervisorRegistered(string login, string password)
         {
             this.Login = login;
             this.Password = password;
