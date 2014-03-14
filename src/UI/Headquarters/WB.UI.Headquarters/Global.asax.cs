@@ -9,6 +9,11 @@ namespace WB.UI.Headquarters
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        static MvcApplication()
+        {
+            NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+        }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -16,16 +21,15 @@ namespace WB.UI.Headquarters
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
             
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            SetupNConfig();
         }
 
-        private static void SetupNConfig()
+        /// <summary>
+        /// Used to trigger execution of static constructor
+        /// </summary>
+        public static void Initialize()
         {
-            NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
         }
     }
 }

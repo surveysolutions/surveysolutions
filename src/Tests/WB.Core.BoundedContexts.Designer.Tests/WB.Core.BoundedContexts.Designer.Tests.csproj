@@ -42,16 +42,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications.Should">
-      <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications.Should, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.2.1312.1622, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1402.2112, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -85,6 +86,8 @@
     <Compile Include="AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventContextExtenstions.cs" />
+    <Compile Include="JsonExportServiceTests\JsonExportServiceTestContext.cs" />
+    <Compile Include="JsonExportServiceTests\when_getting_template_info.cs" />
     <Compile Include="MembershipProviderTests\when_updating_user_with_email_that_used_by_another_user_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\when_creating_user_and_account_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\MembershipProviderTestsContext.cs" />
@@ -323,6 +326,10 @@
     <Compile Include="QuestionnaireTests\when_updating_question_under_roster_and_setting_it_prefilled.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
     <Compile Include="QuestionnaireTests\when_updating_text_list_question_and_max_answer_count_is_specified.cs" />
+    <Compile Include="QuestionnaireVersionerTests\QuestionnaireVersionerTestContext.cs" />
+    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_without_specific_elements.cs" />
+    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_nested_rosters.cs" />
+    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_qr_questions.cs" />
     <Compile Include="RoleProviderTests\when_adding_roles_to_users_with_non_Guid_userId.cs" />
     <Compile Include="RoleProviderTests\RoleProviderTestsContext.cs" />
     <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
@@ -367,6 +374,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400CDE74-7407-4388-8D57-BF429E7C508D}</Project>

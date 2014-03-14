@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Ncqrs.Eventing;
@@ -45,7 +46,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         }
 
         public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
-        IReadSideRepositoryCleanerRegistry cleanerRegistry)
+            IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
@@ -257,7 +258,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 this.ravenStore
                     .DatabaseCommands
-                    .ForDatabase("Views")
                     .DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery
                     {
                         Query = query
@@ -267,7 +267,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 int resultViewCount = this.ravenStore
                                           .DatabaseCommands
-                                          .ForDatabase("Views").Query("Raven/DocumentsByEntityName", new IndexQuery
+                                          .Query("Raven/DocumentsByEntityName", new IndexQuery
                                           {
                                               Query = query
                                           }, new string[0]).Results.Count;
@@ -286,18 +286,13 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             this.ravenStore
                 .DatabaseCommands
-                .EnsureDatabaseExists("Views");
-
-            this.ravenStore
-                .DatabaseCommands
-                .ForDatabase("Views")
                 .PutIndex(
                     "AllViews",
                     new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
                     overwrite: true);
 
             int initialViewCount;
-            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
+            using (IDocumentSession session = this.ravenStore.OpenSession())
             {
                 // this will also materialize index if it is out of date or was just created
                 initialViewCount = session
@@ -312,13 +307,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             this.ravenStore
                 .DatabaseCommands
-                .ForDatabase("Views")
                 .DeleteByIndex("AllViews", new IndexQuery());
+
+            UpdateStatusMessage("Waiting 3 seconds while views are being deleted.");
+
+            Thread.Sleep(3000);
 
             UpdateStatusMessage("Checking remaining views count.");
 
             int resultViewCount;
-            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
+            using (IDocumentSession session = this.ravenStore.OpenSession())
             {
                 resultViewCount = session
                     .Query<object>("AllViews")

@@ -186,6 +186,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             summary.CompletedCount += status == InterviewStatus.Completed ? incCount : 0;
             summary.ApprovedBySupervisorCount += status == InterviewStatus.ApprovedBySupervisor ? incCount : 0;
             summary.RejectedBySupervisorCount += status == InterviewStatus.RejectedBySupervisor ? incCount : 0;
+
+            summary.ApprovedByHeadquartersCount += status == InterviewStatus.ApprovedByHeadquarters ? incCount : 0;
+            summary.RejectedByHeadquartersCount += status == InterviewStatus.RejectedByHeadquarters ? incCount : 0;
+
             summary.RestoredCount += status == InterviewStatus.Restored ? incCount : 0;
 
             if (status != InterviewStatus.Deleted)

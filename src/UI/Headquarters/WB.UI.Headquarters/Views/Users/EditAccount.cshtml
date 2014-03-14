@@ -1,0 +1,9 @@
+﻿@model WB.UI.Headquarters.Models.AccountModel
+
+<div class="col-sm-6">
+    <h2>Edit @Model.UserName account</h2>
+    @using (Html.BeginForm("EditAccount", "Users", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.Partial("AccountForm", Model)
+    }
+</div>

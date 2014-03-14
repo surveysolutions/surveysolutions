@@ -117,7 +117,23 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             if (this.Enabled == enabled)
                 return;
+
             this.Enabled = enabled;
+
+            foreach (var child in this.Items)
+            {
+                var question = child as QuestionViewModel;
+                if (question != null)
+                {
+                    question.SetParentEnabled(enabled);
+                }
+                var group = child as QuestionnaireNavigationPanelItem;
+                if (group != null)
+                {
+                    group.Enabled = enabled;
+                }
+            }
+
             this.RaisePropertyChanged("Enabled");
         }
 

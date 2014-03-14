@@ -110,10 +110,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             return interviewData;
         }
 
-        protected static IPublishedEvent<InterviewApproved> CreatePublishableEvent()
+        protected static IPublishedEvent<InterviewApprovedByHQ> CreatePublishableEvent()
         {
-            var publishableEventMock = new Mock<IPublishedEvent<InterviewApproved>>();
-            publishableEventMock.Setup(x => x.Payload).Returns(new InterviewApproved(Guid.NewGuid(),""));
+            var publishableEventMock = new Mock<IPublishedEvent<InterviewApprovedByHQ>>();
+            publishableEventMock.Setup(x => x.Payload).Returns(new InterviewApprovedByHQ(Guid.NewGuid(),""));
             return publishableEventMock.Object;
         }
     }
