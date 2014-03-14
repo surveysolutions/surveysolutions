@@ -84,11 +84,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\WindowsAzure.Storage.2.0.6.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -156,8 +156,10 @@
     <Compile Include="Controllers\AccountControllerSpecs\when_user_logges_in_with_valid_credentials.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\when_user_signs_out.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\when_user_tries_to_login_with_invalid_credentials.cs" />
+    <Compile Include="Controllers\UsersControllerSpecs\when_edit_user_action_invoked.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_index_action_invoked.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_RegisterAccount_method_invoked.cs" />
+    <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_invalid_credentials.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_valid_info.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

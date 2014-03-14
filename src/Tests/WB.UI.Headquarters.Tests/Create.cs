@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Moq;
+using NSubstitute;
 using Raven.Client.Document;
-using Raven.Client.Embedded;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 using WB.Core.Infrastructure.Raven.Implementation.PlainStorage;
-using WB.Core.Infrastructure.Raven.PlainStorage;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.UI.Headquarters.Tests
@@ -17,12 +15,12 @@ namespace WB.UI.Headquarters.Tests
         {
             if (userManager == null)
             {
-                userManager = new Mock<UserManager<ApplicationUser>>(Mock.Of<IUserStore<ApplicationUser>>()).Object;
+                userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
             }
 
             if (authenticationManager == null)
             {
-                authenticationManager = Mock.Of<IAuthenticationManager>();
+                authenticationManager = Substitute.For<IAuthenticationManager>();
             }
 
             return new AccountController(userManager, authenticationManager);
@@ -33,7 +31,7 @@ namespace WB.UI.Headquarters.Tests
         {
             if (userManager == null)
             {
-                userManager = new Mock<UserManager<ApplicationUser>>(Mock.Of<IUserStore<ApplicationUser>>()).Object;
+                userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
             }
 
             RavenPlainStorageProvider store = storageProvider == null ? 

@@ -1,11 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using Machine.Specifications;
 using Microsoft.AspNet.Identity;
-using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models;
-using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
 {
@@ -14,10 +14,10 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
     {
         Establish context = () =>
         {
-            userManager = new Mock<UserManager<ApplicationUser>>(Mock.Of<IUserStore<ApplicationUser>>());
-            userManager.Setup(x => x.CreateAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>()))
-                       .ReturnsAsync(IdentityResult.Success);
-            controller = Create.UsersController(userManager.Object);
+            userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
+            userManager.CreateAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>())
+                       .Returns(Task.FromResult(IdentityResult.Success));
+            controller = Create.UsersController(userManager);
 
             accountModel = new AccountModel
             {
@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
 
         Because of = async () => actionResult = await controller.RegisterAccount(accountModel);
 
-        It should_create_user_identity = () => userManager.Verify(x => x.CreateAsync(Moq.It.IsAny<ApplicationUser>(), accountModel.Password));
+        It should_create_user_identity = () => userManager.Received().CreateAsync(Arg.Any<ApplicationUser>(), accountModel.Password);
 
         It should_redirect_to_index_action = () =>
         {
@@ -44,6 +44,6 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
         static UsersController controller;
         static AccountModel accountModel;
         static ActionResult actionResult;
-        static Mock<UserManager<ApplicationUser>> userManager;
+        static UserManager<ApplicationUser> userManager;
     }
 }

@@ -1,6 +1,6 @@
 using System.Web.Mvc;
 using Machine.Specifications;
-using Moq;
+using NSubstitute;
 using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 
@@ -11,7 +11,9 @@ namespace WB.UI.Headquarters.Tests.Controllers.AccountControllerSpecs
     {
         Establish context = () =>
         {
-            controller.Url = Mock.Of<UrlHelper>(x => x.IsLocalUrl("/Action/Controller") == true);
+            controller.Url = Substitute.For<UrlHelper>();
+            controller.Url.IsLocalUrl("/Action/Controller")
+                .Returns(true);
         };
 
         Because of = async () => actionResult = await controller.Login(LoginModel, "/Action/Controller");
