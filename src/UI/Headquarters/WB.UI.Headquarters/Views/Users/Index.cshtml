@@ -1,0 +1,33 @@
+﻿@model WB.UI.Headquarters.Models.UsersListModel
+
+@{
+    ViewBag.Title = "Users list";
+}
+
+
+<div>
+    <h1>Users</h1>
+    <div>
+        @TempData["Message"]
+    </div>
+    <div class="row col-sm-12 bottom-buffer">
+        @Html.ActionLink("Register new account", "RegisterAccount", "Users", null,  new { @class = "btn btn-default" })
+    </div>
+    <div class="row col-sm-12">
+        <table class="table table-striped">
+            <tr>
+                <th>User name</th>
+                <th>Role</th>
+            </tr>
+            @foreach (var user in Model.Users)
+            {
+                <tr class="@(string.Equals(user.Login, Model.HighlightedUser, StringComparison.CurrentCultureIgnoreCase) ? "success" : "")">
+                    <td>
+                        @Html.ActionLink(user.Login, "EditAccount", "Users", new { id = user.Id }, null)
+                    </td>
+                    <td>@user.Role</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

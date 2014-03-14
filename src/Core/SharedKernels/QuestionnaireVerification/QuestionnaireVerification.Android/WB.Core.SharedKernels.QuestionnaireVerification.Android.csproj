@@ -37,6 +37,7 @@
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -63,7 +64,11 @@
     <Compile Include="..\QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReferenceType.cs">
       <Link>ValueObjects\QuestionnaireVerificationReferenceType.cs</Link>
     </Compile>
+    <Compile Include="..\QuestionnaireVerification\ValueObjects\QuestionnaireVersion.cs">
+      <Link>ValueObjects\QuestionnaireVersion.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueObjects\InconsistentVersionException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
@@ -100,7 +105,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="44a49db2-2e7e-4be7-b931-7e225ef057f4" />
+      <UserProperties ProjectLinkReference="44a49db2-2e7e-4be7-b931-7e225ef057f4" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

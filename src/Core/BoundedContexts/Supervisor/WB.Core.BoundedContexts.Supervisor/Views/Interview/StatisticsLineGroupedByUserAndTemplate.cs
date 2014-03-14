@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
@@ -22,6 +18,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         public int ApprovedBySupervisorCount { get; set; }
 
         public int RejectedBySupervisorCount { get; set; }
+
+        public int ApprovedByHeadquartersCount { get; set; }
+
+        public int RejectedByHeadquartersCount { get; set; }
 
         public int RestoredCount { get; set; }
 

@@ -1,16 +1,21 @@
-[assembly: WebActivator.PreApplicationStartMethod(typeof(WB.UI.Headquarters.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(WB.UI.Headquarters.App_Start.NinjectWebCommon), "Stop")]
+using System;
+using System.Web;
+using System.Web.Configuration;
+using Microsoft.Owin.Security;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using Ninject.Web.Common;
+using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Authentication;
+using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure.Raven;
+using WB.UI.Headquarters;
 
-namespace WB.UI.Headquarters.App_Start
+[assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
+
+namespace WB.UI.Headquarters
 {
-    using System;
-    using System.Web;
-
-    using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
-    using Ninject;
-    using Ninject.Web.Common;
-
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -39,10 +44,30 @@ namespace WB.UI.Headquarters.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
+            MvcApplication.Initialize();
+            var ravenConnectionSettings = new RavenConnectionSettings(
+                WebConfigurationManager.AppSettings["Raven.DocumentStore"], 
+                isEmbedded: false,
+                username: WebConfigurationManager.AppSettings["Raven.Username"],
+                password: WebConfigurationManager.AppSettings["Raven.Password"],
+                eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
+                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
+                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+
+            var kernel = new StandardKernel(
+                new ServiceLocationModule(),
+                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
+                new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
+                new RavenWriteSideInfrastructureModule(ravenConnectionSettings),
+                new RavenReadSideInfrastructureModule(ravenConnectionSettings),
+                new AuthenticationModule(),
+                new HeadquartersBoundedContextModule(),
+                new CqrsModule());
+
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
+            kernel.Bind<IAuthenticationManager>().ToMethod(ctx => HttpContext.Current.GetOwinContext().Authentication);
+
             RegisterServices(kernel);
             return kernel;
         }

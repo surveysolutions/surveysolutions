@@ -17,8 +17,6 @@ namespace WB.UI.Designer.Code
 {
     using System;
     using System.Web.Mvc;
-
-    using WB.UI.Designer.Filters;
     using WB.UI.Designer.WebServices;
 
     public class DesignerRegistry : CoreRegistry
@@ -36,23 +34,6 @@ namespace WB.UI.Designer.Code
                     });
         }
 
-        protected override object GetReadSideRepositoryWriter(IContext context)
-        {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
-        }
-
-        protected override object GetReadSideRepositoryReader(IContext context)
-        {
-            return ShouldUsePersistentReadLayer()
-                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
-                : this.GetInMemoryReadSideRepositoryAccessor(context);
-        }
-
-        private static bool ShouldUsePersistentReadLayer()
-        {
-            return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
-        }
+        protected override void RegisterDenormalizers() { }
     }
 }

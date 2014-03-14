@@ -4,6 +4,7 @@ using Ninject.Activation;
 using Ninject.Planning.Targets;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
+using Raven.Client.Extensions;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Raven.Implementation
@@ -17,6 +18,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
 
         public DocumentStoreProvider(RavenConnectionSettings settings)
         {
+            if (settings == null) throw new ArgumentNullException("settings");
             this.settings = settings;
         }
 
@@ -29,19 +31,29 @@ namespace WB.Core.Infrastructure.Raven.Implementation
         {
             return this.settings.IsEmbedded
                 ? this.CreateEmbeddedStorage()
-                : this.CreateServerStorage();
+                : this.CreateServerStorage(this.settings.EventsDatabase);
+        }
+
+        public DocumentStore CreateInstanceForPlainStorage()
+        {
+            return this.CreateServerStorage(this.settings.PlainDatabase);
         }
 
         protected override DocumentStore CreateInstance(IContext context)
         {
-            return this.settings.IsEmbedded
-                ? this.GetOrCreateEmbeddedStorage()
-                : this.GetOrCreateServerStorage();
+            return this.CreateInstanceForReadSideStore();
         }
 
-        private DocumentStore GetOrCreateServerStorage()
+        private DocumentStore CreateInstanceForReadSideStore()
         {
-            return this.serverStorage ?? (this.serverStorage = this.CreateServerStorage());
+            return this.settings.IsEmbedded
+                ? this.GetOrCreateEmbeddedStorage()
+                : this.GetOrCreateServerStorage(this.settings.ViewsDatabase);
+        }
+
+        private DocumentStore GetOrCreateServerStorage(string databaseName)
+        {
+            return this.serverStorage ?? (this.serverStorage = this.CreateServerStorage(databaseName));
         }
 
         private EmbeddableDocumentStore GetOrCreateEmbeddedStorage()
@@ -54,12 +66,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             return this.embeddedStorage;
         }
 
-        private DocumentStore CreateServerStorage()
+        private DocumentStore CreateServerStorage(string databaseName)
         {
             var store = new DocumentStore
                 {
                     Url = this.settings.StoragePath,
-                    DefaultDatabase = this.settings.DefaultDatabase,
+                    DefaultDatabase = databaseName,
                     Conventions = {JsonContractResolver = new PropertiesOnlyContractResolver()}
                 };
 
@@ -69,6 +81,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             }
 
             store.Initialize();
+
+            if (!string.IsNullOrWhiteSpace(databaseName))
+            {
+                store.DatabaseCommands.EnsureDatabaseExists(databaseName);
+            }
 
             return store;
         }

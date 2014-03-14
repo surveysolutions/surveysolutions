@@ -75,20 +75,24 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             if (this.Enabled == enabled)
                 return;
+
             this.Enabled = enabled;
+
             foreach (var model in this.Rows)
             {
                 model.SetEnabled(enabled);
             }
+
             this.RaisePropertyChanged("Enabled");
         }
 
-        public void UpdateCounters()
+        public void UpdateGridAfterRowsWereAdded()
         {
             var total = 0;
             var answered = 0;
             foreach (var screenViewModel in this.Rows)
             {
+                screenViewModel.SetEnabled(Enabled);
                 total = total + screenViewModel.Total;
                 answered = answered + screenViewModel.Answered;
             }
