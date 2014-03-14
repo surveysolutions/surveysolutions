@@ -33,9 +33,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
         Because of = () => actionResult = controller.Index();
 
         It should_fill_view_model = () => {
-            var viewResult = actionResult as ViewResult;
-            viewResult.ShouldNotBeNull();
-            var model = viewResult.Model as UsersListModel;
+            var model = actionResult.GetModel<UsersListModel>();
             model.Users.Count.ShouldEqual(1);
             model.Users.First().Id.ShouldEqual("11");
             model.Users.First().Role.ShouldEqual(ApplicationRoles.Administrator);
