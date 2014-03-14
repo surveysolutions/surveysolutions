@@ -7,8 +7,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
 {
-    internal class SurveyDetailsViewDenormalizer : AbstractFunctionalEventHandler<SurveyDetailsView>,
-        IUpdateHandler<SurveyDetailsView, NewSurveyStarted>
+    internal class SurveyDetailsViewDenormalizer : AbstractFunctionalEventHandler<SurveyDetailsView>
+        , IUpdateHandler<SurveyDetailsView, NewSurveyStarted>
+        , IUpdateHandler<SurveyDetailsView, SupervisorAccountRegistered>
     {
         public SurveyDetailsViewDenormalizer(IReadSideRepositoryWriter<SurveyDetailsView> repositoryWriter)
             : base(repositoryWriter) {}
@@ -20,6 +21,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
                 SurveyId = @event.EventSourceId.FormatGuid(),
                 Name = @event.Payload.Name,
             };
+        }
+
+        public SurveyDetailsView Update(SurveyDetailsView state, IPublishedEvent<SupervisorAccountRegistered> @event)
+        {
+            var supervisor = new SupervisorAccountView()
+            {
+                Login = @event.Payload.Login
+            };
+
+            state.SupervisorAccounts.Add(supervisor);
+
+            return state;
         }
     }
 }
