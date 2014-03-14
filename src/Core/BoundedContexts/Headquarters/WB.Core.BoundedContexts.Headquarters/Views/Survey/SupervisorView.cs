@@ -1,6 +1,6 @@
 namespace WB.Core.BoundedContexts.Headquarters.Views.Survey
 {
-    public class SupervisorAccountView
+    public class SupervisorView
     {
         public string Login { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿@model WB.UI.Headquarters.Models.SupervisorAccountModel
+﻿@model WB.UI.Headquarters.Models.SupervisorModel
 
 @{
     ViewBag.Title = string.Format(SurveyResources.RegisterSupervisorTitle, Model.SurveyTitle);
@@ -9,7 +9,7 @@
 
     <div class="col-sm-6">
 
-        @using (Html.BeginForm("RegisterSupervisorAccount", "Surveys", new { id = Model.SurveyId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("RegisterSupervisor", "Surveys", new { id = Model.SurveyId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             <div class="form-group">
                 @Html.LabelFor(x => x.Login, new { @class = "col-sm-4 control-label" })

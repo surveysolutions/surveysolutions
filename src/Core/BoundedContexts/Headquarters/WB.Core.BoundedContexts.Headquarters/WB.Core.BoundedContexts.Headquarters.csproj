@@ -79,9 +79,9 @@
     <Compile Include="Authentication\CustomPasswordValidator.cs" />
     <Compile Include="Authentication\Models\ApplicationUser.cs" />
     <Compile Include="Commands\Survey\Base\SurveyCommand.cs" />
-    <Compile Include="Commands\Survey\RegisterSupervisorAccount.cs" />
+    <Compile Include="Commands\Survey\RegisterSupervisor.cs" />
     <Compile Include="Commands\Survey\StartNewSurvey.cs" />
-    <Compile Include="Events\Survey\SupervisorAccountRegistered.cs" />
+    <Compile Include="Events\Survey\SupervisorRegistered.cs" />
     <Compile Include="Events\Survey\Base\SurveyEvent.cs" />
     <Compile Include="Events\Survey\NewSurveyStarted.cs" />
     <Compile Include="Exceptions\SurveyException.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="ViewFactories\ISurveyViewFactory.cs" />
-    <Compile Include="Views\Survey\SupervisorAccountView.cs" />
+    <Compile Include="Views\Survey\SupervisorView.cs" />
     <Compile Include="Views\Survey\SurveyDetailsView.cs" />
     <Compile Include="Views\Survey\SurveyLineView.cs" />
   </ItemGroup>

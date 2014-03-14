@@ -193,7 +193,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Models\SupervisorAccountModel.cs" />
+    <Compile Include="Models\SupervisorModel.cs" />
     <Compile Include="Controllers\SurveysController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Models\AccountModel.cs" />
@@ -275,7 +275,7 @@
     <Content Include="Views\Users\AccountForm.cshtml" />
     <Content Include="Views\Surveys\Index.cshtml" />
     <Content Include="Views\Surveys\StartNew.cshtml" />
-    <Content Include="Views\Surveys\RegisterSupervisorAccount.cshtml" />
+    <Content Include="Views\Surveys\RegisterSupervisor.cshtml" />
     <Content Include="Views\Surveys\Details.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <None Include="Web.Debug.config">

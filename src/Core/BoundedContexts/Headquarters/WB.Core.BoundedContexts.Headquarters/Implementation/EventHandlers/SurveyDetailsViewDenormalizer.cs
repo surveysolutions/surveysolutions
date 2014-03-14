@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
 {
     internal class SurveyDetailsViewDenormalizer : AbstractFunctionalEventHandler<SurveyDetailsView>
         , IUpdateHandler<SurveyDetailsView, NewSurveyStarted>
-        , IUpdateHandler<SurveyDetailsView, SupervisorAccountRegistered>
+        , IUpdateHandler<SurveyDetailsView, SupervisorRegistered>
     {
         public SurveyDetailsViewDenormalizer(IReadSideRepositoryWriter<SurveyDetailsView> repositoryWriter)
             : base(repositoryWriter) {}
@@ -24,14 +24,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
             };
         }
 
-        public SurveyDetailsView Update(SurveyDetailsView state, IPublishedEvent<SupervisorAccountRegistered> @event)
+        public SurveyDetailsView Update(SurveyDetailsView state, IPublishedEvent<SupervisorRegistered> @event)
         {
-            var supervisor = new SupervisorAccountView()
+            var supervisor = new SupervisorView()
             {
                 Login = @event.Payload.Login
             };
 
-            state.SupervisorAccounts.Add(supervisor);
+            state.Supervisors.Add(supervisor);
 
             return state;
         }

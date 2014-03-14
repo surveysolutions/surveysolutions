@@ -7,12 +7,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Survey
     {
         public SurveyDetailsView()
         {
-            SupervisorAccounts = new List<SupervisorAccountView>();
+            this.Supervisors = new List<SupervisorView>();
         }
 
         public string SurveyId { get; set; }
         public string Name { get; set; }
 
-        public List<SupervisorAccountView> SupervisorAccounts { get; set; }
+        public List<SupervisorView> Supervisors { get; set; }
     }
 }
