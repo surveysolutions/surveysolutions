@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using Machine.Specifications;
-using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.UI.Headquarters.Controllers;
@@ -14,8 +14,8 @@ namespace WB.UI.Headquarters.Tests.Controllers.SurveysControllerTests
         {
             surveyDetailsView = new SurveyDetailsView { SurveyId = surveyId, Name = "My survey" };
 
-            var surveyViewFactory = Mock.Of<ISurveyViewFactory>(factory
-                => factory.GetDetailsView(surveyId) == surveyDetailsView);
+            var surveyViewFactory = Substitute.For<ISurveyViewFactory>();
+            surveyViewFactory.GetDetailsView(surveyId).Returns(surveyDetailsView);
 
             controller = CreateSurveysController(surveyViewFactory: surveyViewFactory);
         };

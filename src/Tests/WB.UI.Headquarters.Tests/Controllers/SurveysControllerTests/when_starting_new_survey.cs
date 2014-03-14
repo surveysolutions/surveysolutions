@@ -1,7 +1,7 @@
 using System.Web.Mvc;
 using Machine.Specifications;
-using Moq;
 using Ncqrs.Commanding.ServiceModel;
+using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Commands.Survey;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models;
@@ -15,18 +15,16 @@ namespace WB.UI.Headquarters.Tests.Controllers.SurveysControllerTests
         {
             model = new NewSurveyModel { Name = "New Survey" };
 
-            commandServiceMock = new Mock<ICommandService>();
+            commandService = Substitute.For<ICommandService>();
 
-            controller = CreateSurveysController(commandService: commandServiceMock.Object);
+            controller = CreateSurveysController(commandService: commandService);
         };
 
         Because of = () =>
             result = controller.StartNew(model);
 
         It should_execute_start_new_survey_command_with_survey_name_specified_in_model = () =>
-            commandServiceMock.Verify(service =>
-                service.Execute(Moq.It.Is<StartNewSurvey>(command => command.Name == model.Name)),
-                Times.Once);
+            commandService.Received(1).Execute(Arg.Is<StartNewSurvey>(command => command.Name == model.Name));
 
         It should_redirect_user = () =>
             result.ShouldBeOfExactType<RedirectToRouteResult>();
@@ -37,6 +35,6 @@ namespace WB.UI.Headquarters.Tests.Controllers.SurveysControllerTests
         private static ActionResult result;
         private static SurveysController controller;
         private static NewSurveyModel model;
-        private static Mock<ICommandService> commandServiceMock;
+        private static ICommandService commandService;
     }
 }
