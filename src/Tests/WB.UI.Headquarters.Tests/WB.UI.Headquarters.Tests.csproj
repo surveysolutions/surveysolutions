@@ -73,6 +73,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Microsoft.Owin.Security.OAuth.2.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -150,6 +153,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyContext.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\user_credentials_are_valid.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\when_login_action_invoked.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\when_user_logges_in_with_return_url.cs" />
@@ -161,6 +165,12 @@
     <Compile Include="Controllers\UsersControllerSpecs\when_RegisterAccount_method_invoked.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_invalid_credentials.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_valid_info.cs" />
+    <Compile Include="Controllers\SurveysControllerTests\SurveysControllerTestsContext.cs" />
+    <Compile Include="Controllers\SurveysControllerTests\when_showing_all_survey_list.cs" />
+    <Compile Include="Controllers\SurveysControllerTests\when_showing_empty_start_new_survey_form.cs" />
+    <Compile Include="Controllers\SurveysControllerTests\when_showing_existing_survey_details.cs" />
+    <Compile Include="Controllers\SurveysControllerTests\when_showing_not_existing_survey_details.cs" />
+    <Compile Include="Controllers\SurveysControllerTests\when_starting_new_survey.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -169,6 +179,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017EC6D-AE4A-4C19-A653-352999592A7E}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
@@ -176,6 +190,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
       <Name>WB.Core.Infrastructure.Raven</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
       <Project>{d3efcc0c-4a50-484d-a9ff-252dc7916ecd}</Project>
