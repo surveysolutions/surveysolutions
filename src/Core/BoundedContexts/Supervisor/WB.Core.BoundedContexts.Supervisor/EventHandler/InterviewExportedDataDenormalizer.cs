@@ -55,13 +55,18 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var dataRecords = new List<InterviewDataExportRecord>();
 
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelId);
+            decimal interviewId = interview.InterviewId.GetHashCode();
 
             foreach (var dataByLevel in interviewDataByLevels)
             {
-                decimal recordId = dataByLevel.RosterVector.Length == 0 ? 0 : dataByLevel.RosterVector.Last();
+                var vectorLength = dataByLevel.RosterVector.Length;
+                decimal recordId = vectorLength == 0 ? interviewId : dataByLevel.RosterVector.Last();
 
-#warning parentid is always null
-                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, null,
+                decimal? parentRecordId = vectorLength == 0
+                    ? (decimal?) null
+                    : (vectorLength == 1 ? interviewId : dataByLevel.RosterVector[vectorLength - 2]);
+
+                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, parentRecordId,
                     GetQuestionsFroExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
             }
 

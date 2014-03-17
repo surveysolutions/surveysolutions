@@ -116,6 +116,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             publishableEventMock.Setup(x => x.Payload).Returns(new InterviewApprovedByHQ(Guid.NewGuid(),""));
             return publishableEventMock.Object;
         }
+
+
+        protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid levelId)
+        {
+            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelId == levelId);
+        }
     }
 
     public static class ShouldExtensions
@@ -132,4 +138,5 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             questions.ShouldNotContain(q => q.QuestionId == questionId && q.Answers.Any(a=>!string.IsNullOrEmpty(a)));
         }
     }
+
 }
