@@ -42,8 +42,6 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
             model.HeadquarterRoleEnabled.ShouldBeTrue();
         };
 
-        It should_not_allow_to_change_user_name = () => actionResult.GetModel<AccountModel>().UserNameChangeAllowed.ShouldBeFalse();
-
         private static UsersController controller;
         private static ActionResult actionResult;
         private static ApplicationUser applicationUser;

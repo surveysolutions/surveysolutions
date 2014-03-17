@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
                        .Returns(Task.FromResult(IdentityResult.Success));
             controller = Create.UsersController(userManager);
 
-            accountModel = new AccountModel
+            accountModel = new RegisterAccountModel()
             {
                 UserName = "user",
                 Password = "password",
@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
         It should_put_highlighted_user_login_to_temp_data = () => controller.TempData["HighlightedUser"].ShouldEqual(accountModel.UserName);
 
         static UsersController controller;
-        static AccountModel accountModel;
+        static RegisterAccountModel accountModel;
         static ActionResult actionResult;
         static UserManager<ApplicationUser> userManager;
     }
