@@ -43,26 +43,35 @@
                 
                
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole(ApplicationRoles.Headquarter))
                     {
                         @MenuItem("Surveys", "Index", "Surveys")
                     }
-                    
+
                     @if (User.IsInRole(ApplicationRoles.Administrator))
                     {
                         @MenuItem("Users", "Index", "Users")
                     }
                 </ul>
-                @using (Html.BeginForm("Signout", "Account", FormMethod.Post, new { @class = "navbar-form navbar-right" }))
-                {
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        <button class="btn btn-primary" type="submit">Sign Out</button>
-                    }
-                    @Html.AntiForgeryToken()
-                }
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <p class="navbar-text">Signed in as @User.Identity.Name</p>
+                    </li>
+                    <li>
+                        @using (Html.BeginForm("Signout", "Account", FormMethod.Post, new {@class="navbar-form "}))
+                        {
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <button class="btn btn-primary" type="submit">Sign Out</button>
+                            }
+                            @Html.AntiForgeryToken()
+                        }
+                    </li>
+                </ul>
+
             </div>
         </div>
     </div>
