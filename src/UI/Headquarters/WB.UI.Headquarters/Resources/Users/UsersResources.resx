@@ -132,6 +132,9 @@
   <data name="ConfirmPasswordMustMatch" xml:space="preserve">
     <value>The password and confirmation password do not match</value>
   </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>User name needs to be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
@@ -140,5 +143,8 @@
   </data>
   <data name="UserName" xml:space="preserve">
     <value>User name</value>
+  </data>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>User name required</value>
   </data>
 </root>
