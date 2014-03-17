@@ -1287,6 +1287,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
+        private bool IsQuestionDisabledRecursive(Identity questionId, IQuestionnaire questionnaire)
+        {
+            var questionsInvolvedInConditions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId.Id);
+            if (!questionsInvolvedInConditions.Any())
+                return this.IsQuestionDisabled(questionId);
+
+            return !this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionId, questionnaire,
+                (questionInCondition) => this.GetEnabledQuestionAnswerSupportedInExpressions(questionInCondition, (q) => IsQuestionDisabledRecursive(q, questionnaire)));
+        }
+
         public void ReevaluateSynchronizedInterview()
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1300,6 +1310,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> questionsDeclaredValid = new List<Identity>();
             List<Identity> questionsDeclaredInvalid = new List<Identity>();
 
+            Func<Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (questionId) =>
+                this.GetEnabledQuestionAnswerSupportedInExpressions(questionId, (q) => IsQuestionDisabledRecursive(q, questionnaire));
+
             foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
             {
                 var availableRosterLevels = this.AvailableRosterLevelsForGroup(questionnaire, groupWithNotEmptyCustomEnablementCondition);
@@ -1309,8 +1322,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     Identity groupIdAtInterview = new Identity(groupWithNotEmptyCustomEnablementCondition, availableRosterLevel);
 
                     PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
-                        isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(groupIdAtInterview, questionnaire,
-                            this.GetEnabledQuestionAnswerSupportedInExpressions),
+                        isNewStateEnabled:
+                            this.ShouldGroupBeEnabledByCustomEnablementCondition(groupIdAtInterview, questionnaire, getEnabledQuestionAnswerSupportedInExpressions),
                         isOldStateEnabled: !this.IsGroupDisabled(groupIdAtInterview));
                 }
             }
@@ -1327,7 +1340,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         questionsToBeDisabled,
                         isNewStateEnabled:
                             this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionIdAtInterview, questionnaire,
-                                this.GetEnabledQuestionAnswerSupportedInExpressions),
+                                getEnabledQuestionAnswerSupportedInExpressions),
                         isOldStateEnabled: !this.IsQuestionDisabled(questionIdAtInterview));
                 }
             }
