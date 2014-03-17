@@ -3,15 +3,16 @@ using WB.UI.Headquarters.Resources.Users;
 
 namespace WB.UI.Headquarters.Models
 {
-    public class AccountModel
+    public abstract class AccountModel
     {
         [Required]
         [Display(ResourceType = typeof(UsersResources), Name = "UserName")]
         public string UserName { get; set; }
 
+
         [DataType(DataType.Password)]
         [Display(ResourceType = typeof(UsersResources), Name = "Password")]
-        public string Password { get; set; }
+        public virtual string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = "ConfirmPasswordMustMatch")]
@@ -22,8 +23,7 @@ namespace WB.UI.Headquarters.Models
 
         public bool HeadquarterRoleEnabled { get; set; }
 
-        public bool UserNameChangeAllowed { get; set; }
-
         public string Id { get; set; }
+
     }
 }
