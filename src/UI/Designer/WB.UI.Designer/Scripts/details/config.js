@@ -126,10 +126,6 @@
                     title: "Can't move",
                     text: "You can't move a question outside of any group"
                 },
-                cantMoveRosterIntoRoster: {
-                    title: "Can't move",
-                    text: "You can't move a roster inside another roster"
-                },
                 cantMoveGroupWithLinkedQuestion: {
                     title: "Can't move",
                     text: "You can't move a group that contains question used as linked question inside another group"
@@ -165,10 +161,6 @@
                 cantMoveFeaturedQuestionIntoAutoGroup: {
                     title: "Can't move question",
                     text: "You can't move a pre-filled question into a roster"
-                },
-                cantMoveRosterSizeQuestionIntoRosterGroup: {
-                    title: "Can't move question",
-                    text: "You can't move roster size question into a roster group"
                 },
                 cantMoveRosterTitleQuestion: {
                     title: "Can't move question",

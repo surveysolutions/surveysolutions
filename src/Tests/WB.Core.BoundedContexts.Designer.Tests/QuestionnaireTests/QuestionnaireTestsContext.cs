@@ -175,7 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             questionnaire.AddGroup(groupId,
                 responsibleId: responsibleId, title: "New group", rosterSizeQuestionId: rosterSizeQuestionId, description: null,
-                condition: condition, parentGroupId: null, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
+                condition: condition, parentGroupId: parentGroupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId);
         }

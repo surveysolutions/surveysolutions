@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             Guid mandatoryQuestionId = Guid.Parse("33330000FFFFFFFFFFFFFFFFFFFF5555"); 
 
             var questionaire = Mock.Of<IQuestionnaire>(_
-                => _.GetFixedRosterGroups() == new Guid[] {fixedRosterId}
+                => _.GetFixedRosterGroups(null) == new Guid[] {fixedRosterId}
                 && _.GetFixedRosterTitles(fixedRosterId) == fixedRosterTitles
                 && _.IsRosterGroup(fixedRosterId) == true
                 && _.GetRostersFromTopToSpecifiedGroup(fixedRosterId) == new Guid[] { fixedRosterId }
