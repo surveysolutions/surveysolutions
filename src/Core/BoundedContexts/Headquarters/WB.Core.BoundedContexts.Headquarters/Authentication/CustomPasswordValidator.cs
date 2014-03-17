@@ -21,12 +21,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
         {
             if (String.IsNullOrEmpty(item) || item.Length < RequiredLength)
             {
-                return Task.FromResult(IdentityResult.Failed(String.Format("Password should be of length {0}", RequiredLength)));
+                return Task.FromResult(IdentityResult.Failed(String.Format(Resources.PasswordTooShort, RequiredLength)));
             }
 
             if (!string.IsNullOrEmpty(Pattern) && !Regex.IsMatch(item, Pattern))
             {
-                return Task.FromResult(IdentityResult.Failed("Password must contain at least one number, one upper case character and one lower case character"));
+                return Task.FromResult(IdentityResult.Failed(Resources.PasswordNotStrongEnough));
             }
 
             return Task.FromResult(IdentityResult.Success);
