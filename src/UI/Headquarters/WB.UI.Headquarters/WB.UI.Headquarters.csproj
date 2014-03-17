@@ -210,6 +210,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SurveyResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Users\UsersResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UsersResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -350,6 +355,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Users\UsersResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UsersResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
