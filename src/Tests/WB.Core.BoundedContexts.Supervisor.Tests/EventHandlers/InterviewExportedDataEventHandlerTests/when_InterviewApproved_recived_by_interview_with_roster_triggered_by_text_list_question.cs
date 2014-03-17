@@ -102,11 +102,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_have_all_other_coulmns_with_empty_values_for_question_on_top_level = () =>
            GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers.Skip(2).Any(a=>!string.IsNullOrEmpty(a)).ShouldBeFalse();
 
-        private static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid levelId)
-        {
-            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelId == levelId);
-        }
-
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
             InterviewData interview = CreateInterviewData();
