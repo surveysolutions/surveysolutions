@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -28,23 +29,36 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null,
                 rosterTitleQuestionId: null));
+
+            eventContext = new EventContext();
+        };
+
+        Cleanup stuff = () =>
+        {
+            eventContext.Dispose();
+            eventContext = null;
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
                 questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", rosterSizeQuestionId: rosterSizeQuestionId,
                     description: null, condition: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
-                    rosterFixedTitles: null, rosterTitleQuestionId: null));
+                    rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
+        It should_raise_GroupBecameARoster_event = () =>
+            eventContext.ShouldContainEvent<GroupBecameARoster>();
 
-        It should_throw_exception_with_message_containting__group____contains____roster_size_question___ =
-            () =>
-                new[] { "group", "contains", "roster size question" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
+        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<GroupBecameARoster>()
+                .GroupId.ShouldEqual(groupId);
 
-        private static Exception exception;
+        It should_raise_RosterChanged_event = () =>
+            eventContext.ShouldContainEvent<RosterChanged>();
+
+        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<RosterChanged>()
+                .GroupId.ShouldEqual(groupId);
+
+        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

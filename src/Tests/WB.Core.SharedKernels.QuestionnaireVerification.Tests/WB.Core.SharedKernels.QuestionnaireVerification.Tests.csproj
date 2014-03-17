@@ -64,6 +64,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition_.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition___.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_referencing_question_with_deeper_roster_level_.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_referencing_question_with_deeper_roster_level__.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition__.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_question_inside_roster_that_has_custom_condition_referencing_question_with_deeper_lev__.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_question_inside_roster_that_has_custom_condition_referencing_question_with_deeper_level.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_roster_inside_roster_and_parent_roster_has_custom_condition___.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_roster_inside_roster_and_second_one_has_custom_condition___.cs" />
+    <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_roster_inside_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster.cs" />
@@ -73,6 +83,10 @@
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_qr_barcode_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_used_as_linked_source_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_used_as_roster_size_question.cs" />
@@ -101,13 +115,13 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_have_roster_size_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_by_question_that_have_fixed_titles.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_prefilled_question.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_autopropagate_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_has_linked_multy_option_roster_size_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_from_first_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_40.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_without_max_value.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_that_has_roster_group_parent.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_size_question_inside_dependent_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_has_text_roster_size_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_group_where_roster_size_source_is_question_that_does_not_have_roster_size_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_featured_question_of_illegal_types.cs" />

@@ -410,11 +410,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetFixedRosterGroups()
+        public IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null)
         {
+            if (parentRosterId.HasValue)
+            {
+                var nestedRosters = this.GetNestedRostersOfGroupById(parentRosterId.Value);
+                return this
+                    .GetAllGroups()
+                    .Where(x => nestedRosters.Contains(x.PublicKey) && x.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                    .Select(x => x.PublicKey)
+                    .ToList();
+            }
             return this
                 .GetAllGroups()
-                .Where(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                .Where(
+                    x =>
+                        x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.FixedTitles &&
+                            this.GetRosterLevelForGroup(x.PublicKey) == 1)
                 .Select(x => x.PublicKey)
                 .ToList();
         }
@@ -570,6 +582,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.cacheOfRostersAffectedByRosterTitleQuestion[questionId] = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
 
             return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
+        }
+
+        public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
+        {
+            var roster = this.GetGroupOrThrow(rosterId);
+            
+            var nestedRosters = new List<Guid>();
+            var nestedGroups = new Queue<IGroup>(roster.Children.OfType<IGroup>());
+
+            while (nestedGroups.Count>0)
+            {
+                var currentGroup = nestedGroups.Dequeue();
+                if (IsRosterGroup(currentGroup))
+                {
+                    nestedRosters.Add(currentGroup.PublicKey);
+                    continue;
+                }
+                foreach (var childGroup in currentGroup.Children.OfType<IGroup>())
+                {
+                    nestedGroups.Enqueue(childGroup);
+                }
+            }
+
+            return nestedRosters;
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)

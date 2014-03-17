@@ -18,16 +18,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     /// </summary>
     public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
-        private Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, IEnumerable<InterviewItemId> siblings,
+        private readonly Func<InterviewItemId, IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
+        private readonly Func<InterviewItemId, IEnumerable<InterviewItemId>> sibligsValue;
+
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, Func<InterviewItemId, IEnumerable<InterviewItemId>> getSiblings,
             IEnumerable<InterviewItemId> breadcrumbs, IList<HeaderItem> header
-            , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows, int total, int answered)
+            , Func<InterviewItemId, IEnumerable<QuestionnairePropagatedScreenViewModel>> rows, int total, int answered)
         {
             this.QuestionnaireId = questionnaireId;
             this.ScreenName = screenName;
             this.Title = title;
             this.ScreenId = screenId;
-            this.Siblings = siblings;
+            this.sibligsValue = getSiblings;
             this.Breadcrumbs = (breadcrumbs ?? new List<InterviewItemId>()).Union(new InterviewItemId[1] { this.ScreenId }).ToList();
             this.rowsValue = rows;
             this.Header = header;
@@ -36,11 +38,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Total = total;
         }
         [JsonConstructor]
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, IEnumerable<InterviewItemId> siblings,
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, Func<InterviewItemId, IEnumerable<InterviewItemId>> getSiblings,
            IEnumerable<InterviewItemId> breadcrumbs, IList<HeaderItem> header
-           , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
-            : this(questionnaireId, screenName, title, screenId, enabled, siblings, breadcrumbs, header, rows, 0, 0)
+           , Func<InterviewItemId, IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
+            : this(questionnaireId, screenName, title, screenId, enabled, getSiblings, breadcrumbs, header, rows, 0, 0)
         {
+        }
+
+        public QuestionnaireGridViewModel Clone(decimal[] propagationVector, int? sortIndex)
+        {
+            return new QuestionnaireGridViewModel(QuestionnaireId, ScreenName, Title, new InterviewItemId(ScreenId.Id, propagationVector),
+                Enabled, sibligsValue, BreadCrumbsUtils.CloneBreadcrumbs(Breadcrumbs, propagationVector), Header, rowsValue);
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -54,9 +62,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         [JsonIgnore]
         public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows
         {
-            get { return this.rowsValue(); }
+            get { return this.rowsValue(ScreenId); }
         }
-        public IEnumerable<InterviewItemId> Siblings { get; private set; }
+
+        public IEnumerable<InterviewItemId> Siblings
+        {
+            get { return this.sibligsValue(this.ScreenId); }
+        }
         public IEnumerable<InterviewItemId> Breadcrumbs { get; private set; }
 
         public void SetEnabled(bool enabled)
@@ -72,11 +84,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
 
             this.RaisePropertyChanged("Enabled");
-        }
-
-        public void RestoreRowFunction(Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
-        {
-            this.rowsValue = rows;
         }
 
         public void UpdateGridAfterRowsWereAdded()
