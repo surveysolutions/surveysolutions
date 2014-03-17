@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources.Users {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User name needs to be between 3 and 15 characters and contain only letters, digits and underscore symbol.
+        /// </summary>
+        public static string InvalidUserName {
+            get {
+                return ResourceManager.GetString("InvalidUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
@@ -129,6 +138,15 @@ namespace WB.UI.Headquarters.Resources.Users {
         public static string UserName {
             get {
                 return ResourceManager.GetString("UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name required.
+        /// </summary>
+        public static string UserNameRequired {
+            get {
+                return ResourceManager.GetString("UserNameRequired", resourceCulture);
             }
         }
     }

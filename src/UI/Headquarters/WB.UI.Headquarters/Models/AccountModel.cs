@@ -5,8 +5,9 @@ namespace WB.UI.Headquarters.Models
 {
     public abstract class AccountModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = "UserNameRequired")]
         [Display(ResourceType = typeof(UsersResources), Name = "UserName")]
+        [RegularExpression("^[a-zA-Z0-9_]{3,15}$", ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = "InvalidUserName")]
         public string UserName { get; set; }
 
 
