@@ -88,10 +88,14 @@
     <Compile Include="Implementation\Aggregates\Survey.cs" />
     <Compile Include="Implementation\EventHandlers\SurveyDetailsViewDenormalizer.cs" />
     <Compile Include="Implementation\EventHandlers\SurveyLineViewDenormalizer.cs" />
+    <Compile Include="Implementation\EventHandlers\SurvisorLoginsDenormalizer.cs" />
+    <Compile Include="Implementation\Services\LoginsChecker.cs" />
     <Compile Include="Implementation\ViewFactories\SurveyViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
+    <Compile Include="Services\ILoginsChecker.cs" />
     <Compile Include="ViewFactories\ISurveyViewFactory.cs" />
+    <Compile Include="Views\Survey\SupervisorLoginView.cs" />
     <Compile Include="Views\Survey\SupervisorView.cs" />
     <Compile Include="Views\Survey\SurveyDetailsView.cs" />
     <Compile Include="Views\Survey\SurveyLineView.cs" />
