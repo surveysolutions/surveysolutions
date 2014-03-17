@@ -29,8 +29,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,6 +39,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
@@ -176,6 +177,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\LocalizationExtensions.cs" />
+    <Compile Include="Models\EditAccountModel.cs" />
+    <Compile Include="Models\RegisterAccountModel.cs" />
     <Compile Include="Resources\CommonResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -208,6 +212,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SurveyResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Users\UsersResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UsersResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -272,7 +281,6 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\RegisterAccount.cshtml" />
     <Content Include="Views\Users\EditAccount.cshtml" />
-    <Content Include="Views\Users\AccountForm.cshtml" />
     <Content Include="Views\Surveys\Index.cshtml" />
     <Content Include="Views\Surveys\StartNew.cshtml" />
     <Content Include="Views\Surveys\RegisterSupervisor.cshtml" />
@@ -349,6 +357,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Users\UsersResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UsersResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,22 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WB.UI.Headquarters.Resources.Users;
 
 namespace WB.UI.Headquarters.Models
 {
-    public class AccountModel
+    public abstract class AccountModel
     {
-        [Required]
-        [Display(Name = "User name")]
+        [Required(ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = "UserNameRequired")]
+        [Display(ResourceType = typeof(UsersResources), Name = "UserName")]
+        [RegularExpression("^[a-zA-Z0-9_]{3,15}$", ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = "InvalidUserName")]
         public string UserName { get; set; }
 
+
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        [Display(ResourceType = typeof(UsersResources), Name = "Password")]
+        public virtual string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = "ConfirmPasswordMustMatch")]
+        [Display(ResourceType = typeof(UsersResources), Name = "ConfirmPassword")]
+        public string PasswordConfirm { get; set; }
 
         public bool AdminRoleEnabled { get; set; }
 
         public bool HeadquarterRoleEnabled { get; set; }
 
-        public bool UserNameChangeAllowed { get; set; }
-
         public string Id { get; set; }
+
     }
 }

@@ -19,6 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.AuthenticationTests.CustomP
 
         It should_provide_failed_identity_result = () => identityResult.Succeeded.ShouldBeFalse();
 
-        It should_provide_error_with_message = () => identityResult.Errors.ShouldContain(error => error.Contains("Password should be of length"));
+        It should_provide_error_with_message = () => identityResult.Errors.ShouldContain(error => error.Contains("Password should have at least"));
     }
 }
