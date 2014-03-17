@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
     {
         Establish context = () =>
         {
-            model = new AccountModel
+            model = new EditAccountModel
             {
                 UserName = "user",
                 Password = "password1",
@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
         It should_add_updated_user_login_to_temp_data = () => controller.TempData["HighlightedUser"].ShouldEqual(applicationUser.UserName);
 
         private static UsersController controller;
-        private static AccountModel model;
+        private static EditAccountModel model;
         private static ActionResult actionResult;
         private static ApplicationUser applicationUser;
         private static UserManager<ApplicationUser> userManager;

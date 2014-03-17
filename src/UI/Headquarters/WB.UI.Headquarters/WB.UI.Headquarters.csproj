@@ -178,6 +178,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\LocalizationExtensions.cs" />
+    <Compile Include="Models\EditAccountModel.cs" />
+    <Compile Include="Models\RegisterAccountModel.cs" />
     <Compile Include="Resources\CommonResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -279,7 +281,6 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\RegisterAccount.cshtml" />
     <Content Include="Views\Users\EditAccount.cshtml" />
-    <Content Include="Views\Users\AccountForm.cshtml" />
     <Content Include="Views\Surveys\Index.cshtml" />
     <Content Include="Views\Surveys\StartNew.cshtml" />
     <Content Include="Views\Surveys\RegisterSupervisor.cshtml" />
