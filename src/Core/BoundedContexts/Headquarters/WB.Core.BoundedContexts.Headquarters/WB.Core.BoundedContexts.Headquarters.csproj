@@ -79,6 +79,11 @@
     <Compile Include="Authentication\AuthenticationModule.cs" />
     <Compile Include="Authentication\CustomPasswordValidator.cs" />
     <Compile Include="Authentication\Models\ApplicationUser.cs" />
+    <Compile Include="Authentication\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Commands\Survey\Base\SurveyCommand.cs" />
     <Compile Include="Commands\Survey\RegisterSupervisor.cs" />
     <Compile Include="Commands\Survey\StartNewSurvey.cs" />
@@ -131,7 +136,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\" />
     <Folder Include="ViewFactories\Survey\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Authentication\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
