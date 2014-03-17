@@ -115,6 +115,15 @@ namespace WB.UI.Headquarters.Resources.Users {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password required.
+        /// </summary>
+        public static string PasswordRequired {
+            get {
+                return ResourceManager.GetString("PasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User name.
         /// </summary>
         public static string UserName {
