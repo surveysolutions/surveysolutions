@@ -22,7 +22,10 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
                 HeadquarterRoleEnabled = true,
                 Id = "1"
             };
-            applicationUser = new ApplicationUser("1");
+            applicationUser = new ApplicationUser("1")
+            {
+                UserName = model.UserName
+            };
 
             userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
             userManager.FindByIdAsync("1")
@@ -56,7 +59,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
 
         It should_update_user_identity = () => userManager.Received().UpdateAsync(applicationUser);
 
-        It should_add_updated_user_login_to_temp_data = () => controller.TempData["HighlightedUser"].ShouldEqual(model.UserName);
+        It should_add_updated_user_login_to_temp_data = () => controller.TempData["HighlightedUser"].ShouldEqual(applicationUser.UserName);
 
         private static UsersController controller;
         private static AccountModel model;
