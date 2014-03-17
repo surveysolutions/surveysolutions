@@ -43,6 +43,8 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
         It should_add_model_error = () => controller.ModelState[""].Errors.ShouldContain(x => x.ErrorMessage == "error");
 
         It should_return_view = () => actionResult.ShouldBeOfExactType<ViewResult>();
+        
+        It should_return_submitted_model = () => actionResult.GetModel<AccountModel>().ShouldBeTheSameAs(model);
 
         private static UsersController controller;
         private static AccountModel model;

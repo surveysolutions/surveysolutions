@@ -15,6 +15,7 @@
         }
         else
         {
+            @Html.HiddenFor(x => x.UserName)
             <input type="text" value="@Model.UserName" class="form-control" disabled="disabled"/>
         }
         @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-block" })
