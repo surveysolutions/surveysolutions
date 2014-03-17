@@ -96,6 +96,9 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\AnswerViewModel.cs">
       <Link>Views\InterviewDetails\AnswerViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\BreadCrumbsUtils.cs">
+      <Link>Views\InterviewDetails\BreadCrumbsUtils.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\CommentDocument.cs">
       <Link>Views\InterviewDetails\CommentDocument.cs</Link>
     </Compile>

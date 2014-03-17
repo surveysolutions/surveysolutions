@@ -20,26 +20,29 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new GroupBecameARoster(responsibleId, roster1Id));
             questionnaire.Apply(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, roster2Id));
+
+            eventContext = new EventContext();
+        };
+
+        Cleanup stuff = () =>
+        {
+            eventContext.Dispose();
+            eventContext = null;
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                questionnaire.MoveGroup(groupId, roster2Id, 0, responsibleId));
-        
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
+            questionnaire.MoveGroup(groupId, roster2Id, 0, responsibleId);
 
-        It should_throw_exception_with_message_containting__group__ = () =>
-            exception.Message.ToLower().ShouldContain("group");
+        It should_raise_QuestionnaireItemMoved_event = () =>
+          eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
 
-        It should_throw_exception_with_message_containting__with__ = () =>
-            exception.Message.ToLower().ShouldContain("with");
+        It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
+            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+           .PublicKey.ShouldEqual(groupId);
 
-        It should_throw_exception_with_message_containting__into__ = () =>
-            exception.Message.ToLower().ShouldContain("into");
-
-        It should_throw_exception_with_message_containting__roster_twice__ = () =>
-            exception.Message.ToLower().Split().Count(s => s == "roster").ShouldEqual(2);
+        It should_raise_QuestionnaireItemMoved_event_with_roster2Id_specified = () =>
+          eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+            .GroupKey.ShouldEqual(roster2Id);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
@@ -47,6 +50,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static Guid roster1Id = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid roster2Id = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static Exception exception;
+        private static EventContext eventContext;
     }
 }

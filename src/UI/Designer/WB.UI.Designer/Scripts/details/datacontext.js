@@ -279,9 +279,6 @@
 
         questions.getAllAllowedQuestionsForSelect = function () {
             return _.filter(questions.getAllLocal(), function (question) {
-                if (groups.isRosterOrInsideRoster(question.parent())) {
-                    return false;
-                }
                 return isNumericInteger(question) || isNotLinkedMultyCategorical(question) || isTextList(question);
             }).map(function (item) {
                 return {

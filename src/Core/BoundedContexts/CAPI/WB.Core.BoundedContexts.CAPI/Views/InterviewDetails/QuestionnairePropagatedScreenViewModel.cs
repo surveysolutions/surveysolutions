@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 new InterviewItemId(this.ScreenId.Id, propagationVector),
                 items,
                 sibligsValue,
-                CloneBreadcrumbs(propagationVector),
+                BreadCrumbsUtils.CloneBreadcrumbs(Breadcrumbs, propagationVector),
                 Next != null ? Next.Clone(propagationVector) : null,
                 Previous != null ? Previous.Clone(propagationVector) : null,
                 sortIndex);
@@ -68,28 +68,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         }
 
         private readonly Func<InterviewItemId, IEnumerable<InterviewItemId>> sibligsValue;
-
-        private IEnumerable<InterviewItemId> CloneBreadcrumbs(decimal[] propagationVector)
-        {
-            var breadcrumbs = this.Breadcrumbs.ToArray();
-
-            var lastVector = new decimal[propagationVector.Length];
-            propagationVector.CopyTo(lastVector, 0);
-
-            for (int i = breadcrumbs.Length - 1; i >= 0; i--)
-            {
-                var newVector = lastVector;
-
-                if (EmptyBreadcrumbForRosterRow.IsInterviewItemIdEmptyBreadcrumbForRosterRow(breadcrumbs[i]))
-                {
-                    if (lastVector.Length > 0)
-                        lastVector = lastVector.Take(lastVector.Length - 1).ToArray();
-                }
-
-                breadcrumbs[i] = new InterviewItemId(breadcrumbs[i].Id, newVector);
-            }
-            return breadcrumbs;
-        }
 
         public void UpdateScreenName(string screenName)
         {
