@@ -86,6 +86,8 @@
     <Compile Include="SurveyTests\when_creating_new_survey.cs" />
     <Compile Include="SurveyTests\when_creating_new_survey_and_survey_name_contains_only_whitespaces.cs" />
     <Compile Include="SurveyTests\when_creating_new_survey_and_survey_name_is_null.cs" />
+    <Compile Include="SurveyTests\when_registering_supervisor_with_not_unique_login.cs" />
+    <Compile Include="SurveyTests\when_registering_supervisor_with_unique_login.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -102,6 +104,10 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017EC6D-AE4A-4C19-A653-352999592A7E}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>

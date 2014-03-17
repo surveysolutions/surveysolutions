@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Headquarters.Events.Survey;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
 {
