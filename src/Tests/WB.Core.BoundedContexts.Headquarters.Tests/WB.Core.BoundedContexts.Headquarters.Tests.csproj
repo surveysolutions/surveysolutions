@@ -80,6 +80,8 @@
     <Compile Include="StringExtenstion.cs" />
     <Compile Include="SurveyDetailsViewDenormalizerTests\SurveyDetailsViewDenormalizerTestsContext.cs" />
     <Compile Include="SurveyDetailsViewDenormalizerTests\when_applying_NewSurveyStarted_event.cs" />
+    <Compile Include="SurveyDetailsViewDenormalizerTests\when_applying_SupervisorRegistered_event.cs" />
+    <Compile Include="SurveyDetailsViewDenormalizerTests\when_applying_SupervisorRegistered_event_and_where_is_on_supervisor_in_state.cs" />
     <Compile Include="SurveyLineViewDenormalizerTests\SurveyLineViewDenormalizerTestsContext.cs" />
     <Compile Include="SurveyLineViewDenormalizerTests\when_applying_NewSurveyStarted_event.cs" />
     <Compile Include="SurveyTests\SurveyTestsContext.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="SurveyTests\when_creating_new_survey_and_survey_name_is_null.cs" />
     <Compile Include="SurveyTests\when_registering_supervisor_with_not_unique_login.cs" />
     <Compile Include="SurveyTests\when_registering_supervisor_with_unique_login.cs" />
+    <Compile Include="SurvisorLoginsDenormalizerTests\SurvisorLoginsDenormalizerTestContext.cs" />
+    <Compile Include="SurvisorLoginsDenormalizerTests\when_handling_supervisor_regstered_event.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

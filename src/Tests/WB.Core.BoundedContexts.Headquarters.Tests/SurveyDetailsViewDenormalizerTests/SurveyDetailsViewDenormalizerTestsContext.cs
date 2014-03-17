@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -14,8 +15,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyDetailsViewDenormaliz
         protected static SurveyDetailsViewDenormalizer CreateSurveyDetailsViewDenormalizer(
             IReadSideRepositoryWriter<SurveyDetailsView> repositoryWriter = null)
         {
-            return new SurveyDetailsViewDenormalizer(
-                repositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<SurveyDetailsView>>());
+            return new SurveyDetailsViewDenormalizer(repositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<SurveyDetailsView>>());
+        }
+
+        protected static SurveyDetailsView CreateSurveyDetailsView(List<SupervisorView> supervisors = null)
+        {
+            return new SurveyDetailsView
+            {
+                Supervisors = supervisors ?? new List<SupervisorView>()
+            };
+        }
+
+        protected static SupervisorView CreateSupervisorView(string login)
+        {
+            return new SupervisorView
+            {
+                Login = login
+            };
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(Guid? eventSourceId = null, T @event = null) where T : class
