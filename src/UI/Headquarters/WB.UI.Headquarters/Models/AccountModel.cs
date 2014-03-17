@@ -13,6 +13,11 @@ namespace WB.UI.Headquarters.Models
         [Display(ResourceType = typeof(UsersResources), Name = "Password")]
         public string Password { get; set; }
 
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = "ConfirmPasswordMustMatch")]
+        [Display(ResourceType = typeof(UsersResources), Name = "ConfirmPassword")]
+        public string PasswordConfirm { get; set; }
+
         public bool AdminRoleEnabled { get; set; }
 
         public bool HeadquarterRoleEnabled { get; set; }

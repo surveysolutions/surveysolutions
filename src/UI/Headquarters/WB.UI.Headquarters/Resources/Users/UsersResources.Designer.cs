@@ -88,6 +88,24 @@ namespace WB.UI.Headquarters.Resources.Users {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password and confirmation password do not match.
+        /// </summary>
+        public static string ConfirmPasswordMustMatch {
+            get {
+                return ResourceManager.GetString("ConfirmPasswordMustMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {

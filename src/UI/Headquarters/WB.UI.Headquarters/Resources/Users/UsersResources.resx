@@ -126,6 +126,12 @@
   <data name="AssignedRoles" xml:space="preserve">
     <value>Assigned roles</value>
   </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="ConfirmPasswordMustMatch" xml:space="preserve">
+    <value>The password and confirmation password do not match</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
