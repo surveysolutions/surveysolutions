@@ -48,15 +48,12 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult RegisterAccount()
         {
-            return this.View(new AccountModel
-            {
-                UserNameChangeAllowed = true
-            });
+            return this.View(new RegisterAccountModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RegisterAccount(AccountModel model)
+        public async Task<ActionResult> RegisterAccount(RegisterAccountModel model)
         {
             if (ModelState.IsValid)
             {
@@ -78,19 +75,17 @@ namespace WB.UI.Headquarters.Controllers
                 this.AddErrors(identityResult);
             }
 
-            model.UserNameChangeAllowed = true;
             return View(model);
         }
 
         public async Task<ActionResult> EditAccount(string id)
         {
             ApplicationUser user = await userManager.FindByIdAsync(id);
-            var viewModel = new AccountModel
+            var viewModel = new EditAccountModel
             {
                 UserName = user.UserName,
                 HeadquarterRoleEnabled = user.IsHeadquarter,
                 AdminRoleEnabled = user.IsAdministrator,
-                UserNameChangeAllowed = false,
                 Id = user.Id
             };
 
@@ -99,7 +94,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAccount(string id, AccountModel model)
+        public async Task<ActionResult> EditAccount(string id, EditAccountModel model)
         {
             ApplicationUser user = await userManager.FindByIdAsync(model.Id);
             user.IsAdministrator = model.AdminRoleEnabled;
@@ -124,7 +119,7 @@ namespace WB.UI.Headquarters.Controllers
             IdentityResult identityResult = await userManager.UpdateAsync(user);
             if (identityResult.Succeeded)
             {
-                TempData["HighlightedUser"] = model.UserName;
+                TempData["HighlightedUser"] = user.UserName;
                 return RedirectToAction("Index");
             }
 

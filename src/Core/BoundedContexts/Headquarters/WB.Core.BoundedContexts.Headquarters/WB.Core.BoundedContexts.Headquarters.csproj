@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
@@ -78,6 +79,11 @@
     <Compile Include="Authentication\AuthenticationModule.cs" />
     <Compile Include="Authentication\CustomPasswordValidator.cs" />
     <Compile Include="Authentication\Models\ApplicationUser.cs" />
+    <Compile Include="Authentication\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Commands\Survey\Base\SurveyCommand.cs" />
     <Compile Include="Commands\Survey\RegisterSupervisor.cs" />
     <Compile Include="Commands\Survey\StartNewSurvey.cs" />
@@ -88,10 +94,14 @@
     <Compile Include="Implementation\Aggregates\Survey.cs" />
     <Compile Include="Implementation\EventHandlers\SurveyDetailsViewDenormalizer.cs" />
     <Compile Include="Implementation\EventHandlers\SurveyLineViewDenormalizer.cs" />
+    <Compile Include="Implementation\EventHandlers\SurvisorLoginsDenormalizer.cs" />
+    <Compile Include="Implementation\Services\LoginsChecker.cs" />
     <Compile Include="Implementation\ViewFactories\SurveyViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
+    <Compile Include="Services\ILoginsChecker.cs" />
     <Compile Include="ViewFactories\ISurveyViewFactory.cs" />
+    <Compile Include="Views\Survey\SupervisorLoginView.cs" />
     <Compile Include="Views\Survey\SupervisorView.cs" />
     <Compile Include="Views\Survey\SurveyDetailsView.cs" />
     <Compile Include="Views\Survey\SurveyLineView.cs" />
@@ -126,7 +136,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\" />
     <Folder Include="ViewFactories\Survey\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Authentication\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

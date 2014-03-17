@@ -548,9 +548,9 @@
     <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />
     <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <Content Include="Scripts\viewmodels\listview.js" />
+    <None Include="Service References\DesignerPublicService\PublicService.disco" />
     <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
     <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
-    <None Include="Service References\DesignerPublicService\PublicService1.disco" />
     <None Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -593,7 +593,16 @@
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Interview\InterviewDetails.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\ControlPanel\NConfig.cshtml" />
+    <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
+    <Content Include="Views\ControlPanel\Designer.cshtml" />
+    <Content Include="Views\Interview\Revalidate.cshtml" />
+    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
+    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
+    <Content Include="Views\TabletReport\Packages.cshtml" />
+    <Content Include="Views\HQ\MapReport.cshtml" />
+    <None Include="Service References\DesignerPublicService\PublicService.wsdl" />
     <None Include="Service References\DesignerPublicService\PublicService.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -606,35 +615,14 @@
     <None Include="Service References\DesignerPublicService\PublicService3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewItemMessage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
-    <Content Include="Views\ControlPanel\NConfig.cshtml" />
-    <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
-    <Content Include="Views\ControlPanel\Designer.cshtml" />
-    <Content Include="Views\Interview\Revalidate.cshtml" />
-    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
-    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
-    <Content Include="Views\TabletReport\Packages.cshtml" />
-    <Content Include="Views\HQ\MapReport.cshtml" />
+    <None Include="Service References\DesignerPublicService\PublicService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService43.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService44.xsd">
-      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -795,14 +783,14 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\DesignerPublicService\" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\DesignerPublicService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

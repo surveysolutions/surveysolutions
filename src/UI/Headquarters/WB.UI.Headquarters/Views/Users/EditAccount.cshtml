@@ -1,9 +1,62 @@
-﻿@model WB.UI.Headquarters.Models.AccountModel
+﻿@using WB.Core.BoundedContexts.Headquarters.Authentication
+@model WB.UI.Headquarters.Models.EditAccountModel
 
 <div class="col-sm-6">
     <h2>Edit @Model.UserName account</h2>
     @using (Html.BeginForm("EditAccount", "Users", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
-        @Html.Partial("AccountForm", Model)
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.UserName, new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-8">
+                @Html.HiddenFor(x => x.UserName)
+                <input type="text" value="@Model.UserName" class="form-control" disabled="disabled" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Password, new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-8">
+                @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-block" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.PasswordConfirm, new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-8">
+                @Html.PasswordFor(x => x.PasswordConfirm, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.PasswordConfirm, null, new { @class = "help-block" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(UsersResources.AssignedRoles, new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-8">
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(x => x.AdminRoleEnabled)
+                        @ApplicationRoles.Administrator.LocalizedRoleName()
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-offset-4 col-sm-8">
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(x => x.HeadquarterRoleEnabled)
+                        @ApplicationRoles.Headquarter.LocalizedRoleName()
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8">
+                <button type="submit" class="btn btn-default">@CommonResources.Submit</button>
+            </div>
+        </div>
     }
 </div>

@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
                        .Returns(Task.FromResult(IdentityResult.Failed("error")));
 
             controller = Create.UsersController(userManager);
-            model = new AccountModel();
+            model = new RegisterAccountModel();
         };
 
         Because of = async () => actionResult = await controller.RegisterAccount(model);
@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
         It should_return_view = () => actionResult.ShouldBeOfExactType<ViewResult>();
 
         private static UsersController controller;
-        private static AccountModel model;
+        private static RegisterAccountModel model;
         private static ActionResult actionResult;
     }
 }
