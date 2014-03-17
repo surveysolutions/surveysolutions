@@ -226,28 +226,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.invalidAnsweredQuestions.Add(questionKey);
         }
 
-        private void Apply(GroupDisabled @event)
+        internal void Apply(GroupDisabled @event)
         {
             string groupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
 
             this.disabledGroups.Add(groupKey);
         }
 
-        private void Apply(GroupEnabled @event)
+        internal void Apply(GroupEnabled @event)
         {
             string groupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
 
             this.disabledGroups.Remove(groupKey);
         }
 
-        private void Apply(QuestionDisabled @event)
+        internal void Apply(QuestionDisabled @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.disabledQuestions.Add(questionKey);
         }
 
-        private void Apply(QuestionEnabled @event)
+        internal void Apply(QuestionEnabled @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -1334,8 +1334,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             Func<Identity, bool> isQuestionDisabled =
                 (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
-                    (group) => groupsToBeDisabled.Any(q => AreEqual(q, group)) || this.IsGroupDisabled(group),
-                    (question) => questionsToBeDisabled.Any(q => AreEqual(q, question)) || this.IsQuestionDisabled(questionIdAtInterview));
+                    (group) => (groupsToBeDisabled.Any(q => AreEqual(q, group)) || this.IsGroupDisabled(group)) && !groupsToBeEnabled.Any(q => AreEqual(q, group)),
+                    (question) => (questionsToBeDisabled.Any(q => AreEqual(q, question)) || this.IsQuestionDisabled(questionIdAtInterview)) && !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
             foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
             {
