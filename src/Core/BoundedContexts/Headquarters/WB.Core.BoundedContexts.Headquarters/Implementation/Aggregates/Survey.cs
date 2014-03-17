@@ -3,6 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.BoundedContexts.Headquarters.Events.Survey;
 using WB.Core.BoundedContexts.Headquarters.Exceptions;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
@@ -22,6 +23,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private static IPasswordHasher PasswordHasher
         {
             get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
+        }
+
+        private static ILoginsChecker LoginsChecker
+        {
+            get { return ServiceLocator.Current.GetInstance<ILoginsChecker>(); }
         }
 
         #endregion
@@ -50,7 +56,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
         private void ThrowIfSupervisorsLoginIsNotUnique(string login)
         {
-            return;
+            if (!LoginsChecker.IsUnique(login))
+            {
+                throw new SurveyException(string.Format("Supervisor's login {0} is already taken", login));
+            }
         }
 
         private void ThrowIfSurveyNameIsEmpty(string name)
