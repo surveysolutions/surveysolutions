@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
             IdentityResult identityResult = await userManager.UpdateAsync(user);
             if (identityResult.Succeeded)
             {
-                TempData["HighlightedUser"] = model.UserName;
+                TempData["HighlightedUser"] = user.UserName;
                 return RedirectToAction("Index");
             }
 
