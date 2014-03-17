@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                         }
                     }
 
-                    //      writer.WriteField(item.ParentRecordId.HasValue ? item.ParentRecordId.ToString() : string.Empty);
+                    writer.WriteField(item.ParentRecordId.HasValue ? item.ParentRecordId.ToString() : string.Empty);
                     writer.NextRecord();
                 }
 
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                         writer.WriteField(columnName);
                     }
                 }
-
+                writer.WriteField("ParentId");
                 writer.NextRecord();
                 streamWriter.Flush();
             }

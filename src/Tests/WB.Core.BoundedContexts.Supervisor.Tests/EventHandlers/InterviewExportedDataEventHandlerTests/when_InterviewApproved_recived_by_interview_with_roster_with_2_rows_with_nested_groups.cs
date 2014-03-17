@@ -94,11 +94,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_second_record_has_question_with_answer_equal_to_some_answer = () =>
          GetLevel(result, rosterSizeQuestionId).Records[1].Questions[0].Answers[0].ShouldEqual(someAnswer);
 
-        private static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid levelId)
-        {
-            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelId == levelId);
-        }
-
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
             InterviewData interview = CreateInterviewData();

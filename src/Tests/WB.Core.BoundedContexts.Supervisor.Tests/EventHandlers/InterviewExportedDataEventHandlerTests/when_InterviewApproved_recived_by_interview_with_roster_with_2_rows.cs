@@ -45,6 +45,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_second_record_id_equals_1 = () =>
            GetLevel(result, propagationScopeKey).Records[1].RecordId.ShouldEqual(1);
 
+        It should_first_rosters_record_parent_id_equals_to_main_level_record_id = () =>
+          GetLevel(result, propagationScopeKey).Records[0].ParentRecordId.ShouldEqual(GetLevel(result, questionnarie.PublicKey).Records[0].RecordId);
+
+        It should_second_rosters_record_parent_id_equals_to_main_level_record_id = () =>
+           GetLevel(result, propagationScopeKey).Records[1].ParentRecordId.ShouldEqual(GetLevel(result, questionnarie.PublicKey).Records[0].RecordId);
+
         private static QuestionnaireDocument CreateQuestionnaireDocumentWith1PropagationLevel()
         {
             var initialDocument = CreateQuestionnaireDocument(new Dictionary<string, Guid>() { { "auto", propagationScopeKey } });
@@ -59,11 +65,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             }
 
             return initialDocument;
-        }
-
-        private static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid levelId)
-        {
-            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelId == levelId);
         }
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()

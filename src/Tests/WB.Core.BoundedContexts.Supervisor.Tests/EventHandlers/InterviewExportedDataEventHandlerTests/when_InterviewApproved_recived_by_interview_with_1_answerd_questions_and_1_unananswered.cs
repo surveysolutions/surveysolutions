@@ -36,7 +36,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
             result.Levels[0].Records[0].Questions.Length.ShouldEqual(2);
 
         It should_first_record_id_equals_0 = () =>
-            result.Levels[0].Records[0].RecordId.ShouldEqual(0);
+            result.Levels[0].Records[0].RecordId.ShouldEqual(result.Levels[0].Records[0].InterviewId.GetHashCode());
+
+        It should_first_parent_id_equals_null = () =>
+           result.Levels[0].Records[0].ParentRecordId.ShouldBeNull();
 
         It should_answered_question_be_not_empty = () =>
            result.Levels[0].Records[0].Questions.ShouldQuestionHasOneNotEmptyAnswer(answeredQuestionId);
