@@ -13,7 +13,9 @@ namespace WB.UI.Designer.Tests
     {
         public void OnAssemblyStart()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            var serviceLocator = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object;
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocator);
         }
 
         public void OnAssemblyComplete()
