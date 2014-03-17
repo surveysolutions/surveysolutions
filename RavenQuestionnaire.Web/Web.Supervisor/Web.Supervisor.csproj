@@ -551,6 +551,16 @@
     <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
     <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
     <None Include="Service References\DesignerPublicService\PublicService1.disco" />
+    <None Include="Service References\DesignerPublicService\PublicService1.wsdl" />
+    <None Include="Service References\DesignerPublicService\PublicService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService41.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService42.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
