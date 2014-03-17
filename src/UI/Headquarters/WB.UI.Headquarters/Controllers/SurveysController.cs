@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Commands.Survey;
+using WB.Core.BoundedContexts.Headquarters.Exceptions;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.GenericSubdomains.Utils;
@@ -71,9 +72,16 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.commandService.Execute(new RegisterSupervisor(Guid.Parse(id), model.Login, model.Password));
+                try
+                {
+                    this.commandService.Execute(new RegisterSupervisor(Guid.Parse(id), model.Login, model.Password));
 
-                return RedirectToAction("Details", new { id});
+                    return RedirectToAction("Details", new { id });
+                }
+                catch (SurveyException exception)
+                {
+                    ModelState.AddModelError("Login", exception.Message);
+                }
             }
 
             SurveyDetailsView survey = this.surveyViewFactory.GetDetailsView(id);
