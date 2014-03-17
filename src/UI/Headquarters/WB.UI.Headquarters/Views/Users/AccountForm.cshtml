@@ -28,11 +28,12 @@
 </div>
 
 <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-8">
+    @Html.Label(UsersResources.AssignedRoles, new { @class = "col-sm-4 control-label" })
+    <div class="col-sm-8">
         <div class="checkbox">
             <label>
                 @Html.CheckBoxFor(x => x.AdminRoleEnabled)
-                @ApplicationRoles.Administrator
+                @ApplicationRoles.Administrator.LocalizedRoleName()
             </label>
         </div>
     </div>
@@ -40,13 +41,13 @@
         <div class="checkbox">
             <label>
                 @Html.CheckBoxFor(x => x.HeadquarterRoleEnabled)
-                @ApplicationRoles.Headquarter
+                @ApplicationRoles.Headquarter.LocalizedRoleName()
             </label>
         </div>
     </div>
 </div>
 <div class="form-group">
     <div class="col-sm-offset-4 col-sm-8">
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default">@CommonResources.Submit</button>
     </div>
 </div>
