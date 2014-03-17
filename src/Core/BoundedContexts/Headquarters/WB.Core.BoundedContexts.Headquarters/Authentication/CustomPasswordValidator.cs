@@ -7,12 +7,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
 {
     public class CustomPasswordValidator : IIdentityValidator<string>
     {
-        public int RequiredLength { get; set; }
-
-        public CustomPasswordValidator(int length)
+        public CustomPasswordValidator(int requiredLength, string pattern = null)
         {
-            RequiredLength = length;
+            this.RequiredLength = requiredLength;
+            this.Pattern = pattern;
         }
+
+        private int RequiredLength { get; set; }
+
+        private string Pattern { get; set; }
 
         public Task<IdentityResult> ValidateAsync(string item)
         {
@@ -21,9 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
                 return Task.FromResult(IdentityResult.Failed(String.Format("Password should be of length {0}", RequiredLength)));
             }
 
-            string pattern = @"^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$";
-
-            if (!Regex.IsMatch(item, pattern))
+            if (!string.IsNullOrEmpty(Pattern) && !Regex.IsMatch(item, Pattern))
             {
                 return Task.FromResult(IdentityResult.Failed("Password must contain at least one number, one upper case character and one lower case character"));
             }
