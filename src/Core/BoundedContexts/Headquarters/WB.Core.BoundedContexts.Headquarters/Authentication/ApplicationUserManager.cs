@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System;
+using System.Configuration;
+using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 
 namespace WB.Core.BoundedContexts.Headquarters.Authentication
@@ -14,7 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
                 AllowOnlyAlphanumericUserNames = false
             };
 
-            PasswordValidator = new CustomPasswordValidator(10);
+            int requiredLength = Int32.Parse(ConfigurationManager.AppSettings["MinPasswordLength"]);
+            PasswordValidator = new CustomPasswordValidator(requiredLength, ConfigurationManager.AppSettings["PasswordPattern"]);
         }
     }
 }
