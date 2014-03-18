@@ -1320,14 +1320,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
         }
 
-        private bool IsQuestionDisabledRecursive(Identity questionId, IQuestionnaire questionnaire)
+        private bool ShouldQuestionBeDisabledByCustomCondition(Identity questionId, IQuestionnaire questionnaire)
         {
-            var questionsInvolvedInConditions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId.Id);
-            if (!questionsInvolvedInConditions.Any())
-                return this.IsQuestionDisabled(questionId);
-
             return !this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionId, questionnaire,
-                (questionInCondition) => this.GetEnabledQuestionAnswerSupportedInExpressions(questionInCondition, (q) => IsQuestionDisabledRecursive(q, questionnaire)));
+                (questionInCondition) =>
+                    this.GetEnabledQuestionAnswerSupportedInExpressions(questionInCondition,
+                        (q) => ShouldQuestionBeDisabledByCustomCondition(q, questionnaire)));
         }
 
         public void ReevaluateSynchronizedInterview()
@@ -1344,7 +1342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> questionsDeclaredInvalid = new List<Identity>();
 
             Func<Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (questionId) =>
-                this.GetEnabledQuestionAnswerSupportedInExpressions(questionId, (q) => IsQuestionDisabledRecursive(q, questionnaire));
+                this.GetEnabledQuestionAnswerSupportedInExpressions(questionId, (q) => ShouldQuestionBeDisabledByCustomCondition(q, questionnaire));
 
             foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
             {
