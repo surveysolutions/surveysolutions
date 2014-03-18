@@ -554,6 +554,7 @@
     <None Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>

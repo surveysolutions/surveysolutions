@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -60,7 +61,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             SurveyDetailsView survey = this.surveyViewFactory.GetDetailsView(id);
 
-            return this.View(new SupervisorModel()
+            if (survey == null)
+                return new HttpNotFoundResult();
+
+            return this.View(new SupervisorModel
             {
                 SurveyId = id,
                 SurveyTitle = survey.Name
@@ -78,13 +82,20 @@ namespace WB.UI.Headquarters.Controllers
 
                     return RedirectToAction("Details", new { id });
                 }
+                catch (FormatException)
+                {
+                    ModelState.AddModelError(string.Empty, SurveyResources.SurveyIdHasWrongFormat);
+                }
                 catch (SurveyException exception)
                 {
-                    ModelState.AddModelError("Login", exception.Message);
+                    ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
 
             SurveyDetailsView survey = this.surveyViewFactory.GetDetailsView(id);
+
+            if (survey == null)
+                return new HttpNotFoundResult();
 
             model.SurveyId = id;
             model.SurveyTitle = survey.Name;

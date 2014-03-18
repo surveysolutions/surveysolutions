@@ -97,6 +97,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Survey id has wrong format.
+        /// </summary>
+        public static string SurveyIdHasWrongFormat {
+            get {
+                return ResourceManager.GetString("SurveyIdHasWrongFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string SurveyListName {
