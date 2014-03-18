@@ -6,7 +6,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects
     [DataContract]
     public class InconsistentVersionException : Exception
     {
-        [DataMember]
-        public string Reason { get; set; }
+        public InconsistentVersionException(string message)
+            : base(message) {}
+
+        public InconsistentVersionException(string message, Exception innerException)
+            : base(message, innerException) {}
     }
 }
