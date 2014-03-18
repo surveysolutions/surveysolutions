@@ -52,7 +52,6 @@
     <Compile Include="Crypto\SHA1.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GuidExtensions.cs" />
-    <Compile Include="Implementation\DummyPasswordHasher.cs" />
     <Compile Include="Implementation\PasswordHasher.cs" />
     <Compile Include="IPasswordHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
