@@ -11,19 +11,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.LoginsCheckerTests
     {
         Establish context = () =>
         {
-            var supervisorLogins = Mock.Of<IQueryableReadSideRepositoryReader<SupervisorLoginView>>(x => x.GetById(notUniqueLogin) == null as SupervisorLoginView);
+            var supervisorLogins = Mock.Of<IQueryableReadSideRepositoryReader<SupervisorLoginView>>(x => x.GetById(uniqueLogin) == null as SupervisorLoginView);
 
             checker = CreateLoginsChecker(supervisorLogins);
         };
 
         Because of = () =>
-            result = checker.IsUnique(notUniqueLogin);
+            result = checker.IsUnique(uniqueLogin);
 
         It should_return_true_as_result = () =>
             result.ShouldBeTrue();
 
         private static LoginsChecker checker;
-        private static string notUniqueLogin = "Vasya";
+        private static string uniqueLogin = "Vasya";
         private static bool result;
     }
 }

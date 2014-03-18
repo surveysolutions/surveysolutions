@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IEventHandler>().To<SurveyDetailsViewDenormalizer>();
             DispatcherRegistryHelper.RegisterDenormalizer<SurvisorLoginsDenormalizer>(this.Kernel);
 
-            this.Bind<IPasswordHasher>().To<DummyPasswordHasher>().InSingletonScope();
+            this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             this.Bind<ILoginsChecker>().To<LoginsChecker>().InSingletonScope();
         }
     }
