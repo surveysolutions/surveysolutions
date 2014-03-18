@@ -88,6 +88,9 @@ namespace Core.Supervisor.Views.Interview
                     }).ToList();
                 }
             }
+
+            if (!this.IsValid && this.IsMandatory && !this.IsEnabled)
+                this.IsValid = true;
         }
 
         private static string GetTitleWithSubstitutedVariables(IQuestion question, Dictionary<string, string> answersForTitleSubstitution)
