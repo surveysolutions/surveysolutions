@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.ViewFactories
 
         public SurveyLineView[] GetAllLineViews()
         {
-            return this.surveyLineViewRepositoryReader.Query(views => views.ToArray());
+            return this.surveyLineViewRepositoryReader.QueryAll(view => true).ToArray();
         }
 
         public SurveyDetailsView GetDetailsView(string surveyId)
