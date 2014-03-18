@@ -468,11 +468,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size question and dependent roster have different roster levels.
+        ///   Looks up a localized string similar to Roster should have deeper or the same roster level as it&apos;s roster size question..
         /// </summary>
-        internal static string WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels {
+        internal static string WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster {
             get {
-                return ResourceManager.GetString("WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels", resourceCulture);
+                return ResourceManager.GetString("WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster", resourceCulture);
             }
         }
     }

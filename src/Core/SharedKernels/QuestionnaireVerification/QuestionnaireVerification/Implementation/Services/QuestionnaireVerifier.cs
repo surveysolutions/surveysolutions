@@ -101,8 +101,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInValidationExpression, "WB0052", VerificationMessages.WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression),
                     Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
-                    Verifier<IGroup>(RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels),
 
+                    ErrorsByRostersThatHaveRosterSizeQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -251,29 +251,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return false;
 
             return group.RosterFixedTitles.Length > 250;
-        }
-
-        private static bool RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels(IGroup roster,
-            QuestionnaireDocument questionnaire)
-        {
-            if (!IsRosterByQuestion(roster)) return false;
-
-            var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
-
-            if (rosterSizeQuestion == null) return false;
-
-            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(roster, questionnaire);
-
-            if (rosterLevelForRoster == null) return false;
-
-            var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
-            if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
-            {
-                rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
-            }
-
-            return QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(rosterSizeQuestion,
-                rosterLevelWithoutOwnRosterSizeQuestion, questionnaire);
         }
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
@@ -519,6 +496,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return errorByAllQuestionsWithSubstitutions;
         }
 
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByRostersThatHaveRosterSizeQuestionsWithDeeperRosterLevel(QuestionnaireDocument questionnaire)
+        {
+            var rostersByRosterSizeQuestion = questionnaire.Find<IGroup>(IsRosterByQuestion);
+            var errors = new List<QuestionnaireVerificationError>();
+
+            VerifyEnumerableAndAccumulateErrorsToList(rostersByRosterSizeQuestion, errors,
+                @roster => GetVerificationErrorOrNullByRosterThatHasRosterSizeQuestionWithDeeperRosterLevel(@roster, questionnaire));
+            
+
+            return errors;
+        }
+
         private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel(
             QuestionnaireDocument questionnaire)
         {
@@ -733,6 +722,32 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return null;
         }
 
+        private static QuestionnaireVerificationError GetVerificationErrorOrNullByRosterThatHasRosterSizeQuestionWithDeeperRosterLevel(IGroup roster,
+            QuestionnaireDocument questionnaire)
+        {
+            var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
+            if (rosterSizeQuestion != null)
+            {
+                var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(roster, questionnaire);
+                if (rosterLevelForRoster != null)
+                {
+                    var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
+                    if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
+                    {
+                        rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
+                    }
+
+                    if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(rosterSizeQuestion,
+                        rosterLevelWithoutOwnRosterSizeQuestion, questionnaire))
+                    {
+                        return RosterHasRosterSizeQuestionWithDeeperRosterLevel(roster, rosterSizeQuestion);
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private static IQuestion GetQuestionByIdentifier(string identifier, QuestionnaireDocument questionnaire)
         {
             Guid parsedId;
@@ -889,6 +904,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
+        }
+
+        private static QuestionnaireVerificationError RosterHasRosterSizeQuestionWithDeeperRosterLevel(IGroup roster,
+            IQuestion rosterSizeQuestion)
+        {
+            return new QuestionnaireVerificationError("WB0054",
+                VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster,
+                CreateReference(roster),
+                CreateReference(rosterSizeQuestion));
         }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
