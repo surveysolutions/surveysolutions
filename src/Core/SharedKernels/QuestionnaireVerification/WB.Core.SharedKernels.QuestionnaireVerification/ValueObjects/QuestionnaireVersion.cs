@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects
 {
+    [DataContract]
     public class QuestionnaireVersion : IComparable<QuestionnaireVersion>
     {
+        [DataMember]
         public int Major { get; set; }
+
+        [DataMember]
         public int Minor { get; set; }
+
+        [DataMember]
         public int Patch { get; set; }
 
         public QuestionnaireVersion(int major, int minor, int patch)
@@ -18,6 +25,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects
         protected bool Equals(QuestionnaireVersion other)
         {
             return this.Major == other.Major && this.Minor == other.Minor && this.Patch == other.Patch;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}.{1}.{2}", this.Major, this.Minor, this.Patch);
         }
 
         public override int GetHashCode()

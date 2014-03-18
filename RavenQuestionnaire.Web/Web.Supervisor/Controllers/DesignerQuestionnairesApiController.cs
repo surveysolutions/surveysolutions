@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Http;
 using Core.Supervisor.Views.Template;
@@ -7,38 +8,48 @@ using Main.Core.Documents;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Extensions;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
+using IPublicService = Web.Supervisor.DesignerPublicService.IPublicService;
+using QuestionnaireVersion = Web.Supervisor.DesignerPublicService.QuestionnaireVersion;
+using RemoteFileInfo = Web.Supervisor.DesignerPublicService.RemoteFileInfo;
 
 namespace Web.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
-        private IPublicService DesignerService
+        internal IPublicService DesignerService
         {
             get { return this.DesignerServiceClient; }
+            set { this.DesignerServiceClient = (IPublicService)value; }
         }
 
-        private PublicServiceClient DesignerServiceClient
+        private IPublicService DesignerServiceClient
         {
-            get { return (PublicServiceClient)HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name]; }
-            set { HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name] = value; }
+            get { return (IPublicService)HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name]; }
+            set
+            {
+                HttpContext.Current.Session[this.GlobalInfo.GetCurrentUser().Name] = value;
+            }
         }
 
         private readonly IStringCompressor zipUtils;
+        private readonly ISupportedVersionProvider supportedVersionProvider;
 
         public DesignerQuestionnairesApiController(ICommandService commandService, IGlobalInfoProvider globalInfo,
-                                                   IStringCompressor zipUtils, ILogger logger)
+            ISupportedVersionProvider supportedVersionProvider,
+            IStringCompressor zipUtils, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
+            this.supportedVersionProvider = supportedVersionProvider;
         }
 
         public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
@@ -65,8 +76,26 @@ namespace Web.Supervisor.Controllers
             QuestionnaireDocument document = null;
             try
             {
-                RemoteFileInfo docSource =
-                    this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId));
+                var supportedVerstion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
+                RemoteFileInfo docSource;
+                try
+                {
+                    docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
+                            new QuestionnaireVersion
+                            {
+                                Major = supportedVerstion.Major,
+                                Minor = supportedVerstion.Minor,
+                                Patch = supportedVerstion.Patch
+                            }));
+                }
+                catch (FaultException ex)
+                {
+                    this.Logger.Error(string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                    return new QuestionnaireVerificationResponse(true)
+                    {
+                        ImportError = ex.Reason.ToString()
+                    };
+                }
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
