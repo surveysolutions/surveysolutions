@@ -140,7 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
-    <Compile Include="InterviewQuestionViewTests\when_creating_view_for_question_which_is_mandatory_invalid_and_disabled.cs" />
+    <Compile Include="InterviewQuestionViewTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
     <Compile Include="Merger\InterviewDataAndQuestionnaireMergerTestContext.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_group_inside_it_.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_roster_inside_i.cs" />

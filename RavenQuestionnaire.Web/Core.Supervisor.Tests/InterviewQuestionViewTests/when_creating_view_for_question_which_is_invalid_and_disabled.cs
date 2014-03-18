@@ -9,12 +9,11 @@ using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.InterviewQuestionViewTests
 {
-    internal class when_creating_view_for_question_which_is_mandatory_invalid_and_disabled
+    internal class when_creating_view_for_question_which_is_invalid_and_disabled
     {
         Establish context = () =>
         {
-            question = Mock.Of<IQuestion>(_
-                => _.Mandatory == true);
+            question = Mock.Of<IQuestion>();
 
             answeredQuestion = new InterviewQuestion { Valid = false, Enabled = false };
         };

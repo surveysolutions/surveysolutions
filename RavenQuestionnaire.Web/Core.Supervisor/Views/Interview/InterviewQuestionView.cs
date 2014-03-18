@@ -89,7 +89,7 @@ namespace Core.Supervisor.Views.Interview
                 }
             }
 
-            if (!this.IsValid && this.IsMandatory && !this.IsEnabled)
+            if (!this.IsValid && !this.IsEnabled)
                 this.IsValid = true;
         }
 
