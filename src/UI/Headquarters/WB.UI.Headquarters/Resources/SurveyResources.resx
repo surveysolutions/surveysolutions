@@ -129,6 +129,9 @@
   <data name="SupervisorLogin" xml:space="preserve">
     <value>Supervisor login</value>
   </data>
+  <data name="SurveyIdHasWrongFormat" xml:space="preserve">
+    <value>Survey id has wrong format</value>
+  </data>
   <data name="SurveyListName" xml:space="preserve">
     <value>Name</value>
   </data>
