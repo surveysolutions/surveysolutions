@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         {
             Guid rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             Guid rosterSizeQuestionForChildRoster1Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-            Guid rosterSizeQuestionWithInvalidRosterLevelId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid rosterSizeQuestionWithThirdRosteLevelId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
@@ -89,18 +88,25 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         It should_return_error_with_code__WB0054__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0054");
 
-        It should_return_error_with_1_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+        It should_return_error_with_2_references = () =>
+            resultErrors.Single().References.Count().ShouldEqual(2);
 
-        It should_return_error_reference_with_type_question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_first_error_reference_with_type_group = () =>
+            resultErrors.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_error_reference_with_id_of_rosterSizeQuestionId = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
+        It should_return_first_error_reference_with_id_of_rosterId = () =>
+            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
+
+        It should_return_second_error_reference_with_type_question = () =>
+            resultErrors.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+
+        It should_return_second_error_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId = () =>
+            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid groupWithInvalidRosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        private static Guid rosterSizeQuestionWithInvalidRosterLevelId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     }
 }

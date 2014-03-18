@@ -252,7 +252,7 @@
   <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
     <value>QR Barcode questions cannot be used in enablement condition.</value>
   </data>
-  <data name="WB0054_RosterSizeQuestionAndDependentRosterHaveDifferentRosterLevels" xml:space="preserve">
-    <value>Roster size question and dependent roster have different roster levels</value>
+  <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+    <value>Roster should have deeper or the same roster level as it's roster size question.</value>
   </data>
 </root>
