@@ -25,6 +25,7 @@ namespace Web.Supervisor.Models
         public bool IsSuccess { get; private set; }
         public string QuestionnaireTitle { get; private set; }
         public QuestionnaireVerificationErrorResponse[] Errors { get; private set; }
+        public string ImportError { get; set; }
     }
 
     public class QuestionnaireVerificationErrorResponse

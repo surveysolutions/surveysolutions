@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.WebServices.Questionnaire
+﻿using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+
+namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System;
     using System.ServiceModel;
@@ -9,14 +11,10 @@
     [MessageContract]
     public class DownloadQuestionnaireRequest
     {
-        #region Fields
-
-        /// <summary>
-        /// The file name.
-        /// </summary>
         [MessageHeader]
         public Guid QuestionnaireId { get; set; }
 
-        #endregion
+        [MessageHeader]
+        public QuestionnaireVersion SupportedQuestionnaireVersion { get; set; }
     }
 }

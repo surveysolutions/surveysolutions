@@ -48,10 +48,11 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/Message" />
-      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
+      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects" />
+      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/Message" />
+      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="DownloadQuestionnaireRequest">
@@ -59,6 +60,7 @@
   </wsdl:message>
   <wsdl:message name="DownloadQuestionnaireRequest_Headers">
     <wsdl:part name="QuestionnaireId" element="tns:QuestionnaireId" />
+    <wsdl:part name="SupportedQuestionnaireVersion" element="tns:SupportedQuestionnaireVersion" />
   </wsdl:message>
   <wsdl:message name="RemoteFileInfo">
     <wsdl:part name="parameters" element="tns:RemoteFileInfo" />
@@ -122,6 +124,7 @@
       <soap12:operation soapAction="http://tempuri.org/IPublicService/DownloadQuestionnaire" style="document" />
       <wsdl:input name="DownloadQuestionnaireRequest">
         <soap12:header message="tns:DownloadQuestionnaireRequest_Headers" part="QuestionnaireId" use="literal" />
+        <soap12:header message="tns:DownloadQuestionnaireRequest_Headers" part="SupportedQuestionnaireVersion" use="literal" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output name="RemoteFileInfo">
@@ -168,9 +171,9 @@
   </wsdl:binding>
   <wsdl:service name="PublicService">
     <wsdl:port name="CustomBinding_IPublicService" binding="tns:CustomBinding_IPublicService">
-      <soap12:address location="https://localhost/designer/PublicService.svc" />
+      <soap12:address location="https://localhost/Designer/PublicService.svc" />
       <wsa10:EndpointReference>
-        <wsa10:Address>https://localhost/designer/PublicService.svc</wsa10:Address>
+        <wsa10:Address>https://localhost/Designer/PublicService.svc</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Dns>localhost</Dns>
         </Identity>

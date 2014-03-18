@@ -22,12 +22,13 @@
     <MetadataSource Address="https://localhost/Designer/PublicService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="PublicService.xsd" MetadataType="Schema" ID="81f3b814-41f8-48b7-9309-6fb5fdbe6a5c" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?xsd=xsd0" />
-    <MetadataFile FileName="PublicService1.xsd" MetadataType="Schema" ID="18610eb2-5327-4487-885b-d77603b0aacd" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?xsd=xsd1" />
-    <MetadataFile FileName="PublicService.disco" MetadataType="Disco" ID="c115e27f-0477-4d8a-a6e7-b5c14a42a54e" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?disco" />
-    <MetadataFile FileName="PublicService.wsdl" MetadataType="Wsdl" ID="a354865d-5b92-45e7-b5f2-a645370fa59a" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?wsdl" />
-    <MetadataFile FileName="PublicService2.xsd" MetadataType="Schema" ID="adbf7473-1f6f-476e-ac70-2241e7147f56" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?xsd=xsd2" />
-    <MetadataFile FileName="PublicService3.xsd" MetadataType="Schema" ID="db1024b6-7c2e-4e2f-be4b-82cebb940bea" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PublicService4.xsd" MetadataType="Schema" ID="a3e750b8-0b2e-44db-b499-6be9fda1e7d4" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PublicService41.xsd" MetadataType="Schema" ID="2a9ff721-4ef5-484a-8791-3e05647fb137" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PublicService42.xsd" MetadataType="Schema" ID="05cac5a7-0298-4683-b305-f6f3b6d31441" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PublicService1.wsdl" MetadataType="Wsdl" ID="473c8c02-d64f-46ea-9eee-43eb0c9c6b2e" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?wsdl" />
+    <MetadataFile FileName="PublicService43.xsd" MetadataType="Schema" ID="f54e40e8-2b4e-4330-84ae-fd8437174347" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PublicService44.xsd" MetadataType="Schema" ID="c4bda492-709b-4f83-a9c2-3e2213f7a8c6" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd4" />
+    <MetadataFile FileName="PublicService1.disco" MetadataType="Disco" ID="30805b4b-6ed4-40ae-8257-0f2ffda7f0d4" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

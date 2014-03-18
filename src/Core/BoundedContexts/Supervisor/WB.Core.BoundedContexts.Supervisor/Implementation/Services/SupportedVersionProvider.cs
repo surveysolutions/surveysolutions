@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
     {
         private static readonly QuestionnaireVersion supportedQuestionnaireVersion = new QuestionnaireVersion(1, 6, 0);
 
-        public QuestionnaireVersion GetMaximalQuestionnaireVersion()
+        public QuestionnaireVersion GetSupportedQuestionnaireVersion()
         {
             return supportedQuestionnaireVersion;
         }
