@@ -7,7 +7,6 @@ using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
-
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -17,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_reevaluating_whole_interview_and_questionnaire_has_recently_enabled_mandatory_question : InterviewTestsContext
+    internal class when_reevaluating_interview_with_mandatory_question_inside_recently_enabled_group : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -26,11 +25,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
             conditionallyRecentlyEnabledMandatoryQuestionId = Guid.Parse("33333333333333333333333333333333");
-
+            conditionallyRecentlyEnabledGroupId = Guid.Parse("43333333333333333333333333333333");
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId }
-                                                        && _.GetAllMandatoryQuestions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId });
+                                                        _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyRecentlyEnabledGroupId }
+                                                        && _.GetAllMandatoryQuestions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId }
+                                                        && _.GetAllParentGroupsForQuestion(conditionallyRecentlyEnabledMandatoryQuestionId) == new Guid[] { conditionallyRecentlyEnabledGroupId });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.Apply(new QuestionDisabled(conditionallyRecentlyEnabledMandatoryQuestionId, new decimal[0]));
+            interview.Apply(new GroupDisabled(conditionallyRecentlyEnabledGroupId, new decimal[0]));
             interview.Apply(new NumericIntegerQuestionAnswered(userId, conditionallyRecentlyEnabledMandatoryQuestionId, new decimal[0],
                 DateTime.Now, 2));
             eventContext = new EventContext();
@@ -70,13 +70,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldNotContainEvent<AnswerDeclaredInvalid>(@event
              => @event.QuestionId == conditionallyRecentlyEnabledMandatoryQuestionId);
 
+        It should_raise_GroupEnabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
+            eventContext.ShouldContainEvent<GroupEnabled>(@event
+             => @event.GroupId == conditionallyRecentlyEnabledGroupId);
+
         It should_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
            eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event
             => @event.QuestionId == conditionallyRecentlyEnabledMandatoryQuestionId);
+
+        It should_not_raise_GroupDisabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
+            eventContext.ShouldNotContainEvent<GroupDisabled>(@event
+             => @event.GroupId == conditionallyRecentlyEnabledGroupId);
 
         private static EventContext eventContext;
         private static Guid questionnaireId;
         private static Interview interview;
         private static Guid conditionallyRecentlyEnabledMandatoryQuestionId;
+        private static Guid conditionallyRecentlyEnabledGroupId;
     }
 }

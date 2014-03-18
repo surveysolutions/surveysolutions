@@ -17,25 +17,25 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_reevaluating_whole_interview_and_questionnaire_has_group_depending_on_recently_enabled_question : InterviewTestsContext
+    internal class when_reevaluating_interview_with_group_depending_on_recently_enabled_question : InterviewTestsContext
     {
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
 
             var userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-
+            var questionId = Guid.Parse("53333333333333333333333333333333");
             conditionallyDependentGroupId = Guid.Parse("33333333333333333333333333333333");
             conditionallyRecentlyEnabledQuestionId = Guid.Parse("43333333333333333333333333333333");
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
                 _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDependentGroupId }
-                    &&
-                    _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDependentGroupId) ==
-                        new [] { new QuestionIdAndVariableName(conditionallyRecentlyEnabledQuestionId, "q1") }
-                    && _.GetCustomEnablementConditionForGroup(conditionallyDependentGroupId)=="[q1]==2"
-                    && _.GetCustomEnablementConditionForQuestion(conditionallyRecentlyEnabledQuestionId)=="2==2"
-                    && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyRecentlyEnabledQuestionId) == new[] { new QuestionIdAndVariableName(Guid.NewGuid(), "qsomething") });
+                    &&_.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDependentGroupId) == new[] { conditionallyRecentlyEnabledQuestionId }
+                    && _.GetCustomEnablementConditionForGroup(conditionallyDependentGroupId) == string.Format("[q1]==2")
+                    && _.GetCustomEnablementConditionForQuestion(conditionallyRecentlyEnabledQuestionId) == "2==2"
+                    && _.GetQuestionVariableName(conditionallyRecentlyEnabledQuestionId) == "q1"
+                    && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyRecentlyEnabledQuestionId) == new[] { questionId }
+                    && _.GetQuestionVariableName(questionId) == "q2");
 
             var expressionProcessor = new WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
