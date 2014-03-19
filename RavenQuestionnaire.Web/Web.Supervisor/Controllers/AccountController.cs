@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
+using WB.Core.GenericSubdomains.Utils;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -12,13 +13,14 @@ namespace Web.Supervisor.Controllers
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;
-
         private readonly IGlobalInfoProvider globalProvider;
+        private readonly IPasswordHasher passwordHasher;
 
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider)
+        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
+            this.passwordHasher = passwordHasher;
         }
 
         [HttpGet]
@@ -34,7 +36,7 @@ namespace Web.Supervisor.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid)
             {
-                if (LoginIncludingHeadquartersData(model.UserName, model.Password))
+                if (this.LoginIncludingHeadquartersData(model.UserName, model.Password))
                 {
                     bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
@@ -60,14 +62,14 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        private static bool LoginIncludingHeadquartersData(string login, string password)
+        private bool LoginIncludingHeadquartersData(string login, string password)
         {
-            if (LoginUsingLocalDatabase(login, password))
+            if (this.LoginUsingLocalDatabase(login, password))
                 return true;
 
             UpdateLocalDataFromHeadquarters(login, password);
 
-            return LoginUsingLocalDatabase(login, password);
+            return this.LoginUsingLocalDatabase(login, password);
         }
 
         private static void UpdateLocalDataFromHeadquarters(string login, string password)
@@ -75,9 +77,10 @@ namespace Web.Supervisor.Controllers
             // TODO
         }
 
-        private static bool LoginUsingLocalDatabase(string login, string password)
+        private bool LoginUsingLocalDatabase(string login, string password)
         {
-            return Membership.ValidateUser(login, SimpleHash.ComputeHash(password));
+            return Membership.ValidateUser(login, this.passwordHasher.Hash(password))
+                || Membership.ValidateUser(login, SimpleHash.ComputeHash(password));
         }
 
         public bool IsLoggedIn()

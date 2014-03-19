@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorCredentialsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorFeedDenormalizer>(this.Kernel);
 
-            this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
+            this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
             this.Bind<ISupervisorLoginService>().To<SupervisorLoginService>().InSingletonScope();
             this.Bind<ISupervisorFeedService>().To<SupervisorFeedService>();
         }
