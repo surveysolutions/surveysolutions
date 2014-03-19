@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
            GetLevel(result, rosterSizeQuestionId).Records.Length.ShouldEqual(2);
 
         It should_first_record_id_equals_0 = () =>
-           GetLevel(result, rosterSizeQuestionId).Records[0].RecordId.ShouldEqual(0);
+           GetLevel(result, rosterSizeQuestionId).Records[0].RecordId.ShouldEqual("0");
 
         It should_first_record_has_one_question = () =>
           GetLevel(result, rosterSizeQuestionId).Records[0].Questions.Length.ShouldEqual(1);
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
          GetLevel(result, rosterSizeQuestionId).Records[0].Questions[0].Answers[0].ShouldEqual(someAnswer);
 
         It should_second_record_id_equals_1 = () =>
-           GetLevel(result, rosterSizeQuestionId).Records[1].RecordId.ShouldEqual(1);
+           GetLevel(result, rosterSizeQuestionId).Records[1].RecordId.ShouldEqual("1");
 
         It should_second_record_has_one_question = () =>
           GetLevel(result, rosterSizeQuestionId).Records[1].Questions.Length.ShouldEqual(1);

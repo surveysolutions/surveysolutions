@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
                 foreach (var item in items.Records)
                 {
-                    writer.WriteField(item.InterviewId);
                     writer.WriteField(item.RecordId);
 
                     foreach (var exportedQuestion in item.Questions)
@@ -32,10 +31,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                         }
                     }
 
-                    writer.WriteField(item.ParentRecordId.HasValue ? item.ParentRecordId.ToString() : string.Empty);
+                    writer.WriteField(item.ParentRecordId);
                     writer.NextRecord();
                 }
-
                 streamWriter.Flush();
             }
         }
@@ -47,8 +45,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             using (var writer = new CsvWriter(streamWriter))
             {
                 writer.Configuration.Delimiter = this.delimiter;
-
-                writer.WriteField("InterviewId");
                 writer.WriteField(header.LevelIdColumnName);
 
                 foreach (ExportedHeaderItem question in header.HeaderItems.Values)
