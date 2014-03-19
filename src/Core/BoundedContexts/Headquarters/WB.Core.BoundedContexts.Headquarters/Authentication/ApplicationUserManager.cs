@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
 {
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
+        public ApplicationUserManager(IUserStore<ApplicationUser> store, ApplicationUserManagerSettings settings)
             : base(store)
         {
 
@@ -16,8 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
                 AllowOnlyAlphanumericUserNames = false
             };
 
-            int requiredLength = Int32.Parse(ConfigurationManager.AppSettings["MinPasswordLength"]);
-            PasswordValidator = new CustomPasswordValidator(requiredLength, ConfigurationManager.AppSettings["PasswordPattern"]);
+            PasswordValidator = new CustomPasswordValidator(settings.MinPasswordLength, settings.PasswordPattern);
         }
     }
 }
