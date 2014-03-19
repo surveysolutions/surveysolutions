@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurvisorLoginsDenormalizerT
             repositoryWriterMock.Verify(x => x.Store(Moq.It.IsAny<SupervisorLoginView>(), login));
 
         private static SupervisorLoginView passedView;
-        private static SurvisorLoginsDenormalizer denormalizer;
+        private static SupervisorLoginsDenormalizer denormalizer;
         private static IPublishedEvent<SupervisorRegistered> evnt;
         private static Mock<IReadSideRepositoryWriter<SupervisorLoginView>> repositoryWriterMock;
         private static string login = "Sidor";

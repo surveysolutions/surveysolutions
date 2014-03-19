@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Tests.SurvisorCredentialsDenormalizerTests
 {
-    [Subject(typeof(SurvisorCredentialsDenormalizer))]
+    [Subject(typeof(SupervisorCredentialsDenormalizer))]
     public class when_new_supervisor_is_registered
     {
         Establish context = () =>
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurvisorCredentialsDenormal
 
         It should_store_login_and_password_has_as_id = () => writer.Received().Store(Arg.Any<SupervisorCredentialsView>(), "login:passwordhash");
         
-        private static SurvisorCredentialsDenormalizer denormalizer;
+        private static SupervisorCredentialsDenormalizer denormalizer;
         private static IReadSideRepositoryWriter<SupervisorCredentialsView> writer;
         private static IPublishedEvent<SupervisorRegistered> evnt;
     }

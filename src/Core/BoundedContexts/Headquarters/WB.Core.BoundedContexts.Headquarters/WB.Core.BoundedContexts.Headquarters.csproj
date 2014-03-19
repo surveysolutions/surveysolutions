@@ -90,8 +90,8 @@
     <Compile Include="Implementation\Aggregates\Survey.cs" />
     <Compile Include="Implementation\EventHandlers\SurveyDetailsViewDenormalizer.cs" />
     <Compile Include="Implementation\EventHandlers\SurveyLineViewDenormalizer.cs" />
-    <Compile Include="Implementation\EventHandlers\SurvisorCredentialsDenormalizer.cs" />
-    <Compile Include="Implementation\EventHandlers\SurvisorLoginsDenormalizer.cs" />
+    <Compile Include="Implementation\EventHandlers\SupervisorCredentialsDenormalizer.cs" />
+    <Compile Include="Implementation\EventHandlers\SupervisorLoginsDenormalizer.cs" />
     <Compile Include="Implementation\Services\SupervisorLoginService.cs" />
     <Compile Include="Implementation\ViewFactories\SurveyViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -135,7 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="ViewFactories\Survey\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Authentication\Resources.resx">
