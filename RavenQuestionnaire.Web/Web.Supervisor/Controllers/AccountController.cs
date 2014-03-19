@@ -34,7 +34,7 @@ namespace Web.Supervisor.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid)
             {
-                if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
+                if (LoginIncludingHeadquartersData(model.UserName, model.Password))
                 {
                     bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
@@ -59,7 +59,27 @@ namespace Web.Supervisor.Controllers
 
             return this.View(model);
         }
-       
+
+        private static bool LoginIncludingHeadquartersData(string login, string password)
+        {
+            if (LoginUsingLocalDatabase(login, password))
+                return true;
+
+            UpdateLocalDataFromHeadquarters(login, password);
+
+            return LoginUsingLocalDatabase(login, password);
+        }
+
+        private static void UpdateLocalDataFromHeadquarters(string login, string password)
+        {
+            // TODO
+        }
+
+        private static bool LoginUsingLocalDatabase(string login, string password)
+        {
+            return Membership.ValidateUser(login, SimpleHash.ComputeHash(password));
+        }
+
         public bool IsLoggedIn()
         {
             return this.globalProvider.GetCurrentUser() != null;
