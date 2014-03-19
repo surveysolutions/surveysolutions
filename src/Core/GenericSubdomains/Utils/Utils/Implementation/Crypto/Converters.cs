@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace WB.Core.GenericSubdomains.Utils.Crypto
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Crypto
 {
-    public static class Converters
+    internal static class Converters
     {
         public static byte[] ConvertToBytes(object a_in)
         {
