@@ -2,7 +2,9 @@
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Tests
@@ -24,6 +26,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests
             publishedEvent.EventSequence.Returns(1);
 
             return publishedEvent;
+        }
+
+        public static SupervisorLoginService SupervisorLoginService(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins = null,
+            IQueryableReadSideRepositoryReader<SupervisorCredentialsView> credentialsStore = null,
+            IPasswordHasher passwordHasher = null)
+        {
+            return new SupervisorLoginService(supervisorLogins ?? Substitute.For<IQueryableReadSideRepositoryReader<SupervisorLoginView>>(),
+                credentialsStore ?? Substitute.For<IQueryableReadSideRepositoryReader<SupervisorCredentialsView>>(),
+                passwordHasher ?? Substitute.For<IPasswordHasher>());
         }
     }
 }
