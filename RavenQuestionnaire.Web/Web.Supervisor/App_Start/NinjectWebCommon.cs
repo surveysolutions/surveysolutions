@@ -128,7 +128,12 @@ namespace Web.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
-                new SupervisorBoundedContextModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()));
+                new SupervisorBoundedContextModule(
+                    AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])
+                    ));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
