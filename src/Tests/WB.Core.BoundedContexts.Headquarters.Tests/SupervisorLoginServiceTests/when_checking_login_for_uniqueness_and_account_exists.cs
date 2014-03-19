@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Headquarters.Tests.LoginsCheckerTests
+namespace WB.Core.BoundedContexts.Headquarters.Tests.SupervisorLoginServiceTests
 {
     internal class when_checking_login_for_uniqueness_and_account_exists : LoginsCheckerTestContext
     {

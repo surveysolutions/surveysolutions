@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.BoundedContexts.Headquarters.Tests.LoginsCheckerTests
+namespace WB.Core.BoundedContexts.Headquarters.Tests.SupervisorLoginServiceTests
 {
     internal class LoginsCheckerTestContext
     {
