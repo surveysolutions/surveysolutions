@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.LoginsCheckerTests
 {
     internal class LoginsCheckerTestContext
     {
-        protected static LoginsChecker CreateLoginsChecker(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins = null)
+        protected static SupervisorLoginService CreateLoginsChecker(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins = null)
         {
-            return new LoginsChecker(supervisorLogins ?? Mock.Of<IQueryableReadSideRepositoryReader<SupervisorLoginView>>());
+            return new SupervisorLoginService(supervisorLogins ?? Mock.Of<IQueryableReadSideRepositoryReader<SupervisorLoginView>>());
         }
     }
 }
