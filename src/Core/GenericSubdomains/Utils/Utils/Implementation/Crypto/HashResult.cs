@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace WB.Core.GenericSubdomains.Utils.Crypto
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Crypto
 {
     [DebuggerDisplay("HashResult, Size: {m_hash.Length}, Hash: {ToString()}")]
-    public class HashResult
+    internal class HashResult
     {
         private byte[] m_hash;
 

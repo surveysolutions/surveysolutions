@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace WB.Core.GenericSubdomains.Utils.Crypto
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Crypto
 {
-    public interface IHash
+    internal interface IHash
     {
         string Name { get; }
         int BlockSize { get; }

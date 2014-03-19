@@ -13,6 +13,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
 {
     public class AuthenticationModule : NinjectModule
     {
+        private readonly string passwordPattern;
+        private readonly int minPasswordLength;
+        
+        public AuthenticationModule(int minPasswordLength, string passwordPattern)
+        {
+            this.minPasswordLength = minPasswordLength;
+            this.passwordPattern = passwordPattern;
+        }
+
         public override void Load()
         {
             this.Kernel.Bind<IUserStore<ApplicationUser>>()
@@ -20,6 +29,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
                     var ravenUserStore = new RavenUserStore<ApplicationUser>(this.GetSession(), true);
                     return ravenUserStore;
                 }).InRequestScope();
+
+            Kernel.Bind<ApplicationUserManagerSettings>().ToMethod(context => new ApplicationUserManagerSettings  {
+                PasswordPattern = passwordPattern,
+                MinPasswordLength = minPasswordLength
+            });
 
             Kernel.Bind<UserManager<ApplicationUser>>().To<ApplicationUserManager>().InTransientScope();
 
