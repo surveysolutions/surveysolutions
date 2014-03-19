@@ -19,11 +19,14 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IEventHandler>().To<SurveyLineViewDenormalizer>();
             this.Bind<IEventHandler>().To<SurveyDetailsViewDenormalizer>();
+
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorLoginsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorCredentialsDenormalizer>(this.Kernel);
+            DispatcherRegistryHelper.RegisterDenormalizer<SupervisorFeedDenormalizer>(this.Kernel);
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             this.Bind<ISupervisorLoginService>().To<SupervisorLoginService>().InSingletonScope();
+            this.Bind<ISupervisorFeedService>().To<SupervisorFeedService>();
         }
     }
 }
