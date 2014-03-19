@@ -177,6 +177,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Authentication\BasicAuthenticationAttribute.cs" />
+    <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
+    <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
+    <Compile Include="Api\Class1.cs" />
+    <Compile Include="Api\FeedController.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\EditAccountModel.cs" />
     <Compile Include="Models\RegisterAccountModel.cs" />
