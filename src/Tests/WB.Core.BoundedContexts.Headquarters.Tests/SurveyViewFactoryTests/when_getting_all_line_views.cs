@@ -24,8 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyViewFactoryTests
 
             var surveyLineViewRepositoryReader = Mock.Of<IQueryableReadSideRepositoryReader<SurveyLineView>>();
             Mock.Get(surveyLineViewRepositoryReader)
-                .Setup(reader => reader.QueryAll(it.IsAny<Expression<Func<SurveyLineView, bool>>>()))
-                .Returns<Expression<Func<SurveyLineView, bool>>>(condition => viewsFromReader.Where(condition.Compile()));
+                .Setup(reader => reader.Query(it.IsAny<Func<IQueryable<SurveyLineView>, SurveyLineView[]>>()))
+                .Returns<Func<IQueryable<SurveyLineView>, SurveyLineView[]>>(func => func(viewsFromReader.AsQueryable()));
 
             viewFactory = CreateSurveyViewFactory(surveyLineViewRepositoryReader: surveyLineViewRepositoryReader);
         };
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyViewFactoryTests
         Because of = () =>
             result = viewFactory.GetAllLineViews();
 
-        It should_return_all_views_queried_from_line_repository_reader_via_query_all_method = () =>
+        It should_return_all_views_queried_from_line_repository_reader_via_query_method = () =>
             result.ShouldContainOnly(viewsFromReader);
 
         private static SurveyLineView[] result;
