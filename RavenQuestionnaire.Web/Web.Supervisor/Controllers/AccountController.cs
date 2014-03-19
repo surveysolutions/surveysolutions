@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Utils;
 using Web.Supervisor.Models;
 
@@ -15,12 +16,14 @@ namespace Web.Supervisor.Controllers
         private readonly IFormsAuthentication authentication;
         private readonly IGlobalInfoProvider globalProvider;
         private readonly IPasswordHasher passwordHasher;
+        private readonly IHeadquartersSynchronizer headquartersSynchronizer;
 
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher)
+        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher, IHeadquartersSynchronizer headquartersSynchronizer)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
             this.passwordHasher = passwordHasher;
+            this.headquartersSynchronizer = headquartersSynchronizer;
         }
 
         [HttpGet]
@@ -67,14 +70,14 @@ namespace Web.Supervisor.Controllers
             if (this.LoginUsingLocalDatabase(login, password))
                 return true;
 
-            UpdateLocalDataFromHeadquarters(login, password);
+            this.UpdateLocalDataFromHeadquarters(login, password);
 
             return this.LoginUsingLocalDatabase(login, password);
         }
 
-        private static void UpdateLocalDataFromHeadquarters(string login, string password)
+        private void UpdateLocalDataFromHeadquarters(string login, string password)
         {
-            // TODO
+            this.headquartersSynchronizer.Pull(login, password);
         }
 
         private bool LoginUsingLocalDatabase(string login, string password)
