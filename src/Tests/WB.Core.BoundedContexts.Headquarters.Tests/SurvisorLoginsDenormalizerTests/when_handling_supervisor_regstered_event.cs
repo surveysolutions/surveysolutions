@@ -29,6 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurvisorLoginsDenormalizerT
         It should_pass_not_empty_supervisor_login_view = () => 
             passedView.ShouldNotBeNull();
 
+        It should_persist_login_view_using_login_as_id = () => 
+            repositoryWriterMock.Verify(x => x.Store(Moq.It.IsAny<SupervisorLoginView>(), login));
+
         private static SupervisorLoginView passedView;
         private static SurvisorLoginsDenormalizer denormalizer;
         private static IPublishedEvent<SupervisorRegistered> evnt;

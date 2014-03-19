@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.LoginsCheckerTests
         It should_return_false_as_result = () =>
             result.ShouldBeFalse();
 
-        private static LoginsChecker checker;
+        private static SupervisorLoginService checker;
         private static string notUniqueLogin = "Vasya";
         private static bool result;
     }

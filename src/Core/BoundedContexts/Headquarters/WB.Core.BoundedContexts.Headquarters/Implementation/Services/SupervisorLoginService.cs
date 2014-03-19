@@ -4,11 +4,11 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    public class LoginsChecker : ILoginsChecker
+    public class SupervisorLoginService : ISupervisorLoginService
     {
         private readonly IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins;
 
-        public LoginsChecker(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins)
+        public SupervisorLoginService(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins)
         {
             this.supervisorLogins = supervisorLogins;
         }
@@ -16,6 +16,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public bool IsUnique(string login)
         {
             return supervisorLogins.GetById(login) == null;
+        }
+
+        public bool AreCredentialsValid(string login, string password)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
