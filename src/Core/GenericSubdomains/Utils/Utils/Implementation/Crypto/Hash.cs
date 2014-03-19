@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace WB.Core.GenericSubdomains.Utils.Crypto
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Crypto
 {
     internal abstract class Hash : IHash
     {

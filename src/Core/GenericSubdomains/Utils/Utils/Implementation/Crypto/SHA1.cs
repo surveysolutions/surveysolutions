@@ -1,4 +1,4 @@
-﻿namespace WB.Core.GenericSubdomains.Utils.Crypto
+﻿namespace WB.Core.GenericSubdomains.Utils.Implementation.Crypto
 {
     internal class SHA1 : SHA0
     {
