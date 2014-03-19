@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
 {
-    internal class SupervisorCredentialsDenormalizer : IEventHandler, IEventHandler<SupervisorRegistered>
+    internal class SupervisorCredentialsDenormalizer : BaseDenormalizer, IEventHandler<SupervisorRegistered>
     {
         private readonly IReadSideRepositoryWriter<SupervisorCredentialsView> repositoryWriter;
 
@@ -16,17 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
             this.repositoryWriter = repositoryWriter;
         }
 
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
+        public override Type[] BuildsViews
         {
             get { return new[] { typeof(SupervisorCredentialsView) }; }
         }
