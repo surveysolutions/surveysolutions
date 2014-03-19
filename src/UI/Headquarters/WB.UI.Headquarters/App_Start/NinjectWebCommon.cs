@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
                 new RavenWriteSideInfrastructureModule(ravenConnectionSettings),
                 new RavenReadSideInfrastructureModule(ravenConnectionSettings),
-                new AuthenticationModule(),
+                new AuthenticationModule(int.Parse(WebConfigurationManager.AppSettings["MinPasswordLength"]), WebConfigurationManager.AppSettings["PasswordPattern"]),
                 new HeadquartersBoundedContextModule(),
                 new CqrsModule());
 
