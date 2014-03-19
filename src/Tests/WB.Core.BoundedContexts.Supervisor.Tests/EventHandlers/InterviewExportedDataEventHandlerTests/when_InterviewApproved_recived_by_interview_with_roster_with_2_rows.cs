@@ -40,10 +40,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
            GetLevel(result,propagationScopeKey).Records.Length.ShouldEqual(2);
 
         It should_first_record_id_equals_0 = () =>
-           GetLevel(result, propagationScopeKey).Records[0].RecordId.ShouldEqual(0);
+           GetLevel(result, propagationScopeKey).Records[0].RecordId.ShouldEqual("0");
 
         It should_second_record_id_equals_1 = () =>
-           GetLevel(result, propagationScopeKey).Records[1].RecordId.ShouldEqual(1);
+           GetLevel(result, propagationScopeKey).Records[1].RecordId.ShouldEqual("1");
 
         It should_first_rosters_record_parent_id_equals_to_main_level_record_id = () =>
           GetLevel(result, propagationScopeKey).Records[0].ParentRecordId.ShouldEqual(GetLevel(result, questionnarie.PublicKey).Records[0].RecordId);

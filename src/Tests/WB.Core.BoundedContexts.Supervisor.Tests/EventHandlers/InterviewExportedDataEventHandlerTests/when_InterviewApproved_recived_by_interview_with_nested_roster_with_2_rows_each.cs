@@ -60,28 +60,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
            GetLevel(result, nestedRosterId).Records.Length.ShouldEqual(4);
 
         It should_first_record_id_equals_0 = () =>
-           GetLevel(result, nestedRosterId).Records[0].RecordId.ShouldEqual(0);
+           GetLevel(result, nestedRosterId).Records[0].RecordId.ShouldEqual("0");
 
         It should_second_record_id_equals_1 = () =>
-           GetLevel(result, nestedRosterId).Records[1].RecordId.ShouldEqual(1);
+           GetLevel(result, nestedRosterId).Records[1].RecordId.ShouldEqual("1");
 
         It should_third_record_id_equals_1 = () =>
-           GetLevel(result, nestedRosterId).Records[2].RecordId.ShouldEqual(0);
+           GetLevel(result, nestedRosterId).Records[2].RecordId.ShouldEqual("0");
 
         It should_fourth_record_id_equals_1 = () =>
-           GetLevel(result, nestedRosterId).Records[3].RecordId.ShouldEqual(1);
+           GetLevel(result, nestedRosterId).Records[3].RecordId.ShouldEqual("1");
 
         It should_first_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-          GetLevel(result, nestedRosterId).Records[0].ParentRecordId.ShouldEqual(0);
+          GetLevel(result, nestedRosterId).Records[0].ParentRecordId.ShouldEqual("0");
 
         It should_second_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-           GetLevel(result, nestedRosterId).Records[1].ParentRecordId.ShouldEqual(0);
+           GetLevel(result, nestedRosterId).Records[1].ParentRecordId.ShouldEqual("0");
 
         It should_third_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-          GetLevel(result, nestedRosterId).Records[2].ParentRecordId.ShouldEqual(1);
+          GetLevel(result, nestedRosterId).Records[2].ParentRecordId.ShouldEqual("1");
 
         It should_fourth_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-           GetLevel(result, nestedRosterId).Records[3].ParentRecordId.ShouldEqual(1);
+           GetLevel(result, nestedRosterId).Records[3].ParentRecordId.ShouldEqual("1");
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
