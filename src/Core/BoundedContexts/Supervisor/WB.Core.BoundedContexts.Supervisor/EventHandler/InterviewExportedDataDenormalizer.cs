@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -10,6 +11,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
@@ -55,16 +57,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var dataRecords = new List<InterviewDataExportRecord>();
 
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelId);
-            decimal interviewId = interview.InterviewId.GetHashCode();
-
+          
             foreach (var dataByLevel in interviewDataByLevels)
             {
                 var vectorLength = dataByLevel.RosterVector.Length;
-                decimal recordId = vectorLength == 0 ? interviewId : dataByLevel.RosterVector.Last();
+                string recordId = vectorLength == 0 ? interview.InterviewId.FormatGuid() : dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
-                decimal? parentRecordId = vectorLength == 0
-                    ? (decimal?) null
-                    : (vectorLength == 1 ? interviewId : dataByLevel.RosterVector[vectorLength - 2]);
+                string parentRecordId = vectorLength == 0
+                    ? null
+                    : (vectorLength == 1 ? interview.InterviewId.FormatGuid() : dataByLevel.RosterVector[vectorLength - 2].ToString(CultureInfo.InvariantCulture));
 
                 dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, parentRecordId,
                     GetQuestionsFroExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
