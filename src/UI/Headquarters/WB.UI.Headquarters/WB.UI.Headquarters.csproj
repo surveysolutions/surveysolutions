@@ -85,11 +85,16 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Common">
-      <HintPath>..\..\..\..\packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    <Reference Include="Ninject.Web.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Ninject.Web.Common.3.0.2-unstable-9015\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc">
-      <HintPath>..\..\..\..\packages\Ninject.MVC3.3.0.0.6\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+    <Reference Include="Ninject.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Ninject.MVC3.3.0.2-unstable-9015\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi">
+      <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.3.0.2-unstable-9022\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
@@ -180,7 +185,6 @@
     <Compile Include="Api\Authentication\BasicAuthenticationAttribute.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
-    <Compile Include="Api\Class1.cs" />
     <Compile Include="Api\FeedController.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\EditAccountModel.cs" />
