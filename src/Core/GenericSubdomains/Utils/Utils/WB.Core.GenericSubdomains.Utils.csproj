@@ -40,16 +40,16 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Crypto\ArrayExtensions.cs" />
-    <Compile Include="Crypto\Converters.cs" />
-    <Compile Include="Crypto\Hash.cs" />
-    <Compile Include="Crypto\HashBuffer.cs" />
-    <Compile Include="Crypto\HashCryptoNotBuildIn.cs" />
-    <Compile Include="Crypto\HashResult.cs" />
-    <Compile Include="Crypto\IHash.cs" />
-    <Compile Include="Crypto\IHashInfo.cs" />
-    <Compile Include="Crypto\SHA0.cs" />
-    <Compile Include="Crypto\SHA1.cs" />
+    <Compile Include="Implementation\Crypto\ArrayExtensions.cs" />
+    <Compile Include="Implementation\Crypto\Converters.cs" />
+    <Compile Include="Implementation\Crypto\Hash.cs" />
+    <Compile Include="Implementation\Crypto\HashBuffer.cs" />
+    <Compile Include="Implementation\Crypto\HashCryptoNotBuildIn.cs" />
+    <Compile Include="Implementation\Crypto\HashResult.cs" />
+    <Compile Include="Implementation\Crypto\IHash.cs" />
+    <Compile Include="Implementation\Crypto\IHashInfo.cs" />
+    <Compile Include="Implementation\Crypto\SHA0.cs" />
+    <Compile Include="Implementation\Crypto\SHA1.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GuidExtensions.cs" />
     <Compile Include="Implementation\PasswordHasher.cs" />

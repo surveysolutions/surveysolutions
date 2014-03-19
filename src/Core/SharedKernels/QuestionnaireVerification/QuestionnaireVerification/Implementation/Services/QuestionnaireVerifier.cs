@@ -101,8 +101,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInValidationExpression, "WB0052", VerificationMessages.WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression),
                     Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
+                    Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
 
-                    ErrorsByRostersThatHaveRosterSizeQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -435,6 +435,37 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             };
         }
 
+        private static EntityVerificationResult<IComposite> RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster(IGroup roster, QuestionnaireDocument questionnaire)
+        {
+            if (!IsRosterGroup(roster))
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
+            if (rosterSizeQuestion == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(roster, questionnaire);
+            if (rosterLevelForRoster == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
+            if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
+            {
+                rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
+            }
+
+            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(rosterSizeQuestion, rosterLevelWithoutOwnRosterSizeQuestion, questionnaire))
+            {
+                return new EntityVerificationResult<IComposite>
+                {
+                    HasErrors = true,
+                    ReferencedEntities = new IComposite[] { roster, rosterSizeQuestion },
+                };
+            }
+
+            return new EntityVerificationResult<IComposite> { HasErrors = false };
+        }
+
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestions(QuestionnaireDocument questionnaire)
         {
             var linkedQuestions = questionnaire.Find<IQuestion>(
@@ -494,18 +525,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
 
             return errorByAllQuestionsWithSubstitutions;
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByRostersThatHaveRosterSizeQuestionsWithDeeperRosterLevel(QuestionnaireDocument questionnaire)
-        {
-            var rostersByRosterSizeQuestion = questionnaire.Find<IGroup>(IsRosterByQuestion);
-            var errors = new List<QuestionnaireVerificationError>();
-
-            VerifyEnumerableAndAccumulateErrorsToList(rostersByRosterSizeQuestion, errors,
-                @roster => GetVerificationErrorOrNullByRosterThatHasRosterSizeQuestionWithDeeperRosterLevel(@roster, questionnaire));
-            
-
-            return errors;
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel(
@@ -722,32 +741,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return null;
         }
 
-        private static QuestionnaireVerificationError GetVerificationErrorOrNullByRosterThatHasRosterSizeQuestionWithDeeperRosterLevel(IGroup roster,
-            QuestionnaireDocument questionnaire)
-        {
-            var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
-            if (rosterSizeQuestion != null)
-            {
-                var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(roster, questionnaire);
-                if (rosterLevelForRoster != null)
-                {
-                    var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
-                    if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
-                    {
-                        rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
-                    }
-
-                    if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(rosterSizeQuestion,
-                        rosterLevelWithoutOwnRosterSizeQuestion, questionnaire))
-                    {
-                        return RosterHasRosterSizeQuestionWithDeeperRosterLevel(roster, rosterSizeQuestion);
-                    }
-                }
-            }
-
-            return null;
-        }
-
         private static IQuestion GetQuestionByIdentifier(string identifier, QuestionnaireDocument questionnaire)
         {
             Guid parsedId;
@@ -904,15 +897,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
-        }
-
-        private static QuestionnaireVerificationError RosterHasRosterSizeQuestionWithDeeperRosterLevel(IGroup roster,
-            IQuestion rosterSizeQuestion)
-        {
-            return new QuestionnaireVerificationError("WB0054",
-                VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster,
-                CreateReference(roster),
-                CreateReference(rosterSizeQuestion));
         }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,

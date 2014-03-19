@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace WB.Core.GenericSubdomains.Utils.Crypto
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Crypto
 {
     [DebuggerStepThrough]
     internal static class ArrayExtensions

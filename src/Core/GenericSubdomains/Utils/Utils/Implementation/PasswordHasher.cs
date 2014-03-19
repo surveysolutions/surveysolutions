@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using WB.Core.GenericSubdomains.Utils.Crypto;
+using WB.Core.GenericSubdomains.Utils.Implementation.Crypto;
 
 namespace WB.Core.GenericSubdomains.Utils.Implementation
 {

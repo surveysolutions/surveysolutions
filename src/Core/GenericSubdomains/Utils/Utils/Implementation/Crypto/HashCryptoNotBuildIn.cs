@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace WB.Core.GenericSubdomains.Utils.Crypto
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Crypto
 {
     internal abstract class BlockHash : Hash, IBlockHash
     {
