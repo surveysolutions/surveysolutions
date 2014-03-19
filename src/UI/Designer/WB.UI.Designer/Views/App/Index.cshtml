@@ -2,16 +2,76 @@
     Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+ <!--<![endif]-->
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" href="~/UpdatedDesigner/styles/main.css">
 </head>
-<body>
-    <div>
-        <h1>Test</h1>
+<body ng-app="pocAngularApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div id="designer-editor" class="container">
+        <section id="header" class="row">
+            <div class="designer-logo"></div>
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="">Designer home</a></li>
+                    <li><a href="">My Questionnaires</a></li>
+                </ul>
+            </div>
+            <div class="questionnarie-title">
+                <div class="title">
+                    Tanzania NPS 2012/2013 Household Questionnaire <span>(128Q, 27G, 3R)</span>
+                    <input type="button" class="wb-inline-button error" value="VERIFY" />
+                    <span class="error-message">5 errors in <a href="">3 questions</a></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="spacer" class="row">
+            <div class="left"></div>
+            <div class="right"></div>
+        </section>
+
+        <!-- Add your site or application content here -->
+        <section id="main" class="row" ng-view=""></section>
+
     </div>
+    <!--[if lt IE 9]>
+    <script src="~/UpdatedDesigner/vendor/es5-shim/es5-shim.js"></script>
+    <script src="~/UpdatedDesigner/vendor/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    <script src="~/Scripts/jquery-1.9.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/UpdatedDesigner/vendor/underscore/underscore.js"></script>
+    <script src="~/UpdatedDesigner/vendor/angular/angular.js"></script>
+    <script src="~/UpdatedDesigner/vendor/angular-route/angular-route.js"></script>
+    <script src="~/UpdatedDesigner/vendor/angular-cookies/angular-cookies.js"></script>
+    <script src="~/UpdatedDesigner/vendor/angular-resource/angular-resource.js"></script>
+    <script src="~/UpdatedDesigner/vendor/angular-sanitize/angular-sanitize.js"></script>
+
+    <script src="~/UpdatedDesigner/vendor/angular-underscore/angular-underscore.js"></script>
+
+    <script src="~/UpdatedDesigner/scripts/app.js"></script>
+    <script src="~/UpdatedDesigner/scripts/controllers/main.js"></script>
+    <script src="~/UpdatedDesigner/scripts/ujs.js"></script>
+    <script src="~/UpdatedDesigner/scripts/jquery.mCustomScrollbar.js"></script>
+    <script src="~/UpdatedDesigner/scripts/jquery.mousewheel.js"></script>
+    <script src="~/UpdatedDesigner/scripts/wb-designer-editor.js"></script>
+
 </body>
 </html>
