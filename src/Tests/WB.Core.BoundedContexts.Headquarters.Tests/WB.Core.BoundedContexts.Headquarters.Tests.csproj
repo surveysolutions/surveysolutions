@@ -79,7 +79,7 @@
     <Compile Include="AuthenticationTests\CustomPasswordValidatorTests\when_using_simple_password.cs" />
     <Compile Include="AuthenticationTests\CustomPasswordValidatorTests\when_using_valid_password.cs" />
     <Compile Include="Create.cs" />
-    <Compile Include="SupervisorLoginServiceTests\LoginsCheckerTestContext.cs" />
+    <Compile Include="SupervisorLoginServiceTests\when_existing_credentials_are_checked.cs" />
     <Compile Include="SupervisorLoginServiceTests\when_checking_login_for_uniqueness_and_account_exists.cs" />
     <Compile Include="SupervisorLoginServiceTests\when_checking_login_for_uniqueness_and_account_not_exists.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
