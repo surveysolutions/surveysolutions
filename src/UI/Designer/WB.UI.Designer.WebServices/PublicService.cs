@@ -48,15 +48,12 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo.Version > request.SupportedQuestionnaireVersion)
             {
-                throw new InconsistentVersionException
-                {
-                    Reason =
-                        string.Format(
-                            "Requested questionnaire \"{0}\" has version {1}, but Supervisor application supports versions up to {2} only",
-                            templateTitle,
-                            templateInfo.Version,
-                            request.SupportedQuestionnaireVersion)
-                };
+                var message = String.Format("Requested questionnaire \"{0}\" has version {1}, but Supervisor application supports versions up to {2} only",
+                        templateTitle,
+                        templateInfo.Version,
+                        request.SupportedQuestionnaireVersion);
+
+                throw new InconsistentVersionException(message);
             }
 
             Stream stream = this.zipUtils.Compress(templateInfo.Source);
