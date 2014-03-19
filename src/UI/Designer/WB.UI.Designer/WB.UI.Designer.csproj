@@ -213,6 +213,7 @@
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
     <Compile Include="Api\TesterController.cs" />
+    <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -571,6 +572,7 @@
     <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
+    <Content Include="Views\App\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
