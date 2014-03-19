@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using System.Web;
+using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
@@ -63,9 +65,7 @@ namespace WB.UI.Headquarters.Api.Authentication
                     return;
                 }
 
-                var principal = new GenericPrincipal(identity, null);
-
-                Thread.CurrentPrincipal = principal;
+                SetCurrentIdentity(actionContext, identity);
 
                 // inside of ASP.NET this is required
                 //if (HttpContext.Current != null)
@@ -73,6 +73,15 @@ namespace WB.UI.Headquarters.Api.Authentication
 
                 base.OnAuthorization(actionContext);
             }
+        }
+
+        private static void SetCurrentIdentity(HttpActionContext actionContext, BasicAuthenticationIdentity identity)
+        {
+            var principal = new GenericPrincipal(identity, null);
+            var apiController = actionContext.ControllerContext.Controller as ApiController;
+            apiController.User = principal;
+
+            Thread.CurrentPrincipal = principal;
         }
 
         /// <summary>
