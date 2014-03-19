@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.SupportedVersionProviderTests
             {
                 SupportedQuestionnaireVersionMajor = 1,
                 SupportedQuestionnaireVersionMinor = 6,
-                SupportedQuestionnaireVersionPatch = 0
+                SupportedQuestionnaireVersionPatch = 2
             });
         };
 
