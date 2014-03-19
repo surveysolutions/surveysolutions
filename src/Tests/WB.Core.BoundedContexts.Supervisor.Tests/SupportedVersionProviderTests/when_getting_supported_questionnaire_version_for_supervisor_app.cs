@@ -8,7 +8,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.SupportedVersionProviderTests
     {
         Establish context = () =>
         {
-            versionProvider = CreateSupportedVersionProvider();
+            versionProvider = CreateSupportedVersionProvider(new ApplicationVersionSettings
+            {
+                SupportedQuestionnaireVersionMajor = 1,
+                SupportedQuestionnaireVersionMinor = 6,
+                SupportedQuestionnaireVersionPatch = 2
+            });
         };
 
         Because of = () =>
