@@ -72,7 +72,7 @@ namespace WB.UI.Designer.WebServices.Tests
             exception.ShouldBeOfType<InconsistentVersionException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (new[] { "requested questionnaire", "supports versions" }).Each(x => (exception as InconsistentVersionException).Reason.ToLower().ShouldContain(x));
+            (new[] { "requested questionnaire", "supports versions" }).Each(x => (exception as InconsistentVersionException).Message.ToLower().ShouldContain(x));
 
         private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;
