@@ -7,11 +7,11 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers
 {
-    internal class SurvisorCredentialsDenormalizer : IEventHandler, IEventHandler<SupervisorRegistered>
+    internal class SupervisorCredentialsDenormalizer : IEventHandler, IEventHandler<SupervisorRegistered>
     {
         private readonly IReadSideRepositoryWriter<SupervisorCredentialsView> repositoryWriter;
 
-        public SurvisorCredentialsDenormalizer(IReadSideRepositoryWriter<SupervisorCredentialsView> repositoryWriter)
+        public SupervisorCredentialsDenormalizer(IReadSideRepositoryWriter<SupervisorCredentialsView> repositoryWriter)
         {
             this.repositoryWriter = repositoryWriter;
         }

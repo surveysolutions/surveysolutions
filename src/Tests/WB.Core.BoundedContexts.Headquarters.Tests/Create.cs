@@ -11,9 +11,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests
 {
     internal static class Create
     {
-        internal static SurvisorCredentialsDenormalizer SurvisorCredentialsDenormalizer(IReadSideRepositoryWriter<SupervisorCredentialsView> repositoryWriter = null)
+        internal static SupervisorCredentialsDenormalizer SurvisorCredentialsDenormalizer(IReadSideRepositoryWriter<SupervisorCredentialsView> repositoryWriter = null)
         {
-            return new SurvisorCredentialsDenormalizer(
+            return new SupervisorCredentialsDenormalizer(
                 repositoryWriter ?? Substitute.For<IReadSideRepositoryWriter<SupervisorCredentialsView>>()
             );
         }
