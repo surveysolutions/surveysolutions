@@ -25,9 +25,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
         }
 
-        private static ILoginsChecker LoginsChecker
+        private static ISupervisorLoginService SupervisorLoginService
         {
-            get { return ServiceLocator.Current.GetInstance<ILoginsChecker>(); }
+            get { return ServiceLocator.Current.GetInstance<ISupervisorLoginService>(); }
         }
 
         #endregion
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
         private void ThrowIfSupervisorsLoginIsNotUnique(string login)
         {
-            if (!LoginsChecker.IsUnique(login))
+            if (!SupervisorLoginService.IsUnique(login))
             {
                 throw new SurveyException(string.Format("Supervisor's login {0} is already taken", login));
             }

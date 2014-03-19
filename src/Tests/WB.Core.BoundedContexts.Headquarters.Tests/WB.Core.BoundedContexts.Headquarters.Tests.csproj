@@ -60,6 +60,9 @@
     <Reference Include="Moq">
       <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -75,6 +78,7 @@
     <Compile Include="AuthenticationTests\CustomPasswordValidatorTests\when_using_short_password.cs" />
     <Compile Include="AuthenticationTests\CustomPasswordValidatorTests\when_using_simple_password.cs" />
     <Compile Include="AuthenticationTests\CustomPasswordValidatorTests\when_using_valid_password.cs" />
+    <Compile Include="Create.cs" />
     <Compile Include="LoginsCheckerTests\LoginsCheckerTestContext.cs" />
     <Compile Include="LoginsCheckerTests\when_checking_login_for_uniqueness_and_account_exists.cs" />
     <Compile Include="LoginsCheckerTests\when_checking_login_for_uniqueness_and_account_not_exists.cs" />
@@ -96,6 +100,7 @@
     <Compile Include="SurveyViewFactoryTests\SurveyViewFactoryTestsContext.cs" />
     <Compile Include="SurveyViewFactoryTests\when_getting_all_line_views.cs" />
     <Compile Include="SurveyViewFactoryTests\when_getting_details_view.cs" />
+    <Compile Include="SurvisorCredentialsDenormalizerTests\when_new_supervisor_is_registered.cs" />
     <Compile Include="SurvisorLoginsDenormalizerTests\SurvisorLoginsDenormalizerTestContext.cs" />
     <Compile Include="SurvisorLoginsDenormalizerTests\when_handling_supervisor_regstered_event.cs" />
   </ItemGroup>

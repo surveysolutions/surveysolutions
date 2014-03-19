@@ -13,9 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
     {
         Establish context = () =>
         {
-            loginChecker = Mock.Of<ILoginsChecker>(x => x.IsUnique(login) == false);
+            loginChecker = Mock.Of<ISupervisorLoginService>(x => x.IsUnique(login) == false);
 
-            SetupInstanceToMockedServiceLocator<ILoginsChecker>(loginChecker);
+            SetupInstanceToMockedServiceLocator<ISupervisorLoginService>(loginChecker);
 
             survey = CreateSurvey();
 
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
         private static Survey survey;
         private static string login = "Vasya";
         private static string password = "VasyaLovesMeat";
-        private static ILoginsChecker loginChecker;
+        private static ISupervisorLoginService loginChecker;
         private static Exception exception;
     }
 }
