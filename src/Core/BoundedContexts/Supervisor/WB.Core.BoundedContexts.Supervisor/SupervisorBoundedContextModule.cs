@@ -51,6 +51,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
+            this.Bind<IHeadquartersSynchronizer>().To<HeadquartersSynchronizer>();
+
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
         }
 
