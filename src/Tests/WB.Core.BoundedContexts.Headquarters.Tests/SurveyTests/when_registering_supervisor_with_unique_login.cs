@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
             eventContext.GetSingleEvent<SupervisorRegistered>().Login.ShouldEqual(login);
 
         It should_raise_SupervisorRegistered_event_with_Password_equal_to_specified_passwordHash = () =>
-            eventContext.GetSingleEvent<SupervisorRegistered>().Password.ShouldEqual(passwordHash);
+            eventContext.GetSingleEvent<SupervisorRegistered>().PasswordHash.ShouldEqual(passwordHash);
 
         private static EventContext eventContext;
         private static Survey survey;

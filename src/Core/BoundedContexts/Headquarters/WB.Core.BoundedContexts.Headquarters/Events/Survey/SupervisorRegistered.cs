@@ -4,13 +4,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Events.Survey
 {
     public class SupervisorRegistered : SurveyEvent
     {
-        public SupervisorRegistered(string login, string password)
+        public SupervisorRegistered(string login, string passwordHash)
         {
             this.Login = login;
-            this.Password = password;
+            this.PasswordHash = passwordHash;
         }
 
         public string Login { get; set; }
-        public string Password{ get; set; }
+        public string PasswordHash{ get; set; }
     }
 }
