@@ -5,7 +5,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        private static readonly QuestionnaireVersion supportedQuestionnaireVersion = new QuestionnaireVersion(1, 6, 0);
+        private static QuestionnaireVersion supportedQuestionnaireVersion;
+
+        public SupportedVersionProvider(ApplicationVersionSettings settings)
+        {
+            supportedQuestionnaireVersion = new QuestionnaireVersion(
+                settings.SupportedQuestionnaireVersionMajor,
+                settings.SupportedQuestionnaireVersionMinor,
+                settings.SupportedQuestionnaireVersionPatch);
+        }
 
         public QuestionnaireVersion GetSupportedQuestionnaireVersion()
         {

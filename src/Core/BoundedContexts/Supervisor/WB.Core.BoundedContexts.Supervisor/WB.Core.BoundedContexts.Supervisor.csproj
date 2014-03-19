@@ -72,6 +72,7 @@
     <Compile Include="Implementation\ReadSide\CsvReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\FileBaseQuestionnaireExportStructureWriter.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
+    <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
     <Compile Include="Implementation\Services\DataExport\DataExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />

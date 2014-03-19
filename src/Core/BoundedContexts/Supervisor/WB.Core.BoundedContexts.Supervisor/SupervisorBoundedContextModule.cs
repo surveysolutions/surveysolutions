@@ -24,16 +24,32 @@ namespace WB.Core.BoundedContexts.Supervisor
     public class SupervisorBoundedContextModule : NinjectModule
     {
         private readonly string currentFolderPath;
+        private readonly int supportedQuestionnaireVersionMajor;
+        private readonly int supportedQuestionnaireVersionMinor;
+        private readonly int supportedQuestionnaireVersionPatch;
 
-        public SupervisorBoundedContextModule(string currentFolderPath)
+        public SupervisorBoundedContextModule(string currentFolderPath, int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch)
         {
             this.currentFolderPath = currentFolderPath;
+            this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
+            this.supportedQuestionnaireVersionMinor = supportedQuestionnaireVersionMinor;
+            this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
         }
 
         public override void Load()
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IDataExportService>().To<DataExportService>().WithConstructorArgument("folderPath", currentFolderPath);
+
+            this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
+            {
+                SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
+                SupportedQuestionnaireVersionMinor = this.supportedQuestionnaireVersionMinor,
+                SupportedQuestionnaireVersionPatch = this.supportedQuestionnaireVersionPatch
+            });
+
+            this.Unbind<ISupportedVersionProvider>();
+            this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>().InSingletonScope();
 
             this.Unbind<IReadSideRepositoryWriter<InterviewDataExportView>>();
             this.Bind<IReadSideRepositoryWriter<InterviewDataExportView>>().To<CsvInterviewDataExportViewWriter>();
