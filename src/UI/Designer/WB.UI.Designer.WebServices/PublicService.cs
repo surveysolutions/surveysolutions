@@ -53,7 +53,7 @@ namespace WB.UI.Designer.WebServices
                         templateInfo.Version,
                         request.SupportedQuestionnaireVersion);
 
-                throw new InconsistentVersionException(message);
+                throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
 
             Stream stream = this.zipUtils.Compress(templateInfo.Source);
