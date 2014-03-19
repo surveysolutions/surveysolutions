@@ -225,7 +225,7 @@
         
         groups.getRosterSizeQuestionByGroup = function (group) {
             while (!isUndefinedOrNull(group)) {
-                if (group.isRoster() && !isUndefinedOrNull(group.rosterSizeQuestion())) {
+                if (group.isRoster() && group.rosterSizeQuestion) {
                     return group.rosterSizeQuestion();
                 }
 
@@ -293,7 +293,12 @@
 
         questions.getRosterTitleQuestionsForSelect = function (rosterSizeQuestionId) {
             return _.filter(groups.getQuestionsFromPropagatableGroups(), function (question) {
-                var groupRosterSizeQuestionId = groups.getRosterSizeQuestionByGroup(question.parent());
+                var questionRoster = question.parent();
+                if (questionRoster.isRoster && !questionRoster.isRoster()) {
+                    questionRoster = questionRoster.parent();
+                }
+
+                var groupRosterSizeQuestionId = groups.getRosterSizeQuestionByGroup(questionRoster);
                 return !isUndefinedOrNull(groupRosterSizeQuestionId) && (groupRosterSizeQuestionId == rosterSizeQuestionId);
             }).map(function (item) {
                 return { questionId: item.id(), title: item.alias() + ": " + item.title() };

@@ -149,6 +149,8 @@
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_paralell_roster_scope.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_under_deeper_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_variable_name_not_unique.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_qr_barcode_question_and_variable_name_is_too_long.cs" />

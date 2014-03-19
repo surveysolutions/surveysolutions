@@ -1,6 +1,7 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
+using Raven.Abstractions.Extensions;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -2684,7 +2685,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         throw new QuestionnaireException(string.Format(
                             "Roster title question {0} is missing in questionnaire.", rosterTitleQuestionId));
 
-                    if (!IsRosterTitleInRosterByRosterSize(rosterTitleQuestion:rosterTitleQuestion, rosterSizeQuestionId:rosterSizeQuestionId))
+                    if (!IsRosterTitleInRosterByRosterSize(rosterTitleQuestion: rosterTitleQuestion, rosterSizeQuestionId: rosterSizeQuestionId, currentRosterId: groupId))
                         throw new QuestionnaireException(string.Format(
                             "Question for roster titles {0} should be placed only inside groups where roster size question is {1}",
                             FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
@@ -2707,16 +2708,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return referencedItemRosterVector.All(referencesItemRosterVector.Contains);
         }
 
-        private bool IsRosterTitleInRosterByRosterSize(IQuestion rosterTitleQuestion, Guid rosterSizeQuestionId)
+        private bool IsRosterTitleInRosterByRosterSize(IQuestion rosterTitleQuestion, Guid rosterSizeQuestionId, Guid currentRosterId)
         {
             var groupsByRosterSizeQuestion =
-                this.GetGroupsByRosterSizeQuestion(rosterSizeQuestionId).Select(x => x.PublicKey);
+                this.GetGroupsByRosterSizeQuestion(rosterSizeQuestionId).Select(x => x.PublicKey).ToHashSet();
+            groupsByRosterSizeQuestion.Add(currentRosterId);
 
             var parentForRosterTitleQuestion = rosterTitleQuestion.GetParent();
             while (parentForRosterTitleQuestion != null)
             {
                 if (groupsByRosterSizeQuestion.Contains(parentForRosterTitleQuestion.PublicKey))
                     return true;
+                var parentGroup = parentForRosterTitleQuestion as IGroup;
+                if (parentGroup != null && parentGroup.IsRoster)
+                    break;
 
                 parentForRosterTitleQuestion = parentForRosterTitleQuestion.GetParent();
             }
@@ -2727,19 +2732,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private IEnumerable<IGroup> GetGroupsByRosterSizeQuestion(Guid rosterSizeQuestionId)
         {
             return this.innerDocument.Find<IGroup>(
-                group => IsGroupOrRosterByRosterSizeQuestion(group, rosterSizeQuestionId));
-        }
-
-
-        private bool IsGroupOrRosterByRosterSizeQuestion(IGroup group, Guid rosterSizeQuestionId)
-        {
-            while (group != null)
-            {
-                if (group.RosterSizeQuestionId == rosterSizeQuestionId)
-                    return true;
-                group = (IGroup) group.GetParent();
-            }
-            return false;
+                group => group.RosterSizeQuestionId == rosterSizeQuestionId);
         }
 
         private IEnumerable<IQuestion> GetAllQuestionsInGroup(IGroup group)
