@@ -13,10 +13,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurvisorLoginsDenormalizerT
 {
     internal class SurvisorLoginsDenormalizerTestContext
     {
-        protected static SurvisorLoginsDenormalizer CreateSurveyDetailsViewDenormalizer(
+        protected static SupervisorLoginsDenormalizer CreateSurveyDetailsViewDenormalizer(
            IReadSideRepositoryWriter<SupervisorLoginView> repositoryWriter = null)
         {
-            return new SurvisorLoginsDenormalizer(repositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<SupervisorLoginView>>());
+            return new SupervisorLoginsDenormalizer(repositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<SupervisorLoginView>>());
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(Guid? eventSourceId = null, T @event = null) where T : class
