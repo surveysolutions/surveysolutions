@@ -50,6 +50,9 @@
     <Reference Include="AspNet.Identity.RavenDB">
       <HintPath>..\..\..\..\lib\AspNet.Identity.RavenDB\AspNet.Identity.RavenDB.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.Identity.Core.2.0.0-beta1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
