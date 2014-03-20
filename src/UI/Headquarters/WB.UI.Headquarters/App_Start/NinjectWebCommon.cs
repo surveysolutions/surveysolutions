@@ -7,6 +7,7 @@ using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
+using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
 using WB.UI.Headquarters;
@@ -60,7 +61,8 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
                 new RavenWriteSideInfrastructureModule(ravenConnectionSettings),
                 new RavenReadSideInfrastructureModule(ravenConnectionSettings),
-                new AuthenticationModule(int.Parse(WebConfigurationManager.AppSettings["MinPasswordLength"]), WebConfigurationManager.AppSettings["PasswordPattern"]),
+                new PasswordPolicyModule(int.Parse(WebConfigurationManager.AppSettings["MinPasswordLength"]), WebConfigurationManager.AppSettings["PasswordPattern"]),
+                new AuthenticationModule(),
                 new HeadquartersBoundedContextModule(),
                 new CqrsModule());
 
