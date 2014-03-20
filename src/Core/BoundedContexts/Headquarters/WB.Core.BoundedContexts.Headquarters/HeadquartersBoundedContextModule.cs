@@ -1,7 +1,9 @@
-﻿using Ninject.Modules;
+﻿using System;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.ViewFactories;
+using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.GenericSubdomains.Utils;
@@ -13,6 +15,14 @@ namespace WB.Core.BoundedContexts.Headquarters
 {
     public class HeadquartersBoundedContextModule : NinjectModule
     {
+        public override void VerifyRequiredModulesAreLoaded()
+        {
+            if (!this.Kernel.HasModule(typeof(PasswordPolicyModule).FullName))
+            {
+                throw new InvalidOperationException("PasswordPolicyModule is required");
+            }
+        }
+
         public override void Load()
         {
             this.Bind<ISurveyViewFactory>().To<SurveyViewFactory>();

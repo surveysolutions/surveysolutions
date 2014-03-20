@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
+using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Events.Survey;
 using WB.Core.BoundedContexts.Headquarters.Exceptions;
+using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Utils;
+using IPasswordHasher = WB.Core.GenericSubdomains.Utils.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 {
@@ -30,6 +35,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<ISupervisorLoginService>(); }
         }
 
+        private static ApplicationPasswordPolicySettings ApplicationPasswordPolicySettings
+        {
+            get { return ServiceLocator.Current.GetInstance<ApplicationPasswordPolicySettings>(); }
+        }
         #endregion
 
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
@@ -47,6 +56,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         {
             this.ThrowIfSupervisorsLoginIsNotUnique(login);
 
+            this.ThrowIfSupervisorsPasswordDoesnotMeetApplicationPasswordPolicy(password);
+
             var passwordHash = PasswordHasher.Hash(password);
 
             this.ApplyEvent(new SupervisorRegistered(login, passwordHash));
@@ -59,6 +70,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             if (!SupervisorLoginService.IsUnique(login))
             {
                 throw new SurveyException(string.Format("Supervisor's login {0} is already taken", login));
+            }
+        }
+
+        private void ThrowIfSupervisorsPasswordDoesnotMeetApplicationPasswordPolicy (string password)
+        {
+            if (String.IsNullOrEmpty(password) || password.Length < ApplicationPasswordPolicySettings.MinPasswordLength)
+            {
+                throw new SurveyException(string.Format("Supervisor's password is too short. Password should have at least {0} characters", ApplicationPasswordPolicySettings.MinPasswordLength));
+            }
+
+            if (!string.IsNullOrEmpty(ApplicationPasswordPolicySettings.PasswordPattern) && !Regex.IsMatch(password, ApplicationPasswordPolicySettings.PasswordPattern))
+            {
+                throw new SurveyException("Password must contain at least one number, one upper case character and one lower case character");
             }
         }
 

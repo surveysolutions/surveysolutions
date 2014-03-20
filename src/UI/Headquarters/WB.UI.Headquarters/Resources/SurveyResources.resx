@@ -121,7 +121,7 @@
     <value>Register supervisor</value>
   </data>
   <data name="RegisterSupervisorTitle" xml:space="preserve">
-    <value>register supervisor - {0}</value>
+    <value>Register supervisor for '{0}' survey</value>
   </data>
   <data name="StartNewSurveyLink" xml:space="preserve">
     <value>Start new survey</value>

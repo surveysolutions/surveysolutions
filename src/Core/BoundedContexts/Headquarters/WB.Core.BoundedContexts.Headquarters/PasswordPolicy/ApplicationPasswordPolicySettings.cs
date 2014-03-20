@@ -1,6 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Authentication
+﻿namespace WB.Core.BoundedContexts.Headquarters.PasswordPolicy
 {
-    public struct ApplicationUserManagerSettings
+    public struct ApplicationPasswordPolicySettings
     {
         public int MinPasswordLength { get; set; }
 
