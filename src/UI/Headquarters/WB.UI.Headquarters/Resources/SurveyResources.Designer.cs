@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to register supervisor - {0}.
+        ///   Looks up a localized string similar to Register supervisor for &apos;{0}&apos; survey.
         /// </summary>
         public static string RegisterSupervisorTitle {
             get {

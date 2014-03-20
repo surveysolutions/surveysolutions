@@ -2,6 +2,7 @@
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 
 namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
 {
@@ -18,6 +19,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<TInstance>())
                 .Returns(instance);
+        }
+
+        protected static ApplicationPasswordPolicySettings CreateApplicationPasswordPolicySettings(int? minPasswordLength = null, string passwordPattern = null)
+        {
+            return new ApplicationPasswordPolicySettings
+            {
+                MinPasswordLength = minPasswordLength ?? 5,
+                PasswordPattern = passwordPattern ?? "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$"
+            };
         }
     }
 }

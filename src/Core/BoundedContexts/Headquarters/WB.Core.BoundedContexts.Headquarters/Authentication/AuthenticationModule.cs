@@ -6,6 +6,7 @@ using Ninject.Web.Common;
 using Ninject.Modules;
 using Raven.Client;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
+using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Raven.PlainStorage;
 
@@ -13,13 +14,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
 {
     public class AuthenticationModule : NinjectModule
     {
-        private readonly string passwordPattern;
-        private readonly int minPasswordLength;
-        
-        public AuthenticationModule(int minPasswordLength, string passwordPattern)
+        public override void VerifyRequiredModulesAreLoaded()
         {
-            this.minPasswordLength = minPasswordLength;
-            this.passwordPattern = passwordPattern;
+            if (!this.Kernel.HasModule(typeof(PasswordPolicyModule).FullName))
+            {
+                throw new InvalidOperationException("PasswordPolicyModule is required");
+            }
         }
 
         public override void Load()
@@ -29,11 +29,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
                     var ravenUserStore = new RavenUserStore<ApplicationUser>(this.GetSession(), true);
                     return ravenUserStore;
                 }).InRequestScope();
-
-            Kernel.Bind<ApplicationUserManagerSettings>().ToMethod(context => new ApplicationUserManagerSettings  {
-                PasswordPattern = passwordPattern,
-                MinPasswordLength = minPasswordLength
-            });
 
             Kernel.Bind<UserManager<ApplicationUser>>().To<ApplicationUserManager>().InTransientScope();
 
