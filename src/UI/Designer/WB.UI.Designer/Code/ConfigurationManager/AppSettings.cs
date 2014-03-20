@@ -35,6 +35,16 @@ namespace WB.UI.Designer
             get { return ConfigurationManager.AppSettings.GetString("Raven.Username"); }
         }
 
+        public bool UseStreamingForEntity
+        {
+            get { return ConfigurationManager.AppSettings.GetBool("Raven.UseStreamingForEntity", true); }
+        }
+
+        public bool UseStreamingForAllEvents
+        {
+            get { return ConfigurationManager.AppSettings.GetBool("Raven.UseStreamingForAllEvents", true); }
+        }
+
         public string RavenUserPassword
         {
             get { return ConfigurationManager.AppSettings.GetString("Raven.Password"); }
