@@ -33,13 +33,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
                 HttpResponseMessage response = await client.SendAsync(request);
 
+                if (!response.IsSuccessStatusCode)
+                    return;
+
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                dynamic responseFeed = JObject.Parse(responseBody);
+                var command = CreateCommandFromResponseBody(responseBody);
 
-                this.commandService.Execute(
-                    new CreateUserCommand(Guid.NewGuid(), responseFeed.Login, responseFeed.PasswordHash, string.Empty, new[] { UserRoles.Supervisor }, false, null));
+                this.commandService.Execute(command);
             }
+        }
+
+        private static CreateUserCommand CreateCommandFromResponseBody(string responseBody)
+        {
+            dynamic responseFeed = JObject.Parse(responseBody);
+
+            string login = responseFeed.Login;
+            string passwordHash = responseFeed.PasswordHash;
+
+            return new CreateUserCommand(
+                Guid.NewGuid(), login, passwordHash, string.Empty, new[] { UserRoles.Supervisor }, false, null);
         }
     }
 }
