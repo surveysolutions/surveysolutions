@@ -17,13 +17,20 @@ namespace Web.Supervisor.Controllers
         private readonly IGlobalInfoProvider globalProvider;
         private readonly IPasswordHasher passwordHasher;
         private readonly IHeadquartersSynchronizer headquartersSynchronizer;
+        private readonly Func<string, string, bool> validateUserCredentials;
 
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher, IHeadquartersSynchronizer headquartersSynchronizer)
+        public AccountController(IFormsAuthentication authentication, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
+            IHeadquartersSynchronizer headquartersSynchronizer)
+            : this(authentication, globalProvider, passwordHasher, headquartersSynchronizer, Membership.ValidateUser) { }
+
+        internal AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
+            IHeadquartersSynchronizer headquartersSynchronizer, Func<string, string, bool> validateUserCredentials)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
             this.passwordHasher = passwordHasher;
             this.headquartersSynchronizer = headquartersSynchronizer;
+            this.validateUserCredentials = validateUserCredentials;
         }
 
         [HttpGet]
@@ -82,8 +89,8 @@ namespace Web.Supervisor.Controllers
 
         private bool LoginUsingLocalDatabase(string login, string password)
         {
-            return Membership.ValidateUser(login, this.passwordHasher.Hash(password))
-                || Membership.ValidateUser(login, SimpleHash.ComputeHash(password));
+            return this.validateUserCredentials(login, this.passwordHasher.Hash(password))
+                || this.validateUserCredentials(login, SimpleHash.ComputeHash(password));
         }
 
         public bool IsLoggedIn()
