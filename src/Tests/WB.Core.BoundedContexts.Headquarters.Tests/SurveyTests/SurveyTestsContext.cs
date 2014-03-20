@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
             return new ApplicationPasswordPolicySettings
             {
                 MinPasswordLength = minPasswordLength ?? 5,
-                PasswordPattern = passwordPattern ?? "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$"
+                PasswordPattern = passwordPattern ?? ""
             };
         }
     }
