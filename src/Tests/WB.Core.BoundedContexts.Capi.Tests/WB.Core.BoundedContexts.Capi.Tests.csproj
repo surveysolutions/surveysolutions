@@ -90,6 +90,7 @@
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_contains_nested_group.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_is_nested_roster.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_twice_and_row_is_nested_roster.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_deleting_roster_row_with_nested_group.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_deleting_roster_row_with_question_inside_nested_group.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_chapter_with_nested_group_is_disabling.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_chapter_with_nested_roster_is_disabling.cs" />

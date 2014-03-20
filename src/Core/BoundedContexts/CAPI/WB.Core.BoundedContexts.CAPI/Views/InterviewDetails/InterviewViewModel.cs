@@ -418,8 +418,22 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (!this.Screens.ContainsKey(screenId))
                 return;
 
-            var screen = this.Screens[screenId] as QuestionnaireScreenViewModel;
-            foreach (var item in screen.Items)
+            var screen = this.Screens[screenId] ;
+
+            var simpleScreen = screen as QuestionnaireScreenViewModel;
+            if (simpleScreen != null)
+                CleanupSimpleScreen(simpleScreen);
+
+            var rosterScreen = screen as QuestionnaireGridViewModel;
+            if (rosterScreen != null)
+                CleanupRosterScreen(rosterScreen);
+
+            this.Screens.Remove(screenId);
+        }
+
+        private void CleanupSimpleScreen(QuestionnaireScreenViewModel simpleScreen)
+        {
+            foreach (var item in simpleScreen.Items)
             {
                 var question = item as QuestionViewModel;
                 if (question != null)
@@ -434,7 +448,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     RemoveScreen(group.PublicKey);
                 }
             }
-            this.Screens.Remove(screenId);
+        }
+
+        private void CleanupRosterScreen(QuestionnaireGridViewModel roster)
+        {
+            foreach (var rosterRow in roster.Rows)
+            {
+                RemoveScreen(rosterRow.ScreenId);
+            }
         }
 
         private void CleanQuestionsParticipationInSubstitutionReferencesBySubscribedQuestion(QuestionViewModel question)
