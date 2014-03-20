@@ -86,9 +86,14 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     ModelState.AddModelError(string.Empty, SurveyResources.SurveyIdHasWrongFormat);
                 }
-                catch (SurveyException exception)
+                catch (Exception exception)
                 {
-                    ModelState.AddModelError(string.Empty, exception.Message);
+                    var surveyException = exception.GetSelfOrInnerAs<SurveyException>();
+                    if (surveyException == null)
+                    {
+                        throw;
+                    }
+                    ModelState.AddModelError(string.Empty, surveyException.Message);
                 }
             }
 

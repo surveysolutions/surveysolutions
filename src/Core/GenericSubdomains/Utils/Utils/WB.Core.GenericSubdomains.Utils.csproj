@@ -40,6 +40,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Implementation\Crypto\ArrayExtensions.cs" />
     <Compile Include="Implementation\Crypto\Converters.cs" />
     <Compile Include="Implementation\Crypto\Hash.cs" />

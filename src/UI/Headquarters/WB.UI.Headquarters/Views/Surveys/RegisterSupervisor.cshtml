@@ -11,6 +11,10 @@
 
         @using (Html.BeginForm("RegisterSupervisor", "Surveys", new { id = Model.SurveyId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
+            if (!ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary(true)
+            }
             <div class="form-group">
                 @Html.LabelFor(x => x.Login, new { @class = "col-sm-4 control-label" })
 
