@@ -22,9 +22,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
 
-        private bool useStreamingForAllEvents = true;
+        private readonly bool useStreamingForAllEvents;
 
-        private bool useStreamingForEntity = false;
+        private readonly bool useStreamingForEntity;
 
         /// <summary>
         /// PageSize for loading by chunk
@@ -33,37 +33,42 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         private readonly int timeout = 180;
 
-        public RavenDBEventStore(string ravenUrl, int pageSize)
+        public RavenDBEventStore(string ravenUrl, int pageSize, bool useStreamingForAllEvents = true, bool useStreamingForEntity = true)
         {
             this.DocumentStore = new DocumentStore
-                {
-                    Url = ravenUrl, 
-                    Conventions = CreateStoreConventions(CollectionName)
-                }.Initialize();
-            
-            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
-                {
-                    e.Request.Timeout = 30 * 60 * 1000; /*ms*/
-                };
-            this.pageSize = pageSize;
-            IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
+            {
+                Url = ravenUrl,
+                Conventions = CreateStoreConventions(CollectionName)
+            }.Initialize();
 
-            IndexCreation.CreateIndexes(typeof(EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
+            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
+            {
+                e.Request.Timeout = 30*60*1000; /*ms*/
+            };
+            this.pageSize = pageSize;
+            this.useStreamingForAllEvents = useStreamingForAllEvents;
+            this.useStreamingForEntity = useStreamingForEntity;
+            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
+
+            IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 
-        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
+        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize, bool useStreamingForAllEvents = true,
+            bool useStreamingForEntity = true)
         {
             externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             this.DocumentStore = externalDocumentStore;
 
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
-                {
-                    e.Request.Timeout = 30 * 60 * 1000; /*ms*/
-                };
+            {
+                e.Request.Timeout = 30*60*1000; /*ms*/
+            };
             this.pageSize = pageSize;
-            IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
+            this.useStreamingForAllEvents = useStreamingForAllEvents;
+            this.useStreamingForEntity = useStreamingForEntity;
+            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
 
-            IndexCreation.CreateIndexes(typeof(EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
+            IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
