@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
 
             SetupInstanceToMockedServiceLocator<ISupervisorLoginService>(loginChecker);
 
-            var passwordPolicy = CreateApplicationPasswordPolicySettings(minPasswordLength: 3);
+            var passwordPolicy = CreateApplicationPasswordPolicySettings(minPasswordLength: 3, passwordPattern: "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$");
 
             SetupInstanceToMockedServiceLocator<ApplicationPasswordPolicySettings>(passwordPolicy);
 
