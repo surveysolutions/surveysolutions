@@ -113,17 +113,27 @@ namespace Web.Supervisor.App_Start
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username,
                                                             password: password, defaultDatabase: defaultDatabase);
 
+            bool useStreamingForEntity, useStreamingForAllEvents;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForEntity"], out useStreamingForEntity))
+            {
+                useStreamingForEntity = true;
+            }
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
+            {
+                useStreamingForAllEvents = true;
+            }
+
             var kernel = new StandardKernel(
-                new NinjectSettings {InjectNonPublic = true},
+                new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 pageSize.HasValue
-                    ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
-                    : new RavenWriteSideInfrastructureModule(ravenSettings),
-                new RavenReadSideInfrastructureModule(ravenSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
+                    ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, useStreamingForEntity, pageSize.Value)
+                    : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, useStreamingForEntity),
+                new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
