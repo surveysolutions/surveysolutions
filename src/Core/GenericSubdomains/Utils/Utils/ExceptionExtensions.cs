@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.UI.Shared.Web.Extensions
+namespace WB.Core.GenericSubdomains.Utils
 {
     public static class ExceptionExtensions
     {
