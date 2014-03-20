@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             this.headquartersSettings = headquartersSettings;
         }
 
-        public async void Pull(string login, string password)
+        public void Pull(string login, string password)
         {
             using (var handler = new HttpClientHandler { Credentials = new NetworkCredential(login, password) })
             using (var client = new HttpClient(handler))
@@ -34,12 +34,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage response = await client.SendAsync(request);
+                HttpResponseMessage response = client.SendAsync(request).Result;
 
                 if (!response.IsSuccessStatusCode)
                     return;
 
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = response.Content.ReadAsStringAsync().Result;
 
                 var command = CreateCommandFromResponseBody(responseBody);
 
