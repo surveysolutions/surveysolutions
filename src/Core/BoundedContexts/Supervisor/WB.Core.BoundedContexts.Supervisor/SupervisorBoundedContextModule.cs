@@ -4,6 +4,7 @@ using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
@@ -27,13 +28,17 @@ namespace WB.Core.BoundedContexts.Supervisor
         private readonly int supportedQuestionnaireVersionMajor;
         private readonly int supportedQuestionnaireVersionMinor;
         private readonly int supportedQuestionnaireVersionPatch;
+        private readonly string headquartersUrl;
 
-        public SupervisorBoundedContextModule(string currentFolderPath, int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch)
+        public SupervisorBoundedContextModule(string currentFolderPath,
+            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
+            string headquartersUrl)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
             this.supportedQuestionnaireVersionMinor = supportedQuestionnaireVersionMinor;
             this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
+            this.headquartersUrl = headquartersUrl;
         }
 
         public override void Load()
@@ -67,6 +72,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
+            this.Bind<HeadquartersSettings>().ToConstant(new HeadquartersSettings(this.headquartersUrl));
             this.Bind<IHeadquartersSynchronizer>().To<HeadquartersSynchronizer>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable

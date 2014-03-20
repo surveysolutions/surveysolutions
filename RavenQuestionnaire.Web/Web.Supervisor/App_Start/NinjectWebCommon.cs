@@ -132,8 +132,8 @@ namespace Web.Supervisor.App_Start
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])
-                    ));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
+                    WebConfigurationManager.AppSettings["Headquarters.Url"]));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
