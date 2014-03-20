@@ -1290,11 +1290,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool IsQuestionDisabledRecursive(Identity questionId, IQuestionnaire questionnaire)
         {
             var questionsInvolvedInConditions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId.Id);
-            if (!questionsInvolvedInConditions.Any())
+            if (!questionsInvolvedInConditions.Any() || questionsInvolvedInConditions.Any(q => q.Id == questionId.Id))
                 return this.IsQuestionDisabled(questionId);
 
             return !this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionId, questionnaire,
-                (questionInCondition) => this.GetEnabledQuestionAnswerSupportedInExpressions(questionInCondition, (q) => IsQuestionDisabledRecursive(q, questionnaire)));
+                (questionInCondition) =>
+                    this.GetEnabledQuestionAnswerSupportedInExpressions(questionInCondition,
+                        (q) => IsQuestionDisabledRecursive(q, questionnaire)));
         }
 
         public void ReevaluateSynchronizedInterview()
