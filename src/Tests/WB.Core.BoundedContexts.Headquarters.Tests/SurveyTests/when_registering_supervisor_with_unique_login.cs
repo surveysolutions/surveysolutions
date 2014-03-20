@@ -15,9 +15,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
         {
             loginChecker = Mock.Of<ISupervisorLoginService>(x => x.IsUnique(login) == true);
             passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(password) == passwordHash);
+            var passwordPolicy = CreateApplicationPasswordPolicySettings();
 
             SetupInstanceToMockedServiceLocator<ISupervisorLoginService>(loginChecker);
             SetupInstanceToMockedServiceLocator<IPasswordHasher>(passwordHasher);
+            SetupInstanceToMockedServiceLocator(passwordPolicy);
 
             survey = CreateSurvey();
 
@@ -46,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
         private static Survey survey;
         private static string login = "Vasya";
         private static string password = "VasyaLovesMeat";
-        private static string passwordHash = "==========";
+        private static string passwordHash = "_A1dbbbbbbb";
         private static ISupervisorLoginService loginChecker;
         private static IPasswordHasher passwordHasher;
     }
