@@ -7,9 +7,10 @@ namespace Main.Core.View.User
 {
     public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        // in this case we use writer here because we want to make sure login is performed on the latest version of data and we understand that indexing may take some time
+        private readonly IQueryableReadSideRepositoryWriter<UserDocument> users;
 
-        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+        public UserViewFactory(IQueryableReadSideRepositoryWriter<UserDocument> users)
         {
             this.users = users;
         }
