@@ -71,7 +71,6 @@ namespace Core.Supervisor.Views.Interview
                 CommenterName = x.CommenterName,
                 Date = x.Date
             }).ToList();
-            this.IsValid = answeredQuestion.Valid;
             this.Answer = answeredQuestion.Answer;
 
             var textListQuestion = question as ITextListQuestion;
@@ -89,8 +88,9 @@ namespace Core.Supervisor.Views.Interview
                 }
             }
 
-            if (!this.IsValid && !this.IsEnabled)
-                this.IsValid = true;
+            bool shouldBeValidByConvention = !this.IsEnabled;
+
+            this.IsValid = shouldBeValidByConvention || answeredQuestion.Valid;
         }
 
         private static string GetTitleWithSubstitutedVariables(IQuestion question, Dictionary<string, string> answersForTitleSubstitution)
