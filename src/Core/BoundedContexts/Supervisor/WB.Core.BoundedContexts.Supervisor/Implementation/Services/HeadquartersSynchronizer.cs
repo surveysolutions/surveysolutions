@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,10 +17,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
     internal class HeadquartersSynchronizer : IHeadquartersSynchronizer
     {
         private readonly ICommandService commandService;
+        private readonly HeadquartersSettings headquartersSettings;
 
-        public HeadquartersSynchronizer(ICommandService commandService)
+        public HeadquartersSynchronizer(ICommandService commandService, HeadquartersSettings headquartersSettings)
         {
             this.commandService = commandService;
+            this.headquartersSettings = headquartersSettings;
         }
 
         public async void Pull(string login, string password)
@@ -27,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             using (var handler = new HttpClientHandler { Credentials = new NetworkCredential(login, password) })
             using (var client = new HttpClient(handler))
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/Headquarters/api/feed/v0");
+                var request = new HttpRequestMessage(HttpMethod.Get, this.GetFeedUrl());
 
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -42,6 +45,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
                 this.commandService.Execute(command);
             }
+        }
+
+        private Uri GetFeedUrl()
+        {
+            return new Uri(this.headquartersSettings.Url.TrimEnd('/') + "/api/feed/v0");
         }
 
         private static CreateUserCommand CreateCommandFromResponseBody(string responseBody)
