@@ -27,10 +27,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         public void Pull(string login, string password)
         {
-            using (var handler = new HttpClientHandler { Credentials = new NetworkCredential(login, password) })
-            using (var client = new HttpClient(handler))
+            using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, this.GetFeedUrl());
+
+                string base64Credential = Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", login, password)));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64Credential);
 
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
