@@ -1,10 +1,13 @@
-﻿using Machine.Specifications;
+﻿using System.Threading.Tasks;
+using Machine.Specifications;
+using Microsoft.AspNet.Identity;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Events.Survey;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Utils;
+using IPasswordHasher = WB.Core.GenericSubdomains.Utils.IPasswordHasher;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
@@ -13,14 +16,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
     {
         Establish context = () =>
         {
-            loginChecker = Mock.Of<ISupervisorLoginService>(x => x.IsUnique(login) == true && 
-                x.AreCredentialsValid(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()) == true);
+            loginChecker = Mock.Of<ISupervisorLoginService>(x => x.IsUnique(login) == true);
+
+            var customPasswordValidator = Create.CustomPasswordValidator();
 
             passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(password) == passwordHash);
             var passwordPolicy = CreateApplicationPasswordPolicySettings();
 
-            SetupInstanceToMockedServiceLocator<ISupervisorLoginService>(loginChecker);
-            SetupInstanceToMockedServiceLocator<IPasswordHasher>(passwordHasher);
+            SetupInstanceToMockedServiceLocator(customPasswordValidator);
+            SetupInstanceToMockedServiceLocator(loginChecker);
+            SetupInstanceToMockedServiceLocator(passwordHasher);
             SetupInstanceToMockedServiceLocator(passwordPolicy);
 
             survey = CreateSurvey();
