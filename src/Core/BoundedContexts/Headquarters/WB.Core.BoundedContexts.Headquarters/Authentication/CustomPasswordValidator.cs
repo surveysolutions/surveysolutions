@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
 {
     public class CustomPasswordValidator : IIdentityValidator<string>
     {
-        public CustomPasswordValidator(int requiredLength, string pattern = null)
+        public CustomPasswordValidator(int requiredLength, string pattern)
         {
             this.RequiredLength = requiredLength;
             this.Pattern = pattern;
@@ -17,14 +17,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
 
         private string Pattern { get; set; }
 
-        public Task<IdentityResult> ValidateAsync(string item)
+        public virtual Task<IdentityResult> ValidateAsync(string password)
         {
-            if (String.IsNullOrEmpty(item) || item.Length < RequiredLength)
+            if (String.IsNullOrEmpty(password) || password.Length < RequiredLength)
             {
                 return Task.FromResult(IdentityResult.Failed(String.Format(Resources.PasswordTooShort, RequiredLength)));
             }
 
-            if (!string.IsNullOrEmpty(Pattern) && !Regex.IsMatch(item, Pattern))
+            if (!string.IsNullOrEmpty(Pattern) && !Regex.IsMatch(password, Pattern))
             {
                 return Task.FromResult(IdentityResult.Failed(Resources.PasswordNotStrongEnough));
             }
