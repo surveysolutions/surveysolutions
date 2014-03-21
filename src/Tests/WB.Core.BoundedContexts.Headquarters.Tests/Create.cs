@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests
             return new CustomPasswordValidator(minPasswordLength, pattern);
         }
 
-        public static SupervisorLoginService SupervisorLoginService(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins = null,
+        internal static SupervisorLoginService SupervisorLoginService(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins = null,
             IQueryableReadSideRepositoryReader<SupervisorCredentialsView> credentialsStore = null,
             IPasswordHasher passwordHasher = null)
         {
