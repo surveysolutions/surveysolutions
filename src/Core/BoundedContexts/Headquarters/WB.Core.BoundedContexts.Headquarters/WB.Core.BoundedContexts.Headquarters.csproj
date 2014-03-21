@@ -71,6 +71,11 @@
   <ItemGroup>
     <Compile Include="Authentication\ApplicationRoles.cs" />
     <Compile Include="Authentication\ApplicationUserManager.cs" />
+    <Compile Include="Implementation\Aggregates\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="PasswordPolicy\ApplicationPasswordPolicySettings.cs" />
     <Compile Include="Authentication\AuthenticationModule.cs" />
     <Compile Include="Authentication\CustomPasswordValidator.cs" />
@@ -143,6 +148,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Authentication\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Implementation\Aggregates\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>

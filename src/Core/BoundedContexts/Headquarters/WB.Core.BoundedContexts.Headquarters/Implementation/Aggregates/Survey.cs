@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -23,8 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
         #endregion
 
-        #region Dependencies
-
         private static IPasswordHasher PasswordHasher
         {
             get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
@@ -35,11 +34,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<ISupervisorLoginService>(); }
         }
 
+        private static IIdentityValidator<string> PasswordValidator
+        {
+            get { return ServiceLocator.Current.GetInstance<CustomPasswordValidator>(); }
+        } 
+
         private static ApplicationPasswordPolicySettings ApplicationPasswordPolicySettings
         {
             get { return ServiceLocator.Current.GetInstance<ApplicationPasswordPolicySettings>(); }
         }
-        #endregion
 
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Survey() { }
@@ -69,27 +72,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         {
             if (!SupervisorLoginService.IsUnique(login))
             {
-                throw new SurveyException(string.Format("Supervisor's login {0} is already taken", login));
+                throw new SurveyException(string.Format(Resources.SupervisorLoginAlreadyTaken, login));
             }
         }
 
         private void ThrowIfSupervisorsPasswordDoesnotMeetApplicationPasswordPolicy (string password)
         {
-            if (String.IsNullOrEmpty(password) || password.Length < ApplicationPasswordPolicySettings.MinPasswordLength)
-            {
-                throw new SurveyException(string.Format("Supervisor's password is too short. Password should have at least {0} characters", ApplicationPasswordPolicySettings.MinPasswordLength));
-            }
+            IdentityResult identityResult = PasswordValidator.ValidateAsync(password).Result;
 
-            if (!string.IsNullOrEmpty(ApplicationPasswordPolicySettings.PasswordPattern) && !Regex.IsMatch(password, ApplicationPasswordPolicySettings.PasswordPattern))
+            if (!identityResult.Succeeded)
             {
-                throw new SurveyException("Password must contain at least one number, one upper case character and one lower case character");
+                throw new SurveyException(identityResult.Errors.First());
             }
         }
 
         private void ThrowIfSurveyNameIsEmpty(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new SurveyException("Survey name cannot be empty.");
+                throw new SurveyException(Resources.SurveyNameCannotBeEmpty);
         }
 
         #endregion
