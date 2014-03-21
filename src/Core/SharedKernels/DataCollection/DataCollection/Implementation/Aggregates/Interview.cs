@@ -831,8 +831,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
             }
 
-
-
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetEnabledQuestionAnswerSupportedInExpressions(question);
 
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
@@ -3006,14 +3004,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 yield break;
             }
 
-            DistinctDecimalList rosterInstanceIds = getRosterInstanceIds(rosterGroupsStartingFromTop.Last(), rosterVector);
-
             var outerVectorsForExtend =
                 GetOuterVectorForParentRoster(rosterGroupsStartingFromTop.Skip(rosterGroupsStartingFromTop.Length - length).ToArray(),
                     rosterVector);
 
             foreach (var outerVectorForExtend in outerVectorsForExtend)
             {
+                DistinctDecimalList rosterInstanceIds = getRosterInstanceIds(rosterGroupsStartingFromTop.Last(), outerVectorForExtend);
                 foreach (decimal rosterInstanceId in rosterInstanceIds)
                 {
                     yield return ExtendRosterVectorWithOneValue(outerVectorForExtend, rosterInstanceId);
