@@ -185,6 +185,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\ActionFilters\UnhandledExceptionFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationAttribute.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
@@ -282,7 +283,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\ValidationFix.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
     <Content Include="Views\Shared\_Layout.cshtml" />
