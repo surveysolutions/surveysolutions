@@ -117,31 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="UserName" xml:space="preserve">
-    <value>User name</value>
+  <data name="SupervisorLoginAlreadyTaken" xml:space="preserve">
+    <value>Supervisor's login {0} is already taken</value>
   </data>
-  <data name="InvalidUrlValidationMessage" xml:space="preserve">
-    <value>Please provide a valid URL</value>
-  </data>
-  <data name="UserNameRequiredValidationMessage" xml:space="preserve">
-    <value>Please provide user name</value>
-  </data>
-  <data name="UserNameTooLongValidationMessage" xml:space="preserve">
-    <value>Login cannot have more that {0} symbols</value>
-  </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>Add Supervisor</value>
-  </data>
-  <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm Password</value>
-  </data>
-  <data name="UserPasswordsShouldMatchValidationMessage" xml:space="preserve">
-    <value>The password and confirmation password do not match.</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="PasswordRequired" xml:space="preserve">
-    <value>Password is required</value>
+  <data name="SurveyNameCannotBeEmpty" xml:space="preserve">
+    <value>Survey name cannot be empty</value>
   </data>
 </root>
