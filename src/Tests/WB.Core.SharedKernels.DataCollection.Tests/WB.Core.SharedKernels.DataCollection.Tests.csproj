@@ -91,6 +91,7 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
+    <Compile Include="InterviewTests\when_answering_top_level_question_which_enables_nested_roster.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips.cs" />
     <Compile Include="InterviewTests\when_hqreject_interview_in_incorrect_status.cs" />
     <Compile Include="InterviewTests\when_hqreject_interview.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
     <Compile Include="InterviewTests\when_roster_row_with_nested_roster_is_removed.cs" />
     <Compile Include="InterviewTests\when_reevaluating_interview_with_recently_enabled_mandatory_question.cs" />
+    <Compile Include="InterviewTests\when_roster_size_question_of_neted_roster_increase_row_count_but_row_is_disabled.cs" />
     <Compile Include="InterviewTests\when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_rost___.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_unanswered_mandatory_question_with_validation.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
