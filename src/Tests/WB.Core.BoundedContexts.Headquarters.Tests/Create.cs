@@ -1,6 +1,7 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
+using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
@@ -26,6 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests
             publishedEvent.EventSequence.Returns(1);
 
             return publishedEvent;
+        }
+
+        internal static CustomPasswordValidator CustomPasswordValidator(int minPasswordLength = 10, string pattern = ".*")
+        {
+            return new CustomPasswordValidator(minPasswordLength, pattern);
         }
 
         public static SupervisorLoginService SupervisorLoginService(IQueryableReadSideRepositoryReader<SupervisorLoginView> supervisorLogins = null,

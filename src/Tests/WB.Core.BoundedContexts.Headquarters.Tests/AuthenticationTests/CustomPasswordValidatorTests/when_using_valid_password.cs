@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.AuthenticationTests.CustomP
 
         Establish context = () =>
         {
-            validator = new CustomPasswordValidator(10);
+            validator = Create.CustomPasswordValidator();
         };
 
         Because of = async () => identityResult = await validator.ValidateAsync("Qwert12341");
