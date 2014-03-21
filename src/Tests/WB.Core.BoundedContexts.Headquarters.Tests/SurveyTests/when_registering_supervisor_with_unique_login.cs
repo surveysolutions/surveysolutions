@@ -26,8 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
             eventContext = new EventContext();
         };
 
-        Because of = () =>
-            survey.RegisterSupervisor(login, password);
+        Because of = () => survey.RegisterSupervisor(login, password);
 
         Cleanup stuff = () =>
         {
