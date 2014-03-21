@@ -16,6 +16,8 @@ namespace WB.UI.Headquarters.Models
             ErrorMessageResourceName = "UserNameTooLongValidationMessage")]
         public string Login { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(SupervisorAccountResources), 
+            ErrorMessageResourceName = "PasswordRequired")]
         [DataType(DataType.Password)]
         [Display(Name = "Password", ResourceType = typeof(SupervisorAccountResources))]
         public string Password { get; set; }

@@ -13,7 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.SurveyTests
     {
         Establish context = () =>
         {
-            loginChecker = Mock.Of<ISupervisorLoginService>(x => x.IsUnique(login) == true);
+            loginChecker = Mock.Of<ISupervisorLoginService>(x => x.IsUnique(login) == true && 
+                x.AreCredentialsValid(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()) == true);
+
             passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(password) == passwordHash);
             var passwordPolicy = CreateApplicationPasswordPolicySettings();
 
