@@ -78,7 +78,8 @@ namespace WB.UI.Designer.Code
                            CanExport = true, 
                            CanEdit = x.CreatedBy == this.userService.WebUser.UserId ||
                                      x.SharedPersons.Contains(this.userService.WebUser.UserId) ||
-                                     this.userService.WebUser.IsAdmin, 
+                                     this.userService.WebUser.IsAdmin,
+                           ShowUpdatedEditForm = this.userService.WebUser.IsAdmin,
                            CanSynchronize = this.userService.WebUser.IsAdmin, 
                            CanExportToPdf = true,
                            CreatorName =
@@ -102,7 +103,8 @@ namespace WB.UI.Designer.Code
                            CanExportToPdf = true,
                            CanDelete = x.CreatedBy == this.userService.WebUser.UserId && !x.IsDeleted,
                            CanEdit = x.CreatedBy == this.userService.WebUser.UserId ||
-                                     x.SharedPersons.Contains(this.userService.WebUser.UserId), 
+                                     x.SharedPersons.Contains(this.userService.WebUser.UserId),
+                           ShowUpdatedEditForm = this.userService.WebUser.IsAdmin,
                            CanExport = true, 
                            CanSynchronize = this.userService.WebUser.IsAdmin
                        };
