@@ -11,5 +11,6 @@ namespace Ncqrs.Eventing.Storage
         int CountOfAllEvents();
 
         IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize = 32);
+        long GetLastEventSequence(Guid id);
     }
 }

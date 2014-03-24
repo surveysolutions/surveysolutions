@@ -70,7 +70,7 @@ namespace WB.Core.Synchronization.SyncStorage
             return Path.Combine(path, ErrorFolderName, string.Format("{0}.{1}", id, FileExtension));
         }
 
-        public void ProcessItem(Guid id, long sequence)
+        public void ProcessItem(Guid id)
         {
             var fileName = GetItemFileName(id);
             if (!File.Exists(fileName))
@@ -79,22 +79,27 @@ namespace WB.Core.Synchronization.SyncStorage
             var fileContent = File.ReadAllText(fileName);
 
             var items = GetContentAsItem<AggregateRootEvent[]>(fileContent);
-            if(items.Length>0)
-                StoreEvents(id, items, sequence);
+            if (items.Length > 0)
+            {
+                var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
+                if (eventStore == null)
+                    return;
 
-            File.Delete(fileName);
-        }
+                var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
 
-        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
-        {
-            var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            var incomeEvents = this.BuildEventStreams(stream, sequence);
+                var incomeEvents = this.BuildEventStreams(items, eventStore.GetLastEventSequence(id));
 
-            eventStore.Store(incomeEvents);
-            bus.Publish(incomeEvents);
-            commandService.Execute(new ReevaluateSynchronizedInterview(id));
+                eventStore.Store(incomeEvents);
+                File.Delete(fileName);
+
+                bus.Publish(incomeEvents);
+                commandService.Execute(new ReevaluateSynchronizedInterview(id));
+            }
+            else
+            {
+                File.Delete(fileName);
+            }
         }
 
         public IEnumerable<Guid> GetListOfUnhandledPackages()

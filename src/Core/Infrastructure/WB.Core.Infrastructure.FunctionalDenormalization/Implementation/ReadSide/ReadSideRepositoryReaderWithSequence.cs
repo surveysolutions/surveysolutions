@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -14,17 +15,15 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
     public class ReadSideRepositoryReaderWithSequence<T> : IReadSideRepositoryReader<T> where T : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader;
-        private readonly IReadSideRepositoryWriter<ViewWithSequence<T>> readsideWriter;
         private static ConcurrentDictionary<Guid, bool> packagesInProcess = new ConcurrentDictionary<Guid, bool>();
-        private Action<Guid, long> additionalEventChecker;
+        private Action<Guid> additionalEventChecker;
         private const int CountOfAttempt = 60;
 
         public ReadSideRepositoryReaderWithSequence(
-            IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader, Action<Guid, long> additionalEventChecker, IReadSideRepositoryWriter<ViewWithSequence<T>> readsideWriter)
+            IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader, Action<Guid> additionalEventChecker)
         {
             this.readsideReader = readsideReader;
             this.additionalEventChecker = additionalEventChecker;
-            this.readsideWriter = readsideWriter;
         }
 
         public int Count()
@@ -35,8 +34,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
         public T GetById(Guid id)
         {
             var view = this.readsideReader.GetById(id);
-           
-            if (this.IsViewWasUpdatedFromEventStream(id, view == null ? 0 : view.Sequence))
+            if (this.IsViewWasUpdatedFromEventStream(id))
             {
                 view = this.readsideReader.GetById(id);
                 if (view == null)
@@ -46,7 +44,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
             return view.Document;
         }
 
-        private bool IsViewWasUpdatedFromEventStream(Guid id, long sequence)
+        private bool IsViewWasUpdatedFromEventStream(Guid id)
         {
             if (!this.WaitUntilViewCanBeProcessed(id))
                 return false;
@@ -55,7 +53,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSi
 
             try
             {
-                this.additionalEventChecker(id, sequence);
+                this.additionalEventChecker(id);
                 result = true;
             }
             finally

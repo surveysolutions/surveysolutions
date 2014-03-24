@@ -84,5 +84,10 @@ namespace WB.Tools.CapiDataGenerator.Models
         {
             throw new NotImplementedException();
         }
+
+        public long GetLastEventSequence(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

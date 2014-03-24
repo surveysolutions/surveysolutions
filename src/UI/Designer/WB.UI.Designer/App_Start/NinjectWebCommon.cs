@@ -71,8 +71,7 @@ namespace WB.UI.Designer.App_Start
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new RavenWriteSideInfrastructureModule(ravenSettings, AppSettings.Instance.UseStreamingForAllEvents,
-                    AppSettings.Instance.UseStreamingForEntity),
+                new RavenWriteSideInfrastructureModule(ravenSettings, AppSettings.Instance.UseStreamingForAllEvents),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(),

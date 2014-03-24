@@ -113,11 +113,7 @@ namespace Web.Supervisor.App_Start
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username,
                                                             password: password, defaultDatabase: defaultDatabase);
 
-            bool useStreamingForEntity, useStreamingForAllEvents;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForEntity"], out useStreamingForEntity))
-            {
-                useStreamingForEntity = true;
-            }
+            bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
             {
                 useStreamingForAllEvents = true;
@@ -131,8 +127,8 @@ namespace Web.Supervisor.App_Start
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 pageSize.HasValue
-                    ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, useStreamingForEntity, pageSize.Value)
-                    : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, useStreamingForEntity),
+                    ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
+                    : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
