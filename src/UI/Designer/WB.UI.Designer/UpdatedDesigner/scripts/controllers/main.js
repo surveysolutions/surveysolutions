@@ -18,7 +18,7 @@ angular.module('pocAngularApp')
       console.log('submit');
     };
 
-    $http.get('../UpdatedDesigner/data/data.json')
+    $http.get('../../UpdatedDesigner/data/data.json')
       .then(function(result) {
         $scope.documents = result.data;
         $scope.chapters = _.map(result.data.Chapters, function(chapter){
