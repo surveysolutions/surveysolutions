@@ -134,27 +134,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         }
 
-        private CommittedEventStream ReadFromInternalWithStreaming(Guid id, long minVersion, long maxVersion)
-        {
-            List<CommittedEvent> storedEvents = new List<CommittedEvent>();
-
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
-                    .Where(x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
-                    .OrderBy(y => y.EventSequence);
-
-                var enumerator = session.Advanced.Stream(query);
-
-                while (enumerator.MoveNext())
-                {
-                    storedEvents.Add (ToCommittedEvent(enumerator.Current.Document));
-                }
-            }
-
-            return new CommittedEventStream(id, storedEvents);
-        }
-
         public void Store(UncommittedEventStream eventStream)
         {
             try
@@ -186,7 +165,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     }
                 }
             }
-            catch (global::Raven.Abstractions.Exceptions.ConcurrencyException)
+            catch (global::Raven.Abstractions.Exceptions.ConcurrencyException cex)
             {
                 Guid sourceId = Guid.Empty;
                 long version = 0;
@@ -196,7 +175,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     version = eventStream.Sources.Single().CurrentVersion;
                 }
 
-                throw new ConcurrencyException(sourceId, version);
+                throw new ConcurrencyException(sourceId, version, cex);
             }
         }
 
@@ -321,6 +300,28 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                         yield return new CommittedEvent[]{ToCommittedEvent(enumerator.Current.Document)};
                     }
                 }
+        }
+
+        private CommittedEventStream ReadFromInternalWithStreaming(Guid id, long minVersion, long maxVersion)
+        {
+            List<CommittedEvent> storedEvents = new List<CommittedEvent>();
+
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
+                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                    .Where(x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
+                    .OrderBy(y => y.EventSequence);
+
+                var enumerator = session.Advanced.Stream(query);
+
+                while (enumerator.MoveNext())
+                {
+                    storedEvents.Add(ToCommittedEvent(enumerator.Current.Document));
+                }
+            }
+
+            return new CommittedEventStream(id, storedEvents);
         }
     }
 }
