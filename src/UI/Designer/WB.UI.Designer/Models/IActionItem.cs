@@ -17,5 +17,7 @@
         bool CanSynchronize { get; }
 
         bool CanExportToPdf { get; }
+
+        bool ShowUpdatedEditForm { get; }
     }
 }

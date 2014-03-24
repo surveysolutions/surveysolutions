@@ -1,5 +1,4 @@
-﻿
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     public abstract class ActionItem : IActionItem
     {
@@ -10,14 +9,7 @@ namespace WB.UI.Designer.Models
             CanPreview = false;
             CanExport = false;
             CanSynchronize = false;
-        }
-
-        public virtual bool CanCopy
-        {
-            get
-            {
-                return true;
-            }
+            ShowUpdatedEditForm = false;
         }
 
         public virtual bool CanDelete { get; set; }
@@ -31,6 +23,16 @@ namespace WB.UI.Designer.Models
         public virtual bool CanSynchronize { get; set; }
 
         public bool CanExportToPdf { get; set; }
+
+        public bool ShowUpdatedEditForm { get; set; }
+
+        public virtual bool CanCopy
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         public virtual bool CanPrint
         {
