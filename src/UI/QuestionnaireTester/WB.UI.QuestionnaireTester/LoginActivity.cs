@@ -60,11 +60,6 @@ namespace WB.UI.QuestionnaireTester
             get { return this.FindViewById<ScrollView>(Resource.Id.topView); }
         }
 
-        protected TextView teVersion
-        {
-            get { return this.FindViewById<TextView>(Resource.Id.teVersion); }
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -89,9 +84,6 @@ namespace WB.UI.QuestionnaireTester
             this.tePassword.Click += editText_Click;
             this.btnSave.Click += btnSave_Click;
             this.topView.Click += topView_Click;
-
-            this.teVersion.Text = 
-                Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
         }
 
         void topView_Click(object sender, EventArgs e)

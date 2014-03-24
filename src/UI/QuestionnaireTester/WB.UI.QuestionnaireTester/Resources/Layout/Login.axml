@@ -82,21 +82,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:text="Save" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/llVersion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dip"
-            android:layout_alignParentBottom="true">
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_alignParentBottom="true"
-                android:text="."
-                android:id="@+id/teVersion" />
-        </LinearLayout>
+        </LinearLayout>        
     </RelativeLayout>
 </ScrollView>
