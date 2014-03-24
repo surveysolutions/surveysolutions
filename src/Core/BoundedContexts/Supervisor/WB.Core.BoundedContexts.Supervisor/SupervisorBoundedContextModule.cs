@@ -59,16 +59,16 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
-            Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;
+            Action<Guid> additionalEventChecker = this.AdditionalEventChecker;
 
             this.Bind<IReadSideRepositoryReader<InterviewData>>()
                 .To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope()
                 .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
         }
 
-        protected void AdditionalEventChecker(Guid interviewId, long sequence)
+        protected void AdditionalEventChecker(Guid interviewId)
         {
-            Kernel.Get<IIncomePackagesRepository>().ProcessItem(interviewId, sequence);
+            Kernel.Get<IIncomePackagesRepository>().ProcessItem(interviewId);
         }
     }
 }
