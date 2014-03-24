@@ -25,7 +25,7 @@ namespace Web.Supervisor.Tests.ApiTests
         };
 
         It should_return_InterviewApiDetails = () =>
-            actionResult.ShouldBeOfType<InterviewApiDetails>();
+            actionResult.ShouldBeOfExactType<InterviewApiDetails>();
 
         It should_return_view_with_correct_id = () =>
             actionResult.Interview.PublicKey.ShouldEqual(interviewId);

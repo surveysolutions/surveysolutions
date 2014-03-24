@@ -23,7 +23,7 @@ namespace Web.Supervisor.Tests.ApiTests
         };
 
         It should_return_UserApiView = () =>
-            actionResult.ShouldBeOfType<UserApiView>();
+            actionResult.ShouldBeOfExactType<UserApiView>();
 
         It should_call_factory_load_once = () =>
             supervisorsFactoryMock.Verify(x => x.Load(Moq.It.IsAny<UserListViewInputModel>()), Times.Once());

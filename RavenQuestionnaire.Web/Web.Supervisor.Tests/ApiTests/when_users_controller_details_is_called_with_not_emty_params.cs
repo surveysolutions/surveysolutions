@@ -25,7 +25,7 @@ namespace Web.Supervisor.Tests.ApiTests
         };
 
         It should_return_UserApiDetails = () =>
-            actionResult.ShouldBeOfType<UserApiDetails>();
+            actionResult.ShouldBeOfExactType<UserApiDetails>();
 
         It should_return_correct_user_id = () =>
             actionResult.UserId.ShouldEqual(userId);

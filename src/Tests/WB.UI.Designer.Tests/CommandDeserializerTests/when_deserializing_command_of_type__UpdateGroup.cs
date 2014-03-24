@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Tests.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewUpdateGroupCommand = () =>
-            result.ShouldBeOfType<UpdateGroupCommand>();
+            result.ShouldBeOfExactType<UpdateGroupCommand>();
 
         It should_return_same_title_in_NewUpdateGroupCommand = () =>
             ((UpdateGroupCommand)result).Title.ShouldEqual(title);

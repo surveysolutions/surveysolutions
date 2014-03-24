@@ -70,7 +70,7 @@ namespace WB.UI.Designer.WebServices.Tests
              exception = Catch.Exception(() => service.DownloadQuestionnaire(request));
 
         It should_throw_exception_of_type_InconsistentVersionException = () =>
-            exception.ShouldBeOfType<FaultException>();
+            exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
             (new[] { "requested questionnaire", "supports versions" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));

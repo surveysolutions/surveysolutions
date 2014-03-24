@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.RoleProviderTests
             exception = Catch.Exception(() => roleProvider.AddUsersToRoles(new[] { nonGuidAccountId }, new[] { roleName }));
 
         It should_throw_ProviderException = () =>
-            exception.ShouldBeOfType<ProviderException>();
+            exception.ShouldBeOfExactType<ProviderException>();
 
         It should_throw_exception_with_message_containing__parse__ = () =>
             exception.Message.ToLower().ShouldContain("parse");

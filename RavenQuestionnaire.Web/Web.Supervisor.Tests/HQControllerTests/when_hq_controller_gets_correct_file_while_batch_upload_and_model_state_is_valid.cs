@@ -30,13 +30,13 @@ namespace Web.Supervisor.Tests.HQControllerTests
         };
 
         It should_return_ViewResult = () =>
-            actionResult.ShouldBeOfType<ViewResult>();
+            actionResult.ShouldBeOfExactType<ViewResult>();
 
         It should_return_view_with_name_empty_name = () =>
             ((ViewResult)actionResult).ViewName.ShouldEqual("ImportSample");
 
         It should_return_view_of_type__QuestionnaireBrowseItem__ = () =>
-            ((ViewResult)actionResult).Model.ShouldBeOfType<QuestionnaireBrowseItem>();
+            ((ViewResult)actionResult).Model.ShouldBeOfExactType<QuestionnaireBrowseItem>();
 
         private static HQController controller;
         private static BatchUploadModel inputModel;

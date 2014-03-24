@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
             resultQuestion = factory.CreateQuestion(autoPropagateQuestionData);
 
         It should_create_numeric_question = () =>
-            resultQuestion.ShouldBeOfType<NumericQuestion>();
+            resultQuestion.ShouldBeOfExactType<NumericQuestion>();
 
         It should_create_question_with_QuestionType_field_equals__Numeric__ = () =>
            resultQuestion.QuestionType.ShouldEqual(QuestionType.Numeric);

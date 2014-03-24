@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Tests.CommandDeserializerTests
                 deserializer.Deserialize(type, command));
 
         It should_throw_CommandDeserializationException = () =>
-            exception.ShouldBeOfType<CommandDeserializationException>();
+            exception.ShouldBeOfExactType<CommandDeserializationException>();
 
         private static Exception exception;
         private static CommandDeserializer deserializer;

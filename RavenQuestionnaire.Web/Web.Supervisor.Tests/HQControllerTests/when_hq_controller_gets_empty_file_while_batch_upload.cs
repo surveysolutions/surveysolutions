@@ -29,13 +29,13 @@ namespace Web.Supervisor.Tests.HQControllerTests
         };
 
         It should_return_ViewResult = () =>
-            actionResult.ShouldBeOfType<ViewResult>();
+            actionResult.ShouldBeOfExactType<ViewResult>();
 
         It should_return_view_with_name_empty_name = () =>
             ((ViewResult)actionResult).ViewName.ShouldBeEmpty();
 
         It should_return_view_of_type__BatchUploadModel__ = () =>
-            ((ViewResult)actionResult).Model.ShouldBeOfType<BatchUploadModel>();
+            ((ViewResult)actionResult).Model.ShouldBeOfExactType<BatchUploadModel>();
 
         It should_return_view_with_model_contains_specified_questionnaire_id = () =>
             (((ViewResult)actionResult).Model as BatchUploadModel).QuestionnaireId.ShouldEqual(questionnaireId);

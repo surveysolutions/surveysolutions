@@ -24,7 +24,7 @@ namespace Web.Supervisor.Tests.ApiTests
         };
 
         It should_return_QuestionnaireApiView = () =>
-            actionResult.ShouldBeOfType<QuestionnaireApiView>();
+            actionResult.ShouldBeOfExactType<QuestionnaireApiView>();
 
         It should_call_factory_load_once = () =>
             questionnaireBrowseViewFactoryMock.Verify(x => x.Load(Moq.It.IsAny<QuestionnaireBrowseInputModel>()), Times.Once());

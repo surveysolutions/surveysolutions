@@ -19,7 +19,7 @@ namespace Web.Supervisor.Tests.ApiTests
         };
 
         It should_return_IEnumerable_string = () =>
-            actionResult.ShouldBeOfType<IEnumerable<string>>();
+            actionResult.ShouldBeAssignableTo<IEnumerable<string>>();
 
         It should_count_be_positive = () =>
             actionResult.Count().ShouldBeGreaterThan(0);
