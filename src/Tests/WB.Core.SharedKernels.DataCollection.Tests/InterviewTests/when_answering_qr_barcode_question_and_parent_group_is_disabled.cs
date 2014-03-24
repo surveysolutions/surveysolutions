@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
 
         It should_raise_InterviewException = () =>
-           exception.ShouldBeOfType<InterviewException>();
+           exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__parent_group_disabled__ = () =>
              new [] { "parent", "group", "disabled" }.ShouldEachConformTo(

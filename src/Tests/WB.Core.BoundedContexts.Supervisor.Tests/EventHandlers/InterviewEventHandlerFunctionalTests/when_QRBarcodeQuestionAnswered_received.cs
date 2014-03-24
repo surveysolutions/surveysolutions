@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
                     answer)));
 
         It should_answer_on_qr_barcode_question_be_type_of_string = () =>
-            GetAnswer().ShouldBeOfType<string>();
+            GetAnswer().ShouldBeOfExactType<string>();
 
         It should_be_answer_equal_to_specified_answer = () =>
             GetAnswer().ShouldEqual(answer);

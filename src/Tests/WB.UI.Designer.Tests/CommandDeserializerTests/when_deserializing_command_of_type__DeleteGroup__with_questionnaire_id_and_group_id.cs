@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Tests.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewDeleteGroupCommand = () =>
-            result.ShouldBeOfType<DeleteGroupCommand>();
+            result.ShouldBeOfExactType<DeleteGroupCommand>();
 
         It should_return_same_questionnaire_id_in_NewDeleteGroupCommand = () =>
             ((DeleteGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
