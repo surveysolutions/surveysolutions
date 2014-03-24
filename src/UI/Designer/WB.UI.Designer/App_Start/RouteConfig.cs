@@ -6,8 +6,6 @@
 
     public class RouteConfig
     {
-        #region Public Methods and Operators
-        
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -43,7 +41,5 @@
                 defaults: new { controller = "Questionnaire", action = "Index", id = UrlParameter.Optional });
             
         }
-
-        #endregion
     }
 }
