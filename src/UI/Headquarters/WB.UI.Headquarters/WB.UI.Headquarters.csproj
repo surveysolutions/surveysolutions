@@ -190,6 +190,7 @@
     <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
     <Compile Include="Api\FeedController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\EditAccountModel.cs" />
     <Compile Include="Models\RegisterAccountModel.cs" />
@@ -310,6 +311,11 @@
     <Content Include="Views\Surveys\RegisterSupervisor.cshtml" />
     <Content Include="Views\Surveys\Details.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Error\Forbidden.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Shared\_Layout.empty.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
