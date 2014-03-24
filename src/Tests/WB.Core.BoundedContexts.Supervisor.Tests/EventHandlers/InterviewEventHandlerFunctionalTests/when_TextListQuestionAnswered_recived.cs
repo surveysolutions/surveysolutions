@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
                     answer)));
 
         It should_answer_on_text_list_be_type_of_InterviewTextListAnswers = () =>
-            GetTextListAnswers().ShouldBeOfType<InterviewTextListAnswers>();
+            GetTextListAnswers().ShouldBeOfExactType<InterviewTextListAnswers>();
 
         It should_answer_on_text_list_have_2_options = () =>
            GetTextListAnswers().Answers.Length.ShouldEqual(2);
