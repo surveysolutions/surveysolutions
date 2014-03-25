@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Xml;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -102,6 +105,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
+                    Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -270,6 +274,26 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
             return !Enumerable.Range(1, 40).Contains(rosterSizeQuestionMaxValue.Value);
+        }
+
+        private static bool RosterHasRosterLevelMoreThan4(IGroup roster)
+        {
+            if (!IsRosterGroup(roster))
+                return false;
+
+            return GetRosterLevel(roster) > 4;
+        }
+
+        private static int GetRosterLevel(IComposite questionnaireItem)
+        {
+            int rosterLevel = 0;
+            while ((questionnaireItem = questionnaireItem.GetParent()) != null)
+            {
+                if (IsRosterGroup((IGroup) questionnaireItem))
+                    rosterLevel++;
+            }
+
+            return rosterLevel;
         }
 
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
