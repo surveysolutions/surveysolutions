@@ -1294,6 +1294,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool ShouldQuestionBeDisabledByCustomCondition(Identity questionId, IQuestionnaire questionnaire)
         {
+            var questionsInvolvedInConditions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId.Id);
+            if (!questionsInvolvedInConditions.Any() || questionsInvolvedInConditions.Any(q => q.Id == questionId.Id))
+                return this.IsQuestionDisabled(questionId);
+
             return !this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionId, questionnaire,
                 (questionInCondition) =>
                     this.GetEnabledQuestionAnswerSupportedInExpressions(questionInCondition,

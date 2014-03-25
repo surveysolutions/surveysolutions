@@ -7,7 +7,7 @@ namespace WB.Core.Synchronization
     public interface IIncomePackagesRepository
     {
         void StoreIncomingItem(SyncItem item);
-        void ProcessItem(Guid id, long sequence);
+        void ProcessItem(Guid id);
         IEnumerable<Guid> GetListOfUnhandledPackages();
         string GetUnhandledPackagePath(Guid id);
     }
