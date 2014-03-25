@@ -58,6 +58,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
+        private void Apply(InterviewOnClientCreated @event)
+        {
+            this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
+        }
+
         internal void Apply(InterviewSynchronized @event)
         {
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
@@ -574,72 +580,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
-
-            List<Identity> initiallyDisabledGroups = GetGroupsToBeDisabledInJustCreatedInterview(questionnaire);
-            List<Identity> initiallyDisabledQuestions = GetQuestionsToBeDisabledInJustCreatedInterview(questionnaire);
-            List<Identity> initiallyInvalidQuestions = GetQuestionsToBeInvalidInJustCreatedInterview(questionnaire, initiallyDisabledGroups, initiallyDisabledQuestions);
-
+            
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            initiallyInvalidQuestions.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+            this.InitInterview(userId, questionnaire, answersToFeaturedQuestions, answersTime);
 
-
-#warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
-            foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
-            {
-                Guid questionId = answerToFeaturedQuestion.Key;
-                object answer = answerToFeaturedQuestion.Value;
-
-                ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-
-                QuestionType questionType = questionnaire.GetQuestionType(questionId);
-
-                switch (questionType)
-                {
-                    case QuestionType.Text:
-                        this.AnswerTextQuestion(userId, questionId, EmptyRosterVector, answersTime, (string)answer);
-                        break;
-
-                    case QuestionType.AutoPropagate:
-                        this.AnswerNumericIntegerQuestion(userId, questionId, EmptyRosterVector, answersTime, (int)answer);
-                        break;
-                    case QuestionType.Numeric:
-                        if (questionnaire.IsQuestionInteger(questionId))
-                            this.AnswerNumericIntegerQuestion(userId, questionId, EmptyRosterVector, answersTime, (int)answer);
-                        else
-                            this.AnswerNumericRealQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal)answer);
-                        break;
-
-                    case QuestionType.DateTime:
-                        this.AnswerDateTimeQuestion(userId, questionId, EmptyRosterVector, answersTime, (DateTime)answer);
-                        break;
-
-                    case QuestionType.SingleOption:
-                        this.AnswerSingleOptionQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal)answer);
-                        break;
-
-                    case QuestionType.MultyOption:
-                        this.AnswerMultipleOptionsQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal[])answer);
-                        break;
-
-                    case QuestionType.GpsCoordinates:
-                    default:
-                        throw new InterviewException(string.Format(
-                            "Question {0} has type {1} which is not supported as initial pre-filled question.",
-                            questionId, questionType));
-                }
-            }
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
+            
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+        }
 
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(questionnaire);
+        public Interview(Guid id, Guid userId, Guid questionnaireId,  DateTime answersTime, Guid supervisorId)
+            : base(id)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
-            fixedRosterCalculationDatas.ForEach(calculatedRosterData => this.ApplyRosterEvents(calculatedRosterData));
+            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaire.Version));
+            
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
+
+            this.InitInterview(userId, questionnaire, new Dictionary<Guid, object>(), answersTime);
+
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.ApplyEvent(new InterviewerAssigned(userId, userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)
@@ -647,12 +617,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
+            this.ApplyEvent(new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version));
+
+            this.InitInterview(userId, questionnaire, answersToFeaturedQuestions, answersTime);
+        }
+
+        public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
+            : base(id)
+        {
+            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid);
+        }
+
+        private void InitInterview(Guid userId, IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)
+        {
             List<Identity> initiallyDisabledGroups = GetGroupsToBeDisabledInJustCreatedInterview(questionnaire);
             List<Identity> initiallyDisabledQuestions = GetQuestionsToBeDisabledInJustCreatedInterview(questionnaire);
             List<Identity> initiallyInvalidQuestions = GetQuestionsToBeInvalidInJustCreatedInterview(questionnaire, initiallyDisabledGroups, initiallyDisabledQuestions);
-
-            this.ApplyEvent(new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version));
-            //this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
             initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
@@ -710,11 +690,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
-            : base(id)
-        {
-            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid);
-        }
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {

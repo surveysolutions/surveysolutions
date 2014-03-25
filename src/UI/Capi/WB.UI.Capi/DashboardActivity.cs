@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using Android.App;
 using Android.Content;
@@ -7,9 +8,16 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using Ninject;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
+using WB.UI.Capi.Services;
+using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi
 {
@@ -20,6 +28,10 @@ namespace WB.UI.Capi
         protected DashboardModel currentDashboard;
         protected IDictionary<Guid,View> sureveyHolders;
         protected LinearLayout llSurveyHolder;
+        protected AlertDialog dialog;
+
+        private IChangeLogManipulator logManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -55,19 +67,38 @@ namespace WB.UI.Capi
             var txtSurveyName = view.FindViewById<TextView>(Resource.Id.txtSurveyName);
             txtSurveyName.Text = dashboardSurveyItem.SurveyTitle;
             var txtSurveyCount = view.FindViewById<TextView>(Resource.Id.txtSurveyCount);
-            txtSurveyCount.Text = dashboardSurveyItem.ActiveItems.Count.ToString();
-            var llQuestionnarieHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
+            txtSurveyCount.Text = dashboardSurveyItem.ActiveItems.Count.ToString(CultureInfo.InvariantCulture);
 
-            var adapter = new DashboardAdapter(dashboardSurveyItem.ActiveItems,this);
+            var btnNewInterview = view.FindViewById<Button>(Resource.Id.btnNewInterview);
+            btnNewInterview.SetTag(Resource.Id.QuestionnaireId, dashboardSurveyItem.PublicKey.ToString());
+
+            btnNewInterview.Click += this.rlSurveyHeader_HeaderClick;
+            
+            var llQuestionnaireHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
+
+            var adapter = new DashboardAdapter(dashboardSurveyItem.ActiveItems, this, DeleteInterview);
+
             for (int i = 0; i < adapter.Count; i++)
             {
                 View item = adapter.GetView(i, null, null);
-                llQuestionnarieHolder.AddView(item);
+                llQuestionnaireHolder.AddView(item);
                 item.Click += this.llQuestionnarieHolder_ItemClick;
             }
 
-            llQuestionnarieHolder.Clickable = true;
+            llQuestionnaireHolder.Clickable = true;
             this.llSurveyHolder.AddView(view);
+        }
+
+        
+        private void DeleteInterview(Guid itemId, View view)
+        {
+            new CleanUpExecutor(logManipulator).DeleteInterveiw(itemId);
+            ((LinearLayout)view.Parent).RemoveView(view);
+        }
+        
+        private void btnUpdateDeclined_Click(object sender, DialogClickEventArgs e)
+        {
+            
         }
 
         void llQuestionnarieHolder_ItemClick(object sender, EventArgs e)
@@ -75,21 +106,35 @@ namespace WB.UI.Capi
             var target = sender as View;
             if(target==null)
                 return;
+
             var intent = new Intent(this, typeof(LoadingActivity));
             intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
             this.StartActivity(intent);
         }
+
+        void rlSurveyHeader_HeaderClick(object sender, EventArgs e)
+        {
+            var target = sender as Button;
+            if (target == null)
+                return;
+
+            var id = target.GetTag(Resource.Id.QuestionnaireId).ToString();
+            var interviewKey = Guid.NewGuid();
+
+            Guid interviewUserId = CapiApplication.Membership.CurrentUser.Id;
+            Guid supervisorId = CapiApplication.Membership.SupervisorId;
+
+            NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
+                Guid.Parse(id), DateTime.UtcNow, supervisorId));
         
+            var intent = new Intent(this, typeof(CreateInterviewActivity));
+            intent.PutExtra("publicKey", interviewKey.ToString());
+            this.StartActivity(intent);
+        }
 
         private void RequestData(Action restore)
         {
-        /*    var progress = new ProgressDialog(this);
-            progress.SetTitle("Loading");
-            progress.SetProgressStyle(ProgressDialogStyle.Spinner);
-            progress.SetCancelable(false);
-            progress.Show();*/
-
-            ThreadPool.QueueUserWorkItem((s) => { restore(); /*progress.Dismiss();*/ });
+            ThreadPool.QueueUserWorkItem((s) => restore());
         }
 
         protected override void OnRestart()
@@ -107,4 +152,3 @@ namespace WB.UI.Capi
         }
     }
 }
-

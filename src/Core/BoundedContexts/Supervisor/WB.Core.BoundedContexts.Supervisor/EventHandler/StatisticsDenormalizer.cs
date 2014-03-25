@@ -5,7 +5,6 @@ using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -20,7 +19,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                           IEventHandler<SupervisorAssigned>,
                                           IEventHandler<InterviewDeleted>,
                                           IEventHandler<InterviewRestored>,
-                                          IEventHandler<InterviewerAssigned>
+                                          IEventHandler<InterviewerAssigned>,
+                                          IEventHandler<InterviewOnClientCreated>
 
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -39,27 +39,34 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.interviewBriefStorage = interviewBriefStorage;
             this.questionnaires = questionnaires;
         }
+        
+        private void HandleCreation(Guid eventSourceId, Guid responsibleId, Guid questionnaireId, long questionnaireVersion)
+        {
+            var interviewBriefItem = new InterviewBrief
+            {
+                InterviewId = eventSourceId,
+                IsDeleted = false,
+                ResponsibleId = responsibleId,
+                Status = InterviewStatus.Created,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion
+            };
+
+            var statistics = this.GetStatisticItem(interviewBriefItem) ?? this.CreateNewStatisticsLine(interviewBriefItem);
+
+            this.IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.StoreStatisticsItem(interviewBriefItem, statistics);
+        }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
-            var interviewBriefItem = new InterviewBrief
-                {
-                    InterviewId = evnt.EventSourceId,
-                    IsDeleted = false,
-                    ResponsibleId = evnt.Payload.UserId,
-                    Status = InterviewStatus.Created,
-                    QuestionnaireId = evnt.Payload.QuestionnaireId,
-                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion
-                };
+            this.HandleCreation(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion);
+        }
 
-            var statistics = this.GetStatisticItem(interviewBriefItem);
-            if (statistics == null)
-            {
-                statistics = CreateNewStatisticsLine(interviewBriefItem);
-            }
-            IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
-            interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            StoreStatisticsItem(interviewBriefItem, statistics);
+        public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
+        {
+            this.HandleCreation(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion);
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
