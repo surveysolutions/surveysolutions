@@ -43,8 +43,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry,
-        IReadSideRepositoryCleanerRegistry cleanerRegistry)
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, DocumentStore ravenStore, ILogger logger,
+            IRavenReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
@@ -75,9 +75,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 GetReadableErrors());
         }
 
-        public void RebuildAllViewsAsync()
+        public void RebuildAllViewsAsync(int skipEvents)
         {
-            new Task(this.RebuildAllViews).Start();
+            skipEvents = Math.Max(0, skipEvents);
+
+            new Task(() => this.RebuildAllViews(skipEvents)).Start();
         }
 
         public void RebuildViewsAsync(string[] handlerNames)
@@ -120,7 +122,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             }
         }
 
-        private void RebuildAllViews()
+        private void RebuildAllViews(int skipEvents)
         {
             if (!areViewsBeingRebuiltNow)
             {
@@ -128,7 +130,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
-                        this.RebuildAllViewsImpl();
+                        this.RebuildAllViewsImpl(skipEvents);
                     }
                 }
             }
@@ -201,14 +203,17 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             return this.writerRegistry.GetAll().Where(w => viewTypes.Contains(w.ViewType)).ToArray();
         }
 
-        private void RebuildAllViewsImpl()
+        private void RebuildAllViewsImpl(int skipEvents)
         {
             try
             {
                 areViewsBeingRebuiltNow = true;
 
-                this.DeleteAllViews();
-                this.CleanUpAllWriters();
+                if (skipEvents == 0)
+                {
+                    this.DeleteAllViews();
+                    this.CleanUpAllWriters();
+                }
 
                 string republishDetails = "<<NO DETAILS>>";
 
@@ -216,7 +221,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 {
                     this.EnableCacheInAllRepositoryWriters();
 
-                    republishDetails = this.RepublishAllEvents();
+                    republishDetails = this.RepublishAllEvents(skipEvents);
                 }
                 finally
                 {
@@ -382,9 +387,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private string RepublishAllEvents()
+        private string RepublishAllEvents(int skipEvents = 0)
         {
-            int processedEventsCount = 0;
+            int processedEventsCount = skipEvents;
             int failedEventsCount = 0;
 
             ThrowIfShouldStopViewsRebuilding();
@@ -400,11 +405,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 "Acquiring first portion of events. "
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
 
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents())
+            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEvents))
             {
                 foreach (CommittedEvent @event in eventBulk)
                 {
-                    ThrowIfShouldStopViewsRebuilding();
+                    ThrowIfShouldStopViewsRebuilding(GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
 
                     UpdateStatusMessage(
                         string.Format("Publishing event {0}. ", processedEventsCount + 1)
@@ -465,12 +470,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute, estimatedTotalRepublishTime.ToString(@"hh\:mm\:ss"));
         }
 
-        private static void ThrowIfShouldStopViewsRebuilding()
+        private static void ThrowIfShouldStopViewsRebuilding(string readableStatus = "")
         {
             if (shouldStopViewsRebuilding)
             {
                 shouldStopViewsRebuilding = false;
-                throw new Exception("Views rebuilding stopped by request.");
+                throw new Exception("Views rebuilding stopped by request. " + readableStatus);
             }
         }
 
