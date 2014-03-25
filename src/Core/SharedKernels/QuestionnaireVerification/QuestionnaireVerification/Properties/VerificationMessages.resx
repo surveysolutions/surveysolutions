@@ -255,4 +255,7 @@
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
     <value>Roster should have deeper or the same roster level as it's roster size question.</value>
   </data>
+  <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+    <value>Roster can have no more than 3 parent rosters</value>
+  </data>
 </root>
