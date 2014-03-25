@@ -23,13 +23,14 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         #region Constructors and Destructors
 
         
-        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IList<FeaturedItem> properties, string title)
+        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IList<FeaturedItem> properties, string title, bool? createdOnClient)
         {
             this.PublicKey = publicKey;
             this.status = status;
             this.Properties = properties;
             this.SurveyKey = surveyKey;
             this.Title = title;
+            this.CreatedOnClient = createdOnClient;
         }
 
         #endregion
@@ -49,6 +50,8 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public string Title { get; private set; }
 
         public Guid SurveyKey { get; private set; }
+
+        public bool? CreatedOnClient { get; set; }
         /// <summary>
         /// Gets the status.
         /// </summary>

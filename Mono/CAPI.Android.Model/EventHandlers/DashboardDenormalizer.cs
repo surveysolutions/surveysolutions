@@ -25,7 +25,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<InterviewDeclaredValid>,
                                       IEventHandler<InterviewDeclaredInvalid>,
                                       IEventHandler<InterviewStatusChanged>, 
-                                      IEventHandler<TemplateImported>
+                                      IEventHandler<TemplateImported>,
+
+                                      IEventHandler<InterviewOnClientCreated>,
+                                      IEventHandler<InterviewerAssigned>,
+                                      IEventHandler<SupervisorAssigned>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
@@ -43,13 +47,21 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.FeaturedQuestionsMeta);
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, 
+                evnt.Payload.FeaturedQuestionsMeta, false);
         }
 
+
+        public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
+        {
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, 
+                new AnsweredQuestionSynchronizationDto[0], true);
+        }
+
+
         private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, Guid interviewId, Guid responsibleId,
-                                                     InterviewStatus status,
-                                                     IEnumerable<AnsweredQuestionSynchronizationDto>
-                                                         answeredQuestions)
+                                                     InterviewStatus status,IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions, 
+                                                     bool createdOnClient)
         {
             var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId);
             if (questionnaireTemplate == null)
@@ -61,7 +73,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                                     items), interviewId);
+                                     items, createdOnClient), interviewId);
         }
 
         private FeaturedItem CreateFeaturedItem(AnsweredQuestionSynchronizationDto q, QuestionnaireDocumentVersioned questionnaireTemplate)
@@ -98,7 +110,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
             AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId,
-                                            evnt.Payload.InterviewData.Status, evnt.Payload.InterviewData.Answers);
+                                            evnt.Payload.InterviewData.Status, evnt.Payload.InterviewData.Answers, false);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -146,6 +158,16 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public override Type[] BuildsViews
         {
             get { return new Type[] { typeof(QuestionnaireDTO) }; }
+        }
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
+        {
+            //do nothing
+        }
+
+        public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
+        {
+            //do nothing
         }
     }
 }

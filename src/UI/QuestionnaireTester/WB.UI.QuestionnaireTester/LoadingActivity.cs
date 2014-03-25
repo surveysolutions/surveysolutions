@@ -59,7 +59,8 @@ namespace WB.UI.QuestionnaireTester
             var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                 new QuestionnaireScreenInput(interviewId));
 
-            if (questionnaire == null) return;
+            if (questionnaire == null) 
+                return;
 
             var intent = new Intent(this, typeof(CreateInterviewActivity));
             intent.PutExtra("publicKey", interviewId.ToString());
@@ -72,7 +73,8 @@ namespace WB.UI.QuestionnaireTester
         {
             QuestionnaireCommunicationPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, ct);
 
-            if (ct.IsCancellationRequested) return false;
+            if (ct.IsCancellationRequested) 
+                return false;
 
             if (template == null)
             {
@@ -89,21 +91,23 @@ namespace WB.UI.QuestionnaireTester
             try
             {
                 string content = PackageHelper.DecompressString(template.Questionnaire);
-                var interview = JsonUtils.GetObject<QuestionnaireDocument>(content);
+                var questionnaireDocument = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
-                NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(interview));
+                NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(questionnaireDocument));
 
                 Guid interviewUserId = Guid.NewGuid();
 
                 NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
-                    interview.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
+                    questionnaireDocument.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
             }
             catch (Exception e)
             {
                 logger.Error(e.Message, e);
                 ShowLongToastInUIThread("Template is invalid for current version of Tester . Please return to Designer and change it.");
+                
                 return false;
             }
+
             return true;
         }
 

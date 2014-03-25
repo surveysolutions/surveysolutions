@@ -143,8 +143,7 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(InterviewForTestingCreated));
-
+            
             bus.RegisterHandler(eventHandler, typeof(RosterRowTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
@@ -157,6 +156,8 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericRealQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
+
+            bus.RegisterHandler(eventHandler, typeof(InterviewForTestingCreated));
         }
 
         private void InitTemplateStorage(InProcessEventBus bus)
