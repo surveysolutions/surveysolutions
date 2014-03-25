@@ -112,5 +112,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
 
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
+        Guid? GetRosterSizeQuestion(Guid rosterId);
     }
 }
