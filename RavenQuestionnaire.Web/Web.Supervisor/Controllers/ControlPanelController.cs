@@ -86,9 +86,9 @@ namespace Web.Supervisor.Controllers
             return this.RedirectToAction("ReadSide");
         }
 
-        public ActionResult RebuildReadSide()
+        public ActionResult RebuildReadSide(int skipEvents = 0)
         {
-            this.ReadSideAdministrationService.RebuildAllViewsAsync();
+            this.ReadSideAdministrationService.RebuildAllViewsAsync(skipEvents);
 
             return this.RedirectToAction("ReadSide");
         }
