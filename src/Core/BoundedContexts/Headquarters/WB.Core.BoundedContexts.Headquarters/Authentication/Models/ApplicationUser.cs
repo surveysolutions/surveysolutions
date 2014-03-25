@@ -3,8 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using AspNet.Identity.RavenDB.Entities;
 using Raven.Imports.Newtonsoft.Json;
-using Raven.Imports.Newtonsoft.Json.Schema;
-using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Authentication.Models
 {
