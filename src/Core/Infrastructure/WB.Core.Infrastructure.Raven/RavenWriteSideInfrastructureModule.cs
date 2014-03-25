@@ -1,12 +1,8 @@
 ﻿using Ncqrs;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
-using Raven.Client.Document;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
-using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven
 {
@@ -14,11 +10,13 @@ namespace WB.Core.Infrastructure.Raven
     {
         private readonly int pageSize;
         private IStreamableEventStore singleEventStore;
+        private readonly bool useStreamingForAllEvents;
 
-        public RavenWriteSideInfrastructureModule(RavenConnectionSettings settings, int pageSize = 50)
+        public RavenWriteSideInfrastructureModule(RavenConnectionSettings settings, bool useStreamingForAllEvents = true,int pageSize = 50)
             : base(settings)
         {
-            this.pageSize = pageSize;
+            this.pageSize = pageSize; 
+            this.useStreamingForAllEvents = useStreamingForAllEvents;
         }
 
         public override void Load()
@@ -36,7 +34,7 @@ namespace WB.Core.Infrastructure.Raven
             return this.singleEventStore ?? (this.singleEventStore =
                 new RavenDBEventStore(
                     this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(),
-                    this.pageSize));
+                    this.pageSize, useStreamingForAllEvents));
         }
     }
 }
