@@ -2145,7 +2145,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid[] rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId).ToArray();
 
                 var outerVectorsForExtend =
-                    GetOuterVectorForParentRoster(rosterGroupsStartingFromTop.Skip(rosterGroupsStartingFromTop.Length - length).ToArray(),
+                    this.GetOuterVectorForParentRoster(rosterGroupsStartingFromTop.Skip(rosterGroupsStartingFromTop.Length - length).ToArray(),
                         nearestToOuterRosterVector);
 
                 foreach (var outerVectorForExtend in outerVectorsForExtend)
@@ -2159,36 +2159,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstancesToAdd.AddRange(
                         rosterInstanceIdsBeingAdded);
 
-                    foreach (var rosterInstanceIdBeingAdded in rosterInstanceIdsBeingAdded)
+                    var listOfRosterInstanceIdsForRemove = rosterInstanceIds == null
+                        ? this.GetRosterInstanceIds(rosterId, outerVectorForExtend)
+                        : GetRosterInstanceIdsBeingRemoved(this.GetRosterInstanceIds(rosterId, outerVectorForExtend), rosterInstanceIds);
+
+                    rosterInstancesToRemove.AddRange(
+                        listOfRosterInstanceIdsForRemove.Select(rosterInstanceId =>
+                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)));
+
+                    foreach (var rosterInstanceIdBeingAdded in rosterInstanceIdsBeingAdded.Union(rosterInstancesToRemove))
                     {
                         var outerRosterVector = this.ExtendRosterVectorWithOneValue(rosterInstanceIdBeingAdded.OuterRosterVector,
                             rosterInstanceIdBeingAdded.RosterInstanceId);
-                        rosterInstantiatesFromNestedLevels.AddRange(CalculateDynamicRostersData(questionnaire, outerRosterVector, rosterId));
+                        rosterInstantiatesFromNestedLevels.AddRange(this.CalculateDynamicRostersData(questionnaire, outerRosterVector, rosterId));
                     }
-
-                    CalculateRostersForDelete(questionnaire, rosterInstancesToRemove, rosterId, outerVectorForExtend, rosterInstanceIds);
-                }
-            }
-        }
-
-        private void CalculateRostersForDelete(IQuestionnaire questionnare, List<RosterIdentity> rosterInstancesToRemove, Guid rosterId, decimal[] outerVectorForExtend, DistinctDecimalList rosterInstanceIdsForRemove = null)
-        {
-            var listOfRosterInstanceIdsForRemove = rosterInstanceIdsForRemove == null
-                ? this.GetRosterInstanceIds(rosterId, outerVectorForExtend)
-                : GetRosterInstanceIdsBeingRemoved(this.GetRosterInstanceIds(rosterId, outerVectorForExtend), rosterInstanceIdsForRemove);
-
-            rosterInstancesToRemove.AddRange(
-                listOfRosterInstanceIdsForRemove.Select(rosterInstanceId =>
-                    new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)));
-
-             var nestedRosterIds = questionnare.GetNestedRostersOfGroupById(rosterId);
-
-            foreach (var nestedRosterId in nestedRosterIds)
-            {
-                foreach (var rosterInstanceIdBeingRemoved in listOfRosterInstanceIdsForRemove)
-                {
-                    CalculateRostersForDelete(questionnare, rosterInstancesToRemove, nestedRosterId,
-                        this.ExtendRosterVectorWithOneValue(outerVectorForExtend, rosterInstanceIdBeingRemoved));
                 }
             }
         }
@@ -2205,7 +2189,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(rosterId => new RosterIdentity(rosterId, splittedRosterVector.Item1, splittedRosterVector.Item2))
                 .ToList();
         }
-
 
         private void PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
             Identity answeredQuestion, IQuestionnaire questionnaire, Func<Identity, object> getAnswer, Func<Identity, bool?> getNewQuestionStatus,
