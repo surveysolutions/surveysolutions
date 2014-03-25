@@ -1962,7 +1962,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private Dictionary<decimal, Tuple<string,int?>> GetRosterInstancesById(IQuestionnaire questionnaire, Guid rosterId, decimal[] outerRosterVector)
+        private Dictionary<decimal, Tuple<string, int?>> GetRosterInstancesById(IQuestionnaire questionnaire, Guid rosterId,
+            decimal[] outerRosterVector)
         {
             Guid? rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
 
@@ -1974,30 +1975,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         RosterInstanceId = (decimal) index
                     })
                     .ToDictionary(x => x.RosterInstanceId, x => new Tuple<string, int?>(x.Title, null));
-            
+
             var rosterSizeQuestionIdentity = new Identity(rosterSizeQuestionId.Value,
                 outerRosterVector.Take(questionnaire.GetRosterLevelForQuestion(rosterSizeQuestionId.Value)).ToArray());
 
             var answerOnRosterSizeQuestion =
                 this.GetEnabledQuestionAnswerSupportedInExpressions(rosterSizeQuestionIdentity);
-
-            if (questionnaire.IsQuestionInteger(rosterSizeQuestionId.Value))
-            {
-                if (answerOnRosterSizeQuestion == null)
-                    return new Dictionary<decimal, Tuple<string, int?>>();
-
-                return Enumerable.Range(0, (int) answerOnRosterSizeQuestion)
-                    .ToDictionary(x => (decimal) x, x => new Tuple<string, int?>(null, x));
-            }
-
             var questionType = questionnaire.GetQuestionType(rosterSizeQuestionId.Value);
             switch (questionType)
             {
+                case QuestionType.Numeric:
+                    if (questionnaire.IsQuestionInteger(rosterSizeQuestionId.Value))
+                    {
+                        if (answerOnRosterSizeQuestion == null)
+                            return new Dictionary<decimal, Tuple<string, int?>>();
+
+                        return Enumerable.Range(0, (int) answerOnRosterSizeQuestion)
+                            .ToDictionary(x => (decimal) x, x => new Tuple<string, int?>(null, x));
+                    }
+
+                    break;
                 case QuestionType.MultyOption:
                     var multyOptionAnswer = answerOnRosterSizeQuestion as decimal[];
                     if (multyOptionAnswer != null)
                     {
-                        return multyOptionAnswer.ToDictionary(x => x, x => new Tuple<string, int?>(questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId.Value, x), (int?)x));
+                        return multyOptionAnswer.ToDictionary(x => x,
+                            x => new Tuple<string, int?>(questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId.Value, x), (int?) x));
                     }
                     break;
                 case QuestionType.TextList:
@@ -2005,7 +2008,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         ConvertIdAndRosterVectorToString(rosterSizeQuestionIdentity.Id, rosterSizeQuestionIdentity.RosterVector);
                     if (textListAnswers.ContainsKey(questionKey))
                     {
-                        return textListAnswers[questionKey].ToDictionary(x => x.Item1, x => new Tuple<string, int?>(x.Item2, (int?)x.Item1));
+                        return textListAnswers[questionKey].ToDictionary(x => x.Item1, x => new Tuple<string, int?>(x.Item2, (int?) x.Item1));
                     }
                     break;
             }
