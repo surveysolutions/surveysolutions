@@ -387,9 +387,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private string RepublishAllEvents(int skipEvents = 0)
+        private string RepublishAllEvents(int skipEventsCount = 0)
         {
-            int processedEventsCount = skipEvents;
+            int processedEventsCount = skipEventsCount;
             int failedEventsCount = 0;
 
             ThrowIfShouldStopViewsRebuilding();
@@ -403,17 +403,17 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             DateTime republishStarted = DateTime.Now;
             UpdateStatusMessage(
                 "Acquiring first portion of events. "
-                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEvents))
+            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
             {
                 foreach (CommittedEvent @event in eventBulk)
                 {
-                    ThrowIfShouldStopViewsRebuilding(GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
+                    ThrowIfShouldStopViewsRebuilding(GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
                     UpdateStatusMessage(
                         string.Format("Publishing event {0}. ", processedEventsCount + 1)
-                        + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
+                        + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
                     try
                     {
@@ -437,36 +437,38 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 UpdateStatusMessage(
                     "Acquiring next portion of events. "
-                    + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
+                    + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
             }
 
             logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
 
             UpdateStatusMessage(string.Format("All events were republished. "
-                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount)));
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount)));
 
-            return GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount);
+            return GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount);
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
-            int processedEventsCount, int allEventsCount, int failedEventsCount)
+            int processedEventsCount, int allEventsCount, int failedEventsCount, int skippedEventsCount)
         {
+            int republishedEventsCount = processedEventsCount - skippedEventsCount;
+
             TimeSpan republishTimeSpent = DateTime.Now - republishStarted;
 
             int speedInEventsPerMinute = (int)(
                 republishTimeSpent.TotalSeconds == 0
                 ? 0
-                : 60 * processedEventsCount / republishTimeSpent.TotalSeconds);
+                : 60 * republishedEventsCount / republishTimeSpent.TotalSeconds);
 
             TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
-                processedEventsCount == 0
+                republishedEventsCount == 0
                 ? 0
-                : republishTimeSpent.TotalMilliseconds / processedEventsCount * allEventsCount);
+                : republishTimeSpent.TotalMilliseconds / republishedEventsCount * allEventsCount);
 
             return string.Format(
-                "Processed events: {1}. Total events: {2}. Failed events: {3}.{0}Time spent republishing: {4}. Speed: {5} events per minute. Estimated time: {6}.",
+                "Processed events: {1}. Total events: {2}. Skipped events: {3} Failed events: {4}.{0}Time spent republishing: {5}. Speed: {6} events per minute. Estimated time: {7}.",
                 Environment.NewLine,
-                processedEventsCount, allEventsCount, failedEventsCount,
+                processedEventsCount, allEventsCount, skippedEventsCount, failedEventsCount,
                 republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute, estimatedTotalRepublishTime.ToString(@"hh\:mm\:ss"));
         }
 
