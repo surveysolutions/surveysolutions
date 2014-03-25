@@ -37,9 +37,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="AspNet.Identity.RavenDB, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\AspNet.Identity.RavenDB\AspNet.Identity.RavenDB.dll</HintPath>
+    <Reference Include="AspNet.Identity.RavenDB">
+      <HintPath>..\..\..\packages\AspNet.Identity.RavenDB.2.0.0-pre-01\lib\net45\AspNet.Identity.RavenDB.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.dll</HintPath>
@@ -63,7 +63,15 @@
     <Reference Include="NSubstitute">
       <HintPath>..\..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
