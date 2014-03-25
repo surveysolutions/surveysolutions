@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<InterviewForTestingCreated>,
+        IEventHandler<InterviewOnClientCreated>,
         IEventHandler<RosterRowTitleChanged>,
         IEventHandler<QRBarcodeQuestionAnswered>
     {
@@ -294,6 +295,20 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         }
 
         public void Handle(IPublishedEvent<InterviewForTestingCreated> evnt)
+        {
+            var questionnaire = this.questionnarieStorage.GetById(evnt.Payload.QuestionnaireId,
+                                                             evnt.Payload.QuestionnaireVersion);
+            if (questionnaire == null)
+                return;
+
+            var propagationStructure = this.GetPropagationStructureOfQuestionnaireAndBuildItIfAbsent(questionnaire);
+
+            var view = new InterviewViewModel(evnt.EventSourceId, questionnaire.Questionnaire, propagationStructure);
+
+            this.interviewStorage.Store(view, evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
             var questionnaire = this.questionnarieStorage.GetById(evnt.Payload.QuestionnaireId,
                                                              evnt.Payload.QuestionnaireVersion);

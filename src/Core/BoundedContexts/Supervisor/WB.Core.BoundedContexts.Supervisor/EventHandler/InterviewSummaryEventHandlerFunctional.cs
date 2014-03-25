@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -36,7 +31,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<InterviewSummary, InterviewDeleted>,
         IUpdateHandler<InterviewSummary, InterviewRestored>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
-        IUpdateHandler<InterviewSummary, InterviewDeclaredValid>
+        IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
+        ICreateHandler<InterviewSummary, InterviewOnClientCreated>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -89,23 +85,36 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        public InterviewSummary Create(IPublishedEvent<InterviewCreated> evnt)
+        private InterviewSummary CreateInterviewSummary(Guid userId, Guid questionnaireId, long questionnaireVersion,
+            Guid eventSourceId, DateTime eventTimeStamp)
         {
-            UserDocument responsible = this.users.GetById(evnt.Payload.UserId);
-            var questionnarie = this.questionnaires.GetById(evnt.Payload.QuestionnaireId,
-                evnt.Payload.QuestionnaireVersion);
+            UserDocument responsible = this.users.GetById(userId);
+            var questionnarie = this.questionnaires.GetById(questionnaireId,
+                questionnaireVersion);
             return
                 new InterviewSummary(questionnarie.Questionnaire)
                 {
-                    InterviewId = evnt.EventSourceId,
-                    UpdateDate = evnt.EventTimeStamp,
-                    QuestionnaireId = evnt.Payload.QuestionnaireId,
-                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
+                    InterviewId = eventSourceId,
+                    UpdateDate = eventTimeStamp,
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireVersion = questionnaireVersion,
                     QuestionnaireTitle = questionnarie.Questionnaire.Title,
-                    ResponsibleId = evnt.Payload.UserId, // Creator is responsible
-                    ResponsibleName = this.users.GetById(evnt.Payload.UserId).UserName,
+                    ResponsibleId = userId, // Creator is responsible
+                    ResponsibleName = this.users.GetById(userId).UserName,
                     ResponsibleRole = responsible.Roles.FirstOrDefault()
                 };
+        }
+
+        public InterviewSummary Create(IPublishedEvent<InterviewCreated> evnt)
+        {
+            return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public InterviewSummary Create(IPublishedEvent<InterviewOnClientCreated> evnt)
+        {
+            return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
+             evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewStatusChanged> evnt)
