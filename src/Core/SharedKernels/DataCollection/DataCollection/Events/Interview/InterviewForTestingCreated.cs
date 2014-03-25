@@ -1,7 +1,7 @@
 ﻿namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     using System;
-    using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+    using Base;
 
     public class InterviewForTestingCreated : InterviewActiveEvent
     {
