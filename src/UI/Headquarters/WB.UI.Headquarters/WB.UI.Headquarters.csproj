@@ -48,7 +48,7 @@
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="AspNet.Identity.RavenDB">
-      <HintPath>..\..\..\..\lib\AspNet.Identity.RavenDB\AspNet.Identity.RavenDB.dll</HintPath>
+      <HintPath>..\..\..\..\packages\AspNet.Identity.RavenDB.2.0.0-pre-01\lib\net45\AspNet.Identity.RavenDB.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
