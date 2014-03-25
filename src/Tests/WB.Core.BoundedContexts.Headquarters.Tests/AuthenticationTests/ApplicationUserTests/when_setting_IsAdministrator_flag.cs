@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using AspNet.Identity.RavenDB.Entities;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
