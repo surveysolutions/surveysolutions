@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AspNet.Identity.RavenDB">
-      <HintPath>..\..\..\lib\AspNet.Identity.RavenDB\AspNet.Identity.RavenDB.dll</HintPath>
+      <HintPath>..\..\..\packages\AspNet.Identity.RavenDB.2.0.0-pre-01\lib\net45\AspNet.Identity.RavenDB.dll</HintPath>
     </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.dll</HintPath>
