@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             rosterGroupId = Guid.Parse("11111111111111111111111111111111");
             parentRosterGroupId = Guid.Parse("21111111111111111111111111111111");
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
-
+            questionInParentRosterId = Guid.Parse("31111111111111111111111111111111");
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
 
@@ -44,7 +44,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                         new[] { parentRosterGroupId, rosterGroupId }
                     && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new[] { parentRosterGroupId, rosterGroupId }
                     && _.GetRostersFromTopToSpecifiedGroup(parentRosterGroupId) == new[] { parentRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]);
+                    && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
+
+                    && _.GetAllUnderlyingQuestions(parentRosterGroupId) == new[] { questionInParentRosterId }
+                    && _.GetRosterLevelForQuestion(questionInParentRosterId) == 1
+                    && _.GetRostersFromTopToSpecifiedQuestion(questionInParentRosterId) == new[] { parentRosterGroupId });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 questionnaire);
@@ -62,6 +66,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview.Apply(new RosterRowAdded(parentRosterGroupId, new decimal[0], 1, null));
             interview.Apply(new RosterRowAdded(rosterGroupId, new decimal[] { 0 }, 0, null));
             interview.Apply(new RosterRowAdded(rosterGroupId, new decimal[] { 1 }, 0, null));
+
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionInParentRosterId, new decimal[]{0}, DateTime.Now,
+               2));
+
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionInParentRosterId, new decimal[] { 1 }, DateTime.Now,
+               2));
             eventContext = new EventContext();
         };
 
@@ -72,10 +82,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 0);
+           interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 1);
 
-        It should_raise_RosterRowRemoved_event_for_first_row = () =>
-          eventContext.ShouldContainEvent<RosterRowRemoved>(@event
+        It should_not_raise_RosterRowRemoved_event_for_first_row = () =>
+          eventContext.ShouldNotContainEvent<RosterRowRemoved>(@event
               => @event.GroupId == parentRosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 0);
 
         It should_raise_RosterRowRemoved_event_for_second_row = () =>
@@ -86,19 +96,28 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldNotContainEvent<RosterRowAdded>(@event
                 => @event.GroupId == rosterGroupId);
 
-        It should_raise_RosterRowRemoved_of_nested_roster_event_for_first_row = () =>
-            eventContext.ShouldContainEvent<RosterRowRemoved>(@event
+        It should_not_raise_RosterRowRemoved_of_nested_roster_event_for_first_row = () =>
+            eventContext.ShouldNotContainEvent<RosterRowRemoved>(@event
                 => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
 
         It should_raise_RosterRowRemoved_of_nested_roster_event_for_second_row = () =>
           eventContext.ShouldContainEvent<RosterRowRemoved>(@event
               => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 1);
 
+        It should_not_raise_AnswerRemoved_event_for_first_row = () =>
+            eventContext.ShouldNotContainEvent<AnswerRemoved>(@event
+                 => @event.QuestionId == questionInParentRosterId && @event.PropagationVector[0] == 0 && @event.PropagationVector.Length == 1);
+
+        It should_raise_AnswerRemoved_event_for_second_row = () =>
+         eventContext.ShouldContainEvent<AnswerRemoved>(@event
+              => @event.QuestionId == questionInParentRosterId && @event.PropagationVector[0] == 1 && @event.PropagationVector.Length == 1);
+
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
         private static Guid questionWhichIncreasesRosterSizeId;
         private static Guid rosterGroupId;
+        private static Guid questionInParentRosterId;
         private static Guid parentRosterGroupId;
     }
 }
