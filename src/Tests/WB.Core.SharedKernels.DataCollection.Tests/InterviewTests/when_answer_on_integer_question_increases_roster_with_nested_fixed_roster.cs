@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answer_on_integer_question_increases_roster_with_ested_fixed_roster : InterviewTestsContext
+    internal class when_answer_on_integer_question_increases_roster_with_nested_fixed_roster : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -40,10 +40,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.GetRosterLevelForGroup(rosterGroupId) == 1
                                                         && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
+                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { "t1"}
                                                         && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new[] { rosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
 
-                                                        && _.GetFixedRosterGroups(rosterGroupId) == new Guid[] { fixedRosterGroupId }
+                                                        && _.GetNestedRostersOfGroupById(rosterGroupId) == new[] { fixedRosterGroupId}
+                                                        && _.GetFixedRosterGroups(rosterGroupId) == new [] { fixedRosterGroupId }
                                                         && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
                                                         && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { title1, title2 }
                                                         );
@@ -107,6 +109,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_rise_RosterRowTitleChanged_for_second_row_of_fixed_roster_by_second_row = () =>
             eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
                 => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 1 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0 && @event.Title == title2);
+
+        It should_raise_RosterRowTitleChanged_event_for_first_nested_row = () =>
+            eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
+                =>
+                @event.Title == "t1" && @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 0 &&
+                    @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
 
         private static EventContext eventContext;
         private static Interview interview;

@@ -16,8 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("uningnore after KP-3219 fix")]
-    internal class when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips : InterviewTestsContext
+    internal class when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_numeric : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -31,24 +30,30 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
 
-                                                        => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                                                        && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                                                        && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { parentRosterGroupId }
+                => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
+                    && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
+                    && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
+                    && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { parentRosterGroupId }
 
-                                                        && _.HasQuestion(questionWhichIncreasesNestedRosterSizeId) == true
-                                                        && _.GetQuestionType(questionWhichIncreasesNestedRosterSizeId) == QuestionType.Numeric
-                                                        && _.IsQuestionInteger(questionWhichIncreasesNestedRosterSizeId) == true
-                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesNestedRosterSizeId) == new[] { nestedRosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesNestedRosterSizeId) == new Guid[0]
+                    && _.HasQuestion(questionWhichIncreasesNestedRosterSizeId) == true
+                    && _.GetQuestionType(questionWhichIncreasesNestedRosterSizeId) == QuestionType.Numeric
+                    && _.IsQuestionInteger(questionWhichIncreasesNestedRosterSizeId) == true
+                    && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesNestedRosterSizeId) == new[] { nestedRosterGroupId }
+                    && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesNestedRosterSizeId) == new Guid[0]
+                    && _.GetRosterLevelForQuestion(questionWhichIncreasesNestedRosterSizeId) == 0
 
-                                                        && _.HasGroup(nestedRosterGroupId) == true
-                                                        && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
-                                                        && _.GetRosterLevelForGroup(parentRosterGroupId) == 1
-                                                        && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedGroup(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedGroup(parentRosterGroupId) == new[] { parentRosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]);
+                    && _.HasGroup(nestedRosterGroupId) == true
+                    && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
+                    && _.GetRosterLevelForGroup(parentRosterGroupId) == 1
+                    &&
+                    _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) ==
+                        new[] { parentRosterGroupId, nestedRosterGroupId }
+                    && _.GetRostersFromTopToSpecifiedGroup(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
+                    && _.GetRostersFromTopToSpecifiedGroup(parentRosterGroupId) == new[] { parentRosterGroupId }
+                    && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
+
+                    && _.GetNestedRostersOfGroupById(parentRosterGroupId) == new[] { nestedRosterGroupId }
+                    && _.GetRosterSizeQuestion(nestedRosterGroupId) == questionWhichIncreasesNestedRosterSizeId);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionnaire);
@@ -83,6 +88,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_not_raise_RosterRowRemoved_event = () =>
             eventContext.ShouldNotContainEvent<RosterRowRemoved>(@event
                 => @event.GroupId == nestedRosterGroupId);
+
+        It should_not_raise_RosterRowTitleChanged_event_for_first_nested_row = () =>
+         eventContext.ShouldNotContainEvent<RosterRowTitleChanged>(@event
+             => @event.GroupId == nestedRosterGroupId && @event.RosterInstanceId == 0 &&
+                 @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
 
         private static EventContext eventContext;
         private static Interview interview;

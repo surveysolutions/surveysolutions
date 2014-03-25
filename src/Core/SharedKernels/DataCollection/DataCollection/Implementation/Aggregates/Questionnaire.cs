@@ -608,6 +608,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return nestedRosters;
         }
 
+        public Guid? GetRosterSizeQuestion(Guid rosterId)
+        {
+            var roster = this.GetGroupOrThrow(rosterId);
+            return roster.RosterSizeQuestionId;
+        }
+
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
