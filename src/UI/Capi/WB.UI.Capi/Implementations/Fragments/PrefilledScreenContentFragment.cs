@@ -6,11 +6,12 @@ using Android.OS;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.QuestionnaireTester.Implementations.Activities;
+using WB.UI.Capi.Implementations.Activities;
+using WB.UI.Shared.Android.Activities;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
 
-namespace WB.UI.QuestionnaireTester.Implementations.Fragments
+namespace WB.UI.Capi.Implementations.Fragments
 {
     public class PrefilledScreenContentFragment : ScreenContentFragment
     {
@@ -32,22 +33,22 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 
         protected override IQuestionViewFactory GetQuestionViewFactory()
         {
-            return CapiTesterApplication.Kernel.Get<IQuestionViewFactory>();
+            return CapiApplication.Kernel.Get<IQuestionViewFactory>();
         }
 
         protected override QuestionnaireScreenViewModel GetScreenViewModel()
         {
-            var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId));
+            var questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+                new QuestionnaireScreenInput(this.QuestionnaireId));
 
             if (questionnaire.FeaturedQuestions.Count == 0)
             {
-                var intent = new Intent(this.Activity, typeof (TesterDetailsActivity));
-                intent.PutExtra("publicKey", QuestionnaireId.ToString());
+                var intent = new Intent(this.Activity, typeof(DataCollectionDetailsActivity));
+                intent.PutExtra("publicKey", this.QuestionnaireId.ToString());
                 this.StartActivity(intent);
                 this.Activity.Finish();
             }
-            return new QuestionnaireScreenViewModel(QuestionnaireId, "Pre-filled questions", "test", true, new InterviewItemId(Guid.Empty),
+            return new QuestionnaireScreenViewModel(this.QuestionnaireId, "Pre-filled questions", "", true, new InterviewItemId(Guid.Empty),
                 questionnaire.FeaturedQuestions.Values.Select(q => q as IQuestionnaireItemViewModel).ToList(),
                 new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>());
         }

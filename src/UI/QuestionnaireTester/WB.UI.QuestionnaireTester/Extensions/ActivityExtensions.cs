@@ -1,8 +1,5 @@
 using Android.App;
-using Android.Content;
-using Android.Views;
 using Android.Widget;
-using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester.Extensions
 {

@@ -25,6 +25,8 @@ namespace CAPI.Android.Core.Model.Authorization
             get { return currentUser; }
         }
 
+        public Guid SupervisorId { get; private set; }
+
 
         public SyncCredentials? RequestSyncCredentials()
         {
@@ -50,10 +52,13 @@ namespace CAPI.Android.Core.Model.Authorization
 
                 LoginDTO user = this.documentStorage.Filter(u => u.Login == userNameToLower).FirstOrDefault();
 
-                if (user == null || user.Password!=hash || user.IsLocked)
+                if (user == null || user.Password != hash || user.IsLocked)
                     return false;
 
                 currentUser = new UserLight(Guid.Parse(user.Id), user.Login);
+
+                Guid super;
+                this.SupervisorId = Guid.TryParse(user.Supervisor, out super) ? super : Guid.NewGuid();
                 return true;
             }
             catch(Exception e)

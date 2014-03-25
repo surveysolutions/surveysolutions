@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
@@ -13,9 +15,13 @@ namespace WB.UI.Capi.Controls
     {
         private readonly Activity activity;
 
-        public DashboardAdapter(IList<DashboardQuestionnaireItem> items, Activity activity) : base(items)
+        private readonly Action<Guid, View> deleteHandler;
+
+        public DashboardAdapter(IList<DashboardQuestionnaireItem> items, Activity activity, Action<Guid, View> deleteHandler)
+            : base(items)
         {
             this.activity = activity;
+            this.deleteHandler = deleteHandler;
         }
 
         protected override View BuildViewItem(DashboardQuestionnaireItem dataItem, int position)
@@ -30,19 +36,39 @@ namespace WB.UI.Capi.Controls
             view.SetTag(Resource.Id.QuestionnaireId, dataItem.PublicKey.ToString());
             llQuestionnairie.Focusable = false;
 
+            if (dataItem.CreatedOnClient.HasValue && dataItem.CreatedOnClient.Value)
+            {
+                Button delButton = new Button(activity);
+                delButton.SetTypeface(null, TypefaceStyle.Bold);
+                delButton.Text = "-";
+                delButton.SetBackgroundColor(Color.Red);
+                llQuestionnairie.AddView(delButton, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                                                  ViewGroup.LayoutParams.WrapContent));
+
+                delButton.Click += (sender, args) =>
+                {
+                    var target = sender as Button;
+                        if(target==null)
+                    return;
+
+                    this.deleteHandler.Invoke(dataItem.PublicKey, target.Parent as View);
+                };
+            }
+
             AddPropertyToContainer(llQuestionnairie, GetStatusText(dataItem.Status));
           
             foreach (var featuredItem in dataItem.Properties)
             {
                 AddPropertyToContainer(llQuestionnairie, featuredItem.Title + ": " + featuredItem.Value);
             }
+            
             var tvArrow = new TextView(activity);
             var img = activity.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
             tvArrow.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
             llQuestionnairie.AddView(tvArrow, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WrapContent, 1));
             return view;
         }
-
+        
         protected string GetStatusText(InterviewStatus status)
         {
             switch (status)

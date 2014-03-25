@@ -147,7 +147,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
 
-
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
@@ -156,6 +155,9 @@ namespace WB.UI.Capi
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericRealQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
+
+            bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
+
         }
 
         private void InitTemplateStorage(InProcessEventBus bus)
@@ -198,6 +200,11 @@ namespace WB.UI.Capi
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
+
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewOnClientCreated));
+
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewerAssigned));
+            bus.RegisterHandler(dashboardeventHandler, typeof(SupervisorAssigned));
             
         }
 
