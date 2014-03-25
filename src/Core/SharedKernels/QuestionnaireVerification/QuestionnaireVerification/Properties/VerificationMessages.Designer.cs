@@ -475,5 +475,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster can have no more than 3 parent rosters.
+        /// </summary>
+        internal static string WB0055_RosterHasRosterLevelMoreThan4 {
+            get {
+                return ResourceManager.GetString("WB0055_RosterHasRosterLevelMoreThan4", resourceCulture);
+            }
+        }
     }
 }
