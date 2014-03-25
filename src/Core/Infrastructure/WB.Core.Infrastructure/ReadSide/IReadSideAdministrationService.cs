@@ -7,7 +7,7 @@ namespace WB.Core.Infrastructure.ReadSide
     {
         string GetReadableStatus();
 
-        void RebuildAllViewsAsync();
+        void RebuildAllViewsAsync(int skipEvents = 0);
 
         void RebuildViewsAsync(string[] handlerNames);
 
