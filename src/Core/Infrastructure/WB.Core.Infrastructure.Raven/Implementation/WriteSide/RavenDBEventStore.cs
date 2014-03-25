@@ -271,18 +271,18 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
             }
         }
 
-        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
+        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, int skipEvents)
         {
-            if (useStreamingForAllEvents)
-                return GetAllEventsWithStream(bulkSize);
-            else
-                return GetAllEventsWithPaging(bulkSize);
-            
+            skipEvents = Math.Max(0, skipEvents);
+
+            return this.useStreamingForAllEvents
+                ? this.GetAllEventsWithStream(skipEvents)
+                : this.GetAllEventsWithPaging(bulkSize, skipEvents);
         }
 
-        private IEnumerable<CommittedEvent[]> GetAllEventsWithPaging(int bulkSize)
+        private IEnumerable<CommittedEvent[]> GetAllEventsWithPaging(int bulkSize, int skipEvents)
         {
-            int returnedEventCount = 0;
+            int returnedEventCount = skipEvents;
 
             while (true)
             {
@@ -290,7 +290,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                 {
                     StoredEvent[] storedEventsBulk =
                         QueryAllEvents(session)
-                        .OrderBy(y => y.EventTimeStamp).ThenBy(y => y.EventSequence)
+                        .OrderBy(y => y.EventTimeStamp)
+                        .ThenBy(y => y.EventSequence)
                         .Skip(returnedEventCount)
                         .Take(bulkSize)
                         .ToArray();
@@ -306,13 +307,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
             }
         }
 
-        private IEnumerable<CommittedEvent[]> GetAllEventsWithStream(int bulkSize)
+        private IEnumerable<CommittedEvent[]> GetAllEventsWithStream(int skipEvents)
         {
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
                     var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
                         .OrderBy(y => y.EventTimeStamp)
-                        .ThenBy(y => y.EventSequence);
+                        .ThenBy(y => y.EventSequence)
+                        .Skip(skipEvents);
 
                     var enumerator = session.Advanced.Stream(query);
 
