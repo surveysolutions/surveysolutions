@@ -10,7 +10,6 @@ using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ViewModel.Login;
-using Java.IO;
 using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
@@ -21,11 +20,9 @@ using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
-using File = System.IO.File;
 
 namespace WB.UI.Capi
 {

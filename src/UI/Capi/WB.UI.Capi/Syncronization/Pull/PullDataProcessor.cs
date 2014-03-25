@@ -31,11 +31,11 @@ namespace WB.UI.Capi.Syncronization.Pull
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
-            this.chuncksFroProccess=new List<SyncItem>();
+            this.chuncksFromProccess = new List<SyncItem>();
             this.cleanUpExecutor = new CleanUpExecutor(changelog);
             this.userStorage = userStorage;
         }
-        private IList<SyncItem> chuncksFroProccess;
+        private IList<SyncItem> chuncksFromProccess;
         private ILogger logger;
         private CleanUpExecutor cleanUpExecutor;
 
@@ -45,12 +45,12 @@ namespace WB.UI.Capi.Syncronization.Pull
 
         public void Save(SyncItem  data)
         {
-            this.chuncksFroProccess.Add(data);
+            this.chuncksFromProccess.Add(data);
         }
 
         public void Proccess(SynchronizationChunkMeta chunkId)
         {
-            var item = this.chuncksFroProccess.FirstOrDefault(i => i.Id == chunkId.Id);
+            var item = this.chuncksFromProccess.FirstOrDefault(i => i.Id == chunkId.Id);
             if (item == null)
                 return;
             
@@ -58,7 +58,7 @@ namespace WB.UI.Capi.Syncronization.Pull
 
             this.changelog.CreatePublicRecord(item.Id);
 
-            this.chuncksFroProccess.Remove(item);
+            this.chuncksFromProccess.Remove(item);
         }
         
         protected void HandleItem(SyncItem item)

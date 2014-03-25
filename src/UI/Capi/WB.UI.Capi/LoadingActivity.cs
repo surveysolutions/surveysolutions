@@ -38,13 +38,17 @@ namespace WB.UI.Capi
         {
             this.CheckAndRestoreFromSyncPackage(publicKey);
             
-            var questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+            InterviewViewModel interview = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                 new QuestionnaireScreenInput(publicKey));
-            if (questionnaire == null)
+            
+            if (interview == null)
             {
                 this.RunOnUiThread(this.Finish);
                 return;
             }
+
+            /*if (interview.)*/
+
             var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
             intent.PutExtra("publicKey", publicKey.ToString());
             this.StartActivity(intent);

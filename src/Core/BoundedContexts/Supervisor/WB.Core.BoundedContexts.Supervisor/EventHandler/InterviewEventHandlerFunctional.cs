@@ -54,7 +54,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, FlagRemovedFromAnswer>,
         IUpdateHandler<ViewWithSequence<InterviewData>, FlagSetToAnswer>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewDeclaredInvalid>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, InterviewDeclaredValid>
+        IUpdateHandler<ViewWithSequence<InterviewData>, InterviewDeclaredValid>,
+        ICreateHandler<ViewWithSequence<InterviewData>, InterviewOnClientCreated>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
@@ -295,6 +296,24 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewCreated> evnt)
+        {
+            var responsible = this.users.GetById(evnt.Payload.UserId);
+
+            var interview = new InterviewData()
+            {
+                InterviewId = evnt.EventSourceId,
+                UpdateDate = evnt.EventTimeStamp,
+                QuestionnaireId = evnt.Payload.QuestionnaireId,
+                QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
+                ResponsibleId = evnt.Payload.UserId, // Creator is responsible
+                ResponsibleRole = responsible.Roles.FirstOrDefault()
+            };
+            var emptyVector = new decimal[0];
+            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, null, emptyVector));
+            return new ViewWithSequence<InterviewData>(interview, evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
             var responsible = this.users.GetById(evnt.Payload.UserId);
 
@@ -720,6 +739,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
             return outerVector;
         }
-
+        
     }
 }

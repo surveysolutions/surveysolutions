@@ -5,12 +5,11 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using WB.UI.QuestionnaireTester.Extensions;
-using WB.UI.QuestionnaireTester.Implementations.Activities;
-using WB.UI.QuestionnaireTester.Implementations.Fragments;
+using WB.UI.Capi.Implementations.Activities;
+using WB.UI.Capi.Implementations.Fragments;
 using WB.UI.Shared.Android.Activities;
 
-namespace WB.UI.QuestionnaireTester
+namespace WB.UI.Capi
 {
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class CreateInterviewActivity : DoubleBackMvxFragmentActivity
@@ -33,7 +32,6 @@ namespace WB.UI.QuestionnaireTester
         protected override void OnStart()
         {
             base.OnStart();
-            this.CreateActionBar();
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -44,19 +42,19 @@ namespace WB.UI.QuestionnaireTester
 
             SetContentView(Resource.Layout.CreateInterview);
 
-            var screen = PrefilledScreenContentFragment.CreatePrefilledScreenContentFragment(QuestionnaireId);
+            var screen = PrefilledScreenContentFragment.CreatePrefilledScreenContentFragment(this.QuestionnaireId);
 
-            SupportFragmentManager.BeginTransaction().Add(Resource.Id.flFragmentHolder, screen).Commit();
+            this.SupportFragmentManager.BeginTransaction().Add(Resource.Id.flFragmentHolder, screen).Commit();
 
-            btnNext.Click += btnNext_Click;
+            this.btnNext.Click += this.btnNext_Click;
             this.Title = string.Format("Pre-filled questions");
         }
 
         void btnNext_Click(object sender, EventArgs e)
         {
-            var intent = new Intent(this, typeof(TesterDetailsActivity));
+            var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
             intent.SetFlags(ActivityFlags.ReorderToFront);
-            intent.PutExtra("publicKey", QuestionnaireId.ToString());
+            intent.PutExtra("publicKey", this.QuestionnaireId.ToString());
             this.StartActivity(intent);
         }
     }

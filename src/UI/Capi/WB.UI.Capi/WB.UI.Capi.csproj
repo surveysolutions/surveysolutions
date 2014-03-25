@@ -155,6 +155,7 @@
     <Compile Include="Core\CAPIParcelableCreator.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="Core\ParcelableWrapper.cs" />
+    <Compile Include="CreateInterviewActivity.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Implementations\Activities\DataCollectionDetailsActivity.cs" />
@@ -162,12 +163,13 @@
     <Compile Include="Implementations\Fragments\DataCollectionGridContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionScreenContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
+    <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\CleanUpExecutor.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
@@ -223,6 +225,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\SyncLogin.axml">
       <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\CreateInterview.axml">
+      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>

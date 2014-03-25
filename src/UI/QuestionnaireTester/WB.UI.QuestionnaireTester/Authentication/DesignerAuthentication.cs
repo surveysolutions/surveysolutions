@@ -17,6 +17,8 @@ namespace WB.UI.QuestionnaireTester.Authentication
             get { return currentUser; }
         }
 
+        public Guid SupervisorId { get; private set; }
+
         public bool IsLoggedIn
         {
             get { return RemoteUser != null; }

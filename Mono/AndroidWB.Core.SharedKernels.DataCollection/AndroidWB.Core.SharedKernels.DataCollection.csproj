@@ -121,6 +121,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\CreateInterviewForTestingCommand.cs">
       <Link>Commands\Interview\CreateInterviewForTestingCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\CreateInterviewOnClientCommand.cs">
+      <Link>Commands\Interview\CreateInterviewOnClientCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\DeleteInterviewCommand.cs">
       <Link>Commands\Interview\DeleteInterviewCommand.cs</Link>
     </Compile>
@@ -273,6 +276,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\InterviewForTestingCreated.cs">
       <Link>Events\Interview\InterviewForTestingCreated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\InterviewOnClientCreated.cs">
+      <Link>Events\Interview\InterviewOnClientCreated.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\InterviewRejected.cs">
       <Link>Events\Interview\InterviewRejected.cs</Link>
