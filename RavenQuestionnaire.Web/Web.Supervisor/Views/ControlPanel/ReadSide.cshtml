@@ -39,9 +39,16 @@ Requesting status...
       
     </ul>
    
-    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn ", onclick="return confirmAction()" })
     <button class="btn" type="submit"  onclick="return confirmAction()" >Rebuild Selected</button>
     @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn "})
+}
+
+@using (Html.BeginForm("RebuildReadSide", "ControlPanel", FormMethod.Get)) {
+    @:Skip events:
+    @Html.TextBox("skipEvents", "0");
+    <input type="submit" value="Rebuild All" class="btn" onclick="return confirmAction()" />
+    <br/>
+    @:If any of events are skipped, then views will not be deleted.
 }
 
 @functions{
@@ -77,7 +84,7 @@ Requesting status...
 
         function updateReadSideStatusNeverending() {
             $.when(updateReadSideStatus()).always(function () {
-                setTimeout(updateReadSideStatusNeverending, 1000);
+                setTimeout(updateReadSideStatusNeverending, 3000);
             });
         }
 

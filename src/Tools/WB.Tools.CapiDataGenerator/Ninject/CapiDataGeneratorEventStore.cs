@@ -87,7 +87,12 @@ namespace WB.Tools.CapiDataGenerator.Models
             throw new NotImplementedException();
         }
 
-        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize = 32)
+        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, int skipEvents)
+        {
+            throw new NotImplementedException();
+        }
+
+        public long GetLastEventSequence(Guid id)
         {
             throw new NotImplementedException();
         }

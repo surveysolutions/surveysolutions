@@ -18,10 +18,8 @@ namespace Ncqrs.Eventing.Storage
         /// <param name="eventSourceId">The id of the event source.</param>
         /// <param name="versionToBeSaved">Version to be saved.</param>
         public ConcurrencyException(Guid eventSourceId, long versionToBeSaved)
-            : base(String.Format("There is a newer than {0} version of the event source with id {1} you are trying to save stored in the event store.", versionToBeSaved, eventSourceId))
+            : this(eventSourceId, versionToBeSaved, null)
         {
-            _eventSourceId = eventSourceId;
-            _eventSourceVersion = versionToBeSaved;
         }
 
         /// <summary>
@@ -36,6 +34,16 @@ namespace Ncqrs.Eventing.Storage
         {
             _eventSourceId = (Guid) info.GetValue("EventSourceId", typeof (Guid));
             _eventSourceVersion = info.GetInt64("EventSourceVersion");
+        }
+
+        public ConcurrencyException(Guid eventSourceId, long eventSourceVersion, Exception innerException)
+            : base(
+                String.Format(
+                    "There is a newer than {0} version of the event source with id {1} you are trying to save stored in the event store.",
+                    eventSourceVersion, eventSourceId), innerException)
+        {
+            this._eventSourceId = eventSourceId;
+            this._eventSourceVersion = eventSourceVersion;
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

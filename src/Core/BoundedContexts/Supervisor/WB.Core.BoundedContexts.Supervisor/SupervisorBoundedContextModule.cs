@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
-            Action<Guid, long> additionalEventChecker = this.AdditionalEventChecker;
+            Action<Guid> additionalEventChecker = this.AdditionalEventChecker;
 
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
@@ -78,9 +78,9 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
         }
 
-        protected void AdditionalEventChecker(Guid interviewId, long sequence)
+        protected void AdditionalEventChecker(Guid interviewId)
         {
-            Kernel.Get<IIncomePackagesRepository>().ProcessItem(interviewId, sequence);
+            Kernel.Get<IIncomePackagesRepository>().ProcessItem(interviewId);
         }
     }
 }

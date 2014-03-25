@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 interview.CommentedStatusesHistory.Add(new InterviewCommentedStatus
                 {
                     Status = interview.Status,
-                    Date = interview.UpdateDate,
+                    Date = evnt.EventTimeStamp,
                     Comment = evnt.Payload.Comment
                 });
             });
