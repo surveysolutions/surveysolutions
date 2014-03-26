@@ -287,10 +287,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static int GetRosterLevel(IComposite questionnaireItem)
         {
             int rosterLevel = 0;
-            while ((questionnaireItem = questionnaireItem.GetParent()) != null)
+            while (questionnaireItem != null)
             {
-                if (IsRosterGroup((IGroup) questionnaireItem))
+                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup) questionnaireItem))
                     rosterLevel++;
+
+                questionnaireItem = questionnaireItem.GetParent();
             }
 
             return rosterLevel;
@@ -945,6 +947,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static bool IsRosterGroup(IGroup group)
         {
             return group.IsRoster;
+        }
+
+        private static bool IsGroup(IComposite questionnaireItem)
+        {
+            return questionnaireItem is IGroup;
         }
 
         private static bool IsRosterByQuestion(IGroup group)

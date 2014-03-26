@@ -57,21 +57,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                                 new NumericQuestion() {PublicKey = rosterSizeLevel5Id, IsInteger = true, MaxValue = 5},
                                                 new Group()
                                                 {
-                                                    PublicKey = Guid.NewGuid(),
+                                                    PublicKey = rosterGroupId,
                                                     IsRoster = true,
                                                     RosterSizeQuestionId = rosterSizeLevel5Id,
                                                     Children = new List<IComposite>()
                                                     {
-                                                        new Group()
-                                                        {
-                                                            PublicKey = rosterGroupId,
-                                                            IsRoster = true,
-                                                            RosterSizeQuestionId = rosterSizeLevel5Id,
-                                                            Children = new List<IComposite>()
-                                                            {
-
-                                                            }
-                                                        }
                                                     }
                                                 }
                                             }
