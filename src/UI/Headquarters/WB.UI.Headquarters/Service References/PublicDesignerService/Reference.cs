@@ -160,27 +160,35 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
         WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo DownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
-        System.Threading.Tasks.Task<WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo> DownloadQuestionnaireAsync(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
+        System.IAsyncResult BeginDownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request, System.AsyncCallback callback, object asyncState);
+        
+        WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo EndDownloadQuestionnaire(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
         string DownloadQuestionnaireSource(System.Guid request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
-        System.Threading.Tasks.Task<string> DownloadQuestionnaireSourceAsync(System.Guid request);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
+        System.IAsyncResult BeginDownloadQuestionnaireSource(System.Guid request, System.AsyncCallback callback, object asyncState);
+        
+        string EndDownloadQuestionnaireSource(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/Dummy", ReplyAction="http://tempuri.org/IPublicService/DummyResponse")]
         void Dummy();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/Dummy", ReplyAction="http://tempuri.org/IPublicService/DummyResponse")]
-        System.Threading.Tasks.Task DummyAsync();
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IPublicService/Dummy", ReplyAction="http://tempuri.org/IPublicService/DummyResponse")]
+        System.IAsyncResult BeginDummy(System.AsyncCallback callback, object asyncState);
+        
+        void EndDummy(System.IAsyncResult result);
         
         // CODEGEN: Generating message contract since the wrapper name (QuestionnaireListRequest) of message QuestionnaireListRequest does not match the default value (GetQuestionnaireList)
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/GetQuestionnaireList", ReplyAction="http://tempuri.org/IPublicService/GetQuestionnaireListResponse")]
         WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage GetQuestionnaireList(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/GetQuestionnaireList", ReplyAction="http://tempuri.org/IPublicService/GetQuestionnaireListResponse")]
-        System.Threading.Tasks.Task<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage> GetQuestionnaireListAsync(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IPublicService/GetQuestionnaireList", ReplyAction="http://tempuri.org/IPublicService/GetQuestionnaireListResponse")]
+        System.IAsyncResult BeginGetQuestionnaireList(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request, System.AsyncCallback callback, object asyncState);
+        
+        WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage EndGetQuestionnaireList(System.IAsyncResult result);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -297,7 +305,130 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class DownloadQuestionnaireCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public DownloadQuestionnaireCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public long Length {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((long)(this.results[0]));
+            }
+        }
+        
+        public System.IO.Stream FileByteStream {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((System.IO.Stream)(this.results[1]));
+            }
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[2]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class DownloadQuestionnaireSourceCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public DownloadQuestionnaireSourceCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class GetQuestionnaireListCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GetQuestionnaireListCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public int Page {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+        
+        public int PageSize {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((int)(this.results[1]));
+            }
+        }
+        
+        public int TotalCount {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((int)(this.results[2]));
+            }
+        }
+        
+        public System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage>)(this.results[3]));
+            }
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[4]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PublicServiceClient : System.ServiceModel.ClientBase<WB.UI.Headquarters.PublicDesignerService.IPublicService>, WB.UI.Headquarters.PublicDesignerService.IPublicService {
+        
+        private BeginOperationDelegate onBeginDownloadQuestionnaireDelegate;
+        
+        private EndOperationDelegate onEndDownloadQuestionnaireDelegate;
+        
+        private System.Threading.SendOrPostCallback onDownloadQuestionnaireCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginDownloadQuestionnaireSourceDelegate;
+        
+        private EndOperationDelegate onEndDownloadQuestionnaireSourceDelegate;
+        
+        private System.Threading.SendOrPostCallback onDownloadQuestionnaireSourceCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginDummyDelegate;
+        
+        private EndOperationDelegate onEndDummyDelegate;
+        
+        private System.Threading.SendOrPostCallback onDummyCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginGetQuestionnaireListDelegate;
+        
+        private EndOperationDelegate onEndGetQuestionnaireListDelegate;
+        
+        private System.Threading.SendOrPostCallback onGetQuestionnaireListCompletedDelegate;
         
         public PublicServiceClient() {
         }
@@ -318,6 +449,14 @@ namespace WB.UI.Headquarters.PublicDesignerService {
                 base(binding, remoteAddress) {
         }
         
+        public event System.EventHandler<DownloadQuestionnaireCompletedEventArgs> DownloadQuestionnaireCompleted;
+        
+        public event System.EventHandler<DownloadQuestionnaireSourceCompletedEventArgs> DownloadQuestionnaireSourceCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> DummyCompleted;
+        
+        public event System.EventHandler<GetQuestionnaireListCompletedEventArgs> GetQuestionnaireListCompleted;
+        
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo WB.UI.Headquarters.PublicDesignerService.IPublicService.DownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request) {
             return base.Channel.DownloadQuestionnaire(request);
@@ -334,31 +473,168 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo> WB.UI.Headquarters.PublicDesignerService.IPublicService.DownloadQuestionnaireAsync(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request) {
-            return base.Channel.DownloadQuestionnaireAsync(request);
+        System.IAsyncResult WB.UI.Headquarters.PublicDesignerService.IPublicService.BeginDownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginDownloadQuestionnaire(request, callback, asyncState);
         }
         
-        public System.Threading.Tasks.Task<WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo> DownloadQuestionnaireAsync(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion) {
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginDownloadQuestionnaire(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion, System.AsyncCallback callback, object asyncState) {
             WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest inValue = new WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest();
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
-            return ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).DownloadQuestionnaireAsync(inValue);
+            return ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).BeginDownloadQuestionnaire(inValue, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo WB.UI.Headquarters.PublicDesignerService.IPublicService.EndDownloadQuestionnaire(System.IAsyncResult result) {
+            return base.Channel.EndDownloadQuestionnaire(result);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public string EndDownloadQuestionnaire(System.IAsyncResult result, out long Length, out System.IO.Stream FileByteStream) {
+            WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo retVal = ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).EndDownloadQuestionnaire(result);
+            Length = retVal.Length;
+            FileByteStream = retVal.FileByteStream;
+            return retVal.FileName;
+        }
+        
+        private System.IAsyncResult OnBeginDownloadQuestionnaire(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            System.Guid QuestionnaireId = ((System.Guid)(inValues[0]));
+            WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion = ((WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion)(inValues[1]));
+            return this.BeginDownloadQuestionnaire(QuestionnaireId, SupportedQuestionnaireVersion, callback, asyncState);
+        }
+        
+        private object[] OnEndDownloadQuestionnaire(System.IAsyncResult result) {
+            long Length = this.GetDefaultValueForInitialization<long>();
+            System.IO.Stream FileByteStream = this.GetDefaultValueForInitialization<System.IO.Stream>();
+            string retVal = this.EndDownloadQuestionnaire(result, out Length, out FileByteStream);
+            return new object[] {
+                    Length,
+                    FileByteStream,
+                    retVal};
+        }
+        
+        private void OnDownloadQuestionnaireCompleted(object state) {
+            if ((this.DownloadQuestionnaireCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.DownloadQuestionnaireCompleted(this, new DownloadQuestionnaireCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void DownloadQuestionnaireAsync(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion) {
+            this.DownloadQuestionnaireAsync(QuestionnaireId, SupportedQuestionnaireVersion, null);
+        }
+        
+        public void DownloadQuestionnaireAsync(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion, object userState) {
+            if ((this.onBeginDownloadQuestionnaireDelegate == null)) {
+                this.onBeginDownloadQuestionnaireDelegate = new BeginOperationDelegate(this.OnBeginDownloadQuestionnaire);
+            }
+            if ((this.onEndDownloadQuestionnaireDelegate == null)) {
+                this.onEndDownloadQuestionnaireDelegate = new EndOperationDelegate(this.OnEndDownloadQuestionnaire);
+            }
+            if ((this.onDownloadQuestionnaireCompletedDelegate == null)) {
+                this.onDownloadQuestionnaireCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnDownloadQuestionnaireCompleted);
+            }
+            base.InvokeAsync(this.onBeginDownloadQuestionnaireDelegate, new object[] {
+                        QuestionnaireId,
+                        SupportedQuestionnaireVersion}, this.onEndDownloadQuestionnaireDelegate, this.onDownloadQuestionnaireCompletedDelegate, userState);
         }
         
         public string DownloadQuestionnaireSource(System.Guid request) {
             return base.Channel.DownloadQuestionnaireSource(request);
         }
         
-        public System.Threading.Tasks.Task<string> DownloadQuestionnaireSourceAsync(System.Guid request) {
-            return base.Channel.DownloadQuestionnaireSourceAsync(request);
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginDownloadQuestionnaireSource(System.Guid request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginDownloadQuestionnaireSource(request, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public string EndDownloadQuestionnaireSource(System.IAsyncResult result) {
+            return base.Channel.EndDownloadQuestionnaireSource(result);
+        }
+        
+        private System.IAsyncResult OnBeginDownloadQuestionnaireSource(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            System.Guid request = ((System.Guid)(inValues[0]));
+            return this.BeginDownloadQuestionnaireSource(request, callback, asyncState);
+        }
+        
+        private object[] OnEndDownloadQuestionnaireSource(System.IAsyncResult result) {
+            string retVal = this.EndDownloadQuestionnaireSource(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnDownloadQuestionnaireSourceCompleted(object state) {
+            if ((this.DownloadQuestionnaireSourceCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.DownloadQuestionnaireSourceCompleted(this, new DownloadQuestionnaireSourceCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void DownloadQuestionnaireSourceAsync(System.Guid request) {
+            this.DownloadQuestionnaireSourceAsync(request, null);
+        }
+        
+        public void DownloadQuestionnaireSourceAsync(System.Guid request, object userState) {
+            if ((this.onBeginDownloadQuestionnaireSourceDelegate == null)) {
+                this.onBeginDownloadQuestionnaireSourceDelegate = new BeginOperationDelegate(this.OnBeginDownloadQuestionnaireSource);
+            }
+            if ((this.onEndDownloadQuestionnaireSourceDelegate == null)) {
+                this.onEndDownloadQuestionnaireSourceDelegate = new EndOperationDelegate(this.OnEndDownloadQuestionnaireSource);
+            }
+            if ((this.onDownloadQuestionnaireSourceCompletedDelegate == null)) {
+                this.onDownloadQuestionnaireSourceCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnDownloadQuestionnaireSourceCompleted);
+            }
+            base.InvokeAsync(this.onBeginDownloadQuestionnaireSourceDelegate, new object[] {
+                        request}, this.onEndDownloadQuestionnaireSourceDelegate, this.onDownloadQuestionnaireSourceCompletedDelegate, userState);
         }
         
         public void Dummy() {
             base.Channel.Dummy();
         }
         
-        public System.Threading.Tasks.Task DummyAsync() {
-            return base.Channel.DummyAsync();
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginDummy(System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginDummy(callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndDummy(System.IAsyncResult result) {
+            base.Channel.EndDummy(result);
+        }
+        
+        private System.IAsyncResult OnBeginDummy(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            return this.BeginDummy(callback, asyncState);
+        }
+        
+        private object[] OnEndDummy(System.IAsyncResult result) {
+            this.EndDummy(result);
+            return null;
+        }
+        
+        private void OnDummyCompleted(object state) {
+            if ((this.DummyCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.DummyCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void DummyAsync() {
+            this.DummyAsync(null);
+        }
+        
+        public void DummyAsync(object userState) {
+            if ((this.onBeginDummyDelegate == null)) {
+                this.onBeginDummyDelegate = new BeginOperationDelegate(this.OnBeginDummy);
+            }
+            if ((this.onEndDummyDelegate == null)) {
+                this.onEndDummyDelegate = new EndOperationDelegate(this.OnEndDummy);
+            }
+            if ((this.onDummyCompletedDelegate == null)) {
+                this.onDummyCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnDummyCompleted);
+            }
+            base.InvokeAsync(this.onBeginDummyDelegate, null, this.onEndDummyDelegate, this.onDummyCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -381,17 +657,83 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage> WB.UI.Headquarters.PublicDesignerService.IPublicService.GetQuestionnaireListAsync(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request) {
-            return base.Channel.GetQuestionnaireListAsync(request);
+        System.IAsyncResult WB.UI.Headquarters.PublicDesignerService.IPublicService.BeginGetQuestionnaireList(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetQuestionnaireList(request, callback, asyncState);
         }
         
-        public System.Threading.Tasks.Task<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage> GetQuestionnaireListAsync(string Filter, int PageIndex, int PageSize, string SortOrder) {
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginGetQuestionnaireList(string Filter, int PageIndex, int PageSize, string SortOrder, System.AsyncCallback callback, object asyncState) {
             WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest inValue = new WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest();
             inValue.Filter = Filter;
             inValue.PageIndex = PageIndex;
             inValue.PageSize = PageSize;
             inValue.SortOrder = SortOrder;
-            return ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).GetQuestionnaireListAsync(inValue);
+            return ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).BeginGetQuestionnaireList(inValue, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage WB.UI.Headquarters.PublicDesignerService.IPublicService.EndGetQuestionnaireList(System.IAsyncResult result) {
+            return base.Channel.EndGetQuestionnaireList(result);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public string EndGetQuestionnaireList(System.IAsyncResult result, out int Page, out int PageSize, out int TotalCount, out System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items) {
+            WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage retVal = ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).EndGetQuestionnaireList(result);
+            Page = retVal.Page;
+            PageSize = retVal.PageSize;
+            TotalCount = retVal.TotalCount;
+            Items = retVal.Items;
+            return retVal.Order;
+        }
+        
+        private System.IAsyncResult OnBeginGetQuestionnaireList(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string Filter = ((string)(inValues[0]));
+            int PageIndex = ((int)(inValues[1]));
+            int PageSize = ((int)(inValues[2]));
+            string SortOrder = ((string)(inValues[3]));
+            return this.BeginGetQuestionnaireList(Filter, PageIndex, PageSize, SortOrder, callback, asyncState);
+        }
+        
+        private object[] OnEndGetQuestionnaireList(System.IAsyncResult result) {
+            int Page = this.GetDefaultValueForInitialization<int>();
+            int PageSize = this.GetDefaultValueForInitialization<int>();
+            int TotalCount = this.GetDefaultValueForInitialization<int>();
+            System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items = this.GetDefaultValueForInitialization<System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage>>();
+            string retVal = this.EndGetQuestionnaireList(result, out Page, out PageSize, out TotalCount, out Items);
+            return new object[] {
+                    Page,
+                    PageSize,
+                    TotalCount,
+                    Items,
+                    retVal};
+        }
+        
+        private void OnGetQuestionnaireListCompleted(object state) {
+            if ((this.GetQuestionnaireListCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GetQuestionnaireListCompleted(this, new GetQuestionnaireListCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GetQuestionnaireListAsync(string Filter, int PageIndex, int PageSize, string SortOrder) {
+            this.GetQuestionnaireListAsync(Filter, PageIndex, PageSize, SortOrder, null);
+        }
+        
+        public void GetQuestionnaireListAsync(string Filter, int PageIndex, int PageSize, string SortOrder, object userState) {
+            if ((this.onBeginGetQuestionnaireListDelegate == null)) {
+                this.onBeginGetQuestionnaireListDelegate = new BeginOperationDelegate(this.OnBeginGetQuestionnaireList);
+            }
+            if ((this.onEndGetQuestionnaireListDelegate == null)) {
+                this.onEndGetQuestionnaireListDelegate = new EndOperationDelegate(this.OnEndGetQuestionnaireList);
+            }
+            if ((this.onGetQuestionnaireListCompletedDelegate == null)) {
+                this.onGetQuestionnaireListCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetQuestionnaireListCompleted);
+            }
+            base.InvokeAsync(this.onBeginGetQuestionnaireListDelegate, new object[] {
+                        Filter,
+                        PageIndex,
+                        PageSize,
+                        SortOrder}, this.onEndGetQuestionnaireListDelegate, this.onGetQuestionnaireListCompletedDelegate, userState);
         }
     }
 }

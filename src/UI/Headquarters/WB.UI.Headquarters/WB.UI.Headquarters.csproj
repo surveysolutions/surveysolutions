@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}</ProjectGuid>
-    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
@@ -196,6 +196,8 @@
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
     <Compile Include="Api\FeedController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\InterviewsController.cs" />
+    <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\EditAccountModel.cs" />
     <Compile Include="Models\RegisterAccountModel.cs" />
@@ -203,6 +205,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CommonResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Interviews\IndexPageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IndexPageResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\LoginPageResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -222,6 +229,11 @@
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\NewSurveyModel.cs" />
     <Compile Include="Models\UsersListModel.cs" />
+    <Compile Include="Resources\Questionnaires\IndexPageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IndexPageResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\SupervisorAccountResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -352,12 +364,8 @@
     <Content Include="Service References\PublicDesignerService\WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\PublicDesignerService\WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\PublicDesignerService\WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
+    <Content Include="Views\Interviews\Index.cshtml" />
+    <Content Include="Views\Questionnaires\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -415,10 +423,18 @@
       <LastGenOutput>CommonResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews\IndexPageResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndexPageResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LoginPageResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginPageResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Questionnaires\IndexPageResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndexPageResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SupervisorAccountResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
