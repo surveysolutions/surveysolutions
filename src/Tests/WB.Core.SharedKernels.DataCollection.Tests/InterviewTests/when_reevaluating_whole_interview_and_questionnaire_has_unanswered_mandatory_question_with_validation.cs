@@ -67,13 +67,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.ReevaluateSynchronizedInterview();
 
-        It should_not_raise_AnswerDeclaredValid_event_with_GroupId_equal_to_conditionallyInvalidQuestionId = () =>
-            eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
-             => @event.QuestionId == unansweredMandatoryWithValidationQuestionId);
+        It should_not_raise_AnswersDeclaredValid_event_with_GroupId_equal_to_conditionallyInvalidQuestionId = () =>
+            eventContext.ShouldNotContainEvent<AnswersDeclaredValid>(@event
+                => @event.Questions.Any(question => question.Id == unansweredMandatoryWithValidationQuestionId));
 
-        It should_raise_AnswerDeclaredInvalid_event_with_GroupId_equal_to_conditionallyInvalidQuestionId = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event
-              => @event.QuestionId == unansweredMandatoryWithValidationQuestionId);
+        It should_raise_AnswersDeclaredInvalid_event_with_GroupId_equal_to_conditionallyInvalidQuestionId = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(@event
+                => @event.Questions.Any(question => question.Id == unansweredMandatoryWithValidationQuestionId));
 
         private static EventContext eventContext;
         private static Guid questionnaireId;

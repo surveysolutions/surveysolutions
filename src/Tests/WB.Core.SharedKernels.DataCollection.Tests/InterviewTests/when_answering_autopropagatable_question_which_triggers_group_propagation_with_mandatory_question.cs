@@ -67,13 +67,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
            interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new decimal[] { }, DateTime.Now, 1);
 
 
-        private It should_not_raise_AnswerDeclaredValid_event = () =>
-             eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
-                 => @event.QuestionId == mandatoryQuestionId);
+        It should_not_raise_AnswersDeclaredValid_event = () =>
+             eventContext.ShouldNotContainEvent<AnswersDeclaredValid>(@event
+                 => @event.Questions.Any(question => question.Id == mandatoryQuestionId));
 
-        private It should_raise_AnswerDeclaredInvalid_event = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event
-                => @event.QuestionId == mandatoryQuestionId);
+        It should_raise_AnswersDeclaredInvalid_event = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(@event
+                 => @event.Questions.Any(question => question.Id == mandatoryQuestionId));
 
         private static EventContext eventContext;
         private static Interview interview;
