@@ -147,6 +147,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Files", "Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj", "{6AC3A080-CECA-4974-9CA1-C239695ED8F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3464F3AE-094C-4DEC-8725-59506328E597} = {3464F3AE-094C-4DEC-8725-59506328E597}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headquarters", "Headquarters", "{58C84264-2FA1-48B8-A8F2-282DCC250DF4}"
 EndProject
