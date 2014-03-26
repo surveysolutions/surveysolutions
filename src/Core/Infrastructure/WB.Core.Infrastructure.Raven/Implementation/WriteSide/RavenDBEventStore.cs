@@ -298,7 +298,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
             {
                 var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
                     .OrderBy(y => y.EventTimeStamp)
-                    .ThenBy(y => y.EventSequence);
+                    .ThenBy(y => y.EventSequence)
                     .Skip(skipEvents);
 
                 var enumerator = session.Advanced.Stream(query);
