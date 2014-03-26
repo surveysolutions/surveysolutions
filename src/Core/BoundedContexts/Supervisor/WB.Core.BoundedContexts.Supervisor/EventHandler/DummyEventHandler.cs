@@ -10,9 +10,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
         IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<AnswerDeclaredInvalid>,
+        IEventHandler<AnswersDeclaredValid>,
+        IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<GroupPropagated>,
         IEventHandler<QuestionEnabled>,
-        IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<QuestionDisabled>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
@@ -26,11 +28,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupPropagated> evnt) {}
+        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) { }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupPropagated> evnt) { }
 
         public void Handle(IPublishedEvent<QuestionEnabled> evnt) {}
-
-        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) {}
 
         public void Handle(IPublishedEvent<QuestionDisabled> evnt) {}
 

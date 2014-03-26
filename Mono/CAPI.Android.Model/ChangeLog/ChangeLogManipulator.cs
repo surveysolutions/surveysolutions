@@ -137,6 +137,12 @@ namespace CAPI.Android.Core.Model.ChangeLog
             if (eventType is AnswerDeclaredValid)
                 return false;
 
+            if (eventType is AnswersDeclaredInvalid)
+                return false;
+
+            if (eventType is AnswersDeclaredValid)
+                return false;
+
             if (eventType is GroupDisabled)
                 return false;
 
