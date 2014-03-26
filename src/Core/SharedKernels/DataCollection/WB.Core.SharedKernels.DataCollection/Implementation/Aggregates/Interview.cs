@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
-using Microsoft.SqlServer.Server;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
@@ -225,6 +224,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.validAnsweredQuestions.Remove(questionKey);
             this.invalidAnsweredQuestions.Add(questionKey);
+        }
+
+        private void Apply(AnswersDeclaredValid @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+
+                this.validAnsweredQuestions.Add(questionKey);
+                this.invalidAnsweredQuestions.Remove(questionKey);
+            }
+        }
+
+        private void Apply(AnswersDeclaredInvalid @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+
+                this.validAnsweredQuestions.Remove(questionKey);
+                this.invalidAnsweredQuestions.Add(questionKey);
+            }
         }
 
         internal void Apply(GroupDisabled @event)

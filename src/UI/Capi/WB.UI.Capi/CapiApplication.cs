@@ -126,6 +126,8 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
             bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredInvalid));
             bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredValid));
+            bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredInvalid));
+            bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredValid));
             bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
             bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
