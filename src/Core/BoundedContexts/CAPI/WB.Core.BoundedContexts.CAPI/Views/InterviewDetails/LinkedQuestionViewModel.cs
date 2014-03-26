@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     {
         public LinkedQuestionViewModel(
             InterviewItemId publicKey, string text, QuestionType questionType, bool enabled, string instructions,
-            bool valid, bool mandatory, string validationMessage, Func<IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
+            bool valid, bool mandatory, string validationMessage, Func<decimal[],IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
             string variable, IEnumerable<string> substitutionReferences, bool? areAnsewrsOrdered,int? maxAllowedAnswers)
             : base(
                 publicKey, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences)
@@ -22,11 +22,16 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.MaxAllowedAnswers = maxAllowedAnswers;
         }
 
-        private Func<IEnumerable<LinkedAnswerViewModel>> getAnswerOptions;
+        private Func<decimal[], IEnumerable<LinkedAnswerViewModel>> getAnswerOptions;
 
         public IEnumerable<LinkedAnswerViewModel> AnswerOptions
         {
-            get { return this.getAnswerOptions(); }
+            get
+            {
+                return
+                    this.getAnswerOptions(
+                        PublicKey.InterviewItemPropagationVector);
+            }
         }
 
         public decimal[][] SelectedAnswers { get; private set; }
