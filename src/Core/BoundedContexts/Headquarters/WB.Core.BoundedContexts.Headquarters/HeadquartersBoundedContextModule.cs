@@ -4,6 +4,8 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.ViewFactories;
 using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.GenericSubdomains.Utils;
@@ -37,6 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
             this.Bind<ISupervisorLoginService>().To<SupervisorLoginService>().InSingletonScope();
             this.Bind<ISupervisorFeedService>().To<SupervisorFeedService>();
+
+            this.Bind<IDesignerService>().To<DesignerService>();
         }
     }
 }
