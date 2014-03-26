@@ -49,21 +49,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                             {
                                                 new Group()
                                                 {
-                                                    PublicKey = Guid.NewGuid(),
+                                                    PublicKey = rosterGroupId,
                                                     IsRoster = true,
                                                     RosterSizeQuestionId = rosterSizeQuestionId,
                                                     Children = new List<IComposite>()
                                                     {
-                                                        new Group()
-                                                        {
-                                                            PublicKey = rosterGroupId,
-                                                            IsRoster = true,
-                                                            RosterSizeQuestionId = rosterSizeQuestionId,
-                                                            Children = new List<IComposite>()
-                                                            {
-
-                                                            }
-                                                        }
                                                     }
                                                 }
                                             }
