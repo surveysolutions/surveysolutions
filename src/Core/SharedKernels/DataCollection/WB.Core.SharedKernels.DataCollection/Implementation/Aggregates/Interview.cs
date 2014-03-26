@@ -228,10 +228,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(AnswersDeclaredValid @event)
         {
-            foreach (var question in @event.Questions)
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
             {
-                string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
                 this.validAnsweredQuestions.Add(questionKey);
                 this.invalidAnsweredQuestions.Remove(questionKey);
             }
@@ -239,10 +237,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(AnswersDeclaredInvalid @event)
         {
-            foreach (var question in @event.Questions)
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
             {
-                string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
                 this.validAnsweredQuestions.Remove(questionKey);
                 this.invalidAnsweredQuestions.Add(questionKey);
             }
@@ -274,6 +270,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.disabledQuestions.Remove(questionKey);
+        }
+
+        internal void Apply(QuestionsDisabled @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.disabledQuestions.Add(questionKey);
+            }
+        }
+
+        internal void Apply(QuestionsEnabled @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.disabledQuestions.Remove(questionKey);
+            }
         }
 
         private void Apply(AnswerCommented @event) { }
@@ -3073,6 +3085,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return new HashSet<string>(
                 synchronizationIdentities.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemPropagationVector)));
+        }
+
+        /// <remarks>
+        /// The opposite operation (get id or vector from string) should never be performed!
+        /// This is one-way transformation. Opposite operation is too slow.
+        /// If you need to compactify data and get it back, you should use another datatype, not a string.
+        /// </remarks>
+        private static string ConvertEventIdentityToString(Events.Interview.Dtos.Identity identity)
+        {
+            return ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
         }
 
         /// <remarks>
