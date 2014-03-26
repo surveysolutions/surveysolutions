@@ -67,11 +67,14 @@
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredInvalid.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredValid.cs" />
+    <Compile Include="Events\Interview\Base\GroupsPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionsPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Interview\Dtos\Identity.cs" />
+    <Compile Include="Events\Interview\GroupsDisabled.cs" />
+    <Compile Include="Events\Interview\GroupsEnabled.cs" />
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
