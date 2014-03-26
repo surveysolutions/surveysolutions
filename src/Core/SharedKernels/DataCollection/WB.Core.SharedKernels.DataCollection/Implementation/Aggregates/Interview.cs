@@ -1625,7 +1625,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyAnswersRemovanceEvents(List<Identity> answersToRemove)
         {
-            answersToRemove.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            if (answersToRemove.Any())
+            {
+                this.ApplyEvent(new AnswersRemoved(ToEventIdentities(answersToRemove)));
+            }
         }
 
         private void ApplySingleAnswerDeclaredValidEvent(Guid questionId, decimal[] rosterVector)
