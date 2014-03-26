@@ -1,20 +1,6 @@
-param([string]$VersionPrefix,
-[INT]$BuildNumber,
-[string]$BuildConfiguration='release',
-[string]$KeystorePassword)
+param([string]$BuildConfiguration='release')
 
 $ErrorActionPreference = "Stop"
-
-#do not allow empty prefix
-if([string]::IsNullOrWhiteSpace($VersionPrefix)){
-	Write-Host "##teamcity[buildProblem description='VersionPrefix param is not set']"
-	Exit
-}
-#do not allow empty build number	
-if(!$BuildNumber){
-	Write-Host "##teamcity[buildProblem description='BuildNumber param is not set']"
-	Exit
-}
 
 #do not allow empty KeystorePassword
 if([string]::IsNullOrWhiteSpace($KeystorePassword)){
@@ -29,9 +15,7 @@ try {
 	BuildHeadquarters `
 		-Solution 'src\Headquarters.sln' `
 		-Project 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj' `
-		-BuildConfiguration $BuildConfiguration `
-		-VersionPrefix $VersionPrefix `
-		-BuildNumber $BuildNumber
+		-BuildConfiguration $BuildConfiguration
 }
 catch {
 	Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred']"

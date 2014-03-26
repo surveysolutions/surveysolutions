@@ -25,13 +25,24 @@ if([string]::IsNullOrWhiteSpace($KeystorePassword)){
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\build-functions.ps1"
 
+$PackageName = 'WBCapi.apk'
+$VersionName = $VersionPrefix + $BuildNumber
 try {
+	. "$scriptFolder\build-android-package.ps1" `
+		-VersionName $VersionName `
+		-VersionCode $BuildNumber `
+		-BuildConfiguration $BuildConfiguration `
+		-KeystorePassword $KeystorePassword `
+		-KeystoreName 'WBCapi.keystore' `
+		-KeystoreAlias 'wbcapipublish' `
+		-CapiProject 'src\UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj' `
+		-OutFileName $PackageName
+
 	BuildSupervisor `
 		-Solution 'src\Supervisor.sln' `
 		-Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
-		-CapiProject 'src\UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj' `
 		-BuildConfiguration $BuildConfiguration `
-		-VersionPrefix $VersionPrefix `
+		-AndroidPackageName $PackageName `
 		-BuildNumber $BuildNumber
 }
 catch {
