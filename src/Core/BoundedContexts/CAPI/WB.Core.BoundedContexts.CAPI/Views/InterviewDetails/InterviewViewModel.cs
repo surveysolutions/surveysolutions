@@ -923,7 +923,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 newType,
                 true, question.Instructions,
                 true, question.Mandatory,question.ValidationMessage,
-                () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value), 
+                (questionRosterVecor) => this.GetAnswerOptionsForLinkedQuestion(new InterviewItemId(question.LinkedToQuestionId.Value, questionRosterVecor)), 
                 question.StataExportCaption, question.GetVariablesUsedInTitle(),
                 multyOptionsQuestion != null? multyOptionsQuestion.AreAnswersOrdered : (bool?) null, 
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
@@ -963,17 +963,32 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
-        protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId)
+        protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(InterviewItemId referencedQuestionId)
         {
-            return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId)
+            return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId.Id)
                 ? Enumerable.Empty<LinkedAnswerViewModel>()
                 : this
-                    .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
+                    .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId.Id]
                     .Select(instanceId => this.Questions.ContainsKey(instanceId) ? this.Questions[instanceId] : null)
-                    .Where(questionInstance => questionInstance != null && questionInstance.IsEnabled())
+                    .Where(
+                        questionInstance =>
+                            questionInstance != null && questionInstance.IsEnabled() &&
+                                IsQuestionAllowedToBeUsedAsLinkSourceInCurrentScope(
+                                    questionInstance.PublicKey.InterviewItemPropagationVector, referencedQuestionId.InterviewItemPropagationVector))
                     .Select(
                         questionInstance =>
-                            new LinkedAnswerViewModel(questionInstance.PublicKey.InterviewItemPropagationVector, questionInstance.AnswerString));
+                            new LinkedAnswerViewModel(questionInstance.PublicKey.InterviewItemPropagationVector,
+                                questionInstance.AnswerString));
+        }
+
+        private bool IsQuestionAllowedToBeUsedAsLinkSourceInCurrentScope(decimal[] questionRosterVecor, decimal[] currentScope)
+        {
+            for (int i = 0; i < Math.Min(questionRosterVecor.Length - 1, currentScope.Length); i++)
+            {
+                if (questionRosterVecor[i] != currentScope[i])
+                    return false;
+            }
+            return true;
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)
