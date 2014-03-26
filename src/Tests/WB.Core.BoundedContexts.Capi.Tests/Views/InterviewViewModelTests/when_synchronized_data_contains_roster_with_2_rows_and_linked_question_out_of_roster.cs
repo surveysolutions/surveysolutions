@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
@@ -23,17 +24,23 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 
             var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            var rosterGroup = new Group() { PublicKey = propagatedGroupId, IsRoster = true, RosterSizeQuestionId =rosterSizeQuestionId };
-            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = sourceForLinkedQuestionId });
-            rosterGroup.Children.Add(new SingleQuestion(){PublicKey = linkedQuestionInRosterId,LinkedToQuestionId = sourceForLinkedQuestionId});
-
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
                     QuestionType = QuestionType.Numeric
                 },
-                rosterGroup,
+                new Group()
+                {
+                    PublicKey = propagatedGroupId,
+                    IsRoster = true,
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    Children = new List<IComposite>()
+                    {
+                        new NumericQuestion() { PublicKey = sourceForLinkedQuestionId },
+                        new SingleQuestion() { PublicKey = linkedQuestionInRosterId, LinkedToQuestionId = sourceForLinkedQuestionId }
+                    }
+                },
                 new SingleQuestion()
                 {
                     PublicKey = linkedQuestionId,
