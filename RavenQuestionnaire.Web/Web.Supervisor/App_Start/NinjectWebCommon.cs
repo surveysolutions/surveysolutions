@@ -143,9 +143,7 @@ namespace Web.Supervisor.App_Start
             var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             kernel.Bind<IDomainRepository>().ToConstant(repository);
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
-
-            GlobalConfiguration.Configuration.DependencyResolver = new NinjectResolver(kernel);
-
+            
 #warning dirty index registrations
             // SuccessMarker.Start(kernel);
             return kernel;
