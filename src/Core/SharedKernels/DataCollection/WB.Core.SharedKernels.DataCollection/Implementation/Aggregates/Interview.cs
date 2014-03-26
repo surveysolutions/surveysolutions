@@ -1555,8 +1555,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyValidityChangesEvents(ValidityChanges validityChanges)
         {
-            validityChanges.AnswersDeclaredValid.ForEach(answer => this.ApplyEvent(new AnswerDeclaredValid(answer.Id, answer.RosterVector)));
-            validityChanges.AnswersDeclaredInvalid.ForEach(answer => this.ApplyEvent(new AnswerDeclaredInvalid(answer.Id, answer.RosterVector)));
+            if (validityChanges.AnswersDeclaredValid.Any())
+            {
+                this.ApplyEvent(new AnswersDeclaredValid(ToEventIdentities(validityChanges.AnswersDeclaredValid)));
+            }
+
+            if (validityChanges.AnswersDeclaredInvalid.Any())
+            {
+                this.ApplyEvent(new AnswersDeclaredInvalid(ToEventIdentities(validityChanges.AnswersDeclaredInvalid)));
+            }
         }
 
         private void ApplyAnswersRemovanceEvents(List<Identity> answersToRemove)
@@ -1592,6 +1599,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 data.InitializedGroupsToBeDisabled, data.InitializedGroupsToBeEnabled, data.InitializedQuestionsToBeDisabled, data.InitializedQuestionsToBeEnabled));
 
             this.ApplyValidityChangesEvents(new ValidityChanges(null, data.InitializedQuestionsToBeInvalid));
+        }
+
+        private static Events.Interview.Dtos.Identity[] ToEventIdentities(IEnumerable<Identity> answersDeclaredValid)
+        {
+            return answersDeclaredValid.Select(ToEventIdentity).ToArray();
+        }
+
+        private static Events.Interview.Dtos.Identity ToEventIdentity(Identity identity)
+        {
+            return new Events.Interview.Dtos.Identity(identity.Id, identity.RosterVector);
         }
 
 

@@ -60,19 +60,19 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new decimal[] { }, DateTime.Now, 0);
 
-        private Cleanup stuff = () =>
+        Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
         };
 
-        private It should_not_raise_AnswerDeclaredValid_event = () =>
-            eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
-                => @event.QuestionId == mandatoryQuestionId);
+        It should_not_raise_AnswersDeclaredValid_event = () =>
+            eventContext.ShouldNotContainEvent<AnswersDeclaredValid>(@event
+                => @event.Questions.Any(question => question.Id == mandatoryQuestionId));
 
-        private It should_raise_AnswerDeclaredInvalid_event = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event
-                => @event.QuestionId == mandatoryQuestionId);
+        It should_raise_AnswersDeclaredInvalid_event = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(@event
+                => @event.Questions.Any(question => question.Id == mandatoryQuestionId));
 
         private static EventContext eventContext;
         private static Guid userId;
