@@ -2635,7 +2635,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId, string[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
         {
             var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
-            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            
             if (rosterSizeQuestion == null)
                 // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
                 throw new QuestionnaireException(string.Format(
@@ -2644,7 +2644,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             if (!RosterSizeQuestionTypes.Contains(rosterSizeQuestion.QuestionType))
                 throw new QuestionnaireException(string.Format(
-                "Roster size question {0} should have Numeric or Categorical Multy Answers type.",
+                "Roster size question {0} should have Numeric or Categorical Multy Answers or List type.",
                 FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
 
             if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId), rosterDepthFunc()))
