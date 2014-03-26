@@ -160,6 +160,12 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
             if (eventType is QuestionEnabled)
                 return false;
+
+            if (eventType is QuestionsDisabled)
+                return false;
+
+            if (eventType is QuestionsEnabled)
+                return false;
             
             return true;
         }
