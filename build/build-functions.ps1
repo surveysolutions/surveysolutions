@@ -139,8 +139,7 @@ function PathToFinalCapi($CapiProject, $FinalPackageName) {
 	return $PathToFinalCapi
 }
 
-function CopyCapi($Project, $PathToFinalCapi) {
-
+function CopyCapi($Project, $PathToFinalCapi, $BuildNumber) {
 	$file = get-childitem $Project
 	$SourceFolder = $file.directoryname + "\Externals\Capi"
 
@@ -182,33 +181,13 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	AddArtifacts $Project $BuildConfiguration
 }
 
-
-function BuildDesigner($Solution, $Project, $CapiProject, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
-
-	$OutFileName = "WBCapiTester.apk"
-	$FinalPackageName = "org.worldbank.solutions.tester"
-	$KeyStoreName = "WBCapi.keystore"
-	$Alias = "wbcapipublish"
-
+function BuildDesigner($Solution, $Project, $BuildConfiguration, $AndroidPackageName, $BuildNumber) {
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
 
-	UpdateAndroidAppManifest $VersionPrefix $BuildNumber -CapiProject $CapiProject
-	BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
-
-	$PathToFinalCapi = PathToFinalCapi -CapiProject $CapiProject -FinalPackageName $FinalPackageName
-
-	SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeyStoreName `
-		-Alias $Alias `
-		-PathToFinalCapi $PathToFinalCapi `
-		-OutFileName $OutFileName | %{ if (-not $_) { Exit } }
-
-	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
-
-	CopyCapi -Project $Project -PathToFinalCapi $OutFileName
-	
 	RunConfigTransform "src\UI\Designer\WB.UI.Designer\Web.config" "src\UI\Designer\WB.UI.Designer\Web.$BuildConfiguration.config"
+    CopyCapi -Project $Project -PathToFinalCapi $AndroidPackageName -BuildNumber $BuildNumber
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
