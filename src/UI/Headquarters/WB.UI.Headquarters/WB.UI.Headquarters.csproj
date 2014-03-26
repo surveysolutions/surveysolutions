@@ -122,6 +122,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -235,6 +237,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UsersResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service References\PublicDesignerService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -296,6 +303,13 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\ValidationFix.js" />
+    <None Include="Service References\PublicDesignerService\PublicService.disco" />
+    <None Include="Service References\PublicDesignerService\configuration91.svcinfo" />
+    <None Include="Service References\PublicDesignerService\configuration.svcinfo" />
+    <None Include="Service References\PublicDesignerService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -319,6 +333,31 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Shared\_Layout.empty.cshtml" />
+    <None Include="Service References\PublicDesignerService\PublicService.wsdl" />
+    <None Include="Service References\PublicDesignerService\PublicService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PublicDesignerService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PublicDesignerService\PublicService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PublicDesignerService\PublicService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PublicDesignerService\PublicService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\PublicDesignerService\WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\PublicDesignerService\WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\PublicDesignerService\WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -395,6 +434,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UsersResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\PublicDesignerService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
