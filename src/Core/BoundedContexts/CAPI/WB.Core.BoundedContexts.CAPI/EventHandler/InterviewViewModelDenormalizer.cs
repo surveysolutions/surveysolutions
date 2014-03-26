@@ -34,6 +34,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<GroupEnabled>,
         IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionEnabled>,
+        IEventHandler<QuestionsDisabled>,
+        IEventHandler<QuestionsEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
         IEventHandler<AnswersDeclaredInvalid>,
@@ -216,6 +218,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
+        }
+
+        public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionStatus(new InterviewItemId(question.Id, question.RosterVector), false);
+            }
+        }
+
+        public void Handle(IPublishedEvent<QuestionsEnabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionStatus(new InterviewItemId(question.Id, question.RosterVector), true);
+            }
         }
 
         public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt)

@@ -48,6 +48,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionEnabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsDisabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredInvalid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredValid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredInvalid>,
@@ -71,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return base.BuildsViews.Union(new[] { typeof (SynchronizationDelta) }).ToArray(); }
         }
 
-        private string CreateLevelIdFromPropagationVector(decimal[] vector)
+        private static string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
             if (vector.Length == 0)
                 return "#";
@@ -176,7 +178,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                             .Select(level => level.Key).ToList();
         }
 
-        private InterviewData PreformActionOnLevel(InterviewData interview, decimal[] vector, Action<InterviewLevel> action)
+        private static InterviewData PreformActionOnLevel(InterviewData interview, decimal[] vector, Action<InterviewLevel> action)
         {
             var levelId = CreateLevelIdFromPropagationVector(vector);
 
@@ -187,7 +189,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return interview;
         }
 
-        private InterviewData UpdateQuestion(InterviewData interview, decimal[] vector, Guid questionId, Action<InterviewQuestion> update)
+        private static InterviewData UpdateQuestion(InterviewData interview, decimal[] vector, Guid questionId, Action<InterviewQuestion> update)
         {
             return PreformActionOnLevel(interview, vector, (questionsAtTheLevel) =>
             {
@@ -199,17 +201,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
 
 
-        private InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool newState)
+        private static InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool newState)
         {
-            return this.UpdateQuestion(interview, vector, questionId, (question) =>
+            return UpdateQuestion(interview, vector, questionId, (question) =>
             {
                 question.Enabled = newState;
             });
         }
 
-        private InterviewData ChangeQuestionConditionValidity(InterviewData interview, decimal[] vector, Guid questionId, bool valid)
+        private static InterviewData ChangeQuestionConditionValidity(InterviewData interview, decimal[] vector, Guid questionId, bool valid)
         {
-            return this.UpdateQuestion(interview, vector, questionId, (question) =>
+            return UpdateQuestion(interview, vector, questionId, (question) =>
             {
                 question.Valid = valid;
             });
@@ -217,7 +219,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private InterviewData SaveAnswer<T>(InterviewData interview, decimal[] vector, Guid questionId, T answer)
         {
-            return this.PreformActionOnLevel(interview, vector, (level) =>
+            return PreformActionOnLevel(interview, vector, (level) =>
             {
                 var answeredQuestion = level.GetOrCreateQuestion(questionId);
 
@@ -252,9 +254,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
 
-        private InterviewData SetFlagStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId, bool isFlagged)
+        private static InterviewData SetFlagStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId, bool isFlagged)
         {
-            return this.UpdateQuestion(interview, vector, questionId, (question) =>
+            return UpdateQuestion(interview, vector, questionId, (question) =>
             {
                 question.IsFlagged = isFlagged;
             });
@@ -278,7 +280,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 Date = commentTime
             };
 
-            return this.UpdateQuestion(interview, vector, questionId, (question) =>
+            return UpdateQuestion(interview, vector, questionId, (question) =>
             {
                 if (question.Comments == null)
                     question.Comments = new List<InterviewQuestionComment>();
@@ -517,7 +519,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             return
                 new ViewWithSequence<InterviewData>(
-                    this.UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+                    UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
                     {
                         question.Answer = null;
                         question.IsAnswered = false;
@@ -564,6 +566,24 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                true), evnt.EventSequence);
         }
 
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionsDisabled> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Questions.Aggregate(
+                    currentState.Document,
+                    (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, false)),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionsEnabled> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Questions.Aggregate(
+                    currentState.Document,
+                    (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, true)),
+                evnt.EventSequence);
+        }
+
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredInvalid> evnt)
         {
             return new ViewWithSequence<InterviewData>(
@@ -574,7 +594,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredValid> evnt)
         {
             return new ViewWithSequence<InterviewData>(
-                this.ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true),
+                ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true),
                 evnt.EventSequence);
         }
 
@@ -583,7 +603,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return new ViewWithSequence<InterviewData>(
                 evnt.Payload.Questions.Aggregate(
                     currentState.Document,
-                    (document, question) => this.ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false)),
+                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false)),
                 evnt.EventSequence);
         }
 
@@ -592,7 +612,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return new ViewWithSequence<InterviewData>(
                 evnt.Payload.Questions.Aggregate(
                     currentState.Document,
-                    (document, question) => this.ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true)),
+                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true)),
                 evnt.EventSequence);
         }
 
