@@ -72,13 +72,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new decimal[] { }, DateTime.Now, 0);
 
-        It should_not_raise_QuestionDisabled_event_with_QuestionId_equal_to_conditionallyDisabledQuestionId = () =>
-            eventContext.ShouldNotContainEvent<QuestionDisabled>(@event
-              => @event.QuestionId == conditionallyDisabledQuestionId );
+        It should_not_raise_QuestionsDisabled_event_with_QuestionId_equal_to_conditionallyDisabledQuestionId = () =>
+            eventContext.ShouldNotContainEvent<QuestionsDisabled>(@event
+                => @event.Questions.Any(question => question.Id == conditionallyDisabledQuestionId));
 
-        It should_raise_QuestionEnabled_event_with_QuestionId_equal_to_conditionallyDisabledQuestionId = () =>
-            eventContext.ShouldContainEvent<QuestionEnabled>(@event
-             => @event.QuestionId == conditionallyDisabledQuestionId);
+        It should_raise_QuestionsEnabled_event_with_QuestionId_equal_to_conditionallyDisabledQuestionId = () =>
+            eventContext.ShouldContainEvent<QuestionsEnabled>(@event
+                => @event.Questions.Any(question => question.Id == conditionallyDisabledQuestionId));
 
         private static EventContext eventContext;
         private static Guid conditionallyDisabledQuestionId;
