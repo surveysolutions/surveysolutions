@@ -47,12 +47,17 @@
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole(ApplicationRoles.Headquarter))
                     {
-                        @MenuItem("Surveys", "Index", "Surveys")
+                        @MenuItem(CommonResources.Interviews, "Index", "Interviews")
+                    }
+
+                    @if (User.IsInRole(ApplicationRoles.Headquarter))
+                    {
+                        @MenuItem(CommonResources.Surveys, "Index", "Surveys")
                     }
 
                     @if (User.IsInRole(ApplicationRoles.Administrator))
                     {
-                        @MenuItem("Users", "Index", "Users")
+                        @MenuItem(CommonResources.Users, "Index", "Users")
                     }
                 </ul>
 
