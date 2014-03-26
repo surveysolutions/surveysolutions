@@ -65,6 +65,8 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -107,6 +109,14 @@
     <Compile Include="PasswordPolicy\PasswordPolicyModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
+    <Compile Include="Questionnaires\DesignerQuestionnairesListModel.cs" />
+    <Compile Include="Questionnaires\IDesignerService.cs" />
+    <Compile Include="Questionnaires\Implementation\DesignerService.cs" />
+    <Compile Include="Service References\DesignerPublicService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Services\ISupervisorFeedService.cs" />
     <Compile Include="Services\ISupervisorLoginService.cs" />
     <Compile Include="ViewFactories\ISurveyViewFactory.cs" />
@@ -118,7 +128,27 @@
     <Compile Include="Views\Survey\SurveyLineView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <None Include="Service References\DesignerPublicService\PublicService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
@@ -158,6 +188,27 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\DesignerPublicService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DesignerPublicService\PublicService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\DesignerPublicService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

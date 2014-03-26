@@ -61,11 +61,74 @@ namespace WB.UI.Headquarters.Resources.Questionnaires {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attention!.
+        /// </summary>
+        public static string Attention {
+            get {
+                return ResourceManager.GetString("Attention", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cound not connect to designer.
+        /// </summary>
+        public static string CouldNotConnectToDesigner {
+            get {
+                return ResourceManager.GetString("CouldNotConnectToDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode..
+        /// </summary>
+        public static string DesigerLoginAttention {
+            get {
+                return ResourceManager.GetString("DesigerLoginAttention", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import template.
+        /// </summary>
+        public static string ImportTemplate {
+            get {
+                return ResourceManager.GetString("ImportTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid designer user credentials.
+        /// </summary>
+        public static string InvalidDesignerCredentials {
+            get {
+                return ResourceManager.GetString("InvalidDesignerCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
         public static string PageTitle {
             get {
                 return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name.
+        /// </summary>
+        public static string UserName {
+            get {
+                return ResourceManager.GetString("UserName", resourceCulture);
             }
         }
     }

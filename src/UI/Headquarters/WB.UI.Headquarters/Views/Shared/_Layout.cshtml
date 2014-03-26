@@ -49,6 +49,11 @@
                     {
                         @MenuItem(CommonResources.Interviews, "Index", "Interviews")
                     }
+                    
+                    @if (User.IsInRole(ApplicationRoles.Headquarter))
+                    {
+                        @MenuItem(CommonResources.Questionnaires, "Index", "Questionnaires")
+                    }
 
                     @if (User.IsInRole(ApplicationRoles.Headquarter))
                     {
@@ -88,7 +93,8 @@
         </div>
 
     </div>
-    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap", "~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap", "~/bundles/jqueryval", "~/bundles/angular", "~/bundles/appjs")
+
     @RenderSection("scripts", false)
 </body>
 </html>
