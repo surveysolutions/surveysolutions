@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, DateTimeQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GeoLocationQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerRemoved>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, AnswersRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupsDisabled>,
@@ -519,13 +520,26 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerRemoved> evnt)
         {
-            return
-                new ViewWithSequence<InterviewData>(
-                    UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+            return new ViewWithSequence<InterviewData>(
+                UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+                {
+                    question.Answer = null;
+                    question.IsAnswered = false;
+                }),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswersRemoved> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Questions.Aggregate(
+                    currentState.Document,
+                    (document, question) => UpdateQuestion(document, question.RosterVector, question.Id, updatedQuestion =>
                     {
-                        question.Answer = null;
-                        question.IsAnswered = false;
-                    }), evnt.EventSequence);
+                        updatedQuestion.Answer = null;
+                        updatedQuestion.IsAnswered = false;
+                    })),
+                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupDisabled> evnt)
