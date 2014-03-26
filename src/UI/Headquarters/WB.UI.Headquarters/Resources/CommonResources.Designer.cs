@@ -79,6 +79,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaires.
+        /// </summary>
+        public static string Questionnaires {
+            get {
+                return ResourceManager.GetString("Questionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit.
         /// </summary>
         public static string Submit {

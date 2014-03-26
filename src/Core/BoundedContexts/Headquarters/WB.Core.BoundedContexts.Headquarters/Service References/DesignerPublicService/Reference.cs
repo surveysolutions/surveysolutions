@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.UI.Headquarters.PublicDesignerService {
+namespace WB.Core.BoundedContexts.Headquarters.DesignerPublicService {
     using System.Runtime.Serialization;
     using System;
     
@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerifi" +
         "cation.ValueObjects")]
     [System.SerializableAttribute()]
-    public partial class QuestionnaireVersion : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    internal partial class QuestionnaireVersion : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Major {
+        internal int Major {
             get {
                 return this.MajorField;
             }
@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Minor {
+        internal int Minor {
             get {
                 return this.MinorField;
             }
@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Patch {
+        internal int Patch {
             get {
                 return this.PatchField;
             }
@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireListViewItemMessage", Namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire")]
     [System.SerializableAttribute()]
-    public partial class QuestionnaireListViewItemMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    internal partial class QuestionnaireListViewItemMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid Id {
+        internal System.Guid Id {
             get {
                 return this.IdField;
             }
@@ -130,7 +130,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Title {
+        internal string Title {
             get {
                 return this.TitleField;
             }
@@ -153,17 +153,17 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PublicDesignerService.IPublicService")]
-    public interface IPublicService {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DesignerPublicService.IPublicService")]
+    internal interface IPublicService {
         
         // CODEGEN: Generating message contract since the wrapper name (DownloadQuestionnaireRequest) of message DownloadQuestionnaireRequest does not match the default value (DownloadQuestionnaire)
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
-        WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo DownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request);
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.RemoteFileInfo DownloadQuestionnaire(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest request);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
-        System.IAsyncResult BeginDownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginDownloadQuestionnaire(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest request, System.AsyncCallback callback, object asyncState);
         
-        WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo EndDownloadQuestionnaire(System.IAsyncResult result);
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.RemoteFileInfo EndDownloadQuestionnaire(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
         string DownloadQuestionnaireSource(System.Guid request);
@@ -183,30 +183,30 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         
         // CODEGEN: Generating message contract since the wrapper name (QuestionnaireListRequest) of message QuestionnaireListRequest does not match the default value (GetQuestionnaireList)
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/GetQuestionnaireList", ReplyAction="http://tempuri.org/IPublicService/GetQuestionnaireListResponse")]
-        WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage GetQuestionnaireList(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request);
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewMessage GetQuestionnaireList(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest request);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IPublicService/GetQuestionnaireList", ReplyAction="http://tempuri.org/IPublicService/GetQuestionnaireListResponse")]
-        System.IAsyncResult BeginGetQuestionnaireList(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginGetQuestionnaireList(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest request, System.AsyncCallback callback, object asyncState);
         
-        WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage EndGetQuestionnaireList(System.IAsyncResult result);
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewMessage EndGetQuestionnaireList(System.IAsyncResult result);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="DownloadQuestionnaireRequest", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-    public partial class DownloadQuestionnaireRequest {
+    internal partial class DownloadQuestionnaireRequest {
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
         public System.Guid QuestionnaireId;
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
-        public WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion;
+        public WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion;
         
         public DownloadQuestionnaireRequest() {
         }
         
-        public DownloadQuestionnaireRequest(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion) {
+        public DownloadQuestionnaireRequest(System.Guid QuestionnaireId, WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion) {
             this.QuestionnaireId = QuestionnaireId;
             this.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
         }
@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="RemoteFileInfo", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-    public partial class RemoteFileInfo {
+    internal partial class RemoteFileInfo {
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
         public string FileName;
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="QuestionnaireListRequest", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-    public partial class QuestionnaireListRequest {
+    internal partial class QuestionnaireListRequest {
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
         public string Filter;
@@ -270,7 +270,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="QuestionnaireListViewMessage", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-    public partial class QuestionnaireListViewMessage {
+    internal partial class QuestionnaireListViewMessage {
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
         public string Order;
@@ -285,12 +285,12 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         public int TotalCount;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
-        public System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items;
+        public System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage> Items;
         
         public QuestionnaireListViewMessage() {
         }
         
-        public QuestionnaireListViewMessage(string Order, int Page, int PageSize, int TotalCount, System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items) {
+        public QuestionnaireListViewMessage(string Order, int Page, int PageSize, int TotalCount, System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage> Items) {
             this.Order = Order;
             this.Page = Page;
             this.PageSize = PageSize;
@@ -300,12 +300,12 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IPublicServiceChannel : WB.UI.Headquarters.PublicDesignerService.IPublicService, System.ServiceModel.IClientChannel {
+    internal interface IPublicServiceChannel : WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class DownloadQuestionnaireCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    internal partial class DownloadQuestionnaireCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
@@ -338,7 +338,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class DownloadQuestionnaireSourceCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    internal partial class DownloadQuestionnaireSourceCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
@@ -357,7 +357,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class GetQuestionnaireListCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    internal partial class GetQuestionnaireListCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
@@ -387,10 +387,10 @@ namespace WB.UI.Headquarters.PublicDesignerService {
             }
         }
         
-        public System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items {
+        public System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage> Items {
             get {
                 base.RaiseExceptionIfNecessary();
-                return ((System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage>)(this.results[3]));
+                return ((System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage>)(this.results[3]));
             }
         }
         
@@ -404,7 +404,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PublicServiceClient : System.ServiceModel.ClientBase<WB.UI.Headquarters.PublicDesignerService.IPublicService>, WB.UI.Headquarters.PublicDesignerService.IPublicService {
+    internal partial class PublicServiceClient : System.ServiceModel.ClientBase<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService>, WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService {
         
         private BeginOperationDelegate onBeginDownloadQuestionnaireDelegate;
         
@@ -458,41 +458,41 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         public event System.EventHandler<GetQuestionnaireListCompletedEventArgs> GetQuestionnaireListCompleted;
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo WB.UI.Headquarters.PublicDesignerService.IPublicService.DownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request) {
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.RemoteFileInfo WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService.DownloadQuestionnaire(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest request) {
             return base.Channel.DownloadQuestionnaire(request);
         }
         
-        public string DownloadQuestionnaire(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion, out long Length, out System.IO.Stream FileByteStream) {
-            WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest inValue = new WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest();
+        public string DownloadQuestionnaire(System.Guid QuestionnaireId, WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion, out long Length, out System.IO.Stream FileByteStream) {
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest inValue = new WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest();
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
-            WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo retVal = ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).DownloadQuestionnaire(inValue);
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.RemoteFileInfo retVal = ((WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService)(this)).DownloadQuestionnaire(inValue);
             Length = retVal.Length;
             FileByteStream = retVal.FileByteStream;
             return retVal.FileName;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult WB.UI.Headquarters.PublicDesignerService.IPublicService.BeginDownloadQuestionnaire(WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest request, System.AsyncCallback callback, object asyncState) {
+        System.IAsyncResult WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService.BeginDownloadQuestionnaire(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest request, System.AsyncCallback callback, object asyncState) {
             return base.Channel.BeginDownloadQuestionnaire(request, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginDownloadQuestionnaire(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion, System.AsyncCallback callback, object asyncState) {
-            WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest inValue = new WB.UI.Headquarters.PublicDesignerService.DownloadQuestionnaireRequest();
+        public System.IAsyncResult BeginDownloadQuestionnaire(System.Guid QuestionnaireId, WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion, System.AsyncCallback callback, object asyncState) {
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest inValue = new WB.Core.BoundedContexts.Headquarters.DesignerPublicService.DownloadQuestionnaireRequest();
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
-            return ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).BeginDownloadQuestionnaire(inValue, callback, asyncState);
+            return ((WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService)(this)).BeginDownloadQuestionnaire(inValue, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo WB.UI.Headquarters.PublicDesignerService.IPublicService.EndDownloadQuestionnaire(System.IAsyncResult result) {
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.RemoteFileInfo WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService.EndDownloadQuestionnaire(System.IAsyncResult result) {
             return base.Channel.EndDownloadQuestionnaire(result);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public string EndDownloadQuestionnaire(System.IAsyncResult result, out long Length, out System.IO.Stream FileByteStream) {
-            WB.UI.Headquarters.PublicDesignerService.RemoteFileInfo retVal = ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).EndDownloadQuestionnaire(result);
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.RemoteFileInfo retVal = ((WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService)(this)).EndDownloadQuestionnaire(result);
             Length = retVal.Length;
             FileByteStream = retVal.FileByteStream;
             return retVal.FileName;
@@ -500,7 +500,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         
         private System.IAsyncResult OnBeginDownloadQuestionnaire(object[] inValues, System.AsyncCallback callback, object asyncState) {
             System.Guid QuestionnaireId = ((System.Guid)(inValues[0]));
-            WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion = ((WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion)(inValues[1]));
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion = ((WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion)(inValues[1]));
             return this.BeginDownloadQuestionnaire(QuestionnaireId, SupportedQuestionnaireVersion, callback, asyncState);
         }
         
@@ -521,11 +521,11 @@ namespace WB.UI.Headquarters.PublicDesignerService {
             }
         }
         
-        public void DownloadQuestionnaireAsync(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion) {
+        public void DownloadQuestionnaireAsync(System.Guid QuestionnaireId, WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion) {
             this.DownloadQuestionnaireAsync(QuestionnaireId, SupportedQuestionnaireVersion, null);
         }
         
-        public void DownloadQuestionnaireAsync(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicDesignerService.QuestionnaireVersion SupportedQuestionnaireVersion, object userState) {
+        public void DownloadQuestionnaireAsync(System.Guid QuestionnaireId, WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion, object userState) {
             if ((this.onBeginDownloadQuestionnaireDelegate == null)) {
                 this.onBeginDownloadQuestionnaireDelegate = new BeginOperationDelegate(this.OnBeginDownloadQuestionnaire);
             }
@@ -638,17 +638,17 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage WB.UI.Headquarters.PublicDesignerService.IPublicService.GetQuestionnaireList(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request) {
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewMessage WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService.GetQuestionnaireList(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest request) {
             return base.Channel.GetQuestionnaireList(request);
         }
         
-        public string GetQuestionnaireList(string Filter, int PageIndex, ref int PageSize, string SortOrder, out int Page, out int TotalCount, out System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items) {
-            WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest inValue = new WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest();
+        public string GetQuestionnaireList(string Filter, int PageIndex, ref int PageSize, string SortOrder, out int Page, out int TotalCount, out System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage> Items) {
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest inValue = new WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest();
             inValue.Filter = Filter;
             inValue.PageIndex = PageIndex;
             inValue.PageSize = PageSize;
             inValue.SortOrder = SortOrder;
-            WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage retVal = ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).GetQuestionnaireList(inValue);
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewMessage retVal = ((WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService)(this)).GetQuestionnaireList(inValue);
             Page = retVal.Page;
             PageSize = retVal.PageSize;
             TotalCount = retVal.TotalCount;
@@ -657,28 +657,28 @@ namespace WB.UI.Headquarters.PublicDesignerService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult WB.UI.Headquarters.PublicDesignerService.IPublicService.BeginGetQuestionnaireList(WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest request, System.AsyncCallback callback, object asyncState) {
+        System.IAsyncResult WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService.BeginGetQuestionnaireList(WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest request, System.AsyncCallback callback, object asyncState) {
             return base.Channel.BeginGetQuestionnaireList(request, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public System.IAsyncResult BeginGetQuestionnaireList(string Filter, int PageIndex, int PageSize, string SortOrder, System.AsyncCallback callback, object asyncState) {
-            WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest inValue = new WB.UI.Headquarters.PublicDesignerService.QuestionnaireListRequest();
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest inValue = new WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListRequest();
             inValue.Filter = Filter;
             inValue.PageIndex = PageIndex;
             inValue.PageSize = PageSize;
             inValue.SortOrder = SortOrder;
-            return ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).BeginGetQuestionnaireList(inValue, callback, asyncState);
+            return ((WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService)(this)).BeginGetQuestionnaireList(inValue, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage WB.UI.Headquarters.PublicDesignerService.IPublicService.EndGetQuestionnaireList(System.IAsyncResult result) {
+        WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewMessage WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService.EndGetQuestionnaireList(System.IAsyncResult result) {
             return base.Channel.EndGetQuestionnaireList(result);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public string EndGetQuestionnaireList(System.IAsyncResult result, out int Page, out int PageSize, out int TotalCount, out System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items) {
-            WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewMessage retVal = ((WB.UI.Headquarters.PublicDesignerService.IPublicService)(this)).EndGetQuestionnaireList(result);
+        public string EndGetQuestionnaireList(System.IAsyncResult result, out int Page, out int PageSize, out int TotalCount, out System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage> Items) {
+            WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewMessage retVal = ((WB.Core.BoundedContexts.Headquarters.DesignerPublicService.IPublicService)(this)).EndGetQuestionnaireList(result);
             Page = retVal.Page;
             PageSize = retVal.PageSize;
             TotalCount = retVal.TotalCount;
@@ -698,7 +698,7 @@ namespace WB.UI.Headquarters.PublicDesignerService {
             int Page = this.GetDefaultValueForInitialization<int>();
             int PageSize = this.GetDefaultValueForInitialization<int>();
             int TotalCount = this.GetDefaultValueForInitialization<int>();
-            System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage> Items = this.GetDefaultValueForInitialization<System.Collections.Generic.List<WB.UI.Headquarters.PublicDesignerService.QuestionnaireListViewItemMessage>>();
+            System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage> Items = this.GetDefaultValueForInitialization<System.Collections.Generic.List<WB.Core.BoundedContexts.Headquarters.DesignerPublicService.QuestionnaireListViewItemMessage>>();
             string retVal = this.EndGetQuestionnaireList(result, out Page, out PageSize, out TotalCount, out Items);
             return new object[] {
                     Page,

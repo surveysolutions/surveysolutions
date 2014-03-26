@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="41bb7e49-b426-4d2d-a79e-0f8793c8a731" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>true</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://localhost/Designer/PublicService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PublicService.xsd" MetadataType="Schema" ID="a3aff4b6-c3e8-47ae-bb31-de0e682287f6" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PublicService1.xsd" MetadataType="Schema" ID="45746830-8f95-44ca-a51e-ff0c020fb351" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PublicService2.xsd" MetadataType="Schema" ID="2a0004a6-0b74-4d77-9c45-a27d70d13a4a" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PublicService.wsdl" MetadataType="Wsdl" ID="9308421e-cf04-4c3f-acc8-6bbf6e900b14" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?wsdl" />
+    <MetadataFile FileName="PublicService3.xsd" MetadataType="Schema" ID="20557d42-7155-4db8-a4e0-3c0ed964d50b" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PublicService4.xsd" MetadataType="Schema" ID="4dcbc4f8-a73e-4aa7-a708-5b8bf1704d3a" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?xsd=xsd4" />
+    <MetadataFile FileName="PublicService.disco" MetadataType="Disco" ID="28640dc6-0df7-49f9-a7e6-329139973866" SourceId="1" SourceUrl="https://localhost/Designer/PublicService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

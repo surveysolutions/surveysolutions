@@ -123,6 +123,9 @@
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
   </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Questionnaires</value>
+  </data>
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>
   </data>
