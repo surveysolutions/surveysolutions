@@ -52,10 +52,11 @@ namespace Web.Supervisor.Controllers
             {
                 return this.RedirectToInterviewList(template);
             }
-            this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
-            this.ViewBag.TemplateId = template;
-            UserLight user = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = user;
+
+            this.ViewBag.InterviewId = id;
+            this.ViewBag.CurrentGroupId = group;
+            this.ViewBag.CurrentPropagationKeyId = propagationKey;
+
             return this.View(model);
         }
 

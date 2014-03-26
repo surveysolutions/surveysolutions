@@ -17,16 +17,19 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
         private readonly IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
+        private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory;
 
         public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
                                       IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
                                       IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory,
-                                      IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory)
+                                      IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
+                                      IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory)
             : base(commandService, globalInfo, logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.teamInterviewViewFactory = teamInterviewViewFactory;
             this.changeStatusFactory = changeStatusFactory;
+            this.interviewDetailsFactory = interviewDetailsFactory;
         }
 
         [HttpPost]
@@ -93,6 +96,20 @@ namespace Web.Supervisor.Controllers
                             State = x.Status.ToLocalizeString()
                         })
             };
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Supervisor, Headquarter")]
+        public InterviewDetailsView InterviewDetails(InterviewDetailsViewModel data)
+        {
+            return this.interviewDetailsFactory.Load(
+                 new InterviewDetailsInputModel()
+                 {
+                     CompleteQuestionnaireId = data.InterviewId,
+                     CurrentGroupPublicKey = data.CurrentGroupId,
+                     PropagationKey = data.CurrentPropagationKey,
+                     User = this.GlobalInfo.GetCurrentUser()
+                 });
         }
     }
 }

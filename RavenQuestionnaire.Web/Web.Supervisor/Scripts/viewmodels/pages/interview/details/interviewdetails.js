@@ -1,5 +1,5 @@
-Supervisor.VM.InterviewDetails = function (commandExecutionUrl, inputQuestionnaire, userName, changeStateHistoryUrl, interviewsUrl, urlReferrer) {
-    Supervisor.VM.InterviewDetails.superclass.constructor.apply(this, arguments);
+Supervisor.VM.InterviewDetails = function (settings) {
+    Supervisor.VM.InterviewDetails.superclass.constructor.apply(this, [settings.Urls.CommandExecution]);
 
     var self = this,
         config = new Config(),
@@ -85,7 +85,7 @@ Supervisor.VM.InterviewDetails = function (commandExecutionUrl, inputQuestionnai
             var comment = new model.Comment();
             comment.text(self.currentComment());
             comment.date(new Date());
-            comment.userName(userName);
+            comment.userName(settings.UserName);
             self.currentQuestion().comments.push(comment);
             self.currentComment('');
         });
@@ -130,33 +130,33 @@ Supervisor.VM.InterviewDetails = function (commandExecutionUrl, inputQuestionnai
         //console.log(e);
     };
     self.load = function () {
-        self.IsAjaxComplete(false);
-        datacontext.parseData(inputQuestionnaire);
-        self.questionnaire(datacontext.questionnaire);
-        self.groups(datacontext.groups.getAllLocal());
-        self.questions(datacontext.questions.getAllLocal());
+        self.SendRequest(settings.Urls.InterviewDetails, settings.Interview, function (interview) {
 
-        Router({
-            '/group/:groupId': function(groupId) {
-                self.applyQuestionFilter('all');
-                var visibleGroupsIds = [groupId];
-                $.each(self.groups(), function(index, group) {
-                    if (_.contains(visibleGroupsIds, group.uiId())) {
-                        group.isVisible(true);
-                    } else if (_.contains(visibleGroupsIds, group.parentId())) {
-                        visibleGroupsIds.push(group.uiId());
-                        group.isVisible(true);
-                    } else {
-                        group.isVisible(false);
-                    }
-                });
-            },
-            '/:filter': function(f) {
-                self.applyQuestionFilter(f);
-            }
-        }).init();
-        self.IsAjaxComplete(true);
-        self.IsPageLoaded(true);
+            datacontext.parseData(interview);
+            self.questionnaire(datacontext.questionnaire);
+            self.groups(datacontext.groups.getAllLocal());
+            self.questions(datacontext.questions.getAllLocal());
+
+            Router({
+                '/group/:groupId': function (groupId) {
+                    self.applyQuestionFilter('all');
+                    var visibleGroupsIds = [groupId];
+                    $.each(self.groups(), function (index, group) {
+                        if (_.contains(visibleGroupsIds, group.uiId())) {
+                            group.isVisible(true);
+                        } else if (_.contains(visibleGroupsIds, group.parentId())) {
+                            visibleGroupsIds.push(group.uiId());
+                            group.isVisible(true);
+                        } else {
+                            group.isVisible(false);
+                        }
+                    });
+                },
+                '/:filter': function (f) {
+                    self.applyQuestionFilter(f);
+                }
+            }).init();
+        });
     };
 
     self.showApproveModal = function () {
@@ -184,10 +184,10 @@ Supervisor.VM.InterviewDetails = function (commandExecutionUrl, inputQuestionnai
     self.changeState = function (commandName) {
         var command = datacontext.getCommand(commandName, { comment: self.changeStateComment() });
         self.SendCommand(command, function () {
-            if (!_.isNull(urlReferrer)) {
-                window.location = urlReferrer;
+            if (!_.isNull(settings.UrlReferrer)) {
+                window.location = settings.UrlReferrer;
             } else {
-                window.location = interviewsUrl;
+                window.location = settings.Urls.Interviews;
             }
             
         });
@@ -197,7 +197,7 @@ Supervisor.VM.InterviewDetails = function (commandExecutionUrl, inputQuestionnai
     self.showStatesHistory = function () {
         if (!isHistoryShowed) {
             self.changeStateHistory(undefined);
-            self.SendRequest(changeStateHistoryUrl, { interviewId: datacontext.questionnaire.id() }, function (data) {
+            self.SendRequest(settings.Urls.ChangeStateHistory, { interviewId: datacontext.questionnaire.id() }, function (data) {
                 self.changeStateHistory(data);
                 $('#statesHistoryPopover').show();
             });

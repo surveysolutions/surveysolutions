@@ -1,9 +1,6 @@
-﻿@using System.Runtime.Serialization.Formatters
-@using System.Web.Optimization
-@using Newtonsoft.Json
+﻿@using System.Web.Optimization
 @using Questionnaire.Core.Web.Helpers
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
-@using Web.Supervisor.Code
 @model Core.Supervisor.Views.Interview.InterviewDetailsView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,28 +14,27 @@
 {
     @Scripts.Render("~/js/interview-general", "~/js/interview-details")
     <script type="text/javascript">
-        var questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
-                                {
-                                    TypeNameHandling = TypeNameHandling.None,
-                                    TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
-                                    Converters = new List<JsonConverter>()
-                                        {
-                                            new EnumToStringConverter(),
-                                            //new HtmlEncodeStringPropertiesConverter()
-                                        }
-                                }));
-        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
-        var changeStateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })';
-        var userName = '@User.Identity.Name';
         var urlReferrer = null;
         @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews") && Request.UrlReferrer.OriginalString.Contains("Survey"))
         {
             <text>urlReferrer = '@Html.Raw(Request.UrlReferrer)';</text>
         }
         
-        var interviewsUrl = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))';
-        $(function () {
-            var model = new Supervisor.VM.InterviewDetails(commandExecutionUrl, questionnaire, userName, changeStateHistoryUrl, interviewsUrl, urlReferrer);
+        var settings = new Supervisor.VM.InterviewDetailsSettings();
+        settings.UserName = '@User.Identity.Name';
+        settings.UrlReferrer = urlReferrer;
+
+        settings.Interview.InterviewId = '@ViewBag.InterviewId';
+        settings.Interview.CurrentGroupId = '@ViewBag.CurrentGroupId';
+        settings.Interview.CurrentPropagationKeyId = '@ViewBag.CurrentPropagationKeyId';
+
+        settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
+        settings.Urls.InterviewDetails = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewDetails"})';
+        settings.Urls.Interviews ='@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))';
+        settings.Urls.ChangeStateHistory = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})';
+
+        $(function() {
+            var model = new Supervisor.VM.InterviewDetails(settings);
             ko.applyBindings(model);
             model.load();
         });

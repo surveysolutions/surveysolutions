@@ -364,6 +364,7 @@
     <Compile Include="Models\API\UserApiItem.cs" />
     <Compile Include="Models\API\UserApiView.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
+    <Compile Include="Models\InterviewDetailsViewModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
@@ -531,6 +532,7 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\viewmodels\pages\interview\details\config.js" />
     <Content Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
     <Content Include="Scripts\viewmodels\pages\interview\details\mapper.js" />
     <Content Include="Scripts\viewmodels\pages\interview\details\model.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
