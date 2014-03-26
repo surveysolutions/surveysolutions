@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<AnswersDeclaredValid>,
         IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<AnswerRemoved>,
+        IEventHandler<AnswersRemoved>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<InterviewForTestingCreated>,
@@ -196,6 +197,14 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)
         {
             this.RemoveAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<AnswersRemoved> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                this.RemoveAnswer(evnt.EventSourceId, question.Id, question.RosterVector);
+            }
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)

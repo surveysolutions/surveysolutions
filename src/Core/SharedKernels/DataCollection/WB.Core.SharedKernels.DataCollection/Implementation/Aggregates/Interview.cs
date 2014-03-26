@@ -395,7 +395,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledQuestions.Remove(questionKey);
             this.validAnsweredQuestions.Remove(questionKey);
             this.invalidAnsweredQuestions.Remove(questionKey);
+        }
 
+        private void Apply(AnswersRemoved @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.answersSupportedInExpressions.Remove(questionKey);
+                this.linkedSingleOptionAnswersBuggy.Remove(questionKey);
+                this.linkedMultipleOptionsAnswers.Remove(questionKey);
+                this.textListAnswers.Remove(questionKey);
+                this.answeredQuestions.Remove(questionKey);
+                this.disabledQuestions.Remove(questionKey);
+                this.validAnsweredQuestions.Remove(questionKey);
+                this.invalidAnsweredQuestions.Remove(questionKey);
+            }
         }
 
         public InterviewState CreateSnapshot()
