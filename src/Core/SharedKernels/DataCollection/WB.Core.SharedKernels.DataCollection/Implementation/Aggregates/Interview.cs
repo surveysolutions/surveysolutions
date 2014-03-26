@@ -1575,8 +1575,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyEnablementChangesEvents(EnablementChanges enablementChanges)
         {
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
+            if (enablementChanges.GroupsToBeDisabled.Any())
+            {
+                this.ApplyEvent(new GroupsDisabled(ToEventIdentities(enablementChanges.GroupsToBeDisabled)));
+            }
+
+            if (enablementChanges.GroupsToBeEnabled.Any())
+            {
+                this.ApplyEvent(new GroupsEnabled(ToEventIdentities(enablementChanges.GroupsToBeEnabled)));
+            }
 
             if (enablementChanges.QuestionsToBeDisabled.Any())
             {
