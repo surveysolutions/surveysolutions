@@ -1,7 +1,7 @@
 param([string]$VersionPrefix,
 [INT]$BuildNumber,
 [string]$BuildConfiguration='release',
-[string]$KeystorePassword)
+[string]$TesterKeystorePassword)
 
 $ErrorActionPreference = "Stop"
 
@@ -15,7 +15,7 @@ try {
 		-VersionName $VersionName `
 		-VersionCode $BuildNumber `
 		-BuildConfiguration $BuildConfiguration `
-		-KeystorePassword $KeystorePassword `
+		-KeystorePassword $TesterKeystorePassword `
 		-KeystoreName 'WBCapiTester.keystore' `
 		-KeystoreAlias 'Tester' `
 		-CapiProject 'src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\WB.UI.QuestionnaireTester.csproj' `
