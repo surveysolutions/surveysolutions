@@ -89,16 +89,24 @@ namespace WB.UI.Capi
             this.llSurveyHolder.AddView(view);
         }
 
-        
+
         private void DeleteInterview(Guid itemId, View view)
         {
-            new CleanUpExecutor(logManipulator).DeleteInterveiw(itemId);
-            ((LinearLayout)view.Parent).RemoveView(view);
-        }
-        
-        private void btnUpdateDeclined_Click(object sender, DialogClickEventArgs e)
-        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle("Do you want to delete this item?");
+
+            alert.SetPositiveButton("OK", (e, s) =>
+            {
+                new CleanUpExecutor(logManipulator).DeleteInterveiw(itemId);
+                ((LinearLayout)view.Parent).RemoveView(view);
+            });
+
+            alert.SetNegativeButton("Cancel", (e, s) =>
+            {
+                
+            });
             
+            alert.Show();
         }
 
         void llQuestionnarieHolder_ItemClick(object sender, EventArgs e)
