@@ -258,6 +258,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledGroups.Remove(groupKey);
         }
 
+        internal void Apply(GroupsDisabled @event)
+        {
+            foreach (string groupKey in @event.Groups.Select(ConvertEventIdentityToString))
+            {
+                this.disabledGroups.Add(groupKey);
+            }
+        }
+
+        internal void Apply(GroupsEnabled @event)
+        {
+            foreach (string groupKey in @event.Groups.Select(ConvertEventIdentityToString))
+            {
+                this.disabledGroups.Remove(groupKey);
+            }
+        }
+
         internal void Apply(QuestionDisabled @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
