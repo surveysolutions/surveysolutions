@@ -1561,8 +1561,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
             enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+
+            if (enablementChanges.QuestionsToBeDisabled.Any())
+            {
+                this.ApplyEvent(new QuestionsDisabled(ToEventIdentities(enablementChanges.QuestionsToBeDisabled)));
+            }
+
+            if (enablementChanges.QuestionsToBeEnabled.Any())
+            {
+                this.ApplyEvent(new QuestionsEnabled(ToEventIdentities(enablementChanges.QuestionsToBeEnabled)));
+            }
         }
 
         private void ApplyValidityChangesEvents(ValidityChanges validityChanges)
