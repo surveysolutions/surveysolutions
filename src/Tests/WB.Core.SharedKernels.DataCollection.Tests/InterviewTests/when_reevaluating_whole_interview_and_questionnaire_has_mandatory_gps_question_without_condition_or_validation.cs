@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -50,8 +51,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.ReevaluateSynchronizedInterview();
 
-        It should_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_geoQuestionId = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event => @event.QuestionId == geoQuestionId);
+        It should_raise_AnswersDeclaredValid_event_with_QuestionId_equal_to_geoQuestionId = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredValid>(@event
+                => @event.Questions.Any(question => question.Id == geoQuestionId));
 
         private static EventContext eventContext;
         private static Interview interview;
