@@ -390,6 +390,7 @@
     <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
+    <Compile Include="Models\InterviewModel.cs" />
     <Compile Include="Models\RevalidateModel.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
