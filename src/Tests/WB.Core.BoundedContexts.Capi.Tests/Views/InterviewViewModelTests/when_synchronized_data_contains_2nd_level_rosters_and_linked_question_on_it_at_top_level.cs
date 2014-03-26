@@ -74,25 +74,23 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                         new InterviewItemId(firstLevelRosterId, new decimal[0]),
                         new[]
                         {
-                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 0, null, null),
-                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 1, null, null),
-
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 1 }, 0, null, null)
+                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 0, null, "roster1"),
+                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 1, null, "roster2")
                         }
                     },
                     {
                         new InterviewItemId(secondLevelRosterId, new decimal[] { 0 }),
                         new[]
                         {
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 0 }, 0, null, null),
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 0 }, 1, null, null),
+                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 0 }, 0, null, "roster11"),
+                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 0 }, 1, null, "roster12"),
                         }
                     },
                     {
                         new InterviewItemId(secondLevelRosterId, new decimal[] { 1 }),
                         new[]
                         {
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 1 }, 0, null, null)
+                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 1 }, 0, null, "roster21")
                         }
                     }
                 });
@@ -110,17 +108,17 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         It should_linked_question_outside_roster_has_first_option_equal_to_11 = () =>
          ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
              question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[0]))
-             .FirstOrDefault()).AnswerOptions.First().Title.ShouldEqual("11");
+             .FirstOrDefault()).AnswerOptions.First().Title.ShouldEqual("roster1: 11");
 
         It should_linked_question_outside_roster_has_second_option_equal_to_12 = () =>
          ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
              question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[0]))
-             .FirstOrDefault()).AnswerOptions.ToArray()[1].Title.ShouldEqual("12");
+             .FirstOrDefault()).AnswerOptions.ToArray()[1].Title.ShouldEqual("roster1: 12");
 
         It should_linked_question_outside_roster_has_third_option_equal_to_21 = () =>
          ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
              question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[0]))
-             .FirstOrDefault()).AnswerOptions.Last().Title.ShouldEqual("21");
+             .FirstOrDefault()).AnswerOptions.Last().Title.ShouldEqual("roster2: 21");
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

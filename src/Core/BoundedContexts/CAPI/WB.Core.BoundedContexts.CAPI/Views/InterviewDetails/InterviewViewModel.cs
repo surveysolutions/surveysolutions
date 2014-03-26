@@ -978,7 +978,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     .Select(
                         questionInstance =>
                             new LinkedAnswerViewModel(questionInstance.PublicKey.InterviewItemPropagationVector,
-                                questionInstance.AnswerString));
+                                BuildLinkedQuestionOptionTitle(questionInstance, referencedQuestionId.InterviewItemPropagationVector)));
         }
 
         private bool IsQuestionAllowedToBeUsedAsLinkSourceInCurrentScope(decimal[] questionRosterVecor, decimal[] currentScope)
@@ -989,6 +989,47 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     return false;
             }
             return true;
+        }
+
+        private string BuildLinkedQuestionOptionTitle(QuestionViewModel referencedQuestion, decimal[] currentScope)
+        {
+            var combinedRosterTitles = new List<string>();
+
+            var screenOfReferencedQuestion = this.Screens.Values.OfType<QuestionnairePropagatedScreenViewModel>()
+                .FirstOrDefault(
+                    s =>
+                        s.ScreenId.CompareWithVector(referencedQuestion.PublicKey.InterviewItemPropagationVector) &&
+                            s.Items.Any(item => item.PublicKey.Id == referencedQuestion.PublicKey.Id));
+            
+            if (screenOfReferencedQuestion != null)
+            {
+                var previousScreenDepth = 0;
+
+                foreach (var breadcrumb in screenOfReferencedQuestion.Breadcrumbs)
+                {
+                    var currentScreenDepth = breadcrumb.InterviewItemPropagationVector.Length;
+
+                    if (IsNextRosterLevelHappened(previousScreenDepth, currentScreenDepth) && IsScreenNameNeedToBeShown(currentScope.Length,currentScreenDepth))
+                        combinedRosterTitles.Add(Screens[breadcrumb].ScreenName);
+
+                    previousScreenDepth = breadcrumb.InterviewItemPropagationVector.Length;
+                }
+                combinedRosterTitles = combinedRosterTitles.Take(combinedRosterTitles.Count - 1).ToList();
+            }
+
+            combinedRosterTitles.Add(referencedQuestion.AnswerString);
+
+            return string.Join(": ", combinedRosterTitles.Where(title => !string.IsNullOrEmpty(title)));
+        }
+
+        private bool IsNextRosterLevelHappened(int previousScreenDepth, int newScreenDepth)
+        {
+            return previousScreenDepth < newScreenDepth;
+        }
+
+        private bool IsScreenNameNeedToBeShown(int currentScopeDepth, int newScreenDepth)
+        {
+            return currentScopeDepth < newScreenDepth;
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)

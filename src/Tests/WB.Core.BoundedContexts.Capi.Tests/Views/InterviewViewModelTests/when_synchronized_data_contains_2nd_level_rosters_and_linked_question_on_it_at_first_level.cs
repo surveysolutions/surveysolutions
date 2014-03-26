@@ -19,24 +19,18 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
     {
         private Establish context = () =>
         {
-            linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
+            linkedQuestionId = Guid.Parse("33333333333333333333333333333333");
             sourceForLinkedQuestionId = Guid.Parse("11111111111111111111111111111111");
             firstLevelRosterId = Guid.Parse("10000000000000000000000000000000");
             secondLevelRosterId = Guid.Parse("44444444444444444444444444444444");
 
-            var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
-
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion()
-                {
-                    PublicKey = rosterSizeQuestionId,
-                    QuestionType = QuestionType.Numeric
-                },
                 new Group()
                 {
                     PublicKey = firstLevelRosterId,
                     IsRoster = true,
-                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    RosterFixedTitles = new[] { "roster1", "roster2" },
                     Children = new List<IComposite>()
                     {
                         new Group()
@@ -74,10 +68,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                         new InterviewItemId(firstLevelRosterId, new decimal[0]),
                         new[]
                         {
-                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 0, null, null),
-                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 1, null, null),
-
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 1 }, 0, null, null)
+                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 0, null, "roster1"),
+                            new RosterSynchronizationDto(firstLevelRosterId, new decimal[0], 1, null, "roster2")
                         }
                     },
                     {
