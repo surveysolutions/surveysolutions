@@ -125,6 +125,8 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (GroupDisabled));
             bus.RegisterHandler(eventHandler, typeof (GroupEnabled));
+            bus.RegisterHandler(eventHandler, typeof (GroupsDisabled));
+            bus.RegisterHandler(eventHandler, typeof (GroupsEnabled));
             bus.RegisterHandler(eventHandler, typeof (QuestionDisabled));
             bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
             bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredInvalid));
