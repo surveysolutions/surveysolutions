@@ -52,23 +52,23 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>();
 
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count().ShouldEqual(3);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
 
         It should_set_roster_id_to_all_instances_in_RosterInstancesAdded_event = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances
-                .ShouldEachConformTo(addedInstance => addedInstance.Instance.GroupId == fixedRosterId);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances
+                .ShouldEachConformTo(instance => instance.GroupId == fixedRosterId);
 
         It should_set_empty_outer_roster_vector_to_all_instances_in_RosterInstancesAdded_event = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances
-                .ShouldEachConformTo(addedInstance => addedInstance.Instance.OuterRosterVector.Length == 0);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances
+                .ShouldEachConformTo(instance => instance.OuterRosterVector.Length == 0);
 
         It should_set__0__or__1__or_2__as_roster_instance_ids_in_RosterInstancesAdded_event = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Select(addedInstance => addedInstance.Instance.RosterInstanceId).ToArray()
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Select(instance => instance.RosterInstanceId).ToArray()
                 .ShouldContainOnly(0, 1, 2);
 
         It should_set_null_in_sort_index_to_all_instances_in_RosterInstancesAdded_event = () =>
-             eventContext.GetEvent<RosterInstancesAdded>().AddedInstances
-                .ShouldEachConformTo(addedInstance => addedInstance.SortIndex == null);
+             eventContext.GetEvent<RosterInstancesAdded>().Instances
+                .ShouldEachConformTo(instance => instance.SortIndex == null);
        
         It should_raise_3_RosterRowTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 3);

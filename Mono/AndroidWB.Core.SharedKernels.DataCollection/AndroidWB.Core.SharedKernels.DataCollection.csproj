@@ -235,14 +235,14 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\DateTimeQuestionAnswered.cs">
       <Link>Events\Interview\DateTimeQuestionAnswered.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\AddedRosterInstanceDto.cs">
-      <Link>Events\Interview\Dtos\AddedRosterInstanceDto.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\AddedRosterInstance.cs">
+      <Link>Events\Interview\Dtos\AddedRosterInstance.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\Identity.cs">
       <Link>Events\Interview\Dtos\Identity.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\RosterInstanceIdentity.cs">
-      <Link>Events\Interview\Dtos\RosterInstanceIdentity.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\RosterInstance.cs">
+      <Link>Events\Interview\Dtos\RosterInstance.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\FlagRemovedFromAnswer.cs">
       <Link>Events\Interview\FlagRemovedFromAnswer.cs</Link>

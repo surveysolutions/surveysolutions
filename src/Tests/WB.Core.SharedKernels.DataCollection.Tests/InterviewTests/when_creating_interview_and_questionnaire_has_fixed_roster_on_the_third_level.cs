@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count().ShouldEqual(3);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
 
         Cleanup stuff = () =>
         {

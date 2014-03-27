@@ -65,16 +65,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<TextListQuestionAnswered>();
 
         It should_raise_RosterInstancesAdded_event_with_2_instances = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count().ShouldEqual(2);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(2);
 
         It should_raise_RosterInstancesRemoved_event_with_2_instances = () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count().ShouldEqual(2);
 
         It should_raise_RosterInstancesAdded_event_with_1_instance_with_GroupId_equals_to_rosterAId = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count(addedInstance => addedInstance.Instance.GroupId == rosterAId).ShouldEqual(1);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.GroupId == rosterAId).ShouldEqual(1);
 
         It should_raise_RosterInstancesAdded_event_with_1_instance_with_GroupId_equals_to_rosterBId = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count(addedInstance => addedInstance.Instance.GroupId == rosterBId).ShouldEqual(1);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.GroupId == rosterBId).ShouldEqual(1);
 
         It should_raise_RosterInstancesRemoved_event_with_1_instance_with_GroupId_equals_to_rosterAId = () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.GroupId == rosterAId).ShouldEqual(1);
@@ -83,25 +83,25 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.GroupId == rosterBId).ShouldEqual(1);
 
         It should_raise_RosterInstancesAdded_event_with_2_instances_with_roster_instance_id_equals_to_5 = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count(addedInstance => addedInstance.Instance.RosterInstanceId == 5).ShouldEqual(2);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.RosterInstanceId == 5).ShouldEqual(2);
 
         It should_raise_RosterInstancesRemoved_event_with_2_instances_with_roster_instance_id_equals_to_2 = () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.RosterInstanceId == 2).ShouldEqual(2);
 
         It should_set_empty_outer_roster_vector_to_all_instances_in_RosterInstancesAdded_event = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances
-                .ShouldEachConformTo(addedInstance => addedInstance.Instance.OuterRosterVector.Length == 0);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances
+                .ShouldEachConformTo(instance => instance.OuterRosterVector.Length == 0);
 
         It should_set_empty_outer_roster_vector_to_all_instances_in_RosterInstancesRemoved_event = () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances
                 .ShouldEachConformTo(instance => instance.OuterRosterVector.Length == 0);
 
         It should_set_not_null_in_sort_index_to_all_instances_in_RosterInstancesAdded_event = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances
-                .ShouldEachConformTo(addedInstance => addedInstance.SortIndex != null);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances
+                .ShouldEachConformTo(instance => instance.SortIndex != null);
 
         It should_raise_RosterInstancesAdded_event_with_2_instances_with_sort_index_equals_to_5 = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count(addedInstance => addedInstance.SortIndex == 5).ShouldEqual(2);
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.SortIndex == 5).ShouldEqual(2);
 
         It should_raise_2_RosterRowTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 2);
