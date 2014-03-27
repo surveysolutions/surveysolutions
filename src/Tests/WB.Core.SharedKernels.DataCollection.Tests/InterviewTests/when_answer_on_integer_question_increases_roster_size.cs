@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         It should_raise_RosterInstancesAdded_event = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.AddedInstances.Any(addedInstance => addedInstance.Instance.GroupId == rosterGroupId && addedInstance.Instance.RosterInstanceId == 0));
+                => @event.Instances.Any(instance => instance.GroupId == rosterGroupId && instance.RosterInstanceId == 0));
 
         It should_not_raise_RosterInstancesRemoved_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event

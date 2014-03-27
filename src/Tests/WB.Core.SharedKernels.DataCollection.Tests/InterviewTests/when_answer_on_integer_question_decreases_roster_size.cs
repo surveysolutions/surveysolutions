@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         It should_not_raise_RosterInstancesAdded_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event
-                => @event.AddedInstances.Any(addedInstance => addedInstance.Instance.GroupId == rosterGroupId));
+                => @event.Instances.Any(instance => instance.GroupId == rosterGroupId));
 
         private static EventContext eventContext;
         private static Interview interview;
