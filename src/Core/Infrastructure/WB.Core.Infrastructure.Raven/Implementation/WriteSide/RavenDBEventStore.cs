@@ -114,7 +114,31 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            return ReadFromInternalWithPaging(id, minVersion, maxVersion);
+            var commmitedEvents = new List<CommittedEvent>();
+
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                var query = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
+                    .Where(x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
+                    .OrderBy(y => y.EventSequence);
+
+                var enumerator = session.Advanced.Stream(query);
+
+                while (enumerator.MoveNext())
+                {
+                    commmitedEvents.Add(ToCommittedEvent(enumerator.Current.Document));
+                }
+            }
+            var lastEventSequenceReadWithStreming = commmitedEvents.Any()
+                ? commmitedEvents.Last().EventSequence + 1
+                : minVersion;
+
+            commmitedEvents.AddRange(
+                this.AccumulateEvents(
+                    x => x.EventSourceId == id && x.EventSequence >= lastEventSequenceReadWithStreming && x.EventSequence <= maxVersion)
+                    .Select(ToCommittedEvent));
+
+            return new CommittedEventStream(id, commmitedEvents);
         }
 
         public long GetLastEventSequence(Guid id)
@@ -129,15 +153,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     return 0;
                 return lastEvent.EventSequence;
             }
-        }
-
-        private CommittedEventStream ReadFromInternalWithPaging(Guid id, long minVersion, long maxVersion)
-        {
-            IEnumerable<StoredEvent> storedEvents =
-                this.AccumulateEvents(
-                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
-            return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
-
         }
 
         public void Store(UncommittedEventStream eventStream)
