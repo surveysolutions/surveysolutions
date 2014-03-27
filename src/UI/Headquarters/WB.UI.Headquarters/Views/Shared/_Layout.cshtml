@@ -18,6 +18,9 @@
     @Styles.Render("~/content/bootstrap")
     
     @Styles.Render("~/content/app")
+    
+    @RenderSection("styles", false)
+
     <style>
         body {
             padding-top: 50px;
@@ -90,10 +93,32 @@
 
         <div>
             @RenderBody()
+            
+            
+            <div id="output">
+                <div class="inner">
+                    <div class="title">
+                        <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
+                        <span>Errors log</span>
+                    </div>
+                    <div class="body">
+                        <div class="container-fluid">
+                            <div class="form-horizontal">
+                                <ul data-bind="foreach: Errors" class="error-list">
+                                    <li class="error">
+                                        <pre data-bind="html: error"></pre>
+                                    </li>
+                                </ul>
+                                @RenderSection("output", false)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
-    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap", "~/bundles/jqueryval", "~/bundles/angular", "~/bundles/appjs")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap", "~/bundles/jqueryval", "~/bundles/main")
 
     @RenderSection("scripts", false)
 </body>

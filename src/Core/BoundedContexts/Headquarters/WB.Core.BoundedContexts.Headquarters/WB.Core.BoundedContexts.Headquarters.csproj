@@ -82,6 +82,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
     <Compile Include="PasswordPolicy\ApplicationPasswordPolicySettings.cs" />
     <Compile Include="Authentication\AuthenticationModule.cs" />
     <Compile Include="Authentication\CustomPasswordValidator.cs" />
@@ -112,8 +113,14 @@
     <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="Questionnaires\IDesignerService.cs" />
     <Compile Include="Questionnaires\Implementation\DesignerService.cs" />
+    <Compile Include="Questionnaires\Implementation\SupportedVersionProvider.cs" />
+    <Compile Include="Questionnaires\ISupportedVersionProvider.cs" />
     <Compile Include="Questionnaires\QuestionnaireDto.cs" />
     <Compile Include="Questionnaires\QuestionnaireListDto.cs" />
+    <Compile Include="Questionnaires\RemoteFileInfo.cs" />
+    <Compile Include="Questionnaires\Views\DesignerQuestionnaireListViewItem.cs" />
+    <Compile Include="Questionnaires\Views\DesignerQuestionnairesView.cs" />
+    <Compile Include="Questionnaires\Views\QuestionnaireListInputModel.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -157,6 +164,10 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
@@ -172,6 +183,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
