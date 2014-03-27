@@ -36,11 +36,12 @@ using WB.UI.Shared.Android.Controls.ScreenItems;
 
 namespace WB.UI.QuestionnaireTester
 {
-    #if RELEASE 
-    [Application(Debuggable=false)] 
-    #else
-    [Application(Debuggable = true)]
-    #endif
+#if DEBUG
+    [Application(Debuggable=true)]
+#else
+    [Application(Debuggable = false)]
+#endif
+
     [Crasher(UseCustomData = false)]
     public class CapiTesterApplication : Application
     {
