@@ -1,10 +1,9 @@
-﻿using WB.Core.BoundedContexts.Headquarters.DesignerPublicService;
-
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires
+﻿namespace WB.Core.BoundedContexts.Headquarters.Questionnaires
 {
     public interface IDesignerService
     {
         void TryLogin(string userName, string password);
-        //QuestionnaireListViewMessage GetQuestionnaireList(DesignerQuestionnairesListModel questionnaireListRequest);
+
+        QuestionnaireListDto GetQuestionnaireList(string filter, int page, int pageSize);
     }
 }

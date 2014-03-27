@@ -41,7 +41,21 @@
                     </div>
                 </div>
                 <div ng-show="listToImportVisible">
-
+                    <div class="well-sm col-sm-5 input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="well-sm">
+                        <div class="list-group" ng-repeat="item in questionnaires.items">
+                            <a class="list-group-item" href="javascript:void(0);" ng-click="selectItem($item.Id)" ng-class="{'active': $item.Id == questionnaires.selectedItemId}">
+                                {{item.Title}}
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
