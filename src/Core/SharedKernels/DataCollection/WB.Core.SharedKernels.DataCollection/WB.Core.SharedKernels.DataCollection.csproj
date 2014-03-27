@@ -73,7 +73,10 @@
     <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Interview\Dtos\AddedRosterRowDto.cs" />
+    <Compile Include="Events\Interview\Dtos\ChangedRosterRowTitleDto.cs" />
     <Compile Include="Events\Interview\Dtos\Identity.cs" />
+    <Compile Include="Events\Interview\Dtos\RosterRowIdentity.cs" />
     <Compile Include="Events\Interview\GroupsDisabled.cs" />
     <Compile Include="Events\Interview\GroupsEnabled.cs" />
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
@@ -84,6 +87,9 @@
     <Compile Include="Events\Interview\QuestionsEnabled.cs" />
     <Compile Include="Events\Interview\RosterRowAdded.cs" />
     <Compile Include="Events\Interview\RosterRowRemoved.cs" />
+    <Compile Include="Events\Interview\RosterRowsAdded.cs" />
+    <Compile Include="Events\Interview\RosterRowsRemoved.cs" />
+    <Compile Include="Events\Interview\RosterRowsTitleChanged.cs" />
     <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
