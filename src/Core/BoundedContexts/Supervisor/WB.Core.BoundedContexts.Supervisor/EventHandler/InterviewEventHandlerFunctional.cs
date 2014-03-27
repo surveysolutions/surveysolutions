@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowTitleChanged>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesAdded>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericRealQuestionAnswered>,
@@ -386,8 +388,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowAdded> evnt)
         {
-            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
-                                                          evnt.Payload.GroupId);
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
 
             this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex, scopeOfCurrentGroup);
 
@@ -397,12 +398,41 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowRemoved> evnt)
         {
-            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document,
-                                                         evnt.Payload.GroupId);
+            var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
 
             var newVector = CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
             this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { evnt.Payload.GroupId }, scopeOfCurrentGroup.ScopeId);
+
+            currentState.Sequence = evnt.EventSequence;
+            return currentState;
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterInstancesAdded> evnt)
+        {
+            foreach (var addedInstance in evnt.Payload.AddedInstances)
+            {
+                var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document, addedInstance.Instance.GroupId);
+
+                this.AddLevelToInterview(currentState.Document,
+                    addedInstance.Instance.OuterRosterVector, addedInstance.Instance.RosterInstanceId, addedInstance.SortIndex, scopeOfCurrentGroup);
+            }
+
+            currentState.Sequence = evnt.EventSequence;
+            return currentState;
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterInstancesRemoved> evnt)
+        {
+            foreach (var instance in evnt.Payload.Instances)
+            {
+                var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document, instance.GroupId);
+
+                var rosterVector = CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
+                var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
+
+                this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { instance.GroupId }, scopeOfCurrentGroup.ScopeId);
+            }
 
             currentState.Sequence = evnt.EventSequence;
             return currentState;
