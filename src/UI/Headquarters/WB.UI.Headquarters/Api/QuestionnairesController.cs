@@ -67,16 +67,10 @@ namespace WB.UI.Headquarters.Api
 
         [HttpGet]
         [Route("api/questionnaires")]
-        public object List(string filter, int page = 0, int pageSize = 10)
+        public QuestionnaireListDto List(string filter, int page = 0, int pageSize = 10)
         {
-            var list =  this.designerService.GetQuestionnaireList(filter, page, pageSize);
+            QuestionnaireListDto list =  this.designerService.GetQuestionnaireList(filter, page, pageSize);
             return list;
-            //return new DesignerQuestionnairesView()
-            //{
-            //    Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() { Id = x.Id, Title = x.Title }),
-            //    TotalCount = list.TotalCount,
-            //    ItemsSummary = null
-            //};
         }
 
     }

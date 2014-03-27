@@ -1,4 +1,4 @@
-﻿angular.module('questionnaires', ['ui.bootstrap'])
+﻿angular.module('questionnaires', ['ui.bootstrap', 'mgo-angular-wizard'])
     .controller('importController', ['$scope', '$modal', '$log', function ($scope, $modal, $log) {
 
         $scope.open = function () {
@@ -14,12 +14,15 @@
                 $log.info('Model closed');
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
+                $log.info($scope.test);
             });
         };
     }])
-    .controller('importDialogController', ['$scope', '$modalInstance', '$http', '$log', function ($scope, $modalInstance, $http, $log) {
-        $scope.signInVisible = true;
-        $scope.loading = false;
+    .controller('importDialogController', ['$scope', '$modalInstance', '$http', '$log', 'WizardHandler', function ($scope, $modalInstance, $http, $log, wizardHandler) {
+        $scope.signInInProggress = false;
+
+    $scope.test = 'test';
+
         $scope.credentials = {
             userName: '',
             password: ''
@@ -27,14 +30,33 @@
 
         $scope.questionnaires = {
             total: 0,
-            selectedItemId: '',
+            pageSize: 10,
+            filter: '',
+            selectedItemId: false,
             items: []
         }
 
-        $scope.next = function () {
+        $scope.getQuestionnaries = function (page) {
+            $log.info('getQuestionnaires');
+            if (_.isUndefined(page)) {
+                page = 1;
+            }
+            $http({
+                method: 'GET',
+                url: '/Headquarters/api/questionnaires',
+                params: {
+                    filter: $scope.questionnaires.filter,
+                    page: page,
+                    pageSize: $scope.questionnaires.pageSize
+                }
+            }).success(function (data) {
+                $scope.questionnaires.items = data.Items;
+                $scope.questionnaires.total = data.Total;
+            });
+        }
 
-            $scope.loading = true;
-
+        $scope.login = function () {
+            $scope.signInInProggress = true;
             $http({
                 method: 'POST',
                 url: '/Headquarters/api/Questionnaires/LoginToDesigner',
@@ -43,25 +65,15 @@
                     password: $scope.credentials.password
                 }
             }).success(function () {
-                $scope.listToImportVisible = true;
-                $scope.signInVisible = false;
-                $scope.listToImportVisible = true;
+                $scope.signInInProggress = false;
+                wizardHandler.wizard('importWizard').next();
 
-                $http({
-                    method: 'GET',
-                    url: '/Headquarters/api/questionnaires',
-                    params: {
-                        filter: ''
-                    }
-                }).success(function (data) {
-                    $scope.questionnaires.items = data.Items;
-                    $scope.questionnaires.total = data.Total;
-                });
+                $scope.getQuestionnaries(1);
 
-                $scope.loading = false;
+            
 
             }).error(function (data) {
-                $scope.loading = false;
+                $scope.signInInProggress = false;
                 $scope.errorMessage = data.Message;
                 $log.error(data);
             });
