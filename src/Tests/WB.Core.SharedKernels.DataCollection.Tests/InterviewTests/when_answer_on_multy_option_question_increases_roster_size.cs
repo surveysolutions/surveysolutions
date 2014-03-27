@@ -79,17 +79,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
            interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[] { }, DateTime.Now, new decimal[]{1,2});
 
-        It should_raise_RosterRowAdded_event = () =>
-          eventContext.ShouldContainEvent<RosterRowAdded>(@event
-              => @event.GroupId == rosterGroupId &&  @event.RosterInstanceId == 2);
+        It should_raise_RosterInstancesAdded_event = () =>
+            eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
+                => @event.AddedInstances.Any(addedInstance => addedInstance.Instance.GroupId == rosterGroupId && addedInstance.Instance.RosterInstanceId == 2));
 
-        It should_not_raise_RosterRowAdded_event = () =>
-            eventContext.ShouldNotContainEvent<RosterRowAdded>(@event
-                => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 1);
+        It should_not_raise_RosterInstancesAdded_event = () =>
+            eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event
+                => @event.AddedInstances.Any(addedInstance => addedInstance.Instance.GroupId == rosterGroupId && addedInstance.Instance.RosterInstanceId == 1));
 
-        It should_not_raise_RosterRowRemoved_event = () =>
-            eventContext.ShouldNotContainEvent<RosterRowRemoved>(@event
-                => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 1);
+        It should_not_raise_RosterInstancesRemoved_event = () =>
+            eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
+                => @event.Instances.Any(instance => instance.GroupId == rosterGroupId && instance.RosterInstanceId == 1));
 
         private static EventContext eventContext;
         private static Interview interview;
