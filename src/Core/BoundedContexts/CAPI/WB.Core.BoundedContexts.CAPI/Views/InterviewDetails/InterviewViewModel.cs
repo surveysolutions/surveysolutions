@@ -1008,7 +1008,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 foreach (var breadcrumb in screenOfReferencedQuestion.Breadcrumbs)
                 {
                     var currentScreenDepth = breadcrumb.InterviewItemPropagationVector.Length;
-
                     if (IsNextRosterLevelHappened(previousScreenDepth, currentScreenDepth) && IsScreenNameNeedToBeShown(currentScope.Length,currentScreenDepth))
                         combinedRosterTitles.Add(Screens[breadcrumb].ScreenName);
 
@@ -1022,14 +1021,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return string.Join(": ", combinedRosterTitles.Where(title => !string.IsNullOrEmpty(title)));
         }
 
-        private bool IsNextRosterLevelHappened(int previousScreenDepth, int newScreenDepth)
+        private bool IsNextRosterLevelHappened(int previousScreenDepth, int newScreenRosterDepth)
         {
-            return previousScreenDepth < newScreenDepth;
+            return previousScreenDepth < newScreenRosterDepth;
         }
 
-        private bool IsScreenNameNeedToBeShown(int currentScopeDepth, int newScreenDepth)
+        private bool IsScreenNameNeedToBeShown(int currentScopeDepth, int newScreenRosterDepth)
         {
-            return currentScopeDepth < newScreenDepth;
+            return currentScopeDepth < newScreenRosterDepth;
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)
