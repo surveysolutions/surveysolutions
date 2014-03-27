@@ -48,8 +48,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
-        It should_raise_3_RosterRowAdded_event = () =>
-            eventContext.Events.Where(e => e.Payload is RosterRowAdded).Count().ShouldEqual(3);
+        It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().AddedInstances.Count().ShouldEqual(3);
 
         Cleanup stuff = () =>
         {

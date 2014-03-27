@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -1672,8 +1673,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRosterEvents(RosterCalculationData data)
         {
-            data.RosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
-            data.RosterInstancesToRemove.ForEach(roster => this.ApplyEvent(new RosterRowRemoved(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId)));
+            if (data.RosterInstancesToAdd.Any())
+            {
+                AddedRosterInstanceDto[] addedInstances = data
+                    .RosterInstancesToAdd
+                    .Select(roster =>
+                        new AddedRosterInstanceDto(
+                            new RosterInstanceIdentity(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId),
+                            roster.SortIndex))
+                    .ToArray();
+
+                this.ApplyEvent(new RosterInstancesAdded(addedInstances));
+            }
+
+            if (data.RosterInstancesToRemove.Any())
+            {
+                RosterInstanceIdentity[] instances = data
+                    .RosterInstancesToRemove
+                    .Select(roster => new RosterInstanceIdentity(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
+                    .ToArray();
+
+                this.ApplyEvent(new RosterInstancesRemoved(instances));
+            }
 
             if (data.TitlesForRosterInstancesToAdd != null)
             {
