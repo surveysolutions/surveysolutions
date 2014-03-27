@@ -194,15 +194,25 @@
     <Compile Include="Api\Authentication\BasicAuthenticationAttribute.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
+    <Compile Include="Api\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Api\FeedController.cs" />
-    <Compile Include="Api\QuestionnairesController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
+    <Compile Include="Models\GridDataRequestModel.cs" />
+    <Compile Include="Models\PagerData.cs" />
+    <Compile Include="Models\Template\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\EditAccountModel.cs" />
     <Compile Include="Models\RegisterAccountModel.cs" />
     <Compile Include="Models\SslSettings.cs" />
+    <Compile Include="Models\Template\DesignerQuestionnairesRequestModel.cs" />
+    <Compile Include="Models\Template\LogOnModel.cs" />
+    <Compile Include="Models\Template\QuestionnaireVerificationErrorResponse.cs" />
+    <Compile Include="Models\Template\QuestionnaireVerificationReferenceResponse.cs" />
+    <Compile Include="Models\Template\QuestionnaireVerificationResponse.cs" />
     <Compile Include="Resources\CommonResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -259,11 +269,12 @@
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Alerts.cs" />
+    <Compile Include="Utils\GlobalHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Content Include="clientSide\controllers\importQuestionnaireController.js" />
     <Content Include="Content\Application.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -302,16 +313,7 @@
     <Content Include="NLog.Debug.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\angular-wizard\angular-wizard.css" />
-    <Content Include="Scripts\angular-wizard\angular-wizard.js" />
-    <Content Include="Scripts\angular-wizard\angular-wizard.min.css" />
-    <Content Include="Scripts\angular-wizard\angular-wizard.min.js" />
-    <Content Include="Scripts\angular.js" />
-    <Content Include="Scripts\angular.min.js" />
-    <Content Include="Scripts\angular.min.js.map" />
-    <Content Include="Scripts\angular-wizard\angular-wizard.less" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
@@ -321,12 +323,10 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-3.1.0.debug.js" />
+    <Content Include="Scripts\knockout-3.1.0.js" />
     <Content Include="Scripts\lodash.js" />
     <Content Include="Scripts\lodash.min.js" />
-    <Content Include="Scripts\ui-bootstrap-0.10.0.js" />
-    <Content Include="Scripts\ui-bootstrap-0.10.0.min.js" />
-    <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.js" />
-    <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.min.js" />
     <Content Include="Scripts\ValidationFix.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -353,6 +353,10 @@
     <Content Include="Views\Shared\_Layout.empty.cshtml" />
     <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\Questionnaires\Index.cshtml" />
+    <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Views\Template\LoginToDesigner.cshtml" />
+    <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -375,6 +379,10 @@
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
+      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
+      <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
@@ -403,6 +411,18 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
