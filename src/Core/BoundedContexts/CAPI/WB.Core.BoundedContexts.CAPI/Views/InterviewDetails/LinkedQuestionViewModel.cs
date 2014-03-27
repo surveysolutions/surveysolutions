@@ -10,11 +10,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class LinkedQuestionViewModel : QuestionViewModel
     {
         public LinkedQuestionViewModel(
-            InterviewItemId publicKey, string text, QuestionType questionType, bool enabled, string instructions,
-            bool valid, bool mandatory, string validationMessage, Func<decimal[],IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
+            InterviewItemId publicKey, Guid[] questionRosterScope, string text, QuestionType questionType, bool enabled, string instructions,
+            bool valid, bool mandatory, string validationMessage, Func<decimal[], Guid[], IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
             string variable, IEnumerable<string> substitutionReferences, bool? areAnsewrsOrdered,int? maxAllowedAnswers)
             : base(
-                publicKey, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences)
+                publicKey,questionRosterScope, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences)
         {
             this.getAnswerOptions = getAnswerOptions;
             this.SelectedAnswers = new decimal[0][];
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.MaxAllowedAnswers = maxAllowedAnswers;
         }
 
-        private Func<decimal[], IEnumerable<LinkedAnswerViewModel>> getAnswerOptions;
+        private Func<decimal[], Guid[], IEnumerable<LinkedAnswerViewModel>> getAnswerOptions;
 
         public IEnumerable<LinkedAnswerViewModel> AnswerOptions
         {
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 return
                     this.getAnswerOptions(
-                        PublicKey.InterviewItemPropagationVector);
+                        PublicKey.InterviewItemPropagationVector, QuestionRosterScope);
             }
         }
 
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
-            return new LinkedQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
+            return new LinkedQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),QuestionRosterScope,
                 this.SourceText, this.QuestionType,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions, this.Status.HasFlag(QuestionStatus.Valid),
                 this.Mandatory, this.ValidationMessage, this.getAnswerOptions, this.Variable, this.SubstitutionReferences, 
