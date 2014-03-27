@@ -63,22 +63,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_raise_MultipleOptionsQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
 
-        It should_not_raise_RosterRowAdded_event = () =>
-            eventContext.ShouldNotContainEvent<RosterRowAdded>();
+        It should_not_raise_RosterInstancesAdded_event = () =>
+            eventContext.ShouldNotContainEvent<RosterInstancesAdded>();
 
-        It should_raise_2_RosterRowRemoved_events = () =>
-            eventContext.ShouldContainEvents<RosterRowRemoved>(count: 2);
+        It should_raise_RosterInstancesRemoved_event_with_2_instances = () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count().ShouldEqual(2);
 
-        It should_set_roster_id_to_all_RosterRowRemoved_events = () =>
-            eventContext.GetEvents<RosterRowRemoved>()
-                .ShouldEachConformTo(@event => @event.GroupId == rosterId);
+        It should_set_roster_id_to_all_instances_in_RosterInstancesRemoved_event = () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances
+                .ShouldEachConformTo(instance => instance.GroupId == rosterId);
 
-        It should_set_empty_outer_roster_vector_to_all_RosterRowRemoved_events = () =>
-            eventContext.GetEvents<RosterRowRemoved>()
-                .ShouldEachConformTo(@event => @event.OuterRosterVector.Length == 0);
+        It should_set_empty_outer_roster_vector_to_all_instances_in_RosterInstancesRemoved_event = () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances
+                .ShouldEachConformTo(instance => instance.OuterRosterVector.Length == 0);
 
-        It should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterRowRemoved_events = () =>
-            eventContext.GetEvents<RosterRowRemoved>().Select(@event => @event.RosterInstanceId).ToArray()
+        It should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterInstancesRemoved_event = () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Select(instance => instance.RosterInstanceId).ToArray()
                 .ShouldContainOnly(option2, option4);
 
         private static EventContext eventContext;
