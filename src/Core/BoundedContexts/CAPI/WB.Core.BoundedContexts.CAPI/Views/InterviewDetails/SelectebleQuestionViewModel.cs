@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class SelectebleQuestionViewModel : QuestionViewModel
     {
         public SelectebleQuestionViewModel(
-            InterviewItemId publicKey,
+            InterviewItemId publicKey, Guid[] questionRosterScope,
             string text,
             QuestionType questionType,
             IEnumerable<AnswerViewModel> answers,
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             IEnumerable<string> substitutionReferences,
             bool? areAnswersOrdered,
             int? maxAllowedAnswers)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory,
+            : base(publicKey, questionRosterScope, text, questionType, enabled, instructions, comments, valid, mandatory,
                    answerObject, validationMessage, variable, substitutionReferences)
         {
             this.Answers = answers;
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
-            return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
+            return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),QuestionRosterScope,
                 this.SourceText, this.QuestionType, newAnswers,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),

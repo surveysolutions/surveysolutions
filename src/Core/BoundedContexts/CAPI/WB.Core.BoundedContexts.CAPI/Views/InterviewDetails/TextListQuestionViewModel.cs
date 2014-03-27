@@ -9,11 +9,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class TextListQuestionViewModel : QuestionViewModel
     {
-        public TextListQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType,
+        public TextListQuestionViewModel(InterviewItemId publicKey, Guid[] questionRosterScope, string text, QuestionType questionType,
             bool enabled, string instructions, string comments, bool valid, bool mandatory,
             string validationMessage, string variable, IEnumerable<string> substitutionReferences,
-            int? maxAnswerCount, int maxAnswerCountLimit) 
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory,null, 
+            int? maxAnswerCount, int maxAnswerCountLimit)
+            : base(publicKey, questionRosterScope, text, questionType, enabled, instructions, comments, valid, mandatory, null, 
                    validationMessage, variable, substitutionReferences)
         {
             this.ListAnswers = Enumerable.Empty<TextListAnswerViewModel>();
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
-            return new TextListQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
+            return new TextListQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector), QuestionRosterScope,
                                                    this.SourceText, this.QuestionType, 
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
