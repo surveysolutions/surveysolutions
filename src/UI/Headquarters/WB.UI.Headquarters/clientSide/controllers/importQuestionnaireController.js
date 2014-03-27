@@ -25,6 +25,12 @@
             password: ''
         };
 
+        $scope.questionnaires = {
+            total: 0,
+            selectedItemId: '',
+            items: []
+        }
+
         $scope.next = function () {
 
             $scope.loading = true;
@@ -39,8 +45,18 @@
             }).success(function () {
                 $scope.listToImportVisible = true;
                 $scope.signInVisible = false;
+                $scope.listToImportVisible = true;
 
-                
+                $http({
+                    method: 'GET',
+                    url: '/Headquarters/api/questionnaires',
+                    params: {
+                        filter: ''
+                    }
+                }).success(function (data) {
+                    $scope.questionnaires.items = data.Items;
+                    $scope.questionnaires.total = data.Total;
+                });
 
                 $scope.loading = false;
 
@@ -50,6 +66,11 @@
                 $log.error(data);
             });
         };
+
+        $scope.selectItem = function (itemId) {
+            $scope.questionnaires.selectedItemId = itemId;
+            $log.info(itemId);
+        }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');

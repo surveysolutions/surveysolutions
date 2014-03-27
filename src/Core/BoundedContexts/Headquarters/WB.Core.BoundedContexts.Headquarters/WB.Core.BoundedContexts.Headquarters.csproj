@@ -67,6 +67,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -109,9 +110,10 @@
     <Compile Include="PasswordPolicy\PasswordPolicyModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
-    <Compile Include="Questionnaires\DesignerQuestionnairesListModel.cs" />
     <Compile Include="Questionnaires\IDesignerService.cs" />
     <Compile Include="Questionnaires\Implementation\DesignerService.cs" />
+    <Compile Include="Questionnaires\QuestionnaireDto.cs" />
+    <Compile Include="Questionnaires\QuestionnaireListDto.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
