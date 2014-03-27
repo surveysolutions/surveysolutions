@@ -73,9 +73,9 @@
     <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Interview\Dtos\AddedRosterInstanceDto.cs" />
+    <Compile Include="Events\Interview\Dtos\AddedRosterInstance.cs" />
     <Compile Include="Events\Interview\Dtos\Identity.cs" />
-    <Compile Include="Events\Interview\Dtos\RosterInstanceIdentity.cs" />
+    <Compile Include="Events\Interview\Dtos\RosterInstance.cs" />
     <Compile Include="Events\Interview\GroupsDisabled.cs" />
     <Compile Include="Events\Interview\GroupsEnabled.cs" />
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
