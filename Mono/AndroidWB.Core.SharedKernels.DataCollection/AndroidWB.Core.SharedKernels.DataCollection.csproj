@@ -235,17 +235,17 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\DateTimeQuestionAnswered.cs">
       <Link>Events\Interview\DateTimeQuestionAnswered.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\AddedRosterRowDto.cs">
-      <Link>Events\Interview\Dtos\AddedRosterRowDto.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\AddedRosterInstanceDto.cs">
+      <Link>Events\Interview\Dtos\AddedRosterInstanceDto.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\ChangedRosterRowTitleDto.cs">
-      <Link>Events\Interview\Dtos\ChangedRosterRowTitleDto.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\ChangedRosterInstanceTitleDto.cs">
+      <Link>Events\Interview\Dtos\ChangedRosterInstanceTitleDto.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\Identity.cs">
       <Link>Events\Interview\Dtos\Identity.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\RosterRowIdentity.cs">
-      <Link>Events\Interview\Dtos\RosterRowIdentity.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\RosterInstanceIdentity.cs">
+      <Link>Events\Interview\Dtos\RosterInstanceIdentity.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\FlagRemovedFromAnswer.cs">
       <Link>Events\Interview\FlagRemovedFromAnswer.cs</Link>
@@ -337,20 +337,20 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionsEnabled.cs">
       <Link>Events\Interview\QuestionsEnabled.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterInstancesAdded.cs">
+      <Link>Events\Interview\RosterInstancesAdded.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterInstancesRemoved.cs">
+      <Link>Events\Interview\RosterInstancesRemoved.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterInstancesTitleChanged.cs">
+      <Link>Events\Interview\RosterInstancesTitleChanged.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowAdded.cs">
       <Link>Events\Interview\RosterRowAdded.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowRemoved.cs">
       <Link>Events\Interview\RosterRowRemoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowsAdded.cs">
-      <Link>Events\Interview\RosterRowsAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowsRemoved.cs">
-      <Link>Events\Interview\RosterRowsRemoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowsTitleChanged.cs">
-      <Link>Events\Interview\RosterRowsTitleChanged.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowTitleChanged.cs">
       <Link>Events\Interview\RosterRowTitleChanged.cs</Link>
