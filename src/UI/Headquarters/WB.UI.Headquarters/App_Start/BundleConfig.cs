@@ -15,12 +15,16 @@ namespace WB.UI.Headquarters.App_Start
             bundles.Add(new ScriptBundle("~/bundles/angular").Include("~/Scripts/angular.js", 
                 "~/Scripts/angular-*",
                 "~/Scripts/ui-bootstrap-{version}.js",
-                "~/Scripts/ui-bootstrap-tpls-{version}.js"));
+                "~/Scripts/ui-bootstrap-tpls-{version}.js",
+                "~/Scripts/lodash.js",
+                "~/Scripts/angular-wizard/angular-wizard.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/appjs").IncludeDirectory("~/clientSide/controllers", "*.js"));
 
             bundles.Add(new StyleBundle("~/content/bootstrap").Include("~/content/bootstrap.css", "~/content/bootstrap-theme.css"));
-            bundles.Add(new StyleBundle("~/content/app").Include("~/content/Application.css"));
+
+            bundles.Add(new StyleBundle("~/content/app").Include("~/content/Application.css",
+                "~/Scripts/angular-wizard/angular-wizard.css"));
         }
     }
 }
