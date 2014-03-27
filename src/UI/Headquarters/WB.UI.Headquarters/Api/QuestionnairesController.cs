@@ -2,7 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.ServiceModel.Security;
+using System.Web;
 using System.Web.Http;
+using System.Web.SessionState;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.GenericSubdomains.Logging;
@@ -34,6 +36,8 @@ namespace WB.UI.Headquarters.Api
         [HttpPost]
         public object LoginToDesigner(string userName, string password)
         {
+            HttpSessionState httpSessionState = HttpContext.Current.Session;
+
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
             {
                 return this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, IndexPageResources.InvalidDesignerCredentials);
@@ -62,16 +66,11 @@ namespace WB.UI.Headquarters.Api
         }
 
         [HttpGet]
-        public object List(DesignerQuestionnairesListModel data)
+        [Route("api/questionnaires")]
+        public object List(string filter, int page = 0, int pageSize = 10)
         {
-            return new object();
-            //QuestionnaireListViewMessage list =
-            //    this.designerService.GetQuestionnaireList(
-            //        new QuestionnaireListRequest(
-            //            Filter: data.Filter,
-            //            PageIndex: data.Page,
-            //            PageSize: data.PageSize));
-
+            var list =  this.designerService.GetQuestionnaireList(filter, page, pageSize);
+            return list;
             //return new DesignerQuestionnairesView()
             //{
             //    Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() { Id = x.Id, Title = x.Title }),

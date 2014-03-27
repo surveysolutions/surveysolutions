@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -41,6 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ISupervisorFeedService>().To<SupervisorFeedService>();
 
             this.Bind<IDesignerService>().To<DesignerService>();
+
+            this.Unbind(typeof(HttpContextBase));
+            this.Bind<HttpContextBase>().ToMethod(ctx => new HttpContextWrapper(HttpContext.Current)).InTransientScope();
         }
     }
 }
