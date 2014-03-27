@@ -347,9 +347,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
         }
 
-        private void Apply(RosterRowTitleChanged @event)
-        {
+        private void Apply(RosterRowTitleChanged @event) { }
 
+        internal void Apply(RosterInstancesAdded @event)
+        {
+            foreach (var addedInstance in @event.AddedInstances)
+            {
+                string rosterGroupKey = ConvertIdAndRosterVectorToString(addedInstance.Instance.GroupId, addedInstance.Instance.OuterRosterVector);
+                DistinctDecimalList rosterRowInstances = this.rosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.rosterGroupInstanceIds[rosterGroupKey]
+                    : new DistinctDecimalList();
+
+                rosterRowInstances.Add(addedInstance.Instance.RosterInstanceId);
+
+                this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+            }
+        }
+
+        private void Apply(RosterInstancesRemoved @event)
+        {
+            foreach (var instance in @event.Instances)
+            {
+                string rosterGroupKey = ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
+
+                var rosterRowInstances = this.rosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.rosterGroupInstanceIds[rosterGroupKey]
+                    : new DistinctDecimalList();
+                rosterRowInstances.Remove(instance.RosterInstanceId);
+
+                this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+            }
         }
 
         private void Apply(InterviewStatusChanged @event)

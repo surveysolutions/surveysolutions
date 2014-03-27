@@ -18,6 +18,9 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<GroupPropagated>,
         IEventHandler<RosterRowAdded>,
         IEventHandler<RosterRowRemoved>,
+        IEventHandler<RosterRowTitleChanged>,
+        IEventHandler<RosterInstancesAdded>,
+        IEventHandler<RosterInstancesRemoved>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<AnswerCommented>,
@@ -47,8 +50,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<AnswersRemoved>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        IEventHandler<InterviewForTestingCreated>,
-        IEventHandler<RosterRowTitleChanged>
+        IEventHandler<InterviewForTestingCreated>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -352,6 +354,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             
             doc.UpdateRosterRowTitle(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.Title);
+        }
+
+        public void Handle(IPublishedEvent<RosterInstancesAdded> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var addedInstance in evnt.Payload.AddedInstances)
+            {
+                doc.AddPropagateScreen(addedInstance.Instance.GroupId, addedInstance.Instance.OuterRosterVector, addedInstance.Instance.RosterInstanceId, addedInstance.SortIndex);
+            }
+        }
+
+        public void Handle(IPublishedEvent<RosterInstancesRemoved> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var instance in evnt.Payload.Instances)
+            {
+                doc.RemovePropagatedScreen(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
+            }
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
