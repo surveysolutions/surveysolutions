@@ -254,10 +254,9 @@
             self.isVisible = ko.observable(true);
 
             self.visibleQuestionsCount = ko.computed(function () {
-                //return _.reduce(self.questions(), function (count, question) {
-                //    return count + (question.isVisible() ? 1 : 0);
-                //}, 0);
-                return 0;
+                return _.reduce(self.questions(), function (count, question) {
+                    return count + (question.isVisible() ? 1 : 0);
+                }, 0);
             });
             return self;
         },

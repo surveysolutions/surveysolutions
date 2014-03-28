@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection.Emit;
 using System.Web;
 using System.Web.Http;
 using Core.Supervisor.Views.ChangeStatus;
@@ -15,6 +16,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Web.Supervisor.Models;
 using System.Linq;
 
@@ -122,10 +124,21 @@ namespace Web.Supervisor.Controllers
 
             var ret = new NewInterviewDetailsView()
             {
-                Details = a,
-                Questions = a.Groups.Select(g =>
-                    new {group = g, questions = g.Questions})
-                    .SelectMany(x => new List<QuestionModel>(x.questions.Select(q => SelectModelByQuestion(x.group, q))))
+                InterviewInfo = new InterviewInfoModel()
+                {
+                    id = a.PublicKey.ToString(),
+                    questionnaireId = a.QuestionnairePublicKey.ToString(),
+                    title = a.Title,
+                    status = Enum.GetName(typeof(InterviewStatus), a.Status)
+                },
+                Groups = a.Groups.Select(group => new GroupModel(group.ParentId)
+                {
+                    id = group.Id.ToString(),
+                    depth = group.Depth,
+                    title = group.Title,
+                    rosterVector = group.RosterVector,
+                    questions = new List<QuestionModel>(group.Questions.Select(q => SelectModelByQuestion(group, q)))
+                })
             };
 
             return ret;
@@ -280,12 +293,58 @@ namespace Web.Supervisor.Controllers
         }
     }
 
-    public class NewInterviewDetailsView
+    public class GroupModel
     {
-        public InterviewDetailsView Details { get; set; }
-        public IEnumerable<QuestionModel> Questions { get; set; }
+        private readonly Guid? parentIdPrivate;
+        public GroupModel(Guid? parentId)
+        {
+            parentIdPrivate = parentId;
+        }
+
+        public IEnumerable<QuestionModel> questions { get; set; }
+        public string id { get; set; }
+        public int depth { get; set; }
+        public string title { get; set; }
+        public decimal[] rosterVector { get; set; }
+
+        public string uiId
+        {
+            get { return string.Concat(this.id, "_", string.Join("_", this.rosterVector)); }
+        }
+
+        public string parentId
+        {
+            get
+            {
+                return parentIdPrivate.HasValue
+                    ? string.Concat(this.parentIdPrivate, "_", string.Join("_", this.rosterVector.Take(this.rosterVector.Length - 1)))
+                    : string.Empty;
+            }
+        }
+
+        public string css
+        {
+            get { return string.Concat("level", this.depth); }
+        }
+
+        public string href
+        {
+            get { return string.Concat("#group/", this.uiId); }
+        }
     }
 
+    public class InterviewInfoModel
+    {
+        public string id { get; set; }
+        public string title { get; set; }
+        public string status { get; set; }
+        public string questionnaireId { get; set; }
+    }
+    public class NewInterviewDetailsView
+    {
+        public InterviewInfoModel InterviewInfo { get; set; }
+        public IEnumerable<GroupModel> Groups { get; set; }
+    }
     public class QuestionModel
     {
         public string uiId
@@ -306,8 +365,6 @@ namespace Web.Supervisor.Controllers
         public string questionType { set; get; }
         public string title { set; get; }
         public bool? isInvalid { set; get; }
-        public bool isVisible { set; get; }
-        public bool isSelected { set; get; }
         public bool isAnswered { set; get; }
         public string validationMessage { set; get; }
         public string validationExpression { set; get; }
@@ -315,7 +372,6 @@ namespace Web.Supervisor.Controllers
         public bool? isValid { set; get; }
 
     }
-
     public class GpsQuestionModel : QuestionModel
     {
         public string latitude { set; get; }
@@ -323,38 +379,31 @@ namespace Web.Supervisor.Controllers
         public string accuracy { set; get; }
         public string timestamp { set; get; }
     }
-
     public class TextQuestionModel : QuestionModel
     {
         public string answer { set; get; }
     }
-
     public class NumericQuestionModel : TextQuestionModel
     {
         public bool isInteger = true;
         public int? countOfDecimalPlaces { set; get; }
     }
-
     public class DateQuestionModel : TextQuestionModel{}
     public class QRBarcodeQuestionModel : TextQuestionModel { }
-
     public class CategoricalQuestionModel : TextQuestionModel
     {
         public IEnumerable<OptionModel> options { get; set; }
     }
-
     public class SingleQuestionModel : CategoricalQuestionModel
     {
         public decimal? selectedOption { get; set; }
     }
-
     public class MultiQuestionModel : CategoricalQuestionModel
     {
         public bool areAnswersOrdered { get; set; }
         public int? maxAllowedAnswers { get; set; }
         public IEnumerable<OptionModel> selectedOptions { get; set; }
     }
-
     public class OptionModel
     {
         public OptionModel(string questionId)
@@ -374,7 +423,6 @@ namespace Web.Supervisor.Controllers
 
         public int orderNo { get; set; }
     }
-
     public class CommentModel
     {
         public string id { get; set; }
