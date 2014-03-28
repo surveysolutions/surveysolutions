@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Index()
         {
-            var model = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel {
+            QuestionnaireBrowseView model = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel {
                 PageSize = 1024
             });
             return this.View(model);

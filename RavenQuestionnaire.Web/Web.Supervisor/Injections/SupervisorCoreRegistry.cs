@@ -1,28 +1,21 @@
-using System.Web.Configuration;
 using Core.Supervisor.Views.User;
+using Main.Core;
+using Questionnaire.Core.Web.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Web.Mvc;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Shared.Web.Filters;
 using Web.Supervisor.Code;
 
 namespace Web.Supervisor.Injections
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Web.Mvc;
-
-    using Main.Core;
-    using Ninject;
-    using Ninject.Activation;
-    using Questionnaire.Core.Web.Security;
-    using WB.Core.SharedKernel.Utils.Compression;
-
     public class SupervisorCoreRegistry : CoreRegistry
     {
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()
@@ -31,7 +24,7 @@ namespace Web.Supervisor.Injections
             {
                 typeof(UserViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
-                typeof(ImportFromDesigner).Assembly,
+                typeof(DataCollectionSharedKernelModule).Assembly,
                 typeof(UserDenormalizer).Assembly
             });
         }
