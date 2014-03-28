@@ -77,22 +77,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
            interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 1);
 
-        It should_raise_RosterRowAdded_event_for_first_row = () =>
-          eventContext.ShouldContainEvent<RosterRowAdded>(@event
-              => @event.GroupId == parentRosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 0);
+        It should_raise_RosterInstancesAdded_event_for_first_row = () =>
+            eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
+                => @event.Instances.Any(instance => instance.GroupId == parentRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 0));
 
-        It should_raise_RosterRowAdded_event_for_first_nested_row = () =>
-          eventContext.ShouldContainEvent<RosterRowAdded>(@event
-              => @event.GroupId == nestedRosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
-
-        It should_not_raise_RosterRowRemoved_event = () =>
-            eventContext.ShouldNotContainEvent<RosterRowRemoved>(@event
-                => @event.GroupId == nestedRosterGroupId);
+        It should_raise_RosterInstancesAdded_event_for_first_nested_row = () =>
+            eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
+                => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 1 && instance.OuterRosterVector[0] == 0));
 
         It should_not_raise_RosterRowTitleChanged_event_for_first_nested_row = () =>
          eventContext.ShouldNotContainEvent<RosterRowTitleChanged>(@event
              => @event.GroupId == nestedRosterGroupId && @event.RosterInstanceId == 0 &&
                  @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
+
+        It should_not_raise_RosterInstancesRemoved_event = () =>
+            eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
+                => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId));
 
         private static EventContext eventContext;
         private static Interview interview;
