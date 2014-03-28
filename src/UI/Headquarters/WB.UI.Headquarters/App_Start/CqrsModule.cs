@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters
 {
@@ -55,9 +56,15 @@ namespace WB.UI.Headquarters
 
         private static void RegisterCommands(CommandService commandService)
         {
+            var assembliesWithCommands = new []
+            {
+                typeof (HeadquartersBoundedContextModule).Assembly,
+                typeof (DataCollectionSharedKernelModule).Assembly,
+            };
+
             var mapper = new AttributeBasedCommandMapper();
 
-            IEnumerable<Type> commands = typeof (HeadquartersBoundedContextModule).Assembly.GetTypes().Where(IsCommand).ToList();
+            IEnumerable<Type> commands = assembliesWithCommands.SelectMany(x => x.GetTypes()).Where(IsCommand).ToList();
 
             foreach (Type type in commands)
             {

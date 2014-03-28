@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication.Models
         {
             if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id");
             this.Id = id;
+            this.Claims.Add(new RavenUserClaim(new Claim(ClaimTypes.Sid, this.Id)));
         }
 
         [JsonIgnore]

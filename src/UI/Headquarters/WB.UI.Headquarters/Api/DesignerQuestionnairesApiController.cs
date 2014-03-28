@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.ServiceModel;
 using System.Web.Http;
 using Main.Core.Documents;
@@ -83,7 +84,7 @@ namespace WB.UI.Headquarters.Api
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
-                Guid createdBy = Guid.Parse((User as ApplicationUser).Id);
+                Guid createdBy = Guid.Parse((User as ClaimsPrincipal).Claims.First(x => ClaimTypes.Sid == x.Type).Value);
                 this.commandService.Execute(new ImportFromDesigner(createdBy, document));
 
                 return new QuestionnaireVerificationResponse(true);
