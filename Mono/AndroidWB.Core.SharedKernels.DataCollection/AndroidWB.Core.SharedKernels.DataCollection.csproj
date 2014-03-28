@@ -369,6 +369,7 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterInstancesTitleChanged.cs">
       <Link>Events\Interview\RosterInstancesTitleChanged.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterRowAdded.cs">
       <Link>Events\Interview\RosterRowAdded.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterRowRemoved.cs">
