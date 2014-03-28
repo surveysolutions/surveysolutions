@@ -74,14 +74,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
            eventContext.ShouldContainEvent<AnswersDeclaredValid>(@event
                 => @event.Questions.Any(question => question.Id == conditionallyRecentlyEnabledMandatoryQuestionId));
 
-        It should_raise_QuestionEnabled_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
-            eventContext.ShouldContainEvent<QuestionEnabled>(@event
-             => @event.QuestionId == conditionallyRecentlyEnabledMandatoryQuestionId);
+        It should_raise_QuestionsEnabled_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
+            eventContext.ShouldContainEvent<QuestionsEnabled>(@event
+                => @event.Questions.Any(question => question.Id == conditionallyRecentlyEnabledMandatoryQuestionId));
 
-
-        It should_not_raise_QuestionDisabled_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
-            eventContext.ShouldNotContainEvent<QuestionDisabled>(@event
-                => @event.QuestionId == conditionallyRecentlyEnabledMandatoryQuestionId);
+        It should_not_raise_QuestionsDisabled_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
+            eventContext.ShouldNotContainEvent<QuestionsDisabled>(@event
+                => @event.Questions.Any(question => question.Id == conditionallyRecentlyEnabledMandatoryQuestionId));
 
         private static EventContext eventContext;
         private static Guid questionnaireId;
