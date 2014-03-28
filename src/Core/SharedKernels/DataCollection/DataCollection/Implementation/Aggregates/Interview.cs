@@ -2060,20 +2060,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private List<RosterCalculationData> CalculateFixedRostersData(IQuestionnaire questionnaire, decimal[] outerRosterVector = null, Guid? parentRosterId = null)
+        private List<RosterCalculationData> CalculateFixedRostersData(IQuestionnaire questionnaire, decimal[] outerRosterVector = null)
         {
             if (outerRosterVector == null)
                 outerRosterVector = EmptyRosterVector;
 
             Func<Identity, object> getAnswer = question => string.Empty;
             
-            List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups(parentRosterId).ToList();
+            List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
 
             Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds, questionnaire);
 
-            Func<Guid, decimal[], bool> isFixedRoster = (groupId, groupOuterScopeRosterVector)
-                => fixedRosterIds.Contains(groupId)
-                    && AreEqualRosterVectors(groupOuterScopeRosterVector, outerRosterVector);
+            Func<Guid, decimal[], bool> isFixedRoster =
+                (groupId, groupOuterScopeRosterVector) =>
+                    fixedRosterIds.Contains(groupId) && AreEqualRosterVectors(groupOuterScopeRosterVector, outerRosterVector);
 
             Func<Guid, DistinctDecimalList> getFixedRosterInstanceIds =
                 fixedRosterId => new DistinctDecimalList(rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToList());
