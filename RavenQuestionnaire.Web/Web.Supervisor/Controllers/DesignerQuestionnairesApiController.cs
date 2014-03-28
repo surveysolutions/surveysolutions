@@ -25,6 +25,7 @@ using RemoteFileInfo = Web.Supervisor.DesignerPublicService.RemoteFileInfo;
 namespace Web.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter")]
+    [Obsolete("Remove when HQ app will be separate")]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
         internal IPublicService DesignerService

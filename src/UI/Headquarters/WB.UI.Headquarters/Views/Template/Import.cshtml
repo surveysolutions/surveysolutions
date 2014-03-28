@@ -12,7 +12,7 @@
                 '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "GetQuestionnaire" })');
 
             model.onQuestionnaireImported = function () {
-                window.location.href = '@Url.Action("Index", "HQ")';
+                window.location.href = '@Url.Action("Index", "Questionnaires")';
             };
 
             ko.applyBindings(model);
@@ -42,11 +42,15 @@
 
 @section gridnavigation
 {
-    <div class="menubar">
-        <form data-bind="submit: filter">
-            <div class="input-append search-bar">
-                <input class="span4" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'" />
-                <button class="btn" type="button" data-bind="click: filter">Search</button>
+    <div class="row menubar bottom-buffer">
+        <form data-bind="submit: filter" class="form-inline">
+            <div class="form-group col-sm-4">
+                <div class="input-group">
+                    <input class="span4 form-control" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-bind="click: filter">Search</button>
+                    </span>
+                </div>
             </div>
         </form>
     </div>

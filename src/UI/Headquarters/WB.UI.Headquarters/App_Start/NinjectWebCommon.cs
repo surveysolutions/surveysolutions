@@ -1,6 +1,7 @@
 using System;
 using System.Web;
 using System.Web.Configuration;
+using Main.Core.View;
 using Microsoft.Owin.Security;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
@@ -8,8 +9,14 @@ using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.Models;
 
@@ -64,7 +71,9 @@ namespace WB.UI.Headquarters
                 new RavenReadSideInfrastructureModule(ravenConnectionSettings),
                 new PasswordPolicyModule(int.Parse(WebConfigurationManager.AppSettings["MinPasswordLength"]), WebConfigurationManager.AppSettings["PasswordPattern"]),
                 new AuthenticationModule(),
-                new HeadquartersBoundedContextModule(),
+                new HeadquartersBoundedContextModule(int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])),
                 new CqrsModule());
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -85,6 +94,13 @@ namespace WB.UI.Headquarters
             {
                 AcceptUnsignedCertificate = bool.Parse(WebConfigurationManager.AppSettings["AcceptUnsignedCertificate"])
             }).InTransientScope();
+
+            kernel.Bind<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>()
+                .To<QuestionnaireBrowseViewFactory>();
+
+            kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
+            kernel.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            kernel.Bind<IJsonUtils>().To<NewtonJsonUtils>();
         }
     }
 }

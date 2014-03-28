@@ -13,6 +13,7 @@ using Web.Supervisor.Models;
 namespace Web.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter")]
+    [Obsolete("Remove when HQ application will be separate")]
     public class TemplateController : BaseController
     {
         public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)

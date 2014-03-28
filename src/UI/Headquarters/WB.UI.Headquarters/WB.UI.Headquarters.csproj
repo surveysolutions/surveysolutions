@@ -325,9 +325,17 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-3.1.0.debug.js" />
     <Content Include="Scripts\knockout-3.1.0.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\ko.pager.js" />
     <Content Include="Scripts\lodash.js" />
     <Content Include="Scripts\lodash.min.js" />
+    <Content Include="Scripts\supervisor.framework.js" />
+    <Content Include="Scripts\viewModels\pagebase.js" />
+    <Content Include="Scripts\viewModels\pages\designerquestionnaires.js" />
     <Content Include="Scripts\ValidationFix.js" />
+    <Content Include="Scripts\viewModels\listview.js" />
+    <Content Include="Scripts\viewModels\viewmodelbase.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -357,6 +365,8 @@
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
+    <Content Include="Views\Shared\_alerts.cshtml" />
+    <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
