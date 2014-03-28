@@ -8,22 +8,29 @@
 
 @section scripts
 {
-    @Scripts.Render("~/validate")
+    
 }
 
 <div class="container">
-    @using (Html.BeginForm("LoginToDesigner", "Template", FormMethod.Post, new { @class = "form-signin" }))
+    <h2>Please sign in to designer</h2>
+    @using (Html.BeginForm("LoginToDesigner", "Template", FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        <h2 class="form-signin-heading">Please sign in to designer</h2>
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login" })
+
+            @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "help-block" })
+        </div>
+        <div class="form-group">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "help-block" })
+        </div>
         
-        @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level", placeholder = "Login" })
-        <span class="help-inline">@Html.ValidationMessageFor(m => m.UserName)</span>
         
-        @Html.PasswordFor(m => m.Password, new { @class = "input-block-level", placeholder = "Password" })
-        <span class="help-inline">@Html.ValidationMessageFor(m => m.Password)</span>
-        <p class="pull-right">
-            <button class="btn btn-large btn-primary " type="submit">Sign in</button>
-        </p>
+         <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8">
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+        </div>
     }
 </div>
 

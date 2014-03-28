@@ -18,6 +18,17 @@ namespace WB.Core.BoundedContexts.Headquarters
 {
     public class HeadquartersBoundedContextModule : NinjectModule
     {
+        private readonly int supportedQuestionnaireVersionMajor;
+        private readonly int supportedQuestionnaireVersionMinor;
+        private readonly int supportedQuestionnaireVersionPatch;
+
+        public HeadquartersBoundedContextModule(int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch)
+        {
+            this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
+            this.supportedQuestionnaireVersionMinor = supportedQuestionnaireVersionMinor;
+            this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
+        }
+
         public override void VerifyRequiredModulesAreLoaded()
         {
             if (!this.Kernel.HasModule(typeof(PasswordPolicyModule).FullName))
@@ -45,6 +56,13 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Unbind(typeof(HttpContextBase));
             this.Bind<HttpContextBase>().ToMethod(ctx => new HttpContextWrapper(HttpContext.Current)).InTransientScope();
+
+            this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
+            {
+                SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
+                SupportedQuestionnaireVersionMinor = this.supportedQuestionnaireVersionMinor,
+                SupportedQuestionnaireVersionPatch = this.supportedQuestionnaireVersionPatch
+            });
         }
     }
 }
