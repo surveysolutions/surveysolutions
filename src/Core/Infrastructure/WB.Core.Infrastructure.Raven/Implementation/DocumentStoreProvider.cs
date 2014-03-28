@@ -5,6 +5,7 @@ using Ninject.Planning.Targets;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Extensions;
+using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Raven.Implementation
@@ -69,11 +70,19 @@ namespace WB.Core.Infrastructure.Raven.Implementation
         private DocumentStore CreateServerStorage(string databaseName)
         {
             var store = new DocumentStore
+            {
+                Url = this.settings.StoragePath,
+                DefaultDatabase = databaseName,
+                Conventions =
                 {
-                    Url = this.settings.StoragePath,
-                    DefaultDatabase = databaseName,
-                    Conventions = {JsonContractResolver = new PropertiesOnlyContractResolver()}
-                };
+                    JsonContractResolver = new PropertiesOnlyContractResolver(),
+                    CustomizeJsonSerializer = serializer =>
+                    {
+                        serializer.TypeNameHandling =
+                            TypeNameHandling.All;
+                    }
+                }
+            };
 
             if (!string.IsNullOrWhiteSpace(this.settings.Username))
             {
@@ -96,10 +105,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             {
                 DataDirectory = this.settings.StoragePath,
                 UseEmbeddedHttpServer = false,
-                Conventions = new DocumentConvention {JsonContractResolver = new PropertiesOnlyContractResolver()},
+                Conventions = new DocumentConvention
+                {
+                    JsonContractResolver = new PropertiesOnlyContractResolver()
+                },
                 ResourceManagerId = Guid.NewGuid(),
             };
-
             store.Initialize();
 
             return store;
