@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     {
         protected QuestionViewModel(
             InterviewItemId publicKey,
+            Guid[] questionRosterScope,
             string text,
             QuestionType questionType,
             bool enabled,
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             IEnumerable<string> substitutionReferences)
         {
             this.PublicKey = publicKey;
+            this.QuestionRosterScope = questionRosterScope;
             this.ValidationMessage = validationMessage;
             this.SubstitutionReferences = substitutionReferences;
             this.referencedQuestionAnswers = this.SubstitutionReferences.ToDictionary(x => x, y => StringUtil.DefaultSubstitutionText);
@@ -54,6 +56,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         }
 
         public InterviewItemId PublicKey { get; private set; }
+        public Guid[] QuestionRosterScope { get; private set; }
         public string SourceText { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }

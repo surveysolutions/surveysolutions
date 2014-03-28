@@ -24,7 +24,12 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
                                                     new JsonSerializerSettings
                                                         {
                                                             TypeNameHandling = TypeNameHandling.Objects,
-                                                            NullValueHandling = NullValueHandling.Ignore
+                                                            NullValueHandling = NullValueHandling.Ignore,
+
+                                                            Error = delegate(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                                                            {
+                                                                args.ErrorContext.Handled = true;
+                                                            }
                                                         });
         }
 

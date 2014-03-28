@@ -120,7 +120,19 @@
   <data name="Action" xml:space="preserve">
     <value>Action</value>
   </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Interviews</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Questionnaires</value>
+  </data>
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>
+  </data>
+  <data name="Surveys" xml:space="preserve">
+    <value>Surveys</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
   </data>
 </root>
