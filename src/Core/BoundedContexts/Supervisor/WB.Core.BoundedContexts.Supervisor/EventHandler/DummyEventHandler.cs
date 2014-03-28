@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<GroupPropagated>,
         IEventHandler<QuestionEnabled>,
         IEventHandler<QuestionDisabled>,
+        IEventHandler<QuestionsEnabled>,
+        IEventHandler<QuestionsDisabled>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
         IEventHandler<InterviewSynchronized>,
@@ -40,6 +42,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<QuestionEnabled> evnt) {}
 
         public void Handle(IPublishedEvent<QuestionDisabled> evnt) {}
+
+        public void Handle(IPublishedEvent<QuestionsEnabled> evnt) {}
+
+        public void Handle(IPublishedEvent<QuestionsDisabled> evnt) {}
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt) {}
 
