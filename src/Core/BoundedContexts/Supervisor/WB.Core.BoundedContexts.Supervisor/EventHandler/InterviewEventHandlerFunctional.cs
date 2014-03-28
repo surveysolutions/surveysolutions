@@ -430,12 +430,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterInstancesAdded> evnt)
         {
-            foreach (var addedInstance in evnt.Payload.AddedInstances)
+            foreach (var instance in evnt.Payload.Instances)
             {
-                var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document, addedInstance.Instance.GroupId);
+                var scopeOfCurrentGroup = GetScopeOfPassedGroup(currentState.Document, instance.GroupId);
 
                 this.AddLevelToInterview(currentState.Document,
-                    addedInstance.Instance.OuterRosterVector, addedInstance.Instance.RosterInstanceId, addedInstance.SortIndex, scopeOfCurrentGroup);
+                    instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex, scopeOfCurrentGroup);
             }
 
             currentState.Sequence = evnt.EventSequence;
