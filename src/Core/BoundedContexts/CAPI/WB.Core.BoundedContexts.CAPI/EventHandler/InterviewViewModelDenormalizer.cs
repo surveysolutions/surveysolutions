@@ -32,6 +32,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
+        IEventHandler<GroupsDisabled>,
+        IEventHandler<GroupsEnabled>,
         IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionEnabled>,
         IEventHandler<QuestionsDisabled>,
@@ -42,6 +44,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<AnswersDeclaredValid>,
         IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<AnswerRemoved>,
+        IEventHandler<AnswersRemoved>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<InterviewForTestingCreated>,
@@ -206,6 +209,14 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             this.RemoveAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector);
         }
 
+        public void Handle(IPublishedEvent<AnswersRemoved> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                this.RemoveAnswer(evnt.EventSourceId, question.Id, question.RosterVector);
+            }
+        }
+
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
@@ -216,6 +227,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), true);
+        }
+
+        public void Handle(IPublishedEvent<GroupsDisabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var group in evnt.Payload.Groups)
+            {
+                doc.SetScreenStatus(new InterviewItemId(group.Id, group.RosterVector), false);
+            }
+        }
+
+        public void Handle(IPublishedEvent<GroupsEnabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var group in evnt.Payload.Groups)
+            {
+                doc.SetScreenStatus(new InterviewItemId(group.Id, group.RosterVector), true);
+            }
         }
 
         public void Handle(IPublishedEvent<QuestionDisabled> evnt)
