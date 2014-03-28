@@ -33,32 +33,32 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
     self.flagedCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isFlagged() ? 1 : 0);
+            return count + (question.isFlagged ? 1 : 0);
         }, 0);
     });
     self.answeredCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isAnswered() ? 1 : 0);
+            return count + (question.isAnswered ? 1 : 0);
         }, 0);
     });
     self.commentedCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.comments().length > 0 ? 1 : 0);
+            return count + (question.comments.length > 0 ? 1 : 0);
         }, 0);
     });
     self.invalidCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isInvalid() ? 1 : 0);
+            return count + (question.isInvalid ? 1 : 0);
         }, 0);
     });
     self.editableCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.scope() == "Supervisor" ? 1 : 0);
+            return count + (question.scope == "Supervisor" ? 1 : 0);
         }, 0);
     });
     self.enabledCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isEnabled() ? 1 : 0);
+            return count + (question.isEnabled ? 1 : 0);
         }, 0);
     });
     self.applyQuestionFilter = function(f) {
@@ -132,10 +132,48 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.load = function () {
         self.SendRequest(settings.Urls.InterviewDetails, settings.Interview, function (interview) {
 
-            datacontext.parseData(interview);
+            datacontext.parseData(interview.Details);
             self.questionnaire(datacontext.questionnaire);
-            self.groups(datacontext.groups.getAllLocal());
-            self.questions(datacontext.questions.getAllLocal());
+            //self.groups(datacontext.groups.getAllLocal());
+
+            $.each(interview.Questions, function(question) {
+                question.markerStyle = ko.computed(function() {
+                    if (question.isInvalid) {
+                        return "invalid";
+                    }
+                    if (question.scope == "Supervisor") {
+                        return "supervisor";
+                    }
+                    return "";
+                });
+                question.matchFilter = function(filter) {
+                    switch (filter) {
+                    case "all":
+                        question.isVisible = true;
+                        break;
+                    case "flaged":
+                        question.isVisible = question.isFlagged;
+                        break;
+                    case "commented":
+                        question.isVisible = question.comments.length > 0;
+                        break;
+                    case "answered":
+                        question.isVisible = question.isAnswered();
+                        break;
+                    case "invalid":
+                        question.isVisible = question.isInvalid();
+                        break;
+                    case "supervisor":
+                        question.isVisible = question.scope() == "Supervisor";
+                        break;
+                    case "enabled":
+                        question.isVisible = question.isEnabled();
+                        break;
+                    }
+                };
+            });
+
+            self.questions(interview.Questions);
 
             Router({
                 '/group/:groupId': function (groupId) {
@@ -197,7 +235,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.showStatesHistory = function () {
         if (!isHistoryShowed) {
             self.changeStateHistory(undefined);
-            self.SendRequest(settings.Urls.ChangeStateHistory, { interviewId: datacontext.questionnaire.id() }, function (data) {
+            self.SendRequest(settings.Urls.ChangeStateHistory, { interviewId: self.questionnaire.id() }, function (data) {
                 self.changeStateHistory(data);
                 $('#statesHistoryPopover').show();
             });

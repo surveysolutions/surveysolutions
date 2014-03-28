@@ -39,14 +39,14 @@
             return $.Deferred(function(def) {
                 $.extend(questionnaire, mapper.interview.fromDto(q));
                 var rawQuestions = [];
-                $.each(q.Groups, function(index, group) {
-                    var rosterVector = group.RosterVector;
-                    $.each(group.Questions, function(index, question) {
-                        question.RosterVector = rosterVector;
-                        rawQuestions.push(question);
-                    });
-                });
-                questions.getData(rawQuestions);
+                //$.each(q.Groups, function(index, group) {
+                //    var rosterVector = group.RosterVector;
+                //    $.each(group.Questions, function(index, question) {
+                //        question.RosterVector = rosterVector;
+                //        rawQuestions.push(question);
+                //    });
+                //});
+                //questions.getData(rawQuestions);
 
                 groups.getData(q.Groups, questions);
                 def.resolve();
