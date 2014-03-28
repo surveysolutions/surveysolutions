@@ -45,8 +45,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, GeoLocationQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QRBarcodeQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerRemoved>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, AnswersRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupEnabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, GroupsDisabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, GroupsEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsDisabled>,
@@ -543,37 +546,82 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerRemoved> evnt)
         {
-            return
-                new ViewWithSequence<InterviewData>(
-                    UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+            return new ViewWithSequence<InterviewData>(
+                UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+                {
+                    question.Answer = null;
+                    question.IsAnswered = false;
+                }),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswersRemoved> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Questions.Aggregate(
+                    currentState.Document,
+                    (document, question) => UpdateQuestion(document, question.RosterVector, question.Id, updatedQuestion =>
                     {
-                        question.Answer = null;
-                        question.IsAnswered = false;
-                    }), evnt.EventSequence);
+                        updatedQuestion.Answer = null;
+                        updatedQuestion.IsAnswered = false;
+                    })),
+                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupDisabled> evnt)
         {
-            return
-                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, (level) =>
+            return new ViewWithSequence<InterviewData>(
+                PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, level =>
                 {
                     if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
                     {
                         level.DisabledGroups.Add(evnt.Payload.GroupId);
                     }
-                }), evnt.EventSequence);
+                }),
+                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupEnabled> evnt)
         {
-            return
-                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, (level) =>
-            {
-                if (level.DisabledGroups.Contains(evnt.Payload.GroupId))
+            return new ViewWithSequence<InterviewData>(
+                PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, level =>
                 {
-                    level.DisabledGroups.Remove(evnt.Payload.GroupId);
-                }
-            }),evnt.EventSequence);
+                    if (level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    {
+                        level.DisabledGroups.Remove(evnt.Payload.GroupId);
+                    }
+                }),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupsDisabled> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Groups.Aggregate(
+                    currentState.Document,
+                    (document, group) => PreformActionOnLevel(document, group.RosterVector, level =>
+                    {
+                        if (!level.DisabledGroups.Contains(group.Id))
+                        {
+                            level.DisabledGroups.Add(group.Id);
+                        }
+                    })),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupsEnabled> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Groups.Aggregate(
+                    currentState.Document,
+                    (document, group) => PreformActionOnLevel(document, group.RosterVector, level =>
+                    {
+                        if (level.DisabledGroups.Contains(group.Id))
+                        {
+                            level.DisabledGroups.Remove(group.Id);
+                        }
+                    })),
+                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionDisabled> evnt)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -43,16 +44,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
-        It should_raise_GroupDisabled_event = () =>
-            eventContext.ShouldContainEvent<GroupDisabled>();
-
-        It should_provide_id_of_question_with_custom_enablement_condition_in_GroupDisabled_event = () =>
-            eventContext.GetEvent<GroupDisabled>()
-                .GroupId.ShouldEqual(groupId);
-
-        It should_provide_zero_dimensional_propagation_vector_in_GroupDisabled_event = () =>
-            eventContext.GetEvent<GroupDisabled>()
-                .PropagationVector.Length.ShouldEqual(0);
+        It should_raise_GroupsDisabled_event_with_id_of_question_with_custom_enablement_condition_and_zero_dimensional_propagation_vector = () =>
+           eventContext.ShouldContainEvent<GroupsDisabled>(@event
+                => @event.Groups.Any(group => group.Id == groupId && group.RosterVector.Length == 0));
 
         Cleanup stuff = () =>
         {
