@@ -101,16 +101,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
 
         It should_raise_RosterRowRemoved_of_nested_roster_event_for_second_row = () =>
-          eventContext.ShouldContainEvent<RosterRowRemoved>(@event
-              => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 1);
+            eventContext.ShouldContainEvent<RosterRowRemoved>(@event
+                => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 1);
 
-        It should_not_raise_AnswerRemoved_event_for_first_row = () =>
-            eventContext.ShouldNotContainEvent<AnswerRemoved>(@event
-                 => @event.QuestionId == questionInParentRosterId && @event.PropagationVector[0] == 0 && @event.PropagationVector.Length == 1);
+        It should_not_raise_AnswersRemoved_event_for_first_row = () =>
+            eventContext.ShouldNotContainEvent<AnswersRemoved>(@event
+                => @event.Questions.Any(question => question.Id == questionInParentRosterId && question.RosterVector[0] == 0 && question.RosterVector.Length == 1));
 
-        It should_raise_AnswerRemoved_event_for_second_row = () =>
-         eventContext.ShouldContainEvent<AnswerRemoved>(@event
-              => @event.QuestionId == questionInParentRosterId && @event.PropagationVector[0] == 1 && @event.PropagationVector.Length == 1);
+        It should_raise_AnswersRemoved_event_for_second_row = () =>
+            eventContext.ShouldContainEvent<AnswersRemoved>(@event
+                => @event.Questions.Any(question => question.Id == questionInParentRosterId && question.RosterVector[0] == 1 && question.RosterVector.Length == 1));
 
         private static EventContext eventContext;
         private static Interview interview;
