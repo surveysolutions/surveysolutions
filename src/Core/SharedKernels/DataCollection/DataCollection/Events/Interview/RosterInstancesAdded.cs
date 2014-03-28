@@ -6,11 +6,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class RosterInstancesAdded : InterviewPassiveEvent
     {
-        public AddedRosterInstanceDto[] AddedInstances { get; private set; }
+        public AddedRosterInstance[] Instances { get; private set; }
 
-        public RosterInstancesAdded(AddedRosterInstanceDto[] addedInstances)
+        public RosterInstancesAdded(AddedRosterInstance[] instances)
         {
-            this.AddedInstances = addedInstances.ToArray();
+            this.Instances = instances.ToArray();
         }
     }
 }

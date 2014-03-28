@@ -6,9 +6,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class RosterInstancesRemoved : InterviewPassiveEvent
     {
-        public RosterInstanceIdentity[] Instances { get; private set; }
+        public RosterInstance[] Instances { get; private set; }
 
-        public RosterInstancesRemoved(RosterInstanceIdentity[] instances)
+        public RosterInstancesRemoved(RosterInstance[] instances)
         {
             this.Instances = instances.ToArray();
         }

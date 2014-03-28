@@ -367,14 +367,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(RosterInstancesAdded @event)
         {
-            foreach (var addedInstance in @event.AddedInstances)
+            foreach (var instance in @event.Instances)
             {
-                string rosterGroupKey = ConvertIdAndRosterVectorToString(addedInstance.Instance.GroupId, addedInstance.Instance.OuterRosterVector);
+                string rosterGroupKey = ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
                 DistinctDecimalList rosterRowInstances = this.rosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                     ? this.rosterGroupInstanceIds[rosterGroupKey]
                     : new DistinctDecimalList();
 
-                rosterRowInstances.Add(addedInstance.Instance.RosterInstanceId);
+                rosterRowInstances.Add(instance.RosterInstanceId);
 
                 this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
             }
@@ -1699,22 +1699,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (data.RosterInstancesToAdd.Any())
             {
-                AddedRosterInstanceDto[] addedInstances = data
+                AddedRosterInstance[] instances = data
                     .RosterInstancesToAdd
-                    .Select(roster =>
-                        new AddedRosterInstanceDto(
-                            new RosterInstanceIdentity(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId),
-                            roster.SortIndex))
+                    .Select(roster => new AddedRosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex))
                     .ToArray();
 
-                this.ApplyEvent(new RosterInstancesAdded(addedInstances));
+                this.ApplyEvent(new RosterInstancesAdded(instances));
             }
 
             if (data.RosterInstancesToRemove.Any())
             {
-                RosterInstanceIdentity[] instances = data
+                RosterInstance[] instances = data
                     .RosterInstancesToRemove
-                    .Select(roster => new RosterInstanceIdentity(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
+                    .Select(roster => new RosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
                     .ToArray();
 
                 this.ApplyEvent(new RosterInstancesRemoved(instances));

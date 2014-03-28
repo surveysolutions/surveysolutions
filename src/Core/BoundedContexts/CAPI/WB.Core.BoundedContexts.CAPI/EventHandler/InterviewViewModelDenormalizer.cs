@@ -370,9 +370,9 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
 
-            foreach (var addedInstance in evnt.Payload.AddedInstances)
+            foreach (var instance in evnt.Payload.Instances)
             {
-                doc.AddPropagateScreen(addedInstance.Instance.GroupId, addedInstance.Instance.OuterRosterVector, addedInstance.Instance.RosterInstanceId, addedInstance.SortIndex);
+                doc.AddPropagateScreen(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
             }
         }
 
