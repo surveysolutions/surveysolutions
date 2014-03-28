@@ -200,8 +200,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InterviewsController.cs" />
-    <Compile Include="Controllers\QuestionnaireController.cs" />
-    <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\PagerData.cs" />
@@ -362,8 +361,8 @@
     <Content Include="Views\Shared\_Layout.empty.cshtml" />
     <Content Include="Views\Interviews\Index.cshtml" />
     <Content Include="Views\Questionnaires\Index.cshtml" />
-    <Content Include="Views\Template\Import.cshtml" />
-    <Content Include="Views\Template\LoginToDesigner.cshtml" />
+    <Content Include="Views\Questionnaires\Import.cshtml" />
+    <Content Include="Views\Questionnaires\LoginToDesigner.cshtml" />
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />

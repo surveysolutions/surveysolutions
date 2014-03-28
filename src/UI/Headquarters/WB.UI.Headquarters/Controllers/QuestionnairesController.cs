@@ -2,10 +2,14 @@
 using System.Net;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
+using Main.Core.View;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Views;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Utils;
@@ -13,21 +17,32 @@ using WB.UI.Headquarters.Utils;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = ApplicationRoles.Headquarter)]
-    public class TemplateController : BaseController
+    public class QuestionnairesController : BaseController
     {
-        private readonly ILogger logger;
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
         private readonly IDesignerService designerService;
+        private readonly ILogger logger;
 
-        public TemplateController(ILogger logger,
-            IDesignerService designerService,
-            SslSettings sslSettings)
+        public QuestionnairesController(IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory, 
+            IDesignerService designerService, 
+            SslSettings sslSettings,
+            ILogger logger)
         {
-            this.logger = logger;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.designerService = designerService;
+            this.logger = logger;
             if (sslSettings.AcceptUnsignedCertificate)
             {
-                ServicePointManager.ServerCertificateValidationCallback =  (self, certificate, chain, sslPolicyErrors) => true;
+                ServicePointManager.ServerCertificateValidationCallback = (self, certificate, chain, sslPolicyErrors) => true;
             }
+        }
+
+        public ActionResult Index()
+        {
+            QuestionnaireBrowseView model = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel {
+                PageSize = 1024
+            });
+            return this.View(model);
         }
 
         public ActionResult Import(QuestionnaireListInputModel model)
@@ -65,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.Error(
                         string.Format("Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
-                            GlobalHelper.GenerateUrl("Import", "Template", null)));
+                            GlobalHelper.GenerateUrl("Import", "Questionnaires", null)));
                     this.logger.Error("Could not connect to designer.", ex);
                 }
             }
