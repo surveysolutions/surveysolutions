@@ -273,6 +273,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledGroups.Remove(groupKey);
         }
 
+        internal void Apply(GroupsDisabled @event)
+        {
+            foreach (string groupKey in @event.Groups.Select(ConvertEventIdentityToString))
+            {
+                this.disabledGroups.Add(groupKey);
+            }
+        }
+
+        internal void Apply(GroupsEnabled @event)
+        {
+            foreach (string groupKey in @event.Groups.Select(ConvertEventIdentityToString))
+            {
+                this.disabledGroups.Remove(groupKey);
+            }
+        }
+
         internal void Apply(QuestionDisabled @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -398,7 +414,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledQuestions.Remove(questionKey);
             this.validAnsweredQuestions.Remove(questionKey);
             this.invalidAnsweredQuestions.Remove(questionKey);
+        }
 
+        private void Apply(AnswersRemoved @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.answersSupportedInExpressions.Remove(questionKey);
+                this.linkedSingleOptionAnswersBuggy.Remove(questionKey);
+                this.linkedMultipleOptionsAnswers.Remove(questionKey);
+                this.textListAnswers.Remove(questionKey);
+                this.answeredQuestions.Remove(questionKey);
+                this.disabledQuestions.Remove(questionKey);
+                this.validAnsweredQuestions.Remove(questionKey);
+                this.invalidAnsweredQuestions.Remove(questionKey);
+            }
         }
 
         public InterviewState CreateSnapshot()
@@ -1583,8 +1613,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyEnablementChangesEvents(EnablementChanges enablementChanges)
         {
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
+            if (enablementChanges.GroupsToBeDisabled.Any())
+            {
+                this.ApplyEvent(new GroupsDisabled(ToEventIdentities(enablementChanges.GroupsToBeDisabled)));
+            }
+
+            if (enablementChanges.GroupsToBeEnabled.Any())
+            {
+                this.ApplyEvent(new GroupsEnabled(ToEventIdentities(enablementChanges.GroupsToBeEnabled)));
+            }
 
             if (enablementChanges.QuestionsToBeDisabled.Any())
             {
@@ -1612,7 +1649,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyAnswersRemovanceEvents(List<Identity> answersToRemove)
         {
-            answersToRemove.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            if (answersToRemove.Any())
+            {
+                this.ApplyEvent(new AnswersRemoved(ToEventIdentities(answersToRemove)));
+            }
         }
 
         private void ApplySingleAnswerDeclaredValidEvent(Guid questionId, decimal[] rosterVector)

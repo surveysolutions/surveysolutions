@@ -20,6 +20,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<QuestionsDisabled>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
+        IEventHandler<GroupsDisabled>,
+        IEventHandler<GroupsEnabled>,
         IEventHandler<InterviewSynchronized>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeclaredValid>,
@@ -47,8 +49,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupDisabled> evnt) {}
-
         public void Handle(IPublishedEvent<InterviewCompleted> evnt) {}
 
         public void Handle(IPublishedEvent<AnswerCommented> evnt) {}
@@ -57,7 +57,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<FlagSetToAnswer> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupEnabled> evnt) {}
+        public void Handle(IPublishedEvent<GroupDisabled> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupEnabled> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupsDisabled> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupsEnabled> evnt) { }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt) {}
 

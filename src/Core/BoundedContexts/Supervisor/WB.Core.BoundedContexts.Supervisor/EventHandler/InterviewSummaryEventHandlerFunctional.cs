@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
         IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, AnswerRemoved>,
+        IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
         IUpdateHandler<InterviewSummary, InterviewDeleted>,
         IUpdateHandler<InterviewSummary, InterviewRestored>,
@@ -199,6 +200,20 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 if (interview.AnswersToFeaturedQuestions.ContainsKey(evnt.Payload.QuestionId))
                 {
                     interview.AnswersToFeaturedQuestions[evnt.Payload.QuestionId].Answer = string.Empty;
+                }
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswersRemoved> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                foreach (var question in evnt.Payload.Questions)
+                {
+                    if (interview.AnswersToFeaturedQuestions.ContainsKey(question.Id))
+                    {
+                        interview.AnswersToFeaturedQuestions[question.Id].Answer = string.Empty;
+                    }
                 }
             });
         }
