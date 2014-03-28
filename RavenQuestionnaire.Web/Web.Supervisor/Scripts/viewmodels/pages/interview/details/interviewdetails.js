@@ -125,18 +125,46 @@ Supervisor.VM.InterviewDetails = function (settings) {
         var command = datacontext.getCommand(commandName, { questionId: question.uiId() });
         self.SendCommand(command);
     };
-    self.filterClick = function(ui, e) {
-        //console.log(ui);
-        //console.log(e);
-    };
     self.load = function () {
         self.SendRequest(settings.Urls.InterviewDetails, settings.Interview, function (interview) {
 
-            datacontext.parseData(interview.Details);
-            self.questionnaire(datacontext.questionnaire);
-            //self.groups(datacontext.groups.getAllLocal());
+            var questions = self.prepareGroupsAndQuestionsAndReturnAllQuestions(interview.Groups);
 
-            $.each(interview.Questions, function(question) {
+            self.questionnaire(interview.InterviewInfo);
+            self.groups(interview.Groups);
+            self.questions(questions);
+
+            Router({
+                '/group/:groupId': function (groupId) {
+                    self.applyQuestionFilter('all');
+                    var visibleGroupsIds = [groupId];
+                    $.each(self.groups(), function (index, group) {
+                        if (_.contains(visibleGroupsIds, group.uiId)) {
+                            group.isVisible(true);
+                        } else if (_.contains(visibleGroupsIds, group.parentId)) {
+                            visibleGroupsIds.push(group.uiId);
+                            group.isVisible(true);
+                        } else {
+                            group.isVisible(false);
+                        }
+                    });
+                },
+                '/:filter': function (f) {
+                    self.applyQuestionFilter(f);
+                }
+            }).init();
+        });
+    };
+    
+    self.prepareGroupsAndQuestionsAndReturnAllQuestions = function (groups) {
+        var allQuestions = [];
+        $.each(groups, function(i, group) {
+
+            $.each(group.questions, function (j, question) {
+                allQuestions.push(question);
+
+                question.isVisible = ko.observable(true);
+                question.isSelected = ko.observable(false);
                 question.markerStyle = ko.computed(function() {
                     if (question.isInvalid) {
                         return "invalid";
@@ -149,52 +177,39 @@ Supervisor.VM.InterviewDetails = function (settings) {
                 question.matchFilter = function(filter) {
                     switch (filter) {
                     case "all":
-                        question.isVisible = true;
+                        question.isVisible(true);
                         break;
                     case "flaged":
-                        question.isVisible = question.isFlagged;
+                        question.isVisible(question.isFlagged);
                         break;
                     case "commented":
-                        question.isVisible = question.comments.length > 0;
+                        question.isVisible(question.comments.length > 0);
                         break;
                     case "answered":
-                        question.isVisible = question.isAnswered();
+                        question.isVisible(question.isAnswered);
                         break;
                     case "invalid":
-                        question.isVisible = question.isInvalid();
+                        question.isVisible(question.isInvalid);
                         break;
                     case "supervisor":
-                        question.isVisible = question.scope() == "Supervisor";
+                        question.isVisible(question.scope == "Supervisor");
                         break;
                     case "enabled":
-                        question.isVisible = question.isEnabled();
+                        question.isVisible(question.isEnabled);
                         break;
                     }
                 };
             });
 
-            self.questions(interview.Questions);
-
-            Router({
-                '/group/:groupId': function (groupId) {
-                    self.applyQuestionFilter('all');
-                    var visibleGroupsIds = [groupId];
-                    $.each(self.groups(), function (index, group) {
-                        if (_.contains(visibleGroupsIds, group.uiId())) {
-                            group.isVisible(true);
-                        } else if (_.contains(visibleGroupsIds, group.parentId())) {
-                            visibleGroupsIds.push(group.uiId());
-                            group.isVisible(true);
-                        } else {
-                            group.isVisible(false);
-                        }
-                    });
-                },
-                '/:filter': function (f) {
-                    self.applyQuestionFilter(f);
-                }
-            }).init();
+            group.isVisible = ko.observable(true);
+            group.isSelected = ko.observable(false);
+            group.visibleQuestionsCount = ko.computed(function () {
+                return _.reduce(group.questions, function (count, question) {
+                    return count + (question.isVisible() ? 1 : 0);
+                }, 0);
+            });
         });
+        return allQuestions;
     };
 
     self.showApproveModal = function () {
@@ -235,7 +250,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.showStatesHistory = function () {
         if (!isHistoryShowed) {
             self.changeStateHistory(undefined);
-            self.SendRequest(settings.Urls.ChangeStateHistory, { interviewId: self.questionnaire.id() }, function (data) {
+            self.SendRequest(settings.Urls.ChangeStateHistory, { InterviewId: self.questionnaire().id }, function (data) {
                 self.changeStateHistory(data);
                 $('#statesHistoryPopover').show();
             });
