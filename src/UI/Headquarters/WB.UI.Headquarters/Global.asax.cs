@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.SessionState;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
@@ -93,6 +94,19 @@ namespace WB.UI.Headquarters
         /// </summary>
         public static void Initialize()
         {
+        }
+
+        protected void Application_PostAuthorizeRequest()
+        {
+            if (IsWebApiRequest())
+            {
+                HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Required);
+            }
+        }
+
+        private static bool IsWebApiRequest()
+        {
+            return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.StartsWith("~/api");
         }
     }
 }

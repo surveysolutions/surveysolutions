@@ -2,12 +2,6 @@ param([string]$BuildConfiguration='release')
 
 $ErrorActionPreference = "Stop"
 
-#do not allow empty KeystorePassword
-if([string]::IsNullOrWhiteSpace($KeystorePassword)){
-	Write-Host "##teamcity[buildProblem description='VersionPrefix param is not set']"
-	Exit
-}
-
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\build-functions.ps1"
 

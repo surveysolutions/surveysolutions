@@ -887,7 +887,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
         {
             return new ValueQuestionViewModel(
-                new InterviewItemId(question.PublicKey), question.QuestionText,
+                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
                 null,
                 true, question.Instructions, null,
@@ -919,11 +919,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var multyOptionsQuestion = question as MultyOptionsQuestion;
 
             return new LinkedQuestionViewModel(
-                new InterviewItemId(question.PublicKey), question.QuestionText,
+                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
                 true, question.Instructions,
                 true, question.Mandatory,question.ValidationMessage,
-                (questionRosterVecor) => this.GetAnswerOptionsForLinkedQuestion(new InterviewItemId(question.LinkedToQuestionId.Value, questionRosterVecor)), 
+                (questionRosterVecor, questionRosterScope) => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value, questionRosterVecor, questionRosterScope), 
                 question.StataExportCaption, question.GetVariablesUsedInTitle(),
                 multyOptionsQuestion != null? multyOptionsQuestion.AreAnswersOrdered : (bool?) null, 
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
@@ -934,7 +934,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var textListQuestion = question as TextListQuestion;
 
             return new TextListQuestionViewModel(
-                new InterviewItemId(question.PublicKey), question.QuestionText,
+                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
                 true, 
                 textListQuestion.Instructions,
@@ -954,82 +954,94 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var multyOptionsQuestion = question as MultyOptionsQuestion;
 
             return new SelectebleQuestionViewModel(
-                new InterviewItemId(question.PublicKey), question.QuestionText,
+                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType, question.Answers.Select(
                     a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
                 true, question.Instructions, null,
-                true, question.Mandatory,  null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
-                multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
+                true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
+                multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?) null,
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
-        protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(InterviewItemId referencedQuestionId)
+        private Guid[] GetQuestionRosterScope(IQuestion question)
         {
-            return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId.Id)
+            var result = new List<Guid>();
+
+            var parentGroup = question.GetParent() as IGroup;
+
+            while (parentGroup != null)
+            {
+                if (this.IsGroupRoster(parentGroup))
+                {
+                    if (parentGroup.RosterSizeQuestionId.HasValue)
+                        result.Add(parentGroup.RosterSizeQuestionId.Value);
+                    else
+                        result.Add(parentGroup.PublicKey);
+                }
+                parentGroup = parentGroup.GetParent() as IGroup;
+            }
+            result.Reverse();
+            return result.ToArray();
+        }
+
+        protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId, decimal[] linkedQuestionRosterVector, Guid[] linkedQuestionRosterScope)
+        {
+            return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId)
                 ? Enumerable.Empty<LinkedAnswerViewModel>()
                 : this
-                    .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId.Id]
-                    .Select(instanceId => this.Questions.ContainsKey(instanceId) ? this.Questions[instanceId] : null)
+                    .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
+                    .Select(
+                        instanceId =>  this.Questions.ContainsKey(instanceId) ? this.Questions[instanceId] : null)
                     .Where(
                         questionInstance =>
                             questionInstance != null && questionInstance.IsEnabled() &&
                                 IsQuestionAllowedToBeUsedAsLinkSourceInCurrentScope(
-                                    questionInstance.PublicKey.InterviewItemPropagationVector, referencedQuestionId.InterviewItemPropagationVector))
+                                    questionInstance,
+                                    linkedQuestionRosterVector, linkedQuestionRosterScope))
                     .Select(
                         questionInstance =>
                             new LinkedAnswerViewModel(questionInstance.PublicKey.InterviewItemPropagationVector,
-                                BuildLinkedQuestionOptionTitle(questionInstance, referencedQuestionId.InterviewItemPropagationVector)));
+                                BuildLinkedQuestionOptionTitle(questionInstance,
+                                    linkedQuestionRosterVector, linkedQuestionRosterScope)));
         }
 
-        private bool IsQuestionAllowedToBeUsedAsLinkSourceInCurrentScope(decimal[] questionRosterVecor, decimal[] currentScope)
+        private bool IsQuestionAllowedToBeUsedAsLinkSourceInCurrentScope(QuestionViewModel referensedQuestion,
+            decimal[] linkedQuestionRosterVector, Guid[] linkedQuestionRosterScope)
         {
-            for (int i = 0; i < Math.Min(questionRosterVecor.Length - 1, currentScope.Length); i++)
+            for (int i = 0; i < Math.Min(referensedQuestion.PublicKey.InterviewItemPropagationVector.Length - 1, linkedQuestionRosterVector.Length); i++)
             {
-                if (questionRosterVecor[i] != currentScope[i])
+                if (referensedQuestion.QuestionRosterScope[i] != linkedQuestionRosterScope[i])
+                    continue;
+                if (referensedQuestion.PublicKey.InterviewItemPropagationVector[i] != linkedQuestionRosterVector[i])
                     return false;
             }
             return true;
         }
 
-        private string BuildLinkedQuestionOptionTitle(QuestionViewModel referencedQuestion, decimal[] currentScope)
+        private string BuildLinkedQuestionOptionTitle(QuestionViewModel referencedQuestion, decimal[] linkedQuestionRosterVector, Guid[] linkedQuestionRosterScope)
         {
             var combinedRosterTitles = new List<string>();
 
-            var screenOfReferencedQuestion = this.Screens.Values.OfType<QuestionnairePropagatedScreenViewModel>()
-                .FirstOrDefault(
-                    s =>
-                        s.ScreenId.CompareWithVector(referencedQuestion.PublicKey.InterviewItemPropagationVector) &&
-                            s.Items.Any(item => item.PublicKey.Id == referencedQuestion.PublicKey.Id));
-            
-            if (screenOfReferencedQuestion != null)
+            for (int i = 0; i < referencedQuestion.QuestionRosterScope.Length - 1; i++)
             {
-                var previousScreenDepth = 0;
+                var scopeId = referencedQuestion.QuestionRosterScope[i];
+                var rosterScopeDescription = this.rosterStructure.RosterScopes[scopeId];
 
-                foreach (var breadcrumb in screenOfReferencedQuestion.Breadcrumbs)
-                {
-                    var currentScreenDepth = breadcrumb.InterviewItemPropagationVector.Length;
+                var firstScreenInScopeId = rosterScopeDescription.RosterIdToRosterTitleQuestionIdMap.Keys.First();
+                var firstScreeninScopeRosterVector =
+                    referencedQuestion.PublicKey.InterviewItemPropagationVector.Take(i + 1).ToArray();
 
-                    if (IsNextRosterLevelHappened(previousScreenDepth, currentScreenDepth) && IsScreenNameNeedToBeShown(currentScope.Length,currentScreenDepth))
-                        combinedRosterTitles.Add(Screens[breadcrumb].ScreenName);
+                if (linkedQuestionRosterScope.Length > i && linkedQuestionRosterScope[i] == scopeId &&
+                    linkedQuestionRosterVector.Length >= firstScreeninScopeRosterVector.Length)
+                    continue;
 
-                    previousScreenDepth = breadcrumb.InterviewItemPropagationVector.Length;
-                }
-                combinedRosterTitles = combinedRosterTitles.Take(combinedRosterTitles.Count - 1).ToList();
+                var screenFromScope = this.Screens[new InterviewItemId(firstScreenInScopeId, firstScreeninScopeRosterVector)];
+                combinedRosterTitles.Add(screenFromScope.ScreenName);
             }
 
             combinedRosterTitles.Add(referencedQuestion.AnswerString);
 
             return string.Join(": ", combinedRosterTitles.Where(title => !string.IsNullOrEmpty(title)));
-        }
-
-        private bool IsNextRosterLevelHappened(int previousScreenDepth, int newScreenDepth)
-        {
-            return previousScreenDepth < newScreenDepth;
-        }
-
-        private bool IsScreenNameNeedToBeShown(int currentScopeDepth, int newScreenDepth)
-        {
-            return currentScopeDepth < newScreenDepth;
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)

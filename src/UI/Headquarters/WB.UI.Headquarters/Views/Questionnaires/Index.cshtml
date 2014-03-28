@@ -1,0 +1,77 @@
+﻿@using WB.UI.Headquarters.Resources.Questionnaires
+@{
+    ViewBag.Title = IndexPageResources.PageTitle;
+}
+
+<div class="container well-sm" ng-app="questionnaires">
+    <h1>@ViewBag.Title</h1>
+
+    <div ng-controller="importController">
+        <script type="text/ng-template" id="myModalContent.html">
+            <div class="modal-header">
+                <h2>@IndexPageResources.ImportTemplate</h2>
+            </div>
+
+
+            <div class="modal-body">
+                <div ng-show="signInVisible">
+                    <div class="alert alert-warning alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <strong>@IndexPageResources.Attention</strong>
+                        @IndexPageResources.DesigerLoginAttention
+                    </div>
+
+                    <h3>Please sign in to designer</h3>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="userName" class="col-sm-3 control-label">@IndexPageResources.UserName</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="userName" placeholder="@IndexPageResources.UserName" ng-model="credentials.userName" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-3 control-label">@IndexPageResources.Password</label>
+                            <div class="col-sm-7">
+                                <input type="password" class="form-control" id="password" placeholder="@IndexPageResources.Password" ng-model="credentials.password" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" ng-show="errorMessage">
+                        {{errorMessage}}
+                    </div>
+                </div>
+                <div ng-show="listToImportVisible">
+                    <div class="well-sm col-sm-5 input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="well-sm">
+                        <div class="list-group" ng-repeat="item in questionnaires.items">
+                            <a class="list-group-item" href="javascript:void(0);" ng-click="selectItem($item.Id)" ng-class="{'active': $item.Id == questionnaires.selectedItemId}">
+                                {{item.Title}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="next()" ng-hide="loading">Next</button>
+                <button class="btn btn-primary" disabled ng-click="next()" ng-show="loading">Loading</button>
+
+
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+
+
+
+        <button class="btn btn-default" ng-click="open()">Import questionnaire</button>
+    </div>
+
+</div>
+
+

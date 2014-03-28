@@ -70,11 +70,47 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviews.
+        /// </summary>
+        public static string Interviews {
+            get {
+                return ResourceManager.GetString("Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaires.
+        /// </summary>
+        public static string Questionnaires {
+            get {
+                return ResourceManager.GetString("Questionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit.
         /// </summary>
         public static string Submit {
             get {
                 return ResourceManager.GetString("Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surveys.
+        /// </summary>
+        public static string Surveys {
+            get {
+                return ResourceManager.GetString("Surveys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users.
+        /// </summary>
+        public static string Users {
+            get {
+                return ResourceManager.GetString("Users", resourceCulture);
             }
         }
     }

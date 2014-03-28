@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
 using WB.UI.Headquarters;
+using WB.UI.Headquarters.Models;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -80,6 +81,10 @@ namespace WB.UI.Headquarters
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-        }        
+            kernel.Bind<SslSettings>().ToMethod((context) => new SslSettings
+            {
+                AcceptUnsignedCertificate = bool.Parse(WebConfigurationManager.AppSettings["AcceptUnsignedCertificate"])
+            }).InTransientScope();
+        }
     }
 }

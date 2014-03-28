@@ -1989,9 +1989,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         if (answerOnRosterSizeQuestion == null)
                             return new Dictionary<decimal, Tuple<string, int?>>();
-
-                        return Enumerable.Range(0, (int) answerOnRosterSizeQuestion)
-                            .ToDictionary(x => (decimal) x, x => new Tuple<string, int?>(null, x));
+                        try
+                        {
+                            var intAnswer = Convert.ToInt32(answerOnRosterSizeQuestion);
+                            return Enumerable.Range(0, intAnswer)
+                                .ToDictionary(x => (decimal) x, x => new Tuple<string, int?>(null, x));
+                        }
+                        catch (InvalidCastException e)
+                        {
+                            Logger.Error("invalid cast of int answer on trigger question", e);
+                        }
                     }
 
                     break;
@@ -2165,13 +2172,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     rosterInstancesToRemove.AddRange(
                         listOfRosterInstanceIdsForRemove.Select(rosterInstanceId =>
-                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)));
+                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)).ToList());
 
                     foreach (var rosterInstanceIdBeingAdded in rosterInstanceIdsBeingAdded.Union(rosterInstancesToRemove))
                     {
                         var outerRosterVector = this.ExtendRosterVectorWithOneValue(rosterInstanceIdBeingAdded.OuterRosterVector,
                             rosterInstanceIdBeingAdded.RosterInstanceId);
-                        rosterInstantiatesFromNestedLevels.AddRange(this.CalculateDynamicRostersData(questionnaire, outerRosterVector, rosterId));
+                        rosterInstantiatesFromNestedLevels.AddRange(this.CalculateDynamicRostersData(questionnaire, outerRosterVector, rosterId).ToList());
                     }
                 }
             }
