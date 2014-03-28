@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -362,9 +363,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
         }
 
-        private void Apply(RosterRowTitleChanged @event)
-        {
+        private void Apply(RosterRowTitleChanged @event) { }
 
+        internal void Apply(RosterInstancesAdded @event)
+        {
+            foreach (var addedInstance in @event.AddedInstances)
+            {
+                string rosterGroupKey = ConvertIdAndRosterVectorToString(addedInstance.Instance.GroupId, addedInstance.Instance.OuterRosterVector);
+                DistinctDecimalList rosterRowInstances = this.rosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.rosterGroupInstanceIds[rosterGroupKey]
+                    : new DistinctDecimalList();
+
+                rosterRowInstances.Add(addedInstance.Instance.RosterInstanceId);
+
+                this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+            }
+        }
+
+        private void Apply(RosterInstancesRemoved @event)
+        {
+            foreach (var instance in @event.Instances)
+            {
+                string rosterGroupKey = ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
+
+                var rosterRowInstances = this.rosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.rosterGroupInstanceIds[rosterGroupKey]
+                    : new DistinctDecimalList();
+                rosterRowInstances.Remove(instance.RosterInstanceId);
+
+                this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+            }
         }
 
         private void Apply(InterviewStatusChanged @event)
@@ -1669,8 +1697,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRosterEvents(RosterCalculationData data)
         {
-            data.RosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
-            data.RosterInstancesToRemove.ForEach(roster => this.ApplyEvent(new RosterRowRemoved(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId)));
+            if (data.RosterInstancesToAdd.Any())
+            {
+                AddedRosterInstanceDto[] addedInstances = data
+                    .RosterInstancesToAdd
+                    .Select(roster =>
+                        new AddedRosterInstanceDto(
+                            new RosterInstanceIdentity(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId),
+                            roster.SortIndex))
+                    .ToArray();
+
+                this.ApplyEvent(new RosterInstancesAdded(addedInstances));
+            }
+
+            if (data.RosterInstancesToRemove.Any())
+            {
+                RosterInstanceIdentity[] instances = data
+                    .RosterInstancesToRemove
+                    .Select(roster => new RosterInstanceIdentity(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
+                    .ToArray();
+
+                this.ApplyEvent(new RosterInstancesRemoved(instances));
+            }
 
             if (data.TitlesForRosterInstancesToAdd != null)
             {
