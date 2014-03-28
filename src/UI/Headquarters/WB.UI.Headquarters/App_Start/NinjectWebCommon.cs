@@ -11,7 +11,9 @@ using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Views;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -19,9 +21,9 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.Models;
+using WB.Core.SharedKernels.DataCollection;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -72,8 +74,10 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
                 new RavenWriteSideInfrastructureModule(ravenConnectionSettings),
                 new RavenReadSideInfrastructureModule(ravenConnectionSettings),
+                new DataCollectionSharedKernelModule(),
                 new QuestionnaireVerificationModule(),
                 new ExpressionProcessorModule(),
+                new HeadquartersRegistry(),
                 new PasswordPolicyModule(int.Parse(WebConfigurationManager.AppSettings["MinPasswordLength"]), WebConfigurationManager.AppSettings["PasswordPattern"]),
                 new AuthenticationModule(),
                 new HeadquartersBoundedContextModule(int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
@@ -99,13 +103,6 @@ namespace WB.UI.Headquarters
             {
                 AcceptUnsignedCertificate = bool.Parse(WebConfigurationManager.AppSettings["AcceptUnsignedCertificate"])
             }).InTransientScope();
-
-            kernel.Bind<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>()
-                .To<QuestionnaireBrowseViewFactory>();
-
-            kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
-            kernel.Bind<IStringCompressor>().To<GZipJsonCompressor>();
-            kernel.Bind<IJsonUtils>().To<NewtonJsonUtils>();
         }
     }
 }

@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Supervisor.EventHandler
+namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Views
 {
-    [Obsolete("Remove it when HQ is a separate application")]
     public class QuestionnaireBrowseItemEventHandler : AbstractFunctionalEventHandler<QuestionnaireBrowseItem>,
         ICreateHandler<QuestionnaireBrowseItem, TemplateImported>
     {
@@ -30,7 +21,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public QuestionnaireBrowseItem Create(IPublishedEvent<TemplateImported> evnt)
         {
             var document = evnt.Payload.Source;
-
             return new QuestionnaireBrowseItem(document, evnt.EventSequence);
         }
     }
