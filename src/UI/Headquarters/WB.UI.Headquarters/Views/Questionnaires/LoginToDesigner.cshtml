@@ -1,5 +1,4 @@
-﻿@using System.Web.Optimization
-@model WB.UI.Headquarters.Models.Template.LogOnModel
+﻿@model WB.UI.Headquarters.Models.Template.LogOnModel
 
 @{
     ViewBag.Title = "Sign in to designer";
@@ -13,7 +12,7 @@
 
 <div class="container">
     <h2>Please sign in to designer</h2>
-    @using (Html.BeginForm("LoginToDesigner", "Template", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("LoginToDesigner", "Questionnaires", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         <div class="form-group">
             @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login" })
@@ -26,7 +25,7 @@
         </div>
         
         
-         <div class="form-group">
+        <div class="form-group">
             <div class="col-sm-offset-4 col-sm-8">
                 <button type="submit" class="btn btn-primary">Sign in</button>
             </div>

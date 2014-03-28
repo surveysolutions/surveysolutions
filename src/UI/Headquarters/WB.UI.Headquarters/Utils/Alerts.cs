@@ -2,9 +2,9 @@
 {
     public static class Alerts
     {
-        public const string ATTENTION = "attention";
+        public const string ATTENTION = "warning";
 
-        public const string ERROR = "error";
+        public const string ERROR = "danger";
 
         public const string INFORMATION = "info";
 
