@@ -69,9 +69,13 @@
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\AnswersDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\AnswersDeclaredValid.cs" />
+    <Compile Include="Events\Interview\Base\QuestionsPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\RosterRowEvent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Interview\Dtos\Identity.cs" />
     <Compile Include="Events\Interview\InterviewApprovedByHQ.cs" />
     <Compile Include="Events\Interview\InterviewOnClientCreated.cs" />
     <Compile Include="Events\Interview\InterviewRejectedByHQ.cs" />

@@ -66,17 +66,18 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.ReevaluateSynchronizedInterview();
 
-        It should_not_raise_AnswerDeclaredInvalid_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
-            eventContext.ShouldNotContainEvent<AnswerDeclaredInvalid>(@event
-             => @event.QuestionId == conditionallyRecentlyEnabledMandatoryQuestionId);
+        It should_not_raise_AnswersDeclaredInvalid_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
+            eventContext.ShouldNotContainEvent<AnswersDeclaredInvalid>(@event
+                => @event.Questions.Any(question => question.Id == conditionallyRecentlyEnabledMandatoryQuestionId));
+
+        It should_raise_AnswersDeclaredValid_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
+           eventContext.ShouldContainEvent<AnswersDeclaredValid>(@event
+                => @event.Questions.Any(question => question.Id == conditionallyRecentlyEnabledMandatoryQuestionId));
 
         It should_raise_GroupEnabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
             eventContext.ShouldContainEvent<GroupEnabled>(@event
              => @event.GroupId == conditionallyRecentlyEnabledGroupId);
 
-        It should_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
-           eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event
-            => @event.QuestionId == conditionallyRecentlyEnabledMandatoryQuestionId);
 
         It should_not_raise_GroupDisabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
             eventContext.ShouldNotContainEvent<GroupDisabled>(@event

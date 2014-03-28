@@ -36,6 +36,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<QuestionEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<AnswersDeclaredInvalid>,
+        IEventHandler<AnswersDeclaredValid>,
         IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<AnswerRemoved>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
@@ -236,6 +238,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.SetQuestionValidity(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
+        }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionValidity(new InterviewItemId(question.Id, question.RosterVector), false);
+            }
+        }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionValidity(new InterviewItemId(question.Id, question.RosterVector), true);
+            }
         }
 
         private InterviewViewModel GetStoredViewModel(Guid publicKey)

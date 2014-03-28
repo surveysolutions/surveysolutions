@@ -51,6 +51,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredInvalid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredValid>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredInvalid>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredValid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, FlagRemovedFromAnswer>,
         IUpdateHandler<ViewWithSequence<InterviewData>, FlagSetToAnswer>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewDeclaredInvalid>,
@@ -590,17 +592,34 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredInvalid> evnt)
         {
-            return
-                new ViewWithSequence<InterviewData>(ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-               false), evnt.EventSequence);
+            return new ViewWithSequence<InterviewData>(
+                ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
+                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredValid> evnt)
         {
-            return
-                new ViewWithSequence<InterviewData>(
-                    ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                        true), evnt.EventSequence);
+            return new ViewWithSequence<InterviewData>(
+                this.ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswersDeclaredInvalid> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Questions.Aggregate(
+                    currentState.Document,
+                    (document, question) => this.ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false)),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswersDeclaredValid> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                evnt.Payload.Questions.Aggregate(
+                    currentState.Document,
+                    (document, question) => this.ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true)),
+                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
