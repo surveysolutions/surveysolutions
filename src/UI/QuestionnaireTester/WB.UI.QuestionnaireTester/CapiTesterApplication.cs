@@ -144,6 +144,8 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
             bus.RegisterHandler(eventHandler, typeof(RosterRowAdded));
             bus.RegisterHandler(eventHandler, typeof(RosterRowRemoved));
+            bus.RegisterHandler(eventHandler, typeof(RosterInstancesAdded));
+            bus.RegisterHandler(eventHandler, typeof(RosterInstancesRemoved));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
