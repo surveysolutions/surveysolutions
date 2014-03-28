@@ -9,8 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation
     internal class DesignerService : IDesignerService
     {
         private readonly HttpSessionStateBase sessionState = null;
-        private const string DesignerUserName = "DesignerUserName";
-        private const string DesignerPassword = "DesignerPassword";
+        private const string DesignerSercviceSessionKey = "DesignerService";
 
 
         public DesignerService(HttpContextBase httpContext)
@@ -25,15 +24,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation
             service.ClientCredentials.UserName.Password = password;
             service.Dummy();
 
-            sessionState[DesignerUserName] = userName;
-            sessionState[DesignerPassword] = password;
+            sessionState[DesignerSercviceSessionKey] = service;
         }
 
         public QuestionnaireListDto GetQuestionnaireList(string filter, int page, int pageSize, string sortOrder)
         {
             var service = this.GetService();
 
-           
             var questionnaireListRequest = new QuestionnaireListRequest(filter, page, pageSize, sortOrder);
 
             QuestionnaireListViewMessage list = service.GetQuestionnaireList(questionnaireListRequest);
@@ -49,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation
         {
             var service = this.GetService();
 
-            DownloadQuestionnaireRequest requst = new DownloadQuestionnaireRequest(questionnaireId, new DesignerPublicService.QuestionnaireVersion
+            var requst = new DownloadQuestionnaireRequest(questionnaireId, new DesignerPublicService.QuestionnaireVersion
             {
                 Major = version.Major,
                 Minor = version.Minor,
@@ -62,15 +59,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation
 
         public bool CurrentUserIsLoggedIn()
         {
-           return  !string.IsNullOrEmpty((string) this.sessionState[DesignerUserName]) && !string.IsNullOrEmpty((string) this.sessionState[DesignerPassword]);
+           return  this.GetService() != null;
         }
 
         private IPublicService GetService()
         {
-            var service = new PublicServiceClient();
-            service.ClientCredentials.UserName.UserName = (string) this.sessionState[DesignerUserName];
-            service.ClientCredentials.UserName.Password = (string) this.sessionState[DesignerPassword];
-            return service;
+            return sessionState[DesignerSercviceSessionKey] as IPublicService;
         }
     }
 }

@@ -17,6 +17,9 @@ using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.QuestionnaireVerification;
+using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.Models;
 
@@ -69,6 +72,8 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
                 new RavenWriteSideInfrastructureModule(ravenConnectionSettings),
                 new RavenReadSideInfrastructureModule(ravenConnectionSettings),
+                new QuestionnaireVerificationModule(),
+                new ExpressionProcessorModule(),
                 new PasswordPolicyModule(int.Parse(WebConfigurationManager.AppSettings["MinPasswordLength"]), WebConfigurationManager.AppSettings["PasswordPattern"]),
                 new AuthenticationModule(),
                 new HeadquartersBoundedContextModule(int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
