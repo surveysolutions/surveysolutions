@@ -561,10 +561,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             public EnablementChanges(List<Identity> groupsToBeDisabled, List<Identity> groupsToBeEnabled,
                 List<Identity> questionsToBeDisabled, List<Identity> questionsToBeEnabled)
             {
-                this.GroupsToBeDisabled = groupsToBeDisabled;
-                this.GroupsToBeEnabled = groupsToBeEnabled;
-                this.QuestionsToBeDisabled = questionsToBeDisabled;
-                this.QuestionsToBeEnabled = questionsToBeEnabled;
+                this.GroupsToBeDisabled = groupsToBeDisabled ?? new List<Identity>();
+                this.GroupsToBeEnabled = groupsToBeEnabled ?? new List<Identity>();
+                this.QuestionsToBeDisabled = questionsToBeDisabled ?? new List<Identity>();
+                this.QuestionsToBeEnabled = questionsToBeEnabled ?? new List<Identity>();
             }
 
             public List<Identity> GroupsToBeDisabled { get; private set; }
@@ -637,8 +637,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> initiallyDisabledQuestions = GetQuestionsToBeDisabledInJustCreatedInterview(questionnaire);
             List<Identity> initiallyInvalidQuestions = GetQuestionsToBeInvalidInJustCreatedInterview(questionnaire, initiallyDisabledGroups, initiallyDisabledQuestions);
 
-            initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(new EnablementChanges(initiallyDisabledGroups, null, initiallyDisabledQuestions, null));
+
             initiallyInvalidQuestions.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
 
@@ -1414,11 +1414,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-
-            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled));
 
             questionsDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
             questionsDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
@@ -1579,10 +1575,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             data.AnswersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
 
-            data.InitializedGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            data.InitializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            data.InitializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            data.InitializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(new EnablementChanges(
+                data.InitializedGroupsToBeDisabled, data.InitializedGroupsToBeEnabled, data.InitializedQuestionsToBeDisabled, data.InitializedQuestionsToBeEnabled));
+
             data.InitializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
             data.RosterInstantiatesFromNestedLevels.ForEach(ApplyRosterEvents);
         }
