@@ -120,6 +120,7 @@
     <Compile Include="Questionnaires\RemoteFileInfo.cs" />
     <Compile Include="Questionnaires\Views\DesignerQuestionnaireListViewItem.cs" />
     <Compile Include="Questionnaires\Views\DesignerQuestionnairesView.cs" />
+    <Compile Include="Questionnaires\Views\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Questionnaires\Views\QuestionnaireListInputModel.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -183,6 +184,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>

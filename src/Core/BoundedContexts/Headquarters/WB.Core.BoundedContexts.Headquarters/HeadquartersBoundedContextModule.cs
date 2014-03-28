@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.ViewFactories;
 using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.GenericSubdomains.Utils;
@@ -43,6 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IEventHandler>().To<SurveyLineViewDenormalizer>();
             this.Bind<IEventHandler>().To<SurveyDetailsViewDenormalizer>();
+
+            this.Bind<IEventHandler>().To<QuestionnaireBrowseItemEventHandler>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorLoginsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorCredentialsDenormalizer>(this.Kernel);
