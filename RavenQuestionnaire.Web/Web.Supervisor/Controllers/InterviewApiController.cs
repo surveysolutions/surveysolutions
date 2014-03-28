@@ -321,16 +321,6 @@ namespace Web.Supervisor.Controllers
                     : string.Empty;
             }
         }
-
-        public string css
-        {
-            get { return string.Concat("level", this.depth); }
-        }
-
-        public string href
-        {
-            get { return string.Concat("#group/", this.uiId); }
-        }
     }
 
     public class InterviewInfoModel

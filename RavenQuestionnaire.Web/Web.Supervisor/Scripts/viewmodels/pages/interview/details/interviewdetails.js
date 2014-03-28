@@ -3,9 +3,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
     var self = this,
         config = new Config(),
-        model = new Model(),
-        mapper = new Mapper(model, config),
-        datacontext = new DataContext(mapper, config);
+        datacontext = new DataContext(config);
 
     self.filter = ko.observable('all');
     self.questionnaire = ko.observable();
@@ -79,14 +77,14 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.addComment = function() {
         var command = datacontext.getCommand(config.commands.setCommentCommand, {
             comment: self.currentComment(),
-            questionId: self.currentQuestion().uiId()
+            questionId: self.currentQuestion().uiId
         });
         self.SendCommand(command, function () {
-            var comment = new model.Comment();
-            comment.text(self.currentComment());
-            comment.date(new Date());
-            comment.userName(settings.UserName);
-            self.currentQuestion().comments.push(comment);
+            self.currentQuestion().comments.push({
+                text: self.currentComment(),
+                date: new Date(),
+                userName: settings.UserName
+            });
             self.currentComment('');
         });
     };
@@ -203,6 +201,12 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
             group.isVisible = ko.observable(true);
             group.isSelected = ko.observable(false);
+            group.css = ko.computed(function () {
+                return "level" + self.depth + (group.isSelected() ? " selected" : "");
+            });
+            group.href = ko.computed(function () {
+                return "#group/" + group.uiId;
+            });
             group.visibleQuestionsCount = ko.computed(function () {
                 return _.reduce(group.questions, function (count, question) {
                     return count + (question.isVisible() ? 1 : 0);

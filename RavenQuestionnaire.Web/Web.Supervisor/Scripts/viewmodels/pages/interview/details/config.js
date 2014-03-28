@@ -1,25 +1,13 @@
 ﻿Config = function() {
     var questionTypes = {
-            SingleOption: 0,
-            MultyOption: 3,
-            Numeric: 4,
-            DateTime: 5,
-            GpsCoordinates: 6,
-            Text: 7,
-            AutoPropagate: 8,
-            TextList: 9,
-            QRBarcode: 10
-        },
-        questionTemplateByType = {
-            0: "SingleOption",
-            3: "MultyOption",
-            4: "Numeric",
-            5: "DateTime",
-            6: "GpsCoordinates",
-            7: "Text",
-            8: "AutoPropagate",
-            9: "TextList",
-            10: "QRBarcode"
+            SingleOption: "SingleOption",
+            MultyOption: "MultyOption",
+            Numeric: "Numeric",
+            DateTime: "DateTime",
+            GpsCoordinates: "GpsCoordinates",
+            Text: "Text",
+            TextList: "TextList",
+            QRBarcode: "QRBarcode"
         },
         commands = {
             answerDateTimeQuestionCommand: "AnswerDateTimeQuestionCommand",
@@ -58,7 +46,6 @@
         };
     return {
         questionTypes: questionTypes,
-        questionTemplateByType: questionTemplateByType,
         commands: commands,
         statusMap: statusMap
     };
