@@ -67,13 +67,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        It should_not_raise_GroupEnabled_event = () =>
-            eventContext.ShouldNotContainEvent<GroupEnabled>(@event
-                => @event.GroupId == nestedRosterId && @event.PropagationVector.Length==2 && @event.PropagationVector[0]==0 && @event.PropagationVector[1]==0);
+        It should_not_raise_GroupsEnabled_event = () =>
+            eventContext.ShouldNotContainEvent<GroupsEnabled>(@event
+                => @event.Groups.Any(group => group.Id == nestedRosterId && group.RosterVector.Length == 2 && group.RosterVector[0] == 0 && group.RosterVector[1] == 0));
 
-        It should_raise_GroupDisabled_event = () =>
-            eventContext.ShouldContainEvent<GroupDisabled>(@event
-                => @event.GroupId == nestedRosterId && @event.PropagationVector.Length == 2 && @event.PropagationVector[0] == 0 && @event.PropagationVector[1] == 0);
+        It should_raise_GroupsDisabled_event = () =>
+            eventContext.ShouldContainEvent<GroupsDisabled>(@event
+                => @event.Groups.Any(group => group.Id == nestedRosterId && group.RosterVector.Length == 2 && group.RosterVector[0] == 0 && group.RosterVector[1] == 0));
 
         private static EventContext eventContext;
         private static Guid userId;

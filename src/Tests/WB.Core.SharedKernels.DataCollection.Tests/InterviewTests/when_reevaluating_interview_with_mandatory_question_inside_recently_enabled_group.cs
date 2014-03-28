@@ -71,17 +71,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => @event.Questions.Any(question => question.Id == conditionallyRecentlyEnabledMandatoryQuestionId));
 
         It should_raise_AnswersDeclaredValid_event_with_QuestionId_equal_to_conditionallyRecentlyMandatoryQuestionId = () =>
-           eventContext.ShouldContainEvent<AnswersDeclaredValid>(@event
+            eventContext.ShouldContainEvent<AnswersDeclaredValid>(@event
                 => @event.Questions.Any(question => question.Id == conditionallyRecentlyEnabledMandatoryQuestionId));
 
-        It should_raise_GroupEnabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
-            eventContext.ShouldContainEvent<GroupEnabled>(@event
-             => @event.GroupId == conditionallyRecentlyEnabledGroupId);
+        It should_raise_GroupsEnabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
+            eventContext.ShouldContainEvent<GroupsEnabled>(@event
+                => @event.Groups.Any(group => group.Id == conditionallyRecentlyEnabledGroupId));
 
-
-        It should_not_raise_GroupDisabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
-            eventContext.ShouldNotContainEvent<GroupDisabled>(@event
-             => @event.GroupId == conditionallyRecentlyEnabledGroupId);
+        It should_not_raise_GroupsDisabled_event_with_GroupId_equal_to_conditionallyRecentlyEnabledGroupId = () =>
+            eventContext.ShouldNotContainEvent<GroupsDisabled>(@event
+                => @event.Groups.Any(group => group.Id == conditionallyRecentlyEnabledGroupId));
 
         private static EventContext eventContext;
         private static Guid questionnaireId;
