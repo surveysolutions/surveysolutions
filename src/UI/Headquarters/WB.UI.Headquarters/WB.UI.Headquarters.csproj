@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}</ProjectGuid>
-    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
@@ -122,6 +122,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -193,14 +195,23 @@
     <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
     <Compile Include="Api\FeedController.cs" />
+    <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\InterviewsController.cs" />
+    <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\EditAccountModel.cs" />
     <Compile Include="Models\RegisterAccountModel.cs" />
+    <Compile Include="Models\SslSettings.cs" />
     <Compile Include="Resources\CommonResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CommonResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Interviews\IndexPageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IndexPageResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\LoginPageResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -220,6 +231,11 @@
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\NewSurveyModel.cs" />
     <Compile Include="Models\UsersListModel.cs" />
+    <Compile Include="Resources\Questionnaires\IndexPageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IndexPageResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\SupervisorAccountResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -247,6 +263,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="clientSide\controllers\importQuestionnaireController.js" />
     <Content Include="Content\Application.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -285,7 +302,11 @@
     <Content Include="NLog.Debug.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
@@ -295,6 +316,10 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\ui-bootstrap-0.10.0.js" />
+    <Content Include="Scripts\ui-bootstrap-0.10.0.min.js" />
+    <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.js" />
+    <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.min.js" />
     <Content Include="Scripts\ValidationFix.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -319,6 +344,8 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Shared\_Layout.empty.cshtml" />
+    <Content Include="Views\Interviews\Index.cshtml" />
+    <Content Include="Views\Questionnaires\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -327,6 +354,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Api\Models\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
@@ -376,10 +404,18 @@
       <LastGenOutput>CommonResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews\IndexPageResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndexPageResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LoginPageResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginPageResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Questionnaires\IndexPageResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndexPageResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SupervisorAccountResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

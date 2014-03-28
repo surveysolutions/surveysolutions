@@ -101,6 +101,7 @@
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_roster_title_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_firt_level_inside_it.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_it_at_first_level.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_it_at_parallel_roster_level.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_it_at_top_level.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_roster_with_2_rows_and_linked_question_out_of_roster.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_updating_roster_title.cs" />
