@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
     internal class when_answering_question_inside_propagatable_group_which_triggers_group_enablement_with_mandatory_question_inside_disabled_group : InterviewTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -88,19 +88,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new decimal[] { 0 }, DateTime.Now, 0);
 
-        private Cleanup stuff = () =>
+        Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
         };
 
-        private It should_not_raise_AnswerDeclaredValid_event = () =>
-            eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
-                => @event.QuestionId == mandatoryQuestionId);
+        It should_not_raise_AnswersDeclaredValid_event = () =>
+            eventContext.ShouldNotContainEvent<AnswersDeclaredValid>(@event
+                => @event.Questions.Any(question => question.Id == mandatoryQuestionId));
 
-        private It should_raise_AnswerDeclaredInvalid_event = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event
-                => @event.QuestionId == mandatoryQuestionId && @event.PropagationVector.Length == 1 && @event.PropagationVector[0] == 0);
+        It should_raise_AnswersDeclaredInvalid_event = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(@event
+                => @event.Questions.Any(question
+                    => question.Id == mandatoryQuestionId
+                    && question.RosterVector.Length == 1
+                    && question.RosterVector[0] == 0));
 
         private static EventContext eventContext;
         private static Guid userId;

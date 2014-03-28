@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -53,11 +54,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.ReevaluateSynchronizedInterview();
 
-        It should_raise_only_one_AnswerDeclaredValid_event_with_QuestionId_equal_to_dateQuestionId = () =>
-            eventContext.ShouldContainEvents<AnswerDeclaredValid>(count: 1);
-
-        It should_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_dateQuestionId = () =>
-            eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event => @event.QuestionId == dateQuestionId);
+        It should_raise_AnswersDeclaredValid_event_with_single_QuestionId_which_is_equal_to_dateQuestionId = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredValid>(@event
+                => @event.Questions.Single().Id == dateQuestionId);
 
         private static EventContext eventContext;
         private static Interview interview;
