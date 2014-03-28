@@ -6,7 +6,6 @@ using System.Linq;
 using System.Xml.Schema;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
-using Microsoft.SqlServer.Server;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
@@ -240,6 +239,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.validAnsweredQuestions.Remove(questionKey);
             this.invalidAnsweredQuestions.Add(questionKey);
+        }
+
+        private void Apply(AnswersDeclaredValid @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+
+                this.validAnsweredQuestions.Add(questionKey);
+                this.invalidAnsweredQuestions.Remove(questionKey);
+            }
+        }
+
+        private void Apply(AnswersDeclaredInvalid @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+
+                this.validAnsweredQuestions.Remove(questionKey);
+                this.invalidAnsweredQuestions.Add(questionKey);
+            }
         }
 
         internal void Apply(GroupDisabled @event)
@@ -1558,8 +1579,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyValidityChangesEvents(ValidityChanges validityChanges)
         {
-            validityChanges.AnswersDeclaredValid.ForEach(answer => this.ApplyEvent(new AnswerDeclaredValid(answer.Id, answer.RosterVector)));
-            validityChanges.AnswersDeclaredInvalid.ForEach(answer => this.ApplyEvent(new AnswerDeclaredInvalid(answer.Id, answer.RosterVector)));
+            if (validityChanges.AnswersDeclaredValid.Any())
+            {
+                this.ApplyEvent(new AnswersDeclaredValid(ToEventIdentities(validityChanges.AnswersDeclaredValid)));
+            }
+
+            if (validityChanges.AnswersDeclaredInvalid.Any())
+            {
+                this.ApplyEvent(new AnswersDeclaredInvalid(ToEventIdentities(validityChanges.AnswersDeclaredInvalid)));
+            }
         }
 
         private void ApplyAnswersRemovanceEvents(List<Identity> answersToRemove)
@@ -1596,6 +1624,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyValidityChangesEvents(new ValidityChanges(null, data.InitializedQuestionsToBeInvalid));
             data.RosterInstantiatesFromNestedLevels.ForEach(ApplyRosterEvents);
+        }
+
+        private static Events.Interview.Dtos.Identity[] ToEventIdentities(IEnumerable<Identity> answersDeclaredValid)
+        {
+            return answersDeclaredValid.Select(ToEventIdentity).ToArray();
+        }
+
+        private static Events.Interview.Dtos.Identity ToEventIdentity(Identity identity)
+        {
+            return new Events.Interview.Dtos.Identity(identity.Id, identity.RosterVector);
         }
 
 
