@@ -240,7 +240,7 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\DateTimeQuestionAnswered.cs">
       <Link>Events\Interview\DateTimeQuestionAnswered.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\\DataCollection\Events\Interview\Dtos\Identity.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\Dtos\Identity.cs">
       <Link>Events\Interview\Dtos\Identity.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\FlagRemovedFromAnswer.cs">
@@ -332,6 +332,12 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionEnabled.cs">
       <Link>Events\Interview\QuestionEnabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionsDisabled.cs">
+      <Link>Events\Interview\QuestionsDisabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionsEnabled.cs">
+      <Link>Events\Interview\QuestionsEnabled.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterRowAdded.cs">
       <Link>Events\Interview\RosterRowAdded.cs</Link>
