@@ -73,8 +73,6 @@
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
-                    "~/Scripts/viewmodels/pages/interview/details/mapper.js",
-                    "~/Scripts/viewmodels/pages/interview/details/model.js",
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js"
                     ));
 

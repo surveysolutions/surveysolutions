@@ -1,78 +1,5 @@
-﻿DataContext = function(mapper, config) {
-    var EntitySet = function(mapper) {
-        var items = {},
-            mapDtoToContext = function(dto, extras) {
-                var id = mapper.getDtoId(dto);
-                items[id] = mapper.fromDto(dto, extras);
-                return items[id];
-            },
-            getLocalById = function(id) {
-                return !!id && !!items[id] ? items[id] : null;
-            },
-            getAllLocal = function() {
-                return _.values(items);
-            },
-            getData = function(dtos, extras) {
-                return $.Deferred(function(def) {
-                    if (!items || _.isEmpty(items)) {
-                        $.each(dtos, function(index, dto) {
-                            mapDtoToContext(dto, extras);
-                        });
-                        def.resolve(getAllLocal());
-                    } else {
-                        def.resolve(getAllLocal());
-                    }
-                }).promise();
-            };
-
-        return {
-            mapDtoToContext: mapDtoToContext,
-            getAllLocal: getAllLocal,
-            getLocalById: getLocalById,
-            getData: getData
-        };
-    },
-        questions = new EntitySet(mapper.question),
-        groups = new EntitySet(mapper.group),
-        questionnaire = {},
-        parseData = function(q) {
-            return $.Deferred(function(def) {
-                $.extend(questionnaire, mapper.interview.fromDto(q));
-                var rawQuestions = [];
-                //$.each(q.Groups, function(index, group) {
-                //    var rosterVector = group.RosterVector;
-                //    $.each(group.Questions, function(index, question) {
-                //        question.RosterVector = rosterVector;
-                //        rawQuestions.push(question);
-                //    });
-                //});
-                //questions.getData(rawQuestions);
-
-                groups.getData(q.Groups, questions);
-                def.resolve();
-            }).promise();
-        },
-        prepareQuestion = function() {
-            return _.map(questions.getAllLocal(), function(question) {
-
-                var answer = {
-                    Id: question.id(),
-                    Type: question.type(),
-                    Answer: question.hasOptions() ? "" : question.selectedOption(),
-                    Answers: []
-                };
-
-                if (question.hasOptions()) {
-                    if (question.type() == "SingleOption")
-                        answer.Answers.push(question.selectedOption());
-                    else
-                        answer.Answers = question.selectedOptions();
-                }
-
-                return answer;
-            });
-        };
-
+﻿DataContext = function(config) {
+    
     var commands = {};
 
     var prepareQuestionCommand = function(question) {
@@ -192,10 +119,6 @@
     };
 
     return {
-        questionnaire: questionnaire,
-        questions: questions,
-        groups: groups,
-        getCommand: getCommand,
-        parseData: parseData
+        getCommand: getCommand
     };
 };
