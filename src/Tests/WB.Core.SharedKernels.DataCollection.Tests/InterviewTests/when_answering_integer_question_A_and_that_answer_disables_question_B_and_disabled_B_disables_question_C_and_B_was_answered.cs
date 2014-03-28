@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -83,13 +84,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        It should_raise_QuestionDisabled_event_for_question_B = () =>
-            eventContext.ShouldContainEvent<QuestionDisabled>(@event
-                => @event.QuestionId == questionBId);
+        It should_raise_QuestionsDisabled_event_for_question_B = () =>
+            eventContext.ShouldContainEvent<QuestionsDisabled>(@event
+                => @event.Questions.Any(question => question.Id == questionBId));
 
-        It should_raise_QuestionDisabled_event_for_question_C = () =>
-            eventContext.ShouldContainEvent<QuestionDisabled>(@event
-                => @event.QuestionId == questionCId);
+        It should_raise_QuestionsDisabled_event_for_question_C = () =>
+            eventContext.ShouldContainEvent<QuestionsDisabled>(@event
+                => @event.Questions.Any(question => question.Id == questionCId));
 
         It should_supply_null_answer_for_question_B_when_evaluating_question_C_disablement_condition = () =>
             funcSuppliedWhenEvaluatingQuestionCEnablementCondition.Invoke(questionBVariableName).ShouldEqual(null);
