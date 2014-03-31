@@ -80,11 +80,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         It should_raise_RosterInstancesAdded_for_first_row_of_fixed_roster_by_first_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 1 && instance.OuterRosterVector[0] == 0));
+                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
 
         It should_raise_RosterInstancesAdded_for_first_row_of_fixed_roster_by_second_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 1 && instance.OuterRosterVector[0] == 1));
+                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 1 })));
 
         It should_rise_RosterRowTitleChanged_for_first_row_of_fixed_roster_by_first_row = () =>
             eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
@@ -96,25 +96,25 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         It should_raise_RosterInstancesAdded_for_second_row_of_fixed_roster_by_first_row = () =>
            eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 1 && instance.OuterRosterVector.Length == 1 && instance.OuterRosterVector[0] == 0));
+                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 1 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
 
         It should_raise_RosterInstancesAdded_for_second_row_of_fixed_roster_by_second_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 1 && instance.OuterRosterVector.Length == 1 && instance.OuterRosterVector[0] == 1));
+                => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 1 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 1 })));
 
         It should_rise_RosterRowTitleChanged_for_second_row_of_fixed_roster_by_first_row = () =>
             eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
-                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 1 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0 && @event.Title == title2);
+                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 1 && @event.OuterRosterVector.SequenceEqual(new decimal[] { 0 }) && @event.Title == title2);
 
         It should_rise_RosterRowTitleChanged_for_second_row_of_fixed_roster_by_second_row = () =>
             eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
-                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 1 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0 && @event.Title == title2);
+                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 1 && @event.OuterRosterVector.SequenceEqual(new decimal[] { 1 }) && @event.Title == title2);
 
         It should_raise_RosterRowTitleChanged_event_for_first_nested_row = () =>
             eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
                 =>
                 @event.Title == "t1" && @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 0 &&
-                    @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
+                    @event.OuterRosterVector.SequenceEqual(new decimal[] { 0 }));
 
         private static EventContext eventContext;
         private static Interview interview;
