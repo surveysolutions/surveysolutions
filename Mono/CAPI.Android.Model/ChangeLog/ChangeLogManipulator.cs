@@ -100,7 +100,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             
             for (int i = storedEvents.Count - 1; i >= 0; i--)
             {
-                if (storedEvents[i].Payload is InterviewSynchronized)
+                if (storedEvents[i].Payload is InterviewSynchronized || storedEvents[i].Payload is InterviewOnClientCreated)
                 {
                     break;
                 }

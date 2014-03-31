@@ -205,6 +205,14 @@ namespace WB.UI.Capi
 
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewerAssigned));
             bus.RegisterHandler(dashboardeventHandler, typeof(SupervisorAssigned));
+
+            bus.RegisterHandler(dashboardeventHandler, typeof(TextQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(MultipleOptionsQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(SingleOptionQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof (NumericRealQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
             
         }
 

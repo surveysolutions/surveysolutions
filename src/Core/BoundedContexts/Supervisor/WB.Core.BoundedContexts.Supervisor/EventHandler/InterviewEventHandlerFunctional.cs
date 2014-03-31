@@ -297,39 +297,39 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewCreated> evnt)
         {
-            var responsible = this.users.GetById(evnt.Payload.UserId);
-
-            var interview = new InterviewData()
-            {
-                InterviewId = evnt.EventSourceId,
-                UpdateDate = evnt.EventTimeStamp,
-                QuestionnaireId = evnt.Payload.QuestionnaireId,
-                QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
-                ResponsibleId = evnt.Payload.UserId, // Creator is responsible
-                ResponsibleRole = responsible.Roles.FirstOrDefault()
-            };
-            var emptyVector = new decimal[0];
-            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, null, emptyVector));
-            return new ViewWithSequence<InterviewData>(interview, evnt.EventSequence);
+            return CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
+                evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion,
+                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            var responsible = this.users.GetById(evnt.Payload.UserId);
+           return CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
+                evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion, 
+                evnt.EventSequence);
+        }
+
+        private ViewWithSequence<InterviewData> CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp,
+            Guid questionnaireId, long questionnaireVersion, long eventSequence)
+        {
+            var responsible = this.users.GetById(userId);
 
             var interview = new InterviewData()
             {
-                InterviewId = evnt.EventSourceId,
-                UpdateDate = evnt.EventTimeStamp,
-                QuestionnaireId = evnt.Payload.QuestionnaireId,
-                QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
-                ResponsibleId = evnt.Payload.UserId, // Creator is responsible
+                InterviewId = eventSourceId,
+                UpdateDate = eventTimeStamp,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                ResponsibleId = userId, // Creator is responsible
                 ResponsibleRole = responsible.Roles.FirstOrDefault()
             };
             var emptyVector = new decimal[0];
-            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, null, emptyVector));
-            return new ViewWithSequence<InterviewData>(interview, evnt.EventSequence);
+            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(eventSourceId, null, emptyVector));
+            return new ViewWithSequence<InterviewData>(interview, eventSequence);
         }
+
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewStatusChanged> evnt)
         {
