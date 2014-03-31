@@ -25,10 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Authentication
         public override void Load()
         {
             this.Kernel.Bind<IUserStore<ApplicationUser>>()
-                .ToMethod(context => {
-                    var ravenUserStore = new RavenUserStore<ApplicationUser>(this.GetSession(), true);
-                    return ravenUserStore;
-                }).InRequestScope();
+                .ToMethod(context => new RavenUserStore<ApplicationUser>(this.GetSession(), true)).InRequestScope();
 
             Kernel.Bind<UserManager<ApplicationUser>>().To<ApplicationUserManager>().InTransientScope();
 

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using NSubstitute;
-using Raven.Client.Document;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
-using WB.Core.Infrastructure.Raven.Implementation.PlainStorage;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.UI.Headquarters.Tests
@@ -26,19 +24,14 @@ namespace WB.UI.Headquarters.Tests
             return new AccountController(userManager, authenticationManager);
         }
 
-        public static UsersController UsersController(UserManager<ApplicationUser> userManager = null, 
-            DocumentStore storageProvider = null)
+        public static UsersController UsersController(UserManager<ApplicationUser> userManager = null)
         {
             if (userManager == null)
             {
                 userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
             }
 
-            RavenPlainStorageProvider store = storageProvider == null ? 
-                new RavenPlainStorageProvider(storageProvider) : 
-                new RavenPlainStorageProvider(storageProvider);
-
-            return new UsersController(userManager, store);
+            return new UsersController(userManager);
         }
     }
 }

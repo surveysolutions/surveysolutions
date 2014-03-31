@@ -166,7 +166,6 @@
     <Compile Include="Controllers\UsersControllerSpecs\when_user_password_update_fails.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_account_is_edited_with_changed_password.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_edit_user_action_invoked.cs" />
-    <Compile Include="Controllers\UsersControllerSpecs\when_index_action_invoked.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_invalid_credentials.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_valid_info.cs" />
     <Compile Include="Create.cs" />
