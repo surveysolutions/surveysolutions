@@ -218,7 +218,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                 question.answer.extend({ digit: true });
                             }
                             else if (!_.isNull(question.countOfDecimalPlaces)) {
-                                question.answer.extend({ precision: self.countOfDecimalPlaces });
+                                question.answer.extend({ precision: question.countOfDecimalPlaces });
                             }
                             break;
                         case "SingleOption":
