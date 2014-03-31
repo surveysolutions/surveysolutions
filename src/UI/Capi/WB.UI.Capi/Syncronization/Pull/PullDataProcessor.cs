@@ -31,11 +31,9 @@ namespace WB.UI.Capi.Syncronization.Pull
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
-            this.chuncksFromProccess = new List<SyncItem>();
             this.cleanUpExecutor = new CleanUpExecutor(changelog);
             this.userStorage = userStorage;
         }
-        private IList<SyncItem> chuncksFromProccess;
         private ILogger logger;
         private CleanUpExecutor cleanUpExecutor;
 
@@ -43,25 +41,8 @@ namespace WB.UI.Capi.Syncronization.Pull
         private readonly ICommandService commandService;
         private readonly IReadSideRepositoryReader<LoginDTO> userStorage;
 
-        public void Save(SyncItem  data)
-        {
-            this.chuncksFromProccess.Add(data);
-        }
-
-        public void Proccess(SynchronizationChunkMeta chunkId)
-        {
-            var item = this.chuncksFromProccess.FirstOrDefault(i => i.Id == chunkId.Id);
-            if (item == null)
-                return;
-            
-            this.HandleItem(item);
-
-            this.changelog.CreatePublicRecord(item.Id);
-
-            this.chuncksFromProccess.Remove(item);
-        }
         
-        protected void HandleItem(SyncItem item)
+        public void Proccess(SyncItem item)
         {
             switch (item.ItemType)
             {
@@ -82,7 +63,8 @@ namespace WB.UI.Capi.Syncronization.Pull
                     break;
                 default: break;
             }
-        
+
+            this.changelog.CreatePublicRecord(item.Id);
         }
 
         private void ExecuteFile(SyncItem item)
@@ -133,9 +115,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
             var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
-
-            ////todo: 
-            //save item to sync cache for handling on demand
+            
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
             syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
