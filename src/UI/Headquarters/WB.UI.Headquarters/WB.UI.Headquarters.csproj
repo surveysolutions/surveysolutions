@@ -191,11 +191,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ActionFilters\UnhandledExceptionFilter.cs" />
-    <Compile Include="Api\Authentication\BasicAuthenticationAttribute.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
     <Compile Include="Api\DesignerQuestionnairesApiController.cs" />
-    <Compile Include="Api\FeedController.cs" />
     <Compile Include="Api\Models\UsersListViewModel.cs" />
     <Compile Include="Api\UsersApiController.cs" />
     <Compile Include="App_Start\HeadquartersRegistry.cs" />
@@ -241,26 +239,13 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Models\SupervisorModel.cs" />
-    <Compile Include="Controllers\SurveysController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Models\AccountModel.cs" />
-    <Compile Include="Models\NewSurveyModel.cs" />
     <Compile Include="Models\UsersListModel.cs" />
     <Compile Include="Resources\Questionnaires\IndexPageResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IndexPageResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\SupervisorAccountResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SupervisorAccountResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\SurveyResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SurveyResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Users\UsersResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -361,10 +346,6 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\RegisterAccount.cshtml" />
     <Content Include="Views\Users\EditAccount.cshtml" />
-    <Content Include="Views\Surveys\Index.cshtml" />
-    <Content Include="Views\Surveys\StartNew.cshtml" />
-    <Content Include="Views\Surveys\RegisterSupervisor.cshtml" />
-    <Content Include="Views\Surveys\Details.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
@@ -472,16 +453,6 @@
     <EmbeddedResource Include="Resources\Questionnaires\IndexPageResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>IndexPageResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SupervisorAccountResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SupervisorAccountResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SurveyResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SurveyResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Users\UsersResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
