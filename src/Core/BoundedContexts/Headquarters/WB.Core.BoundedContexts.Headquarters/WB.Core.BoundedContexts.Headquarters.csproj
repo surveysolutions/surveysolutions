@@ -129,6 +129,15 @@
     </Compile>
     <Compile Include="Services\ISupervisorFeedService.cs" />
     <Compile Include="Services\ISupervisorLoginService.cs" />
+    <Compile Include="Team\EventHandlers\UserDenormalizer.cs" />
+    <Compile Include="Team\Models\ListViewModelBase.cs" />
+    <Compile Include="Team\Models\UserListItem.cs" />
+    <Compile Include="Team\Models\UserListView.cs" />
+    <Compile Include="Team\Models\UserListViewInputModel.cs" />
+    <Compile Include="Team\ViewFactories\UserListViewFactory.cs" />
+    <Compile Include="Team\Models\UserView.cs" />
+    <Compile Include="Team\ViewFactories\UserViewFactory.cs" />
+    <Compile Include="Team\Models\UserViewInputModel.cs" />
     <Compile Include="ViewFactories\ISurveyViewFactory.cs" />
     <Compile Include="Views\SupervisorFeed\SupervisorRegisteredEntry.cs" />
     <Compile Include="Views\Survey\SupervisorCredentialsView.cs" />
@@ -166,7 +175,7 @@
       <Name>Ncqrs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
@@ -198,9 +207,7 @@
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Authentication\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

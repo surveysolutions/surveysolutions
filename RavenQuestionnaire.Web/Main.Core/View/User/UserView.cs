@@ -5,56 +5,14 @@ using Main.Core.Entities.SubEntities;
 
 namespace Main.Core.View.User
 {
-    /// <summary>
-    /// The user view.
-    /// </summary>
     public class UserView
     {
-        #region Fields
-
-        /// <summary>
-        /// The _primary role.
-        /// </summary>
         private UserRoles? primaryRole;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserView"/> class.
-        /// </summary>
         public UserView()
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserView"/> class.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="userName">
-        /// The username.
-        /// </param>
-        /// <param name="password">
-        /// The password.
-        /// </param>
-        /// <param name="email">
-        /// The email.
-        /// </param>
-        /// <param name="creationDate">
-        /// The creation date.
-        /// </param>
-        /// <param name="roles">
-        /// The roles.
-        /// </param>
-        /// <param name="isLocked">
-        /// The is locked.
-        /// </param>
-        /// <param name="supervisor">
-        /// The supervisor.
-        /// </param>
         public UserView(Guid publicKey, string userName, string password, string email, DateTime creationDate, 
             IEnumerable<UserRoles> roles, bool isLocked, UserLight supervisor)
         {
@@ -68,33 +26,14 @@ namespace Main.Core.View.User
             this.Supervisor = supervisor;
         }
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the creation date.
-        /// </summary>
         public DateTime CreationDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the email.
-        /// </summary>
         public string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is locked.
-        /// </summary>
         public bool IsLocked { get; set; }
 
-        /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
         public string Password { get; set; }
 
-        /// <summary>
-        /// Gets or sets the primary role.
-        /// </summary>
         public UserRoles PrimaryRole
         {
             get
@@ -112,42 +51,18 @@ namespace Main.Core.View.User
             }
         }
 
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
         public Guid PublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the roles.
-        /// </summary>
         public IEnumerable<UserRoles> Roles { get; set; }
 
-        /// <summary>
-        /// Gets or sets the supervisor.
-        /// </summary>
         public UserLight Supervisor { get; set; }
 
-        /// <summary>
-        /// Gets or sets the user name.
-        /// </summary>
         public string UserName { get; set; }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The new.
-        /// </summary>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.User.UserView.
-        /// </returns>
         public static UserView New()
         {
             return new UserView(
                 Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, null);
         }
-
-        #endregion
     }
 }

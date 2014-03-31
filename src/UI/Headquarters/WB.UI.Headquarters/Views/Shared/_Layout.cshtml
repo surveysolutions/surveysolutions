@@ -52,15 +52,8 @@
                     @if (User.IsInRole(ApplicationRoles.Headquarter))
                     {
                         @MenuItem(CommonResources.Interviews, "Index", "Interviews")
-                    }
-
-                    @if (User.IsInRole(ApplicationRoles.Headquarter))
-                    {
+                        @MenuItem(CommonResources.Team, "Index", "Team")
                         @MenuItem(CommonResources.Questionnaires, "Index", "Questionnaires")
-                    }
-
-                    @if (User.IsInRole(ApplicationRoles.Headquarter))
-                    {
                         @MenuItem(CommonResources.Surveys, "Index", "Surveys")
                     }
 
