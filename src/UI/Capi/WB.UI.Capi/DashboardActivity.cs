@@ -72,7 +72,7 @@ namespace WB.UI.Capi
             var btnNewInterview = view.FindViewById<Button>(Resource.Id.btnNewInterview);
             btnNewInterview.SetTag(Resource.Id.QuestionnaireId, dashboardSurveyItem.PublicKey.ToString());
 
-            btnNewInterview.Click += this.rlSurveyHeader_HeaderClick;
+            btnNewInterview.Click += this.btnNewInterview_ButtonClick;
             
             var llQuestionnaireHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
 
@@ -101,10 +101,7 @@ namespace WB.UI.Capi
                 ((LinearLayout)view.Parent).RemoveView(view);
             });
 
-            alert.SetNegativeButton("Cancel", (e, s) =>
-            {
-                
-            });
+            alert.SetNegativeButton("Cancel", (e, s) =>{});
             
             alert.Show();
         }
@@ -120,7 +117,7 @@ namespace WB.UI.Capi
             this.StartActivity(intent);
         }
 
-        void rlSurveyHeader_HeaderClick(object sender, EventArgs e)
+        void btnNewInterview_ButtonClick(object sender, EventArgs e)
         {
             var target = sender as Button;
             if (target == null)
@@ -133,10 +130,13 @@ namespace WB.UI.Capi
             Guid supervisorId = CapiApplication.Membership.SupervisorId;
 
             NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
-                Guid.Parse(id), DateTime.UtcNow, supervisorId));
+                Guid.Parse(id), null, DateTime.UtcNow, supervisorId));
+
+            logManipulator.CreatePublicRecord(interviewKey);
         
             var intent = new Intent(this, typeof(CreateInterviewActivity));
             intent.PutExtra("publicKey", interviewKey.ToString());
+            intent.AddFlags(ActivityFlags.NoHistory);
             this.StartActivity(intent);
         }
 
