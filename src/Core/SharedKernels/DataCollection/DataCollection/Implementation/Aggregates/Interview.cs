@@ -595,10 +595,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId,  DateTime answersTime, Guid supervisorId)
+        public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion,  DateTime answersTime, Guid supervisorId)
             : base(id)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+            IQuestionnaire questionnaire = questionnaireVersion.HasValue
+                ? this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
+                : this.GetQuestionnaireOrThrow(questionnaireId);
 
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaire.Version));
             
@@ -641,55 +643,74 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
             initiallyInvalidQuestions.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
 
+            this.HandleFeaturedQuestion(userId, questionnaire, answersToFeaturedQuestions, answersTime);
 
-#warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(questionnaire);
+            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
+        }
+
+        private void HandleFeaturedQuestion(Guid userId, IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
+            DateTime answersTime)
+        {
+            #warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
+
+            var allowedFeaturedQuestionTypes = new QuestionType[] { QuestionType.Text, QuestionType.AutoPropagate, 
+                QuestionType.Numeric, QuestionType.DateTime, QuestionType.SingleOption, QuestionType.MultyOption };
+            
+            //trying to validate before raising any event
+            foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
+            {
+                ThrowIfQuestionDoesNotExist(answerToFeaturedQuestion.Key, questionnaire);
+
+                QuestionType questionType = questionnaire.GetQuestionType(answerToFeaturedQuestion.Key);
+                if (!allowedFeaturedQuestionTypes.Contains(questionType))
+                    throw new InterviewException(string.Format(
+                            "Question {0} has type {1} which is not supported as initial pre-filled question.",
+                            answerToFeaturedQuestion.Key, questionType));
+            }
+
+
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
                 Guid questionId = answerToFeaturedQuestion.Key;
                 object answer = answerToFeaturedQuestion.Value;
-
-                ThrowIfQuestionDoesNotExist(questionId, questionnaire);
 
                 QuestionType questionType = questionnaire.GetQuestionType(questionId);
 
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.AnswerTextQuestion(userId, questionId, EmptyRosterVector, answersTime, (string)answer);
+                        this.AnswerTextQuestion(userId, questionId, EmptyRosterVector, answersTime, (string) answer);
                         break;
 
                     case QuestionType.AutoPropagate:
-                        this.AnswerNumericIntegerQuestion(userId, questionId, EmptyRosterVector, answersTime, (int)answer);
+                        this.AnswerNumericIntegerQuestion(userId, questionId, EmptyRosterVector, answersTime, (int) answer);
                         break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.AnswerNumericIntegerQuestion(userId, questionId, EmptyRosterVector, answersTime, (int)answer);
+                            this.AnswerNumericIntegerQuestion(userId, questionId, EmptyRosterVector, answersTime, (int) answer);
                         else
-                            this.AnswerNumericRealQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal)answer);
+                            this.AnswerNumericRealQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal) answer);
                         break;
 
                     case QuestionType.DateTime:
-                        this.AnswerDateTimeQuestion(userId, questionId, EmptyRosterVector, answersTime, (DateTime)answer);
+                        this.AnswerDateTimeQuestion(userId, questionId, EmptyRosterVector, answersTime, (DateTime) answer);
                         break;
 
                     case QuestionType.SingleOption:
-                        this.AnswerSingleOptionQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal)answer);
+                        this.AnswerSingleOptionQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal) answer);
                         break;
 
                     case QuestionType.MultyOption:
-                        this.AnswerMultipleOptionsQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal[])answer);
+                        this.AnswerMultipleOptionsQuestion(userId, questionId, EmptyRosterVector, answersTime, (decimal[]) answer);
                         break;
-
-                    case QuestionType.GpsCoordinates:
+                        
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial pre-filled question.",
                             questionId, questionType));
                 }
             }
-
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(questionnaire);
-            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
         }
 
 
@@ -698,7 +719,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
         }
 
-        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
+        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, 
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
         {
             if (this.status == InterviewStatus.Deleted)
                 Restore(userId);
