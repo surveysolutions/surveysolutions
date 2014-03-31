@@ -13,6 +13,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public Guid PublicKey { get; private set; }
         public string Title { get; private set; }
-        public string Value { get; private set; }
+
+        public string Value { get; set; }
     }
 }

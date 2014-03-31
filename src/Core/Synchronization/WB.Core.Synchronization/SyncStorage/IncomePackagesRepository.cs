@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Main.Core;
+using Main.Core.Documents;
 using Main.Core.Events;
 using Ncqrs;
-using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -23,11 +22,13 @@ namespace WB.Core.Synchronization.SyncStorage
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
         private readonly string path;
+        private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
+
         private const string FolderName = "IncomingData";
         private const string ErrorFolderName = "IncomingDataWithErrors"; 
         private const string FileExtension = "sync";
 
-        public IncomePackagesRepository(string folderPath)
+        public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage)
         {
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
@@ -35,6 +36,8 @@ namespace WB.Core.Synchronization.SyncStorage
             var errorPath = Path.Combine(path, ErrorFolderName);
             if (!Directory.Exists(errorPath))
                 Directory.CreateDirectory(errorPath);
+
+            this.userStorage = userStorage;
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -45,6 +48,17 @@ namespace WB.Core.Synchronization.SyncStorage
             try
             {
                 var meta = GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
+
+                var user = userStorage.Query(_ => _.Where(u => u.PublicKey == meta.ResponsibleId).ToList().FirstOrDefault());
+
+                Guid supervisorId = user.Supervisor.Id;
+
+                if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value)
+                {
+                    NcqrsEnvironment.Get<ICommandService>()
+                        .Execute(new CreateInterviewOnClientCommand(meta.PublicKey, meta.ResponsibleId, meta.TemplateId, meta.TemplateVersion,
+                            DateTime.UtcNow, supervisorId));
+                }
 
                 NcqrsEnvironment.Get<ICommandService>()
                     .Execute(new ApplySynchronizationMetadata(
@@ -86,7 +100,12 @@ namespace WB.Core.Synchronization.SyncStorage
                     return;
 
                 var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
+                if (bus == null)
+                    return;
+                
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
+                if (commandService == null)
+                    return;
 
                 var incomeEvents = this.BuildEventStreams(items, eventStore.GetLastEventSequence(id));
 

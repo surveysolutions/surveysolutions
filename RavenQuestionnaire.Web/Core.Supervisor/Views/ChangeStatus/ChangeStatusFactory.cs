@@ -21,22 +21,24 @@ namespace Core.Supervisor.Views.ChangeStatus
 
         public ChangeStatusView Load(ChangeStatusInputModel input)
         {
-            var interview = interviews.GetById(input.InterviewId);
+            var interviewSummary = interviews.GetById(input.InterviewId);
+            if (interviewSummary == null)
+                return null;
 
             return new ChangeStatusView
                 {
-                    InterviewId = interview.InterviewId,
-                    QuestionnaireId = interview.QuestionnaireId,
-                    QuestionnaireVersion =  interview.QuestionnaireVersion,
-                    QuestionnaireTitle = interview.QuestionnaireTitle,
-                    Status = interview.Status,
-                    StatusHistory = interview.CommentedStatusesHistory.Select(x => new CommentedStatusHistroyView
+                    InterviewId = interviewSummary.InterviewId,
+                    QuestionnaireId = interviewSummary.QuestionnaireId,
+                    QuestionnaireVersion =  interviewSummary.QuestionnaireVersion,
+                    QuestionnaireTitle = interviewSummary.QuestionnaireTitle,
+                    Status = interviewSummary.Status,
+                    StatusHistory = interviewSummary.CommentedStatusesHistory.Select(x => new CommentedStatusHistroyView
                         {
                             Comment = x.Comment,
                             Date = x.Date,
                             Status = x.Status
                         }).ToList(),
-                    FeaturedQuestions = interview.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion
+                    FeaturedQuestions = interviewSummary.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion
                     {
                         Id = a.Id,
                         Answer = a.Answer,

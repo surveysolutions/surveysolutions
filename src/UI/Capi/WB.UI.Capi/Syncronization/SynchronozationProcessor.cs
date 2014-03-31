@@ -99,11 +99,10 @@ namespace WB.UI.Capi.Syncronization
                         try
                         {
                             var data = this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Sequence, this.clientRegistrationId, this.ct);
-
-                            this.pullDataProcessor.Save(data);
+                            
+                            this.pullDataProcessor.Proccess(data);
                             this.remoteChuncksForDownload[chunckId] = true;
-
-                            this.pullDataProcessor.Proccess(chunckId);
+                            
                             //save last handled item
                             this.lastSequence = chunckId.Sequence.ToString();
                         }

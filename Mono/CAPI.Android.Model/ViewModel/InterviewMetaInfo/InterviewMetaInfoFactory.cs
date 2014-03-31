@@ -38,12 +38,14 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
             return new WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo()
                 {
                     PublicKey = input.InterviewId,
-                    ResponsibleId =
-                        Guid.Parse(interview.Responsible),
+                    ResponsibleId = Guid.Parse(interview.Responsible),
                     Status = (int) status,
                     TemplateId = Guid.Parse(interview.Survey),
                     Comments = interview.Comments,
-                    Valid = interview.Valid
+                    Valid = interview.Valid,
+                    
+                    CreatedOnClient = interview.CreatedOnClient,
+                    TemplateVersion = interview.SurveyVersion
                 };
         }
     }

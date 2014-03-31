@@ -85,11 +85,14 @@ namespace Web.Supervisor.Controllers
         [Authorize(Roles = "Supervisor, Headquarter")]
         public InverviewChangeStateHistoryView ChangeStateHistory(ChangeStateHistoryViewModel data)
         {
+            var interviewSummary = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = data.InterviewId });
+
+            if (interviewSummary == null)
+                return null;
+
             return new InverviewChangeStateHistoryView()
             {
-                HistoryItems =
-                    this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = data.InterviewId })
-                        .StatusHistory.Select(x => new HistoryItemView()
+                HistoryItems = interviewSummary.StatusHistory.Select(x => new HistoryItemView()
                         {
                             Comment = x.Comment,
                             Date = x.Date.ToShortDateString(),
