@@ -10,14 +10,20 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class QuestionnaireDTO : DenormalizerRow
     {
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IList<FeaturedItem> properties, bool createdOnClient)
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IList<FeaturedItem> properties,
+            long surveyVersion, bool createdOnClient)
         {
             Id = id.FormatGuid();
             Status = (int)status;
-            Properties = JsonUtils.GetJsonData(properties.ToArray());
+            
             Responsible = responsible.FormatGuid();
             Survey = survey.FormatGuid();
+
+            this.SetProperties(properties);
+
             CreatedOnClient = createdOnClient;
+            SurveyVersion = surveyVersion;
+            
         }
 
         public QuestionnaireDTO()
@@ -27,11 +33,14 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public int Status { get; set; }
         public string Responsible { get; set; }
         public string Survey { get; set; }
+
         public string Properties { get; set; }
+
         public string Comments { get; set; }
         public bool Valid { get; set; }
-        public bool? CreatedOnClient { get; set; }
 
+        public bool? CreatedOnClient { get; set; }
+        public long SurveyVersion { get; set; }
 
         public DashboardQuestionnaireItem GetDashboardItem(string surveyKey, string title)
         {
@@ -46,11 +55,16 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         }
 
 
-        private FeaturedItem[] GetProperties()
+        public FeaturedItem[] GetProperties()
         {
             if (string.IsNullOrEmpty(Properties))
                 return new FeaturedItem[0];
             return JsonUtils.GetObject<FeaturedItem[]>(Properties);
+        }
+
+        public void SetProperties(IEnumerable<FeaturedItem> properties)
+        {
+            Properties = JsonUtils.GetJsonData(properties.ToArray());
         }
     }
 }
