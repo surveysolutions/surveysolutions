@@ -75,10 +75,10 @@ namespace WB.Tests.Integration.InterviewTests
         Because of = () =>
             interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 2);
 
-        It should_raise_AnswerRemoved_event_with_linked_multiple_options_question_id_and_propagation_vector = () =>
-            eventContext.ShouldContainEvent<AnswerRemoved>(@event
-                => @event.QuestionId == linkedQuestionId
-                && @event.PropagationVector.SequenceEqual(new decimal[] { }));
+        It should_raise_AnswersRemoved_event_with_linked_multiple_options_question_id_and_propagation_vector = () =>
+            eventContext.ShouldContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
+                => question.Id == linkedQuestionId
+                && question.RosterVector.SequenceEqual(new decimal[] { })));
 
         Cleanup stuff = () =>
         {

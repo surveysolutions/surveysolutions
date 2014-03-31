@@ -54,13 +54,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
               interview.AnswerNumericIntegerQuestion(userId, answeredQuestionId, new decimal[] { }, DateTime.Now, 1);
 
-        It should_raise_AnswerDeclaredValid_event = () =>
-             eventContext.ShouldContainEvent<AnswerDeclaredValid>(@event
-                 => @event.QuestionId == dependentOnAnsweredQuestionId);
+        It should_raise_AnswersDeclaredValid_event = () =>
+             eventContext.ShouldContainEvent<AnswersDeclaredValid>(@event
+                 => @event.Questions.Any(question => question.Id == dependentOnAnsweredQuestionId));
 
-        It should_not_raise_AnswerDeclaredInvalid_event = () =>
-            eventContext.ShouldNotContainEvent<AnswerDeclaredInvalid>(@event
-                => @event.QuestionId == dependentOnAnsweredQuestionId);
+        It should_not_raise_AnswersDeclaredInvalid_event = () =>
+            eventContext.ShouldNotContainEvent<AnswersDeclaredInvalid>(@event
+                 => @event.Questions.Any(question => question.Id == dependentOnAnsweredQuestionId));
 
         Cleanup stuff = () =>
         {
