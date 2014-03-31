@@ -215,8 +215,23 @@ namespace Web.Supervisor.Controllers
                                         value = option.Value,
                                         orderNo = index
                                     }),
-                        areAnswersOrdered = dto.Settings == null ? true : dto.Settings.GetType().GetProperty("AreAnswersOrdered").GetValue(dto.Settings, null),
-                        maxAllowedAnswers = dto.Settings == null ? null : dto.Settings.GetType().GetProperty("MaxAllowedAnswers").GetValue(dto.Settings, null),
+                        selectedOptions = options.Where(option => answersAsDecimalArray.Contains(option.Value)).Select(
+                            (option, index) =>
+                                new OptionModel(uid)
+                                {
+                                    isSelected = true,
+                                    label = option.Label,
+                                    value = option.Value,
+                                    orderNo = index
+                                }),
+                        areAnswersOrdered =
+                            dto.Settings == null
+                                ? true
+                                : dto.Settings.GetType().GetProperty("AreAnswersOrdered").GetValue(dto.Settings, null),
+                        maxAllowedAnswers =
+                            dto.Settings == null
+                                ? null
+                                : dto.Settings.GetType().GetProperty("MaxAllowedAnswers").GetValue(dto.Settings, null),
                         answer =
                             string.Join(", ",
                                 options.Where(option => answersAsDecimalArray.Contains(option.Value))
@@ -232,7 +247,7 @@ namespace Web.Supervisor.Controllers
                         var selectedAnswer = options.FirstOrDefault(option => option.Value == answerAsDecimal);
                         answerLabel = selectedAnswer == null ? string.Empty : selectedAnswer.Label;
                     }
-                    
+
                     model = new SingleQuestionModel()
                     {
                         options =
@@ -245,7 +260,18 @@ namespace Web.Supervisor.Controllers
                                         value = option.Value,
                                         orderNo = index
                                     }),
-                        selectedOption = answerAsDecimal,
+                        selectedOption =
+                            !answerAsDecimal.HasValue
+                                ? null
+                                : options.Where(option => option.Value == answerAsDecimal.Value)
+                                    .Select((option, index) =>
+                                        new OptionModel(uid)
+                                        {
+                                            isSelected = true,
+                                            label = option.Label,
+                                            value = option.Value,
+                                            orderNo = index
+                                        }).FirstOrDefault(),
                         answer = answerLabel
                     };
                     break;
@@ -384,7 +410,7 @@ namespace Web.Supervisor.Controllers
     }
     public class SingleQuestionModel : CategoricalQuestionModel
     {
-        public decimal? selectedOption { get; set; }
+        public OptionModel selectedOption { get; set; }
     }
     public class MultiQuestionModel : CategoricalQuestionModel
     {
