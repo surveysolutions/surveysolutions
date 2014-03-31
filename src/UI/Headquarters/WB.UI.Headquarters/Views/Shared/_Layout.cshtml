@@ -93,6 +93,11 @@
     <div class="container">
 
         <div>
+            <div id="umbrella">
+                <div id="umbrella-message">
+                    Loading, please wait
+                </div>
+            </div>
             @RenderBody()
 
 
@@ -153,6 +158,7 @@
             $(window).resize(function () {
                 setMinHeight();
             });
+            $('#umbrella').hide();
         });
     </script>
 
