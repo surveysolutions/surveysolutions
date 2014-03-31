@@ -61,16 +61,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
             var createdFileNames = new HashSet<string>();
 
-            foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap)
+            foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                string fileName = CreateValidFileName(headerStructureForLevel.Value.LevelName, createdFileNames, 0);
+                string fileName = CreateValidFileName(headerStructureForLevel.LevelName, createdFileNames);
                 createdFileNames.Add(fileName);
                 var dataFileNameWithExtension = string.Format("{0}.csv", fileName);
-                var stataContent = new StataEnvironmentContentGenerator(headerStructureForLevel.Value, fileName,
+                var stataContent = new StataEnvironmentContentGenerator(headerStructureForLevel, fileName,
                     dataFileNameWithExtension);
 
                 File.WriteAllBytes(Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension),
-                    csvInterviewExporter.CreateHeader(headerStructureForLevel.Value));
+                    csvInterviewExporter.CreateHeader(headerStructureForLevel));
                 File.WriteAllBytes(Path.Combine(dataFolderForTemplatePath, stataContent.NameOfAdditionalFile),
                     stataContent.ContentOfAdditionalFile);
             }
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             var createdFileNames = new HashSet<string>();
             foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
             {
-                string fileName = CreateValidFileName(interviewDataExportLevelView.LevelName, createdFileNames, 0);
+                string fileName = CreateValidFileName(interviewDataExportLevelView.LevelName, createdFileNames);
                 var dataFileNameWithExtension = string.Format("{0}.csv", fileName);
                 var pathToLevelDataFile = Path.Combine(dataFolderForTemplatePath, dataFileNameWithExtension);
                 csvInterviewExporter.AddRecord(pathToLevelDataFile,interviewDataExportLevelView);
@@ -113,14 +113,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return Path.Combine(path, string.Format("exported_data_{0}_{1}", questionnaireId, version));
         }
 
-        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i)
+        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
         {
             string fileNameWithoutInvalidFileNameChars = Path.GetInvalidFileNameChars()
                                                              .Aggregate(name, (current, c) => current.Replace(c, '_'));
             string fileNameWithNumber = string.Concat(RemoveNonAscii(fileNameWithoutInvalidFileNameChars),
                                                          i == 0 ? (object)string.Empty : i);
 
-            var validFileName = MakeValidFileName(fileNameWithNumber).Replace(" ","");
+            var validFileName = MakeValidFileName(fileNameWithNumber).Replace(" ","").ToLower();
 
             return !createdFileNames.Contains(validFileName)
                        ? validFileName
