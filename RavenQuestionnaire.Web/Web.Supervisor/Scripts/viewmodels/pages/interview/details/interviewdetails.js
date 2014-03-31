@@ -86,6 +86,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
                 userName: settings.UserName
             });
             self.currentComment('');
+            self.currentQuestion().comments.valueHasMutated();
         });
     };
     self.flagAnswer = function(question) {
