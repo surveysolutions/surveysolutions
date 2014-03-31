@@ -14,10 +14,12 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public Guid TemplateId { get; set; }
 
+        public long? TemplateVersion { get; set; }
+
         public string Title { get; set; }
 
         public Guid ResponsibleId { get; set; }
-
+        
         public int Status { get; set; }
 
         public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
@@ -25,6 +27,8 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         public string Comments { get; set; }
 
         public bool Valid { get; set; }
+
+        public bool? CreatedOnClient { get; set; }
     }
 
     public class FeaturedQuestionMeta
