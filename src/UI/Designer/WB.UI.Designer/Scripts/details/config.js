@@ -134,10 +134,6 @@
                     title: "Can't move",
                     text: "You can't move a question that used as linked question outside roster"
                 },
-                cantMoveGroupWithRosterSizeQuestionIntoRoster: {
-                    title: "Can't move",
-                    text: "You can't move a group with roster size question into a roster"
-                },
                 cantMoveGroupWithRosterTitleQuestion: {
                     title: "Can't move",
                     text: "You can't move a group with roster title question"

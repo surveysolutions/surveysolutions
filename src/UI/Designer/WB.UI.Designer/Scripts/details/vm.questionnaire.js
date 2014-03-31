@@ -515,12 +515,6 @@
                         return;
                     }
                     
-                    if (moveItemType == "group" && targetGroupIsRoster && datacontext.groups.hasRosterSizeQuestion(arg.item)) {
-                        arg.cancelDrop = true;
-                        config.logger(config.warnings.cantMoveGroupWithRosterSizeQuestionIntoRoster);
-                        return;
-                    }
-                    
                     if (moveItemType == "group" && !arg.item.isRoster() && datacontext.groups.hasRosterTitleQuestion(arg.item)) {
                         arg.cancelDrop = true;
                         config.logger(config.warnings.cantMoveGroupWithRosterTitleQuestion);

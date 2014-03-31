@@ -993,7 +993,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var targetGroup = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
 
             this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
-            this.ThrowIfGroupWithRosterSizeQuestionMovedToRoster(sourceGroup, targetGroup);
+            this.ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: sourceGroup.IsRoster,
@@ -1679,15 +1679,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfGroupWithRosterSizeQuestionMovedToRoster(IGroup sourceGroup, IGroup targetGroup)
+        private void ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(IGroup sourceGroup, IGroup targetGroup)
         {
-            if (this.IsRosterOrInsideRoster(sourceGroup)) return;
-
             var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(sourceGroup).Select(question => question.PublicKey);
 
             var rosterSizeQuestionsInGroup = this.GetAllRosterSizeQuestionIds().Intersect(allQuestionsIdsFromGroup);
+            var rosterSizeQuestionsOfTargetGroupAndUpperRosters = GetRosterSizeQuestionsOfGroupAndUpperRosters(targetGroup);
 
-            if (this.IsRosterOrInsideRoster(targetGroup) && rosterSizeQuestionsInGroup.Any())
+            if (rosterSizeQuestionsOfTargetGroupAndUpperRosters.Intersect(rosterSizeQuestionsInGroup).Any())
             {
                 throw new QuestionnaireException(
                     string.Format(
@@ -1696,6 +1695,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         FormatGroupForException(targetGroup.PublicKey, this.innerDocument),
                         string.Join(Environment.NewLine,
                             rosterSizeQuestionsInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
+            }
+        }
+
+        private IEnumerable<Guid> GetRosterSizeQuestionsOfGroupAndUpperRosters(IGroup group)
+        {
+            var targerGroup = group;
+            while (targerGroup!=null)
+            {
+                if (targerGroup.IsRoster && targerGroup.RosterSizeQuestionId.HasValue)
+                    yield return targerGroup.RosterSizeQuestionId.Value;
+
+                targerGroup = targerGroup.GetParent() as IGroup;
             }
         }
 
