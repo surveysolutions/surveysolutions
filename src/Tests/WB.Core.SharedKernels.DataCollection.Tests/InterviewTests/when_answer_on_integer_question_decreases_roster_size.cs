@@ -62,13 +62,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
            interview.AnswerNumericIntegerQuestion(userId, questionWhichDecreasesRosterSizeId, new decimal[] { }, DateTime.Now, 0);
 
-        It should_raise_RosterRowRemoved_event = () =>
-          eventContext.ShouldContainEvent<RosterRowRemoved>(@event
-              => @event.GroupId == rosterGroupId && @event.RosterInstanceId == 0);
+        It should_raise_RosterInstancesRemoved_event = () =>
+            eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
+                => @event.Instances.Any(instance => instance.GroupId == rosterGroupId && instance.RosterInstanceId == 0));
 
-        It should_not_raise_RosterRowAdded_event = () =>
-            eventContext.ShouldNotContainEvent<RosterRowAdded>(@event
-                => @event.GroupId == rosterGroupId);
+        It should_not_raise_RosterInstancesAdded_event = () =>
+            eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event
+                => @event.Instances.Any(instance => instance.GroupId == rosterGroupId));
 
         private static EventContext eventContext;
         private static Interview interview;

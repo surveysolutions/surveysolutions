@@ -196,8 +196,20 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\AnswerRemoved.cs">
       <Link>Events\Interview\AnswerRemoved.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\AnswersDeclaredInvalid.cs">
+      <Link>Events\Interview\AnswersDeclaredInvalid.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\AnswersDeclaredValid.cs">
+      <Link>Events\Interview\AnswersDeclaredValid.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\AnswersRemoved.cs">
+      <Link>Events\Interview\AnswersRemoved.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\GroupPassiveEvent.cs">
       <Link>Events\Interview\Base\GroupPassiveEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\GroupsPassiveEvent.cs">
+      <Link>Events\Interview\Base\GroupsPassiveEvent.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\InterviewActiveEvent.cs">
       <Link>Events\Interview\Base\InterviewActiveEvent.cs</Link>
@@ -214,11 +226,23 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\QuestionPassiveEvent.cs">
       <Link>Events\Interview\Base\QuestionPassiveEvent.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\QuestionsPassiveEvent.cs">
+      <Link>Events\Interview\Base\QuestionsPassiveEvent.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\RosterRowEvent.cs">
       <Link>Events\Interview\Base\RosterRowEvent.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\DateTimeQuestionAnswered.cs">
       <Link>Events\Interview\DateTimeQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\AddedRosterInstance.cs">
+      <Link>Events\Interview\Dtos\AddedRosterInstance.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\Identity.cs">
+      <Link>Events\Interview\Dtos\Identity.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Dtos\RosterInstance.cs">
+      <Link>Events\Interview\Dtos\RosterInstance.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\FlagRemovedFromAnswer.cs">
       <Link>Events\Interview\FlagRemovedFromAnswer.cs</Link>
@@ -237,6 +261,12 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\GroupPropagated.cs">
       <Link>Events\Interview\GroupPropagated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\GroupsDisabled.cs">
+      <Link>Events\Interview\GroupsDisabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\GroupsEnabled.cs">
+      <Link>Events\Interview\GroupsEnabled.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewApproved.cs">
       <Link>Events\Interview\InterviewApproved.cs</Link>
@@ -297,6 +327,18 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionEnabled.cs">
       <Link>Events\Interview\QuestionEnabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionsDisabled.cs">
+      <Link>Events\Interview\QuestionsDisabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionsEnabled.cs">
+      <Link>Events\Interview\QuestionsEnabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterInstancesAdded.cs">
+      <Link>Events\Interview\RosterInstancesAdded.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterInstancesRemoved.cs">
+      <Link>Events\Interview\RosterInstancesRemoved.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\RosterRowAdded.cs">
       <Link>Events\Interview\RosterRowAdded.cs</Link>

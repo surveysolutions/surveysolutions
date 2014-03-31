@@ -68,13 +68,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.ReevaluateSynchronizedInterview();
 
-        It should_not_raise_GroupDisabled_event_with_GroupId_equal_to_conditionallyDependentGroupId = () =>
-            eventContext.ShouldNotContainEvent<GroupDisabled>(@event
-             => @event.GroupId == conditionallyDependentGroupId);
+        It should_not_raise_GroupsDisabled_event_with_GroupId_equal_to_conditionallyDependentGroupId = () =>
+            eventContext.ShouldNotContainEvent<GroupsDisabled>(@event
+                => @event.Groups.Any(group => group.Id == conditionallyDependentGroupId));
 
-        It should_raise_GroupEnabled_event_with_GroupId_equal_to_conditionallyDependentGroupId = () =>
-           eventContext.ShouldContainEvent<GroupEnabled>(@event
-            => @event.GroupId == conditionallyDependentGroupId);
+        It should_raise_GroupsEnabled_event_with_GroupId_equal_to_conditionallyDependentGroupId = () =>
+           eventContext.ShouldContainEvent<GroupsEnabled>(@event
+                => @event.Groups.Any(group => group.Id == conditionallyDependentGroupId));
 
         private static EventContext eventContext;
         private static Guid questionnaireId;
