@@ -84,3 +84,36 @@
             -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
             box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
         }
+
+#umbrella {
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    text-align: center;
+    left: 0;
+}
+
+#umbrella-message {
+    display: inline-block;
+    background: #F9EDBE;
+    padding: 5px 15px;
+    border: 1px solid #F0C36D;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 0 5px #323232;
+    margin-top: -1px;
+}
+
+.sorting {
+    padding-right: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+    background: url('../Content/img/sort_both.png') no-repeat center right;
+}
+
+.sorting-up {
+    background: url('../Content/img/sort_asc.png') no-repeat center right !important;
+}
+
+.sorting-down {
+    background: url('../Content/img/sort_desc.png') no-repeat center right !important;
+}
