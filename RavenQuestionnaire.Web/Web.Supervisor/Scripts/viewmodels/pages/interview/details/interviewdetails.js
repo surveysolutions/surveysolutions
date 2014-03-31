@@ -3,7 +3,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
     var self = this,
         config = new Config(),
-        datacontext = new DataContext(config);
+        datacontext = new DataContext(config, settings.Interview.InterviewId);
 
     self.filter = ko.observable('all');
     self.questionnaire = ko.observable();
@@ -31,7 +31,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
     self.flagedCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isFlagged ? 1 : 0);
+            return count + (question.isFlagged() ? 1 : 0);
         }, 0);
     });
     self.answeredCount = ko.computed(function() {
@@ -41,7 +41,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
     });
     self.commentedCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.comments.length > 0 ? 1 : 0);
+            return count + (question.comments().length > 0 ? 1 : 0);
         }, 0);
     });
     self.invalidCount = ko.computed(function() {
@@ -77,10 +77,10 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.addComment = function() {
         var command = datacontext.getCommand(config.commands.setCommentCommand, {
             comment: self.currentComment(),
-            questionId: self.currentQuestion().uiId
+            question: self.currentQuestion()
         });
         self.SendCommand(command, function () {
-            self.currentQuestion().comments.push({
+            self.currentQuestion().comments().push({
                 text: self.currentComment(),
                 date: new Date(),
                 userName: settings.UserName
@@ -93,19 +93,23 @@ Supervisor.VM.InterviewDetails = function (settings) {
             ? config.commands.removeFlagFromAnswer
             : config.commands.setFlagToAnswer;
 
-        var command = datacontext.getCommand(commandName, { questionId: question.uiId() });
+        var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command, function () {
-            question.isFlagged(!question.isFlagged());
+            question.isFlagged(!question.isFlagged);
         });
     };
     self.saveAnswer = function(question) {
         var commandName = "";
-        switch (question.questionType()) {
+        switch (question.questionType) {
         case "Text":
             commandName = config.commands.answerTextQuestionCommand;
             break;
-        case "AutoPropagate": commandName = config.commands.answerNumericIntegerQuestionCommand; break;
-        case "Numeric": commandName = question.isInteger() ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand; break;                   
+        case "AutoPropagate":
+            commandName = config.commands.answerNumericIntegerQuestionCommand;
+            break;
+        case "Numeric":
+            commandName = question.isInteger ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand;
+            break;
         case "DateTime":
             commandName = config.commands.answerDateTimeQuestionCommand;
             break;
@@ -120,7 +124,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
             break;
         }
 
-        var command = datacontext.getCommand(commandName, { questionId: question.uiId() });
+        var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command);
     };
     self.load = function () {
@@ -160,9 +164,11 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
             $.each(group.questions, function (j, question) {
                 allQuestions.push(question);
-
                 question.isVisible = ko.observable(true);
                 question.isSelected = ko.observable(false);
+
+                question.comments = ko.observableArray(question.comments);
+                question.isFlagged = ko.observable(question.isFlagged);
                 question.markerStyle = ko.computed(function() {
                     if (question.isInvalid) {
                         return "invalid";
@@ -178,10 +184,10 @@ Supervisor.VM.InterviewDetails = function (settings) {
                         question.isVisible(true);
                         break;
                     case "flaged":
-                        question.isVisible(question.isFlagged);
+                        question.isVisible(question.isFlagged());
                         break;
                     case "commented":
-                        question.isVisible(question.comments.length > 0);
+                        question.isVisible(question.comments().length > 0);
                         break;
                     case "answered":
                         question.isVisible(question.isAnswered);
@@ -197,6 +203,98 @@ Supervisor.VM.InterviewDetails = function (settings) {
                         break;
                     }
                 };
+
+                if (question.scope == "Supervisor") {
+                    question.errors = ko.validation.group(question);
+                    switch (question.questionType) {
+                        case "Text":
+                            question.answer = ko.observable(question.answer);
+                            break;
+                        case "Numeric":
+                            question.answer = ko.observable(question.answer).extend({ required: true, number: true });
+
+                            if (question.isInteger) {
+                                question.answer.extend({ digit: true });
+                            }
+                            else if (!_.isNull(question.countOfDecimalPlaces)) {
+                                question.answer.extend({ precision: self.countOfDecimalPlaces });
+                            }
+                            break;
+                        case "SingleOption":
+                            question.selectedOption = ko.observable(question.selectedOption).extend({
+                                validation: [{
+                                    validator: function (val) {
+                                        if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                                            return false;
+                                        return true;
+                                    },
+                                    message: 'At least one option should be checked'
+                                }]
+                            });
+                            break;
+                        case "MultyOption":
+                            question.orderedOptionsSelection = ko.observableArray([]);
+                            question.selectedOptionsCount = 0;
+                            question.selectedOptions = ko.observableArray(question.selectedOptions).extend({
+                                validation: [
+                                    {
+                                        validator: function (val) {
+                                            if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                                                return false;
+                                            return val.length > 0;
+                                        },
+                                        message: 'At least one option should be checked'
+                                    },
+                                    {
+                                        validator: function (val) {
+                                            if (_.isUndefined(question.maxAllowedAnswers) || _.isNull(question.maxAllowedAnswers)) {
+                                                return true;
+                                            }
+
+                                            return val.length <= question.maxAllowedAnswers;
+                                        },
+                                        message: 'Number of selected answers more than number of maximum permitted answers'
+                                    }]
+                            });
+                            question.orderSelectedOptions = function () {
+                                if (question.selectedOptionsCount != question.selectedOptions().length) {
+                                    if (question.selectedOptionsCount > question.selectedOptions().length) {
+                                        _.each(question.orderedOptionsSelection(), function (answer) {
+                                            if (!_.contains(question.selectedOptions(), answer)) {
+                                                question.orderedOptionsSelection.remove(answer);
+                                            }
+                                        });
+                                    }
+                                    _.each(question.options, function (option) {
+                                        var orderIndex = question.orderedOptionsSelection().indexOf(option.value);
+                                        if (_.contains(question.selectedOptions(), option.value)) {
+                                            if (_.isUndefined(option.orderNo)) {
+                                                option.orderNo = question.selectedOptions().length;
+                                                question.orderedOptionsSelection.push(option.value);
+                                            } else {
+                                                if (orderIndex > -1) {
+                                                    option.orderNo = orderIndex + 1;
+                                                }
+                                            }
+                                        } else {
+                                            if (question.selectedOptionsCount > question.selectedOptions().length) {
+                                                if (orderIndex == -1) {
+                                                    option.orderNo = undefined;
+                                                }
+                                            }
+                                        }
+                                    });
+                                    question.selectedOptionsCount = question.selectedOptions().length;
+                                }
+                            };
+                            if (question.areAnswersOrdered) {
+                                question.selectedOptions.subscribe(function () {
+                                    question.orderSelectedOptions();
+                                });
+                            }
+                            break;
+                    }
+                }
             });
 
             group.isVisible = ko.observable(true);
