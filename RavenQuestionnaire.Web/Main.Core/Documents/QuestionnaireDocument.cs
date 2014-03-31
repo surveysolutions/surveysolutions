@@ -424,6 +424,7 @@ namespace Main.Core.Documents
             {
                 targetContainer.Children.Insert(targetIndex, item);
             }
+            item.SetParent(targetContainer);
         }
 
         private IComposite GetItemOrLogWarning(Guid itemId)
