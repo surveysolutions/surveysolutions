@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Team.ViewFactories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
