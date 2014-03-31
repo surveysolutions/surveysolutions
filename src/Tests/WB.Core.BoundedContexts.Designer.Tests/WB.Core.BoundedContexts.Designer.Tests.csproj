@@ -186,6 +186,7 @@
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_paralell_roster_scope.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_under_deeper_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_changing_roster_group_to_simple_group_but_question_inside_group_is_used_as_link_and_group_inside_other_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_with_roster_size_question_from_top_level_to_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />

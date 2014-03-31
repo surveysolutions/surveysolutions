@@ -2829,7 +2829,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(IGroup group)
         {
-            if (!this.IsRosterOrInsideRoster(@group)) return;
+            if(GetFirstRosterParentGroupOrNull(group.GetParent())!=null)
+                return;
 
             var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(@group).Select(question => question.PublicKey);
 
