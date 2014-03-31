@@ -2347,18 +2347,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstancesToAdd.AddRange(
                         rosterInstanceIdsBeingAdded);
 
-                    var listOfRosterInstanceIdsForRemove = rosterInstanceIds == null
-                        ? this.GetRosterInstanceIds(rosterId, outerVectorForExtend)
-                        : GetRosterInstanceIdsBeingRemoved(this.GetRosterInstanceIds(rosterId, outerVectorForExtend), rosterInstanceIds);
+                    var listOfRosterInstanceIdsForRemove =
+                        GetRosterInstanceIdsBeingRemoved(this.GetRosterInstanceIds(rosterId, outerVectorForExtend), rosterInstanceIds).Select(rosterInstanceId =>
+                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)).ToList();
 
                     rosterInstancesToRemove.AddRange(
-                        listOfRosterInstanceIdsForRemove.Select(rosterInstanceId =>
-                            new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)).ToList());
+                        listOfRosterInstanceIdsForRemove);
 
-                    foreach (var rosterInstanceIdBeingAdded in rosterInstanceIdsBeingAdded.Union(rosterInstancesToRemove))
+                    var rosterInstancesIdBeingChanged = rosterInstanceIdsBeingAdded.Union(listOfRosterInstanceIdsForRemove);
+
+                    foreach (var rosterInstanceIdBeingChanged in rosterInstancesIdBeingChanged)
                     {
-                        var outerRosterVector = this.ExtendRosterVectorWithOneValue(rosterInstanceIdBeingAdded.OuterRosterVector,
-                            rosterInstanceIdBeingAdded.RosterInstanceId);
+                        var outerRosterVector = this.ExtendRosterVectorWithOneValue(rosterInstanceIdBeingChanged.OuterRosterVector,
+                            rosterInstanceIdBeingChanged.RosterInstanceId);
                         rosterInstantiatesFromNestedLevels.AddRange(this.CalculateDynamicRostersData(questionnaire, outerRosterVector, rosterId).ToList());
                     }
                 }

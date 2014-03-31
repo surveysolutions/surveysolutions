@@ -83,12 +83,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         It should_raise_RosterInstancesAdded_event_for_first_nested_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 1 && instance.OuterRosterVector[0] == 0));
+                => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
 
         It should_not_raise_RosterRowTitleChanged_event_for_first_nested_row = () =>
          eventContext.ShouldNotContainEvent<RosterRowTitleChanged>(@event
              => @event.GroupId == nestedRosterGroupId && @event.RosterInstanceId == 0 &&
-                 @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0);
+                 @event.OuterRosterVector.SequenceEqual(new decimal[] { 0 }));
 
         It should_not_raise_RosterInstancesRemoved_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
