@@ -119,6 +119,7 @@
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_present.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_CreateExportedDataStructureByTemplate_is_called_and_directory_is_present.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_CreateExportedDataStructureByTemplate_is_called_and_questionnaire_has_2_rosters_with_the_same_name__.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_method_clear_with_one_file_and_one_dir_present.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_level_labels.cs" />
