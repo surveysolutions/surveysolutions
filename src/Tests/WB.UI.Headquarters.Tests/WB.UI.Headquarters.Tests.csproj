@@ -162,12 +162,6 @@
     <Compile Include="Controllers\AccountControllerSpecs\when_user_signs_out.cs" />
     <Compile Include="Controllers\AccountControllerSpecs\when_user_tries_to_login_with_invalid_credentials.cs" />
     <Compile Include="Controllers\MvcExtensions.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_posting_register_supervisor_page.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_posting_register_supervisor_page_and_AR_throws_domain_exception.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_posting_register_supervisor_page_and_model_state_is_invalid.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_posting_register_supervisor_page_and_survey_id_cannot_be_parsed.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_showing_register_supervisor_page.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_showing_register_supervisor_page_and_survey_not_exists.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_udpate_fails.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_password_update_fails.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_account_is_edited_with_changed_password.cs" />
@@ -175,12 +169,6 @@
     <Compile Include="Controllers\UsersControllerSpecs\when_index_action_invoked.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_invalid_credentials.cs" />
     <Compile Include="Controllers\UsersControllerSpecs\when_user_is_registered_with_valid_info.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\SurveysControllerTestsContext.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_showing_all_survey_list.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_showing_empty_start_new_survey_form.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_showing_existing_survey_details.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_showing_not_existing_survey_details.cs" />
-    <Compile Include="Controllers\SurveysControllerTests\when_starting_new_survey.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

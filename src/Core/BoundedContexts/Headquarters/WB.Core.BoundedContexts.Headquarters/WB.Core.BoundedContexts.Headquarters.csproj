@@ -77,11 +77,6 @@
   <ItemGroup>
     <Compile Include="Authentication\ApplicationRoles.cs" />
     <Compile Include="Authentication\ApplicationUserManager.cs" />
-    <Compile Include="Implementation\Aggregates\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
     <Compile Include="PasswordPolicy\ApplicationPasswordPolicySettings.cs" />
     <Compile Include="Authentication\AuthenticationModule.cs" />
@@ -92,22 +87,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Commands\Survey\Base\SurveyCommand.cs" />
-    <Compile Include="Commands\Survey\RegisterSupervisor.cs" />
-    <Compile Include="Commands\Survey\StartNewSurvey.cs" />
-    <Compile Include="Events\Survey\SupervisorRegistered.cs" />
-    <Compile Include="Events\Survey\Base\SurveyEvent.cs" />
-    <Compile Include="Events\Survey\NewSurveyStarted.cs" />
-    <Compile Include="Exceptions\SurveyException.cs" />
-    <Compile Include="Implementation\Aggregates\Survey.cs" />
-    <Compile Include="Implementation\EventHandlers\SupervisorFeedDenormalizer.cs" />
-    <Compile Include="Implementation\EventHandlers\SurveyDetailsViewDenormalizer.cs" />
-    <Compile Include="Implementation\EventHandlers\SurveyLineViewDenormalizer.cs" />
-    <Compile Include="Implementation\EventHandlers\SupervisorCredentialsDenormalizer.cs" />
-    <Compile Include="Implementation\EventHandlers\SupervisorLoginsDenormalizer.cs" />
-    <Compile Include="Implementation\Services\SupervisorFeedService.cs" />
-    <Compile Include="Implementation\Services\SupervisorLoginService.cs" />
-    <Compile Include="Implementation\ViewFactories\SurveyViewFactory.cs" />
     <Compile Include="PasswordPolicy\PasswordPolicyModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
@@ -127,8 +106,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Services\ISupervisorFeedService.cs" />
-    <Compile Include="Services\ISupervisorLoginService.cs" />
     <Compile Include="Team\EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Team\Models\ListViewModelBase.cs" />
     <Compile Include="Team\Models\UserListItem.cs" />
@@ -138,13 +115,6 @@
     <Compile Include="Team\Models\UserView.cs" />
     <Compile Include="Team\ViewFactories\UserViewFactory.cs" />
     <Compile Include="Team\Models\UserViewInputModel.cs" />
-    <Compile Include="ViewFactories\ISurveyViewFactory.cs" />
-    <Compile Include="Views\SupervisorFeed\SupervisorRegisteredEntry.cs" />
-    <Compile Include="Views\Survey\SupervisorCredentialsView.cs" />
-    <Compile Include="Views\Survey\SupervisorLoginView.cs" />
-    <Compile Include="Views\Survey\SupervisorView.cs" />
-    <Compile Include="Views\Survey\SurveyDetailsView.cs" />
-    <Compile Include="Views\Survey\SurveyLineView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -210,10 +180,6 @@
   <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Authentication\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Implementation\Aggregates\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
