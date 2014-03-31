@@ -44,6 +44,7 @@ namespace WB.UI.QuestionnaireTester
 #else
     [Application(Debuggable = false)]
 #endif
+
     [Crasher(UseCustomData = false)]
     public class CapiTesterApplication : Application
     {
