@@ -56,7 +56,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         private static CreateUserCommand CreateCommandFromResponseBody(string responseBody)
         {
+            if (string.IsNullOrWhiteSpace(responseBody))
+                throw new ArgumentException("Response body is empty.");
+
             dynamic responseFeed = JObject.Parse(responseBody);
+
+            if (responseFeed == null)
+                throw new ArgumentException("Response body cannot be parsed to valid feed - result feed is null.");
 
             string login = responseFeed.Login;
             string passwordHash = responseFeed.PasswordHash;
