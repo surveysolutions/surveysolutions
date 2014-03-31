@@ -187,8 +187,8 @@ namespace Web.Supervisor.Controllers
                 case QuestionType.Numeric:
                     model = new NumericQuestionModel()
                     {
-                        //isInteger = dto.Settings == null ? true : dto.Settings.IsInteger,
-                        //countOfDecimalPlaces = dto.Settings == null ? null : dto.Settings.CountOfDecimalPlaces,
+                        isInteger = dto.Settings == null ? true : dto.Settings.GetType().GetProperty("IsInteger").GetValue(dto.Settings, null),
+                        countOfDecimalPlaces = dto.Settings == null ? null : dto.Settings.GetType().GetProperty("CountOfDecimalPlaces").GetValue(dto.Settings, null),
                         answer = answerAsString
                     };
                     break;
@@ -215,8 +215,8 @@ namespace Web.Supervisor.Controllers
                                         value = option.Value,
                                         orderNo = index
                                     }),
-                        //areAnswersOrdered = dto.Settings == null ? true : dto.Settings.AreAnswersOrdered,
-                        //maxAllowedAnswers = dto.Settings == null ? null : dto.Settings.MaxAllowedAnswers,
+                        areAnswersOrdered = dto.Settings == null ? true : dto.Settings.GetType().GetProperty("AreAnswersOrdered").GetValue(dto.Settings, null),
+                        maxAllowedAnswers = dto.Settings == null ? null : dto.Settings.GetType().GetProperty("MaxAllowedAnswers").GetValue(dto.Settings, null),
                         answer =
                             string.Join(", ",
                                 options.Where(option => answersAsDecimalArray.Contains(option.Value))
@@ -280,7 +280,6 @@ namespace Web.Supervisor.Controllers
             model.title = HttpUtility.UrlDecode(dto.Title);
             model.isFlagged = dto.IsFlagged;
             model.questionType = Enum.GetName(typeof (QuestionType), dto.QuestionType);
-            model.isCapital = dto.IsCapital;
             model.isEnabled = dto.IsEnabled;
             model.isFeatured = dto.IsFeatured;
             model.isMandatory = dto.IsMandatory;
@@ -344,7 +343,6 @@ namespace Web.Supervisor.Controllers
 
         public Guid id { set; get; }
         public string variable { set; get; }
-        public bool isCapital { set; get; }
         public IEnumerable<CommentModel> comments { set; get; }
         public bool isReadonly { set; get; }
         public bool isEnabled { set; get; }
