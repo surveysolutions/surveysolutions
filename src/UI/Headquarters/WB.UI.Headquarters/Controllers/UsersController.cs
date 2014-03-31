@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Raven.Client;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.Raven.PlainStorage;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
@@ -16,30 +17,27 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IRavenPlainStorageProvider storageProvider;
 
-        public UsersController(UserManager<ApplicationUser> userManager,
-            IRavenPlainStorageProvider storageProvider)
+        public UsersController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
-            this.storageProvider = storageProvider;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var viewModel = new UsersListModel();
-            using (var session = storageProvider.GetDocumentStore().OpenSession())
+
+            IList<ApplicationUser> test = await userManager.Users.ToListAsync();
+            foreach (ApplicationUser applicationUser in test)
             {
-                foreach (ApplicationUser applicationUser in session.Query<ApplicationUser>().OrderBy(x => x.UserName))
+                viewModel.Users.Add(new UserListDto
                 {
-                    viewModel.Users.Add(new UserListDto
-                    {
-                        Id = applicationUser.Id,
-                        Login = applicationUser.UserName,
-                        Role = string.Join(", ", applicationUser.Claims.Where(x => x.ClaimType == ClaimTypes.Role).Select(claim => claim.ClaimValue))
-                    });
-                }
+                    Id = applicationUser.Id,
+                    Login = applicationUser.UserName,
+                    Role = string.Join(", ", applicationUser.Claims.Where(x => x.ClaimType == ClaimTypes.Role).Select(claim => claim.ClaimValue))
+                });
             }
+
             viewModel.HighlightedUser = (string)this.TempData["HighlightedUser"];
 
             return this.View(viewModel);
