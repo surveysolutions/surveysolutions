@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         private Dictionary<Guid, string> CreateCleanedFileNamesForLevels(Dictionary<Guid, string> allegedLevelNames)
         {
             var result = new Dictionary<Guid, string>();
-              var createdFileNames = new HashSet<string>();
+            var createdFileNames = new HashSet<string>();
             foreach (var allegedLevelName in allegedLevelNames)
             {
                 string levelFileName = CreateValidFileName(allegedLevelName.Value, createdFileNames);
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             string fileNameWithoutInvalidFileNameChars = fileSystemAccessor.MakeValidFileName(name);
             var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(100).ToArray());
             string fileNameWithNumber = string.Concat(fileNameShortened,
-                i == 0 ? (object) string.Empty : i);
+                i == 0 ? (object) string.Empty : i).ToLower();
 
             return !createdFileNames.Contains(fileNameWithNumber)
                 ? fileNameWithNumber
