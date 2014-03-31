@@ -1,127 +1,100 @@
-﻿DataContext = function(config) {
-    
+﻿DataContext = function(config, interviewId) {
+
     var commands = {};
 
     var prepareQuestionCommand = function(question) {
         return {
-            questionId: question.id(),
-            rosterVector: question.rosterVector(),
-            interviewId: questionnaire.id(),
+            questionId: question.id,
+            rosterVector: question.rosterVector,
+            interviewId: interviewId,
             answerTime: new Date()
         };
     };
 
-    commands[config.commands.answerDateTimeQuestionCommand] = function(args) {
-        var question = questions.getLocalById(args.questionId);
+    commands[config.commands.answerMultipleOptionsQuestionCommand] = function(question) {
         var command = prepareQuestionCommand(question);
-        command.answer = question.answer();
-        return command;
-
-    };
-
-    commands[config.commands.answerGeoLocationQuestionCommand] = function(args) {
-        var question = questions.getLocalById(args.questionId);
-        var command = prepareQuestionCommand(question);
-        command.answer = {};
-        command.answer.timestamp = question.answer.timestamp();
-        command.answer.latitude = question.answer.latitude();
-        command.answer.longitude = question.answer.longitude();
-        command.answer.accuracy = question.answer.accuracy();
-        return command;
-    };
-
-    commands[config.commands.answerMultipleOptionsQuestionCommand] = function(args) {
-        var question = questions.getLocalById(args.questionId);
-        var command = prepareQuestionCommand(question);
-        command.selectedValues = question.areAnswersOrdered() ? question.orderedOptionsSelection() :
+        command.selectedValues = question.areAnswersOrdered ? question.orderedOptionsSelection() :
             question.selectedOptions();
         return command;
     };
 
-        commands[config.commands.answerNumericRealQuestionCommand] = function (args) {
-            var question = questions.getLocalById(args.questionId);
-            var command = prepareQuestionCommand(question);
-            command.answer = question.answer();
-            return command;
-        };
-        
-        commands[config.commands.answerNumericIntegerQuestionCommand] = function (args) {
-        var question = questions.getLocalById(args.questionId);
+    commands[config.commands.answerNumericRealQuestionCommand] = function(question) {
         var command = prepareQuestionCommand(question);
         command.answer = question.answer();
         return command;
     };
 
-    commands[config.commands.answerSingleOptionQuestionCommand] = function(args) {
-        var question = questions.getLocalById(args.questionId);
+    commands[config.commands.answerNumericIntegerQuestionCommand] = function(question) {
+        var command = prepareQuestionCommand(question);
+        command.answer = question.answer();
+        return command;
+    };
+
+    commands[config.commands.answerSingleOptionQuestionCommand] = function(question) {
         var command = prepareQuestionCommand(question);
         command.selectedValue = question.selectedOption();
         return command;
     };
 
-    commands[config.commands.answerTextQuestionCommand] = function(args) {
-        var question = questions.getLocalById(args.questionId);
+    commands[config.commands.answerTextQuestionCommand] = function(question) {
         var command = prepareQuestionCommand(question);
         command.answer = question.answer();
         return command;
     };
 
-    commands[config.commands.setFlagToAnswer] = function(args) {
-        var question = questions.getLocalById(args.questionId);
+    commands[config.commands.setFlagToAnswer] = function(question) {
         return {
-            questionId: question.id(),
-            rosterVector: question.rosterVector(),
-            interviewId: questionnaire.id()
+            questionId: question.id,
+            rosterVector: question.rosterVector,
+            interviewId: interviewId
         };
     };
 
-    commands[config.commands.removeFlagFromAnswer] = function(args) {
-        var question = questions.getLocalById(args.questionId);
+    commands[config.commands.removeFlagFromAnswer] = function(question) {
         return {
-            questionId: question.id(),
-            rosterVector: question.rosterVector(),
-            interviewId: questionnaire.id()
+            questionId: question.id,
+            rosterVector: question.rosterVector,
+            interviewId: interviewId
         };
     };
 
-    commands[config.commands.setCommentCommand] = function(args) {
-        var question = questions.getLocalById(args.questionId);
+    commands[config.commands.setCommentCommand] = function (args) {
         return {
-            interviewId: questionnaire.id(),
-            questionId: question.id(),
-            rosterVector: question.rosterVector(),
-            commentTime: new Date(),
-            comment: args.comment
-        };
-    };
-    
-    commands[config.commands.approveInterviewCommand] = function (args) {
-        return {
-            interviewId: questionnaire.id(),
-            commentTime: new Date(),
-            comment: args.comment
-        };
-    };
-    
-    commands[config.commands.rejectInterviewCommand] = function (args) {
-        return {
-            interviewId: questionnaire.id(),
+            interviewId: interviewId,
+            questionId: args.question.id,
+            rosterVector: args.question.rosterVector,
             commentTime: new Date(),
             comment: args.comment
         };
     };
 
-    commands[config.commands.hQApproveInterviewCommand] = function (args) {
+    commands[config.commands.approveInterviewCommand] = function(args) {
         return {
-            interviewId: questionnaire.id(),
+            interviewId: interviewId,
             commentTime: new Date(),
             comment: args.comment
         };
     };
 
-    commands[config.commands.hQRejectInterviewCommand] = function (args) {
+    commands[config.commands.rejectInterviewCommand] = function(args) {
         return {
-            interviewId: questionnaire.id(),
+            interviewId: interviewId,
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+
+    commands[config.commands.hQApproveInterviewCommand] = function(args) {
+        return {
+            interviewId: interviewId,
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+
+    commands[config.commands.hQRejectInterviewCommand] = function(args) {
+        return {
+            interviewId: interviewId,
             commentTime: new Date(),
             comment: args.comment
         };
