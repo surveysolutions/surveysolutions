@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using Main.Core.View;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -9,6 +10,9 @@ using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Team.EventHandlers;
+using WB.Core.BoundedContexts.Headquarters.Team.Models;
+using WB.Core.BoundedContexts.Headquarters.Team.ViewFactories;
 using WB.Core.BoundedContexts.Headquarters.ViewFactories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
@@ -41,12 +45,14 @@ namespace WB.Core.BoundedContexts.Headquarters
         public override void Load()
         {
             this.Bind<ISurveyViewFactory>().To<SurveyViewFactory>();
+            this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
+            this.Bind<IViewFactory<UserViewInputModel, UserView>>().To<UserViewFactory>();
 
             this.Bind<IEventHandler>().To<SurveyLineViewDenormalizer>();
             this.Bind<IEventHandler>().To<SurveyDetailsViewDenormalizer>();
-
             this.Bind<IEventHandler>().To<QuestionnaireBrowseItemEventHandler>();
 
+            DispatcherRegistryHelper.RegisterDenormalizer<UserDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorLoginsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorCredentialsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<SupervisorFeedDenormalizer>(this.Kernel);
