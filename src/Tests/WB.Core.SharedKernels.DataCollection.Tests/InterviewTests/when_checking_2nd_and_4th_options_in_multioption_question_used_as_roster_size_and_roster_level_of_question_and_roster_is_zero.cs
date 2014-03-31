@@ -68,30 +68,30 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_raise_MultipleOptionsQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
 
-        It should_not_raise_RosterRowRemoved_event = () =>
-            eventContext.ShouldNotContainEvent<RosterRowRemoved>();
+        It should_not_raise_RosterInstancesRemoved_event = () =>
+            eventContext.ShouldNotContainEvent<RosterInstancesRemoved>();
 
-        It should_raise_2_RosterRowAdded_events = () =>
-            eventContext.ShouldContainEvents<RosterRowAdded>(count: 2);
+        It should_raise_RosterInstancesAdded_event_with_2_instances = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(2);
 
-        It should_set_roster_id_to_all_RosterRowAdded_events = () =>
-            eventContext.GetEvents<RosterRowAdded>()
-                .ShouldEachConformTo(@event => @event.GroupId == rosterId);
+        It should_set_roster_id_to_all_instances_in_RosterInstancesAdded_event = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances
+                .ShouldEachConformTo(instance => instance.GroupId == rosterId);
 
-        It should_set_empty_outer_roster_vector_to_all_RosterRowAdded_events = () =>
-            eventContext.GetEvents<RosterRowAdded>()
-                .ShouldEachConformTo(@event => @event.OuterRosterVector.Length == 0);
+        It should_set_empty_outer_roster_vector_to_all_instances_in_RosterInstancesAdded_event = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances
+                .ShouldEachConformTo(instance => instance.OuterRosterVector.Length == 0);
 
-        It should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterRowAdded_events = () =>
-            eventContext.GetEvents<RosterRowAdded>().Select(@event => @event.RosterInstanceId).ToArray()
+        It should_set_2nd_and_4th_options_as_roster_instance_ids_in_instances_in_RosterInstancesAdded_event = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Select(instance => instance.RosterInstanceId).ToArray()
                 .ShouldContainOnly(option2, option4);
 
-        It should_set_sort_index_to_1_in_RosterRowAdded_event_with_roster_instance_id_equal_to_2nd_option = () =>
-            eventContext.GetEvents<RosterRowAdded>().Single(@event => @event.RosterInstanceId == option2)
+        It should_set_sort_index_to_1_in_RosterInstancesAdded_instance_with_roster_instance_id_equal_to_2nd_option = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Single(instance => instance.RosterInstanceId == option2)
                 .SortIndex.ShouldEqual(1);
 
-        It should_set_sort_index_to_3_in_RosterRowAdded_event_with_roster_instance_id_equal_to_4th_option = () =>
-            eventContext.GetEvents<RosterRowAdded>().Single(@event => @event.RosterInstanceId == option4)
+        It should_set_sort_index_to_3_in_RosterInstancesAdded_instance_with_roster_instance_id_equal_to_4th_option = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Single(instance => instance.RosterInstanceId == option4)
                 .SortIndex.ShouldEqual(3);
 
         It should_raise_2_RosterRowTitleChanged_events = () =>

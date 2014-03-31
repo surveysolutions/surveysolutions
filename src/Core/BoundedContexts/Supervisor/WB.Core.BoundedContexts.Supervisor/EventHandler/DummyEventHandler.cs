@@ -10,12 +10,18 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
         IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<AnswerDeclaredInvalid>,
+        IEventHandler<AnswersDeclaredValid>,
+        IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<GroupPropagated>,
         IEventHandler<QuestionEnabled>,
-        IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<QuestionDisabled>,
+        IEventHandler<QuestionsEnabled>,
+        IEventHandler<QuestionsDisabled>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
+        IEventHandler<GroupsDisabled>,
+        IEventHandler<GroupsEnabled>,
         IEventHandler<InterviewSynchronized>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeclaredValid>,
@@ -26,15 +32,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupPropagated> evnt) {}
+        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) { }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupPropagated> evnt) { }
 
         public void Handle(IPublishedEvent<QuestionEnabled> evnt) {}
 
-        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) {}
-
         public void Handle(IPublishedEvent<QuestionDisabled> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupDisabled> evnt) {}
+        public void Handle(IPublishedEvent<QuestionsEnabled> evnt) {}
+
+        public void Handle(IPublishedEvent<QuestionsDisabled> evnt) {}
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt) {}
 
@@ -44,7 +56,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<FlagSetToAnswer> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupEnabled> evnt) {}
+        public void Handle(IPublishedEvent<GroupDisabled> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupEnabled> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupsDisabled> evnt) { }
+
+        public void Handle(IPublishedEvent<GroupsEnabled> evnt) { }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt) {}
 

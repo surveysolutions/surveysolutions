@@ -18,6 +18,9 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<GroupPropagated>,
         IEventHandler<RosterRowAdded>,
         IEventHandler<RosterRowRemoved>,
+        IEventHandler<RosterRowTitleChanged>,
+        IEventHandler<RosterInstancesAdded>,
+        IEventHandler<RosterInstancesRemoved>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<AnswerCommented>,
@@ -32,16 +35,22 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
+        IEventHandler<GroupsDisabled>,
+        IEventHandler<GroupsEnabled>,
         IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionEnabled>,
+        IEventHandler<QuestionsDisabled>,
+        IEventHandler<QuestionsEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<AnswersDeclaredInvalid>,
+        IEventHandler<AnswersDeclaredValid>,
         IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<AnswerRemoved>,
+        IEventHandler<AnswersRemoved>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        IEventHandler<InterviewForTestingCreated>,
-        IEventHandler<RosterRowTitleChanged>
+        IEventHandler<InterviewForTestingCreated>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -192,6 +201,14 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             this.RemoveAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector);
         }
 
+        public void Handle(IPublishedEvent<AnswersRemoved> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                this.RemoveAnswer(evnt.EventSourceId, question.Id, question.RosterVector);
+            }
+        }
+
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
@@ -202,6 +219,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), true);
+        }
+
+        public void Handle(IPublishedEvent<GroupsDisabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var group in evnt.Payload.Groups)
+            {
+                doc.SetScreenStatus(new InterviewItemId(group.Id, group.RosterVector), false);
+            }
+        }
+
+        public void Handle(IPublishedEvent<GroupsEnabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var group in evnt.Payload.Groups)
+            {
+                doc.SetScreenStatus(new InterviewItemId(group.Id, group.RosterVector), true);
+            }
         }
 
         public void Handle(IPublishedEvent<QuestionDisabled> evnt)
@@ -216,6 +253,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
         }
 
+        public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionStatus(new InterviewItemId(question.Id, question.RosterVector), false);
+            }
+        }
+
+        public void Handle(IPublishedEvent<QuestionsEnabled> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionStatus(new InterviewItemId(question.Id, question.RosterVector), true);
+            }
+        }
+
         public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
@@ -226,6 +283,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.SetQuestionValidity(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
+        }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionValidity(new InterviewItemId(question.Id, question.RosterVector), false);
+            }
+        }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var question in evnt.Payload.Questions)
+            {
+                doc.SetQuestionValidity(new InterviewItemId(question.Id, question.RosterVector), true);
+            }
         }
 
         private InterviewViewModel GetStoredViewModel(Guid publicKey)
@@ -277,6 +354,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             
             doc.UpdateRosterRowTitle(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.Title);
+        }
+
+        public void Handle(IPublishedEvent<RosterInstancesAdded> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var instance in evnt.Payload.Instances)
+            {
+                doc.AddPropagateScreen(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+            }
+        }
+
+        public void Handle(IPublishedEvent<RosterInstancesRemoved> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+
+            foreach (var instance in evnt.Payload.Instances)
+            {
+                doc.RemovePropagatedScreen(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
+            }
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)

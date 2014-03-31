@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
     public class AnswerOptionsForLinkedQuestionsDenormalizer :
         IEventHandler<AnswerRemoved>,
+        IEventHandler<AnswersRemoved>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
@@ -27,6 +28,14 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<AnswerRemoved> @event)
         {
             this.RemoveAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<AnswersRemoved> @event)
+        {
+            foreach (var question in @event.Payload.Questions)
+            {
+                this.RemoveAnswerOptionForLinkedQuestions(@event.EventSourceId, question.Id, question.RosterVector);
+            }
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> @event)

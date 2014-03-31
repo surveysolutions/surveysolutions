@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -226,6 +227,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.invalidAnsweredQuestions.Add(questionKey);
         }
 
+        private void Apply(AnswersDeclaredValid @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.validAnsweredQuestions.Add(questionKey);
+                this.invalidAnsweredQuestions.Remove(questionKey);
+            }
+        }
+
+        private void Apply(AnswersDeclaredInvalid @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.validAnsweredQuestions.Remove(questionKey);
+                this.invalidAnsweredQuestions.Add(questionKey);
+            }
+        }
+
         internal void Apply(GroupDisabled @event)
         {
             string groupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
@@ -240,6 +259,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledGroups.Remove(groupKey);
         }
 
+        internal void Apply(GroupsDisabled @event)
+        {
+            foreach (string groupKey in @event.Groups.Select(ConvertEventIdentityToString))
+            {
+                this.disabledGroups.Add(groupKey);
+            }
+        }
+
+        internal void Apply(GroupsEnabled @event)
+        {
+            foreach (string groupKey in @event.Groups.Select(ConvertEventIdentityToString))
+            {
+                this.disabledGroups.Remove(groupKey);
+            }
+        }
+
         internal void Apply(QuestionDisabled @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -252,6 +287,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.disabledQuestions.Remove(questionKey);
+        }
+
+        internal void Apply(QuestionsDisabled @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.disabledQuestions.Add(questionKey);
+            }
+        }
+
+        internal void Apply(QuestionsEnabled @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.disabledQuestions.Remove(questionKey);
+            }
         }
 
         private void Apply(AnswerCommented @event) { }
@@ -297,9 +348,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
         }
 
-        private void Apply(RosterRowTitleChanged @event)
-        {
+        private void Apply(RosterRowTitleChanged @event) { }
 
+        internal void Apply(RosterInstancesAdded @event)
+        {
+            foreach (var instance in @event.Instances)
+            {
+                string rosterGroupKey = ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
+                DistinctDecimalList rosterRowInstances = this.rosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.rosterGroupInstanceIds[rosterGroupKey]
+                    : new DistinctDecimalList();
+
+                rosterRowInstances.Add(instance.RosterInstanceId);
+
+                this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+            }
+        }
+
+        private void Apply(RosterInstancesRemoved @event)
+        {
+            foreach (var instance in @event.Instances)
+            {
+                string rosterGroupKey = ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
+
+                var rosterRowInstances = this.rosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.rosterGroupInstanceIds[rosterGroupKey]
+                    : new DistinctDecimalList();
+                rosterRowInstances.Remove(instance.RosterInstanceId);
+
+                this.rosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+            }
         }
 
         private void Apply(InterviewStatusChanged @event)
@@ -345,7 +423,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledQuestions.Remove(questionKey);
             this.validAnsweredQuestions.Remove(questionKey);
             this.invalidAnsweredQuestions.Remove(questionKey);
+        }
 
+        private void Apply(AnswersRemoved @event)
+        {
+            foreach (string questionKey in @event.Questions.Select(ConvertEventIdentityToString))
+            {
+                this.answersSupportedInExpressions.Remove(questionKey);
+                this.linkedSingleOptionAnswersBuggy.Remove(questionKey);
+                this.linkedMultipleOptionsAnswers.Remove(questionKey);
+                this.textListAnswers.Remove(questionKey);
+                this.answeredQuestions.Remove(questionKey);
+                this.disabledQuestions.Remove(questionKey);
+                this.validAnsweredQuestions.Remove(questionKey);
+                this.invalidAnsweredQuestions.Remove(questionKey);
+            }
         }
 
         public InterviewState CreateSnapshot()
@@ -540,16 +632,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             public EnablementChanges(List<Identity> groupsToBeDisabled, List<Identity> groupsToBeEnabled,
                 List<Identity> questionsToBeDisabled, List<Identity> questionsToBeEnabled)
             {
-                this.GroupsToBeDisabled = groupsToBeDisabled;
-                this.GroupsToBeEnabled = groupsToBeEnabled;
-                this.QuestionsToBeDisabled = questionsToBeDisabled;
-                this.QuestionsToBeEnabled = questionsToBeEnabled;
+                this.GroupsToBeDisabled = groupsToBeDisabled ?? new List<Identity>();
+                this.GroupsToBeEnabled = groupsToBeEnabled ?? new List<Identity>();
+                this.QuestionsToBeDisabled = questionsToBeDisabled ?? new List<Identity>();
+                this.QuestionsToBeEnabled = questionsToBeEnabled ?? new List<Identity>();
             }
 
             public List<Identity> GroupsToBeDisabled { get; private set; }
             public List<Identity> GroupsToBeEnabled { get; private set; }
             public List<Identity> QuestionsToBeDisabled { get; private set; }
             public List<Identity> QuestionsToBeEnabled { get; private set; }
+        }
+
+        private class ValidityChanges
+        {
+            public ValidityChanges(List<Identity> answersDeclaredValid, List<Identity> answersDeclaredInvalid)
+            {
+                this.AnswersDeclaredValid = answersDeclaredValid ?? new List<Identity>();
+                this.AnswersDeclaredInvalid = answersDeclaredInvalid ?? new List<Identity>();
+            }
+
+            public List<Identity> AnswersDeclaredValid { get; private set; }
+            public List<Identity> AnswersDeclaredInvalid { get; private set; }
         }
 
         #endregion
@@ -570,9 +674,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            initiallyInvalidQuestions.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(new EnablementChanges(initiallyDisabledGroups, null, initiallyDisabledQuestions, null));
+            this.ApplyValidityChangesEvents(new ValidityChanges(null, initiallyInvalidQuestions));
 
 
 #warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
@@ -642,9 +745,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version));
             //this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            initiallyInvalidQuestions.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(new EnablementChanges(initiallyDisabledGroups, null, initiallyDisabledQuestions, null));
+            this.ApplyValidityChangesEvents(new ValidityChanges(null, initiallyInvalidQuestions));
 
 
 #warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
@@ -771,14 +873,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
             this.ApplyEnablementChangesEvents(enablementChanges);
+            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
 
-            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyAnswersRemovanceEvents(answersForLinkedQuestionsToRemoveByDisabling);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answer)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answer);
         }
 
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
@@ -857,14 +957,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyRosterEvents(rosterCalculationData);
 
-            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
             this.ApplyEnablementChangesEvents(enablementChanges);
+            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
 
-            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyAnswersRemovanceEvents(answersForLinkedQuestionsToRemoveByDisabling);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal answer)
@@ -915,14 +1013,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new NumericRealQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
             this.ApplyEnablementChangesEvents(enablementChanges);
+            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
 
-            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyAnswersRemovanceEvents(answersForLinkedQuestionsToRemoveByDisabling);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer)
@@ -970,14 +1066,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
             this.ApplyEnablementChangesEvents(enablementChanges);
+            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
 
-            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyAnswersRemovanceEvents(answersForLinkedQuestionsToRemoveByDisabling);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue)
@@ -1027,14 +1121,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedValue));
 
-            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
             this.ApplyEnablementChangesEvents(enablementChanges);
+            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
 
-            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyAnswersRemovanceEvents(answersForLinkedQuestionsToRemoveByDisabling);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedValues)
@@ -1112,14 +1204,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyRosterEvents(rosterCalculationData);
 
-            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
-
             this.ApplyEnablementChangesEvents(enablementChanges);
+            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
 
-            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyAnswersRemovanceEvents(answersForLinkedQuestionsToRemoveByDisabling);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
@@ -1175,11 +1265,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new TextListQuestionAnswered(userId, questionId, rosterVector, answerTime, answers));
 
+            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
+
             this.ApplyRosterEvents(rosterCalculationData);
 
-            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
-
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
@@ -1203,9 +1293,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, answerTime, latitude, longitude, accuracy, timestamp));
 
-            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
@@ -1237,9 +1327,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedPropagationVector));
 
-            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         private string GetLinkedQuestionAnswerFormattedAsRosterTitle(Identity linkedQuestion)
@@ -1282,9 +1372,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedPropagationVectors));
 
-            this.ApplyEvent(new AnswerDeclaredValid(questionId, rosterVector));
+            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
 
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answerFormattedAsRosterTitle)));
+            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         private bool IsQuestionDisabledRecursive(Identity questionId, IQuestionnaire questionnaire)
@@ -1409,14 +1499,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-
-            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
-
-            questionsDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.RosterVector)));
-            questionsDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled));
+            this.ApplyValidityChangesEvents(new ValidityChanges(questionsDeclaredValid, questionsDeclaredInvalid));
 
             if (!this.HasInvalidAnswers())
             {
@@ -1533,16 +1617,81 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyEnablementChangesEvents(EnablementChanges enablementChanges)
         {
-            enablementChanges.GroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            enablementChanges.GroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            enablementChanges.QuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            enablementChanges.QuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
+            if (enablementChanges.GroupsToBeDisabled.Any())
+            {
+                this.ApplyEvent(new GroupsDisabled(ToEventIdentities(enablementChanges.GroupsToBeDisabled)));
+            }
+
+            if (enablementChanges.GroupsToBeEnabled.Any())
+            {
+                this.ApplyEvent(new GroupsEnabled(ToEventIdentities(enablementChanges.GroupsToBeEnabled)));
+            }
+
+            if (enablementChanges.QuestionsToBeDisabled.Any())
+            {
+                this.ApplyEvent(new QuestionsDisabled(ToEventIdentities(enablementChanges.QuestionsToBeDisabled)));
+            }
+
+            if (enablementChanges.QuestionsToBeEnabled.Any())
+            {
+                this.ApplyEvent(new QuestionsEnabled(ToEventIdentities(enablementChanges.QuestionsToBeEnabled)));
+            }
+        }
+
+        private void ApplyValidityChangesEvents(ValidityChanges validityChanges)
+        {
+            if (validityChanges.AnswersDeclaredValid.Any())
+            {
+                this.ApplyEvent(new AnswersDeclaredValid(ToEventIdentities(validityChanges.AnswersDeclaredValid)));
+            }
+
+            if (validityChanges.AnswersDeclaredInvalid.Any())
+            {
+                this.ApplyEvent(new AnswersDeclaredInvalid(ToEventIdentities(validityChanges.AnswersDeclaredInvalid)));
+            }
+        }
+
+        private void ApplyAnswersRemovanceEvents(List<Identity> answersToRemove)
+        {
+            if (answersToRemove.Any())
+            {
+                this.ApplyEvent(new AnswersRemoved(ToEventIdentities(answersToRemove)));
+            }
+        }
+
+        private void ApplySingleAnswerDeclaredValidEvent(Guid questionId, decimal[] rosterVector)
+        {
+            this.ApplyValidityChangesEvents(new ValidityChanges(
+                answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
+                answersDeclaredInvalid: null));
+        }
+
+        private void ApplyRosterRowsTitleChangedEvents(List<RosterIdentity> rosterInstances, string rosterTitle)
+        {
+            rosterInstances.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, rosterTitle)));
         }
 
         private void ApplyRosterEvents(RosterCalculationData data)
         {
-            data.RosterInstancesToAdd.ForEach(roster => this.ApplyEvent(new RosterRowAdded(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex)));
-            data.RosterInstancesToRemove.ForEach(roster => this.ApplyEvent(new RosterRowRemoved(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId)));
+            if (data.RosterInstancesToAdd.Any())
+            {
+                AddedRosterInstance[] instances = data
+                    .RosterInstancesToAdd
+                    .Select(roster => new AddedRosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex))
+                    .ToArray();
+
+                this.ApplyEvent(new RosterInstancesAdded(instances));
+            }
+
+            if (data.RosterInstancesToRemove.Any())
+            {
+                RosterInstance[] instances = data
+                    .RosterInstancesToRemove
+                    .Select(roster => new RosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
+                    .ToArray();
+
+                this.ApplyEvent(new RosterInstancesRemoved(instances));
+            }
 
             if (data.TitlesForRosterInstancesToAdd != null)
             {
@@ -1554,13 +1703,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 data.RosterInstancesToChange.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, data.TitlesForRosterInstancesToAdd[roster.RosterInstanceId])));
             }
 
-            data.AnswersToRemoveByDecreasedRosterSize.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.RosterVector)));
+            this.ApplyAnswersRemovanceEvents(data.AnswersToRemoveByDecreasedRosterSize);
 
-            data.InitializedGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.RosterVector)));
-            data.InitializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.RosterVector)));
-            data.InitializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.RosterVector)));
-            data.InitializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.RosterVector)));
-            data.InitializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.RosterVector)));
+            this.ApplyEnablementChangesEvents(new EnablementChanges(
+                data.InitializedGroupsToBeDisabled, data.InitializedGroupsToBeEnabled, data.InitializedQuestionsToBeDisabled, data.InitializedQuestionsToBeEnabled));
+
+            this.ApplyValidityChangesEvents(new ValidityChanges(null, data.InitializedQuestionsToBeInvalid));
+        }
+
+        private static Events.Interview.Dtos.Identity[] ToEventIdentities(IEnumerable<Identity> answersDeclaredValid)
+        {
+            return answersDeclaredValid.Select(ToEventIdentity).ToArray();
+        }
+
+        private static Events.Interview.Dtos.Identity ToEventIdentity(Identity identity)
+        {
+            return new Events.Interview.Dtos.Identity(identity.Id, identity.RosterVector);
         }
 
 
@@ -3025,6 +3183,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return new HashSet<string>(
                 synchronizationIdentities.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemPropagationVector)));
+        }
+
+        /// <remarks>
+        /// The opposite operation (get id or vector from string) should never be performed!
+        /// This is one-way transformation. Opposite operation is too slow.
+        /// If you need to compactify data and get it back, you should use another datatype, not a string.
+        /// </remarks>
+        private static string ConvertEventIdentityToString(Events.Interview.Dtos.Identity identity)
+        {
+            return ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
         }
 
         /// <remarks>

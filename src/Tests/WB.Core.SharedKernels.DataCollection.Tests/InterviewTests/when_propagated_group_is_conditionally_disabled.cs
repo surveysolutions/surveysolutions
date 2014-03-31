@@ -71,9 +71,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
            interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new decimal[] { }, DateTime.Now, 1);
 
 
-        It should_raise_GroupDisabled_event_with_GroupId_equal_to_propagatedGroupId_with_disablement_condition = () =>
-            eventContext.ShouldContainEvent<GroupDisabled>(@event
-                => @event.GroupId == propagatedGroupId);
+        It should_raise_GroupsDisabled_event_with_GroupId_equal_to_propagatedGroupId_with_disablement_condition = () =>
+            eventContext.ShouldContainEvent<GroupsDisabled>(@event
+                => @event.Groups.Any(group => group.Id == propagatedGroupId));
        
         private static EventContext eventContext;
         private static Interview interview;
