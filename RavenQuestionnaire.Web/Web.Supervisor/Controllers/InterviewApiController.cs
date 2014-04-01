@@ -150,7 +150,7 @@ namespace Web.Supervisor.Controllers
                     option =>
                         new
                         {
-                            Value = option.ToString().Parse<decimal>(),
+                            Value = option.Value.ToString().Parse<decimal>(),
                             Label = option.Label
                         });
             switch (dto.QuestionType)
