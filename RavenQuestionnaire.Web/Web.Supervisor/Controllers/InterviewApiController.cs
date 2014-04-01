@@ -260,18 +260,7 @@ namespace Web.Supervisor.Controllers
                                         value = option.Value,
                                         orderNo = index
                                     }),
-                        selectedOption =
-                            !answerAsDecimal.HasValue
-                                ? null
-                                : options.Where(option => option.Value == answerAsDecimal.Value)
-                                    .Select((option, index) =>
-                                        new OptionModel(uid)
-                                        {
-                                            isSelected = true,
-                                            label = option.Label,
-                                            value = option.Value,
-                                            orderNo = index
-                                        }).FirstOrDefault(),
+                        selectedOption = answerAsString,
                         answer = answerLabel
                     };
                     break;
@@ -410,7 +399,7 @@ namespace Web.Supervisor.Controllers
     }
     public class SingleQuestionModel : CategoricalQuestionModel
     {
-        public OptionModel selectedOption { get; set; }
+        public string selectedOption { get; set; }
     }
     public class MultiQuestionModel : CategoricalQuestionModel
     {
