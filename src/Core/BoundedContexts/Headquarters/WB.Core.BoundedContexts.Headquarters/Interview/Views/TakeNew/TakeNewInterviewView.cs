@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interview.Views.TakeNew
             this.QuestionnaireVersion = questionnaireVersion;
             this.FeaturedQuestions = new List<FeaturedQuestionView>();
             
-            //this.Supervisors = new List<UserDocument>();
+            this.Supervisors = new List<UserDocument>();
 
             foreach (IQuestion q in questionnaire.GetAllQuestions().Where(x => x.Featured).ToList())
             {
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interview.Views.TakeNew
 
         public Guid QuestionnaireId { get; set; }
 
-        //public List<UserDocument> Supervisors { get; set; }
+        public List<UserDocument> Supervisors { get; set; }
 
         public long QuestionnaireVersion { get; set; }
     }

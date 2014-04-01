@@ -70,7 +70,10 @@
                         {
                             if (User.Identity.IsAuthenticated)
                             {
-                                <button class="btn btn-primary" type="submit">Sign Out</button>
+                                <button class="btn btn-primary" type="submit">
+                                    <span class="glyphicon glyphicon-log-out"></span>
+                                    Sign Out
+                                </button>
                             }
                             @Html.AntiForgeryToken()
                         }

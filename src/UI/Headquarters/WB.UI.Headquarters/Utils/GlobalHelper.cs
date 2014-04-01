@@ -11,5 +11,6 @@ namespace WB.UI.Headquarters.Utils
 
             return url.Action(action, controller, routes, HttpContext.Current.Request.Url.Scheme);
         } 
+        
     }
 }
