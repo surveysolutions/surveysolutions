@@ -4,7 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 
-namespace Core.Supervisor
+namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class QuestionnaireHelper
     {
