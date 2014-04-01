@@ -2,6 +2,8 @@
 using System.Web;
 using Main.Core.View;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.Headquarters.Interview.ViewFactories;
+using WB.Core.BoundedContexts.Headquarters.Interview.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.PasswordPolicy;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
@@ -41,6 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters
         {
             this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
             this.Bind<IViewFactory<UserViewInputModel, UserView>>().To<UserViewFactory>();
+            this.Bind<IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView>>().To<TakeNewInterviewViewFactory>();
+
             this.Bind<IEventHandler>().To<QuestionnaireBrowseItemEventHandler>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<UserDenormalizer>(this.Kernel);

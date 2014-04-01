@@ -109,7 +109,7 @@
     <Compile Include="Interview\Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Interview\Views\TakeNew\TakeNewInterviewInputModel.cs" />
     <Compile Include="Interview\Views\TakeNew\TakeNewInterviewView.cs" />
-    <Compile Include="Interview\Views\TakeNew\TakeNewInterviewViewFactory.cs" />
+    <Compile Include="Interview\ViewFactories\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -9,6 +9,8 @@ using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection;
+using WB.UI.Headquarters.Api.Models;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Headquarters
 {
@@ -42,6 +44,7 @@ namespace WB.UI.Headquarters
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
             this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
+            this.Bind<ICommandDeserializer>().To<HeadquartersCommandDeserializer>();
         }
     }
 }

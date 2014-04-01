@@ -31,19 +31,19 @@
                         </td>
                         <td class="buttons">
                             <a href="#" class="btn btn-primary btn-sm">
-                                <i class="icon-white"></i>
+                                <span class="glyphicon glyphicon-th"></span>
                                 Batch upload
                             </a>
-                            <a href="#" class="btn btn-primary btn-sm">
-                                <i class="icon-plus icon-white"></i>
+                            <a href="@Url.Action("TakeNew", "Interviews", new {id = item.QuestionnaireId})" class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-th-list"></span>
                                 New Interview
                             </a>
-                        </td>
+                        </td> 
                         <td>
                             <div class="btn-group">
-                                <a class="btn  btn-small btn-success btn-sm"
-                                   href="#">
-                                    <i class="icon-download icon-white"></i>CSV
+                                <a class="btn btn-success btn-sm" href="#">
+                                    <span class="glyphicon glyphicon-download"></span>
+                                    CSV
                                 </a>
                             </div>
                         </td>
