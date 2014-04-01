@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace Core.Supervisor.Views.TakeNew
+namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Views.TakeNew
 {
     public class TakeNewInterviewView
     {
@@ -14,9 +15,10 @@ namespace Core.Supervisor.Views.TakeNew
             this.QuestionnaireId = questionnaire.PublicKey;
             this.QuestionnaireVersion = questionnaireVersion;
             this.FeaturedQuestions = new List<FeaturedQuestionView>();
-            this.Supervisors = new List<UserDocument>();
+            
+            //this.Supervisors = new List<UserDocument>();
 
-            foreach (IQuestion q in questionnaire.GetFeaturedQuestions())
+            foreach (IQuestion q in questionnaire.GetAllQuestions().Where(x => x.Featured).ToList())
             {
                 var questionView = new FeaturedQuestionView(q, null);
                 this.FeaturedQuestions.Add(questionView);
@@ -29,7 +31,7 @@ namespace Core.Supervisor.Views.TakeNew
 
         public Guid QuestionnaireId { get; set; }
 
-        public List<UserDocument> Supervisors { get; set; }
+        //public List<UserDocument> Supervisors { get; set; }
 
         public long QuestionnaireVersion { get; set; }
     }

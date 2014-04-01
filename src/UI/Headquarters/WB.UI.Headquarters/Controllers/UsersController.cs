@@ -13,7 +13,7 @@ using WB.UI.Headquarters.Models;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = ApplicationRoles.Administrator)]
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IRavenPlainStorageProvider storageProvider;
