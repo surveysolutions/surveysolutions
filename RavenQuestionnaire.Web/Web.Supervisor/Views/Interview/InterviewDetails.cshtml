@@ -45,7 +45,7 @@
         <div class="controls">
             <div data-bind="foreach: options">
                 <label class="radio" data-bind='attr: { "for": optionFor }'>
-                    <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value" disabled="disabled">
+                    <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption" disabled="disabled">
                     <span data-bind="html: label"></span>
                 </label>
             </div>
