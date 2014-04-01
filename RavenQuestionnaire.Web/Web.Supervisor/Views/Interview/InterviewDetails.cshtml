@@ -172,7 +172,7 @@
     <script type="text/html" id="TextFull">
         <div class="control-group" data-bind="validationElement: answer">
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+                <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
                 <span class="help-inline" data-bind="validationMessage: answer"></span>
             </div>
         </div>
@@ -391,8 +391,8 @@
                             <span class="text-block comment-date " data-bind="text: moment(date).fromNow()"></span>
                         </dd>
                     </dl>
-                    <textarea data-bind="value: $root.currentComment" class="input-block-level"></textarea>
-                    <button class="btn" type="button" data-bind="click: $root.addComment">Add comment</button>
+                    <textarea data-bind="value: $root.currentComment, valueUpdate: 'afterkeydown'" class=" input-block-level"></textarea>
+                    <button class="btn" type="button" data-bind="click: $root.addComment, disable: $root.currentComment() == ''">Add comment</button>
                 </div>
             </div>
         </div>
