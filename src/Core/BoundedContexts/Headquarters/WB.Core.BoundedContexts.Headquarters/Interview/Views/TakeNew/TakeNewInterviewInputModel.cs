@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Views.TakeNew
+namespace WB.Core.BoundedContexts.Headquarters.Interview.Views.TakeNew
 {
     public class TakeNewInterviewInputModel
     {

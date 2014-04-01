@@ -2,7 +2,7 @@ using System;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Views.TakeNew
+namespace WB.Core.BoundedContexts.Headquarters.Interview.Views.TakeNew
 {
     public class FeaturedAnswerView : ICompositeView
     {

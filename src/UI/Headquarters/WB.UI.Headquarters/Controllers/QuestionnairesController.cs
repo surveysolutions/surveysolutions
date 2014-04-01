@@ -2,12 +2,10 @@
 using System.Net;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
-using Main.Core.Documents;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Views;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Views.TakeNew;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
@@ -85,18 +83,6 @@ namespace WB.UI.Headquarters.Controllers
                     this.logger.Error("Could not connect to designer.", ex);
                 }
             }
-
-            return this.View(model);
-        }
-
-
-        public ActionResult TakeNew(Guid id)
-        {
-            Guid key = id;
-            
-            //TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(id, user.Id));
-            
-            TakeNewInterviewView model = new TakeNewInterviewView(new QuestionnaireDocument(), 1); 
 
             return this.View(model);
         }
