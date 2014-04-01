@@ -202,6 +202,7 @@
     <Compile Include="Api\Models\HeadquartersCommandDeserializer.cs" />
     <Compile Include="Api\Models\UntypedQuestionAnswer.cs" />
     <Compile Include="Api\Models\UsersListViewModel.cs" />
+    <Compile Include="Api\Models\UsersRequestModel.cs" />
     <Compile Include="Api\UsersApiController.cs" />
     <Compile Include="App_Start\HeadquartersRegistry.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -396,6 +397,8 @@
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Interviews\TakeNew.cshtml" />
+    <Content Include="Views\Team\AddInterviewer.cshtml" />
+    <Content Include="Views\Team\Interviewers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -132,8 +132,8 @@
   <data name="Surveys" xml:space="preserve">
     <value>Surveys</value>
   </data>
-  <data name="Team" xml:space="preserve">
-    <value>Team</value>
+  <data name="Teams" xml:space="preserve">
+    <value>Teams</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Users</value>

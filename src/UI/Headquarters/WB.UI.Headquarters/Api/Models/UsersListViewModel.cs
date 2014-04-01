@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Main.Core.Entities;
 using WB.UI.Headquarters.Models;
 
@@ -10,7 +8,7 @@ namespace WB.UI.Headquarters.Api.Models
     {
         public PagerData Pager { get; set; }
 
-        public Guid? SupervisorId { get; set; }
+        public UsersRequestModel Request { get; set; }
 
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
     }
