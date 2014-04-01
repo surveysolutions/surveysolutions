@@ -2,9 +2,6 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Team.Models
 {
-    /// <summary>
-    /// The user list view.
-    /// </summary>
     public class UserListView
     {
         public int Page { get; set; }

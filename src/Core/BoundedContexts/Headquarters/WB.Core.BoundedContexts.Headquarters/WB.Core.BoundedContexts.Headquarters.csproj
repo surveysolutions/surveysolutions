@@ -116,10 +116,14 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Team\EventHandlers\UserDenormalizer.cs" />
+    <Compile Include="Team\Models\SupervisorInterviewersInputModel.cs" />
+    <Compile Include="Team\Models\InterviewersItem.cs" />
+    <Compile Include="Team\Models\InterviewersView.cs" />
     <Compile Include="Team\Models\ListViewModelBase.cs" />
     <Compile Include="Team\Models\UserListItem.cs" />
     <Compile Include="Team\Models\UserListView.cs" />
     <Compile Include="Team\Models\UserListViewInputModel.cs" />
+    <Compile Include="Team\ViewFactories\InterviewersViewFactory.cs" />
     <Compile Include="Team\ViewFactories\UserListViewFactory.cs" />
     <Compile Include="Team\Models\UserView.cs" />
     <Compile Include="Team\ViewFactories\UserViewFactory.cs" />
