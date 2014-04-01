@@ -257,7 +257,6 @@
     <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Views\Reposts\Views\UsersViewItem.cs" />
-    <Compile Include="Views\Survey\WhereClouseHelper.cs" />
     <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
     <Compile Include="Views\Template\DesignerQuestionnairesView.cs" />
     <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
@@ -285,6 +284,10 @@
       <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
       <Name>WB.Core.Infrastructure.Raven</Name>
@@ -300,6 +303,10 @@
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>

@@ -15,6 +15,8 @@ namespace WB.UI.Headquarters.App_Start
                 .Include("~/Scripts/knockout-{version}.js",
                 "~/Scripts/knockout.mapping-latest.js",
                 "~/Scripts/supervisor.framework.js",
+                "~/Scripts/query-string.js",
+                "~/Scripts/modernizr-{version}.js",
                 "~/Scripts/viewmodels/viewmodelbase.js",
                  "~/Scripts/viewmodels/pagebase.js"));
 

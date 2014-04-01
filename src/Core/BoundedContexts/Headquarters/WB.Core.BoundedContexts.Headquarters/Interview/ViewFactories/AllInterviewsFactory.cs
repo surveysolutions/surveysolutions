@@ -1,18 +1,16 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Utility;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using Main.Core.View;
+using WB.Core.BoundedContexts.Headquarters.Interview.Views;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace Core.Supervisor.Views.Interview
+namespace WB.Core.BoundedContexts.Headquarters.Interview.ViewFactories
 {
-    using System.Linq;
-
-    using Main.Core.View;
-
-    public class AllInterviewsFactory : IViewFactory<AllInterviewsInputModel, AllInterviewsView>
+    internal class AllInterviewsFactory : IViewFactory<AllInterviewsInputModel, AllInterviewsView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
@@ -45,7 +43,7 @@ namespace Core.Supervisor.Views.Interview
                 predicate = predicate.AndCondition(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
             }
 
-            var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
+            var interviewItems = this.DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
                             .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize).ToList();
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Core.Supervisor.Views.Survey
+namespace WB.Core.GenericSubdomains.Utils
 {
     public static class WhereClouseHelper
     {

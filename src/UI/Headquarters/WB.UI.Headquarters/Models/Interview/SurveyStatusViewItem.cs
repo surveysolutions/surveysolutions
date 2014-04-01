@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace Core.Supervisor.Views.Survey
+namespace WB.UI.Headquarters.Models.Interview
 {
     public class SurveyStatusViewItem
     {

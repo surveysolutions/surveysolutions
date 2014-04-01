@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Core.Supervisor.Views.Interview;
-using Core.Supervisor.Views.Survey;
 using Main.Core.Utility;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
