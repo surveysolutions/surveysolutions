@@ -45,6 +45,10 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
@@ -101,6 +105,11 @@
     <Compile Include="Questionnaires\Views\DesignerQuestionnairesView.cs" />
     <Compile Include="Questionnaires\Views\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Questionnaires\Views\QuestionnaireListInputModel.cs" />
+    <Compile Include="Questionnaires\Views\TakeNew\FeaturedAnswerView.cs" />
+    <Compile Include="Questionnaires\Views\TakeNew\FeaturedQuestionView.cs" />
+    <Compile Include="Questionnaires\Views\TakeNew\TakeNewInterviewInputModel.cs" />
+    <Compile Include="Questionnaires\Views\TakeNew\TakeNewInterviewView.cs" />
+    <Compile Include="Questionnaires\Views\TakeNew\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
