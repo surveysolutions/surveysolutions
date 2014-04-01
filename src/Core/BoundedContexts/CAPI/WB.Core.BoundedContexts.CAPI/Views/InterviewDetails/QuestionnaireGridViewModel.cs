@@ -85,7 +85,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var answered = 0;
             foreach (var screenViewModel in this.Rows)
             {
-                screenViewModel.SetEnabled(Enabled);
+                if (!Enabled)
+                    screenViewModel.SetEnabled(false);
                 total = total + screenViewModel.Total;
                 answered = answered + screenViewModel.Answered;
             }
