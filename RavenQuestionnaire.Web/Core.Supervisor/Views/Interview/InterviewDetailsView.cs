@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
     using System;
     using Main.Core.Entities.SubEntities;
-    using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
     public class InterviewDetailsView
     {

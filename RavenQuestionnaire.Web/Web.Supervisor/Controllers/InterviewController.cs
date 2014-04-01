@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using System.Web.Security;
 using Core.Supervisor.Views.ChangeStatus;
-using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Revalidate;
 using Core.Supervisor.Views.Survey;
 using Main.Core.Entities.SubEntities;
@@ -22,41 +20,34 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
-        private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory;
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                    IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-                                    IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
-                                   IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory)
+                                    IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
             this.revalidateInterviewViewFactory = revalidateInterviewViewFactory;
-
-            this.interviewDetailsFactory = interviewDetailsFactory;
         }
 
         public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
-            InterviewDetailsView model = this.interviewDetailsFactory.Load(
-                new InterviewDetailsInputModel()
-                {
-                    CompleteQuestionnaireId = id,
-                    CurrentGroupPublicKey = group,
-                    PropagationKey = propagationKey,
-                    User = this.GlobalInfo.GetCurrentUser()
-                });
 
-            if (model == null)
+            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
+            if (interviewInfo == null)
             {
                 return this.RedirectToInterviewList(template);
             }
-            this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
-            this.ViewBag.TemplateId = template;
-            UserLight user = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = user;
-            return this.View(model);
+
+            return
+                this.View(new InterviewModel()
+                {
+                    InterviewId = id,
+                    CurrentGroupId = group,
+                    CurrentPropagationKeyId = propagationKey,
+                    InterviewStatus = interviewInfo.Status
+                });
         }
 
         [Authorize(Roles = "Headquarter")]
@@ -85,25 +76,6 @@ namespace Web.Supervisor.Controllers
         {
             this.CommandService.Execute(new ReevaluateSynchronizedInterview(interviewId));
             var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = interviewId });
-            return this.View(model);
-        }
-
-        public ActionResult ChangeState(Guid id)
-        {
-            if (this.GlobalInfo.IsHeadquarter)
-            {
-                return new HttpForbiddenResult("Only supervisors have access to page for interview change state");
-            }
-
-            ChangeStatusView model = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
-
-            if (model.Status != InterviewStatus.Completed)
-            {
-                return new HttpForbiddenResult("You can change state for interviews with status \"Complete\" only");
-            }
-
-            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(model);
         }
 

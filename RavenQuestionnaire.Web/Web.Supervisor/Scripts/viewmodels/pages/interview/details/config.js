@@ -1,5 +1,5 @@
 ﻿Config = function() {
-    var commands = {
+    var questionTypes = {
             SingleOption: "SingleOption",
             MultyOption: "MultyOption",
             Numeric: "Numeric",
@@ -23,10 +23,7 @@
             setFlagToAnswer: "SetFlagToAnswerCommand",
             removeFlagFromAnswer: "RemoveFlagFromAnswerCommand",
             approveInterviewCommand: "ApproveInterviewCommand",
-            rejectInterviewCommand: "RejectInterviewCommand",
-
-            hQApproveInterviewCommand: "HqApproveInterviewCommand",
-            hQRejectInterviewCommand: "HqRejectInterviewCommand"
+            rejectInterviewCommand: "RejectInterviewCommand"
         },
         statusMap = {
             Created: "Created",
@@ -39,10 +36,7 @@
             Completed: "Completed",
             Restarted: "Restarted",
             ApprovedBySupervisor: "Approved by supervisor",
-            RejectedBySupervisor: "Rejected by supervisor",
-
-            ApprovedByHeadquarter: "Approved by HQ",
-            RejectedByHeadquarter: "Rejected by HQ"
+            RejectedBySupervisor: "Rejected by supervisor"
         };
     return {
         questionTypes: questionTypes,

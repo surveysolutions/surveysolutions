@@ -73,6 +73,7 @@
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
+                    "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js"
                     ));
 
