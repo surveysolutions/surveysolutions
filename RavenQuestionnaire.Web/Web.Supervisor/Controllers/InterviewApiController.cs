@@ -206,6 +206,16 @@ namespace Web.Supervisor.Controllers
                         ? new decimal[0]
                         : ((IEnumerable<object>) dto.Answer).Select(option => option.ToString().Parse<decimal>());
 
+                    bool areAnswersOrdered =
+                        dto.Settings == null
+                            ? true
+                            : dto.Settings.GetType().GetProperty("AreAnswersOrdered").GetValue(dto.Settings, null);
+                    int? maxAllowedAnswers =
+                        dto.Settings == null
+                            ? null
+                            : dto.Settings.GetType().GetProperty("MaxAllowedAnswers").GetValue(dto.Settings, null);
+
+
                     model = new MultiQuestionModel()
                     {
                         options =
@@ -215,26 +225,19 @@ namespace Web.Supervisor.Controllers
                                     {
                                         isSelected = answersAsDecimalArray.Contains(option.Value),
                                         label = option.Label,
-                                        value = option.Value,
-                                        orderNo = index
+                                        value = option.Value.ToString(),
+                                        orderNo =
+                                            dto.Scope == QuestionScope.Supervisor
+                                                ? null
+                                                : (!areAnswersOrdered
+                                                    ? (int?) null
+                                                    : (!answersAsDecimalArray.Contains(option.Value)
+                                                        ? (int?) null
+                                                        : answersAsDecimalArray.ToList().IndexOf(option.Value) + 1))
                                     }),
-                        selectedOptions = options.Where(option => answersAsDecimalArray.Contains(option.Value)).Select(
-                            (option, index) =>
-                                new OptionModel(uid)
-                                {
-                                    isSelected = true,
-                                    label = option.Label,
-                                    value = option.Value,
-                                    orderNo = index
-                                }),
-                        areAnswersOrdered =
-                            dto.Settings == null
-                                ? true
-                                : dto.Settings.GetType().GetProperty("AreAnswersOrdered").GetValue(dto.Settings, null),
-                        maxAllowedAnswers =
-                            dto.Settings == null
-                                ? null
-                                : dto.Settings.GetType().GetProperty("MaxAllowedAnswers").GetValue(dto.Settings, null),
+                        selectedOptions = answersAsDecimalArray.Select(answer => answer.ToString()),
+                        areAnswersOrdered = areAnswersOrdered,
+                        maxAllowedAnswers = maxAllowedAnswers,
                         answer =
                             string.Join(", ",
                                 options.Where(option => answersAsDecimalArray.Contains(option.Value))
@@ -255,13 +258,12 @@ namespace Web.Supervisor.Controllers
                     {
                         options =
                             options.Select(
-                                (option, index) =>
+                                (option) =>
                                     new OptionModel(uid)
                                     {
                                         isSelected = answerAsDecimal.HasValue && (answerAsDecimal.Value == option.Value),
                                         label = option.Label,
-                                        value = option.Value,
-                                        orderNo = index
+                                        value = option.Value.ToString()
                                     }),
                         selectedOption = answerAsString,
                         answer = answerLabel
@@ -272,7 +274,7 @@ namespace Web.Supervisor.Controllers
                     {
                         options =
                             dto.Options.Select(
-                                option => new OptionModel(uid) {value = option.Value, label = option.Label})
+                                option => new OptionModel(uid) {value = option.Value.ToString(), label = option.Label})
                     };
                     break;
             }
@@ -408,7 +410,7 @@ namespace Web.Supervisor.Controllers
     {
         public bool areAnswersOrdered { get; set; }
         public int? maxAllowedAnswers { get; set; }
-        public IEnumerable<OptionModel> selectedOptions { get; set; }
+        public IEnumerable<string> selectedOptions { get; set; }
     }
     public class OptionModel
     {
@@ -419,7 +421,7 @@ namespace Web.Supervisor.Controllers
 
         private string questionId { get; set; }
         public string label { get; set; }
-        public object value { get; set; }
+        public string value { get; set; }
         public bool isSelected { get; set; }
 
         public string optionFor
@@ -427,7 +429,7 @@ namespace Web.Supervisor.Controllers
             get { return string.Concat("option-", this.questionId, "-", this.value); }
         }
 
-        public int orderNo { get; set; }
+        public int? orderNo { get; set; }
     }
     public class CommentModel
     {

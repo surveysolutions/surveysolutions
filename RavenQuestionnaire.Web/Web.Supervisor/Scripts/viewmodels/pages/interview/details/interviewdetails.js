@@ -206,14 +206,13 @@ Supervisor.VM.InterviewDetails = function (settings) {
                 };
 
                 if (question.scope == "Supervisor") {
-                    question.errors = ko.validation.group(question);
                     switch (question.questionType) {
                         case "Text":
-                            question.answer = ko.observable(question.answer);
+                            question.answer = ko.observable(question.answer).extend({ required: true });
                             break;
                         case "Numeric":
                             question.answer = ko.observable(question.answer).extend({ required: true, number: true });
-
+                            
                             if (question.isInteger) {
                                 question.answer.extend({ digit: true });
                             }
@@ -232,11 +231,16 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                     message: 'At least one option should be checked'
                                 }]
                             });
+                            question.answer = ko.computed(function () {
+                                var o = _.find(question.options, function (option) {
+                                    return question.selectedOption() == option.value;
+                                });
+                                return _.isEmpty(o) ? "" : o.label;
+                            });
                             break;
                         case "MultyOption":
-                            question.orderedOptionsSelection = ko.observableArray([]);
-                            question.selectedOptionsCount = 0;
-                            question.selectedOptions = ko.observableArray(question.selectedOptions).extend({
+                            var selectedOptionsSource = question.selectedOptions;
+                            question.selectedOptions = ko.observableArray().extend({
                                 validation: [
                                     {
                                         validator: function (val) {
@@ -257,44 +261,69 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                         message: 'Number of selected answers more than number of maximum permitted answers'
                                     }]
                             });
-                            question.orderSelectedOptions = function () {
-                                if (question.selectedOptionsCount != question.selectedOptions().length) {
-                                    if (question.selectedOptionsCount > question.selectedOptions().length) {
-                                        _.each(question.orderedOptionsSelection(), function (answer) {
-                                            if (!_.contains(question.selectedOptions(), answer)) {
-                                                question.orderedOptionsSelection.remove(answer);
+
+                            if (question.areAnswersOrdered) {
+                                question.orderedOptionsSelection = ko.observableArray([]);
+                                question.selectedOptionsCount = 0;
+                                question.orderSelectedOptions = function () {
+                                    if (question.selectedOptionsCount != question.selectedOptions().length) {
+                                        if (question.selectedOptionsCount > question.selectedOptions().length) {
+                                            _.each(question.orderedOptionsSelection(), function (answer) {
+                                                if (!_.contains(question.selectedOptions(), answer)) {
+                                                    question.orderedOptionsSelection.remove(answer);
+                                                }
+                                            });
+                                        }
+                                        _.each(question.options, function (option) {
+                                            var orderIndex = question.orderedOptionsSelection().indexOf(option.value);
+                                            if (_.contains(question.selectedOptions(), option.value)) {
+                                                if (_.isNull(option.orderNo())) {
+                                                    option.orderNo(question.selectedOptions().length);
+                                                    question.orderedOptionsSelection.push(option.value);
+                                                } else {
+                                                    if (orderIndex > -1) {
+                                                        option.orderNo(orderIndex + 1);
+                                                    }
+                                                }
+                                            } else {
+                                                if (question.selectedOptionsCount > question.selectedOptions().length) {
+                                                    if (orderIndex == -1) {
+                                                        option.orderNo(null);
+                                                    }
+                                                }
                                             }
                                         });
+                                        question.selectedOptionsCount = question.selectedOptions().length;
                                     }
-                                    _.each(question.options, function (option) {
-                                        var orderIndex = question.orderedOptionsSelection().indexOf(option.value);
-                                        if (_.contains(question.selectedOptions(), option.value)) {
-                                            if (_.isUndefined(option.orderNo)) {
-                                                option.orderNo = question.selectedOptions().length;
-                                                question.orderedOptionsSelection.push(option.value);
-                                            } else {
-                                                if (orderIndex > -1) {
-                                                    option.orderNo = orderIndex + 1;
-                                                }
-                                            }
-                                        } else {
-                                            if (question.selectedOptionsCount > question.selectedOptions().length) {
-                                                if (orderIndex == -1) {
-                                                    option.orderNo = undefined;
-                                                }
-                                            }
-                                        }
+                                };
+                                question.answer = ko.computed(function () {
+                                    var selected = _.filter(question.options, function (option) {
+                                        return _.contains(question.selectedOptions(), option.value);
                                     });
-                                    question.selectedOptionsCount = question.selectedOptions().length;
-                                }
-                            };
-                            if (question.areAnswersOrdered) {
+                                    
+                                    var a = _.reduce(selected, function (result, option) {
+                                        return result + option.label + ", ";
+                                    }, "").trim();
+                                    if (_.isEmpty(a) == false) {
+                                        a = a.substring(0, a.length - 1);
+                                    }
+                                    return a;
+                                });
+
                                 question.selectedOptions.subscribe(function () {
                                     question.orderSelectedOptions();
+                                });
+
+                                $.each(question.options, function (index, option) {
+                                    option.orderNo = ko.observable(option.orderNo);
+                                });
+                                $.each(selectedOptionsSource, function (index, option) {
+                                    question.selectedOptions.push(option);
                                 });
                             }
                             break;
                     }
+                    question.errors = ko.validation.group(question);
                 }
             });
 
