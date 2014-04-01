@@ -7,7 +7,7 @@ using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Views.TakeNew
+namespace WB.Core.BoundedContexts.Headquarters.Interview.Views.TakeNew
 {
     public class FeaturedQuestionView : ICompositeView
     {

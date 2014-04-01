@@ -105,11 +105,11 @@
     <Compile Include="Questionnaires\Views\DesignerQuestionnairesView.cs" />
     <Compile Include="Questionnaires\Views\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Questionnaires\Views\QuestionnaireListInputModel.cs" />
-    <Compile Include="Questionnaires\Views\TakeNew\FeaturedAnswerView.cs" />
-    <Compile Include="Questionnaires\Views\TakeNew\FeaturedQuestionView.cs" />
-    <Compile Include="Questionnaires\Views\TakeNew\TakeNewInterviewInputModel.cs" />
-    <Compile Include="Questionnaires\Views\TakeNew\TakeNewInterviewView.cs" />
-    <Compile Include="Questionnaires\Views\TakeNew\TakeNewInterviewViewFactory.cs" />
+    <Compile Include="Interview\Views\TakeNew\FeaturedAnswerView.cs" />
+    <Compile Include="Interview\Views\TakeNew\FeaturedQuestionView.cs" />
+    <Compile Include="Interview\Views\TakeNew\TakeNewInterviewInputModel.cs" />
+    <Compile Include="Interview\Views\TakeNew\TakeNewInterviewView.cs" />
+    <Compile Include="Interview\Views\TakeNew\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -186,9 +186,7 @@
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interview\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Authentication\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

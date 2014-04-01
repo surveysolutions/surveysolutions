@@ -5,7 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Views.TakeNew
+namespace WB.Core.BoundedContexts.Headquarters.Interview.Views.TakeNew
 {
     public class TakeNewInterviewView
     {
