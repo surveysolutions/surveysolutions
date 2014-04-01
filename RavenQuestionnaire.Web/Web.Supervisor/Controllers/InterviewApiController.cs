@@ -153,13 +153,13 @@ namespace Web.Supervisor.Controllers
             string uid = string.Concat(dto.Id, "_", string.Join("_", parentGroup.RosterVector));
             string answerAsString = dto.Answer == null ? string.Empty : dto.Answer.ToString();
             var options =
-                        dto.Options.Select(
-                            option =>
-                                new
-                                {
-                                    Value = decimal.Parse(option.Value.ToString(), CultureInfo.InvariantCulture),
-                                    Label = option.Label
-                                });
+                dto.Options.Select(
+                    option =>
+                        new
+                        {
+                            Value = option.ToString().Parse<decimal>(),
+                            Label = option.Label
+                        });
             switch (dto.QuestionType)
             {
                 case QuestionType.DateTime:
