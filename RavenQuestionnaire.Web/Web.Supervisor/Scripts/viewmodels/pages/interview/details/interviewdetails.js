@@ -96,7 +96,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
         var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command, function () {
-            question.isFlagged(!question.isFlagged);
+            question.isFlagged(!question.isFlagged());
         });
     };
     self.saveAnswer = function(question) {
