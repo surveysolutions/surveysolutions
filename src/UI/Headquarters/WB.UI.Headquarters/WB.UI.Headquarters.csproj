@@ -197,8 +197,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Api\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Api\InterviewApiController.cs" />
     <Compile Include="Api\Models\CommandTransformator.cs" />
     <Compile Include="Api\Models\CreateInterviewControllerCommand.cs" />
+    <Compile Include="Api\Models\DocumentListViewModel.cs" />
+    <Compile Include="Api\Models\DocumentRequestModel.cs" />
     <Compile Include="Api\Models\HeadquartersCommandDeserializer.cs" />
     <Compile Include="Api\Models\UntypedQuestionAnswer.cs" />
     <Compile Include="Api\Models\UsersListViewModel.cs" />
@@ -213,6 +216,8 @@
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
+    <Compile Include="Models\Interview\DocumentFilter.cs" />
+    <Compile Include="Models\Interview\SurveyStatusViewItem.cs" />
     <Compile Include="Models\PagerData.cs" />
     <Compile Include="Models\Team\UserCreateModel.cs" />
     <Compile Include="Models\Team\UserEditModel.cs" />
@@ -271,6 +276,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Alerts.cs" />
     <Compile Include="Utils\GlobalHelper.cs" />
+    <Compile Include="Utils\StatusHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -346,11 +352,14 @@
     <Content Include="Scripts\lodash.underscore.js" />
     <Content Include="Scripts\lodash.underscore.min.js" />
     <Content Include="Scripts\Math.uuid.js" />
+    <Content Include="Scripts\modernizr-2.7.2.js" />
+    <Content Include="Scripts\query-string.js" />
     <Content Include="Scripts\supervisor.framework.js" />
     <Content Include="Scripts\viewModels\pagebase.js" />
     <Content Include="Scripts\viewModels\pages\designerquestionnaires.js" />
     <Content Include="Scripts\ValidationFix.js" />
     <Content Include="Scripts\viewModels\listview.js" />
+    <Content Include="Scripts\viewModels\pages\interviews.base.js" />
     <Content Include="Scripts\viewModels\pages\interview\custom.js" />
     <Content Include="Scripts\viewModels\pages\interview\details\config.js" />
     <Content Include="Scripts\viewModels\pages\interview\details\datacontext.js" />
@@ -398,6 +407,7 @@
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Interviews\TakeNew.cshtml" />
     <Content Include="Views\Team\AddInterviewer.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <Content Include="Views\Team\Interviewers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
