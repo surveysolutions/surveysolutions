@@ -193,7 +193,14 @@
     <Compile Include="Api\ActionFilters\UnhandledExceptionFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationFilter.cs" />
     <Compile Include="Api\Authentication\BasicAuthenticationIdentity.cs" />
+    <Compile Include="Api\CommandApiController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Api\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Api\Models\CommandTransformator.cs" />
+    <Compile Include="Api\Models\CreateInterviewControllerCommand.cs" />
+    <Compile Include="Api\Models\HeadquartersCommandDeserializer.cs" />
+    <Compile Include="Api\Models\UntypedQuestionAnswer.cs" />
     <Compile Include="Api\Models\UsersListViewModel.cs" />
     <Compile Include="Api\UsersApiController.cs" />
     <Compile Include="App_Start\HeadquartersRegistry.cs" />
@@ -202,6 +209,7 @@
     <Compile Include="Controllers\InterviewsController.cs" />
     <Compile Include="Controllers\QuestionnairesController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
+    <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Extensions\LocalizationExtensions.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\PagerData.cs" />
@@ -271,6 +279,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\datepicker.css" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
     <Content Include="Content\img\sort_both.png" />
@@ -314,6 +323,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
@@ -327,14 +337,32 @@
     <Content Include="Scripts\knockout-3.1.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\knockout.validation.debug.js" />
+    <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\ko.pager.js" />
     <Content Include="Scripts\lodash.js" />
     <Content Include="Scripts\lodash.min.js" />
+    <Content Include="Scripts\lodash.underscore.js" />
+    <Content Include="Scripts\lodash.underscore.min.js" />
+    <Content Include="Scripts\Math.uuid.js" />
     <Content Include="Scripts\supervisor.framework.js" />
     <Content Include="Scripts\viewModels\pagebase.js" />
     <Content Include="Scripts\viewModels\pages\designerquestionnaires.js" />
     <Content Include="Scripts\ValidationFix.js" />
     <Content Include="Scripts\viewModels\listview.js" />
+    <Content Include="Scripts\viewModels\pages\interview\custom.js" />
+    <Content Include="Scripts\viewModels\pages\interview\details\config.js" />
+    <Content Include="Scripts\viewModels\pages\interview\details\datacontext.js" />
+    <Content Include="Scripts\viewModels\pages\interview\details\interviewdetails.js" />
+    <Content Include="Scripts\viewModels\pages\interview\details\interviewdetailssettings.js" />
+    <Content Include="Scripts\viewModels\pages\interview\details\mapper.js" />
+    <Content Include="Scripts\viewModels\pages\interview\details\model.js" />
+    <Content Include="Scripts\viewModels\pages\interview\hq.interviews.js" />
+    <Content Include="Scripts\viewModels\pages\interview\new\datacontext.js" />
+    <Content Include="Scripts\viewModels\pages\interview\new\mapper.js" />
+    <Content Include="Scripts\viewModels\pages\interview\new\model.js" />
+    <Content Include="Scripts\viewModels\pages\interview\new\newinterview.js" />
+    <Content Include="Scripts\viewModels\pages\interview\sv.interviews.js" />
     <Content Include="Scripts\viewModels\pages\users.js" />
     <Content Include="Scripts\viewModels\viewmodelbase.js" />
     <Content Include="Web.config">
@@ -367,6 +395,7 @@
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
+    <Content Include="Views\Interviews\TakeNew.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -376,7 +405,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Extensions\IdentityExtensions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -437,6 +465,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
