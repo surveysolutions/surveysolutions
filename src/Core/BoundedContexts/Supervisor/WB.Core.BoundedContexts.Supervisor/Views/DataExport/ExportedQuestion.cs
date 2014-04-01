@@ -74,11 +74,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private string AnswerToStringValue(object answer)
         {
-            const string DefaultDelimiter = ",";
+            if (answer == null)
+                return string.Empty;
 
             var arrayOfObject = TryCastToEnumerable(answer);
-            if (arrayOfObject != null)
-                return string.Join(DefaultDelimiter, arrayOfObject);
+            if (arrayOfObject != null && arrayOfObject.Any())
+                return arrayOfObject.Last().ToString();
 
             return answer.ToString();
         }
