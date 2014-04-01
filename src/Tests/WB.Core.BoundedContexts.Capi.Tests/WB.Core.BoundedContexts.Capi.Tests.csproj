@@ -81,6 +81,7 @@
     <Compile Include="Views\InterviewViewModelTests\when_chapter_with_nested_group_is_disabling.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_chapter_with_nested_roster_is_disabling.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_roster_row_is_added_to_roster_inside_disabled_chapter.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_row_of_roster_is_conditionally_disabling.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_nested_group_inside_roster.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_roster_title_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_roster_with_2_rows_and_linked_question_out_of_roster.cs" />
