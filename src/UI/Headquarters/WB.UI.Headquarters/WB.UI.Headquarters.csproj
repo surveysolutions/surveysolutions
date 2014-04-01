@@ -284,6 +284,10 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="HostMap.config" />
+    <Content Include="Configuration\Vitalii.Headquarters.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Configuration\ANK.Headquarters.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -363,6 +367,7 @@
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
+    <Content Include="Views\Questionnaires\TakeNew.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

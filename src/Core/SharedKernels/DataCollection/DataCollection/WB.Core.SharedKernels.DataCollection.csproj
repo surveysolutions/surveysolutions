@@ -193,6 +193,7 @@
     <Compile Include="ReadSide\VersionedReadSideRepositoryReaderExtensions.cs" />
     <Compile Include="ReadSide\VersionedReadSideRepositoryWriterExtensions.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
+    <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />

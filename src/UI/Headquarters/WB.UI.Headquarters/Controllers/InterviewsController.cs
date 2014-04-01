@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Authentication;
 
 namespace WB.UI.Headquarters.Controllers
