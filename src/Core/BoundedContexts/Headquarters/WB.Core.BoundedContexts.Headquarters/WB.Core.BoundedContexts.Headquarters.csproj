@@ -81,7 +81,7 @@
   <ItemGroup>
     <Compile Include="Authentication\ApplicationRoles.cs" />
     <Compile Include="Authentication\ApplicationUserManager.cs" />
-    <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
+    <Compile Include="Questionnaires\ApplicationVersionSettings.cs" />
     <Compile Include="PasswordPolicy\ApplicationPasswordPolicySettings.cs" />
     <Compile Include="Authentication\AuthenticationModule.cs" />
     <Compile Include="Authentication\CustomPasswordValidator.cs" />
@@ -186,7 +186,9 @@
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Interview\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Authentication\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

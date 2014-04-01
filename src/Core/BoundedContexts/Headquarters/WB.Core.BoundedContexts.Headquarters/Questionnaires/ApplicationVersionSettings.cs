@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
+﻿namespace WB.Core.BoundedContexts.Headquarters.Questionnaires
 {
     public struct ApplicationVersionSettings
     {
