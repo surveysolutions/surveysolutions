@@ -160,7 +160,7 @@ namespace Web.Supervisor.Controllers
                                 Roles = user.Roles.ToArray(),
                             }
                         );
-                    this.Success(string.Format("Information about <b>{0}</b> sucessfully updated", user.UserName));
+                    this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                     return this.DetailsBackByUser(user);
                 }
                 else

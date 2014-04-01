@@ -106,11 +106,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team.
+        ///   Looks up a localized string similar to Teams.
         /// </summary>
-        public static string Team {
+        public static string Teams {
             get {
-                return ResourceManager.GetString("Team", resourceCulture);
+                return ResourceManager.GetString("Teams", resourceCulture);
             }
         }
         
