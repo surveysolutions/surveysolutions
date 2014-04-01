@@ -367,7 +367,6 @@
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
-    <Content Include="Views\Questionnaires\TakeNew.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
