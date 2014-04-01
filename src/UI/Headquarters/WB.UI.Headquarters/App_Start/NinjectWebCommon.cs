@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenPlainStorageInfrastructureModule(ravenConnectionSettings),
                 new RavenWriteSideInfrastructureModule(ravenConnectionSettings),
-                new RavenReadSideInfrastructureModule(ravenConnectionSettings),
+                new RavenReadSideInfrastructureModule(ravenConnectionSettings, typeof(HeadquartersBoundedContextModule).Assembly),
                 new DataCollectionSharedKernelModule(),
                 new QuestionnaireVerificationModule(),
                 new ExpressionProcessorModule(),

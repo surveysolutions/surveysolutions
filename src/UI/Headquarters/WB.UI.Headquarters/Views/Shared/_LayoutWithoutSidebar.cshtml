@@ -13,11 +13,11 @@
 {
     @RenderSection("output", false)
 }
-<div id="content" class="no-menu">
-    <div class="innerLR">
+<div id="content">
+    <div>
         @Html.Partial("_alerts")
     </div>
-    <div class="innerLR">
+    <div>
         @RenderBody()
     </div>
 </div>

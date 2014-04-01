@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web.UI;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
@@ -9,9 +10,10 @@ using Main.Core.View;
 using WB.Core.BoundedContexts.Headquarters.Team.Models;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.BoundedContexts.Headquarters.Team.ViewFactories
+namespace WB.Core.BoundedContexts.Headquarters.Team.ViewFactories.Implementation
 {
-    public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
+    internal class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>,
+        IUserListViewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
@@ -48,6 +50,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Team.ViewFactories
 
                         return new UserListView {Page = input.Page, PageSize = input.PageSize, TotalCount = all.Count(), Items = selection};
                     });
+        }
+
+        public List<UserDocument> GetActiveUsers(int pageSize)
+        {
+            return this.users.Query(_ => _.Where(x => x.IsLocked == false).Take(pageSize).ToList());
         }
     }
 }

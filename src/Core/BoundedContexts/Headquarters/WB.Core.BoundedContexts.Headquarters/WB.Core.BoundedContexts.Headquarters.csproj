@@ -57,6 +57,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Nito.AsyncEx">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.2.1.3\lib\net45\Nito.AsyncEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.2.1.3\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Enlightenment">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.2.1.3\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
@@ -79,8 +89,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\ApplicationManagerExtensions.cs" />
     <Compile Include="Authentication\ApplicationRoles.cs" />
     <Compile Include="Authentication\ApplicationUserManager.cs" />
+    <Compile Include="Interview\EventHandlers\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Interview\ViewFactories\AllInterviewsFactory.cs" />
+    <Compile Include="Interview\Views\AllInterviewsInputModel.cs" />
+    <Compile Include="Interview\Views\AllInterviewsView.cs" />
+    <Compile Include="Interview\Views\AllInterviewsViewItem.cs" />
+    <Compile Include="Interview\Views\InterviewBrief.cs" />
+    <Compile Include="Interview\Views\InterviewFeaturedQuestion.cs" />
+    <Compile Include="Interview\Views\InterviewSummary.cs" />
     <Compile Include="Questionnaires\ApplicationVersionSettings.cs" />
     <Compile Include="PasswordPolicy\ApplicationPasswordPolicySettings.cs" />
     <Compile Include="Authentication\AuthenticationModule.cs" />
@@ -110,6 +129,14 @@
     <Compile Include="Interview\Views\TakeNew\TakeNewInterviewInputModel.cs" />
     <Compile Include="Interview\Views\TakeNew\TakeNewInterviewView.cs" />
     <Compile Include="Interview\ViewFactories\TakeNewInterviewViewFactory.cs" />
+    <Compile Include="Reports\ViewFactories\Implementation\AllUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Reports\ViewFactories\IAllUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Reports\ViewFactories\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
+    <Compile Include="Reports\Views\AllUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Reports\Views\AllUsersAndQuestionnairesView.cs" />
+    <Compile Include="Reports\Views\StatisticsLineGroupedByUserAndTemplate.cs" />
+    <Compile Include="Reports\Views\TemplateViewItem.cs" />
+    <Compile Include="Reports\Views\UsersViewItem.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -124,7 +151,8 @@
     <Compile Include="Team\Models\UserListView.cs" />
     <Compile Include="Team\Models\UserListViewInputModel.cs" />
     <Compile Include="Team\ViewFactories\InterviewersViewFactory.cs" />
-    <Compile Include="Team\ViewFactories\UserListViewFactory.cs" />
+    <Compile Include="Team\ViewFactories\IUserListViewFactory.cs" />
+    <Compile Include="Team\ViewFactories\Implementation\UserListViewFactory.cs" />
     <Compile Include="Team\Models\UserView.cs" />
     <Compile Include="Team\ViewFactories\UserViewFactory.cs" />
     <Compile Include="Team\Models\UserViewInputModel.cs" />
