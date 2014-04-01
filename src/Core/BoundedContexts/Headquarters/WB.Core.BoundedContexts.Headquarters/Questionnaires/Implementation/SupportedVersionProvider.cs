@@ -1,5 +1,4 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+﻿using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation
 {

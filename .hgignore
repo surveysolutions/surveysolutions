@@ -52,3 +52,4 @@ RavenQuestionnaire.Web/Web.Supervisor/App_Data/IncomingData/IncomingDataWithErro
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/ExportedData/*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/QuestionnaireExportStructureStorage/*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/TabletInformationStorage/*
+src/UI/Headquarters/WB.UI.Headquarters/App_Data/Elmah/
