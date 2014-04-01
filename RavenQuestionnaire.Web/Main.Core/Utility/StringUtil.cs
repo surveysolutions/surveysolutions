@@ -196,19 +196,34 @@ namespace Main.Core.Utility
 
             if (objectType == typeof(int))
             {
-                returnValue = int.Parse(text, CultureInfo.InvariantCulture);
+                int intValue;
+                if (int.TryParse(text, out intValue))
+                {
+                    returnValue = intValue;
+                }
             }
 
             if (objectType == typeof (decimal))
             {
-                returnValue = decimal.Parse(text, CultureInfo.InvariantCulture);
+                decimal decimalValue;
+                if (decimal.TryParse(text, out decimalValue))
+                {
+                    returnValue = decimalValue;
+                }
             }
 
             if (objectType == typeof (DateTime))
             {
-                returnValue = DateTime.Parse(text, CultureInfo.InvariantCulture);
+                DateTime dateValue;
+                if (DateTime.TryParse(text, out dateValue))
+                {
+                    returnValue = dateValue;
+                }
             }
 
+            if (returnValue == null)
+                return default(T);
+            
             return (T) returnValue;
         }
 
