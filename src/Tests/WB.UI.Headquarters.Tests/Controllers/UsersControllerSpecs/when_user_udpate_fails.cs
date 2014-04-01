@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
             applicationUser = new ApplicationUser("1");
 
             userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
-            userManager.FindByIdAsync("1")
+            userManager.FindByNameAsync("1")
                 .Returns(Task.FromResult(applicationUser));
 
             userManager.UpdateAsync(null)
@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
             controller = Create.UsersController(userManager);
         };
 
-        Because of = async () => actionResult = await controller.EditAccount("1", model);
+        Because of = async () => actionResult = await controller.EditAccount(model.UserName, model);
 
         It should_return_view = () => actionResult.ShouldBeOfExactType<ViewResult>();
 

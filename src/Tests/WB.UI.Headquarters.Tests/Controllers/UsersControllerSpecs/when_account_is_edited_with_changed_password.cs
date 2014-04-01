@@ -20,15 +20,15 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
                 Password = "password1",
                 AdminRoleEnabled = true,
                 HeadquarterRoleEnabled = true,
-                Id = "1"
+                Id = "user"
             };
-            applicationUser = new ApplicationUser("1")
+            applicationUser = new ApplicationUser("user")
             {
                 UserName = model.UserName
             };
 
             userManager = Substitute.For<UserManager<ApplicationUser>>(Substitute.For<IUserStore<ApplicationUser>>());
-            userManager.FindByIdAsync("1")
+            userManager.FindByNameAsync(model.Id)
                 .Returns(Task.FromResult(applicationUser));
 
             userManager.UpdateAsync(null)
@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
             controller = Create.UsersController(userManager);
         };
 
-        Because of = async () => actionResult = await controller.EditAccount("1", model);
+        Because of = async () => actionResult = await controller.EditAccount("user", model);
 
         It should_change_user_password = () => applicationUser.PasswordHash.ShouldEqual("password1hash");
 

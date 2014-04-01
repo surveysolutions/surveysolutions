@@ -77,13 +77,13 @@ namespace WB.UI.Headquarters.Controllers
 
         public async Task<ActionResult> EditAccount(string id)
         {
-            ApplicationUser user = await userManager.FindByIdAsync(id);
+            ApplicationUser user = await userManager.FindByNameAsync(id);
             var viewModel = new EditAccountModel
             {
                 UserName = user.UserName,
                 HeadquarterRoleEnabled = user.IsHeadquarter,
                 AdminRoleEnabled = user.IsAdministrator,
-                Id = user.Id
+                Id = user.UserName
             };
 
             return this.View(viewModel);
@@ -93,7 +93,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditAccount(string id, EditAccountModel model)
         {
-            ApplicationUser user = await userManager.FindByIdAsync(model.Id);
+            ApplicationUser user = await userManager.FindByNameAsync(model.Id);
             user.IsAdministrator = model.AdminRoleEnabled;
             user.IsHeadquarter = model.HeadquarterRoleEnabled;
 
