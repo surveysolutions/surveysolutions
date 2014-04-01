@@ -19,11 +19,12 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
             var userManager = Substitute.For<UserManager<ApplicationUser>>(userStore);
             applicationUser = new ApplicationUser("1")
             {
+                UserName = "user",
                 IsAdministrator = true,
                 IsHeadquarter = true
             };
 
-            userManager.FindByIdAsync(null)
+            userManager.FindByNameAsync(null)
                 .ReturnsForAnyArgs(Task.FromResult(applicationUser));
 
             controller = Create.UsersController(userManager);
@@ -37,7 +38,7 @@ namespace WB.UI.Headquarters.Tests.Controllers.UsersControllerSpecs
         {
             var model = actionResult.GetModel<AccountModel>();
 
-            model.Id.ShouldEqual("1");
+            model.Id.ShouldEqual(model.UserName);
             model.AdminRoleEnabled.ShouldBeTrue();
             model.HeadquarterRoleEnabled.ShouldBeTrue();
         };

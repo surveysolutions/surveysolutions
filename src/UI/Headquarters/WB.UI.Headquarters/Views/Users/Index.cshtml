@@ -4,9 +4,11 @@
     ViewBag.Title = "Users list";
 }
 
-
+<div class="page-header">
+    <h1>Users</h1>
+</div>
 <div>
-    <h2>Users</h2>
+    
     <div>
         @TempData["Message"]
     </div>
@@ -23,7 +25,7 @@
             {
                 <tr class="@(string.Equals(user.Login, Model.HighlightedUser, StringComparison.CurrentCultureIgnoreCase) ? "success" : "")">
                     <td>
-                        @Html.ActionLink(user.Login, "EditAccount", "Users", new { id = user.Id }, null)
+                        @Html.ActionLink(user.Login, "EditAccount", "Users", new { id = user.Login }, null)
                     </td>
                     <td>@user.Role</td>
                 </tr>
