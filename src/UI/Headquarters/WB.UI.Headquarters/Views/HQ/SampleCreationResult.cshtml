@@ -1,0 +1,56 @@
+﻿
+@model WB.Core.BoundedContexts.Supervisor.Views.SampleImport.SampleCreationStatus
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+    ViewBag.Title = "Index";
+}
+<div class="row-fluid">
+    <h3 id="creationStatus">
+        Processing....
+    </h3>
+ 
+        
+        
+@section scripts
+{
+
+
+    <script type="text/javascript">
+        var stopMarker = false;
+
+        function updateSampleCreationStatus() {
+            return $.ajax({
+                url: '@Url.Action("GetSampleCreationStatus", new {id = Model.Id})',
+                method: 'POST',
+                data: { timestamp: new Date().getMilliseconds() }
+            }).done(function(result) {
+                if (!result.IsCompleted) {
+                    $('#creationStatus').text(result.StatusMessage);
+                    return;
+                }
+                if (!result.IsSuccessed) {
+                    $('#creationStatus').text(result.ErrorMessage);
+                    stopMarker = true;
+                    return;
+                }
+                stopMarker = true;
+                $('#creationStatus').text("Sample creation was succefully completed!");
+                //  $('#creationStatus').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
+            });
+        }
+
+        function updateSampleCreationResult() {
+            $.when(updateSampleCreationStatus()).always(function() {
+                if (stopMarker != true)
+                    setTimeout(updateSampleCreationResult, 1000);
+            });
+        }
+
+        $(function() {
+            updateSampleCreationResult();
+        });
+
+    </script>
+    
+}
+</div>

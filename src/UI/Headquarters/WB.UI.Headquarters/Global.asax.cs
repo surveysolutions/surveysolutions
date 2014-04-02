@@ -19,5 +19,7 @@ namespace WB.UI.Headquarters
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);            
         }
+
+        public static void Initialize() { }
     }
 }

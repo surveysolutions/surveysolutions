@@ -1,0 +1,17 @@
+﻿@{
+    this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Incoming data which wasn't handled successfully";
+}
+@model IEnumerable<Guid>
+<h3>Incoming data Control Panel</h3>
+<pre style="height: 300px; overflow-y: scroll;">
+@foreach (var packageId in Model)
+      {
+<b>PackageId </b> @packageId  
+          @Html.ActionLink("Download content", "GetIncomingDataWithError", new { id = packageId })
+          <br/>
+                
+      }
+       
+
+</pre>
