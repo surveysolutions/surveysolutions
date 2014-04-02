@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters
                     : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new FileInfrastructureModule(),
-                new SupervisorCoreRegistry(),
+                new HeadquartersRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
                 new HeadquartersBoundedContextModule(
