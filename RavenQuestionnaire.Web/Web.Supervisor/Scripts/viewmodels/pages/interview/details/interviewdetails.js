@@ -3,9 +3,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
     var self = this,
         config = new Config(),
-        model = new Model(),
-        mapper = new Mapper(model, config),
-        datacontext = new DataContext(mapper, config);
+        datacontext = new DataContext(config, settings.Interview.InterviewId);
 
     self.filter = ko.observable('all');
     self.questionnaire = ko.observable();
@@ -38,7 +36,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
     });
     self.answeredCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isAnswered() ? 1 : 0);
+            return count + (question.isAnswered ? 1 : 0);
         }, 0);
     });
     self.commentedCount = ko.computed(function() {
@@ -48,17 +46,17 @@ Supervisor.VM.InterviewDetails = function (settings) {
     });
     self.invalidCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isInvalid() ? 1 : 0);
+            return count + (question.isInvalid ? 1 : 0);
         }, 0);
     });
     self.editableCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.scope() == "Supervisor" ? 1 : 0);
+            return count + (question.scope == "Supervisor" ? 1 : 0);
         }, 0);
     });
     self.enabledCount = ko.computed(function() {
         return _.reduce(self.questions(), function(count, question) {
-            return count + (question.isEnabled() ? 1 : 0);
+            return count + (question.isEnabled ? 1 : 0);
         }, 0);
     });
     self.applyQuestionFilter = function(f) {
@@ -79,15 +77,16 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.addComment = function() {
         var command = datacontext.getCommand(config.commands.setCommentCommand, {
             comment: self.currentComment(),
-            questionId: self.currentQuestion().uiId()
+            question: self.currentQuestion()
         });
         self.SendCommand(command, function () {
-            var comment = new model.Comment();
-            comment.text(self.currentComment());
-            comment.date(new Date());
-            comment.userName(settings.UserName);
-            self.currentQuestion().comments.push(comment);
+            self.currentQuestion().comments().push({
+                text: self.currentComment(),
+                date: new Date(),
+                userName: settings.UserName
+            });
             self.currentComment('');
+            self.currentQuestion().comments.valueHasMutated();
         });
     };
     self.flagAnswer = function(question) {
@@ -95,19 +94,23 @@ Supervisor.VM.InterviewDetails = function (settings) {
             ? config.commands.removeFlagFromAnswer
             : config.commands.setFlagToAnswer;
 
-        var command = datacontext.getCommand(commandName, { questionId: question.uiId() });
+        var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command, function () {
             question.isFlagged(!question.isFlagged());
         });
     };
     self.saveAnswer = function(question) {
         var commandName = "";
-        switch (question.questionType()) {
+        switch (question.questionType) {
         case "Text":
             commandName = config.commands.answerTextQuestionCommand;
             break;
-        case "AutoPropagate": commandName = config.commands.answerNumericIntegerQuestionCommand; break;
-        case "Numeric": commandName = question.isInteger() ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand; break;                   
+        case "AutoPropagate":
+            commandName = config.commands.answerNumericIntegerQuestionCommand;
+            break;
+        case "Numeric":
+            commandName = question.isInteger ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand;
+            break;
         case "DateTime":
             commandName = config.commands.answerDateTimeQuestionCommand;
             break;
@@ -122,30 +125,27 @@ Supervisor.VM.InterviewDetails = function (settings) {
             break;
         }
 
-        var command = datacontext.getCommand(commandName, { questionId: question.uiId() });
+        var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command);
-    };
-    self.filterClick = function(ui, e) {
-        //console.log(ui);
-        //console.log(e);
     };
     self.load = function () {
         self.SendRequest(settings.Urls.InterviewDetails, settings.Interview, function (interview) {
 
-            datacontext.parseData(interview);
-            self.questionnaire(datacontext.questionnaire);
-            self.groups(datacontext.groups.getAllLocal());
-            self.questions(datacontext.questions.getAllLocal());
+            var questions = self.prepareGroupsAndQuestionsAndReturnAllQuestions(interview.Groups);
+
+            self.questionnaire(interview.InterviewInfo);
+            self.groups(interview.Groups);
+            self.questions(questions);
 
             Router({
                 '/group/:groupId': function (groupId) {
                     self.applyQuestionFilter('all');
                     var visibleGroupsIds = [groupId];
                     $.each(self.groups(), function (index, group) {
-                        if (_.contains(visibleGroupsIds, group.uiId())) {
+                        if (_.contains(visibleGroupsIds, group.uiId)) {
                             group.isVisible(true);
-                        } else if (_.contains(visibleGroupsIds, group.parentId())) {
-                            visibleGroupsIds.push(group.uiId());
+                        } else if (_.contains(visibleGroupsIds, group.parentId)) {
+                            visibleGroupsIds.push(group.uiId);
                             group.isVisible(true);
                         } else {
                             group.isVisible(false);
@@ -157,6 +157,162 @@ Supervisor.VM.InterviewDetails = function (settings) {
                 }
             }).init();
         });
+    };
+    
+    self.prepareGroupsAndQuestionsAndReturnAllQuestions = function (groups) {
+        var allQuestions = [];
+        $.each(groups, function(i, group) {
+
+            $.each(group.questions, function (j, question) {
+                allQuestions.push(question);
+                question.isVisible = ko.observable(true);
+                question.isSelected = ko.observable(false);
+
+                question.comments = ko.observableArray(question.comments);
+                question.isFlagged = ko.observable(question.isFlagged);
+                question.markerStyle = ko.computed(function() {
+                    if (question.isInvalid) {
+                        return "invalid";
+                    }
+                    if (question.scope == "Supervisor") {
+                        return "supervisor";
+                    }
+                    return "";
+                });
+                question.matchFilter = function(filter) {
+                    switch (filter) {
+                    case "all":
+                        question.isVisible(true);
+                        break;
+                    case "flaged":
+                        question.isVisible(question.isFlagged());
+                        break;
+                    case "commented":
+                        question.isVisible(question.comments().length > 0);
+                        break;
+                    case "answered":
+                        question.isVisible(question.isAnswered);
+                        break;
+                    case "invalid":
+                        question.isVisible(question.isInvalid);
+                        break;
+                    case "supervisor":
+                        question.isVisible(question.scope == "Supervisor");
+                        break;
+                    case "enabled":
+                        question.isVisible(question.isEnabled);
+                        break;
+                    }
+                };
+
+                if (question.scope == "Supervisor") {
+                    question.errors = ko.validation.group(question);
+                    switch (question.questionType) {
+                        case "Text":
+                            question.answer = ko.observable(question.answer);
+                            break;
+                        case "Numeric":
+                            question.answer = ko.observable(question.answer).extend({ required: true, number: true });
+
+                            if (question.isInteger) {
+                                question.answer.extend({ digit: true });
+                            }
+                            else if (!_.isNull(question.countOfDecimalPlaces)) {
+                                question.answer.extend({ precision: question.countOfDecimalPlaces });
+                            }
+                            break;
+                        case "SingleOption":
+                            question.selectedOption = ko.observable(question.selectedOption).extend({
+                                validation: [{
+                                    validator: function (val) {
+                                        if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                                            return false;
+                                        return true;
+                                    },
+                                    message: 'At least one option should be checked'
+                                }]
+                            });
+                            break;
+                        case "MultyOption":
+                            question.orderedOptionsSelection = ko.observableArray([]);
+                            question.selectedOptionsCount = 0;
+                            question.selectedOptions = ko.observableArray(question.selectedOptions).extend({
+                                validation: [
+                                    {
+                                        validator: function (val) {
+                                            if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                                                return false;
+                                            return val.length > 0;
+                                        },
+                                        message: 'At least one option should be checked'
+                                    },
+                                    {
+                                        validator: function (val) {
+                                            if (_.isUndefined(question.maxAllowedAnswers) || _.isNull(question.maxAllowedAnswers)) {
+                                                return true;
+                                            }
+
+                                            return val.length <= question.maxAllowedAnswers;
+                                        },
+                                        message: 'Number of selected answers more than number of maximum permitted answers'
+                                    }]
+                            });
+                            question.orderSelectedOptions = function () {
+                                if (question.selectedOptionsCount != question.selectedOptions().length) {
+                                    if (question.selectedOptionsCount > question.selectedOptions().length) {
+                                        _.each(question.orderedOptionsSelection(), function (answer) {
+                                            if (!_.contains(question.selectedOptions(), answer)) {
+                                                question.orderedOptionsSelection.remove(answer);
+                                            }
+                                        });
+                                    }
+                                    _.each(question.options, function (option) {
+                                        var orderIndex = question.orderedOptionsSelection().indexOf(option.value);
+                                        if (_.contains(question.selectedOptions(), option.value)) {
+                                            if (_.isUndefined(option.orderNo)) {
+                                                option.orderNo = question.selectedOptions().length;
+                                                question.orderedOptionsSelection.push(option.value);
+                                            } else {
+                                                if (orderIndex > -1) {
+                                                    option.orderNo = orderIndex + 1;
+                                                }
+                                            }
+                                        } else {
+                                            if (question.selectedOptionsCount > question.selectedOptions().length) {
+                                                if (orderIndex == -1) {
+                                                    option.orderNo = undefined;
+                                                }
+                                            }
+                                        }
+                                    });
+                                    question.selectedOptionsCount = question.selectedOptions().length;
+                                }
+                            };
+                            if (question.areAnswersOrdered) {
+                                question.selectedOptions.subscribe(function () {
+                                    question.orderSelectedOptions();
+                                });
+                            }
+                            break;
+                    }
+                }
+            });
+
+            group.isVisible = ko.observable(true);
+            group.isSelected = ko.observable(false);
+            group.css = ko.computed(function () {
+                return "level" + self.depth + (group.isSelected() ? " selected" : "");
+            });
+            group.href = ko.computed(function () {
+                return "#group/" + group.uiId;
+            });
+            group.visibleQuestionsCount = ko.computed(function () {
+                return _.reduce(group.questions, function (count, question) {
+                    return count + (question.isVisible() ? 1 : 0);
+                }, 0);
+            });
+        });
+        return allQuestions;
     };
 
     self.showApproveModal = function () {
@@ -197,7 +353,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.showStatesHistory = function () {
         if (!isHistoryShowed) {
             self.changeStateHistory(undefined);
-            self.SendRequest(settings.Urls.ChangeStateHistory, { interviewId: datacontext.questionnaire.id() }, function (data) {
+            self.SendRequest(settings.Urls.ChangeStateHistory, { InterviewId: self.questionnaire().id }, function (data) {
                 self.changeStateHistory(data);
                 $('#statesHistoryPopover').show();
             });
