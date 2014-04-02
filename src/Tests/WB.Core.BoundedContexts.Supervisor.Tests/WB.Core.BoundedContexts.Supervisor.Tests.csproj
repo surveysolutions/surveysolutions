@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\AnswersByVariableDenormalizerTestContext.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_collection_has_record_about_level_with_key_0.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\when_answering_geo_question_and_collection_was_not_created.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_MultipleOptionsQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_NumericIntegerQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_NumericRealQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
+    <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_InterviewCreated_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowAdded_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived_for_disabled_group.cs" />
