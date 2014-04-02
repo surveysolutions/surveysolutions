@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection.Emit;
 using System.Web;
 using System.Web.Http;
 using Core.Supervisor.Views.ChangeStatus;
 using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Interviews;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Web.Supervisor.Models;
 using System.Linq;
@@ -187,6 +182,7 @@ namespace Web.Supervisor.Controllers
                         timestamp = timestamp
                     };
                     break;
+                case QuestionType.AutoPropagate:
                 case QuestionType.Numeric:
                     model = new NumericQuestionModel()
                     {

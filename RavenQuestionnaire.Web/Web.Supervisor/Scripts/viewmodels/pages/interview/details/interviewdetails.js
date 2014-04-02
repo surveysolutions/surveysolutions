@@ -102,25 +102,22 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.saveAnswer = function(question) {
         var commandName = "";
         switch (question.questionType) {
-        case "Text":
+        case config.questionTypes.Text:
             commandName = config.commands.answerTextQuestionCommand;
             break;
-        case "AutoPropagate":
-            commandName = config.commands.answerNumericIntegerQuestionCommand;
-            break;
-        case "Numeric":
+        case config.questionTypes.Numeric:
             commandName = question.isInteger ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand;
             break;
-        case "DateTime":
+        case config.questionTypes.DateTime:
             commandName = config.commands.answerDateTimeQuestionCommand;
             break;
-        case "GpsCoordinates":
+        case config.questionTypes.GpsCoordinates:
             commandName = config.commands.answerGeoLocationQuestionCommand;
             break;
-        case "SingleOption":
+        case config.questionTypes.SingleOption:
             commandName = config.commands.answerSingleOptionQuestionCommand;
             break;
-        case "MultyOption":
+        case config.questionTypes.MultyOption:
             commandName = config.commands.answerMultipleOptionsQuestionCommand;
             break;
         }
@@ -207,10 +204,10 @@ Supervisor.VM.InterviewDetails = function (settings) {
 
                 if (question.scope == "Supervisor") {
                     switch (question.questionType) {
-                        case "Text":
+                        case config.questionTypes.Text:
                             question.answer = ko.observable(question.answer).extend({ required: true });
                             break;
-                        case "Numeric":
+                        case config.questionTypes.Numeric:
                             question.answer = ko.observable(question.answer).extend({ required: true, number: true });
                             
                             if (question.isInteger) {
@@ -220,7 +217,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                 question.answer.extend({ precision: question.countOfDecimalPlaces });
                             }
                             break;
-                        case "SingleOption":
+                        case config.questionTypes.SingleOption:
                             question.selectedOption = ko.observable(question.selectedOption).extend({
                                 validation: [{
                                     validator: function (val) {
@@ -238,7 +235,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                 return _.isEmpty(o) ? "" : o.label;
                             });
                             break;
-                        case "MultyOption":
+                        case config.questionTypes.MultyOption:
                             var selectedOptionsSource = question.selectedOptions;
                             question.selectedOptions = ko.observableArray().extend({
                                 validation: [
