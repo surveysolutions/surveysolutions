@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         public override void Load()
         {
             this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
-            this.Bind<IViewFactory<SupervisorInterviewersInputModel, InterviewersView>>().To<InterviewersViewFactory>();
+            this.Bind<IViewFactory<InterviewersInputModel, InterviewersView>>().To<InterviewersViewFactory>();
             this.Bind<IViewFactory<UserViewInputModel, UserView>>().To<UserViewFactory>();
             this.Bind<IUserListViewFactory>().To<UserListViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
