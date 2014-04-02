@@ -48,19 +48,12 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (this.LoginIncludingHeadquartersData(model.UserName, model.Password))
                 {
-                    bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
-                    if (isSupervisor || isHeadquarter)
+                    if (isHeadquarter)
                     {
                         this.authentication.SignIn(model.UserName, false);
-                        if (isSupervisor)
-                        {
-                            return this.RedirectToAction("Index", "Survey");
-                        }
-                        else
-                        {
-                            return this.RedirectToAction("Index", "HQ");
-                        }
+                        
+                        return this.RedirectToAction("Index", "HQ");
                     }
 
                     this.ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
