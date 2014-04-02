@@ -30,6 +30,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
                 new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object,new Mock<ISynchronizationDataStorage>().Object);
         }
 
+        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(UserDocument user = null)
+        {
+            var userDocumentMockStorage = new Mock<IReadSideRepositoryWriter<UserDocument>>();
+            userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
+
+            return new InterviewEventHandlerFunctional(
+                userDocumentMockStorage.Object,
+                new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>().Object,
+                new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object, 
+                new Mock<ISynchronizationDataStorage>().Object);
+        }
+
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
             Dictionary<Guid, Guid?> rosterGroupsWithTitleQuestionPairs)
         {
