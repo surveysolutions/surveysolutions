@@ -121,7 +121,7 @@
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
-    <Compile Include="SupervisorBoundedContextModule.cs" />
+    <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />

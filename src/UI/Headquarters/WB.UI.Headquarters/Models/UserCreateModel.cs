@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Models
         }
 
         [Required]
-        public string Password
+        public new string Password
         {
             get
             {
