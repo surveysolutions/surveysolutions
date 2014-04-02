@@ -1,94 +1,119 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using Core.Supervisor.Views.User;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Headquarters.Authentication;
-using WB.Core.BoundedContexts.Headquarters.Team.Models;
+using Questionnaire.Core.Web.Helpers;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.UI.Headquarters.Models.Team;
+using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = ApplicationRoles.Headquarter)]
     public class TeamController : BaseController
     {
-        private readonly ICommandService commandService;
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
 
-        public TeamController(ICommandService commandService,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory)
+        public TeamController(ICommandService commandService, 
+                              IGlobalInfoProvider globalInfo, 
+                              ILogger logger,
+                              IViewFactory<UserViewInputModel, UserView> userViewFactory)
+            : base(commandService, globalInfo, logger)
         {
-            this.commandService = commandService;
             this.userViewFactory = userViewFactory;
+            this.ViewBag.ActivePage = MenuItem.Teams;
         }
 
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(Guid id)
         {
-            return this.View(new UserCreateModel { Id = id });
+            return this.View(new UserCreateModel() {Id = id});
         }
 
         [HttpPost]
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(UserCreateModel model)
         {
             if (this.ModelState.IsValid)
             {
-                UserView user = this.userViewFactory.Load(new UserViewInputModel(model.UserName, null));
+                UserView user =
+                    this.userViewFactory.Load(
+                        new UserViewInputModel(UserName: model.UserName, UserEmail: null));
                 if (user == null)
                 {
-                    this.commandService.Execute(new CreateUserCommand(Guid.NewGuid(), model.UserName, SimpleHash.ComputeHash(model.Password),
-                        model.Email,
-                        isLocked: model.IsLocked,
-                        roles: new[] { UserRoles.Operator },
-                        supervsor: this.GetUser(model.Id).GetUseLight()));
+                    this.CommandService.Execute(new CreateUserCommand(
+                                                    publicKey: Guid.NewGuid(),
+                                                    userName: model.UserName,
+                                                    password: SimpleHash.ComputeHash(model.Password),
+                                                    email: model.Email,
+                                                    isLocked: model.IsLocked,
+                                                    roles: new[] {UserRoles.Operator},
+                                                    supervsor: this.GetUser(model.Id).GetUseLight()));
                     this.Success("Interviewer was successfully created");
-                    return this.RedirectToAction("Interviewers", new { id = model.Id });
+                    return this.RedirectToAction("Interviewers", new {id = model.Id});
                 }
-                this.Error("User name already exists. Please enter a different user name.");
+                else
+                {
+                    this.Error("User name already exists. Please enter a different user name.");
+                }
             }
 
             return this.View(model);
         }
 
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddSupervisor()
         {
             return this.View(new UserCreateModel());
         }
 
         [HttpPost]
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddSupervisor(UserCreateModel model)
         {
             if (this.ModelState.IsValid)
             {
                 UserView user =
                     this.userViewFactory.Load(
-                        new UserViewInputModel(model.UserName, null));
+                        new UserViewInputModel(UserName: model.UserName, UserEmail: null));
                 if (user == null)
                 {
-                    this.commandService.Execute(new CreateUserCommand(Guid.NewGuid(), model.UserName, SimpleHash.ComputeHash(model.Password),
-                        model.Email,
-                        isLocked: model.IsLocked,
-                        roles: new[] { UserRoles.Supervisor },
-                        supervsor: null));
+                    this.CommandService.Execute(new CreateUserCommand(
+                                                    publicKey: Guid.NewGuid(),
+                                                    userName: model.UserName,
+                                                    password: SimpleHash.ComputeHash(model.Password),
+                                                    email: model.Email,
+                                                    isLocked: model.IsLocked,
+                                                    roles: new[] {UserRoles.Supervisor},
+                                                    supervsor: null));
 
                     this.Success("Supervisor was successfully created");
                     return this.RedirectToAction("Index");
                 }
-                this.Error("User name already exists. Please enter a different user name.");
+                else
+                {
+                    this.Error("User name already exists. Please enter a different user name.");
+                }
             }
 
             return this.View(model);
         }
 
+        [Authorize(Roles = "Headquarter")]
         public ActionResult Index()
         {
             return this.View();
         }
 
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult Interviewers(Guid? id)
         {
+            if (this.GlobalInfo.IsHeadquarter && !id.HasValue)
+                return this.RedirectToAction("Index");
+
             return this.View(id);
         }
 
@@ -97,48 +122,67 @@ namespace WB.UI.Headquarters.Controllers
             return this.userViewFactory.Load(new UserViewInputModel(id));
         }
 
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult Details(Guid id)
         {
-            UserView user = this.GetUser(id);
+            var user = this.GetUser(id);
 
-            if (user == null) throw new HttpException(404, string.Empty);
+            if(user == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new UserViewModel
-            {
-                Id = user.PublicKey,
-                Email = user.Email,
-                IsLocked = user.IsLocked,
-                UserName = user.UserName
-            });
+            return this.View(new UserViewModel()
+                {
+                    Id = user.PublicKey,
+                    Email = user.Email,
+                    IsLocked = user.IsLocked,
+                    UserName = user.UserName
+                });
         }
 
+        [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult Details(UserViewModel model)
         {
             if (this.ModelState.IsValid)
             {
-                UserView user = this.GetUser(model.Id);
+                var user = this.GetUser(model.Id);
                 if (user != null)
                 {
-                    this.commandService.Execute(
-                        new ChangeUserCommand
-                        {
-                            PublicKey = user.PublicKey,
-                            PasswordHash = string.IsNullOrEmpty(model.Password)
-                                ? user.Password
-                                : SimpleHash.ComputeHash(model.Password),
-                            Email = model.Email,
-                            IsLocked = model.IsLocked,
-                            Roles = user.Roles.ToArray(),
-                        }
+                    this.CommandService.Execute(
+                        new ChangeUserCommand()
+                            {
+                                PublicKey = user.PublicKey,
+                                PasswordHash = string.IsNullOrEmpty(model.Password)
+                                               ? user.Password
+                                               : SimpleHash.ComputeHash(model.Password),
+                                Email = model.Email,
+                                IsLocked = model.IsLocked,
+                                Roles = user.Roles.ToArray(),
+                            }
                         );
                     this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                    return this.RedirectToAction("Index");
+                    return this.DetailsBackByUser(user);
                 }
-                this.Error("Could not update user information because current user does not exist");
+                else
+                {
+                    this.Error("Could not update user information because current user does not exist");
+                }
             }
 
             return this.View(model);
+        }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult DetailsBack(Guid id)
+        {
+            var user = this.GetUser(id);
+            return this.DetailsBackByUser(user);
+        }
+
+        private ActionResult DetailsBackByUser(UserView user)
+        {
+            return this.GlobalInfo.IsHeadquarter && user.Supervisor == null
+                       ? this.RedirectToAction("Index")
+                       : this.RedirectToAction("Interviewers", new {id = user.Supervisor.Id});
         }
     }
 }

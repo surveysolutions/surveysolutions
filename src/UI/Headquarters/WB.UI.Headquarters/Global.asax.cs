@@ -1,112 +1,132 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
-using System.Web.Http;
+using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Security;
 using System.Web.SessionState;
+using System.Web.Http;
+using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
-using WB.UI.Headquarters.App_Start;
-using WB.UI.Headquarters.Controllers;
+using WB.UI.Shared.Web.Elmah;
 
 namespace WB.UI.Headquarters
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
-        static MvcApplication()
+         /// <summary>
+        /// Initialization per AppDomain.
+        /// </summary>
+        static Global()
         {
-            NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+            SetupNConfig();
+        }
+
+        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute());
+        }
+
+        public static void RegisterHttpFilters(HttpFilterCollection filters)
+        {
+            filters.Add(new ElmahHandledErrorLoggerFilter());
+        }
+
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            
+            routes.MapRoute(
+                "Default", 
+                "{controller}/{action}/{id}", 
+                new { controller = "Survey", action = "Index", id = UrlParameter.Optional } 
+            );
+        }
+
+        protected void Application_Error()
+        {
+            Exception lastError = this.Server.GetLastError();
+            this.logger.Fatal("Unexpected error occurred", lastError);
+            if (lastError.InnerException != null)
+            {
+                this.logger.Fatal("Unexpected error occurred", lastError.InnerException);
+            }
         }
 
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
+            this.logger.Info("Starting application.");
+
+            AppDomain current = AppDomain.CurrentDomain;
+            current.UnhandledException += this.CurrentUnhandledException;
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            
+            //WebApiConfig.Register(GlobalConfiguration.Configuration);
+
+            AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // RouteTable.Routes.Add(new ServiceRoute("", new Ninject.Extensions.Wcf.NinjectServiceHostFactory(), typeof(API)));
+
+            RegisterGlobalFilters(GlobalFilters.Filters);
+            RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
+            RegisterRoutes(RouteTable.Routes);
+
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new RazorViewEngine());
+            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
-        protected void Application_Error(object sender, EventArgs e)
+        private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var httpContext = ((MvcApplication)sender).Context;
-
-            var ex = Server.GetLastError();
-
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
-            logger.Error("Unexpected error occurred", ex);
-
-            var controller = new ErrorController();
-            var routeData = new RouteData();
-            var action = "Index";
-
-            if (ex is HttpAntiForgeryException)
+            try
             {
-                httpContext.Response.Redirect(httpContext.Request.Url.ToString(), true);
+                var exp = (Exception)e.ExceptionObject;
+                this.logger.Fatal("Global Unhandled:", exp);
+                //this.logger.Fatal(e.ExceptionObject);
+            }
+            catch (Exception)
+            {
+                //throw;
+            }
+            
+        }
+
+        private static void SetupNConfig()
+        {
+            NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+        }
+
+        #warning TLK: delete this when NCQRS initialization moved to Global.asax
+        public static void Initialize() { }
+
+        public override void Init()
+        {
+            this.PostAuthenticateRequest += MvcApplication_PostAuthenticateRequest;
+            base.Init();
+        }
+
+        void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
+        {
+            HttpContext.Current.SetSessionStateBehavior(
+                SessionStateBehavior.Required);
+        }
+
+        void ErrorLog_Filtering(object sender, ExceptionFilterEventArgs e)
+        {
+            var ctx = e.Context as HttpContext;
+            if (ctx == null)
+            {
                 return;
             }
-
-            if (ex is HttpException)
-            {
-                var httpEx = ex as HttpException;
-
-                switch (httpEx.GetHttpCode())
-                {
-                    case 404:
-                        action = "NotFound";
-                        break;
-                    case 403:
-                        action = "Forbidden";
-                        break;
-                    case 401:
-                        action = "AccessDenied";
-                        break;
-                }
-            }
-
-            var currentController = string.Empty;
-            var currentAction = string.Empty;
-            var currRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
-            if (currRouteData != null)
-            {
-                currentController = (string)currRouteData.Values["controller"] ?? string.Empty;
-                currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
-            }
-
-            httpContext.ClearError();
-            httpContext.Response.Clear();
-            httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
-            httpContext.Response.TrySkipIisCustomErrors = true;
-            httpContext.Response.ContentType = "text/html";
-
-            routeData.Values["controller"] = "Error";
-            routeData.Values["action"] = action;
-
-            controller.ViewData.Model = new HandleErrorInfo(ex, currentController, currentAction);
-            ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
-        }
-
-        /// <summary>
-        /// Used to trigger execution of static constructor
-        /// </summary>
-        public static void Initialize()
-        {
-        }
-
-        protected void Application_PostAuthorizeRequest()
-        {
-            if (IsWebApiRequest())
-            {
-                HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Required);
-            }
-        }
-
-        private static bool IsWebApiRequest()
-        {
-            return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.StartsWith("~/api");
+            ElmahDataFilter.Apply(e, ctx);
         }
     }
 }

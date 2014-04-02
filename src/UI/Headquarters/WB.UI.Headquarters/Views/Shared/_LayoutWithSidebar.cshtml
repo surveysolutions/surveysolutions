@@ -2,8 +2,9 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section  styles
+@section styles
 {
+    @Styles.Render("~/css/list")
     @RenderSection("styles", false)
 }
 @section scripts
@@ -12,39 +13,19 @@
     @RenderSection("scripts", false)
 }
 
-<div id="content">
-    <div>
-        @Html.Partial("_alerts")
-    </div>
-    @RenderSection("header", false)
-
-    <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="panel-title" data-bind="click: ToggleFilter">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <span class="glyphicon" data-bind="css: { 'glyphicon-zoom-in': !IsFilterOpen(), 'glyphicon-zoom-out': IsFilterOpen()}"></span>
-                        Filters
-                    </button>
-                </div>
-            </div>
-            <div id="filtersCollapse" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div class="row">
-                        @RenderSection("filters", false)
-                    </div>
-                </div>
-            </div>
+<div id="menu" class="hidden-phone">
+    <div id="menuInner" class="slim-scroll">
+        <div class="hide-panel-block text-right innerLR">
+            &larr;&nbsp;<a class="pseudo-link" data-bind="click: ToggleFilter">Hide filter</a>
         </div>
+        @RenderSection("filters", false)
     </div>
-
-
-
+</div>
+<div id="content">
+    <div class="innerLR">@Html.Partial("_alerts")</div>
+    @RenderSection("header", false)
     <div class="menubar">
-
-        @*<div id="filters" class="filters collapse">
-                @RenderSection("filters", false)
-            </div>*@
+        <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
         @RenderSection("actionbar", false)
     </div>
     @RenderSection("gridnavigation", false)

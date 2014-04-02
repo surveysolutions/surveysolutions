@@ -8,16 +8,21 @@
 @section scripts
 {
     @RenderSection("scripts", false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#umbrella').hide();
+        });
+    </script>
 }
 @section output
 {
     @RenderSection("output", false)
 }
-<div id="content">
-    <div>
+<div id="content" class="no-menu">
+    <div class="innerLR">
         @Html.Partial("_alerts")
     </div>
-    <div>
+    <div class="innerLR">
         @RenderBody()
     </div>
 </div>

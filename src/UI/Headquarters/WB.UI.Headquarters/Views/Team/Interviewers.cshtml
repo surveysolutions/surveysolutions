@@ -21,18 +21,18 @@
 
 @section header
 {
-    <div class="page-header">
-        <h1>Interviewers</h1>
-    </div>
+    <h2 class="sinle-line-header">Interviewers</h2>
 }
 
 @section gridnavigation
 {
-    <div class="bottom-buffer">
-        <a class="btn btn-default" href="@Url.Action("AddInterviewer", "Team", new { id = Model })">
-            <span class="glyphicon glyphicon-user"></span> Add interviewer
-        </a>
-    </div>
+    @if (User.IsInRole("Headquarter"))
+    {
+        <div class="menubar">
+            <a class="btn " href="@Url.Action("AddInterviewer", "Team", new {id = Model})">
+                <i class="icon icon-user icon-white"></i> Add interviewer</a>    
+        </div>
+    }
 }
 
 @section grid
