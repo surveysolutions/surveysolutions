@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Supervisor.Views.Interview;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -37,20 +38,43 @@ namespace Core.Supervisor.Tests.Merger
             };
         }
 
-        internal static void AddInterviewLevel(InterviewData interview, Guid scopeId, decimal[] rosterVector, Dictionary<Guid,object> answeredQuestions)
+        internal static void AddInterviewLevel(InterviewData interview, Guid scopeId, decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions, Dictionary<Guid, string> rosterTitles=null)
         {
             var rosterLevel = new InterviewLevel(scopeId, null, rosterVector);
+            
             foreach (var answeredQuestion in answeredQuestions)
             {
                 var nestedQuestion = rosterLevel.GetOrCreateQuestion(answeredQuestion.Key);
                 nestedQuestion.Answer = answeredQuestion.Value;
             }
+
+            if (rosterTitles != null)
+            {
+                rosterLevel.RosterRowTitles = rosterTitles;
+            }
+
             interview.Levels.Add(string.Join(",", rosterVector), rosterLevel);
         }
 
-        internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo()
+        internal static InterviewQuestionView GetQuestion(InterviewDetailsView interviewDetailsView, Guid questionId,
+            decimal[] questionRosterVector)
         {
-            return new ReferenceInfoForLinkedQuestions();
+            var interviewGroupView =
+                interviewDetailsView.Groups.FirstOrDefault(
+                    g => g.Questions.Any(q => q.Id == questionId) && g.RosterVector.SequenceEqual(questionRosterVector));
+            if (
+                interviewGroupView != null)
+                return interviewGroupView
+                    .Questions.FirstOrDefault(q => q.Id == questionId);
+            return null;
+        }
+
+        internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo(QuestionnaireDocument questionnaireDocument = null)
+        {
+            if (questionnaireDocument == null)
+                return new ReferenceInfoForLinkedQuestions();
+            questionnaireDocument.ConnectChildrenWithParent();
+            return new ReferenceInfoForLinkedQuestionsFactory().CreateReferenceInfoForLinkedQuestions(questionnaireDocument, 1);
         }
 
         internal static QuestionnaireDocument CreateQuestionnaireDocumentWithGroupAndFixedRoster(Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)
