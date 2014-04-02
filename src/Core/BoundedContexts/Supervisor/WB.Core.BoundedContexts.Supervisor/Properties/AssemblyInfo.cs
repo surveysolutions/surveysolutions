@@ -36,4 +36,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Supervisor.Tests")]
+[assembly: InternalsVisibleTo("Core.Supervisor.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
