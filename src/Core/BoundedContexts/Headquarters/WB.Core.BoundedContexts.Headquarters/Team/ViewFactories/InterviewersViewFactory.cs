@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Team.ViewFactories
 {
-    public class InterviewersViewFactory : IViewFactory<SupervisorInterviewersInputModel, InterviewersView>
+    public class InterviewersViewFactory : IViewFactory<InterviewersInputModel, InterviewersView>
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Team.ViewFactories
             this.users = users;
         }
 
-        public InterviewersView Load(SupervisorInterviewersInputModel input)
+        public InterviewersView Load(InterviewersInputModel input)
         {
             var interviewers = this.users.Query(_ => _
                 .Where(user => user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == input.SupervisorId)

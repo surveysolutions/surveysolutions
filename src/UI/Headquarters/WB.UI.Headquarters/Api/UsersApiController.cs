@@ -15,11 +15,11 @@ namespace WB.UI.Headquarters.Api
     public class UsersApiController : ApiController
     {
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
-        private readonly IViewFactory<SupervisorInterviewersInputModel, InterviewersView> supervisorInterviewersFactory;
+        private readonly IViewFactory<InterviewersInputModel, InterviewersView> supervisorInterviewersFactory;
 
         public UsersApiController(
             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
-            IViewFactory<SupervisorInterviewersInputModel, InterviewersView> supervisorInterviewersFactory)
+            IViewFactory<InterviewersInputModel, InterviewersView> supervisorInterviewersFactory)
         {
             this.supervisorsFactory = supervisorsFactory;
             this.supervisorInterviewersFactory = supervisorInterviewersFactory;
@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Api
 
         public InterviewersView Interviewers(UsersListViewModel data)
         {
-            var input = new SupervisorInterviewersInputModel(data.Request.SupervisorId.Value)
+            var input = new InterviewersInputModel(data.Request.SupervisorId.Value)
             {
                 Orders = data.SortOrder
             };
