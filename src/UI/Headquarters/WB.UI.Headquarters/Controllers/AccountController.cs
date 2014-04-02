@@ -1,77 +1,113 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
-using WB.Core.BoundedContexts.Headquarters.Authentication.Models;
+using System.Web.Security;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Headquarters.Models;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly IAuthenticationManager authenticationManager;
+        private readonly IFormsAuthentication authentication;
+        private readonly IGlobalInfoProvider globalProvider;
+        private readonly IPasswordHasher passwordHasher;
+        private readonly IHeadquartersSynchronizer headquartersSynchronizer;
+        private readonly Func<string, string, bool> validateUserCredentials;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
-            IAuthenticationManager authenticationManager)
+        public AccountController(IFormsAuthentication authentication, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
+            IHeadquartersSynchronizer headquartersSynchronizer)
+            : this(authentication, globalProvider, passwordHasher, headquartersSynchronizer, Membership.ValidateUser) { }
+
+        internal AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
+            IHeadquartersSynchronizer headquartersSynchronizer, Func<string, string, bool> validateUserCredentials)
         {
-            this.userManager = userManager;
-            this.authenticationManager = authenticationManager;
+            this.authentication = auth;
+            this.globalProvider = globalProvider;
+            this.passwordHasher = passwordHasher;
+            this.headquartersSynchronizer = headquartersSynchronizer;
+            this.validateUserCredentials = validateUserCredentials;
         }
 
-        public ActionResult Login()
+        [HttpGet]
+        public ActionResult LogOn()
         {
+            this.ViewBag.ActivePage = MenuItem.Logon;
             return this.View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginModel model, string returnUrl)
+        public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            this.ViewBag.ActivePage = MenuItem.Logon;
+            if (this.ModelState.IsValid)
             {
-                var user = await this.userManager.FindAsync(model.Login, model.Password);
-                if (user != null)
+                if (this.LoginIncludingHeadquartersData(model.UserName, model.Password))
                 {
-                    await SignInAsync(user, model.RememberMe);
-                    return RedirectToLocal(returnUrl);
+                    bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
+                    bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
+                    if (isSupervisor || isHeadquarter)
+                    {
+                        this.authentication.SignIn(model.UserName, false);
+                        if (isSupervisor)
+                        {
+                            return this.RedirectToAction("Index", "Survey");
+                        }
+                        else
+                        {
+                            return this.RedirectToAction("Index", "HQ");
+                        }
+                    }
+
+                    this.ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
                 }
-
-                ModelState.AddModelError("", LoginPageResources.IvalidUserNameOrPassword);
+                else
+                    this.ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return this.View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SignOut()
+        private bool LoginIncludingHeadquartersData(string login, string password)
         {
-            authenticationManager.SignOut();
-            return RedirectToAction("Login");
+            if (this.LoginUsingLocalDatabase(login, password))
+                return true;
+
+            this.UpdateLocalDataFromHeadquarters(login, password);
+
+            return this.LoginUsingLocalDatabase(login, password);
         }
 
-        private ActionResult RedirectToLocal(string returnUrl)
+        private void UpdateLocalDataFromHeadquarters(string login, string password)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return this.Redirect(returnUrl);
-            }
-
-            return this.RedirectToAction("Index", "Home");
+            //this.headquartersSynchronizer.Pull(login, password);
         }
 
-        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        private bool LoginUsingLocalDatabase(string login, string password)
         {
-            authenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = await this.userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            authenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, identity);
+            return this.validateUserCredentials(login, this.passwordHasher.Hash(password))
+                || this.validateUserCredentials(login, SimpleHash.ComputeHash(password));
+        }
+
+        public bool IsLoggedIn()
+        {
+            return this.globalProvider.GetCurrentUser() != null;
+        }
+
+        public ActionResult LogOff()
+        {
+            this.authentication.SignOut();
+            return this.Redirect("~/");
+        }
+
+        public Guid GetCurrentUser()
+        {
+            UserLight currentUser = this.globalProvider.GetCurrentUser();
+            return currentUser != null ? currentUser.Id : Guid.Empty;
         }
     }
 }
