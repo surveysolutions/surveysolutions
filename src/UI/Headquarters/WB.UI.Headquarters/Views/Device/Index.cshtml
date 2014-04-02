@@ -1,0 +1,25 @@
+﻿@using Main.Core.View.Device
+@model DeviceView
+
+<h2>Devices</h2>
+<table id="table" class="table-hover table table-striped table-bordered table-condensed">
+        <thead>
+            <tr>  
+                <th>Description</th>             
+                <th>Registrator</th>
+                <th>Register Date</th>
+                <td>Responsible</td>
+                <td></td>
+            </tr>
+        </thead>
+        @foreach (var fitem in Model.Items)
+        {
+            <tr>        
+                <td>@fitem.Description</td>              
+                <td>@fitem.Registrator</td>
+                <td>@fitem.RegisterDate</td>
+                <td>No one</td>
+                <td><a class="btn" href="#">Lock</a></td>
+            </tr>
+        }
+</table>
