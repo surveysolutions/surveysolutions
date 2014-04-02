@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private void UpdateLocalDataFromHeadquarters(string login, string password)
         {
-            this.headquartersSynchronizer.Pull(login, password);
+            //this.headquartersSynchronizer.Pull(login, password);
         }
 
         private bool LoginUsingLocalDatabase(string login, string password)
