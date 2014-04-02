@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Core.Supervisor.Views.User;
 using Main.Core;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Questionnaire.Core.Web.Security;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
@@ -21,8 +20,6 @@ namespace WB.UI.Headquarters.Injections
     {
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
-            Debugger.Break();
-
             return base.GetAssembliesForRegistration().Concat(new[]
             {
                 typeof(UserViewFactory).Assembly,
@@ -47,7 +44,7 @@ namespace WB.UI.Headquarters.Injections
         {
             base.RegisterEventHandlers();
 
-            this.BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler<>), (c) => this.Kernel);
+            this.BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler), (c) => this.Kernel);
         }
 
         public override void Load()
