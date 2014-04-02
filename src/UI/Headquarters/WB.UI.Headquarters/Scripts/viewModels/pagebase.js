@@ -11,11 +11,11 @@
     self.NotifyTitle = ko.observable(input.settings.messages.notifyDialogTitle);
     self.NotifyText = ko.observable(input.settings.messages.notifyDialogText);
 
-    self.ToggleFilter = function() {
+    self.ToggleFilter = function () {
         if (self.IsFilterOpen()) {
-            $('#wrapper').addClass('menu-hidden');
+            $('#filtersCollapse').collapse('hide');
         } else {
-            $('#wrapper').removeClass('menu-hidden');
+            $('#filtersCollapse').collapse('show');
         }
         self.IsFilterOpen(!self.IsFilterOpen());
     };
