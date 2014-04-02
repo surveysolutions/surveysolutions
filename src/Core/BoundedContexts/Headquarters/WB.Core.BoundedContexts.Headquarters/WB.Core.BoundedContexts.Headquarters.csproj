@@ -143,7 +143,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Team\EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="Team\Models\SupervisorInterviewersInputModel.cs" />
+    <Compile Include="Team\Models\InterviewersInputModel.cs" />
     <Compile Include="Team\Models\InterviewersItem.cs" />
     <Compile Include="Team\Models\InterviewersView.cs" />
     <Compile Include="Team\Models\ListViewModelBase.cs" />
