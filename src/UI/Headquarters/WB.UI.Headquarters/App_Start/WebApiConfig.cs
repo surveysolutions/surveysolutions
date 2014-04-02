@@ -1,20 +1,18 @@
-﻿using System.Web.Http;
-using WB.UI.Headquarters.Api.ActionFilters;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 
-namespace WB.UI.Headquarters.App_Start
+namespace WB.UI.Headquarters
 {
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
+            // Web API configuration and services
+
+            // Web API routes
             config.MapHttpAttributeRoutes();
-
-            config.Filters.Add(new UnhandledExceptionFilter());
-
-            config.Routes.MapHttpRoute(
-              name: "DefaultApiWithAction",
-              routeTemplate: "api/{controller}/{action}/{id}",
-              defaults: new { id = RouteParameter.Optional });
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
