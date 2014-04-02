@@ -1,7 +1,6 @@
 ﻿using System.Web.Http;
-using WB.UI.Headquarters.Api.ActionFilters;
 
-namespace WB.UI.Headquarters.App_Start
+namespace WB.UI.Headquarters
 {
     public static class WebApiConfig
     {
@@ -9,18 +8,11 @@ namespace WB.UI.Headquarters.App_Start
         {
             config.MapHttpAttributeRoutes();
 
-            config.Filters.Add(new UnhandledExceptionFilter());
+            config.Routes.MapHttpRoute("DefaultApiWithAction", "api/{controller}/{action}/{id}", new { id = RouteParameter.Optional });
 
-            config.Routes.MapHttpRoute(
-              name: "DefaultApiWithAction",
-              routeTemplate: "api/{controller}/{action}/{id}",
-              defaults: new { id = RouteParameter.Optional });
+            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = RouteParameter.Optional });
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            //config.MessageHandlers.Add(new BasicAuthMessageHandler());
         }
     }
 }

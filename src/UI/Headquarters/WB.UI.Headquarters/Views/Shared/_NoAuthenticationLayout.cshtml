@@ -1,0 +1,25 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
+    @Styles.Render("~/css/main-not-loggedin")
+</head>
+<body>
+    <div id="page" class="container-fluid">
+        <div id="main">
+            @RenderBody()
+        </div>
+    </div>
+    <div class="row-fluid" id="footer-block">
+            <hr>
+            <footer class="text-center">
+                <a href="@Url.Action("GetLatestVersion", "Sync")" class="btn ">Get CAPI</a>
+            </footer>
+    </div>
+    @Scripts.Render("~/js/main")
+    @RenderSection("scripts", false)
+</body>
+</html>
