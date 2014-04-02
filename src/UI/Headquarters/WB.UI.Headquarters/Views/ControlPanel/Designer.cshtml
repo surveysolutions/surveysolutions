@@ -1,0 +1,19 @@
+﻿@model string
+
+@{
+    this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Designer Diagnostics";
+}
+
+<b>Diagnostic Results:</b><br/>
+<pre style="height: 300px; overflow-y: scroll;">
+@Html.Raw(this.Model)
+</pre>
+
+@using (Html.BeginForm())
+{
+    <input type="text" name="login"/>
+    <input type="text" name="password"/>
+
+    <button type="submit">Perform Diagnostic</button>
+}
