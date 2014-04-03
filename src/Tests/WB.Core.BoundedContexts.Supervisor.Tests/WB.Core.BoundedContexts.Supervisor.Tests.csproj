@@ -102,7 +102,9 @@
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_created_from_template_containing_2_questions.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_1_answerd_questions_and_1_unananswered.cs" />
-    <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_linked_question_on_second_level_roster.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_linked_question_on_second_level_referenced_on_third.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_linked_question_on_third_level_referenced_on_second.cs" />
+    <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_linked_question_referenced_on_third_level_roster.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_nested_roster_with_2_rows_each.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_roster_triggered_by_text_list_question.cs" />
     <Compile Include="EventHandlers\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows.cs" />
