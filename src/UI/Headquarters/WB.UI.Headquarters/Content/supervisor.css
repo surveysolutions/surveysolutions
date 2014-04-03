@@ -496,7 +496,6 @@ hr.separator {
   background: #fff;
 }
 #content {
-  position: relative;
   overflow: hidden;
   margin: 0 0 0 234px;
   background: #fff;
@@ -869,20 +868,6 @@ hr.separator {
 .menu-hidden.login .navbar.main .appbrand span,
 .menu-hidden.documentation .navbar.main .appbrand span {
   border: none;
-}
-.menubar {
-  height: 34px;
-  position: relative;
-  overflow: visible;
-  border-top: 1px solid #dddddd;
-  border-bottom: 1px solid #dddddd;
-  background: #f5f5f5;
-  padding: 0 10px 0 10px;
-  line-height: 30px;
-}
-
-.menubar .search-bar {
-  margin-bottom: 0;
 }
 
 .widget-stats {

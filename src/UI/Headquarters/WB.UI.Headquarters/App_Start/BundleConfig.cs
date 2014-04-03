@@ -13,7 +13,8 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*intellisense.js");
 
             bundles.Add(new StyleBundle("~/Content/main").Include(
-                "~/Content/css/bootstrap.css",
+                "~/Content/bootstrap.css",
+                "~/Content/bootstrap-responsive.css",
                 "~/Content/font-awesome.min.css",
                 "~/Content/bootstrap-mvc-validation.css",
                 "~/Content/jquery.pnotify.default.css",
@@ -21,9 +22,9 @@ namespace WB.UI.Headquarters
                 "~/Content/main.css"));
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
-                "~/Content/css/bootstrap.css",
+                "~/Content/bootstrap.css",
                 "~/Content/bootstrap-mvc-validation.css",
-                "~/Content/css/bootstrap-responsive.css",
+                "~/Content/bootstrap-responsive.css",
                 "~/Content/main-not-logged.css"));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(

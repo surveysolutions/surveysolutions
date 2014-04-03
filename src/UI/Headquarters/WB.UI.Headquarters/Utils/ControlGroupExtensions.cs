@@ -337,12 +337,12 @@ namespace WB.UI.Headquarters.Utils
         /// <summary>
         /// The attention.
         /// </summary>
-        public const string ATTENTION = "attention";
+        public const string ATTENTION = "warning";
 
         /// <summary>
         /// The error.
         /// </summary>
-        public const string ERROR = "error";
+        public const string ERROR = "danger";
 
         /// <summary>
         /// The information.
