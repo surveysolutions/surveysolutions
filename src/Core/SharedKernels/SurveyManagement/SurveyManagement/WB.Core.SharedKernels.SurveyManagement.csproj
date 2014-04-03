@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{29A132B5-A573-40D2-9E8F-2871E95D7766}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.SharedKernels.SurveyManagement</RootNamespace>
+    <AssemblyName>WB.Core.SharedKernels.SurveyManagement</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\..\..\..\lib\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
+    <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
+    <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
+    <Compile Include="EventHandler\DummyEventHandler.cs" />
+    <Compile Include="EventHandler\EventHandlerUtils.cs" />
+    <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
+    <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
+    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireExportStructureDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
+    <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
+    <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
+    <Compile Include="EventHandler\UserDenormalizer.cs" />
+    <Compile Include="Factories\IExportViewFactory.cs" />
+    <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
+    <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
+    <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
+    <Compile Include="Implementation\HeadquartersSettings.cs" />
+    <Compile Include="Implementation\ISampleRecordsAccessor.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs" />
+    <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
+    <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
+    <Compile Include="Implementation\Services\DataExport\CsvDataFileExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\FileBasedDataExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\FileType.cs" />
+    <Compile Include="Implementation\Services\DataExport\InterviewDataExportException.cs" />
+    <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
+    <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentService.cs" />
+    <Compile Include="Implementation\Services\HeadquartersSynchronizer.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireCacheInitializer.cs" />
+    <Compile Include="Implementation\Services\SampleImportService.cs" />
+    <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
+    <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
+    <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IDataExportService.cs" />
+    <Compile Include="Services\IDataFileExportService.cs" />
+    <Compile Include="Services\IEnvironmentContentService.cs" />
+    <Compile Include="Services\IHeadquartersSynchronizer.cs" />
+    <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
+    <Compile Include="Services\ISampleImportService.cs" />
+    <Compile Include="Services\ISupportedVersionProvider.cs" />
+    <Compile Include="Services\ITabletInformationService.cs" />
+    <Compile Include="SupervisorBoundedContextModule.cs" />
+    <Compile Include="Views\BaseInterviewGridItem.cs" />
+    <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
+    <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
+    <Compile Include="Views\DataExport\ExportedQuestion.cs" />
+    <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
+    <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
+    <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
+    <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
+    <Compile Include="Views\Device\DeviceView.cs" />
+    <Compile Include="Views\Device\DeviceViewFactory.cs" />
+    <Compile Include="Views\Device\DeviceViewInputModel.cs" />
+    <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
+    <Compile Include="Views\IListView.cs" />
+    <Compile Include="Views\InterviewDataAndQuestionnaireMerger.cs" />
+    <Compile Include="Views\Interviewer\InterviewersInputModel.cs" />
+    <Compile Include="Views\Interviewer\InterviewersItem.cs" />
+    <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
+    <Compile Include="Views\Interviewer\InterviewersView.cs" />
+    <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsView.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
+    <Compile Include="Views\Interview\AllInterviewsFactory.cs" />
+    <Compile Include="Views\Interview\AllInterviewsInputModel.cs" />
+    <Compile Include="Views\Interview\AllInterviewsView.cs" />
+    <Compile Include="Views\Interview\AllInterviewsViewItem.cs" />
+    <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
+    <Compile Include="Views\Interview\InterviewBrief.cs" />
+    <Compile Include="Views\Interview\InterviewData.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsView.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
+    <Compile Include="Views\Interview\InterviewGroupView.cs" />
+    <Compile Include="Views\Interview\InterviewLevel.cs" />
+    <Compile Include="Views\Interview\InterviewLinkedQuestionView.cs" />
+    <Compile Include="Views\Interview\InterviewQuestion.cs" />
+    <Compile Include="Views\Interview\InterviewQuestionComment.cs" />
+    <Compile Include="Views\Interview\InterviewQuestionView.cs" />
+    <Compile Include="Views\Interview\InterviewSummary.cs" />
+    <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
+    <Compile Include="Views\ListViewModelBase.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireQuestionsInfo.cs" />
+    <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
+    <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\MapReport.cs" />
+    <Compile Include="Views\Reposts\Factories\QuestionnaireQuestionInfoFactory.cs" />
+    <Compile Include="Views\Reposts\Factories\QuestionnairesAndVersionsFactory.cs" />
+    <Compile Include="Views\Reposts\Factories\SupervisorSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\SupervisorTeamMembersAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\HeadquarterSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SupervisorSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\MapReportView.cs" />
+    <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
+    <Compile Include="Views\Reposts\Views\QuestionnaireQuestionInfoView.cs" />
+    <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
+    <Compile Include="Views\Reposts\Views\UsersViewItem.cs" />
+    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationFactory.cs" />
+    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationInputModel.cs" />
+    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationView.cs" />
+    <Compile Include="Views\SampleImport\ImportResult.cs" />
+    <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
+    <Compile Include="Views\SampleImport\TempFileImportData.cs" />
+    <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
+    <Compile Include="Views\Survey\SurveysInputModel.cs" />
+    <Compile Include="Views\Survey\SurveyStatusViewItem.cs" />
+    <Compile Include="Views\Survey\SurveysView.cs" />
+    <Compile Include="Views\Survey\SurveysViewItem.cs" />
+    <Compile Include="Views\Survey\SurveyUsersView.cs" />
+    <Compile Include="Views\Survey\SurveyUsersViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
+    <Compile Include="Views\TabletInformation\TabletInformationView.cs" />
+    <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
+    <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
+    <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
+    <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
+    <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
+    <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
+    <Compile Include="Views\Template\DesignerQuestionnairesView.cs" />
+    <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\User\UserListItem.cs" />
+    <Compile Include="Views\User\UserListView.cs" />
+    <Compile Include="Views\User\UserListViewFactory.cs" />
+    <Compile Include="Views\User\UserListViewInputModel.cs" />
+    <Compile Include="Views\User\UserView.cs" />
+    <Compile Include="Views\User\UserViewFactory.cs" />
+    <Compile Include="Views\User\UserViewInputModel.cs" />
+    <Compile Include="Views\ViewerStatus.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj">
+      <Project>{aa90754b-ca47-429e-bdc8-2a83e94179b7}</Project>
+      <Name>Ncqrs.Spec</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
+      <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

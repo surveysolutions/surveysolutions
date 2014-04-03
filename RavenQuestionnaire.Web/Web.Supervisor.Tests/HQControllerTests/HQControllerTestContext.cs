@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Web;
-using Core.Supervisor.Views.Survey;
-using Core.Supervisor.Views.TakeNew;
-using Core.Supervisor.Views.User;
-using Core.Supervisor.Views.UsersAndQuestionnaires;
 using Main.Core.View;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
+using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.Models;
 

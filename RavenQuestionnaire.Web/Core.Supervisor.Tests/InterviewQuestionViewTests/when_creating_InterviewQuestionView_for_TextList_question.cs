@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Supervisor.Views.Interview;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace Core.Supervisor.Tests.InterviewQuestionViewTests
 {

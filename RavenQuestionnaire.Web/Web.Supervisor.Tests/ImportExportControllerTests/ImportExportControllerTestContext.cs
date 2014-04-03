@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 using Web.Supervisor.Controllers;
 

@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using Core.Supervisor.Views.User;
 using Main.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,8 @@ using Ninject;
 using Ninject.Activation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using UserDenormalizer = WB.Core.BoundedContexts.Supervisor.EventHandler.UserDenormalizer;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using UserDenormalizer = WB.Core.SharedKernels.SurveyManagement.EventHandler.UserDenormalizer;
 
 namespace CapiDataGenerator
 {

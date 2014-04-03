@@ -3,8 +3,8 @@ using System.Linq;
 using Machine.Specifications;
 using NUnit.Framework;
 using Raven.Client.Embedded;
-using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests
 {

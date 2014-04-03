@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Core.Supervisor.Views.User;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace Web.Supervisor.Models.API
 {

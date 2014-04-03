@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Core.Supervisor.Views.Interview;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.InterviewQuestionViewTests

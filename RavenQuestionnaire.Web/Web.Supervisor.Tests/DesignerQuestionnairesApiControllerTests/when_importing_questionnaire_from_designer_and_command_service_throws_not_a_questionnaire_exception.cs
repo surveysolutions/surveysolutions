@@ -6,7 +6,7 @@ using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
-using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.DesignerPublicService;
 using It = Machine.Specifications.It;

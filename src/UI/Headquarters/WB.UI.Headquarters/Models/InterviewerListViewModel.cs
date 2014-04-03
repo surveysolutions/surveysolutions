@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Supervisor.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 
 namespace WB.UI.Headquarters.Models
 {

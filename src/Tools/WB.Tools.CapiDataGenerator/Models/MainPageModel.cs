@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using CAPI.Android.Core.Model;
 using Cirrious.MvvmCross.ViewModels;
-using Core.Supervisor;
-using Core.Supervisor.Views.User;
 using Main.Core.Documents;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
@@ -30,6 +27,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Tools.CapiDataGenerator;
 using WB.UI.Shared.Web;
 

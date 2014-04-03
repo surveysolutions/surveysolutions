@@ -7,11 +7,11 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.AnswersByVariableDenormalizerTests
 {

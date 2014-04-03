@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Core.Supervisor.Views.Interviewer;
-using Core.Supervisor.Views.Survey;
-using Core.Supervisor.Views.UsersAndQuestionnaires;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
+using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers

@@ -1,7 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.Models;
 using It = Machine.Specifications.It;

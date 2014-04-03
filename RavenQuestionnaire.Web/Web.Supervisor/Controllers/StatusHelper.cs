@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Core.Supervisor.Views.Survey;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 
 namespace Web.Supervisor.Controllers
 {

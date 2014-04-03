@@ -1,8 +1,8 @@
 ﻿using System;
-using Core.Supervisor.Views.User;
 using Machine.Specifications;
 using Main.Core.View;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using Web.Supervisor.API;
 using Web.Supervisor.Models.API;
 using It = Machine.Specifications.It;

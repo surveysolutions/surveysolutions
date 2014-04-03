@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Supervisor.Views;
-using Core.Supervisor.Views.Interview;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -10,9 +8,10 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.Merger

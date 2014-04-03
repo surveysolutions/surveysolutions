@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Supervisor.Views.Reposts.Factories;
-using Core.Supervisor.Views.Reposts.InputModels;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 
 namespace Core.Supervisor.Tests.QuestionnaireQuestionInfoFactoryTests
 {

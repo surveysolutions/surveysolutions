@@ -1,14 +1,14 @@
 ﻿using System;
 using Main.Core.Documents;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.StatisticsDenormalizerTests
 {

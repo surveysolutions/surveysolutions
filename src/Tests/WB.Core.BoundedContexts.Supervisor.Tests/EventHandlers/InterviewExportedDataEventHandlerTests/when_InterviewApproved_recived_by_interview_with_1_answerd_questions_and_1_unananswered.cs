@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {
@@ -48,7 +49,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_unanswered_question_be_empty = () =>
           result.Levels[0].Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
 
-        private static EventHandler.InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
+        private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid answeredQuestionId;

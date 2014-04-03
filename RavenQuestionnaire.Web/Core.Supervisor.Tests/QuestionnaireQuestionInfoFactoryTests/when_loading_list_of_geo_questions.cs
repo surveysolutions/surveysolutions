@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Supervisor.Views.Reposts.Factories;
-using Core.Supervisor.Views.Reposts.InputModels;
-using Core.Supervisor.Views.Reposts.Views;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -14,6 +11,9 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using it = Moq.It;
 using It = Machine.Specifications.It;
 

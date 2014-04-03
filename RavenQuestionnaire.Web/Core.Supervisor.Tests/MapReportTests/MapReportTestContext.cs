@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Supervisor.Views.Reposts.Factories;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 
 namespace Core.Supervisor.Tests.MapReportTests
 {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Supervisor.Views.Reposts.Factories;
-using Core.Supervisor.Views.Reposts.InputModels;
-using Core.Supervisor.Views.Reposts.Views;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.MapReportTests

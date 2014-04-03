@@ -2,15 +2,14 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Supervisor.Views;
-using Core.Supervisor.Views.Interview;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.Merger

@@ -2,10 +2,10 @@
 using System.Net;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
-using Core.Supervisor.Views.Template;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using Web.Supervisor.Code;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;

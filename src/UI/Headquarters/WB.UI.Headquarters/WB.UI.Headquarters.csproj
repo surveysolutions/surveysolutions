@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5DC78F98-026F-47C1-B44A-3DE0C517E5E6}</ProjectGuid>
+    <ProjectGuid>{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -586,6 +586,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
+      <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
+      <Name>WB.Core.SharedKernels.SurveyManagement</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>

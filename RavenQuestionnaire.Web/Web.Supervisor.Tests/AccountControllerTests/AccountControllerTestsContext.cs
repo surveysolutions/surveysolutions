@@ -3,8 +3,8 @@ using Machine.Specifications;
 using Moq;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.AccountControllerTests

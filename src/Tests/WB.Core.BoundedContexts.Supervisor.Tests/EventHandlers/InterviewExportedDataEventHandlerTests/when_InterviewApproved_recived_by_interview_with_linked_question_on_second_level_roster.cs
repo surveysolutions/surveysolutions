@@ -8,9 +8,10 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {
@@ -76,7 +77,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         It should_linked_question_have_first_answer_be_equal_to_0 = () =>
            GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers[0].ShouldEqual("0");
 
-        private static EventHandler.InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
+        private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Guid rosterId;
         private static Guid linkedQuestionId;

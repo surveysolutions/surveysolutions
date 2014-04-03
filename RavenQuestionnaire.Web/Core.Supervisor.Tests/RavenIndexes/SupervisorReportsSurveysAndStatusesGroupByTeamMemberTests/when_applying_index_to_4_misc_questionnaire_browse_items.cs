@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Raven.Client.Embedded;
-using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests
 {

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventHandlerFunctionalTests

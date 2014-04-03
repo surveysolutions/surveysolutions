@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Supervisor.Views.Reposts.Factories;
-using Core.Supervisor.Views.Reposts.Views;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide.Indexes;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.QuestionnairesAndVersionsFactoryTests

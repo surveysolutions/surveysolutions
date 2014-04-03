@@ -10,7 +10,6 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
-using Core.Supervisor.Views.User;
 using Main.Core;
 using Main.Core.Commands;
 using Main.Core.Events.Questionnaire;
@@ -41,16 +40,16 @@ using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Tools.CapiDataGenerator.Models;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CapiDataGenerator
 {
-    using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-    using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
-
     public class MainModelModule : NinjectModule
     {
         private const string ProjectionStoreName = "Projections";

@@ -7,10 +7,11 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReferenceInfoForLinkedQuestionsDenormalizerTests
 {

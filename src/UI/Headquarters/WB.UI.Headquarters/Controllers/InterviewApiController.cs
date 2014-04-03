@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Web.Http;
-using Core.Supervisor.Views.ChangeStatus;
-using Core.Supervisor.Views.Interview;
-using Core.Supervisor.Views.Interviews;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models;
 

@@ -1,4 +1,3 @@
-using Core.Supervisor.Views.User;
 using Main.Core;
 using Questionnaire.Core.Web.Security;
 using System;
@@ -6,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.UI.Shared.Web.Filters;
 using Web.Supervisor.Code;
 

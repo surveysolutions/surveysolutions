@@ -201,6 +201,10 @@
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
+      <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
+      <Name>WB.Core.SharedKernels.SurveyManagement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
       <Name>WB.Core.Synchronization</Name>

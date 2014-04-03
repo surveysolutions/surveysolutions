@@ -1,12 +1,12 @@
 ﻿using System;
-using Core.Supervisor.Views.Interview;
-using Core.Supervisor.Views.Interviewer;
-using Core.Supervisor.Views.User;
 using Main.Core.View;
 using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using Web.Supervisor.API;
 
 namespace Web.Supervisor.Tests.ApiTests

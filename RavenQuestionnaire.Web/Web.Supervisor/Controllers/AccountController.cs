@@ -5,8 +5,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers

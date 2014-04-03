@@ -8,9 +8,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Services;
-using WB.Core.BoundedContexts.Supervisor.Views.TabletInformation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 using Web.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.TabletReportControllerTests

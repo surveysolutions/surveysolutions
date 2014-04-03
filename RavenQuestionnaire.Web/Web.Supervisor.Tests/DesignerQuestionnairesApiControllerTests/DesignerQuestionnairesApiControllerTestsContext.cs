@@ -3,9 +3,9 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.DesignerPublicService;
 

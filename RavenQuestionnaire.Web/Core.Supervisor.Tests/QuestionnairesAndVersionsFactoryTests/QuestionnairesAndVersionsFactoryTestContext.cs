@@ -1,7 +1,7 @@
-﻿using Core.Supervisor.Views.Reposts.Factories;
-using Moq;
+﻿using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 
 namespace Core.Supervisor.Tests.QuestionnairesAndVersionsFactoryTests
 {

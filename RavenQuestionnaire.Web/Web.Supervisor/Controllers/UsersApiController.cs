@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Web.Http;
-using Core.Supervisor.Views.Interviewer;
-using Core.Supervisor.Views.User;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers

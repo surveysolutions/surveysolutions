@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using Core.Supervisor.Views.Reposts.Factories;
-using Core.Supervisor.Views.Reposts.InputModels;
-using Core.Supervisor.Views.Reposts.Views;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.QuestionnaireQuestionInfoFactoryTests

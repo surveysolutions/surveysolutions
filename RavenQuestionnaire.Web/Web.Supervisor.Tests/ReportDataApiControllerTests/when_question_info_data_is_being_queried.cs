@@ -1,8 +1,8 @@
-﻿using Core.Supervisor.Views.Reposts.InputModels;
-using Core.Supervisor.Views.Reposts.Views;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.View;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using Web.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 

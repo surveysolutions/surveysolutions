@@ -1,8 +1,8 @@
-﻿namespace Web.Supervisor.Models
+﻿using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+
+namespace Web.Supervisor.Models
 {
     using System;
-
-    using Core.Supervisor.Views.Interviewer;
 
     /// <summary>
     ///     The interviewer list view model.

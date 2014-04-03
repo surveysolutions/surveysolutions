@@ -4,7 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Questionnaire.Core.Web.Helpers;
-using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;

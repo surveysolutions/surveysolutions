@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 

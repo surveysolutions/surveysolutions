@@ -9,14 +9,14 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using QuestionAnswer = WB.Core.BoundedContexts.Supervisor.Views.Interview.QuestionAnswer;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using QuestionAnswer = WB.Core.SharedKernels.SurveyManagement.Views.Interview.QuestionAnswer;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewSummaryEventHandlerFunctionalTests
 {
@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewSummar
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object);
         }
 
-        protected static InterviewSummary CreateInterviewSummaryQuestions(params WB.Core.BoundedContexts.Supervisor.Views.Interview.QuestionAnswer[] questions)
+        protected static InterviewSummary CreateInterviewSummaryQuestions(params QuestionAnswer[] questions)
         {
             var interviewSummary = new InterviewSummary();
             foreach (var question in questions)

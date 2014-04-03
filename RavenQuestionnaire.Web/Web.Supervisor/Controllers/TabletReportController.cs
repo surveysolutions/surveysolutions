@@ -9,10 +9,10 @@ using System.Web.Mvc;
 using System.Web.WebPages;
 using Main.Core;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.TabletInformation;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Controllers

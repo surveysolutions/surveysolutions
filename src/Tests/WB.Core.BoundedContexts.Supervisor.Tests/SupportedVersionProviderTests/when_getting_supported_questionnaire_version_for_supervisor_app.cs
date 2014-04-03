@@ -1,6 +1,6 @@
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.SupportedVersionProviderTests
 {

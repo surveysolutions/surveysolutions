@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Supervisor.Views.TabletInformation;
 using Web.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.TabletReportControllerTests
