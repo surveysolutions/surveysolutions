@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web;
@@ -192,9 +193,10 @@ namespace Web.Supervisor.Controllers
                     model = new TextQuestionModel() {answer = answerAsString};
                     break;
                 case QuestionType.MultyOption:
-                    IEnumerable<decimal> answersAsDecimalArray = dto.Answer == null
-                        ? new decimal[0]
-                        : ((IEnumerable<object>) dto.Answer).Select(option => option.ToString().Parse<decimal>());
+                    IEnumerable<decimal> answersAsDecimalArray = dto.Answer is IEnumerable
+                        ? ((IEnumerable) dto.Answer).OfType<object>()
+                            .Select(option => option.ToString().Parse<decimal>())
+                        : new decimal[0];
 
                     bool areAnswersOrdered =
                         dto.Settings == null
