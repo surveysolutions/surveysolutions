@@ -67,10 +67,10 @@ namespace Core.Supervisor.Tests.Merger
             AddInterviewLevel(interview, rosterSizeQuestionId, new decimal[] { 0 },
                 new Dictionary<Guid, object> { { nestedRosterSizeQuestionId, 2 } });
 
-            AddInterviewLevel(interview, rosterSizeQuestionId, new decimal[] { 0, 0 },
+            AddInterviewLevel(interview, nestedRosterSizeQuestionId, new decimal[] { 0, 0 },
                 new Dictionary<Guid, object> { { questionInNestedRosterId, 1 } });
 
-            AddInterviewLevel(interview, rosterSizeQuestionId, new decimal[] { 0, 1 },
+            AddInterviewLevel(interview, nestedRosterSizeQuestionId, new decimal[] { 0, 1 },
                 new Dictionary<Guid, object> { { questionInNestedRosterId, 2 } });
             
             questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
@@ -82,8 +82,8 @@ namespace Core.Supervisor.Tests.Merger
         Because of = () =>
             mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
-        It should_create_8_group_screens = () =>
-            mergeResult.Groups.Count.ShouldEqual(8);
+        It should_create_5_group_screens = () =>
+            mergeResult.Groups.Count.ShouldEqual(5);
 
         It should_have_in_first_row_parent_roster_as_separate_screen = () =>
             mergeResult.Groups.FirstOrDefault(g => g.Id == rosterId && g.RosterVector.Length == 1 && g.RosterVector[0] == 0).ShouldNotBeNull();

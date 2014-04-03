@@ -82,8 +82,8 @@ namespace Core.Supervisor.Tests.Merger
         Because of = () =>
             mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
-        It should_create_8_group_screens = () =>
-            mergeResult.Groups.Count.ShouldEqual(8);
+        It should_create_7_group_screens = () =>
+            mergeResult.Groups.Count.ShouldEqual(7);
 
         It should_have_in_first_row_parent_roster_as_separate_screen = () =>
             mergeResult.Groups.FirstOrDefault(g => g.Id == rosterId && g.RosterVector.Length == 1 && g.RosterVector[0] == 0).ShouldNotBeNull();
