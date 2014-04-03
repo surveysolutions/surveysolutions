@@ -82,6 +82,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Func
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.SurveyManagement", "Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj", "{29A132B5-A573-40D2-9E8F-2871E95D7766}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -221,6 +223,12 @@ Global
 		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -259,5 +267,6 @@ Global
 		{39AEBC09-5A81-47C8-B68D-4984199AE1FE} = {72E21A6C-F968-4D6B-B8CE-E87909DC9713}
 		{C96EA28A-CDC4-468B-B111-D54B4C6C00C1} = {72E21A6C-F968-4D6B-B8CE-E87909DC9713}
 		{D55B9582-70FD-4340-A3BC-55A33D49B2E6} = {2D896CD8-53F8-4F8A-AA03-66840EECEFC5}
+		{29A132B5-A573-40D2-9E8F-2871E95D7766} = {2D896CD8-53F8-4F8A-AA03-66840EECEFC5}
 	EndGlobalSection
 EndGlobal

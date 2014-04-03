@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web.Http;
-using Core.Supervisor.Views.Interview;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.UI.Headquarters.Models.API;
 
 namespace Web.Supervisor.API

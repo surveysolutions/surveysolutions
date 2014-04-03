@@ -11,8 +11,8 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
-using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTests

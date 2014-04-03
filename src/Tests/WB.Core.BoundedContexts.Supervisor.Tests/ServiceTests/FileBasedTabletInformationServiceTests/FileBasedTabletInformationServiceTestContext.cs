@@ -2,8 +2,8 @@
 using System.IO;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInformation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.FileBasedTabletInformationServiceTests
 {

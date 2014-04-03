@@ -2,9 +2,9 @@
 using System.IO;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.TabletInformation;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {

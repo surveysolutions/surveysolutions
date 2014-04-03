@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Main.Core.Commands.Sync;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using Machine.Specifications;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
