@@ -200,7 +200,7 @@ namespace Web.Supervisor.Controllers
                 case QuestionType.MultyOption:
                     IEnumerable<decimal> answersAsDecimalArray = dto.Answer == null
                         ? new decimal[0]
-                        : ((IEnumerable<object>) dto.Answer).Select(option => option.ToString().Parse<decimal>());
+                        : ((IEnumerable<decimal>)dto.Answer).Select(option => option.ToString().Parse<decimal>());
 
                     bool areAnswersOrdered =
                         dto.Settings == null
