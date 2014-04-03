@@ -330,7 +330,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
             group.isVisible = ko.observable(true);
             group.isSelected = ko.observable(false);
             group.css = ko.computed(function () {
-                return "level" + self.depth + (group.isSelected() ? " selected" : "");
+                return "level" + group.depth + (group.isSelected() ? " selected" : "");
             });
             group.href = ko.computed(function () {
                 return "#group/" + group.uiId;
