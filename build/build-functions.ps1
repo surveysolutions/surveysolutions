@@ -7,7 +7,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
     Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
-    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" '/p:username=' '/p:CodeContractsRunCodeAnalysis=false' | Write-Host
+    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" '/verbosity:minimal' '/p:username=' '/p:CodeContractsRunCodeAnalysis=false' | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
