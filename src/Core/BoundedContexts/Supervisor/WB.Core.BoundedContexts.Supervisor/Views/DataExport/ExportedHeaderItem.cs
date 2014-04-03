@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
     {
         public Guid PublicKey { get; set; }
         public QuestionType QuestionType { get; set; }
+        public int? DepthOfLinkedQuestionRelativeToSource { get; set; }
         public string[] ColumnNames { get; set; }
         public string[] Titles { get; set; }
         public string VariableName { get; set; }

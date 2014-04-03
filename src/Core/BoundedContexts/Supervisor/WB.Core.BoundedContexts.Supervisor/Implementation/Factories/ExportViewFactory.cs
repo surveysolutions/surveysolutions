@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
             return headerStructureForLevel;
         }
 
-        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question)
+        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int? depthOfLinkedQuestionRelativeToSource)
         {
             var exportedHeaderItem = new ExportedHeaderItem();
 
@@ -88,12 +88,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
             {
                 exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
             }
+
+            if (depthOfLinkedQuestionRelativeToSource.HasValue)
+            {
+                exportedHeaderItem.DepthOfLinkedQuestionRelativeToSource = depthOfLinkedQuestionRelativeToSource;
+            }
             return exportedHeaderItem;
         }
 
-        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int columnCount)
+        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int columnCount, int? depthOfLinkedQuestionRelativeToSource)
         {
-            var exportedHeaderItem = CreateExportedHeaderItem(question);
+            var exportedHeaderItem = CreateExportedHeaderItem(question, depthOfLinkedQuestionRelativeToSource);
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnNames = new string[columnCount];
@@ -237,14 +242,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
                     {
                         if (question.LinkedToQuestionId.HasValue)
                             AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
-                        else AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question);
+                        else AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
                     }
                     else if (this.IsQuestionTextList(question))
                     {
-                        AddHeadersForTextList(headerStructureForLevel.HeaderItems, question);
+                        AddHeadersForTextList(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
                     }
                     else
-                        AddHeaderForNotMultiOptions(headerStructureForLevel.HeaderItems, question);
+                        AddHeaderForNotMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
                     continue;
                 }
 
@@ -272,26 +277,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
         private void AddHeadersForLinkedMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, this.GetRosterSizeForLinkedQuestion(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions)));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, this.GetRosterSizeForLinkedQuestion(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions), this.GetDepthOfLinkedQuestionRelativeToSource(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeaderForNotMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question)
+        protected void AddHeaderForNotMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
-            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, this.GetDepthOfLinkedQuestionRelativeToSource(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeadersForMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question)
+        protected void AddHeadersForMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
             var multiOptionQuestion = question as IMultyOptionsQuestion;
             var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
-            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, maxCount));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, maxCount, this.GetDepthOfLinkedQuestionRelativeToSource(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeadersForTextList(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question)
+        protected void AddHeadersForTextList(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
             var textListQuestion = question as ITextListQuestion;
             var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
-            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, maxCount));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, maxCount, this.GetDepthOfLinkedQuestionRelativeToSource(question, referenceInfoForLinkedQuestions)));
         }
 
         private int GetRosterSizeForLinkedQuestion(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
@@ -301,6 +306,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
                 referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ScopeId;
 
             return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
+        }
+
+        private int? GetDepthOfLinkedQuestionRelativeToSource(IQuestion question,
+            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+        {
+            if (!referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions.ContainsKey(question.PublicKey))
+                return null;
+            return referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].LengthOfRosterVectorWhichNeedToBeExported;
         }
     }
 }

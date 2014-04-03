@@ -8,30 +8,23 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {
-    internal class when_InterviewApproved_recived_by_interview_with_linked_question_on_second_level_roster : InterviewExportedDataEventHandlerTestContext
+    internal class when_InterviewApproved_recived_by_interview_with_linked_question_on_third_level_referenced_on_second : InterviewExportedDataEventHandlerTestContext
     {
         Establish context = () =>
         {
             linkedQuestionSourceId = Guid.Parse("12222222222222222222222222222222");
             rosterId = Guid.Parse("13333333333333333333333333333333");
-            var nestedRosterId = Guid.Parse("23333333333333333333333333333333");
+            nestedRosterId = Guid.Parse("23333333333333333333333333333333");
 
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
-                new SingleQuestion()
-                {
-                    PublicKey = linkedQuestionId,
-                    QuestionType = QuestionType.SingleOption,
-                    LinkedToQuestionId = linkedQuestionSourceId
-                },
                 new Group()
                 {
                     PublicKey = rosterId,
@@ -40,6 +33,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     Children = new List<IComposite>
                     {
+                        new NumericQuestion()
+                        {
+                            PublicKey = linkedQuestionSourceId,
+                            QuestionType = QuestionType.Numeric,
+                            StataExportCaption = "q1"
+                        },
                         new Group()
                         {
                             PublicKey = nestedRosterId,
@@ -48,11 +47,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                             RosterSizeSource = RosterSizeSourceType.FixedTitles,
                             Children = new List<IComposite>
                             {
-                                new NumericQuestion()
+
+                                new SingleQuestion()
                                 {
-                                    PublicKey = linkedQuestionSourceId,
-                                    QuestionType = QuestionType.Numeric,
-                                    StataExportCaption = "q1"
+                                    PublicKey = linkedQuestionId,
+                                    QuestionType = QuestionType.SingleOption,
+                                    LinkedToQuestionId = linkedQuestionSourceId
                                 }
                             }
                         }
@@ -60,8 +60,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
                 });
 
             InterviewData interview = CreateInterviewData();
-            var textListQuestion = interview.Levels["#"].GetOrCreateQuestion(linkedQuestionId);
-            textListQuestion.Answer = new decimal[] { 0, 0 };
+            var rosterLevel = new InterviewLevel(nestedRosterId, null, new decimal[] { 0,0 });
+            interview.Levels.Add("0,0", rosterLevel);
+            var textListQuestion = rosterLevel.GetOrCreateQuestion(linkedQuestionId);
+            textListQuestion.Answer = new decimal[] { 0 };
 
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
@@ -72,10 +74,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
              interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_linked_question_have_one_answer = () =>
-           GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
+           GetLevel(result, nestedRosterId).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
 
         It should_linked_question_have_first_answer_be_equal_to_0 = () =>
-           GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers[0].ShouldEqual("0");
+           GetLevel(result, nestedRosterId).Records[0].Questions[0].Answers[0].ShouldEqual("0");
 
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
@@ -83,5 +85,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExport
         private static Guid linkedQuestionId;
         private static Guid linkedQuestionSourceId;
         private static QuestionnaireDocument questionnarie;
+        private static Guid nestedRosterId;
     }
 }
