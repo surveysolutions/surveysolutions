@@ -83,12 +83,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 ExportedQuestion exportedQuestion = null;
                 if (question == null)
                 {
-                    var ansnwers = new List<string>();
+                    var emptyAnswers = new List<string>();
                     for (int i = 0; i < headerItem.ColumnNames.Count(); i++)
                     {
-                        ansnwers.Add(string.Empty);
+                        emptyAnswers.Add(string.Empty);
                     }
-                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, ansnwers.ToArray());
+                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, emptyAnswers.ToArray());
                 }
                 else
                 {
