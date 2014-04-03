@@ -1,5 +1,5 @@
 ﻿using System.Runtime.Serialization;
-using Core.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.UI.Headquarters.Models.API
 {

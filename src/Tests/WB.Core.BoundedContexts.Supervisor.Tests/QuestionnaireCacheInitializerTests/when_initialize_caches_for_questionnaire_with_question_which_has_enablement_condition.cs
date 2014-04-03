@@ -11,9 +11,9 @@ using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.QuestionnaireCacheInitializerTests

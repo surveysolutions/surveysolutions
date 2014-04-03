@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web.Http;
-using Core.Supervisor.Views.Interviewer;
-using Core.Supervisor.Views.User;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.UI.Headquarters.Models.API;
 
 namespace Web.Supervisor.API

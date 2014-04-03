@@ -16,7 +16,6 @@ using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.EventBus;
@@ -27,6 +26,7 @@ using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.Code.CommandDeserialization;
@@ -118,12 +118,7 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
-                new HeadquartersBoundedContextModule(
-                    AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
-                    WebConfigurationManager.AppSettings["Headquarters.Url"]));
+                new HeadquartersBoundedContextModule());
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

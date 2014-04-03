@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services.TabletInformation;
-using WB.Core.BoundedContexts.Supervisor.Views.TabletInformation;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
+using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.FileBasedTabletInformationServiceTests
 {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using WB.Core.BoundedContexts.Supervisor.Implementation;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests

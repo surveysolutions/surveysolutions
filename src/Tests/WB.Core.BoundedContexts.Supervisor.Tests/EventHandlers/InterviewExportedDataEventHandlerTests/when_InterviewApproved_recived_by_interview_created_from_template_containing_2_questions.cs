@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Supervisor.EventHandler;
-using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
 {

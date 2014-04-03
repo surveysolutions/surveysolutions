@@ -7,8 +7,8 @@ using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Threading;
 using SynchronizationMessages.Export;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 
 namespace WB.UI.Headquarters.Controllers

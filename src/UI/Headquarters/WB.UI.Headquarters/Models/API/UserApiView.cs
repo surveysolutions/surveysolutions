@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Supervisor.Views.Interviewer;
-using Core.Supervisor.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.UI.Headquarters.Models.API
 {
