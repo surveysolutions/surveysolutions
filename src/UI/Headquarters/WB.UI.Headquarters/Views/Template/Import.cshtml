@@ -43,11 +43,11 @@
 @section gridnavigation
 {
     <div class="menubar">
-        <form data-bind="submit: filter">
-            <div class="input-append search-bar">
-                <input class="span4" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'" />
-                <button class="btn" type="button" data-bind="click: filter">Search</button>
+        <form data-bind="submit: filter" class="form-inline">
+            <div class="form-group">
+                <input class="form-control" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'" />
             </div>
+            <button class="btn btn-default" type="button" data-bind="click: filter">Search</button>
         </form>
     </div>
 }
@@ -66,7 +66,9 @@
             <tr>
                 <td data-bind="text: Title"></td>
                 <td>
-                    <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaire"><i class="icon icon-info-sign icon-white"></i>Import</a>
+                    <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaire">
+                        <i class="glyphicon glyphicon-info-sign"></i> Import
+                    </a>
                 </td>
             </tr>
             <!-- /ko -->
