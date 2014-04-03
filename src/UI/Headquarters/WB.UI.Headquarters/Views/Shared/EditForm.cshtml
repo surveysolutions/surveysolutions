@@ -6,12 +6,12 @@
 {
     using (Html.ControlGroupFor(property.Name))
         {
-            @Html.Label(property.Name.ToSeparatedWords(), new { @class = "control-label" })
-            <div class="controls">
+            @Html.Label(property.Name.ToSeparatedWords(), new { @class = "col-sm-4 control-label" })
+            <div class="col-sm-6">
                 @if (property.GetAttribute<ReadOnlyAttribute>() == null)
                 {
-                    @Html.Editor(property.Name, new { @class = "input-xlarge" })
-                    @Html.ValidationMessage(property.Name, null, new { @class = "help-inline" })
+                    @Html.Editor(property.Name, new {htmlAttributes = new { @class = "form-control"}})
+                    @Html.ValidationMessage(property.Name, null, new { @class = "help-block" })
 
                 }
                 else
