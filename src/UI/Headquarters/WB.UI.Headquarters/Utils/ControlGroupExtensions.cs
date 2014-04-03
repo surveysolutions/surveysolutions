@@ -188,7 +188,7 @@ namespace WB.UI.Headquarters.Utils
         {
             var controlGroupWrapper = new TagBuilder("div");
             controlGroupWrapper.MergeAttributes(htmlAttributes);
-            controlGroupWrapper.AddCssClass("control-group");
+            controlGroupWrapper.AddCssClass("form-group");
             string partialFieldName = propertyName;
             string fullHtmlFieldName = html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(partialFieldName);
             if (!html.ViewData.ModelState.IsValidField(fullHtmlFieldName))
