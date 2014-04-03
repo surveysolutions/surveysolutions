@@ -24,10 +24,9 @@
 
 @section gridnavigation
 {
-    <div class="menubar">
-        <a class="btn" href="@Url.Action("AddSupervisor", "Team")">
-            <i class="icon icon-user icon-white"></i> Add supervisor</a>
-    </div>
+    <a class="btn btn-default" href="@Url.Action("AddSupervisor", "Team")">
+        <i class="glyphicon glyphicon-user"></i> Add supervisor
+    </a>
 }
 
 @section grid
@@ -51,11 +50,13 @@
                 <td data-bind="text: Email"></td>
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
-                        <i class="icon icon-group icon-white"></i> Interviewers</a>
+                        <i class="glyphicon glyphicon-user"></i> Interviewers
+                    </a>
                 </td>
                 <td>
                     <a class="btn btn-info" data-bind="attr: { href: $detailsUrl + '/' + UserId() }">
-                        <i class="icon icon-edit icon-white"></i> Details</a>
+                        <i class="glyphicon glyphicon-edit"></i> Details
+                    </a>
                 </td>
             </tr>
             <!-- /ko -->

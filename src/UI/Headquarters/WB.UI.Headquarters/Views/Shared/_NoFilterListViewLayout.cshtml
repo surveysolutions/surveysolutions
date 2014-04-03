@@ -17,25 +17,35 @@
     @RenderSection("output", false)
 }
 <div class="innerLR">
-    @RenderSection("header", false)
+    <div class="page-header">
+        @RenderSection("header", false)
+    </div>
 </div>
 
-@RenderSection("gridnavigation", false)
-<div id="list" class="innerLR">
-    <!-- ko if:IsPageLoaded()  -->
-    <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
-    <p class="text-center">
-        No results found
-    </p>
-    <!-- /ko -->
-    <!-- ko if:Pager().TotalItemCount() > 0 -->
-    @RenderSection("grid", true)
-    <!-- ko if:Pager().LastPage() > 1 -->
-    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
-    <!-- /ko -->
-    <!-- /ko -->
-    <!-- /ko -->
-</div>
-@this.RenderBody()
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @RenderSection("gridnavigation", false)
+    </div>
+    <div class="panel-body">
+        <div id="list" class="innerLR">
+            <!-- ko if:IsPageLoaded()  -->
+            <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
+            <p class="text-center">
+                No results found
+            </p>
+            <!-- /ko -->
+            <!-- ko if:Pager().TotalItemCount() > 0 -->
+            @RenderSection("grid", true)
+            <!-- ko if:Pager().LastPage() > 1 -->
+            <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
+            <!-- /ko -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+        @this.RenderBody()
 
-@Html.Partial("_ListViewPagingScript")
+        @Html.Partial("_ListViewPagingScript")
+    </div>
+</div>
+
+
