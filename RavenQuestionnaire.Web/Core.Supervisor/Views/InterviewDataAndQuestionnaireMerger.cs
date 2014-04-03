@@ -48,10 +48,8 @@ namespace Core.Supervisor.Views
                 var currentGroup = groupStack.Pop();
 
                 var rootLevel = this.GetRootLevel(interview);
-                //### old questionnaires supporting
-                if (currentGroup.Key.Propagated == Propagate.AutoPropagated ||
-                    //### roster
-                    (currentGroup.Key.IsRoster))
+                
+                if (IsRoster(currentGroup.Key))
                 {
                     var rosterGroups = this.GetRosterLevels(currentGroup.Key.PublicKey, interview, questionnaireRosters).ToList();
 
@@ -63,8 +61,9 @@ namespace Core.Supervisor.Views
                         {
                             var completedRosterGroups =
                                 this.GetCompletedRosterGroups(currentGroup.Key, currentGroup.Value,
-                                    rosterGroup.Value, new[] { rootLevel },
-                                    idToVariableMap, variableToIdMap, getAvailableOptions, questionnaire.Questionnaire);
+                                    rosterGroup.Value, new[] {rootLevel},
+                                    idToVariableMap, variableToIdMap, getAvailableOptions, questionnaire.Questionnaire,
+                                    interview, questionnaireRosters);
 
                             interviewDetails.Groups.AddRange(completedRosterGroups);
                         }
@@ -86,6 +85,14 @@ namespace Core.Supervisor.Views
             }
 
             return interviewDetails;
+        }
+
+        private static bool IsRoster(IGroup currentGroup)
+        {
+                    //### old questionnaires supporting
+            return currentGroup.Propagated == Propagate.AutoPropagated ||
+                   //### roster
+                   (currentGroup.IsRoster);
         }
 
         private InterviewLevel GetRootLevel(InterviewData interview)
@@ -120,7 +127,8 @@ namespace Core.Supervisor.Views
             IEnumerable<InterviewLevel> upperInterviewLevels,
             Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap,
             Func<Guid, Dictionary<decimal[], string>> getAvailableOptions,
-            IQuestionnaireDocument questionnaire)
+            IQuestionnaireDocument questionnaire, InterviewData interview,
+            QuestionnaireRosterStructure questionnaireRosters)
         {
             var result = new List<InterviewGroupView>();
             result.Add(GetCompletedGroup(currentGroup, depth, interviewLevel, upperInterviewLevels, idToVariableMap, variableToIdMap,
@@ -128,9 +136,38 @@ namespace Core.Supervisor.Views
 
             foreach (var nestedGroup in currentGroup.Children.OfType<IGroup>())
             {
-                result.AddRange(GetCompletedRosterGroups(nestedGroup, depth + 1, interviewLevel, upperInterviewLevels, idToVariableMap,
-                    variableToIdMap,
-                    getAvailableOptions, questionnaire));
+                //nested roster supporting
+                if (IsRoster(nestedGroup))
+                {
+                    var rosterGroups =
+                        this.GetRosterLevels(nestedGroup.PublicKey, interview, questionnaireRosters)
+                            .Where(
+                                kv =>
+                                    kv.Value.RosterVector.Take(kv.Value.RosterVector.Length - 1)
+                                        .SequenceEqual(interviewLevel.RosterVector))
+                            .ToList();
+
+                    if (rosterGroups.Any())
+                    {
+                        foreach (var rosterGroup in rosterGroups)
+                        {
+                            var completedRosterGroups =
+                                this.GetCompletedRosterGroups(nestedGroup, depth + 1,
+                                    rosterGroup.Value, upperInterviewLevels.Union(new[] {interviewLevel}),
+                                    idToVariableMap, variableToIdMap, getAvailableOptions, questionnaire, interview,
+                                    questionnaireRosters);
+
+                            result.AddRange(completedRosterGroups);
+                        }
+                    }
+                }
+                else
+                {
+                    result.AddRange(GetCompletedRosterGroups(nestedGroup, depth + 1, interviewLevel, upperInterviewLevels, idToVariableMap,
+                        variableToIdMap,
+                        getAvailableOptions, questionnaire, interview, questionnaireRosters));    
+                }
+                
             }
             return result;
         }
