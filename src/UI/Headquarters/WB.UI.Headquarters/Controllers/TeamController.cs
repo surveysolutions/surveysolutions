@@ -76,9 +76,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                UserView user =
-                    this.userViewFactory.Load(
-                        new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+                UserView user = this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
