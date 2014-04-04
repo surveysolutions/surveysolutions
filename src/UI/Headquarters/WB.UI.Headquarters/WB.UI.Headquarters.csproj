@@ -401,7 +401,7 @@
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\SummaryListViewModel.cs" />
     <Compile Include="Models\SummaryRequestModel.cs" />
-    <Compile Include="Models\SupervisorModel.cs" />
+    <Compile Include="Models\HeadquartersModel.cs" />
     <Compile Include="Models\SurveyListViewModel.cs" />
     <Compile Include="Models\SurveyRequestModel.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
@@ -488,7 +488,7 @@
     <Content Include="Views\Team\Interviewers.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
-    <Content Include="Views\User\CreateSupervisor.cshtml" />
+    <Content Include="Views\User\CreateHeadquarters.cshtml" />
     <None Include="Service References\PublicService\PublicService.wsdl" />
     <None Include="Service References\PublicService\PublicService.xsd">
       <SubType>Designer</SubType>
