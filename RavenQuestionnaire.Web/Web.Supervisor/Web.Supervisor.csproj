@@ -734,10 +734,6 @@
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\UI\Designer\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
-      <Project>{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1}</Project>
-      <Name>WB.UI.Designer.WebServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
@@ -746,17 +742,9 @@
       <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
       <Name>SynchronizationMessages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
-      <Project>{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}</Project>
-      <Name>Core.Supervisor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
-      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
-      <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>

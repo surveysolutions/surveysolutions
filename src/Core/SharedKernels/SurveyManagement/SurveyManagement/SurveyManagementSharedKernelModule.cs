@@ -19,7 +19,7 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
-    public class SupervisorBoundedContextModule : NinjectModule
+    public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
         private readonly int supportedQuestionnaireVersionMajor;
@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly int supportedQuestionnaireVersionPatch;
         private readonly string headquartersUrl;
 
-        public SupervisorBoundedContextModule(string currentFolderPath,
+        public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             string headquartersUrl)
         {

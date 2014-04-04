@@ -184,10 +184,6 @@
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Portable\Ncqrs.Portable.csproj">
-      <Project>{A6164AE1-61B3-453B-89A5-F813CC1F809B}</Project>
-      <Name>Ncqrs.Portable</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Spec\Ncqrs.Spec.csproj">
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>

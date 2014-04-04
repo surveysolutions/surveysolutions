@@ -65,67 +65,6 @@ namespace WB.UI.Headquarters.Utils
         }
 
         /// <summary>
-        /// Create new properties for LabelFor
-        /// </summary>
-        /// <param name="html">
-        /// The html.
-        /// </param>
-        /// <param name="expression">
-        /// The expression.
-        /// </param>
-        /// <param name="htmlAttributes">
-        /// The html attributes.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// The parameter  TModel
-        /// </typeparam>
-        /// <typeparam name="TValue">
-        /// The parameter TValue
-        /// </typeparam>
-        /// <returns>
-        ///  Return LabelFor with additional properties
-        /// </returns>
-        public static MvcHtmlString LabelFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, object htmlAttributes)
-        {
-            return LabelFor(html, expression, new RouteValueDictionary(htmlAttributes));
-        }
-
-        /// <summary>
-        /// Added additional properties for LabelFor
-        /// </summary>
-        /// <param name="html">
-        /// The html.
-        /// </param>
-        /// <param name="expression">
-        /// The expression.
-        /// </param>
-        /// <param name="htmlAttributes">
-        /// The html attributes.
-        /// </param>
-        /// <typeparam name="TModel">
-        /// The parameter TModel
-        /// </typeparam>
-        /// <typeparam name="TValue">
-        /// The parameter TValue
-        /// </typeparam>
-        /// <returns>
-        /// Return LabelFor with additional properties
-        /// </returns>
-        public static MvcHtmlString LabelFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, IDictionary<string, object> htmlAttributes)
-        {
-            var metadata = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
-            var htmlFieldName = ExpressionHelper.GetExpressionText(expression);
-            var labelText = metadata.DisplayName ?? metadata.PropertyName ?? htmlFieldName.Split('.').Last();
-            if (String.IsNullOrEmpty(labelText))
-                return MvcHtmlString.Empty;
-            var tag = new TagBuilder("label");
-            tag.MergeAttributes(htmlAttributes);
-            tag.Attributes.Add("for", html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId(htmlFieldName));
-            tag.SetInnerText(labelText);
-            return MvcHtmlString.Create(tag.ToString(TagRenderMode.Normal));
-        }
-
-        /// <summary>
         /// Added new validation parameters
         /// </summary>
         /// <param name="helper">
@@ -142,7 +81,7 @@ namespace WB.UI.Headquarters.Utils
             string retVal = string.Empty;
             if (helper.ViewData.ModelState.IsValid)
                 return MvcHtmlString.Create(string.Empty);
-            retVal += "<div class='alert alert-error'><a data-dismiss='alert' class='close'>&times;</a><span>";
+            retVal += "<div class='alert alert-danger'><a data-dismiss='alert' class='close'>&times;</a><span>";
             if (!string.IsNullOrEmpty(validationMessage))
                 retVal += validationMessage;
             retVal += "</span>";

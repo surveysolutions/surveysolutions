@@ -198,6 +198,8 @@ h4.heading {
 
 #details {
     display: none;
+    height:100%; 
+    overflow-y: auto;
 }
 
 #content.details-visible #details {
