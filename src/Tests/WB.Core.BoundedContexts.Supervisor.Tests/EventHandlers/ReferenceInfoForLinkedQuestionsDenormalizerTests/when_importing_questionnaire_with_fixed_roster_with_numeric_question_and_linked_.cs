@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReferenceInfoFo
         It should_put_linkedId_as_key_and_value_should_contains_rosterId_in__ScopeId__field_of_created_row = () =>
             referenceInfoForLinkedQuestionsWriter.Verify(s => s.Store(
                 it.Is<ReferenceInfoForLinkedQuestions>(d => 
-                    d.ReferencesOnLinkedQuestions.ContainsKey(linkedId) && d.ReferencesOnLinkedQuestions[linkedId].ScopeId == (rosterId)),
+                    d.ReferencesOnLinkedQuestions.ContainsKey(linkedId) && d.ReferencesOnLinkedQuestions[linkedId].ReferencedQuestionRosterScope.Last() == (rosterId)),
                 it.IsAny<string>()));
 
         private static Guid rosterId = Guid.Parse("11111111111111111111111111111111");
