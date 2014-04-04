@@ -20,7 +20,6 @@ using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.Merger
 {
-    [Ignore("unignore when InterviewDataAndQuestionnaireMerger will start support nested rosters")]
     internal class when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_firt_level_inside_it : InterviewDataAndQuestionnaireMergerTestContext
     {
         Establish context = () =>
@@ -31,7 +30,7 @@ namespace Core.Supervisor.Tests.Merger
 
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             sourceForLinkedQuestionId = Guid.Parse("11111111111111111111111111111111");
-            firstLevelRosterId = Guid.Parse("10000000000000000000000000000000");
+            firstLevelRosterId = Guid.Parse("20000000000000000000000000000000");
             secondLevelRosterId = Guid.Parse("44444444444444444444444444444444");
             var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 

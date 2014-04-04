@@ -20,7 +20,6 @@ using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.Merger
 {
-    [Ignore("unignore when InterviewDataAndQuestionnaireMerger will start support nested rosters")]
     internal class when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_it_at_parallel_roster_level : InterviewDataAndQuestionnaireMergerTestContext
     {
         Establish context = () =>
@@ -53,7 +52,12 @@ namespace Core.Supervisor.Tests.Merger
                         RosterFixedTitles = new[] { "t1", "t2" },
                         Children = new List<IComposite>()
                         {
-                            new NumericQuestion() { PublicKey = sourceForLinkedQuestionId, QuestionType = QuestionType.Numeric, StataExportCaption = "sourceForLinkedQuestionId"}
+                            new NumericQuestion()
+                            {
+                                PublicKey = sourceForLinkedQuestionId,
+                                QuestionType = QuestionType.Numeric,
+                                StataExportCaption = "sourceForLinkedQuestionId"
+                            }
                         }
                     }
                 }
@@ -66,11 +70,11 @@ namespace Core.Supervisor.Tests.Merger
                     RosterFixedTitles = new[] { "parallel roster1", "parallel roster1" },
                     Children = new List<IComposite>()
                     {
-
                         new SingleQuestion()
                         {
                             PublicKey = linkedQuestionId,
-                            LinkedToQuestionId = sourceForLinkedQuestionId, StataExportCaption = "linkedQuestionId"
+                            LinkedToQuestionId = sourceForLinkedQuestionId,
+                            StataExportCaption = "linkedQuestionId"
                         }
                     }
                 });
@@ -90,6 +94,11 @@ namespace Core.Supervisor.Tests.Merger
                 new Dictionary<Guid, object> { { sourceForLinkedQuestionId, 21 } }, new Dictionary<Guid, string>() { { secondLevelRosterId, "roster21" } });
 
 
+            AddInterviewLevel(interview, parallelLevelRosterId, new decimal[] { 0 }, new Dictionary<Guid, object>(),
+                new Dictionary<Guid, string>() { { parallelLevelRosterId, "paralel roster1" } });
+            AddInterviewLevel(interview, parallelLevelRosterId, new decimal[] { 1 }, new Dictionary<Guid, object>(),
+               new Dictionary<Guid, string>() { { parallelLevelRosterId, "paralel roster2" } });
+
             questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
             questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaireDocument);
             questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
@@ -100,19 +109,19 @@ namespace Core.Supervisor.Tests.Merger
             mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
         It should_linked_in_first_row_has_3_options = () =>
-       GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.Count().ShouldEqual(3);
+            GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.Count().ShouldEqual(3);
 
         It should_linked_in_second_row_has_3_options = () =>
-         GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 1 }).Options.Count().ShouldEqual(3);
+            GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 1 }).Options.Count().ShouldEqual(3);
 
         It should_linked_question_in_first_row_has_first_option_equal_to_11 = () =>
-         GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.First().Label.ShouldEqual("roster1: 11");
+            GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.First().Label.ShouldEqual("roster1: 11");
 
         It should_linked_question_in_first_row_has_second_option_equal_to_12 = () =>
-        GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.ToArray()[1].Label.ShouldEqual("roster1: 12");
+            GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.ToArray()[1].Label.ShouldEqual("roster1: 12");
 
         It should_linked_question_in_first_row_has_third_option_equal_to_21 = () =>
-         GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.Last().Label.ShouldEqual("roster2: 21");
+            GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.Last().Label.ShouldEqual("roster2: 21");
 
 
         private static InterviewDataAndQuestionnaireMerger merger;

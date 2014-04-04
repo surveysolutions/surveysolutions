@@ -20,7 +20,6 @@ using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.Merger
 {
-    [Ignore("unignore when InterviewDataAndQuestionnaireMerger will start support nested rosters")]
     internal class when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_it_at_first_level : InterviewDataAndQuestionnaireMergerTestContext
     {
         Establish context = () =>

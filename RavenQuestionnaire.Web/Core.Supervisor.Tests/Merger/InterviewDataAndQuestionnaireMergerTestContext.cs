@@ -40,8 +40,18 @@ namespace Core.Supervisor.Tests.Merger
 
         internal static void AddInterviewLevel(InterviewData interview, Guid scopeId, decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions, Dictionary<Guid, string> rosterTitles=null)
         {
-            var rosterLevel = new InterviewLevel(scopeId, null, rosterVector);
-            
+            InterviewLevel rosterLevel;
+            var levelKey = string.Join(",", rosterVector);
+            if (!interview.Levels.ContainsKey(levelKey))
+            {
+                rosterLevel = new InterviewLevel(scopeId, null, rosterVector);
+            }
+            else
+            {
+                rosterLevel = interview.Levels[levelKey];
+                rosterLevel.ScopeIds.Add(scopeId, null);
+            }
+
             foreach (var answeredQuestion in answeredQuestions)
             {
                 var nestedQuestion = rosterLevel.GetOrCreateQuestion(answeredQuestion.Key);
@@ -50,10 +60,13 @@ namespace Core.Supervisor.Tests.Merger
 
             if (rosterTitles != null)
             {
-                rosterLevel.RosterRowTitles = rosterTitles;
+                foreach (var rosterTitle in rosterTitles)
+                {
+                    rosterLevel.RosterRowTitles.Add(rosterTitle.Key, rosterTitle.Value);
+                }
             }
 
-            interview.Levels.Add(string.Join(",", rosterVector), rosterLevel);
+            interview.Levels[levelKey] = rosterLevel;
         }
 
         internal static InterviewQuestionView GetQuestion(InterviewDetailsView interviewDetailsView, Guid questionId,

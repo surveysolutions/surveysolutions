@@ -20,7 +20,6 @@ using It = Machine.Specifications.It;
 
 namespace Core.Supervisor.Tests.Merger
 {
-    [Ignore("unignore when InterviewDataAndQuestionnaireMerger will start support nested rosters")]
     internal class when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_it_at_top_level : InterviewDataAndQuestionnaireMergerTestContext
     {
         Establish context = () =>
@@ -106,13 +105,13 @@ namespace Core.Supervisor.Tests.Merger
                 .Options.Count.ShouldEqual(3);
 
         It should_linked_question_outside_roster_has_first_option_equal_to_11 = () =>
-        GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Options.First().Label.ShouldEqual("roster1: 11");
+        GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Options[0].Label.ShouldEqual("roster1: 11");
 
         It should_linked_question_outside_roster_has_second_option_equal_to_12 = () =>
-         GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Options.First().Label.ShouldEqual("roster1: 12");
+        GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Options[1].Label.ShouldEqual("roster1: 12");
 
         It should_linked_question_outside_roster_has_third_option_equal_to_21 = () =>
-         GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Options.First().Label.ShouldEqual("roster2: 21");
+        GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Options[2].Label.ShouldEqual("roster2: 21");
        
 
         private static InterviewDataAndQuestionnaireMerger merger;

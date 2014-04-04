@@ -6,6 +6,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 Status = interview.Status
             };
 
-            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions = (questionId) => this.GetAvailableOptions(questionId, interview, questionnaireReferenceInfo);
+            Func<Guid, decimal[], Dictionary<decimal[], string>> getAvailableOptions = (questionId, questionRosterVector) => this.GetAvailableOptions(questionId, questionRosterVector, interview, questionnaireReferenceInfo, questionnaireRosters);
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();
 
             groupStack.Push(new KeyValuePair<IGroup, int>(questionnaire.Questionnaire, 0));
@@ -125,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         private IEnumerable<InterviewGroupView> GetCompletedRosterGroups(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
             IEnumerable<InterviewLevel> upperInterviewLevels,
             Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap,
-            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions,
+            Func<Guid, decimal[], Dictionary<decimal[], string>> getAvailableOptions,
             IQuestionnaireDocument questionnaire, InterviewData interview,
             QuestionnaireRosterStructure questionnaireRosters)
         {
@@ -172,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         }
 
         private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels,
-            Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, Dictionary<decimal[], string>> getAvailableOptions,
+            Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, decimal[], Dictionary<decimal[], string>> getAvailableOptions,
             IQuestionnaireDocument questionnaire)
         {
             var rosterTitle = interviewLevel.RosterRowTitles.ContainsKey(currentGroup.PublicKey)
@@ -191,13 +192,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
 
                 Dictionary<string, string> answersForTitleSubstitution =
-                    GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions);
+                    GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector));
 
                 bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null &&
                     IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
 
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
-                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions, isQustionsParentGroupDisabled)
+                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), isQustionsParentGroupDisabled)
                     : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, isQustionsParentGroupDisabled);
 
                 completedGroup.Questions.Add(interviewQuestion);
@@ -312,26 +313,50 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             return currentInterviewLevel.GetQuestion(questionId);
         }
 
-        private Dictionary<decimal[], string> GetAvailableOptions(Guid questionId, InterviewData interview,
-            ReferenceInfoForLinkedQuestions referenceQuestions)
+        private Dictionary<decimal[], string> GetAvailableOptions(Guid questionId, decimal[] questionRosterVector, InterviewData interview,
+            ReferenceInfoForLinkedQuestions referenceQuestions, QuestionnaireRosterStructure questionnaireRosters)
         {
             var optionsSource = this.GetQuestionReferencedQuestion(questionId, referenceQuestions);
             if (optionsSource == null)
                 return this.EmptyOptions;
 
-            IEnumerable<InterviewLevel> allAvailableLevelsByScope = this.GetAllAvailableLevelsByScope(interview, optionsSource);
+            IEnumerable<InterviewLevel> allAvailableLevelsByScope = this.GetAllAvailableLevelsByScope(interview, questionRosterVector, optionsSource);
 
             IDictionary<decimal[], InterviewQuestion> allLinkedQuestions =
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
                     interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
 
-            return allLinkedQuestions.Where(question => question.Value != null && question.Value.Enabled)
-                .ToDictionary(question => question.Key, question => (question.Value.Answer ?? string.Empty).ToString());
+            return allLinkedQuestions.Where(question => question.Value != null && question.Value.Enabled && question.Value.Answer != null)
+                .ToDictionary(question => question.Key, question => CreateLinkedQuestionOption(question.Value, question.Key,questionRosterVector, optionsSource,questionnaireRosters, interview));
         }
 
-        private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, ReferenceInfoByQuestion optionsSource)
+        private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, decimal[] questionRosterVector, ReferenceInfoByQuestion optionsSource)
         {
-            return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(optionsSource.ScopeId));
+            return
+                interview.Levels.Values.Where(
+                    level =>
+                        level.ScopeIds.ContainsKey(optionsSource.ReferencedQuestionRosterScope.Last()) &&
+                            LinkedQuestionUtils.IsLevelAllowedToBeUsedAsLinkSourceInCurrentScope(level.RosterVector, optionsSource.ReferencedQuestionRosterScope,questionRosterVector,optionsSource.LinkedQuestionRosterScope));
+        }
+
+        private string CreateLinkedQuestionOption(InterviewQuestion referencedQuestion, decimal[] referencedQuestionRosterVector, decimal[] linkedQuestionRosterVector,
+            ReferenceInfoByQuestion optionsSource, QuestionnaireRosterStructure questionnaireRosters, InterviewData interview)
+        {
+            return LinkedQuestionUtils.BuildLinkedQuestionOptionTitle(referencedQuestion.Answer.ToString(),
+                (firstScreenInScopeId, levelRosterVector) =>
+                {
+                    var levelFromScope =
+                        interview.Levels.Values.FirstOrDefault(level => level.RosterVector.SequenceEqual(levelRosterVector));
+                    if (levelFromScope != null)
+                    {
+                        if (levelFromScope.RosterRowTitles.ContainsKey(firstScreenInScopeId))
+                        {
+                            return levelFromScope.RosterRowTitles[firstScreenInScopeId];
+                        }
+                    }
+                    return string.Empty;
+                }, referencedQuestionRosterVector, optionsSource.ReferencedQuestionRosterScope, linkedQuestionRosterVector,
+                optionsSource.LinkedQuestionRosterScope, questionnaireRosters);
         }
 
         private ReferenceInfoByQuestion GetQuestionReferencedQuestion(Guid questionId, ReferenceInfoForLinkedQuestions referenceQuestions)
