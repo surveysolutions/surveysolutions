@@ -200,10 +200,6 @@
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
-      <Project>{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}</Project>
-      <Name>Core.Supervisor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>

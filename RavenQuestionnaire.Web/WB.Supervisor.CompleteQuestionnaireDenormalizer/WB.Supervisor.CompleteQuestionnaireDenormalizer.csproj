@@ -63,10 +63,6 @@
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
-      <Project>{072c1754-adf8-4f41-8d96-9c2e1083e6a7}</Project>
-      <Name>Core.Supervisor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
