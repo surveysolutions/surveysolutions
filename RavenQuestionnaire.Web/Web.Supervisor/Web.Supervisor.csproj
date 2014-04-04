@@ -734,10 +734,6 @@
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\UI\Designer\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
-      <Project>{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1}</Project>
-      <Name>WB.UI.Designer.WebServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
