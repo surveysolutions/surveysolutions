@@ -7,26 +7,41 @@
     var roles = UserRoles.Supervisor.ToSelectList();
 }
 
+<div class="page-header">
+    <h3>
+        Create supervisor
+    </h3>
+</div>
 <div class="container">
-    @using (Html.BeginForm("CreateSupervisor", "User", FormMethod.Post, new { @class = "form-signin" }))
+    @using (Html.BeginForm("CreateSupervisor", "User", FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        <h2 class="form-signin-heading">Create supervisor</h2>
         @Html.BootstrapValidationSummary("Create user was unsuccessful. Please correct the errors and try again.")
-        
-        @Html.LabelFor(m => m.Id)
-        @Html.TextBoxFor(m => m.Id, new { @class = "input-block-level", placeholder = "Id" })
-        <span class="help-inline">@Html.ValidationMessageFor(m => m.Id)</span>
-        
-        @Html.LabelFor(m => m.Name)        
-        @Html.TextBoxFor(m => m.Name, new { @class = "input-block-level", placeholder = "Name" })
-        <span class="help-inline">@Html.ValidationMessageFor(m => m.Name)</span>
 
-        @Html.LabelFor(m => m.Role)        
-        @Html.DropDownListFor(m => m.Role, roles, new { @class = "input-block-level", placeholder = "Name" })
-        <span class="help-inline">@Html.ValidationMessageFor(m => m.Role)</span>
-        
-        <p class="pull-right">
-            <button class="btn btn-large btn-primary " type="submit">Create</button>
-        </p>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Id, new { @class = "col-sm-6 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.Id, new { @class = "form-control", placeholder = "Id" })
+                <span class="help-block">@Html.ValidationMessageFor(m => m.Id)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name, new { @class = "col-sm-6 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Name" })
+                <span class="help-block">@Html.ValidationMessageFor(m => m.Name)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Role, new { @class = "col-sm-6 control-label" })
+            <div class="col-sm-6">
+                @Html.DropDownListFor(m => m.Role, roles, new { @class = "form-control", placeholder = "Name" })
+                <span class="help-block">@Html.ValidationMessageFor(m => m.Role)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-6 col-sm-6">
+                <button class="btn btn-primary " type="submit">Create</button>
+            </div>
+        </div>
     }
 </div>
