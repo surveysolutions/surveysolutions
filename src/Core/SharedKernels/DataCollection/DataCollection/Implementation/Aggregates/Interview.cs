@@ -3530,10 +3530,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} [{1}] ({2:N})'",
+            return string.Format("'{0} [{1}]'",
                 GetQuestionTitleForException(questionId, questionnaire),
-                GetQuestionVariableNameForException(questionId, questionnaire),
-                questionId);
+                GetQuestionVariableNameForException(questionId, questionnaire));
         }
 
         private static string FormatGroupForException(Identity group, IQuestionnaire questionnaire)
