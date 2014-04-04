@@ -41,6 +41,7 @@
     <Folder Include="Revalidation\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="EventHandlerDescription.cs" />
