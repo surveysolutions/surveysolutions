@@ -50,13 +50,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 
                 if (IsRoster(currentGroup.Key))
                 {
-                    var rosterGroups = this.GetRosterLevels(currentGroup.Key.PublicKey, interview, questionnaireRosters).ToList();
+                    var rosterLevels = this.GetRosterLevels(currentGroup.Key.PublicKey, interview, questionnaireRosters).ToList();
 
-                    if (rosterGroups.Any())
+                    if (rosterLevels.Any())
                     {
                         //we have at least one completed roster group
                         //so for every layer we are creating roster group
-                        foreach (var rosterGroup in rosterGroups)
+                        foreach (var rosterGroup in rosterLevels)
                         {
                             var completedRosterGroups =
                                 this.GetCompletedRosterGroups(currentGroup.Key, currentGroup.Value,
@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 //nested roster supporting
                 if (IsRoster(nestedGroup))
                 {
-                    var rosterGroups =
+                    var rosterLevels =
                         this.GetRosterLevels(nestedGroup.PublicKey, interview, questionnaireRosters)
                             .Where(
                                 kv =>
@@ -146,9 +146,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                                         .SequenceEqual(interviewLevel.RosterVector))
                             .ToList();
 
-                    if (rosterGroups.Any())
+                    if (rosterLevels.Any())
                     {
-                        foreach (var rosterGroup in rosterGroups)
+                        foreach (var rosterGroup in rosterLevels)
                         {
                             var completedRosterGroups =
                                 this.GetCompletedRosterGroups(nestedGroup, depth + 1,
