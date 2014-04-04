@@ -153,7 +153,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{018E5D8E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Utils", "Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj", "{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{5DC78F98-026F-47C1-B44A-3DE0C517E5E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3464F3AE-094C-4DEC-8725-59506328E597} = {3464F3AE-094C-4DEC-8725-59506328E597}
 	EndProjectSection
