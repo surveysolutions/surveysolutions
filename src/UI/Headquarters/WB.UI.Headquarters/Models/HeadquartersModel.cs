@@ -1,28 +1,26 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Main.Core.Entities.SubEntities;
 
 namespace WB.UI.Headquarters.Models
 {
-    public class SupervisorModel
+    public class HeadquartersModel
     {
-        public SupervisorModel() { }
+        public HeadquartersModel() { }
 
-        public SupervisorModel(Guid id, string name)
+        public HeadquartersModel(Guid id, string name)
         {
             this.Id = id;
             this.Name = name;
         }
 
         [Required]
-        [Display(Name = "Supervisor id")]
+        [Display(Name = "Headquarters id")]
         public Guid Id { get; set; }
 
         
         [Required]
-        [Display(Name = "Supervisor login and password")]
+        [Display(Name = "Headquarters login name")]
         public string Name { get; set; }
 
-        public UserRoles Role { get; set; }
     }
 }
