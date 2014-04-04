@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return headerStructureForLevel;
         }
 
-        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question)
+        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int? lengthOfRosterVectorWhichNeedToBeExported)
         {
             var exportedHeaderItem = new ExportedHeaderItem();
 
@@ -87,12 +87,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             {
                 exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
             }
+
+            if (lengthOfRosterVectorWhichNeedToBeExported.HasValue)
+            {
+                exportedHeaderItem.LengthOfRosterVectorWhichNeedToBeExported = lengthOfRosterVectorWhichNeedToBeExported;
+            }
+
             return exportedHeaderItem;
         }
 
-        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int columnCount)
+        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int columnCount, int? lengthOfRosterVectorWhichNeedToBeExported)
         {
-            var exportedHeaderItem = this.CreateExportedHeaderItem(question);
+            var exportedHeaderItem = this.CreateExportedHeaderItem(question, lengthOfRosterVectorWhichNeedToBeExported);
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnNames = new string[columnCount];
@@ -236,14 +242,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     {
                         if (question.LinkedToQuestionId.HasValue)
                             this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
-                        else this.AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question);
+                        else this.AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
                     }
                     else if (this.IsQuestionTextList(question))
                     {
-                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question);
+                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
                     }
                     else
-                        this.AddHeaderForNotMultiOptions(headerStructureForLevel.HeaderItems, question);
+                        this.AddHeaderForNotMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
                     continue;
                 }
 
@@ -269,28 +275,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
         }
 
         private void AddHeadersForLinkedMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
-            Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
+         Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            headerItems.Add(question.PublicKey, this.CreateExportedHeaderItem(question, this.GetRosterSizeForLinkedQuestion(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions)));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, this.GetRosterSizeForLinkedQuestion(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions), this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeaderForNotMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question)
+        protected void AddHeaderForNotMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
-            headerItems.Add(question.PublicKey, this.CreateExportedHeaderItem(question));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeadersForMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question)
+        protected void AddHeadersForMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
             var multiOptionQuestion = question as IMultyOptionsQuestion;
             var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
-            headerItems.Add(question.PublicKey, this.CreateExportedHeaderItem(question, maxCount));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, maxCount, this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeadersForTextList(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question)
+        protected void AddHeadersForTextList(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
             var textListQuestion = question as ITextListQuestion;
             var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
-            headerItems.Add(question.PublicKey, this.CreateExportedHeaderItem(question, maxCount));
+            headerItems.Add(question.PublicKey, CreateExportedHeaderItem(question, maxCount, this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
         private int GetRosterSizeForLinkedQuestion(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
@@ -301,5 +307,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
+
+        private int? GetLengthOfRosterVectorWhichNeedToBeExported(IQuestion question,
+            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+        {
+            if (!referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions.ContainsKey(question.PublicKey))
+                return null;
+            return referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].LengthOfRosterVectorWhichNeedToBeExported;
+        }
+
     }
 }
