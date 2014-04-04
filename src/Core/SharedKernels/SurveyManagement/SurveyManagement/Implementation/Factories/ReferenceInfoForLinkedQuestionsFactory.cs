@@ -28,11 +28,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 var referencedQuestion =
                     questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == linkedQuestion.LinkedToQuestionId.Value);
 
-                var scopeOfLinkedQuestion = GetScopeOfReferencedQuestions(linkedQuestion, groupsMappedOnPropagatableQuestion).ToArray();
-                var scopeOfReferenceQuestion = GetScopeOfReferencedQuestions(referencedQuestion, groupsMappedOnPropagatableQuestion).ToArray();
+                var scopeOfLinkedQuestion = GetScopeOfReferencedQuestions(linkedQuestion, groupsMappedOnPropagatableQuestion);
+                var scopeOfReferenceQuestion = GetScopeOfReferencedQuestions(referencedQuestion, groupsMappedOnPropagatableQuestion);
                 referenceInfo[linkedQuestion.PublicKey] = new ReferenceInfoByQuestion(
-                    scopeOfReferenceQuestion.Last(),
-                    referencedQuestion.PublicKey, this.GetLengthOfRosterVectorWhichNeedToBeExported(scopeOfLinkedQuestion, scopeOfReferenceQuestion));
+                    referencedQuestion.PublicKey, scopeOfReferenceQuestion, scopeOfLinkedQuestion);
      
             }
 
@@ -40,26 +39,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return referenceInfoForLinkedQuestions;
         }
 
-        private int GetLengthOfRosterVectorWhichNeedToBeExported(Guid[] scopeOfLinkedQuestion, Guid[] scopeOfReferenceQuestion)
-        {
-            for (int i = 0; i < Math.Min(scopeOfLinkedQuestion.Length, scopeOfReferenceQuestion.Length); i++)
-            {
-                if (scopeOfReferenceQuestion[i] != scopeOfLinkedQuestion[i])
-                {
-                    if (scopeOfLinkedQuestion.Length > scopeOfReferenceQuestion.Length)
-                    {
-                        return 1;
-                    }
-                    return scopeOfReferenceQuestion.Length - i - 1;
-                }
-            }
-
-            return scopeOfReferenceQuestion.Length;
-        }
-
-        private IEnumerable<Guid> GetScopeOfReferencedQuestions(IQuestion referencedQuestion,
+        private Guid[] GetScopeOfReferencedQuestions(IQuestion referencedQuestion,
             IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion)
         {
+            var result = new List<Guid>();
             var questionParent = referencedQuestion.GetParent();
 
             while (questionParent != null)
@@ -67,10 +50,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 var group = questionParent as IGroup;
                 if (group != null && (group.Propagated != Propagate.None || group.IsRoster))
                 {
-                    yield return groupsMappedOnPropagatableQuestion[group.PublicKey];
+                    result.Add(groupsMappedOnPropagatableQuestion[group.PublicKey]);
                 }
                 questionParent = questionParent.GetParent();
             }
+            result.Reverse();
+
+            return result.ToArray();
         }
 
 

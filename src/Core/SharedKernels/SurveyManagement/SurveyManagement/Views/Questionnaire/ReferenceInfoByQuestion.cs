@@ -4,15 +4,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 {
     public class ReferenceInfoByQuestion
     {
-        public ReferenceInfoByQuestion(Guid scopeId, Guid referencedQuestionId, int lengthOfRosterVectorWhichNeedToBeExported)
+        public ReferenceInfoByQuestion(Guid referencedQuestionId, Guid[] referencedQuestionRosterScope, Guid[] linkedQuestionRosterScope)
         {
-            this.ScopeId = scopeId;
+            this.ReferencedQuestionRosterScope = referencedQuestionRosterScope;
             this.ReferencedQuestionId = referencedQuestionId;
-            this.LengthOfRosterVectorWhichNeedToBeExported = lengthOfRosterVectorWhichNeedToBeExported;
+            this.LinkedQuestionRosterScope = linkedQuestionRosterScope;
         }
-
-        public Guid ScopeId { get; private set; }
-        public int LengthOfRosterVectorWhichNeedToBeExported { get; private set; }
         public Guid ReferencedQuestionId { get; private set; }
+
+        public Guid[] ReferencedQuestionRosterScope { get; private set; }
+        public Guid[] LinkedQuestionRosterScope { get; private set; }
     }
 }

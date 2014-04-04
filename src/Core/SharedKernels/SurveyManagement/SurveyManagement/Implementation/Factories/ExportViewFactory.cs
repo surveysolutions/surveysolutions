@@ -303,7 +303,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             var rosterSizeQuestionId =
-                referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ScopeId;
+                referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope.Last();
 
             return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
@@ -313,8 +313,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
         {
             if (!referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions.ContainsKey(question.PublicKey))
                 return null;
-            return referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].LengthOfRosterVectorWhichNeedToBeExported;
+            return
+                GetLengthOfRosterVectorWhichNeedToBeExported(
+                    referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].LinkedQuestionRosterScope,
+                    referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope);
         }
 
+        private int GetLengthOfRosterVectorWhichNeedToBeExported(Guid[] scopeOfLinkedQuestion, Guid[] scopeOfReferenceQuestion)
+        {
+            if (scopeOfLinkedQuestion.Length > scopeOfReferenceQuestion.Length)
+            {
+                return 1;
+            }
+
+            for (int i = 0; i < Math.Min(scopeOfLinkedQuestion.Length, scopeOfReferenceQuestion.Length); i++)
+            {
+                if (scopeOfReferenceQuestion[i] != scopeOfLinkedQuestion[i])
+                {
+                    return scopeOfReferenceQuestion.Length - i;
+                }
+            }
+
+            if (scopeOfLinkedQuestion.Length == scopeOfReferenceQuestion.Length)
+            {
+                return 1;
+            }
+
+            return scopeOfReferenceQuestion.Length - scopeOfLinkedQuestion.Length;
+        }
     }
 }
