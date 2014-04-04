@@ -26,6 +26,7 @@ using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
+using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
@@ -118,7 +119,13 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
-                new HeadquartersBoundedContextModule());
+                new HeadquartersBoundedContextModule(),
+                new SurveyManagementSharedKernelModule(
+                    AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
+                    WebConfigurationManager.AppSettings["Headquarters.Url"]));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
