@@ -216,10 +216,6 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Mono\AndroidMain.DenormalizerStorage\AndroidMain.DenormalizerStorage.csproj">
-      <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
-      <Name>AndroidMain.DenormalizerStorage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Mono\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
