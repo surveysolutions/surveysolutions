@@ -284,10 +284,6 @@
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Portable\Ncqrs.Portable.csproj">
-      <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
-      <Name>Ncqrs.Portable</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

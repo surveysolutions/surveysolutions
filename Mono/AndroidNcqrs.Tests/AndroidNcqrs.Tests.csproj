@@ -118,10 +118,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
-      <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
-      <Name>Ncqrs.Portable</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
