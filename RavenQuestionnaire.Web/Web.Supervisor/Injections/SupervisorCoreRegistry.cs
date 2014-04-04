@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.UI.Shared.Web.Filters;
@@ -22,10 +23,9 @@ namespace Web.Supervisor.Injections
         {
             return base.GetAssembliesForRegistration().Concat(new[]
             {
-                typeof(UserViewFactory).Assembly,
+                typeof(SurveyManagementSharedKernelModule).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
                 typeof(DataCollectionSharedKernelModule).Assembly,
-                typeof(UserDenormalizer).Assembly
             });
         }
 

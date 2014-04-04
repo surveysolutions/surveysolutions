@@ -118,7 +118,7 @@
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
-    <Compile Include="SupervisorBoundedContextModule.cs" />
+    <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
