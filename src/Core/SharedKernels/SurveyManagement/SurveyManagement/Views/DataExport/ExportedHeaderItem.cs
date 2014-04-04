@@ -11,7 +11,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         public string[] ColumnNames { get; set; }
         public string[] Titles { get; set; }
         public string VariableName { get; set; }
-        public Dictionary<Guid, LabelItem> Labels { get; set; }}
+        public int? LengthOfRosterVectorWhichNeedToBeExported { get; set; }
+        public Dictionary<Guid, LabelItem> Labels { get; set; }
+    }
 
 
     public class LabelItem

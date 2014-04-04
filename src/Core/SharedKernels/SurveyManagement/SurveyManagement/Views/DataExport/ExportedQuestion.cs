@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                 return header.ColumnNames.Select(c => string.Empty).ToArray();
 
             if (header.ColumnNames.Length == 1)
-                return new string[] { this.AnswerToStringValue(question.Answer) };
+                return new string[] { this.AnswerToStringValue(question.Answer, header) };
 
             var listOfAnswers = this.TryCastToEnumerable(question.Answer);
             if (listOfAnswers != null)
@@ -72,17 +72,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             return null;
         }
 
-        private string AnswerToStringValue(object answer)
+        private string AnswerToStringValue(object answer, ExportedHeaderItem header)
         {
+            const string DefaultDelimiter = "|";
             if (answer == null)
                 return string.Empty;
 
-            var arrayOfObject = this.TryCastToEnumerable(answer);
+            var arrayOfObject = TryCastToEnumerable(answer);
+
             if (arrayOfObject != null && arrayOfObject.Any())
-                return arrayOfObject.Last().ToString();
+            {
+                if (header.LengthOfRosterVectorWhichNeedToBeExported.HasValue)
+                {
+                    var shrinkedArrayOfAnswers =
+                        arrayOfObject.Skip(arrayOfObject.Count() - header.LengthOfRosterVectorWhichNeedToBeExported.Value).ToArray();
+
+                    if (shrinkedArrayOfAnswers.Length == 1)
+                        return shrinkedArrayOfAnswers[0].ToString();
+
+                    return string.Format("[{0}]",
+                        string.Join(DefaultDelimiter, shrinkedArrayOfAnswers));
+                }
+                return string.Join(DefaultDelimiter, arrayOfObject);
+            }
 
             return answer.ToString();
         }
+
 
         private string[] BuildAnswerListForQuestionByHeader(object[] answers, ExportedHeaderItem header)
         {
@@ -90,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i]) : string.Empty;
+                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
             }
 
             return result;
