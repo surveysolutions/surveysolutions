@@ -41,8 +41,8 @@
     </script>
 <script type="text/html" id="SingleOption">
     <div class="form-group" data-bind="validationElement: selectedOption">
-        <label class="col-sm-6 control-label" data-bind="text: title"></label>
-        <div class="col-sm-6">
+        <label class="col-sm-2 control-label" data-bind="text: title"></label>
+        <div class="col-sm-2">
             <!-- ko foreach: options -->
             <div class="radio">
                 <label data-bind='attr: { "for": optionFor }'>
@@ -58,8 +58,8 @@
 </script>
 <script type="text/html" id="MultyOption">
     <div class="form-group" data-bind="validationElement: selectedOptions">
-        <label class="col-sm-6 control-label" data-bind="text: title"></label>
-        <div class="col-sm-6">
+        <label class="col-sm-2 control-label" data-bind="text: title"></label>
+        <div class="col-sm-2">
             <!-- ko foreach: options -->
             <div class="checkbox">
                 <label data-bind='attr: { "for": optionFor }'>
@@ -74,8 +74,8 @@
 </script>
 <script type="text/html" id="Numeric">
     <div class="form-group" data-bind="validationElement: selectedOption">
-        <label class="col-sm-6 control-label" data-bind="text: title"></label>
-        <div class="col-sm-6">
+        <label class="col-sm-2 control-label" data-bind="text: title"></label>
+        <div class="col-sm-2">
             <div class="input-group">
                 <span class="input-group-addon">#</span>
                 <input class="form-control" type="text" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
@@ -87,8 +87,8 @@
 </script>
 <script type="text/html" id="DateTime">
     <div class="form-group" data-bind="validationElement: selectedOption">
-        <label class="col-sm-6 control-label" data-bind="text: title"></label>
-        <div class="col-sm-6">
+        <label class="col-sm-2 control-label" data-bind="text: title"></label>
+        <div class="col-sm-2">
             <div class="input-group">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }" />
@@ -100,8 +100,8 @@
 </script>
 <script type="text/html" id="AutoPropagate">
     <div class="form-group" data-bind="validationElement: selectedOption">
-        <label class="col-sm-6 control-label" data-bind="text: title"></label>
-        <div class="col-sm-6">
+        <label class="col-sm-2 control-label" data-bind="text: title"></label>
+        <div class="col-sm-2">
             <div class="input-group">
                 <span class="input-group-addon">#</span>
                 <input type="number" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
@@ -113,8 +113,8 @@
 </script>
 <script type="text/html" id="Text">
     <div class="form-group" data-bind="validationElement: selectedOption">
-        <label class="col-sm-6 control-label" data-bind="text: title"></label>
-        <div class="col-sm-6">
+        <label class="col-sm-2 control-label" data-bind="text: title"></label>
+        <div class="col-sm-2">
             <div class="input-group">
                 <span class="input-group-addon">T</span>
                 <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
@@ -125,8 +125,8 @@
 </script>
 <script type="text/html" id="GpsCoordinates">
     <div class="form-group" data-bind="validationElement: selectedOption">
-        <label class="col-sm-6 control-label" data-bind="text: title"></label>
-        <div class="col-sm-6">
+        <label class="col-sm-2 control-label" data-bind="text: title"></label>
+        <div class="col-sm-2">
             <div class="input-prepend">
                 <span class="add-on">T</span>
                 <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
@@ -138,25 +138,23 @@
 }
 
 <div class="row-fluid" id="featured-questions-region" data-bind="visible: IsPageLoaded">
-    <div class="col-md-12">
-        <div id="featured-questions" class="form-horizontal">
-            <!-- ko foreach: questions -->
-            <!-- ko template:  { name: type(), data: $data } -->
-            <!-- /ko -->
-            <!-- /ko -->
-            <div class="form-group" data-bind="validationElement: responsible">
-                <label class="col-md-6 control-label">Responsible</label>
-                <div class="col-md-6">
-                    <select class="form-control" data-bind="options: supervisors, optionsText: 'name', value: responsible"></select>
-                    <span class="help-block" data-bind="validationMessage: responsible"></span>
-                </div>
+    <div id="featured-questions" class="form-horizontal">
+        <!-- ko foreach: questions -->
+        <!-- ko template:  { name: type(), data: $data } -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <div class="form-group" data-bind="validationElement: responsible">
+            <label class="col-sm-2 control-label">Responsible</label>
+            <div class="col-md-2">
+                <select class="form-control" data-bind="options: supervisors, optionsText: 'name', value: responsible"></select>
+                <span class="help-block" data-bind="validationMessage: responsible"></span>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-sm-offset-6 col-sm-6">
-                <button type="submit" class="btn btn-primary" data-bind="click: saveCommand, enable: isSaveEnable">Create</button>
-                @Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-default" })
-            </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-2">
+            <button type="submit" class="btn btn-primary" data-bind="click: saveCommand, enable: isSaveEnable">Create</button>
+            @Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-default" })
         </div>
     </div>
 </div>

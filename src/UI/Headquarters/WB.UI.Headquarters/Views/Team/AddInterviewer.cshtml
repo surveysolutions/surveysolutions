@@ -17,12 +17,12 @@
 </div>
 
 
-<form class="form-horizontal col-sm-6" method="POST">
+<form class="form-horizontal" method="POST">
     @{
         this.Html.RenderPartial("EditForm");
     }
     <div class="form-group">
-        <div class="col-sm-offset-4">
+        <div class="col-sm-offset-2">
             <button type="submit" class="btn btn-primary">Save changes</button>
             @Html.ActionLink("Cancel", "Interviewers", new { id = Model.Id }, new { @class = "btn btn-default" })
         </div>
