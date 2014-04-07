@@ -47,6 +47,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZetaLongPaths">
+      <HintPath>..\..\..\..\packages\ZetaLongPaths.1.0.0\lib\ZetaLongPaths.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileInfrastructureModule.cs" />

@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.FileBasedTabletI
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
 
-            fileSystemAccessorMock.Setup(x => x.CombinePath(It.IsAny<string[]>())).Returns<string[]>(Path.Combine);
+            fileSystemAccessorMock.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>())).Returns<string[]>(Path.Combine);
             fileSystemAccessorMock.Setup(x => x.GetFileName(It.IsAny<string>())).Returns<string>((s) => s);
             fileSystemAccessorMock.Setup(x => x.GetCreationTime(It.IsAny<string>())).Returns(DateTime.Now);
 

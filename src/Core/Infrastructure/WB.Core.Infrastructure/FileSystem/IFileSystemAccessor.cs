@@ -7,7 +7,7 @@ namespace WB.Core.Infrastructure.FileSystem
 {
     public interface IFileSystemAccessor
     {
-        string CombinePath(params string[] pathParts);
+        string CombinePath(string path1, string path2);
         string GetFileName(string filePath);
         long GetFileSize(string filePath);
         DateTime GetCreationTime(string filePath);

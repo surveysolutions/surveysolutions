@@ -140,8 +140,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
         {
             string fileNameWithoutInvalidFileNameChars = this.fileSystemAccessor.MakeValidFileName(name);
-            var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(100).ToArray());
-            string fileNameWithNumber = string.Concat(fileNameShortened,
+            string fileNameWithNumber = string.Concat(fileNameWithoutInvalidFileNameChars,
                 i == 0 ? (object) string.Empty : i).ToLower();
 
             return !createdFileNames.Contains(fileNameWithNumber)

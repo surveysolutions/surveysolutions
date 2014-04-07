@@ -16,7 +16,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.CapiInformationServiceT
             IArchiveUtils archiveUtils)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.CombinePath(It.IsAny<string[]>())).Returns<string[]>(Path.Combine);
+            fileSystemAccessorMock.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>())).Returns<string[]>(Path.Combine);
 
             fileSystemAccessorMock.Setup(x => x.CopyFileOrDirectory(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback<string, string>((sourceDir, targetDir) => addToArchiveCallback(sourceDir));
