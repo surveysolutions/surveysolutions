@@ -11,7 +11,7 @@ using FileShare = ZetaLongPaths.Native.FileShare;
 
 namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 {
-    internal class FileSystemIoAccessor : IFileSystemAccessor
+    internal class FileSystemIOAccessor : IFileSystemAccessor
     {
         public string CombinePath(string path1, string path2)
         {
