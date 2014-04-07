@@ -51,11 +51,9 @@ namespace WB.UI.Headquarters
                     "~/Scripts/viewmodels/listview.js"));
 
             bundles.Add(new StyleBundle("~/css/interview-new").Include(
-                "~/Content/bootstrap-editable.css",
                 "~/Content/datepicker.css"));
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
-                "~/Content/bootstrap-editable.css",
                 "~/Content/datepicker.css",
                 "~/Content/details.css"));
 
