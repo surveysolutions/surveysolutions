@@ -13,7 +13,7 @@
     @RenderSection("scripts", false)
 }
 
-<div id="menu" class="hidden-phone">
+<div id="menu" class="col-sm-3 col-md-2 hidden-phone">
     <div id="menuInner" class="slim-scroll">
         <div class="hide-panel-block text-right innerLR">
             &larr;&nbsp;<a class="pseudo-link" data-bind="click: ToggleFilter">Hide filter</a>
@@ -21,7 +21,7 @@
         @RenderSection("filters", false)
     </div>
 </div>
-<div id="content">
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" id="content">
     <div class="innerLR">@Html.Partial("_alerts")</div>
     <div class="page-header">
         @RenderSection("header", false)
