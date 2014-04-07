@@ -151,9 +151,10 @@ namespace Web.Supervisor.Controllers
                     option =>
                         new
                         {
-                            Value = option.Value.ToString().Parse<decimal>(),
+                            Value = option.Value is decimal[] ? 0 : option.Value.ToString().Parse<decimal>(),
                             Label = option.Label
                         });
+
             switch (dto.QuestionType)
             {
                 case QuestionType.DateTime:
@@ -239,13 +240,32 @@ namespace Web.Supervisor.Controllers
                 case QuestionType.SingleOption:
                     decimal? answerAsDecimal = null;
                     string answerLabel = string.Empty;
-                    if (!string.IsNullOrEmpty(answerAsString))
+                    if ((dto.Answer is IEnumerable) & !(dto.Answer is String))
                     {
-                        answerAsDecimal = answerAsString.Parse<decimal>();
-                        var selectedAnswer = options.FirstOrDefault(option => option.Value == answerAsDecimal);
-                        answerLabel = selectedAnswer == null ? string.Empty : selectedAnswer.Label;
-                    }
+                        var b = ((IEnumerable<object>)dto.Answer).Select(Convert.ToDecimal);
 
+                        for (int index = 0; index < dto.Options.Count; index++)
+                        {
+                            var option = dto.Options[index];
+                            var a = option.Value as IEnumerable<decimal>;
+
+                            if (a.SequenceEqual(b))
+                            {
+                                answerAsDecimal = index;
+                                answerAsString = index.ToString();
+                                answerLabel = option.Label;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(answerAsString))
+                        {
+                            answerAsDecimal = answerAsString.Parse<decimal>();
+                            var selectedAnswer = options.FirstOrDefault(option => option.Value == answerAsDecimal);
+                            answerLabel = selectedAnswer == null ? string.Empty : selectedAnswer.Label;
+                        }    
+                    }
                     model = new SingleQuestionModel()
                     {
                         options =

@@ -201,6 +201,10 @@ namespace Main.Core.Utility
                 {
                     returnValue = intValue;
                 }
+                else
+                {
+                    throw new FormatException(String.Format("Can't convert string \"{0}\" to {1}", text, objectType));
+                }
             }
 
             if (objectType == typeof (decimal))
@@ -210,6 +214,10 @@ namespace Main.Core.Utility
                 {
                     returnValue = decimalValue;
                 }
+                else
+                {
+                    throw new FormatException(String.Format("Can't convert string  \"{0}\" to {1}", text, objectType));
+                }
             }
 
             if (objectType == typeof (DateTime))
@@ -218,6 +226,10 @@ namespace Main.Core.Utility
                 if (DateTime.TryParse(text, out dateValue))
                 {
                     returnValue = dateValue;
+                }
+                else
+                {
+                    throw new FormatException(String.Format("Can't convert string \"{0}\" to {1}", text, objectType));
                 }
             }
 
