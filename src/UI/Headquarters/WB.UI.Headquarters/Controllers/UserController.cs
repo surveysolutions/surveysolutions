@@ -13,9 +13,6 @@ using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    /// <summary>
-    ///     User controller responsible for dispay users, lock/unlock users, counting statistics
-    /// </summary>
     [Authorize]
     public class UserController : BaseController
     {
