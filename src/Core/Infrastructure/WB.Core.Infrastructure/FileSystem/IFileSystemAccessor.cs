@@ -16,6 +16,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void DeleteDirectory(string path);
 
         bool IsFileExists(string pathToFile);
+        void CreateFile(string pathToFile);
         void DeleteFile(string pathToFile);
 
         string MakeValidFileName(string name);
