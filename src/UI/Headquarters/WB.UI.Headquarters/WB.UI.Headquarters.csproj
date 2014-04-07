@@ -215,10 +215,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
-    <Content Include="Scripts\bootstrap-editable-inline.js" />
-    <Content Include="Scripts\bootstrap-editable-inline.min.js" />
-    <Content Include="Scripts\bootstrap-editable.js" />
-    <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
