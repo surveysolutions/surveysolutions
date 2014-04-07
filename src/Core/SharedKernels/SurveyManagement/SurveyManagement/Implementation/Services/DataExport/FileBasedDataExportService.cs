@@ -86,8 +86,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var interviewExportedDataFileName = this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName);
                 var contentOfAdditionalFileName = this.environmentContentService.GetEnvironmentContentFileName(levelFileName);
 
+
+                string pathToInterviewDataFile = this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName);
+                this.fileSystemAccessor.CreateFile(pathToInterviewDataFile);
                 this.dataFileExportService.CreateHeader(headerStructureForLevel,
-                    this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName));
+                    pathToInterviewDataFile);
 
                 this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName,
                     this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, contentOfAdditionalFileName));

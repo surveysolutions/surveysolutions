@@ -1,73 +1,68 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
-using ZetaLongPaths;
-using ZetaLongPaths.Native;
-using FileAccess = ZetaLongPaths.Native.FileAccess;
-using FileAttributes = System.IO.FileAttributes;
-using FileShare = ZetaLongPaths.Native.FileShare;
 
 namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 {
-    internal class FileSystemIoAccessor : IFileSystemAccessor
+    internal class FileSystemIOAccessor : IFileSystemAccessor
     {
         public string CombinePath(string path1, string path2)
         {
-            return ZlpPathHelper.Combine(path1, path2);
+            return Path.Combine(path1, path2);
         }
 
         public string GetFileName(string filePath)
         {
-            return ZlpPathHelper.GetFileNameFromFilePath(filePath);
+            return Path.GetFileName(filePath);
         }
 
         public long GetFileSize(string filePath)
         {
             if (!this.IsFileExists(filePath))
                 return -1;
-            return new ZlpFileInfo(filePath).Length;
+            return new FileInfo(filePath).Length;
         }
 
         public DateTime GetCreationTime(string filePath)
         {
             if (!this.IsFileExists(filePath))
                 return DateTime.MinValue;
-            return new ZlpFileInfo(filePath).CreationTime;
+            return new FileInfo(filePath).CreationTime;
         }
 
         public bool IsDirectoryExists(string pathToDirectory)
         {
-            return ZlpIOHelper.DirectoryExists(pathToDirectory);
+            return Directory.Exists(pathToDirectory);
         }
 
         public void CreateDirectory(string path)
         {
-            ZlpIOHelper.CreateDirectory(path);
+            Directory.CreateDirectory(path);
         }
 
         public void DeleteDirectory(string path)
         {
-            ZlpIOHelper.DeleteDirectory(path, true);
+            Directory.Delete(path, true);
         }
 
         public bool IsFileExists(string pathToFile)
         {
-            return ZlpIOHelper.FileExists(pathToFile);
+            return File.Exists(pathToFile);
         }
 
         public void DeleteFile(string pathToFile)
         {
-            ZlpIOHelper.DeleteFile(pathToFile);
+            File.Delete(pathToFile);
         }
 
         public void CreateFile(string pathToFile)
         {
-            using(var a = ZlpIOHelper.CreateFileHandle(pathToFile, CreationDisposition.New, FileAccess.GenericAll, FileShare.None))
-            {
-                
-            }
+            File.Create(pathToFile);
         }
 
         public string MakeValidFileName(string name)
@@ -79,27 +74,27 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public string[] GetDirectoriesInDirectory(string pathToDirectory)
         {
-            return ZlpIOHelper.GetDirectories(pathToDirectory).Select(directoryInfo => directoryInfo.FullName).ToArray();
+            return Directory.GetDirectories(pathToDirectory).ToArray();
         }
 
         public string[] GetFilesInDirectory(string pathToDirectory)
         {
-            return ZlpIOHelper.GetFiles(pathToDirectory).Select(fileInfo => fileInfo.FullName).ToArray();
+            return Directory.GetFiles(pathToDirectory).ToArray();
         }
 
         public void WriteAllText(string pathToFile, string content)
         {
-            ZlpIOHelper.WriteAllText(pathToFile, content);
+            File.WriteAllText(pathToFile, content);
         }
 
         public void WriteAllBytes(string pathToFile, byte[] content)
         {
-            ZlpIOHelper.WriteAllBytes(pathToFile, content);
+            File.WriteAllBytes(pathToFile,content);
         }
 
         public byte[] ReadAllBytes(string pathToFile)
         {
-            return ZlpIOHelper.ReadAllBytes(pathToFile);
+            return File.ReadAllBytes(pathToFile);
         }
 
         public void CopyFileOrDirectory(string sourceDir, string targetDir)
@@ -114,7 +109,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 CreateDirectory(destDir);
 
                 foreach (var file in GetFilesInDirectory(sourceDir))
-                    ZlpIOHelper.CopyFile(file, CombinePath(destDir, GetFileName(file)), true);
+                    File.Copy(file, CombinePath(destDir, GetFileName(file)));
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
                     CopyFileOrDirectory(directory, CombinePath(destDir, sourceDirectoryName));
@@ -135,7 +130,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             var sourceFileName = GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
-            ZlpIOHelper.CopyFile(sourcePath, CombinePath(backupFolderPath, sourceFileName), true);
+            File.Copy(sourcePath, CombinePath(backupFolderPath, sourceFileName), true);
         }
     }
 }
