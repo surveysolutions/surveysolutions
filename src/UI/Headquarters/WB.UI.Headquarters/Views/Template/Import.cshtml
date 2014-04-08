@@ -22,14 +22,16 @@
 }
 
 @section output{
-    <p data-bind="text: ImportFailMessage" class="importError"></p>
+    <h5 data-bind="text: ImportFailMessage" class="importError"></h5>
     <div class="verificatonErrors" data-bind="visible: VerificationErrors().length > 0">
-        <ul data-bind="foreach: VerificationErrors" class="error-list">
-            <li class="error">
-                <b class="error-code" data-bind="text: code"></b><span data-bind="    html: message"></span>
-                <ul class="error-reference-items" data-bind="foreach: references">
-                    <li><span data-bind="text: title"></span></li>
-                </ul>
+        <ul data-bind="foreach: VerificationErrors" class="list-group">
+            <li class="list-group-item">
+                <p class="list-group-item-heading"><b class="error-code" data-bind="text: code"></b>&nbsp;<span data-bind="html: message"></span></p>
+                <p class="list-group-item-text">
+                    <ul class="error-reference-items" data-bind="foreach: references">
+                        <li><span data-bind="text: title"></span></li>
+                    </ul>
+                </p>
             </li>
         </ul>
     </div>

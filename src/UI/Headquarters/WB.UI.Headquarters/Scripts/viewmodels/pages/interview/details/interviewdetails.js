@@ -16,7 +16,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
     
 
     self.closeDetails = function() {
-        $('#content').removeClass('details-visible');
+        $('body').removeClass('details-visible');
     };
     self.showDetails = function(question, event) {
         event.stopPropagation();
@@ -26,7 +26,8 @@ Supervisor.VM.InterviewDetails = function (settings) {
         }
         self.currentQuestion(question);
         self.currentQuestion().isSelected(true);
-        $('#content').addClass('details-visible');
+
+        $('body').addClass('details-visible');
     };
 
     self.flagedCount = ko.computed(function() {
@@ -374,6 +375,14 @@ Supervisor.VM.InterviewDetails = function (settings) {
             
         });
     };
+
+    $('#statusHistoryModal').on('show.bs.modal', function (e) {
+        self.changeStateHistory(undefined);
+        self.SendRequest(settings.Urls.ChangeStateHistory, { InterviewId: self.questionnaire().id }, function (data) {
+            self.changeStateHistory(data);
+            $('#statesHistoryPopover').show();
+        });
+    });
 
     var isHistoryShowed = false;
     self.showStatesHistory = function () {
