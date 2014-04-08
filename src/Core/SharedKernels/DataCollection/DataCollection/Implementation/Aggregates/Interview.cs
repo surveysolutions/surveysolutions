@@ -2554,7 +2554,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid[] rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId).ToArray();
 
                 var outerVectorsForExtend =
-                    this.GetOuterVectorForParentRoster(rosterGroupsStartingFromTop.Skip(rosterGroupsStartingFromTop.Length - length).ToArray(),
+                    this.GetOuterVectorForParentRoster(rosterGroupsStartingFromTop,
                         nearestToOuterRosterVector);
 
                 foreach (var outerVectorForExtend in outerVectorsForExtend)
@@ -3459,7 +3459,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var outerVectorsForExtend =
-                GetOuterVectorForParentRoster(rosterGroupsStartingFromTop.Skip(rosterGroupsStartingFromTop.Length - length).ToArray(),
+                GetOuterVectorForParentRoster(rosterGroupsStartingFromTop,
                     rosterVector);
 
             foreach (var outerVectorForExtend in outerVectorsForExtend)
@@ -3474,17 +3474,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<decimal[]> GetOuterVectorForParentRoster(Guid[] rosterGroupsStartingFromTop, decimal[] rosterVector)
         {
-            if (rosterGroupsStartingFromTop.Count() <= 1 || rosterGroupsStartingFromTop.Length -1 == rosterVector.Length)
+            if (rosterGroupsStartingFromTop.Count() <= 1 || rosterGroupsStartingFromTop.Length - 1 == rosterVector.Length)
             {
                 yield return rosterVector;
                 yield break;
             }
 
-            var previousRoster = rosterGroupsStartingFromTop[rosterGroupsStartingFromTop.Length - 2];
+            var indexOfPreviousRoster = rosterGroupsStartingFromTop.Length - 2;
+
+            var previousRoster = rosterGroupsStartingFromTop[rosterVector.Length];
             var previousRosterInstances = GetRosterInstanceIds(previousRoster, rosterVector);
             foreach (var previousRosterInstance in previousRosterInstances)
             {
-                yield return ExtendRosterVectorWithOneValue(rosterVector, previousRosterInstance);
+                var extendedRoster = ExtendRosterVectorWithOneValue(rosterVector, previousRosterInstance);
+                if (indexOfPreviousRoster == rosterVector.Length)
+                {
+                    yield return extendedRoster;
+                }
+                foreach (var nextVector in GetOuterVectorForParentRoster(rosterGroupsStartingFromTop, extendedRoster))
+                {
+                    yield return nextVector;
+                }
             }
         }
 

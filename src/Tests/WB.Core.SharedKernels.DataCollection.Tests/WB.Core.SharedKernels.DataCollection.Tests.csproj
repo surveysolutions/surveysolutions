@@ -92,6 +92,7 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
     <Compile Include="InterviewTests\when_answering_top_level_question_which_enables_nested_roster.cs" />
+    <Compile Include="InterviewTests\when_answer_on_integer_question_increases_nested_roster_size_and_roster_size_question_3_level_above.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_multyoption.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_numeric.cs" />
@@ -190,13 +191,14 @@
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_fixed_rosters_and_GetFixedRosterGroups_called_for_whole_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_roster_inside_nested_group_of_other_roster_and_GetNestedRostersOfGroupById_called_for_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_rosters_and_GetNestedRostersOfRosterById_called_for_parent_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_questionnaire_have_3_trigger_questions_which_are_triggering_roster_and_nested_roster_and_nested_in_nested_roster_respectively_.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_question_with_not_existing_group_in_triggers_then_GetRosterGroupsByRosterSizeQuestion_should_t___.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_groups_and_GetRosterGroupsByRosterSizeQuestion_return_them.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_nested_roster_group_with_not_empty_RosterSizeQuestionId_and_GetRosterGroupsByRosterSizeQuestion_called.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_question_has_enablement_condition.cs" />
-    <Compile Include="QuestionnaireTests\when_questionnaire_have_numeric_question_which_is_triggering_roster_and_nested_roster_and_GetRosterGroupsByRosterSizeQuestion.cs" />
+    <Compile Include="QuestionnaireTests\when_questionnaire_have_numeric_question_which_is_triggering_roster_and_nested_roster_and_GetRosterGroupsByRosterSizeQuestion_called.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_variable_by_questionnaire_readside_versioned_repositories.cs" />
