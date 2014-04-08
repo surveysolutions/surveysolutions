@@ -208,8 +208,7 @@ namespace Web.Supervisor.Controllers
                     Func<object, bool> isSelected =
                         (option) =>
                             isLinked
-                                ? answersAsDecimalArray.Contains((decimal) option)
-                                : answersAsDecimalArrayOnLinkedQuestion.Contains((decimal[]) option);
+                                ? answersAsDecimalArrayOnLinkedQuestion.Contains((decimal[])option) : answersAsDecimalArray.Contains((decimal)option);
                     model = new MultiQuestionModel()
                     {
                         options =
@@ -234,8 +233,7 @@ namespace Web.Supervisor.Controllers
                                     }),
                         selectedOptions =
                             isLinked
-                                ? answersAsDecimalArray.Select(answer => answer.ToString())
-                                : answersAsDecimalArrayOnLinkedQuestion.Select(answer => string.Join(", ", answer.ToString())),
+                                ? answersAsDecimalArrayOnLinkedQuestion.Select(answer => string.Join(", ", answer.ToString())) : answersAsDecimalArray.Select(answer => answer.ToString()),
                         areAnswersOrdered = areAnswersOrdered,
                         maxAllowedAnswers = maxAllowedAnswers,
                         answer =
