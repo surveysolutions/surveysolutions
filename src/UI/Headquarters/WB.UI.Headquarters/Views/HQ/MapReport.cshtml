@@ -9,27 +9,27 @@
     <div class="central-pane">
         <div class="row-fluid">
             <div class="span12">
-                <div class="control-group">
-                    <label class="control-label" for="questionnaire">Questionnaire</label>
+                <div class="form-group">
+                    <label  for="questionnaire">Questionnaire</label>
                     <div class="controls">
-                        <select class="input-block-level" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+                        <select class="form-control" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="version">Version</label>
+                <div class="form-group">
+                    <label  for="version">Version</label>
                     <div class="controls">
-                        <select class="input-block-level" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : questionnaireVersions"></select>
+                        <select class="form-control" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : questionnaireVersions"></select>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="version">Variables</label>
+                <div class="form-group">
+                    <label  for="version">Variables</label>
                     <div class="controls">
-                        <select class="input-block-level" id="version" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : questionnaireVariables"></select>
+                        <select class="form-control" id="version" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : questionnaireVariables"></select>
                     </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                     <div class="controls">
-                        <button class="input-block-level btn" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
+                        <button class="btn-block btn" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
 
                     </div>
                 </div>
@@ -50,7 +50,7 @@
     <div class="bottom-pane">
         <div class="row-fluid">
             <div class="span12">
-                <button class="input-block-level btn btn-danger" data-bind="click: clearAllMarkers">Clear all markers</button>
+                <button class="btn-block btn btn-danger" data-bind="click: clearAllMarkers">Clear all markers</button>
             </div>
         </div>
     </div>

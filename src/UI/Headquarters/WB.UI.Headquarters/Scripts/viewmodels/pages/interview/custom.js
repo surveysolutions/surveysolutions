@@ -1,4 +1,4 @@
-﻿ko.validation.init({ insertMessages: false, decorateElement: true, errorElementClass: 'error' });
+﻿ko.validation.init({ insertMessages: false, decorateElement: true, errorElementClass: 'has-error' });
 
 ko.bindingHandlers.datepicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
