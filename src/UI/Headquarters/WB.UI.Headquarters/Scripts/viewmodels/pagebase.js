@@ -13,9 +13,23 @@
 
     self.ToggleFilter = function() {
         if (self.IsFilterOpen()) {
-            $('#wrapper').addClass('menu-hidden');
+            $('body').addClass('menu-hidden');
+
+            $('#content').removeClass('col-sm-9');  
+            $('#content').removeClass('col-sm-offset-3');
+            $('#content').removeClass('col-md-10');
+            $('#content').removeClass('col-md-offset-2');
+            $('#content').addClass('col-sm-12');
+            $('#content').addClass('col-md-12');
         } else {
-            $('#wrapper').removeClass('menu-hidden');
+            $('body').removeClass('menu-hidden');
+
+            $('#content').addClass('col-sm-9');
+            $('#content').addClass('col-sm-offset-3');
+            $('#content').addClass('col-md-10');
+            $('#content').addClass('col-md-offset-2');
+            $('#content').removeClass('col-sm-12');
+            $('#content').removeClass('col-md-12');
         }
         self.IsFilterOpen(!self.IsFilterOpen());
     };

@@ -16,10 +16,7 @@
     @RenderSection("styles", false)
 </head>
 <body>
-    <div id="splash-screen">
-        @RenderSection("splash_screen", false)
-    </div>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header hidden-print">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -101,23 +98,18 @@
             </div>
             @RenderBody()
             <div id="output">
-                <div class="inner">
-                    <div class="title">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
                         <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
                         <span>Errors log</span>
                     </div>
-                    <div class="body">
-                        <div class="container-fluid">
-                            <div class="form-horizontal">
-                                <ul data-bind="foreach: Errors" class="error-list">
-                                    <li class="error">
-                                        <pre data-bind="html: error"></pre>
-                                    </li>
-                                </ul>
-                                @RenderSection("output", false)
-
-                            </div>
-                        </div>
+                    <div class="panel-body">
+                        <ul data-bind="foreach: Errors" class="list-group">
+                            <li class="list-group-item">
+                                <pre data-bind="html: error"></pre>
+                            </li>
+                        </ul>
+                        @RenderSection("output", false)
                     </div>
                 </div>
             </div>

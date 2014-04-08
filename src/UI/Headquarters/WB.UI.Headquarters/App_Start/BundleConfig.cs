@@ -14,17 +14,14 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/bootstrap.css",
-                "~/Content/bootstrap-responsive.css",
                 "~/Content/font-awesome.min.css",
                 "~/Content/bootstrap-mvc-validation.css",
                 "~/Content/jquery.pnotify.default.css",
-                "~/Content/supervisor.css",
-                "~/Content/main.css"));
+                "~/Content/app.css"));
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap-mvc-validation.css",
-                "~/Content/bootstrap-responsive.css",
                 "~/Content/main-not-logged.css"));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
@@ -54,8 +51,7 @@ namespace WB.UI.Headquarters
                 "~/Content/datepicker.css"));
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
-                "~/Content/datepicker.css",
-                "~/Content/details.css"));
+                "~/Content/datepicker.css"));
 
             bundles.Add(
                 new ScriptBundle("~/js/interview-general").Include(
