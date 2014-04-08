@@ -2,7 +2,7 @@
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace Web.Supervisor.API
+namespace WB.UI.Headquarters.API
 {
     public abstract class BaseApiServiceController : ApiController
     {

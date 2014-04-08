@@ -308,6 +308,7 @@
     <Compile Include="API\InterviewsController.cs" />
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\UsersController.cs" />
+    <Compile Include="API\UsersFeed.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
