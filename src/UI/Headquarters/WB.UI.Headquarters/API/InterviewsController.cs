@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.UI.Headquarters.Models.API;
 
-namespace Web.Supervisor.API
+namespace WB.UI.Headquarters.API
 {
     [Authorize (Roles = "Headquarter, Supervisor")]
     public class InterviewsController : BaseApiServiceController
@@ -69,7 +69,7 @@ namespace Web.Supervisor.API
                 CompleteQuestionnaireId = id
             };
 
-            var interview = interviewDetailsViewFactory.Load(inputModel);
+            var interview = this.interviewDetailsViewFactory.Load(inputModel);
 
             return new InterviewApiDetails(interview);
         }
