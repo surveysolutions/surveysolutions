@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -16,7 +14,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void DeleteDirectory(string path);
 
         bool IsFileExists(string pathToFile);
-        void CreateFile(string pathToFile);
+        Stream OpenOrCreateFile(string pathToFile);
         void DeleteFile(string pathToFile);
 
         string MakeValidFileName(string name);
