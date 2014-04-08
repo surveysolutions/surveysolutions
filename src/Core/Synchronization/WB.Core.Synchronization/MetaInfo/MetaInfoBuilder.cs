@@ -41,9 +41,13 @@ namespace WB.Core.Synchronization.MetaInfo
             foreach (var featuredQuestion in questionnarie.Find<IQuestion>(q => q.Featured))
             {
                 var answerOnFeaturedQuestion = doc.Answers.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-                if(answerOnFeaturedQuestion==null)
-                    continue;
-                featuredQuestionList.Add(new FeaturedQuestionMeta(featuredQuestion.PublicKey,featuredQuestion.QuestionText,answerOnFeaturedQuestion.Answer.ToString()));
+
+                if (answerOnFeaturedQuestion != null && answerOnFeaturedQuestion.Answer != null)
+                {
+
+                    featuredQuestionList.Add(new FeaturedQuestionMeta(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
+                        answerOnFeaturedQuestion.Answer.ToString()));
+                }
             }
 
             metaInfo.FeaturedQuestionsMeta = featuredQuestionList;
