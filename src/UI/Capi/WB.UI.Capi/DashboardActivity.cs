@@ -112,10 +112,10 @@ namespace WB.UI.Capi
             if(target == null)
                 return;
 
-            var id = target.GetTag(Resource.Id.IsInterviewLocal).ToString();
+            var id = target.GetTag(Resource.Id.IsInterviewLocal);
             bool isLocal;
             
-            if (bool.TryParse(id, out isLocal) && isLocal)
+            if (id != null && bool.TryParse(id.ToString(), out isLocal) && isLocal)
             {
                 var intent = new Intent(this, typeof(CreateInterviewActivity));
                 intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
