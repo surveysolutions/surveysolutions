@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 using ZetaLongPaths;
 using ZetaLongPaths.Native;
-using FileAccess = ZetaLongPaths.Native.FileAccess;
+using FileAccess = System.IO.FileAccess;
 using FileAttributes = System.IO.FileAttributes;
 using FileShare = ZetaLongPaths.Native.FileShare;
 
@@ -62,14 +62,14 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             ZlpIOHelper.DeleteFile(pathToFile);
         }
 
-        public void CreateFile(string pathToFile)
+        public Stream OpenOrCreateFile(string pathToFile)
         {
-            using(var a = ZlpIOHelper.CreateFileHandle(pathToFile, CreationDisposition.New, FileAccess.GenericAll, FileShare.None))
-            {
-                
-            }
+            return new FileStream(
+                ZlpIOHelper.CreateFileHandle(pathToFile, IsFileExists(pathToFile) ? CreationDisposition.OpenExisting : CreationDisposition.New,
+                    ZetaLongPaths.Native.FileAccess.GenericWrite, FileShare.Write),
+                FileAccess.Write);
         }
-
+        
         public string MakeValidFileName(string name)
         {
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
