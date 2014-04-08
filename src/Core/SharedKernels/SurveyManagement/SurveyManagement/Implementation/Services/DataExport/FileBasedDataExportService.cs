@@ -86,11 +86,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var interviewExportedDataFileName = this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName);
                 var contentOfAdditionalFileName = this.environmentContentService.GetEnvironmentContentFileName(levelFileName);
 
-
-                string pathToInterviewDataFile = this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName);
-                this.fileSystemAccessor.CreateFile(pathToInterviewDataFile);
                 this.dataFileExportService.CreateHeader(headerStructureForLevel,
-                    pathToInterviewDataFile);
+                    this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName));
 
                 this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName,
                     this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, contentOfAdditionalFileName));
@@ -143,7 +140,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
         {
             string fileNameWithoutInvalidFileNameChars = this.fileSystemAccessor.MakeValidFileName(name);
-            string fileNameWithNumber = string.Concat(fileNameWithoutInvalidFileNameChars,
+            var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(250).ToArray());
+            string fileNameWithNumber = string.Concat(fileNameShortened,
                 i == 0 ? (object) string.Empty : i).ToLower();
 
             return !createdFileNames.Contains(fileNameWithNumber)

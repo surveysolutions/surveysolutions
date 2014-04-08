@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using CsvHelper;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -8,11 +9,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 {
     internal class CsvDataFileExportService : IDataFileExportService
     {
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
+        public CsvDataFileExportService(IFileSystemAccessor fileSystemAccessor)
+        {
+            this.fileSystemAccessor = fileSystemAccessor;
+        }
+
         private readonly string delimiter = ",";
 
         public void AddRecord(InterviewDataExportLevelView items, string filePath)
         {
-            using (var fileStream = new FileStream(filePath, FileMode.Append))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
@@ -39,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void CreateHeader(HeaderStructureForLevel header, string filePath)
         {
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Write))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {

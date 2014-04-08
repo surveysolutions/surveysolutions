@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
@@ -60,9 +57,9 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             File.Delete(pathToFile);
         }
 
-        public void CreateFile(string pathToFile)
+        public Stream OpenOrCreateFile(string pathToFile)
         {
-            File.Create(pathToFile);
+            return new FileStream(pathToFile, FileMode.Create, FileAccess.Write);
         }
 
         public string MakeValidFileName(string name)
