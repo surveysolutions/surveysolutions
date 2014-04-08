@@ -48,11 +48,13 @@ namespace WB.UI.Capi.Controls
                 delButton.Click += (sender, args) =>
                 {
                     var target = sender as Button;
-                        if(target==null)
-                    return;
+                    if(target == null)
+                        return;
 
                     this.deleteHandler.Invoke(dataItem.PublicKey, target.Parent as View);
                 };
+
+                view.SetTag(Resource.Id.IsInterviewLocal, true);
             }
 
             AddPropertyToContainer(llQuestionnairie, GetStatusText(dataItem.Status));

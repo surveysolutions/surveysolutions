@@ -109,12 +109,25 @@ namespace WB.UI.Capi
         void llQuestionnarieHolder_ItemClick(object sender, EventArgs e)
         {
             var target = sender as View;
-            if(target==null)
+            if(target == null)
                 return;
 
-            var intent = new Intent(this, typeof(LoadingActivity));
-            intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
-            this.StartActivity(intent);
+            var id = target.GetTag(Resource.Id.IsInterviewLocal).ToString();
+            bool isLocal;
+            
+            if (bool.TryParse(id, out isLocal) && isLocal)
+            {
+                var intent = new Intent(this, typeof(CreateInterviewActivity));
+                intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
+                intent.AddFlags(ActivityFlags.NoHistory);
+                this.StartActivity(intent);
+            }
+            else
+            {
+                var intent = new Intent(this, typeof(LoadingActivity));
+                intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
+                this.StartActivity(intent);
+            }
         }
 
         void btnNewInterview_ButtonClick(object sender, EventArgs e)
