@@ -11,6 +11,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -24,11 +25,13 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly string path;
         private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
+        private readonly ILogger logger;
+
         private const string FolderName = "IncomingData";
         private const string ErrorFolderName = "IncomingDataWithErrors"; 
         private const string FileExtension = "sync";
 
-        public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage)
+        public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger)
         {
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
@@ -38,6 +41,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 Directory.CreateDirectory(errorPath);
 
             this.userStorage = userStorage;
+            this.logger = logger;
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -66,8 +70,10 @@ namespace WB.Core.Synchronization.SyncStorage
 
                 File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
             }
-            catch
+            catch (Exception ex)
             {
+                logger.Error("error on handling incoming package,", ex);
+
                 File.WriteAllText(GetItemFileNameForErrorStorage(item.Id), JsonConvert.SerializeObject(item));
             }
 
