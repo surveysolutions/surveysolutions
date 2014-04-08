@@ -147,13 +147,14 @@ namespace Web.Supervisor.Controllers
         {
             QuestionModel model = null;
             string uid = string.Concat(dto.Id, "_", string.Join("_", parentGroup.RosterVector));
+            var isLinked=dto is InterviewLinkedQuestionView;
             string answerAsString = dto.Answer == null ? string.Empty : dto.Answer.ToString();
             var options =
                 dto.Options.Select(
                     option =>
                         new
                         {
-                            Value = option.Value.ToString().Parse<decimal>(),
+                            Value = isLinked? (object)(option.Value as decimal[]) : option.Value.ToString().Parse<decimal>(),
                             Label = option.Label
                         });
             switch (dto.QuestionType)
@@ -199,11 +200,8 @@ namespace Web.Supervisor.Controllers
                     model = new TextQuestionModel() {answer = answerAsString};
                     break;
                 case QuestionType.MultyOption:
-                    IEnumerable<decimal> answersAsDecimalArray = dto.Answer is IEnumerable
-                        ? ((IEnumerable) dto.Answer).OfType<object>()
-                            .Select(option => option.ToString().Parse<decimal>())
-                        : new decimal[0];
-
+                    var answersAsDecimalArray = (dto.Answer as decimal[])?? new decimal[0];
+                    var answersAsDecimalArrayOnLinkedQuestion = (dto.Answer as decimal[][]) ?? new decimal[0][];
                     bool areAnswersOrdered =
                         dto.Settings == null
                             ? true
@@ -212,8 +210,11 @@ namespace Web.Supervisor.Controllers
                         dto.Settings == null
                             ? null
                             : dto.Settings.GetType().GetProperty("MaxAllowedAnswers").GetValue(dto.Settings, null);
-
-
+                    Func<object, bool> isSelected =
+                        (option) =>
+                            isLinked
+                                ? answersAsDecimalArray.Contains((decimal) option)
+                                : answersAsDecimalArrayOnLinkedQuestion.Contains((decimal[]) option);
                     model = new MultiQuestionModel()
                     {
                         options =
@@ -221,7 +222,7 @@ namespace Web.Supervisor.Controllers
                                 (option, index) =>
                                     new OptionModel(uid)
                                     {
-                                        isSelected = answersAsDecimalArray.Contains(option.Value),
+                                        isSelected = isSelected(option.Value),
                                         label = option.Label,
                                         value = option.Value.ToString(),
                                         orderNo =
@@ -229,29 +230,36 @@ namespace Web.Supervisor.Controllers
                                                 ? null
                                                 : (!areAnswersOrdered
                                                     ? (int?) null
-                                                    : (!answersAsDecimalArray.Contains(option.Value)
+                                                    : (!isSelected(option.Value))
                                                         ? (int?) null
-                                                        : answersAsDecimalArray.ToList().IndexOf(option.Value) + 1))
+                                                        : isLinked
+                                                            ? Array.FindIndex(answersAsDecimalArrayOnLinkedQuestion,
+                                                                o => o.SequenceEqual((decimal[]) option.Value)) + 1
+                                                            : answersAsDecimalArray.ToList().IndexOf((decimal) option.Value) + 1)
                                     }),
-                        selectedOptions = answersAsDecimalArray.Select(answer => answer.ToString()),
+                        selectedOptions =
+                            isLinked
+                                ? answersAsDecimalArray.Select(answer => answer.ToString())
+                                : answersAsDecimalArrayOnLinkedQuestion.Select(answer => string.Join(", ", answer.ToString())),
                         areAnswersOrdered = areAnswersOrdered,
                         maxAllowedAnswers = maxAllowedAnswers,
                         answer =
                             string.Join(", ",
-                                options.Where(option => answersAsDecimalArray.Contains(option.Value))
+                                options.Where(option => isSelected(option.Value))
                                     .Select(option => option.Label))
                     };
                     break;
                 case QuestionType.SingleOption:
-                    decimal? answerAsDecimal = null;
                     string answerLabel = string.Empty;
-                    if (!string.IsNullOrEmpty(answerAsString))
-                    {
-                        answerAsDecimal = answerAsString.Parse<decimal>();
-                        var selectedAnswer = options.FirstOrDefault(option => option.Value == answerAsDecimal);
+                    decimal? answerAsDecimal = dto.Answer == null ? (decimal?)null : dto.Answer.ToString().Parse<decimal>();
+                    var answersAsDecimalOnLinkedQuestion = (dto.Answer as decimal[]) ?? new decimal[0];
+                    Func<object, bool> isSelectedOption =
+                        (option) =>
+                            isLinked
+                                ? ((decimal[]) option).SequenceEqual(answersAsDecimalOnLinkedQuestion)
+                                : answerAsDecimal.HasValue && (decimal) option == answerAsDecimal;
+                    var selectedAnswer = options.FirstOrDefault(option => isSelectedOption(option.Value));
                         answerLabel = selectedAnswer == null ? string.Empty : selectedAnswer.Label;
-                    }
-
                     model = new SingleQuestionModel()
                     {
                         options =
@@ -259,11 +267,11 @@ namespace Web.Supervisor.Controllers
                                 (option) =>
                                     new OptionModel(uid)
                                     {
-                                        isSelected = answerAsDecimal.HasValue && (answerAsDecimal.Value == option.Value),
+                                        isSelected = isSelectedOption(option.Value),
                                         label = option.Label,
-                                        value = option.Value.ToString()
+                                        value = isLinked ? string.Join(", ", (decimal[])option.Value) : option.Value.ToString()/* option.Value.ToString()*/
                                     }),
-                        selectedOption = answerAsString,
+                        selectedOption = isLinked ? string.Join(", ", answersAsDecimalOnLinkedQuestion) : answerAsDecimal.ToString(),
                         answer = answerLabel
                     };
                     break;
