@@ -484,5 +484,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0055_RosterHasRosterLevelMoreThan4", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Circular references are not allowed.
+        /// </summary>
+        internal static string WB0056_QuestionShouldNotHaveCircularReferences {
+            get {
+                return ResourceManager.GetString("WB0056_QuestionShouldNotHaveCircularReferences", resourceCulture);
+            }
+        }
     }
 }
