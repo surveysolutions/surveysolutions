@@ -1,12 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Linq;
 using System.Web.Http;
-using System.Web.Security;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
