@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (object handler in kernel.GetAll(typeof (IEventHandler)))
             {
-                bus.Register(handler as IEventHandler);
+                bus.Register((IEventHandler)handler);
             }
         }
 
