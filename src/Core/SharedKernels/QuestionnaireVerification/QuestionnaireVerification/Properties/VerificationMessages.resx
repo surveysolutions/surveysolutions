@@ -258,4 +258,7 @@
   <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
     <value>Roster can have no more than 3 parent rosters</value>
   </data>
+  <data name="WB0056_QuestionShouldNotHaveCircularReferences" xml:space="preserve">
+    <value>Circular references are not allowed</value>
+  </data>
 </root>
