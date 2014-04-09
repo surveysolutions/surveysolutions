@@ -12,15 +12,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
 {
     public class UsersFeedDenormalizer : BaseDenormalizer,
                                     IEventHandler<NewUserCreated>,
-                                    IEventHandler<UserChanged>,
-                                    IEventHandler<UserLocked>,
-                                    IEventHandler<UserUnlocked>
+                                    IEventHandler<UserChanged>
     {
         private readonly IReadSideRepositoryWriter<UserChangedFeedEntry> usersFeed;
-        private readonly IReadSideRepositoryReader<UserDocument> users;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         public UsersFeedDenormalizer(IReadSideRepositoryWriter<UserChangedFeedEntry> usersFeed,
-            IReadSideRepositoryReader<UserDocument> users)
+            IReadSideRepositoryWriter<UserDocument> users)
         {
             this.usersFeed = usersFeed;
             this.users = users;
@@ -49,41 +47,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
             {
                 var supervisorId = GetSupervisorId(item);
 
-                usersFeed.Store(new UserChangedFeedEntry(supervisorId, evnt.EventSourceId.FormatGuid())
+                var eventId = evnt.EventIdentifier.FormatGuid();
+                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId)
                 {
                     ChangedUserId = evnt.EventSourceId.FormatGuid(),
                     Timestamp = evnt.EventTimeStamp
-                }, evnt.EventIdentifier.FormatGuid());
-            }
-        }
-
-        public void Handle(IPublishedEvent<UserLocked> evnt)
-        {
-            UserDocument item = this.users.GetById(evnt.EventSourceId);
-
-            if (item.Roles.HasSupervisorApplicationRole())
-            {
-                var supervisorId = GetSupervisorId(item);
-
-                usersFeed.Store(new UserChangedFeedEntry(supervisorId, evnt.EventIdentifier.FormatGuid())
-                {
-                    ChangedUserId = evnt.Payload.PublicKey.FormatGuid(),
-                    Timestamp = evnt.EventTimeStamp
-                }, evnt.EventIdentifier.FormatGuid());
-            }
-        }
-
-        public void Handle(IPublishedEvent<UserUnlocked> evnt)
-        {
-            UserDocument item = this.users.GetById(evnt.EventSourceId);
-
-            if (item.Roles.HasSupervisorApplicationRole())
-            {
-                usersFeed.Store(new UserChangedFeedEntry(GetSupervisorId(item), evnt.EventIdentifier.FormatGuid())
-                {
-                    ChangedUserId = evnt.Payload.PublicKey.FormatGuid(),
-                    Timestamp = evnt.EventTimeStamp
-                }, evnt.EventIdentifier.FormatGuid());
+                }, eventId);
             }
         }
 
