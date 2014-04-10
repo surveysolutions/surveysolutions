@@ -26,9 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.NewAddQuestion(questionId, rosterId, "title", QuestionType.Text, "var1",
-                    false, isPrefilled, QuestionScope.Interviewer, null, null, null, null, null, Order.AsIs,
-                    responsibleId, null, false, null));
+                questionnaire.AddTextQuestion(questionId, rosterId, "title", "var1",
+                    false, isPrefilled, QuestionScope.Interviewer, null, null, null, null, responsibleId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
