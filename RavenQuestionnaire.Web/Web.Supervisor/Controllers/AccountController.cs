@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
+using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Models;
@@ -16,20 +17,20 @@ namespace Web.Supervisor.Controllers
         private readonly IFormsAuthentication authentication;
         private readonly IGlobalInfoProvider globalProvider;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IHeadquartersSynchronizer headquartersSynchronizer;
+        private readonly IHeadquartersLoginService headquartersLoginService;
         private readonly Func<string, string, bool> validateUserCredentials;
 
         public AccountController(IFormsAuthentication authentication, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
-            IHeadquartersSynchronizer headquartersSynchronizer)
-            : this(authentication, globalProvider, passwordHasher, headquartersSynchronizer, Membership.ValidateUser) { }
+            IHeadquartersLoginService headquartersLoginService)
+            : this(authentication, globalProvider, passwordHasher, headquartersLoginService, Membership.ValidateUser) { }
 
         internal AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
-            IHeadquartersSynchronizer headquartersSynchronizer, Func<string, string, bool> validateUserCredentials)
+            IHeadquartersLoginService headquartersLoginService, Func<string, string, bool> validateUserCredentials)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
             this.passwordHasher = passwordHasher;
-            this.headquartersSynchronizer = headquartersSynchronizer;
+            this.headquartersLoginService = headquartersLoginService;
             this.validateUserCredentials = validateUserCredentials;
         }
 
@@ -84,7 +85,7 @@ namespace Web.Supervisor.Controllers
 
         private void UpdateLocalDataFromHeadquarters(string login, string password)
         {
-            this.headquartersSynchronizer.Pull(login, password);
+            this.headquartersLoginService.LoginAndCreateAccount(login, password);
         }
 
         private bool LoginUsingLocalDatabase(string login, string password)

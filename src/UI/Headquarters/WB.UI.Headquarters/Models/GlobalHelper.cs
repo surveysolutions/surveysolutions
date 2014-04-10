@@ -60,30 +60,11 @@ namespace WB.UI.Headquarters.Models
 
         #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The generate url.
-        /// </summary>
-        /// <param name="action">
-        /// The action.
-        /// </param>
-        /// <param name="controller">
-        /// The controller.
-        /// </param>
-        /// <param name="routes">
-        /// The routes.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         public static string GenerateUrl(string action, string controller, object routes)
         {
             var url = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
             return url.Action(action, controller, routes, HttpContext.Current.Request.Url.Scheme);
         }
-
-        #endregion
     }
 }

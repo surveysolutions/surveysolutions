@@ -1,7 +1,6 @@
-﻿using System;
-using Ninject;
-using Ninject.Modules;
-using WB.Core.Synchronization;
+﻿using Ninject.Modules;
+using WB.Core.BoundedContexts.Headquarters.Users.Denormalizers;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -9,7 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         public override void Load()
         {
-           
         }
     }
 }

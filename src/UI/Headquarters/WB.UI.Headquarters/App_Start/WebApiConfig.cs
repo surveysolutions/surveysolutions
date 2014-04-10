@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using WB.UI.Headquarters.API.Formatters;
 
 namespace WB.UI.Headquarters
 {
@@ -8,11 +9,10 @@ namespace WB.UI.Headquarters
         {
             config.MapHttpAttributeRoutes();
 
+            config.Formatters.Add(new SyndicationFeedFormatter());
+
             config.Routes.MapHttpRoute("DefaultApiWithAction", "api/{controller}/{action}/{id}", new { id = RouteParameter.Optional });
-
             config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = RouteParameter.Optional });
-
-            //config.MessageHandlers.Add(new BasicAuthMessageHandler());
         }
     }
 }

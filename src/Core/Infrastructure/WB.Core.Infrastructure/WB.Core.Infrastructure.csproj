@@ -38,7 +38,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Revalidation\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
@@ -49,6 +48,7 @@
     <Compile Include="FileSystem\IFileSystemAccessor.cs" />
     <Compile Include="Implementation\ReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
+    <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />

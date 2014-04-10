@@ -420,6 +420,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\Snapshots\QuestionnaireState.cs">
       <Link>Implementation\Aggregates\Snapshots\QuestionnaireState.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Entities\PlainQuestionnaire.cs">
+      <Link>Implementation\Entities\PlainQuestionnaire.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\EnumerableExtensions.cs">
       <Link>Implementation\EnumerableExtensions.cs</Link>
     </Compile>
@@ -435,11 +438,17 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs">
       <Link>Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\DomainQuestionnaireRepository.cs">
+      <Link>Implementation\Repositories\DomainQuestionnaireRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\IPlainQuestionnaireRepository.cs">
+      <Link>Implementation\Repositories\IPlainQuestionnaireRepository.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\IQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\IQuestionnaireRepository.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\QuestionnaireRepository.cs">
-      <Link>Implementation\Repositories\QuestionnaireRepository.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainQuestionnaireRepository.cs">
+      <Link>Implementation\Repositories\PlainQuestionnaireRepository.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ReadSide\IVersionedReadSideRepositoryReader.cs">
       <Link>ReadSide\IVersionedReadSideRepositoryReader.cs</Link>

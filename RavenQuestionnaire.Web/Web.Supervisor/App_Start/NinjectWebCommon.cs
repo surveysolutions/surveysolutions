@@ -89,15 +89,15 @@ namespace Web.Supervisor.App_Start
                 isEmbeded = false;
             }
 
+            bool areHeadquartersFunctionsEnabled;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out areHeadquartersFunctionsEnabled))
+            {
+                areHeadquartersFunctionsEnabled = false;
+            }
+
             string storePath = isEmbeded
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
-            bool isApprovedSended;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["IsApprovedSended"], out isApprovedSended))
-            {
-                isApprovedSended = false;
-            }
 
             int? pageSize = GetEventStorePageSize();
 
@@ -107,6 +107,12 @@ namespace Web.Supervisor.App_Start
                 eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+
+
+            var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
+            var headquartersSettings = new HeadquartersSettings(
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.LoginServiceEndpoint"])
+                );
 
             bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
@@ -118,9 +124,10 @@ namespace Web.Supervisor.App_Start
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: areHeadquartersFunctionsEnabled),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
+                
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
@@ -133,8 +140,8 @@ namespace Web.Supervisor.App_Start
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
-                    WebConfigurationManager.AppSettings["Headquarters.Url"]));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])),
+                new SupervisorBoundedContextModule(headquartersSettings));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

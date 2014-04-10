@@ -91,7 +91,6 @@
     <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
-    <Compile Include="Implementation\HeadquartersSettings.cs" />
     <Compile Include="Implementation\ISampleRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
@@ -107,7 +106,6 @@
     <Compile Include="Implementation\Services\DataExport\InterviewDataExportException.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentService.cs" />
-    <Compile Include="Implementation\Services\HeadquartersSynchronizer.cs" />
     <Compile Include="Implementation\Services\QuestionnaireCacheInitializer.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
@@ -117,7 +115,6 @@
     <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="Services\IDataFileExportService.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
-    <Compile Include="Services\IHeadquartersSynchronizer.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />

@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.Models;
@@ -14,10 +15,10 @@ namespace Web.Supervisor.Tests.AccountControllerTests
         {
             Func<string, string, bool> validateUserCredentials = (login, passwordHash) => false;
 
-            headquartersSynchronizerMock = new Mock<IHeadquartersSynchronizer>();
+            loginServiceMock = new Mock<IHeadquartersLoginService>();
 
             controller = CreateAccountController(
-                headquartersSynchronizer: headquartersSynchronizerMock.Object,
+                loginService: loginServiceMock.Object,
                 validateUserCredentials: validateUserCredentials);
         };
 
@@ -25,9 +26,9 @@ namespace Web.Supervisor.Tests.AccountControllerTests
             controller.LogOn(new LogOnModel { UserName = login, Password = password }, string.Empty);
 
         It should_pull_data_from_headquarters_using_specified_credentials = () =>
-            headquartersSynchronizerMock.Verify(_ => _.Pull(login, password), Times.Once);
+            loginServiceMock.Verify(_ => _.LoginAndCreateAccount(login, password), Times.Once);
 
-        private static Mock<IHeadquartersSynchronizer> headquartersSynchronizerMock;
+        private static Mock<IHeadquartersLoginService> loginServiceMock;
         private static string login = "login";
         private static string password = "pwd";
         private static AccountController controller;

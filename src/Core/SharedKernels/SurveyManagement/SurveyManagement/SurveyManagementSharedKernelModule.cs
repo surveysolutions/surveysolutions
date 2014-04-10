@@ -25,17 +25,14 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly int supportedQuestionnaireVersionMajor;
         private readonly int supportedQuestionnaireVersionMinor;
         private readonly int supportedQuestionnaireVersionPatch;
-        private readonly string headquartersUrl;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
-            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
-            string headquartersUrl)
+            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
             this.supportedQuestionnaireVersionMinor = supportedQuestionnaireVersionMinor;
             this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
-            this.headquartersUrl = headquartersUrl;
         }
 
         public override void Load()
@@ -68,9 +65,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
-
-            this.Bind<HeadquartersSettings>().ToConstant(new HeadquartersSettings(this.headquartersUrl));
-            this.Bind<IHeadquartersSynchronizer>().To<HeadquartersSynchronizer>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
         }

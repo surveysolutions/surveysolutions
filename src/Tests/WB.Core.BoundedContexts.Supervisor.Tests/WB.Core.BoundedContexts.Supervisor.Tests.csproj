@@ -54,11 +54,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="Create.cs" />
     <Compile Include="EventHandlers\AnswersByVariableDenormalizerTests\AnswersByVariableDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
     <Compile Include="EventHandlers\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
@@ -148,6 +157,9 @@
     <Compile Include="Factories\ExportViewFactoryTests\ExportViewFactoryTestsContext.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roster_max_2_rows_and_MultyOptionLinkedQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and__.cs" />
+    <Compile Include="Users\HeadquartersLoginServiceTests\when_hq_service_fails.cs" />
+    <Compile Include="Users\HeadquartersLoginServiceTests\when_invalid_credentials_provided.cs" />
+    <Compile Include="Users\HeadquartersLoginServiceTests\when_valid_credentials_provided.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -166,6 +178,10 @@
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj">
+      <Project>{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}</Project>
+      <Name>Web.Supervisor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
       <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
