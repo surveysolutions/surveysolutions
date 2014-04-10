@@ -70,7 +70,7 @@
                     "~/Scripts/knockout.validation.debug.js", 
                     "~/Scripts/lib/knockout-sortable.js", 
                     // Other 3rd party libraries
-                    "~/Scripts/lodash.js", 
+                    "~/Scripts/lodash.underscore.js", 
                     "~/Scripts/moment.js", 
                     "~/Scripts/lib/sammy.js", 
                     "~/Scripts/lib/sammy.title.js", 
