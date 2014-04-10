@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -39,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IDataExportService>().To<FileBasedDataExportService>().WithConstructorArgument("folderPath", this.currentFolderPath);
-
+            this.Bind<IPreloadingTemplateService>().To<CsvPreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
