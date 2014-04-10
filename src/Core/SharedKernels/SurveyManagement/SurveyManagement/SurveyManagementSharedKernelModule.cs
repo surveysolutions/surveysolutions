@@ -9,11 +9,13 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
@@ -41,6 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IDataExportService>().To<FileBasedDataExportService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadingTemplateService>().To<CsvPreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
