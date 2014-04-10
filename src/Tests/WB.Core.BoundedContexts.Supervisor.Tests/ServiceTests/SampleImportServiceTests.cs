@@ -5,6 +5,7 @@ using System.Threading;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.View;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -17,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
@@ -68,7 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
 
             //act
 
-            var importId = target.ImportSampleAsync(Guid.NewGuid(),null);
+            var importId = target.ImportSampleAsync(Guid.NewGuid(), 1, null);
 
             var status = this.WaitForCompletedImportResult(target, importId);
 
@@ -82,11 +84,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             //arrange
             var templateId = Guid.NewGuid();
 
-            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnaireBrowseItem() { QuestionnaireId = templateId, FeaturedQuestions = new FeaturedQuestionItem[0] });
+            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnairePreloadingDataItem(templateId,1,"", new QuestionDescription[0]));
 
             //act
 
-            var importId = target.ImportSampleAsync(templateId, CreateSampleRecordsAccessor(new string[][] { new string[] { "q" }, new string[] { "v" } }));
+            var importId = target.ImportSampleAsync(templateId,1, CreateSampleRecordsAccessor(new string[][] { new string[] { "q" }, new string[] { "v" } }));
 
             var status = this.WaitForCompletedImportResult(target, importId);
 
@@ -106,11 +108,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
         {
             //arrange
             var templateId = Guid.NewGuid();
-            var availableFeaturedQuestions = new FeaturedQuestionItem[featuredQuestionsCount];
+            var availableFeaturedQuestions = new QuestionDescription[featuredQuestionsCount];
             var randomizer = new Random();
             for (int i = 0; i < featuredQuestionsCount; i++)
             {
-                availableFeaturedQuestions[i] = new FeaturedQuestionItem(Guid.NewGuid(), randomizer.Next().ToString(),
+                availableFeaturedQuestions[i] = new QuestionDescription(Guid.NewGuid(), randomizer.Next().ToString(),
                                                                         randomizer.Next().ToString());
             }
 
@@ -122,11 +124,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
                     availableFeaturedQuestions.Take(presentQuestions).Select(q => randomizer.Next().ToString()).ToArray();
             }
 
-            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnaireBrowseItem() { QuestionnaireId = templateId, FeaturedQuestions = availableFeaturedQuestions });
+            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnairePreloadingDataItem(templateId, 1, "", availableFeaturedQuestions));
 
             //act
 
-            var importId = target.ImportSampleAsync(templateId, CreateSampleRecordsAccessor(values));
+            var importId = target.ImportSampleAsync(templateId, 1,CreateSampleRecordsAccessor(values));
 
             //assert
             var status = this.WaitForCompletedImportResult(target, importId);
@@ -144,10 +146,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
         {
             //arrange
             var templateId = Guid.NewGuid();
-            var availableFeaturedQuestions = new FeaturedQuestionItem[4];
+            var availableFeaturedQuestions = new QuestionDescription[4];
             for (int i = 0; i < availableFeaturedQuestions.Length; i++)
             {
-                availableFeaturedQuestions[i] = new FeaturedQuestionItem(Guid.NewGuid(), "title", "q" + i);
+                availableFeaturedQuestions[i] = new QuestionDescription(Guid.NewGuid(), "title", "q" + i);
             }
 
             var values = new string[3][];
@@ -157,11 +159,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
                 values[i] = new string[] { "a1", "a2" };
             }
 
-            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnaireBrowseItem() { QuestionnaireId = templateId, FeaturedQuestions = availableFeaturedQuestions });
+            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnairePreloadingDataItem(templateId, 1, "", availableFeaturedQuestions));
 
             //act
 
-            var importId = target.ImportSampleAsync(templateId, CreateSampleRecordsAccessor(values));
+            var importId = target.ImportSampleAsync(templateId, 1,CreateSampleRecordsAccessor(values));
 
             //assert
             var status = this.WaitForCompletedImportResult(target, importId);
@@ -178,10 +180,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
         {
             //arrange
             var templateId = Guid.NewGuid();
-            var availableFeaturedQuestions = new FeaturedQuestionItem[4];
+            var availableFeaturedQuestions = new QuestionDescription[4];
             for (int i = 0; i < availableFeaturedQuestions.Length; i++)
             {
-                availableFeaturedQuestions[i] = new FeaturedQuestionItem(Guid.NewGuid(), "title", "q" + i);
+                availableFeaturedQuestions[i] = new QuestionDescription(Guid.NewGuid(), "title", "q" + i);
             }
 
             var values = new string[3][];
@@ -189,15 +191,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             values[1] = new string[] {"a1", "a2"};
             values[2] = new string[] {"", ""};
 
-            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnaireBrowseItem()
-            {
-                QuestionnaireId = templateId,
-                FeaturedQuestions = availableFeaturedQuestions
-            });
+            SampleImportService target = CreateSampleImportService(questionnaireBrowseItem: new QuestionnairePreloadingDataItem(templateId, 1, "", availableFeaturedQuestions));
 
             //act
 
-            var importId = target.ImportSampleAsync(templateId, CreateSampleRecordsAccessor(values));
+            var importId = target.ImportSampleAsync(templateId,1, CreateSampleRecordsAccessor(values));
 
             //assert
             var status = this.WaitForCompletedImportResult(target, importId);
@@ -215,7 +213,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
         [TestCase(QuestionType.Numeric, "ivalidNumber")]
         [TestCase(QuestionType.SingleOption, "ivalidNumber")]
         [TestCase(QuestionType.SingleOption, "10")]
-        public void CreateSample_When_Batch_data_contains_invalida_values_Then_import_result_contains_error(QuestionType type, string answer)
+        public void CreateSample_When_Batch_data_contains_invalida_values_Then_import_result_contains_no_error(QuestionType type, string answer)
         {
             //arrange
             var importId = Guid.NewGuid();
@@ -238,7 +236,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             var status = this.WaitForSampleCreation(target, importId);
 
             //assert
-            Assert.False(status.IsSuccessed);
+            Assert.True(status.IsSuccessed);
         }
 
         [Test]
@@ -276,7 +274,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
         [Test]
         [TestCase(QuestionType.GpsCoordinates)]
         [TestCase(QuestionType.MultyOption)]
-        public void CreateSample_When_Batch_data_contains_answers_on_invalid_question_types_Then_import_result_contains_error(QuestionType type)
+        public void CreateSample_When_Batch_data_contains_answers_on_invalid_question_types_Then_import_result_contains_no_error(QuestionType type)
         {
             //arrange
             var importId = Guid.NewGuid();
@@ -299,7 +297,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             var status = this.WaitForSampleCreation(target, importId);
 
             //assert
-            Assert.False(status.IsSuccessed);
+            Assert.True(status.IsSuccessed);
         }
 
         private TempFileImportData CreateCompletedTempFileImportData(Guid importId, Dictionary<string, string> data)
@@ -368,7 +366,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             QuestionnaireDocument questionnaireDocumentVersion = null,
             IQuestionnaire questionnaire = null,
             SampleCreationStatus sampleCreationStatus = null,
-            QuestionnaireBrowseItem questionnaireBrowseItem = null)
+            QuestionnairePreloadingDataItem questionnaireBrowseItem = null)
         {
             var questionnaireFactoryMock = new Mock<IQuestionnaireFactory>();
             questionnaireFactoryMock.Setup(x => x.CreateTemporaryInstance(It.IsAny<QuestionnaireDocument>()))
@@ -384,13 +382,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             if (sampleCreationStatus != null)
                 smallTemplateRepository.Store(sampleCreationStatus, sampleCreationStatus.Id.ToString());
 
-            var questionnaireBrowseItemStore = new InMemoryReadSideRepositoryAccessor<QuestionnaireBrowseItem>();
+            var questionnaireBrowseItemStoreMock = new Mock<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>();
             if (questionnaireBrowseItem != null)
-                questionnaireBrowseItemStore.Store(questionnaireBrowseItem, questionnaireBrowseItem.QuestionnaireId);
+            {
+                questionnaireBrowseItemStoreMock.Setup(x => x.Load(It.IsAny<QuestionnairePreloadingDataInputModel>()))
+                    .Returns(questionnaireBrowseItem);
+            }
             return
                 new SampleImportService(
                     bigTemplateRepositoryMock.Object,
-                    questionnaireBrowseItemStore,
+                    questionnaireBrowseItemStoreMock.Object,
                     tempStorage,
                     smallTemplateRepository,
                     questionnaireFactoryMock.Object);
