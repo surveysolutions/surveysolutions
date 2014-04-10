@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection
             }
             else
             {
-                this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
+                this.Bind<IQuestionnaireRepository>().To<DomainQuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
             }
 
             this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();

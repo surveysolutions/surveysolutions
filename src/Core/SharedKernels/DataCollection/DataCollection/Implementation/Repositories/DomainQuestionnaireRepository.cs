@@ -11,14 +11,14 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class QuestionnaireRepository : IQuestionnaireRepository
+    internal class DomainQuestionnaireRepository : IQuestionnaireRepository
     {
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
         private readonly IDomainRepository domainRepository;
         private readonly Dictionary<string, IQuestionnaire> historicalQuestionnaireCache = new Dictionary<string, IQuestionnaire>();
 
-        public QuestionnaireRepository(IDomainRepository domainRepository, IEventStore eventStore,
+        public DomainQuestionnaireRepository(IDomainRepository domainRepository, IEventStore eventStore,
                                        ISnapshotStore snapshotStore)
         {
             this.eventStore = eventStore;
