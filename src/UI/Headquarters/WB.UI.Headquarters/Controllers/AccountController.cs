@@ -16,20 +16,16 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IFormsAuthentication authentication;
         private readonly IGlobalInfoProvider globalProvider;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IHeadquartersSynchronizer headquartersSynchronizer;
         private readonly Func<string, string, bool> validateUserCredentials;
 
-        public AccountController(IFormsAuthentication authentication, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
-            IHeadquartersSynchronizer headquartersSynchronizer)
-            : this(authentication, globalProvider, passwordHasher, headquartersSynchronizer, Membership.ValidateUser) { }
+        public AccountController(IFormsAuthentication authentication, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher)
+            : this(authentication, globalProvider, passwordHasher, Membership.ValidateUser) { }
 
-        internal AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
-            IHeadquartersSynchronizer headquartersSynchronizer, Func<string, string, bool> validateUserCredentials)
+        internal AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher, Func<string, string, bool> validateUserCredentials)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
             this.passwordHasher = passwordHasher;
-            this.headquartersSynchronizer = headquartersSynchronizer;
             this.validateUserCredentials = validateUserCredentials;
         }
 
@@ -46,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid)
             {
-                if (this.LoginIncludingHeadquartersData(model.UserName, model.Password))
+                if (this.Login(model.UserName, model.Password))
                 {
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
                     if (isHeadquarter)
@@ -65,25 +61,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        private bool LoginIncludingHeadquartersData(string login, string password)
+        private bool Login(string login, string password)
         {
-            if (this.LoginUsingLocalDatabase(login, password))
-                return true;
-
-            this.UpdateLocalDataFromHeadquarters(login, password);
-
-            return this.LoginUsingLocalDatabase(login, password);
-        }
-
-        private void UpdateLocalDataFromHeadquarters(string login, string password)
-        {
-            //this.headquartersSynchronizer.Pull(login, password);
-        }
-
-        private bool LoginUsingLocalDatabase(string login, string password)
-        {
-            return this.validateUserCredentials(login, this.passwordHasher.Hash(password))
-                || this.validateUserCredentials(login, SimpleHash.ComputeHash(password));
+            return this.validateUserCredentials(login, this.passwordHasher.Hash(password)) || this.validateUserCredentials(login, SimpleHash.ComputeHash(password));
         }
 
         public bool IsLoggedIn()
