@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
+    [Ignore]
     public class NewAddQuestionTests : QuestionnaireTestsContext
     {
         [SetUp]
