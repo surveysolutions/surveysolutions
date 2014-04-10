@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 pageSize.HasValue
