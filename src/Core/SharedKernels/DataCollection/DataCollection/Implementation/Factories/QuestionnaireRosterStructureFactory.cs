@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -29,7 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
             {
                 var rosterIdMappedOfRosterTitleQuestionId = this.GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
 
-                var rosterDescription = new RosterScopeDescription(autoPropagatebleQuestion.PublicKey, rosterIdMappedOfRosterTitleQuestionId);
+                var rosterDescription = new RosterScopeDescription(autoPropagatebleQuestion.PublicKey, string.Empty, false, rosterIdMappedOfRosterTitleQuestionId);
 
                 result.RosterScopes.Add(autoPropagatebleQuestion.PublicKey,
                     rosterDescription);
@@ -49,14 +47,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Factories
 
                 var rosterIdWithTitleQuestionIds = this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(questionnaire, groupsFromRosterSizeQuestionScope);
 
-                var rosterDescription = new RosterScopeDescription(rosterSizeQuestion.PublicKey, rosterIdWithTitleQuestionIds);
+                var rosterDescription = new RosterScopeDescription(rosterSizeQuestion.PublicKey, rosterSizeQuestion.StataExportCaption, 
+                    rosterSizeQuestion.QuestionType == QuestionType.TextList, rosterIdWithTitleQuestionIds);
 
                 result.RosterScopes.Add(rosterSizeQuestion.PublicKey, rosterDescription);
             }
 
             foreach (var fixedRosterGroup in fixedRosterGroups)
             {
-                result.RosterScopes[fixedRosterGroup.PublicKey] = new RosterScopeDescription(fixedRosterGroup.PublicKey,
+                result.RosterScopes[fixedRosterGroup.PublicKey] = new RosterScopeDescription(fixedRosterGroup.PublicKey, string.Empty, false,
                     new Dictionary<Guid, RosterTitleQuestionDescription> { { fixedRosterGroup.PublicKey, null } });
             }
             return result;
