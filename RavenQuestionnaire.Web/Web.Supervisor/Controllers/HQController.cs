@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
@@ -38,6 +40,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
+        private readonly IPreloadedDataVerifier preloadedDataVerifier;
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
                             IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
@@ -45,7 +48,7 @@ namespace Web.Supervisor.Controllers
                             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
                             ISampleImportService sampleImportService,
                             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
-                                allUsersAndQuestionnairesFactory, IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository)
+                                allUsersAndQuestionnairesFactory, IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository, IPreloadedDataVerifier preloadedDataVerifier)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -55,6 +58,7 @@ namespace Web.Supervisor.Controllers
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.preloadingTemplateService = preloadingTemplateService;
             this.preloadedDataRepository = preloadedDataRepository;
+            this.preloadedDataVerifier = preloadedDataVerifier;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -110,9 +114,8 @@ namespace Web.Supervisor.Controllers
 
             var preloadedDataId = preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
             var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformation(preloadedDataId);
-            this.ViewBag.SupervisorList =
-                    this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
-            return this.View("ImportSample", preloadedMetadata);
+      
+            return this.View("ImportSample",new PreloadedMetaDataView(model.QuestionnaireId,model.QuestionnaireVersion, preloadedMetadata));
         }
 
         public ActionResult TemplateDownload(Guid id, long version)
@@ -121,23 +124,19 @@ namespace Web.Supervisor.Controllers
             return this.File(pathToFile, "application/zip", fileDownloadName: Path.GetFileName(pathToFile));
         }
 
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public ActionResult ImportResult(Guid id)
+        public ActionResult VerifySample(Guid questionnaireId, long version, Guid id)
         {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
-            ImportResult result = this.sampleImportService.GetImportStatus(id);
-            if (result.IsCompleted && result.IsSuccessed)
-            {
-                this.ViewBag.SupervisorList =
-                    this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
-            }
-            return this.PartialView(result);
+            var errors = preloadedDataVerifier.Verify(questionnaireId, version, preloadedDataRepository.GetPreloadedData(id));
+            this.ViewBag.SupervisorList =
+              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+            return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id));
         }
 
-        public ActionResult CreateSample(Guid id, Guid responsibleSupervisor)
+
+        public ActionResult ImportPreloadedData(Guid questionnaireId, long version, Guid id, Guid responsibleSupervisor)
         {
-            this.sampleImportService.CreateSample(id, this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
+            this.sampleImportService.CreateSample(questionnaireId, version, id, preloadedDataRepository.GetPreloadedData(id),
+                this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
 

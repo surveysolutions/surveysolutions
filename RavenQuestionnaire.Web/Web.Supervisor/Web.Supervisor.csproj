@@ -657,6 +657,7 @@
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Views\HQ\VerifySample.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

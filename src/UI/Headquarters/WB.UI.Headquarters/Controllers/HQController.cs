@@ -98,45 +98,6 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
-        [HttpPost]
-        public ActionResult BatchUpload(BatchUploadModel model)
-        {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
-            if (!this.ModelState.IsValid)
-            {
-                var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
-                model.FeaturedQuestions = questionnaireBrowseItem.FeaturedQuestions;
-                model.QuestionnaireTitle = questionnaireBrowseItem.Title;
-
-                return this.View(model);
-            }
-
-            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId,1, new CsvSampleRecordsAccessor(model.File.InputStream));
-            var questionnaireBrowsemodel = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
-            return this.View("ImportSample", questionnaireBrowsemodel);
-        }
-
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public ActionResult ImportResult(Guid id)
-        {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
-            ImportResult result = this.sampleImportService.GetImportStatus(id);
-            if (result.IsCompleted && result.IsSuccessed)
-            {
-                this.ViewBag.SupervisorList =
-                    this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
-            }
-            return this.PartialView(result);
-        }
-
-        public ActionResult CreateSample(Guid id, Guid responsibleSupervisor)
-        {
-            this.sampleImportService.CreateSample(id, this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
-            return this.RedirectToAction("SampleCreationResult", new { id });
-        }
-
         public ActionResult SampleCreationResult(Guid id)
         {
             SampleCreationStatus result = this.sampleImportService.GetSampleCreationStatus(id);

@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Repositories
     public interface IPreloadedDataRepository
     {
         Guid Store(Stream preloadedDataFile, string fileName);
-        PreloadedDataMetaData GetPreloadedDataMetaInformation(Guid id);
+        PreloadedContentMetaData GetPreloadedDataMetaInformation(Guid id);
+        PreloadedDataByFile[] GetPreloadedData(Guid id);
     }
 }

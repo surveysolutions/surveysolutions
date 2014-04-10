@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IDataExportService>().To<FileBasedDataExportService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadingTemplateService>().To<CsvPreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,

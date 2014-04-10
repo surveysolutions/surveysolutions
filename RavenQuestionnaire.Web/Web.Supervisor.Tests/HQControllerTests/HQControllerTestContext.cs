@@ -7,12 +7,14 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
+using WB.Core.Synchronization;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.Models;
 
@@ -43,13 +45,13 @@ namespace Web.Supervisor.Tests.HQControllerTests
                 Mock.Of<IGlobalInfoProvider>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>(),
-                questionnaireItemFactoryMock ?? Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(),
-                Mock.Of<IViewFactory<UserListViewInputModel, UserListView>>(),
-                Mock.Of<IViewFactory<SurveyUsersViewInputModel, SurveyUsersView>>(),
+                questionnaireItemFactoryMock ??
+                    Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(),
                 Mock.Of<IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView>>(),
                 Mock.Of<IViewFactory<UserListViewInputModel, UserListView>>(),
                 sampleImportServiceMock ?? Mock.Of<ISampleImportService>(),
-                Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(), Mock.Of<IPreloadingTemplateService>());
+                Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(),
+                Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(), Mock.Of<IPreloadedDataVerifier>());
         }
     }
 }
