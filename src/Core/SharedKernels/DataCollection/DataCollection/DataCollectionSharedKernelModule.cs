@@ -11,9 +11,25 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class DataCollectionSharedKernelModule : NinjectModule
     {
+        private readonly bool usePlainQuestionnaireRepository;
+
+        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository)
+        {
+            this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
+        }
+
         public override void Load()
         {
-            this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
+            if (this.usePlainQuestionnaireRepository)
+            {
+                this.Bind<IQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
+                this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
+            }
+            else
+            {
+                this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
+            }
+
             this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
 
             this.Bind(typeof(IVersionedReadSideRepositoryWriter<>)).To(typeof(VersionedReadSideRepositoryWriter<>));
