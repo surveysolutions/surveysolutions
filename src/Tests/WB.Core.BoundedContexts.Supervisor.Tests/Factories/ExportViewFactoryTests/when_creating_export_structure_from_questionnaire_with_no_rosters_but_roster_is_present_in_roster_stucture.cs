@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTe
                                 RosterScopes =
                                     new Dictionary<Guid, RosterScopeDescription>()
                                     {
-                                        { misteriousRosterGroupId, new RosterScopeDescription(misteriousRosterGroupId, null) }
+                                        { misteriousRosterGroupId, new RosterScopeDescription(misteriousRosterGroupId, string.Empty, false, null) }
                                     }
                             });
 
