@@ -580,6 +580,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [Ignore]
         public void CloneQuestion_When_categorical_multi_question_with_linked_question_that_has_max_allowed_answers_Then_QuestionCloned_event_with_max_allowed_answers_value_should_be_raised()
         {
             using (var eventContext = new EventContext())
