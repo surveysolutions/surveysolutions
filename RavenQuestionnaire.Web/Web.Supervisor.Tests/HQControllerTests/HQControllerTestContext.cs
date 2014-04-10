@@ -49,7 +49,7 @@ namespace Web.Supervisor.Tests.HQControllerTests
                 Mock.Of<IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView>>(),
                 Mock.Of<IViewFactory<UserListViewInputModel, UserListView>>(),
                 sampleImportServiceMock ?? Mock.Of<ISampleImportService>(),
-                Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>());
+                Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(), Mock.Of<IPreloadingTemplateService>());
         }
     }
 }

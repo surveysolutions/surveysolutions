@@ -98,6 +98,7 @@
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs" />
+    <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvDataFileExportService.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="Services\IDataFileExportService.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
@@ -170,6 +172,8 @@
     <Compile Include="Views\Interview\InterviewSummary.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
+    <Compile Include="Views\PreloadedData\PreloadedDataMetaData.cs" />
+    <Compile Include="Views\PreloadedData\PreloadedFileMetaData.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataInputModel.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />

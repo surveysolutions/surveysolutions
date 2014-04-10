@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -34,30 +35,26 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory;
         private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
-        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
+        private readonly IPreloadedDataRepository preloadedDataRepository;
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
                             IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
-                            IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
-                            IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
                             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
                             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
                             ISampleImportService sampleImportService,
                             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
-                                allUsersAndQuestionnairesFactory, IPreloadingTemplateService preloadingTemplateService)
+                                allUsersAndQuestionnairesFactory, IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnairePreloadingDataItemFactory = questionnairePreloadingDataItemFactory;
-            this.userListViewFactory = userListViewFactory;
-            this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.preloadingTemplateService = preloadingTemplateService;
+            this.preloadedDataRepository = preloadedDataRepository;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -111,9 +108,11 @@ namespace Web.Supervisor.Controllers
                 return View(model);
             }
 
-            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId,model.QuestionnaireVersion, new CsvSampleRecordsAccessor(model.File.InputStream));
-            var questionnaireBrowsemodel = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(model.QuestionnaireId, model.QuestionnaireVersion));
-            return this.View("ImportSample", questionnaireBrowsemodel);
+            var preloadedDataId = preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformation(preloadedDataId);
+            this.ViewBag.SupervisorList =
+                    this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+            return this.View("ImportSample", preloadedMetadata);
         }
 
         public ActionResult TemplateDownload(Guid id, long version)
