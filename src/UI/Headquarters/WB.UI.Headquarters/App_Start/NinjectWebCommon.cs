@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 pageSize.HasValue
@@ -124,8 +124,7 @@ namespace WB.UI.Headquarters
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
-                    WebConfigurationManager.AppSettings["Headquarters.Url"]));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -164,7 +163,7 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (object handler in kernel.GetAll(typeof (IEventHandler)))
             {
-                bus.Register(handler as IEventHandler);
+                bus.Register((IEventHandler)handler);
             }
         }
 

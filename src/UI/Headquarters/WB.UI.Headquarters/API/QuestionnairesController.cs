@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.UI.Headquarters.Models.API;
 
-namespace Web.Supervisor.API
+namespace WB.UI.Headquarters.API
 {
     [RoutePrefix("apis/v1/questionnaires")]
     [Authorize(Roles = "Headquarter, Supervisor")]

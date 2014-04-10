@@ -4,7 +4,7 @@ using WB.Core.Infrastructure.Raven.PlainStorage;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.PlainStorage
 {
-    public class RavenPlainStorageProvider : IRavenPlainStorageProvider
+    internal class RavenPlainStorageProvider : IRavenPlainStorageProvider
     {
         private readonly DocumentStore documentStore;
 

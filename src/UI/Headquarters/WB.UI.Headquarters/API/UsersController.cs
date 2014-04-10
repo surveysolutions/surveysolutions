@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.UI.Headquarters.Models.API;
 
-namespace Web.Supervisor.API
+namespace WB.UI.Headquarters.API
 {
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class UsersController : BaseApiServiceController

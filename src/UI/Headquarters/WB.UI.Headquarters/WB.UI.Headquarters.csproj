@@ -305,8 +305,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BaseApiServiceController.cs" />
+    <Compile Include="API\Feeds\UsersFeedController.cs" />
+    <Compile Include="API\Formatters\SyndicationFeedFormatter.cs" />
     <Compile Include="API\InterviewsController.cs" />
     <Compile Include="API\QuestionnairesController.cs" />
+    <Compile Include="API\Resources\SupervisorValidationResult.cs" />
+    <Compile Include="API\Resources\UsersResourceController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
