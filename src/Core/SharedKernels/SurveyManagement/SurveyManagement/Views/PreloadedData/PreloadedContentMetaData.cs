@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 {
-    public class PreloadedDataMetaData
+    public class PreloadedContentMetaData
     {
-        public PreloadedDataMetaData(Guid id, string title, PreloadedFileMetaData[] filesMetaInformation)
+        public PreloadedContentMetaData(Guid id, string title, PreloadedFileMetaData[] filesMetaInformation)
         {
             this.Id = id;
             this.Title = title;
