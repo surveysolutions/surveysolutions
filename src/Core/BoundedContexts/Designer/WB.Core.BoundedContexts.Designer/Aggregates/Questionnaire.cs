@@ -1191,30 +1191,39 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #region Question: Text command handlers
-        public void AddTextQuestion(Guid questionId,
-           Guid groupId, string title,string variableName,
-           bool isMandatory, bool isFeatured,
-           QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions,Guid responsibleId)
+
+        public void AddTextQuestion(
+            Guid questionId,
+            Guid parentGroupId,
+            string title,
+            string variableName,
+            bool isMandatory,
+            bool isPreFilled,
+            QuestionScope scope,
+            string enablementCondition,
+            string validationExpression,
+            string validationMessage,
+            string instructions,
+            Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(groupId);
+            var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isFeatured, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = groupId,
+                GroupPublicKey = parentGroupId,
                 QuestionText = title,
                 QuestionType = QuestionType.Text,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isFeatured,
+                Featured = isPreFilled,
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
@@ -1290,27 +1299,32 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Question: GpsCoordinates command handlers
         public void AddGpsCoordinatesQuestion(Guid questionId,
-           Guid groupId, string title,  string variableName,
-           bool isMandatory, QuestionScope scope, string condition, 
-           string instructions, Guid responsibleId)
+            Guid parentGroupId,
+            string title,
+            string variableName,
+            bool isMandatory,
+            QuestionScope scope,
+            string enablementCondition,
+            string instructions,
+            Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(groupId);
+            var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, string.Empty);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, string.Empty);
 
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = groupId,
+                GroupPublicKey = parentGroupId,
                 QuestionText = title,
                 QuestionType = QuestionType.GpsCoordinates,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
@@ -1377,29 +1391,36 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Question: DateTime command handlers
         public void AddDateTimeQuestion(Guid questionId,
-           Guid groupId, string title, string variableName,
-           bool isMandatory, bool isFeatured,
-           QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Guid responsibleId)
+            Guid parentGroupId,
+            string title,
+            string variableName,
+            bool isMandatory,
+            bool isPreFilled,
+            QuestionScope scope,
+            string enablementCondition,
+            string validationExpression,
+            string validationMessage,
+            string instructions,
+            Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(groupId);
+            var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isFeatured, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = groupId,
+                GroupPublicKey = parentGroupId,
                 QuestionText = title,
                 QuestionType = QuestionType.DateTime,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isFeatured,
+                Featured = isPreFilled,
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
@@ -1474,33 +1495,41 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: MultiOption command handlers
-        public void AddMultiOptionQuestion(Guid questionId,
-           Guid groupId, string title, string variableName,
-           bool isMandatory,
-           QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Guid? linkedToQuestionId, 
-           bool areAnswersOrdered, int? maxAllowedAnswers,
-           Guid responsibleId)
+        public void AddMultiOptionQuestion( Guid questionId,
+            Guid parentGroupId,
+            string title,
+            string variableName,
+            bool isMandatory,
+            QuestionScope scope,
+            string enablementCondition,
+            string validationExpression,
+            string validationMessage,
+            string instructions,
+            Guid responsibleId,
+            Option[] options,
+            Guid? linkedToQuestionId,
+            bool areAnswersOrdered, 
+            int? maxAllowedAnswers)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(groupId);
+            var parentGroup = this.GetGroupById(parentGroupId);
             
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(questionId, options, linkedToQuestionId, false);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = groupId,
+                GroupPublicKey = parentGroupId,
                 QuestionText = title,
                 QuestionType = QuestionType.MultyOption,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
@@ -1593,32 +1622,42 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: SingleOption command handlers
-        public void AddSingleOptionQuestion(Guid questionId,
-           Guid groupId, string title, string variableName,
-           bool isMandatory, bool isFeatured,
-           QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Guid? linkedToQuestionId,
-           Guid responsibleId)
+
+        public void AddSingleOptionQuestion(
+            Guid questionId,
+            Guid parentGroupId,
+            string title,
+            string variableName,
+            bool isMandatory,
+            bool isPreFilled,
+            QuestionScope scope,
+            string enablementCondition,
+            string validationExpression,
+            string validationMessage,
+            string instructions,
+            Guid responsibleId,
+            Option[] options,
+            Guid? linkedToQuestionId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(groupId);
+            var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isFeatured, responsibleId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(questionId, options, linkedToQuestionId, isFeatured);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(questionId, options, linkedToQuestionId, isPreFilled);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = groupId,
+                GroupPublicKey = parentGroupId,
                 QuestionText = title,
                 QuestionType = QuestionType.SingleOption,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                Featured = isFeatured,
+                Featured = isPreFilled,
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
