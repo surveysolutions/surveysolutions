@@ -57,9 +57,14 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             File.Delete(pathToFile);
         }
 
-        public Stream OpenOrCreateFile(string pathToFile)
+        public Stream OpenOrCreateFile(string pathToFile, bool append)
         {
-            return new FileStream(pathToFile, FileMode.Create, FileAccess.Write);
+            return new FileStream(pathToFile, append ? FileMode.Append : FileMode.Create, FileAccess.Write);
+        }
+
+        public Stream ReadFile(string pathToFile)
+        {
+            return new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
         }
 
         public string MakeValidFileName(string name)

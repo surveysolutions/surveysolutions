@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
          
         public void AddRecord(InterviewDataExportLevelView items, string filePath)
         {
-            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, true))
+
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
@@ -29,6 +30,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 foreach (var item in items.Records)
                 {
                     writer.WriteField(item.RecordId);
+
+                    foreach (var referenceValue in item.ReferenceValues)
+                    {
+                        writer.WriteField(referenceValue);
+                    }
 
                     foreach (var exportedQuestion in item.Questions)
                     {
@@ -47,12 +53,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void CreateHeader(HeaderStructureForLevel header, string filePath)
         {
-            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, false))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
                 writer.Configuration.Delimiter = this.delimiter;
                 writer.WriteField(header.LevelIdColumnName);
+
+                if (header.IsTextListScope)
+                {
+                    foreach (var name in header.ReferencedNames)
+                    {
+                        writer.WriteField(name);
+                    }
+                }
 
                 foreach (ExportedHeaderItem question in header.HeaderItems.Values)
                 {

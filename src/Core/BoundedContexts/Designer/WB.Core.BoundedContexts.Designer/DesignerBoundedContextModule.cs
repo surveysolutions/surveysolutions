@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer
 
             RegistryHelper.RegisterFactory<QuestionnaireListViewFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<QuestionnaireViewFactory>(this.Kernel);
+            RegistryHelper.RegisterFactory<ChapterInfoViewFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<QuestionnaireSharedPersonsFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<AccountListViewFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<AccountViewFactory>(this.Kernel);

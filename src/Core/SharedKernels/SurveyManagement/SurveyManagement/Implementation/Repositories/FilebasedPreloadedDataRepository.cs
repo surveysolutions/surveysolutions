@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 fileSystemAccessor.DeleteDirectory(currentFolderPath);
 
             fileSystemAccessor.CreateDirectory(currentFolderPath);
-            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(fileSystemAccessor.CombinePath(currentFolderPath, fileName)))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(fileSystemAccessor.CombinePath(currentFolderPath, fileName),false))
             {
                 preloadedDataFile.CopyTo(fileStream);
             }
@@ -96,6 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 return null;
             var archivePath = archivesInDirectory[0];
             var unzippedDirectoryPath = archivePath.Substring(0, archivePath.LastIndexOf('.'));
+
             if (!fileSystemAccessor.IsDirectoryExists(unzippedDirectoryPath))
             {
                 try
@@ -125,11 +126,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             var records = new List<string[]>();
             try
             {
-                using (var fileStream = new FileStream(fileInDirectory, FileMode.Open))
+                using (var fileStream = fileSystemAccessor.ReadFile(fileInDirectory))
                 {
                     var recordAccessor = new CsvSampleRecordsAccessor(fileStream);
 
-                    foreach (var record in recordAccessor.Records)
+                    foreach (var record in recordAccessor.Records.ToList())
                     {
                         if (header == null)
                         {

@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
             Dictionary<Guid, Guid?> rosterGroupsWithTitleQuestionPairs)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterScopeDescription(scopeId,
+            var rosterDescription = new RosterScopeDescription(scopeId, string.Empty, false,
                 rosterGroupsWithTitleQuestionPairs.ToDictionary(roster => roster.Key,
                     roster => roster.Value.HasValue ? new RosterTitleQuestionDescription(roster.Value.Value) : null));
 
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
            Dictionary<Guid, RosterTitleQuestionDescription> rosterGroupsWithTitleQuestionPairs)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterScopeDescription(scopeId, rosterGroupsWithTitleQuestionPairs);
+            var rosterDescription = new RosterScopeDescription(scopeId, string.Empty, false,  rosterGroupsWithTitleQuestionPairs);
 
             rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
         {
             var rosterStructure = new QuestionnaireRosterStructure();
             var rosterGroupsWithTitleQuestionPairs = groupIdsFromScope.ToDictionary<Guid, Guid, RosterTitleQuestionDescription>(groupId => groupId, groupId => null);
-            var rosterDescription = new RosterScopeDescription(scopeId, rosterGroupsWithTitleQuestionPairs);
+            var rosterDescription = new RosterScopeDescription(scopeId, string.Empty, false, rosterGroupsWithTitleQuestionPairs);
             rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
             return rosterStructure;
         }
