@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -36,7 +37,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
-
+        private readonly IPreloadingTemplateService preloadingTemplateService;
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
                             IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
@@ -46,7 +47,7 @@ namespace Web.Supervisor.Controllers
                             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
                             ISampleImportService sampleImportService,
                             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
-                                allUsersAndQuestionnairesFactory)
+                                allUsersAndQuestionnairesFactory, IPreloadingTemplateService preloadingTemplateService)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -56,6 +57,7 @@ namespace Web.Supervisor.Controllers
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.preloadingTemplateService = preloadingTemplateService;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -90,14 +92,10 @@ namespace Web.Supervisor.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            var questionnairePreloadingData = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(id, version));
-
             var viewModel = new BatchUploadModel()
             {
-                Questions =  questionnairePreloadingData.Questions,
-                QuestionnaireId = questionnairePreloadingData.QuestionnaireId,
-                QuestionnaireVersion = questionnairePreloadingData.Version,
-                QuestionnaireTitle = questionnairePreloadingData.Title
+                QuestionnaireId = id,
+                QuestionnaireVersion = version
             };
 
             return this.View(viewModel);
@@ -110,16 +108,18 @@ namespace Web.Supervisor.Controllers
 
             if (!ModelState.IsValid)
             {
-                var questionnaireBrowseItem = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(model.QuestionnaireId, model.QuestionnaireVersion));
-                model.Questions = questionnaireBrowseItem.Questions;
-                model.QuestionnaireTitle = questionnaireBrowseItem.Title;
-
                 return View(model);
             }
 
             this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId,model.QuestionnaireVersion, new CsvSampleRecordsAccessor(model.File.InputStream));
             var questionnaireBrowsemodel = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(model.QuestionnaireId, model.QuestionnaireVersion));
             return this.View("ImportSample", questionnaireBrowsemodel);
+        }
+
+        public ActionResult TemplateDownload(Guid id, long version)
+        {
+            var pathToFile = preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
+            return this.File(pathToFile, "application/zip", fileDownloadName: Path.GetFileName(pathToFile));
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]

@@ -34,26 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Preloading
                     headerItem =>
                         headerItem.ColumnNames.Select(
                             (column, i) => new QuestionDescription(headerItem.PublicKey, headerItem.Titles[i], column)));
-            /* foreach (var child in parentGroup.Children)
-            {
-                var question = child as IQuestion;
-                if (question != null)
-                {
-                    yield return new QuestionDescription(question.PublicKey, question.QuestionText, question.StataExportCaption);
-                    continue;
-                }
-                var group = child as IGroup;
-                if (group != null)
-                {
-                    if (group.IsRoster)
-                        continue;
-                    var questionsInGroup = this.BuildTopLevelQuestionList(group);
-                    foreach (var questionDescription in questionsInGroup)
-                    {
-                        yield return questionDescription;
-                    }
-                }
-            }*/
         }
     }
 }
