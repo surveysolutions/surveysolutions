@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         }
 
         private readonly string delimiter = ",";
-
+         
         public void AddRecord(InterviewDataExportLevelView items, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath))

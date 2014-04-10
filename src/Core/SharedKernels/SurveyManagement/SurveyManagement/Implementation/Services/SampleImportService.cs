@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.View;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Spec;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -14,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
@@ -21,29 +25,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
     internal class SampleImportService : ISampleImportService
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository;
-        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
+        private readonly IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory;
         private readonly ITemporaryDataStorage<TempFileImportData> tempImportStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
         private readonly IQuestionnaireFactory questionnaireFactory;
 
+        private static ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
         public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository,
-                                   IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, 
+                                   IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory, 
             ITemporaryDataStorage<TempFileImportData> tempImportStorage,
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
             IQuestionnaireFactory questionnaireFactory)
         {
             this.templateRepository = templateRepository;
-            this.templateSmallRepository = templateSmallRepository;
+            this.questionnairePreloadingDataItemFactory = questionnairePreloadingDataItemFactory;
             this.tempImportStorage = tempImportStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
             this.questionnaireFactory = questionnaireFactory;
         }
 
-        public Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor)
+        public Guid ImportSampleAsync(Guid templateId, long templateVersion, ISampleRecordsAccessor recordAccessor)
         {
             Guid importId = Guid.NewGuid();
             this.tempImportStorage.Store( this.CreateInitialTempRecord(templateId, importId), importId.ToString());
-            new Task(() => this.Process(templateId, recordAccessor, importId)).Start();
+            new Task(() => this.Process(templateId,templateVersion, recordAccessor, importId)).Start();
             return importId;
         }
 
@@ -98,33 +107,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.tempSampleCreationStorage.Store(result, id.ToString());
                 return;
             }
-            IQuestionnaire questionnarie;
+            IQuestionnaire questionnarie = this.questionnaireFactory.CreateTemporaryInstance(bigTemplate);
 
-            questionnarie = this.questionnaireFactory.CreateTemporaryInstance(bigTemplate);
-
-            int i = 0;
-            foreach (var value in item.Values)
-            {
-                try
-                {
-                    using (new ObliviousEventContext())
-                    {
-                        this.PreBuiltInterview(value, item.Header, questionnarie);
-
-                        i++;
-
-                        result.SetStatusMessage(string.Format("Validated {0} interview(s) from {1}", i, item.Values.Count));
-                        this.tempSampleCreationStorage.Store(result, id.ToString());
-                    }
-                }
-                catch
-                {
-                    result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
-                    this.tempSampleCreationStorage.Store(result, id.ToString());
-                    return;
-                }
-            }
-            i = 1;
+            var i = 1;
             foreach (var value in item.Values)
             {
                 try
@@ -135,18 +120,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     this.tempSampleCreationStorage.Store(result, id.ToString());
                     i++;
                 }
-                catch
+                catch(Exception e)
                 {
-                    // result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
+                    Logger.Error(e.Message, e);
                 }
             }
             result.CompleteProcess();
             this.tempSampleCreationStorage.Store(result, id.ToString());
         }
 
-        private void Process(Guid templateId, ISampleRecordsAccessor recordAccessor, Guid id)
+        private void Process(Guid templateId, long templateVersion, ISampleRecordsAccessor recordAccessor, Guid id)
         {
-            var smallTemplate = this.templateSmallRepository.GetById(templateId);
+            var smallTemplate = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(templateId, templateVersion));
             if (smallTemplate == null)
             {
                 this.tempImportStorage.Store(this.CreateErrorTempRecord(templateId, id, "Template Is Absent"), id.ToString());
@@ -166,7 +151,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         header = record;
                         try
                         {
-                            this.ValidateHeader(header, smallTemplate.FeaturedQuestions, id, templateId);
+                            this.ValidateHeader(header, smallTemplate.Questions, id, templateId);
                         }
                         catch (ArgumentException e)
                         {
@@ -204,9 +189,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.tempImportStorage.Store(item, id.ToString());
         }
 
-        private void ValidateHeader(string[] header, FeaturedQuestionItem[] expectedHeader, Guid id,Guid templateId)
+        private void ValidateHeader(string[] header, QuestionDescription[] expectedHeader, Guid id, Guid templateId)
         {
-            var newHeader = new List<FeaturedQuestionItem>();
+            var newHeader = new List<QuestionDescription>();
             for (int i = 0; i < header.Length; i++)
             {
                 var realHeader = expectedHeader.FirstOrDefault(h => h.Caption == header[i]);
@@ -262,7 +247,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 var question = getQuestionByStataCaption(header[i]);
                 if (question == null)
                     continue;
-
+                if(question.LinkedToQuestionId.HasValue)
+                    continue;
+                
                 switch (question.QuestionType)
                 {
                     case QuestionType.Text:
@@ -270,26 +257,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         break;
 
                     case QuestionType.AutoPropagate:
-                        featuredAnswers.Add(question.PublicKey, int.Parse(values[i]));
+                        int intValue;
+                        if (int.TryParse(values[i], out intValue))
+                            featuredAnswers.Add(question.PublicKey, intValue);
+
                         break;
 
                     case QuestionType.Numeric:
                         var numericQuestion = question as INumericQuestion;
                         if (numericQuestion == null)
-                            throw new ArgumentException(string.Format("Question with id {0} has Type Numeric, but for real is {1}",
-                                question.PublicKey, question.GetType().Name));
-
+                            continue;    
                         // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
                         if (numericQuestion.IsInteger)
-                            featuredAnswers.Add(question.PublicKey, int.Parse(values[i]));
+                        {
+                            int intNumericValue;
+                            if (int.TryParse(values[i], out intNumericValue))
+                                featuredAnswers.Add(question.PublicKey, intNumericValue);
+                        }
                         else
-                            featuredAnswers.Add(question.PublicKey, decimal.Parse(values[i]));
+                        {
+                            decimal decimalNumericValue;
+                            if (decimal.TryParse(values[i], out decimalNumericValue))
+                                featuredAnswers.Add(question.PublicKey, decimalNumericValue);
+                        }
                         break;
 
                     case QuestionType.DateTime:
                         DateTime date;
                         if (!DateTime.TryParse(values[i], out date))
-                            throw new ArgumentException("date time value can't be parsed");
+                            continue;    
+                            //throw new ArgumentException("date time value can't be parsed");
                         featuredAnswers.Add(question.PublicKey, date);
                         break;
 
@@ -299,16 +296,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         {
                             decimal answerValue;
                             if (!decimal.TryParse(values[i], out answerValue))
-                                throw new ArgumentException("date time value can't be parsed");
+                                continue;    
+                                //  throw new ArgumentException("date time value can't be parsed");
                             if (!getAnswerOptionsAsValues(question.PublicKey).Contains(answerValue))
-                                throw new ArgumentException("passed option is missing");
+                                continue;    
+                                //throw new ArgumentException("passed option is missing");
                             featuredAnswers.Add(question.PublicKey, answerValue);
                         }
                         break;
 
-                    case QuestionType.GpsCoordinates:
+                    case QuestionType.TextList:
                     case QuestionType.MultyOption:
-                        throw new ArgumentException("Unsupported pre-filled question type in sample");
+
+                    case QuestionType.GpsCoordinates:
+                    case QuestionType.QRBarcode:
+                        continue;    
+                    //throw new ArgumentException("Unsupported pre-filled question type in sample");
                 }
             }
             return featuredAnswers;
