@@ -420,6 +420,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\Snapshots\QuestionnaireState.cs">
       <Link>Implementation\Aggregates\Snapshots\QuestionnaireState.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Entities\PlainQuestionnaire.cs">
+      <Link>Implementation\Entities\PlainQuestionnaire.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\EnumerableExtensions.cs">
       <Link>Implementation\EnumerableExtensions.cs</Link>
     </Compile>
@@ -435,8 +438,14 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs">
       <Link>Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\IPlainQuestionnaireRepository.cs">
+      <Link>Implementation\Repositories\IPlainQuestionnaireRepository.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\IQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\IQuestionnaireRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainQuestionnaireRepository.cs">
+      <Link>Implementation\Repositories\PlainQuestionnaireRepository.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\QuestionnaireRepository.cs">
       <Link>Implementation\Repositories\QuestionnaireRepository.cs</Link>
@@ -560,7 +569,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
