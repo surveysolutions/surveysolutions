@@ -186,7 +186,7 @@
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\PlainQuestionnaireRepository.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Repositories\DomainQuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataCollectionSharedKernelModule.cs" />
