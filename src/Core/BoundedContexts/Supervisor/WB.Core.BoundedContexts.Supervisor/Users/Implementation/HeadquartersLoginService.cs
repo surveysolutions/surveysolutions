@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
@@ -37,15 +38,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         {
             using (var client = new HttpClient(messageHandler))
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, this.headquartersSettings.LoginServiceEndpointUrl);
+                var requestUri = this.BuildValidationUri(login, password);
+                var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var passwordHash = SimpleHash.ComputeHash(password);
-                request.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
-                {
-                    {"login", login},
-                    {"passwordHash", passwordHash}
-                });
 
                 HttpResponseMessage response = client.SendAsync(request).Result;
 
@@ -60,11 +55,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                 if ((bool)responseFeed.isValid)
                 {
                     var publicKey = Guid.Parse((string)responseFeed.userId);
-                    var command = new CreateUserCommand(publicKey, login, passwordHash, string.Empty, new[] { UserRoles.Supervisor }, false, null);
+                    var command = new CreateUserCommand(publicKey, login, SimpleHash.ComputeHash(password), string.Empty, new[] { UserRoles.Supervisor }, false, null);
 
                     this.commandService.Execute(command);
                 }
             }
+        }
+
+        private Uri BuildValidationUri(string login, string password)
+        {
+            var passwordHash = SimpleHash.ComputeHash(password);
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["login"] = login;
+            query["passwordHash"] = passwordHash;
+            string queryString = query.ToString();
+
+            var loginServiceEndpointUrl = this.headquartersSettings.LoginServiceEndpointUrl;
+            var uri = new UriBuilder(loginServiceEndpointUrl) { Query = queryString };
+
+            return uri.Uri;
         }
     }
 }
