@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -19,9 +20,9 @@ namespace Web.Supervisor.Tests.HQControllerTests
 {
     internal class HqControllerTestContext
     {
-        protected static QuestionnaireBrowseItem CreateQuestionnaireBrowseItem()
+        protected static QuestionnairePreloadingDataItem CreateQuestionnaireBrowseItem()
         {
-            return new QuestionnaireBrowseItem();
+            return new QuestionnairePreloadingDataItem(Guid.NewGuid(), 1,"", new QuestionDescription[0]);
         }
 
         protected static BatchUploadModel CreateBatchUploadModel(HttpPostedFileBase file, Guid questionnaireId)
@@ -34,7 +35,7 @@ namespace Web.Supervisor.Tests.HQControllerTests
         }
 
         protected static HQController CreateHqController(
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactoryMock = null,
+            IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnaireItemFactoryMock = null,
             ISampleImportService sampleImportServiceMock = null)
         {
             return new HQController(
@@ -42,7 +43,7 @@ namespace Web.Supervisor.Tests.HQControllerTests
                 Mock.Of<IGlobalInfoProvider>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>(),
-                questionnaireItemFactoryMock ?? Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
+                questionnaireItemFactoryMock ?? Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(),
                 Mock.Of<IViewFactory<UserListViewInputModel, UserListView>>(),
                 Mock.Of<IViewFactory<SurveyUsersViewInputModel, SurveyUsersView>>(),
                 Mock.Of<IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView>>(),

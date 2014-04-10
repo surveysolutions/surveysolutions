@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
-            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId, new CsvSampleRecordsAccessor(model.File.InputStream));
+            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId,1, new CsvSampleRecordsAccessor(model.File.InputStream));
             var questionnaireBrowsemodel = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
             return this.View("ImportSample", questionnaireBrowsemodel);
         }

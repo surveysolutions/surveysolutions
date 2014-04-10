@@ -483,6 +483,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Questionnaire\FeaturedQuestionItem.cs">
       <Link>Views\Questionnaire\FeaturedQuestionItem.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Questionnaire\QuestionDescription.cs">
+      <Link>Views\Questionnaire\QuestionDescription.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Questionnaire\QuestionnaireBrowseInputModel.cs">
       <Link>Views\Questionnaire\QuestionnaireBrowseInputModel.cs</Link>
     </Compile>

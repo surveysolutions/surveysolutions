@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.Models;
 using It = Machine.Specifications.It;
@@ -18,9 +19,9 @@ namespace Web.Supervisor.Tests.HQControllerTests
     {
         Establish context = () =>
         {
-            var questionnaireItemFactoryMock = Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(x => x.Load(Moq.It.IsAny<QuestionnaireItemInputModel>()) == CreateQuestionnaireBrowseItem());
+            var questionnaireItemFactoryMock = Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(x => x.Load(Moq.It.IsAny<QuestionnairePreloadingDataInputModel>()) == CreateQuestionnaireBrowseItem());
 
-            var sampleImportServiceMock = Mock.Of<ISampleImportService>(x => x.ImportSampleAsync(Moq.It.IsAny<Guid>(), Moq.It.IsAny<ISampleRecordsAccessor>()) == Guid.Parse("10000000000000000000000000000000"));
+            var sampleImportServiceMock = Mock.Of<ISampleImportService>(x => x.ImportSampleAsync(Moq.It.IsAny<Guid>(),Moq.It.IsAny<long>(), Moq.It.IsAny<ISampleRecordsAccessor>()) == Guid.Parse("10000000000000000000000000000000"));
             inputModel = CreateBatchUploadModel(file: Mock.Of<HttpPostedFileBase>(), questionnaireId: questionnaireId);
             controller = CreateHqController(questionnaireItemFactoryMock: questionnaireItemFactoryMock, sampleImportServiceMock: sampleImportServiceMock);
         };
@@ -37,7 +38,7 @@ namespace Web.Supervisor.Tests.HQControllerTests
             ((ViewResult)actionResult).ViewName.ShouldEqual("ImportSample");
 
         It should_return_view_of_type__QuestionnaireBrowseItem__ = () =>
-            ((ViewResult)actionResult).Model.ShouldBeOfExactType<QuestionnaireBrowseItem>();
+            ((ViewResult)actionResult).Model.ShouldBeOfExactType<QuestionnairePreloadingDataItem>();
 
         private static HQController controller;
         private static BatchUploadModel inputModel;

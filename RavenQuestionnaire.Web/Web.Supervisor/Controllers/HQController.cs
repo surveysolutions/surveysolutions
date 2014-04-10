@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -29,7 +30,7 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory;
+        private readonly IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory;
         private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
@@ -38,7 +39,7 @@ namespace Web.Supervisor.Controllers
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
-                            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
+                            IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
                             IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
                             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
                             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
@@ -49,7 +50,7 @@ namespace Web.Supervisor.Controllers
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.questionnaireItemFactory = questionnaireItemFactory;
+            this.questionnairePreloadingDataItemFactory = questionnairePreloadingDataItemFactory;
             this.userListViewFactory = userListViewFactory;
             this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -85,17 +86,18 @@ namespace Web.Supervisor.Controllers
             return this.View(this.Filters());
         }
 
-        public ActionResult BatchUpload(Guid id)
+        public ActionResult BatchUpload(Guid id, long version)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
+            var questionnairePreloadingData = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(id, version));
 
             var viewModel = new BatchUploadModel()
             {
-                FeaturedQuestions =  questionnaireBrowseItem.FeaturedQuestions,
-                QuestionnaireId = questionnaireBrowseItem.QuestionnaireId,
-                QuestionnaireTitle = questionnaireBrowseItem.Title
+                Questions =  questionnairePreloadingData.Questions,
+                QuestionnaireId = questionnairePreloadingData.QuestionnaireId,
+                QuestionnaireVersion = questionnairePreloadingData.Version,
+                QuestionnaireTitle = questionnairePreloadingData.Title
             };
 
             return this.View(viewModel);
@@ -108,15 +110,15 @@ namespace Web.Supervisor.Controllers
 
             if (!ModelState.IsValid)
             {
-                var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
-                model.FeaturedQuestions = questionnaireBrowseItem.FeaturedQuestions;
+                var questionnaireBrowseItem = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(model.QuestionnaireId, model.QuestionnaireVersion));
+                model.Questions = questionnaireBrowseItem.Questions;
                 model.QuestionnaireTitle = questionnaireBrowseItem.Title;
 
                 return View(model);
             }
 
-            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId, new CsvSampleRecordsAccessor(model.File.InputStream));
-            var questionnaireBrowsemodel = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(model.QuestionnaireId));
+            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(model.QuestionnaireId,model.QuestionnaireVersion, new CsvSampleRecordsAccessor(model.File.InputStream));
+            var questionnaireBrowsemodel = this.questionnairePreloadingDataItemFactory.Load(new QuestionnairePreloadingDataInputModel(model.QuestionnaireId, model.QuestionnaireVersion));
             return this.View("ImportSample", questionnaireBrowsemodel);
         }
 

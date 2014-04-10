@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using Web.Supervisor.Controllers;
 using Web.Supervisor.Models;
 using It = Machine.Specifications.It;
@@ -14,7 +15,7 @@ namespace Web.Supervisor.Tests.HQControllerTests
     {
         Establish context = () =>
         {
-            var questionnaireItemFactoryMock = Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(x => x.Load(Moq.It.IsAny<QuestionnaireItemInputModel>()) == CreateQuestionnaireBrowseItem());
+            var questionnaireItemFactoryMock = Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(x => x.Load(Moq.It.IsAny<QuestionnairePreloadingDataInputModel>()) == CreateQuestionnaireBrowseItem());
 
             inputModel = CreateBatchUploadModel(file: null, questionnaireId: questionnaireId);
             controller = CreateHqController(questionnaireItemFactoryMock: questionnaireItemFactoryMock);
