@@ -36,7 +36,7 @@ namespace CapiDataGenerator
                 new SynchronizationModule(AppDomain.CurrentDomain.BaseDirectory),
                 new CapiDataGeneratorRegistry(),
                 new NLogLoggingModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
-                new DataCollectionSharedKernelModule(),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new FileInfrastructureModule(),

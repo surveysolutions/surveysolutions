@@ -89,15 +89,15 @@ namespace Web.Supervisor.App_Start
                 isEmbeded = false;
             }
 
+            bool areHeadquartersFunctionsEnabled;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out areHeadquartersFunctionsEnabled))
+            {
+                areHeadquartersFunctionsEnabled = false;
+            }
+
             string storePath = isEmbeded
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
-            bool isApprovedSended;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["IsApprovedSended"], out isApprovedSended))
-            {
-                isApprovedSended = false;
-            }
 
             int? pageSize = GetEventStorePageSize();
 
@@ -124,7 +124,7 @@ namespace Web.Supervisor.App_Start
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: areHeadquartersFunctionsEnabled),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 
