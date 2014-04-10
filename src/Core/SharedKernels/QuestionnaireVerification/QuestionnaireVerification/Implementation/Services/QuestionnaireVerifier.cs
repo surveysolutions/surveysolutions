@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
                     Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
-                    //Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
+                    Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -388,9 +388,43 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
         }
 
-        private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion question, QuestionnaireDocument questionnaire)
+        private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion entity, QuestionnaireDocument questionnaire)
         {
-            return VerifyCircularReferences(question, question.ConditionExpression, questionnaire);
+            if (String.IsNullOrEmpty(entity.ConditionExpression))
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var referencedEntities = new List<IComposite>();
+
+            var referencedQuestion = this.ReferencedQuestion(entity.ConditionExpression, questionnaire);
+
+            foreach (var question in referencedQuestion)
+            {
+                if (String.IsNullOrWhiteSpace(question.ConditionExpression))
+                {
+                    continue;
+                }
+                var internalReferencedQuestion = this.ReferencedQuestion(question.ConditionExpression, questionnaire);
+
+                foreach (var internalQuestion in internalReferencedQuestion)
+                {
+                    if (internalQuestion.PublicKey == entity.PublicKey)
+                    {
+                        referencedEntities.Add(entity);
+                        referencedEntities.Add(question);
+                    }
+                }
+            }
+
+            if (referencedEntities.Any())
+            {
+                return new EntityVerificationResult<IComposite>
+                {
+                    HasErrors = true,
+                    ReferencedEntities = referencedEntities
+                };
+            }
+
+            return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
         private static bool TextListQuestionCannotHaveCustomValidation(ITextListQuestion question)
@@ -559,25 +593,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return errorByAllQuestionsWithSubstitutions;
         }
 
-        private EntityVerificationResult<IComposite> VerifyCircularReferences(IComposite entity, string expression, QuestionnaireDocument questionnaire)
+        private IEnumerable<IQuestion> ReferencedQuestion(string expression, QuestionnaireDocument questionnaire)
         {
-            if (string.IsNullOrEmpty(expression))
-                return new EntityVerificationResult<IComposite> { HasErrors = false };
-
             IEnumerable<IQuestion> incorrectReferencedQuestions = this.expressionProcessor
                 .GetIdentifiersUsedInExpression(expression)
                 .Select(identifier => GetQuestionByIdentifier(identifier, questionnaire))
                 .Where(referencedQuestion => referencedQuestion != null)
                 .ToList();
-
-            if (!incorrectReferencedQuestions.Any())
-                return new EntityVerificationResult<IComposite> { HasErrors = false };
-
-            return new EntityVerificationResult<IComposite>
-            {
-                HasErrors = true,
-                ReferencedEntities = Enumerable.Concat(entity.ToEnumerable(), incorrectReferencedQuestions),
-            };
+            return incorrectReferencedQuestions;
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel(
