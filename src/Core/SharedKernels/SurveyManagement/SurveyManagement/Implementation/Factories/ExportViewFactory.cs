@@ -193,8 +193,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 throw new InvalidOperationException("level is absent in template");
             
             var levelTitle = rootGroups.First().Title;
-            return this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
+            
+            var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
                 maxValuesForRosterSizeQuestions, levelId);
+
+            if (questionnaireLevelStructure.RosterScopes.ContainsKey(levelId) && questionnaireLevelStructure.RosterScopes[levelId].IsTextListRoster)
+            {
+                structures.IsTextListScope = true;
+                structures.ReferencedNames = new string[]{questionnaireLevelStructure.RosterScopes[levelId].ScopeTriggerName};
+            }
+
+            return structures;
         }
 
         private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid levelId)

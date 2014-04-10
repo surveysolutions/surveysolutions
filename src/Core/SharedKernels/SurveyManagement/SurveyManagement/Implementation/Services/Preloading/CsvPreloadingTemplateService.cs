@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var interviewTemplateFilePath = this.fileSystemAccessor.CombinePath(dataDirectoryPath,
                 GetLevelFileName(firstLevelHeader.LevelName));
 
-            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(interviewTemplateFilePath))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(interviewTemplateFilePath, false))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {

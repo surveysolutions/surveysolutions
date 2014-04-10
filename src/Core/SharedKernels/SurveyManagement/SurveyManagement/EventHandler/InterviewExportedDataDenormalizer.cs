@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -44,11 +45,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var exportStructure = this.questionnaireExportStructureWriter.GetById(interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion);
 
-            var interviewDataExportView= new InterviewDataExportView(interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion,
-             exportStructure.HeaderToLevelMap.Values.Select(
-                 exportStructureForLevel =>
-                     new InterviewDataExportLevelView(exportStructureForLevel.LevelId, exportStructureForLevel.LevelName,
-                         this.BuildRecordsForHeader(interview.Document, exportStructureForLevel))).ToArray());
+            var interviewDataExportView = new InterviewDataExportView(interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion,
+                exportStructure.HeaderToLevelMap.Values.Select(
+                    exportStructureForLevel => 
+                        new InterviewDataExportLevelView(exportStructureForLevel.LevelId, exportStructureForLevel.LevelName, 
+                            this.BuildRecordsForHeader(interview.Document, exportStructureForLevel))).ToArray());
+            
             this.dataExportService.AddExportedDataByInterview(interviewDataExportView);
         }
 
@@ -61,20 +63,63 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             foreach (var dataByLevel in interviewDataByLevels)
             {
                 var vectorLength = dataByLevel.RosterVector.Length;
-                string recordId = vectorLength == 0 ? interview.InterviewId.FormatGuid() : dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
+                
+                string recordId = vectorLength == 0 ?
+                    interview.InterviewId.FormatGuid() :
+                    dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
-                string parentRecordId = vectorLength == 0
-                    ? null
-                    : (vectorLength == 1 ? interview.InterviewId.FormatGuid() : dataByLevel.RosterVector[vectorLength - 2].ToString(CultureInfo.InvariantCulture));
+                string parentRecordId = vectorLength == 0 ?
+                    null:
+                    (vectorLength == 1 ? interview.InterviewId.FormatGuid() : dataByLevel.RosterVector[vectorLength - 2].ToString(CultureInfo.InvariantCulture));
 
-                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, parentRecordId,
-                    this.GetQuestionsFroExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
+                string[] referenceValues = new string[0];
+
+                if (headerStructureForLevel.IsTextListScope)
+                {
+                    referenceValues = new string[]{ GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelId)};
+                }
+
+                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordId,
+                    this.GetQuestionsForExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
             }
 
             return dataRecords.ToArray();
         }
 
-        private ExportedQuestion[] GetQuestionsFroExport(IEnumerable<InterviewQuestion> availableQuestions, HeaderStructureForLevel headerStructureForLevel)
+        private string CreateLevelIdFromPropagationVector(decimal[] vector)
+        {
+            return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
+        }
+
+        private string GetTextValueForTextListQuestion(InterviewData interview, decimal[] rosterVector, Guid id)
+        {
+            decimal itemToSearch = rosterVector.Last();
+
+            for(var i = 1; i <= rosterVector.Length; i++)
+            {
+                var levelForVector =
+                    interview.Levels.SingleOrDefault(
+                        l => l.Key == CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
+
+                var questionToCheck = levelForVector.Value.GetQuestion(id);
+
+                if (questionToCheck == null) 
+                    continue;
+                if (questionToCheck.Answer == null) 
+                    return string.Empty;
+                var interviewTextListAnswer = questionToCheck.Answer as InterviewTextListAnswers;
+
+                if (interviewTextListAnswer == null) 
+                    return string.Empty;
+                var item = interviewTextListAnswer.Answers.SingleOrDefault(a => a.Value == itemToSearch);
+                
+                return item != null ? item.Answer : string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        private ExportedQuestion[] GetQuestionsForExport(IEnumerable<InterviewQuestion> availableQuestions, HeaderStructureForLevel headerStructureForLevel)
         {
             var result = new List<ExportedQuestion>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)

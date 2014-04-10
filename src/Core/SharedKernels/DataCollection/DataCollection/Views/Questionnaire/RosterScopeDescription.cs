@@ -5,13 +5,19 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     public class RosterScopeDescription
     {
-        public RosterScopeDescription(Guid scopeId, Dictionary<Guid, RosterTitleQuestionDescription> rosterIdToRosterTitleQuestionIdMap)
+        public RosterScopeDescription(Guid scopeId, string scopeName, bool isTextListRoster, Dictionary<Guid, RosterTitleQuestionDescription> rosterIdToRosterTitleQuestionIdMap)
         {
             this.ScopeId = scopeId;
+            this.ScopeTriggerName = scopeName;
+            this.IsTextListRoster = isTextListRoster;
             this.RosterIdToRosterTitleQuestionIdMap = rosterIdToRosterTitleQuestionIdMap ?? new Dictionary<Guid, RosterTitleQuestionDescription>();
         }
 
         public Guid ScopeId { get; private set; }
+        
+        public string ScopeTriggerName { get; private set; }
+        public bool IsTextListRoster { get; private set; }
+
         public Dictionary<Guid, RosterTitleQuestionDescription> RosterIdToRosterTitleQuestionIdMap { get; private set; }
     }
 }
