@@ -127,6 +127,7 @@ namespace Web.Supervisor.App_Start
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
+                
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
@@ -139,7 +140,8 @@ namespace Web.Supervisor.App_Start
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])),
+                new SupervisorBoundedContextModule(headquartersSettings));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
