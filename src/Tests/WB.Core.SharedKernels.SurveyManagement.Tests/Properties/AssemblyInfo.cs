@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WB.Core.SharedKernels.SurveyManagement")]
+[assembly: AssemblyTitle("WB.Core.SharedKernels.SurveyManagement.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WB.Core.SharedKernels.SurveyManagement")]
+[assembly: AssemblyProduct("WB.Core.SharedKernels.SurveyManagement.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("eeb98545-811e-4098-9433-b66055d11d27")]
+[assembly: Guid("eada7731-68b7-437d-bb70-4ae4c1db8ef6")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,7 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Supervisor.Tests")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
-[assembly: InternalsVisibleTo("Core.Supervisor.Tests")]
-[assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement.Tests")]
