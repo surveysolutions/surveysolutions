@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void CloneQuestion_When_title_is_not_empty_Then_QuestionChanged_event_contains_the_same_title_caption()
+        public void CloneQuestion_When_title_is_not_empty_Then_QuestionCloned_event_contains_the_same_title_caption()
         {
             using (var eventContext = new EventContext())
             {
@@ -37,10 +37,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string notEmptyTitle = "not empty :)";
 
                 // act
-                questionnaire.CloneQuestion(newQuestionId, groupId, notEmptyTitle, QuestionType.Text, "test_clone", false, false,
-                                                QuestionScope.Interviewer, string.Empty, string.Empty,
+                questionnaire.CloneTextQuestion(newQuestionId, notEmptyTitle,  "test_clone", false, false,QuestionScope.Interviewer, string.Empty, string.Empty,
                                                 string.Empty,
-                                                string.Empty, new Option[0], Order.AZ, sourceQuestionId, 1, responsibleId, null, false, null);
+                                                string.Empty, groupId, sourceQuestionId, 1, responsibleId);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -304,39 +303,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         [Test]
         [TestCase(QuestionType.DateTime)]
-        [TestCase(QuestionType.GpsCoordinates)]
-        [TestCase(QuestionType.Text)]
-        public void CloneQuestion_When_non_categorical_question_with_linked_question_Then_DomainException_should_be_thrown(QuestionType questionType)
-        {
-            // arrange
-            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
-            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
-            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
-            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire =
-                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-                    rosterId: autoGroupId,
-                    secondGroup: groupId,
-                    autoQuestionId: autoQuestionId,
-                    questionId: questionId,
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.MultyOption);
-
-            // act
-            TestDelegate act =
-                () =>
-                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, 
-                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId, false, null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion));
-        }
-
-        [Test]
-        [TestCase(QuestionType.DateTime)]
         [TestCase(QuestionType.Numeric)]
         [TestCase(QuestionType.Text)]
         public void CloneQuestion_When_categorical_question_with_linked_question_with_number_or_text_or_datetime_type(QuestionType questionType)
@@ -590,21 +556,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionType: QuestionType.MultyOption);
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneMultiOptionQuestion(
                 questionId: Guid.NewGuid(),
                 groupId: autoGroupId,
                 title: "Question",
-                type: QuestionType.MultyOption,
-                alias: "test",
+                variableName: "test",
                 isMandatory: false,
-                isFeatured: false,
                 scope: QuestionScope.Interviewer,
                 condition: string.Empty,
                 validationExpression: string.Empty,
                 validationMessage: string.Empty,
                 instructions: string.Empty,
                 options: null,
-                optionsOrder: Order.AZ,
                 responsibleId: responsibleId,
                 linkedToQuestionId: autoQuestionId,
                 areAnswersOrdered: false,
@@ -638,81 +601,28 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                         questionType: QuestionType.MultyOption);
 
                 // act
-                questionnaire.CloneQuestion(
-                    questionId: Guid.NewGuid(),
-                    groupId: autoGroupId,
-                    title: "Question",
-                    type: QuestionType.MultyOption,
-                    alias: "test",
-                    isMandatory: false,
-                    isFeatured: false,
-                    scope: QuestionScope.Interviewer,
-                    condition: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
-                    responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: maxAllowedAnswers,
-                    sourceQuestionId: questionId,
-                    targetIndex: 1);
+                TestDelegate act = () => questionnaire.CloneMultiOptionQuestion(
+                 questionId: Guid.NewGuid(),
+                 groupId: autoGroupId,
+                 title: "Question",
+                 variableName: "test",
+                 isMandatory: false,
+                 scope: QuestionScope.Interviewer,
+                 condition: string.Empty,
+                 validationExpression: string.Empty,
+                 validationMessage: string.Empty,
+                 instructions: string.Empty,
+                 options: null,
+                 responsibleId: responsibleId,
+                 linkedToQuestionId: autoQuestionId,
+                 areAnswersOrdered: false,
+                 maxAllowedAnswers: maxAllowedAnswers,
+                 sourceQuestionId: questionId,
+                 targetIndex: 1);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
                 Assert.AreEqual(maxAllowedAnswers, risedEvent.MaxAllowedAnswers);
-            }
-        }
-
-        [Test]
-        public void CloneQuestion_When_categorical_multi_question_with_linked_question_ordered_Then_QuestionCloned_event_with_ordered_value_should_be_raised()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                const bool areAnswersOrdered = true;
-                Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
-                Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
-                Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
-                Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire =
-                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-                        rosterId: autoGroupId,
-                        secondGroup: groupId,
-                        autoQuestionId: autoQuestionId,
-                        questionId: questionId,
-                        responsibleId: responsibleId,
-                        questionType: QuestionType.MultyOption);
-
-                // act
-                questionnaire.CloneQuestion(
-                    questionId: Guid.NewGuid(),
-                    groupId: autoGroupId,
-                    title: "Question",
-                    type: QuestionType.MultyOption,
-                    alias: "test",
-                    isMandatory: false,
-                    isFeatured: false,
-                    scope: QuestionScope.Interviewer,
-                    condition: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
-                    responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId,
-                    areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: null,
-                    sourceQuestionId: questionId,
-                    targetIndex: 1);
-
-                // assert
-                var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
-                Assert.AreEqual(areAnswersOrdered, risedEvent.AreAnswersOrdered);
             }
         }
 
@@ -734,12 +644,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, aliasForExistingQuestion);
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName: "test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -747,12 +656,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -778,12 +682,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, question2Id, groupId, responsibleId, QuestionType.Text, "q2");
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName: "test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -791,12 +694,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -822,12 +720,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, aliasForExistingQuestion);
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName: "test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -835,12 +732,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: expression,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -866,12 +758,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, question2Id, groupId, responsibleId, QuestionType.Text, "q2");
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName: "test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -879,12 +770,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: expression,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -910,12 +796,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2");
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName: "test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -923,12 +808,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -957,12 +837,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, question12d, groupId, responsibleId, QuestionType.Text, "q2");
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName:"test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -970,12 +849,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -1003,12 +877,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2");
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName: "test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -1016,12 +889,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: expression,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -1050,12 +918,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2");
 
             // act
-            TestDelegate act = () => questionnaire.CloneQuestion(
+            TestDelegate act = () => questionnaire.CloneTextQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
-                    alias: "test",
+                    variableName: "test",
                     isMandatory: false,
                     isFeatured: false,
                     scope: QuestionScope.Interviewer,
@@ -1063,12 +930,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: expression,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: null,
-                    optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null,
-                    areAnswersOrdered: false,
-                    maxAllowedAnswers: null,
                     sourceQuestionId: question1Id,
                     targetIndex: 1);
 
@@ -1427,7 +1289,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                () =>
 //                questionnaire.CloneQuestion(questionId: targetQuestionPublicKey,
 //                                   title: "What is your last name?",
-//                                   alias: "name",
+//                                   variableName: "name",
 //                                   type: questionType,
 //                                   scope: QuestionScope.Interviewer,
 //                                   condition: string.Empty,
@@ -1467,7 +1329,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                // act
 //                questionnaire.CloneQuestion(questionId: targetQuestionPublicKey,
 //                                   title: "What is your last name?",
-//                                   alias: "name",
+//                                   variableName: "name",
 //                                   type: questionType,
 //                                   scope: QuestionScope.Interviewer,
 //                                   condition: string.Empty,
@@ -1503,7 +1365,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                               questionnaire.CloneQuestion(
 //                                   questionId: targetQuestionPublicKey,
 //                                   title: "What is your last name?",
-//                                   alias: "name",
+//                                   variableName: "name",
 //                                   type: QuestionType.MultyOption,
 //                                   scope: QuestionScope.Interviewer,
 //                                   condition: string.Empty,
@@ -1541,7 +1403,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                questionnaire.CloneQuestion(
 //                    questionId: targetQuestionPublicKey,
 //                    title: "What is your last name?",
-//                    alias: "name",
+//                    variableName: "name",
 //                    type: questionType,
 //                    scope: QuestionScope.Interviewer,
 //                    condition: string.Empty,
@@ -1585,7 +1447,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                questionnaire.CloneQuestion(
 //                    questionId: questionId,
 //                    title: "What is your last name?",
-//                    alias: "name",
+//                    variableName: "name",
 //                    type: allowedQuestionType,
 //                    scope: QuestionScope.Interviewer,
 //                    condition: string.Empty,
@@ -1620,7 +1482,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //            TestDelegate act = () => questionnaire.CloneQuestion(
 //                questionId: questionId,
 //                title: "What is your last name?",
-//                alias: "name",
+//                variableName: "name",
 //                type: notAllowedQuestionType,
 //                scope: QuestionScope.Interviewer,
 //                condition: string.Empty,
@@ -1654,7 +1516,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                               questionnaire.CloneQuestion(
 //                                   questionId: targetQuestionPublicKey,
 //                                   title: "What is your last name?",
-//                                   alias: "name",
+//                                   variableName: "name",
 //                                   type: questionType,
 //                                   scope: QuestionScope.Interviewer,
 //                                   condition: string.Empty,
@@ -1692,7 +1554,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                questionnaire.CloneQuestion(
 //                    questionId: targetQuestionPublicKey,
 //                    title: "What is your last name?",
-//                    alias: "name",
+//                    variableName: "name",
 //                    type: questionType,
 //                    scope: QuestionScope.Interviewer,
 //                    condition: string.Empty,
@@ -1732,7 +1594,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                               questionnaire.CloneQuestion(
 //                                   questionId: targetQuestionPublicKey,
 //                                   title: "What is your last name?",
-//                                   alias: "name",
+//                                   variableName: "name",
 //                                   type: questionType,
 //                                   scope: QuestionScope.Interviewer,
 //                                   condition: string.Empty,
@@ -1772,7 +1634,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                questionnaire.CloneQuestion(
 //                    questionId: targetQuestionPublicKey,
 //                    title: "What is your last name?",
-//                    alias: "name",
+//                    variableName: "name",
 //                    type: questionType,
 //                    scope: QuestionScope.Interviewer,
 //                    condition: string.Empty,

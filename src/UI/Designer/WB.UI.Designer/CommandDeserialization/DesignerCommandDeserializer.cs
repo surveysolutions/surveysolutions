@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numeric;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBarcode;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextList;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.CommandDeserialization

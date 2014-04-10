@@ -97,17 +97,17 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneTextListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateTextListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddTextListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddNumericQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\TextList\CloneTextListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\QRBarcode\AddQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\QRBarcode\CloneQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\QRBarcode\UpdateQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\TextList\UpdateTextListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\TextList\AddTextListQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\Numeric\AddNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\Numeric\CloneNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\Numeric\UpdateNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
@@ -334,7 +334,13 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Commands\Questionnaire\Question\DateTime\" />
+    <Folder Include="Commands\Questionnaire\Question\GpsCoordinates\" />
+    <Folder Include="Commands\Questionnaire\Question\MultiOption\" />
+    <Folder Include="Commands\Questionnaire\Question\SingleOption\" />
+    <Folder Include="Commands\Questionnaire\Question\Text\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
