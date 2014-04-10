@@ -62,12 +62,21 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             ZlpIOHelper.DeleteFile(pathToFile);
         }
 
-        public Stream OpenOrCreateFile(string pathToFile)
+        public Stream OpenOrCreateFile(string pathToFile, bool append)
         {
-            return new FileStream(
-                ZlpIOHelper.CreateFileHandle(pathToFile, IsFileExists(pathToFile) ? CreationDisposition.OpenExisting : CreationDisposition.New,
-                    ZetaLongPaths.Native.FileAccess.GenericWrite, FileShare.Write),
+            var stream = new FileStream(
+                ZlpIOHelper.CreateFileHandle(pathToFile,
+                                             IsFileExists(pathToFile) ? CreationDisposition.OpenExisting : CreationDisposition.New,
+                                             ZetaLongPaths.Native.FileAccess.GenericWrite,
+                                             FileShare.Write),
                 FileAccess.Write);
+
+            if (append && stream.CanSeek)
+            {
+                stream.Seek(0, SeekOrigin.End);
+            }
+
+            return stream;
         }
         
         public string MakeValidFileName(string name)

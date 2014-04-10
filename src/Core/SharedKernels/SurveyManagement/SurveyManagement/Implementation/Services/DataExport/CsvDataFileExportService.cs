@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
          
         public void AddRecord(InterviewDataExportLevelView items, string filePath)
         {
-            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, true))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void CreateHeader(HeaderStructureForLevel header, string filePath)
         {
-            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath))
+            using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, false))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
