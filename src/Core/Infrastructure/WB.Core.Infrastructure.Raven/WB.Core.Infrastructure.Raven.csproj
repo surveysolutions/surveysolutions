@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\DocumentStoreProvider.cs" />
+    <Compile Include="Implementation\PlainStorage\RavenPlainStorageAccessor.cs" />
     <Compile Include="Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
     <Compile Include="Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />
     <Compile Include="PlainStorage\IRavenPlainStorageProvider.cs" />

@@ -1,7 +1,7 @@
 using System;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.PlainRepository;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     internal class PlainQuestionnaireRepository : IPlainQuestionnaireRepository
     {
-        private readonly IPlainRepositoryAccessor<QuestionnaireDocument> repository;
+        private readonly IPlainStorageAccessor<QuestionnaireDocument> repository;
 
-        public PlainQuestionnaireRepository(IPlainRepositoryAccessor<QuestionnaireDocument> repository)
+        public PlainQuestionnaireRepository(IPlainStorageAccessor<QuestionnaireDocument> repository)
         {
             this.repository = repository;
         }
@@ -31,12 +31,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            this.repository.Store(GetRepositoryId(id, version), questionnaireDocument);
+            this.repository.Store(questionnaireDocument, GetRepositoryId(id, version));
         }
 
         private static string GetRepositoryId(Guid id, long version)
         {
-            return string.Format("{0}:{1}", id.FormatGuid(), version);
+            return string.Format("{0}${1}", id.FormatGuid(), version);
         }
     }
 }
