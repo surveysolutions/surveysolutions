@@ -3,8 +3,22 @@
     this.ViewBag.Title = "Control Panel: Read Side";
 }
 @model IEnumerable<WB.Core.Infrastructure.EventHandlerDescription>
-<h3>Read Side Control Panel</h3>
+           <div class="page-header">
+    <h3>Read Side Control Panel</h3>
+</div>
 
+<div class="well">
+    @using (Html.BeginForm("RebuildReadSide", "ControlPanel", FormMethod.Get))
+    {
+        <label for="skipEvents">Skip events:</label>
+        @Html.TextBox("skipEvents", "0");
+        <input type="submit" value="Rebuild All" class="btn btn-primary" onclick="return confirmAction()" />
+        <div class="help-block">
+            If any of events are skipped, then views will not be deleted.
+        </div>
+    }
+
+</div>
 <pre id="statusArea" style="height: 500px; overflow-y: scroll;">
 Requesting status...
 </pre>
@@ -39,17 +53,11 @@ Requesting status...
       
     </ul>
    
-    <button class="btn" type="submit"  onclick="return confirmAction()" >Rebuild Selected</button>
-    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn "})
+    <button class="btn btn-primary" type="submit"  onclick="return confirmAction()" >Rebuild Selected</button>
+    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn btn-default"})
 }
 
-@using (Html.BeginForm("RebuildReadSide", "ControlPanel", FormMethod.Get)) {
-    @:Skip events:
-    @Html.TextBox("skipEvents", "0");
-    <input type="submit" value="Rebuild All" class="btn" onclick="return confirmAction()" />
-    <br/>
-    @:If any of events are skipped, then views will not be deleted.
-}
+
 
 @functions{
     public bool IsHandlerChecked(string handlerName)
