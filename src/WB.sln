@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AD7E0C01-7CD9-46FD-9DD7-3BC8A5C10ECF}"
 	ProjectSection(SolutionItems) = preProject
@@ -258,6 +258,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SurveyManagement", "SurveyManagement", "{D2127B1E-4E7B-40D9-AED6-765E394C51B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.SurveyManagement", "Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj", "{29A132B5-A573-40D2-9E8F-2871E95D7766}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.SurveyManagement.Tests", "Tests\WB.Core.SharedKernels.SurveyManagement.Tests\WB.Core.SharedKernels.SurveyManagement.Tests.csproj", "{536497AE-3A3D-4B71-94A0-31A1797C122C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1640,6 +1642,21 @@ Global
 		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{29A132B5-A573-40D2-9E8F-2871E95D7766}.Release|x86.ActiveCfg = Release|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{536497AE-3A3D-4B71-94A0-31A1797C122C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1688,6 +1705,7 @@ Global
 		{3D4175CD-A99B-43D0-A69B-54DEA155DD87} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{BE71107E-7F6D-41E1-A858-322AE635A143} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{73ABB193-75C8-44A5-B1A0-F6F7704A946A} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
+		{536497AE-3A3D-4B71-94A0-31A1797C122C} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{3464F3AE-094C-4DEC-8725-59506328E597} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
 		{400CDE74-7407-4388-8D57-BF429E7C508D} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
 		{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
