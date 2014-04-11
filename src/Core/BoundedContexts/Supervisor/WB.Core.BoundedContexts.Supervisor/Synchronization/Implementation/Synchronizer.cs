@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void FillLocalCopyOfFeed()
         {
-            var lastStoredFeedEntry = this.localFeedStorage.GetLastEntry();
+            var lastStoredFeedEntry = this.localFeedStorage.GetLastEntryAsync().Result;
             var newEvents = feedReader.ReadAfterAsync(lastStoredFeedEntry).Result;
 
             foreach (var userChangedEvent in newEvents)
