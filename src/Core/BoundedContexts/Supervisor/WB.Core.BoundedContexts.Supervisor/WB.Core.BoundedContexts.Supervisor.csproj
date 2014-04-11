@@ -76,11 +76,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorContextModule.cs" />
     <Compile Include="Synchronization\ILocalFeedStorage.cs" />
+    <Compile Include="Synchronization\ILocalUserFeedProcessor.cs" />
     <Compile Include="Synchronization\Implementation\LocalFeedStorage.cs" />
+    <Compile Include="Synchronization\Implementation\LocalUserdFeedProcessor.cs" />
     <Compile Include="Synchronization\Implementation\UserChangedFeedReader.cs" />
     <Compile Include="Synchronization\IUserChangedFeedReader.cs" />
     <Compile Include="Synchronization\Implementation\Synchronizer.cs" />
     <Compile Include="Synchronization\ISynchronizer.cs" />
+    <Compile Include="Synchronization\LocalUserChangedFeedEntry.cs" />
     <Compile Include="Users\IHeadquartersLoginService.cs" />
     <Compile Include="Users\Implementation\HeadquartersLoginService.cs" />
     <Compile Include="HeadquartersSettings.cs" />

@@ -6,7 +6,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public interface ILocalFeedStorage
     {
-        UserChangedFeedEntry GetLastEntry();
-        void Store(IEnumerable<UserChangedFeedEntry> userChangedEvent);
+        LocalUserChangedFeedEntry GetLastEntry();
+        void Store(IEnumerable<LocalUserChangedFeedEntry> userChangedEvent);
+        IEnumerable<LocalUserChangedFeedEntry> GetNotProcessedSupervisorRelatedEvents(string supervisorId);
+        void Store(LocalUserChangedFeedEntry userChangedEvent);
     }
 }

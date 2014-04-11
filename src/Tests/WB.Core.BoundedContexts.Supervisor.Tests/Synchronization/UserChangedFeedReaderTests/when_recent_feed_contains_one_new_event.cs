@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,8 +8,8 @@ using Machine.Specifications;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFeedReaderTests
@@ -30,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
                     Content = new StringContent(ResourceHelper.ReadResourceFile("WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFeedReaderTests.Simplefeed.xml"))
                 }));
 
-            lastStoredEntry = JsonConvert.DeserializeObject<UserChangedFeedEntry>(@"{
+            lastStoredEntry = JsonConvert.DeserializeObject<LocalUserChangedFeedEntry>(@"{
       ""ChangedUserId"": ""8a25e5113b214d26a48ad6b50379afce"",
       ""Timestamp"": ""2014-04-09T16:25:51.6176054Z"",
       ""SupervisorId"": ""8a09d88f04b04eff9f471e25903540b1"",
@@ -47,7 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
         It should_read_last_new_event_from_feed = () => feedEntries.Last().EntryId.ShouldEqual("lastEntry");
 
         private static UserChangedFeedReader feedReader;
-        private static List<UserChangedFeedEntry> feedEntries;
-        private static UserChangedFeedEntry lastStoredEntry;
+        private static List<LocalUserChangedFeedEntry> feedEntries;
+        private static LocalUserChangedFeedEntry lastStoredEntry;
     }
 }

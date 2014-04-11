@@ -5,6 +5,7 @@ using System.Net.Http;
 using Machine.Specifications;
 using Moq;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 using It = Machine.Specifications.It;
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
             handler.SetupResponseFromResource("http://localhost/Headquarters/api/feeds/users/v1/archive/2", 
                 "WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFeedReaderTests.SimpleArchiveFeed.xml");
 
-            lastStoredEntry = JsonConvert.DeserializeObject<UserChangedFeedEntry>(@"{
+            lastStoredEntry = JsonConvert.DeserializeObject<LocalUserChangedFeedEntry>(@"{
       ""ChangedUserId"": ""40ad9dff03d24137997db418d0f3ae1b"",
       ""Timestamp"": ""2014-04-09T15:33:38.9251308Z"",
       ""SupervisorId"": ""40ad9dff03d24137997db418d0f3ae1b"",
@@ -44,7 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
         It should_end_with_last_event_in_recent = () => feedEntries.Last().EntryId.ShouldEqual("lastEntry");
 
         private static UserChangedFeedReader feedReader;
-        private static List<UserChangedFeedEntry> feedEntries;
-        private static UserChangedFeedEntry lastStoredEntry;
+        private static List<LocalUserChangedFeedEntry> feedEntries;
+        private static LocalUserChangedFeedEntry lastStoredEntry;
     }
 }
