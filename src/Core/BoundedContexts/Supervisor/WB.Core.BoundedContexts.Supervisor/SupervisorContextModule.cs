@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<ILocalFeedStorage>().To<LocalFeedStorage>();
             this.Bind<ISynchronizer>().To<Synchronizer>();
             this.Bind<IUserChangedFeedReader>().To<UserChangedFeedReader>();
+            this.Bind<ILocalUserFeedProcessor>().To<LocalUserdFeedProcessor>();
 
             this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
         }

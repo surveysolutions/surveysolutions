@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public interface IUserChangedFeedReader 
     {
-        Task<List<UserChangedFeedEntry>> ReadAfterAsync(UserChangedFeedEntry lastStoredFeedEntry);
+        Task<List<LocalUserChangedFeedEntry>> ReadAfterAsync(LocalUserChangedFeedEntry lastStoredFeedEntry);
     }
 }
