@@ -127,6 +127,8 @@
     <Compile Include="Services\ITabletInformationService.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />
+    <Compile Include="Synchronization\Users\SupervisorFeedEntry.cs" />
+    <Compile Include="Synchronization\Users\UserChangedFeedEntry.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />

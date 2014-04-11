@@ -111,7 +111,8 @@ namespace Web.Supervisor.App_Start
 
             var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
             var headquartersSettings = new HeadquartersSettings(
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.LoginServiceEndpoint"])
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.LoginServiceEndpoint"]),
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.UserChangedFeed"])
                 );
 
             bool useStreamingForAllEvents;
