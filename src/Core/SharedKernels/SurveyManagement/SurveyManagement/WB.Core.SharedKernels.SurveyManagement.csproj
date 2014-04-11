@@ -88,10 +88,12 @@
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
     <Compile Include="Factories\IExportViewFactory.cs" />
+    <Compile Include="Factories\IRecordsAccessorFactory.cs" />
     <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
+    <Compile Include="Implementation\Factories\CsvRecordsAccessorFactory.cs" />
     <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
-    <Compile Include="Implementation\ISampleRecordsAccessor.cs" />
+    <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
@@ -99,7 +101,7 @@
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
-    <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
+    <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvDataFileExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileBasedDataExportService.cs" />

@@ -4,11 +4,11 @@ using CsvHelper;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors
 {
-    public class CsvSampleRecordsAccessor : ISampleRecordsAccessor
+    public class CsvRecordsAccessor : IRecordsAccessor
     {
         private readonly Stream sampleStream;
 
-        public CsvSampleRecordsAccessor(Stream sampleStream)
+        public CsvRecordsAccessor(Stream sampleStream)
         {
             this.sampleStream = sampleStream;
         }

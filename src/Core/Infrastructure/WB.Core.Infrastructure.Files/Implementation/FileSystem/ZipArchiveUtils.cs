@@ -38,11 +38,26 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         {
             using (ZipFile decompress = ZipFile.Read(archivedFile))
             {
-                foreach (ZipEntry e in decompress)
+                decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
+            }
+        }
+
+        public bool IsZipFile(string filePath)
+        {
+            return ZipFile.IsZipFile(filePath);
+        }
+
+        public Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath)
+        {
+            var result = new Dictionary<string, long>();
+            using (var zips = ZipFile.Read(filePath))
+            {
+                foreach (var zip in zips)
                 {
-                    e.Extract(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
+                    result.Add(zip.FileName, zip.UncompressedSize);
                 }
             }
+            return result;
         }
     }
 }
