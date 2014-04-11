@@ -9,5 +9,7 @@ namespace WB.Core.Infrastructure.FileSystem
     {
         void ZipDirectory(string directory, string archiveFile);
         void Unzip(string archivedFile, string extractToFolder);
+        bool IsZipFile(string filePath);
+        Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath);
     }
 }
