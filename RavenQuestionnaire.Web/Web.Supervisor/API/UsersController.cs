@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
@@ -65,6 +66,11 @@ namespace Web.Supervisor.API
         public UserApiDetails Details(Guid id)
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(id));
+
+            if (user == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
 
             return new UserApiDetails(user);
         }
