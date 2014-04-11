@@ -53,11 +53,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -74,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorContextModule.cs" />
     <Compile Include="Synchronization\ILocalFeedStorage.cs" />
+    <Compile Include="Synchronization\Implementation\LocalFeedStorage.cs" />
     <Compile Include="Synchronization\Implementation\UserChangedFeedReader.cs" />
     <Compile Include="Synchronization\IUserChangedFeedReader.cs" />
     <Compile Include="Synchronization\Implementation\Synchronizer.cs" />
@@ -106,6 +109,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Core.Infrastructure.Raven</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

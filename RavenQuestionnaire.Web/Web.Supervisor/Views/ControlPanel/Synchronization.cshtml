@@ -1,0 +1,25 @@
+﻿@{
+    this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Synchronization";
+}
+
+<div class="page-header">
+    <h3>
+        Synchronization
+    </h3>
+</div>
+
+<div>
+    <button class="btn btn-default" id="synchnizationStart">Synchronize</button>
+    <div id="synchronizationMessage"></div>
+</div>
+
+<script>
+    $(function() {
+        $('#synchnizationStart').click(function() {
+            $.post('@Url.Action("Synchronize", "ControlPanel")', function() {
+                $('#synchronizationMessage').html('Synchronization started');
+            });
+        });
+    });
+</script>

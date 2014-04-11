@@ -658,6 +658,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\ControlPanel\Synchronization.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -168,5 +168,16 @@ namespace Web.Supervisor.Controllers
         }
 
         #endregion
+
+        public ActionResult Synchronization()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Synchronize()
+        {
+            return Json(new object());
+        }
     }
 }

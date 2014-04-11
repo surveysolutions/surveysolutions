@@ -1,10 +1,11 @@
-﻿using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
+﻿using System.Threading.Tasks;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public interface ILocalFeedStorage
     {
-        UserChangedFeedEntry GetLastEntry();
+        Task<UserChangedFeedEntry> GetLastEntryAsync();
         void Store(UserChangedFeedEntry userChangedEvent);
     }
 }
