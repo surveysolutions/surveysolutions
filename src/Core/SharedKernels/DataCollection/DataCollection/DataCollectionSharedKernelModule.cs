@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
