@@ -1,9 +1,9 @@
 ﻿using System;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
+namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
-    internal interface IQuestionnaireRepository
+    public interface IQuestionnaireRepository
     {
         /// <summary>
         /// Returns latest version of questionnaire.

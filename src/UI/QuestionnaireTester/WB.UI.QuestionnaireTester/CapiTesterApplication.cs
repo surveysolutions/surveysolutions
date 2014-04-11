@@ -201,7 +201,7 @@ namespace WB.UI.QuestionnaireTester
                 new CapiBoundedContextModule(),
                 new AndroidTesterModelModule(),
                 new TesterLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true),
                 new RestAndroidModule(),
                 new ExpressionProcessorModule());
 

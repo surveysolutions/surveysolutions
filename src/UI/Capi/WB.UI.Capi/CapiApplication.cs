@@ -250,7 +250,7 @@ namespace WB.UI.Capi
                 new AndroidModelModule(basePath),
                 new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true),
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);

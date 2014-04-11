@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Capi.Services;
 
@@ -26,40 +27,43 @@ namespace WB.UI.Capi.Syncronization.Pull
 {
     public class PullDataProcessor
     {
-        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService, IReadSideRepositoryReader<LoginDTO> userStorage)
+        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService, IReadSideRepositoryReader<LoginDTO> userStorage, IPlainQuestionnaireRepository questionnaireRepository)
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
             this.cleanUpExecutor = new CleanUpExecutor(changelog);
             this.userStorage = userStorage;
+            this.questionnaireRepository = questionnaireRepository;
         }
-        private ILogger logger;
-        private CleanUpExecutor cleanUpExecutor;
+
+        private readonly ILogger logger;
+        private readonly CleanUpExecutor cleanUpExecutor;
 
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
         private readonly IReadSideRepositoryReader<LoginDTO> userStorage;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
 
-        
+
         public void Proccess(SyncItem item)
         {
             switch (item.ItemType)
             {
                 case SyncItemType.Questionnare:
-                    this.ExecuteInterview(item);
+                    this.UpdateInterview(item);
                     break;
                 case SyncItemType.DeleteQuestionnare:
-                    this.ExecuteDeleteQuestionnarie(item);
+                    this.DeleteInterview(item);
                     break;
                 case SyncItemType.User:
-                    this.ExecuteUser(item);
+                    this.ChangeOrCreateUser(item);
                     break;
                 case SyncItemType.File:
-                    this.ExecuteFile(item);
+                    this.UploadFile(item);
                     break;
                 case SyncItemType.Template:
-                    this.ExecuteTemplate(item);
+                    this.UpdateQuestionnaire(item);
                     break;
                 default: break;
             }
@@ -67,18 +71,16 @@ namespace WB.UI.Capi.Syncronization.Pull
             this.changelog.CreatePublicRecord(item.Id);
         }
 
-        private void ExecuteFile(SyncItem item)
+        private void UploadFile(SyncItem item)
         {
-            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
+            var file = ExtractObject<FileSyncDescription>(item.Content, item.IsCompressed);
 
-            var file = JsonUtils.GetObject<FileSyncDescription>(content);
             this.commandService.Execute(new UploadFileCommand(file.PublicKey, file.Title, file.Description, file.OriginalFile));
         }
 
-        private void ExecuteDeleteQuestionnarie(SyncItem item)
+        private void DeleteInterview(SyncItem item)
         {
-            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
-            var questionnarieId = Guid.Parse(content);
+            var questionnarieId = ExtractGuid(item.Content, item.IsCompressed);
 
             try
             {
@@ -92,29 +94,25 @@ namespace WB.UI.Capi.Syncronization.Pull
             }
         }
 
-        private void ExecuteUser(SyncItem item)
+        private void ChangeOrCreateUser(SyncItem item)
         {
-            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
-            var user = JsonUtils.GetObject<UserDocument>(content);
+            var user = ExtractObject<UserDocument>(item.Content, item.IsCompressed);
 
             ICommand userCommand = null;
 
             if (this.userStorage.GetById(user.PublicKey) == null)
                 userCommand = new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
                                                     user.Roles.ToArray(), user.IsLocked, user.Supervisor);
-
             else
-
                 userCommand = new ChangeUserCommand(user.PublicKey, user.Email,
                                                     user.Roles.ToArray(), user.IsLocked, user.Password);
+
             this.commandService.Execute(userCommand);
         }
 
-        private void ExecuteInterview(SyncItem item)
+        private void UpdateInterview(SyncItem item)
         {
-            string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
-
-            var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
+            var metaInfo = ExtractObject<InterviewMetaInfo>(item.MetaInfo, item.IsCompressed);
             
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
             syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
@@ -129,11 +127,40 @@ namespace WB.UI.Capi.Syncronization.Pull
                     .ToArray(), string.Empty, true));
         }
 
-        private void ExecuteTemplate(SyncItem item)
+        private void UpdateQuestionnaire(SyncItem item)
         {
-            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
-            var template = JsonUtils.GetObject<QuestionnaireDocument>(content);
-            this.commandService.Execute(new ImportFromSupervisor(template));
+            var template = ExtractObject<QuestionnaireDocument>(item.Content, item.IsCompressed);
+
+            QuestionnaireMetadata metadata;
+            try
+            {
+                metadata = ExtractObject<QuestionnaireMetadata>(item.MetaInfo, item.IsCompressed);
+            }
+            catch (Exception exception)
+            {
+                throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
+            }
+
+            this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
+        }
+
+        private static TResult ExtractObject<TResult>(string initialString, bool isCompressed)
+        {
+            string stringData = ExtractStringData(initialString, isCompressed);
+
+            return JsonUtils.GetObject<TResult>(stringData);
+        }
+
+        private static Guid ExtractGuid(string initialString, bool isCompressed)
+        {
+            string stringData = ExtractStringData(initialString, isCompressed);
+
+            return Guid.Parse(stringData);
+        }
+
+        private static string ExtractStringData(string initialString, bool isCompressed)
+        {
+            return isCompressed ? PackageHelper.DecompressString(initialString) : initialString;
         }
     }
 }

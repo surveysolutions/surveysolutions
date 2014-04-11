@@ -51,4 +51,13 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         public string Name { get; set; }
     }
 
+    public class QuestionnaireMetadata
+    {
+        public QuestionnaireMetadata(long version)
+        {
+            this.Version = version;
+        }
+
+        public long Version { get; private set; }
+    }
 }
