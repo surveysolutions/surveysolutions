@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData
     {
         Column,
         Row,
-        Cell
+        Cell,
+        File
     }
 }

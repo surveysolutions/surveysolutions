@@ -86,5 +86,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0003_ColumnWasntMappedOnQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File wan&apos;t mapped on roster in questionnaire template.
+        /// </summary>
+        internal static string PL0004_FileWasntMappedRoster {
+            get {
+                return ResourceManager.GetString("PL0004_FileWasntMappedRoster", resourceCulture);
+            }
+        }
     }
 }
