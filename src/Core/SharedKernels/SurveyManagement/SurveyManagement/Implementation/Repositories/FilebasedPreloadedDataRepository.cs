@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             {
                 try
                 {
-                    archiveUtils.Unzip(archivePath, unzippedDirectoryPath);
+                    archiveUtils.Unzip( archivePath, currentFolderPath);
                 }
                 catch (Exception e)
                 {
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 Logger.Error(e.Message, e);
                 return null;
             }
-            return new PreloadedDataByFile(id, fileSystemAccessor.GetFileName(fileInDirectory), header, records.ToArray());
+            return new PreloadedDataByFile(id, fileSystemAccessor.GetFileName(fileInDirectory), header?? new string[0], records.ToArray());
         }
     }
 }
