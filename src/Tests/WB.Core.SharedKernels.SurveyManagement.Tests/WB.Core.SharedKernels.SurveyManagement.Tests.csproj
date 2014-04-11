@@ -58,6 +58,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\FilebasedPreloadedDataRepositoryTestContext.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_folder_contains_no_archives_GetPreloadedDataMetaInformation_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_folder_contains_no_archives_GetPreloadedData_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_folder_is_missing_GetPreloadedDataMetaInformation_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_folder_is_missing_GetPreloadedData_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_and_unzipped_with_2_files_GetPreloadedData_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_and_zipped_GetPreloadedData_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformation_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
     <Compile Include="PreloadingTemplateServiceTests\PreloadingTemplateServiceTestContext.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_archive_were_build_before_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_questionnaire_has_2_levels_and_GetFilePathToPreloadingTemplate_called.cs" />

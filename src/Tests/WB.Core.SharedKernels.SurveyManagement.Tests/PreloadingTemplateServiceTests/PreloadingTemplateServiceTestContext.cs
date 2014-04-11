@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateServiceTests
 {
+    [Subject(typeof(PreloadingTemplateService))]
     internal class PreloadingTemplateServiceTestContext
     {
         protected static PreloadingTemplateService CreatePreloadingTemplateService(IDataFileExportService dataFileExportService = null,
