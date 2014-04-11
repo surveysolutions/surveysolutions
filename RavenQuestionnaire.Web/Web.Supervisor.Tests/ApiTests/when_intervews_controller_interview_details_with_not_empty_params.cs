@@ -26,10 +26,7 @@ namespace Web.Supervisor.Tests.ApiTests
 
         It should_return_InterviewApiDetails = () =>
             actionResult.ShouldBeOfExactType<InterviewApiDetails>();
-
-        It should_return_view_with_correct_id = () =>
-            actionResult.Interview.PublicKey.ShouldEqual(interviewId);
-
+        
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static InterviewApiDetails actionResult;
         private static InterviewsController controller;

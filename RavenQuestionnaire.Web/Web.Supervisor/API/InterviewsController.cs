@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Web.Http;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
@@ -71,7 +72,14 @@ namespace Web.Supervisor.API
 
             var interview = interviewDetailsViewFactory.Load(inputModel);
 
-            return new InterviewApiDetails(interview);
+            if (interview == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            var interviewDetails = new InterviewApiDetails(interview);
+
+            return interviewDetails;
         }
     }
 }
