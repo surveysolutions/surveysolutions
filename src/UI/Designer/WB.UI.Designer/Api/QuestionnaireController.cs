@@ -17,14 +17,20 @@ namespace WB.UI.Designer.Api
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
         }
 
-        public QuestionnaireInfoView GetQuestionnaireInfo(QuestionnaireInfoViewInputModel input)
+        public QuestionnaireInfoView Get(string id)
         {
-            return questionnaireInfoViewFactory.Load(input);
+            return questionnaireInfoViewFactory.Load(new QuestionnaireInfoViewInputModel() {QuestionnaireId = id});
         }
 
-        public ChapterInfoView GetChapterInfo(ChapterInfoViewInputModel input)
+        [HttpGet]
+        public ChapterInfoView Chapter(string id, string chapterId)
         {
-            return chapterInfoViewFactory.Load(input);
+            return
+                chapterInfoViewFactory.Load(new ChapterInfoViewInputModel()
+                {
+                    QuestionnaireId = id,
+                    ChapterId = chapterId
+                });
         }
         
     }
