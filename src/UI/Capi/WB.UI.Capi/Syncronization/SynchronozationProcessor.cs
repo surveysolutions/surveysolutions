@@ -16,6 +16,7 @@ using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Handshake;
 using WB.UI.Capi.Syncronization.Pull;
@@ -60,7 +61,9 @@ namespace WB.UI.Capi.Syncronization
             get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
         }
 
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog, IReadSideRepositoryReader<LoginDTO> userStorage, IRestServiceWrapperFactory restServiceWrapperFactory)
+        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog,
+            IReadSideRepositoryReader<LoginDTO> userStorage, IRestServiceWrapperFactory restServiceWrapperFactory, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.context = context;
             
@@ -73,7 +76,7 @@ namespace WB.UI.Capi.Syncronization
             this.handshake = new RestHandshake(executor);
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            this.pullDataProcessor = new PullDataProcessor(changelog, commandService, userStorage);
+            this.pullDataProcessor = new PullDataProcessor(changelog, commandService, userStorage, plainQuestionnaireRepository);
             this.pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();

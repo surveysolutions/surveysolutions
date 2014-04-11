@@ -19,6 +19,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
@@ -238,7 +239,7 @@ namespace WB.UI.Capi
             {
                 this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
                     CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IReadSideRepositoryReader<LoginDTO>>(),
-                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
+                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>());
             }
             catch (Exception ex)
             {
