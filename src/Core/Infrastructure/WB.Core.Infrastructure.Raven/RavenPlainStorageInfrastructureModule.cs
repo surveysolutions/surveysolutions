@@ -19,7 +19,8 @@ namespace WB.Core.Infrastructure.Raven
             this.Bind<IRavenPlainStorageProvider>()
                 .ToMethod(ctx => new RavenPlainStorageProvider(this.Kernel.Get<DocumentStoreProvider>().CreateInstanceForPlainStorage())).InSingletonScope();
 
-            this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(RavenPlainStorageAccessor<>));
+            this.Bind(typeof (IPlainStorageAccessor<>)).To(typeof (RavenPlainStorageAccessor<>));
+            this.Bind(typeof (IQueryablePlainStorageAccessor<>)).To(typeof (RavenQueryablePlainStorageAccessor<>));
         }
     }
 }

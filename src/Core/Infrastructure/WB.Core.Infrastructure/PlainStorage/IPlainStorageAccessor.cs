@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace WB.Core.Infrastructure.PlainStorage
 {
     public interface IPlainStorageAccessor<TEntity>
@@ -8,5 +11,6 @@ namespace WB.Core.Infrastructure.PlainStorage
         void Remove(string id);
 
         void Store(TEntity entity, string id);
+        void Store(IEnumerable<Tuple<TEntity, string>> entities);
     }
 }

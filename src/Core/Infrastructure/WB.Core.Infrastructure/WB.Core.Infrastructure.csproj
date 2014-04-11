@@ -49,6 +49,7 @@
     <Compile Include="Implementation\ReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
+    <Compile Include="PlainStorage\IQueryablePlainStorageAccessor.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
