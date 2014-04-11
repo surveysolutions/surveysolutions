@@ -65,7 +65,8 @@ namespace WB.Core.Synchronization.SyncStorage
                 Id = doc.PublicKey.Combine(version),
                 ItemType = SyncItemType.Template,
                 IsCompressed = UseCompression,
-                Content = GetItemAsContent(doc)
+                Content = GetItemAsContent(doc),
+                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(version)),
             };
             chunkStorageWriter.StoreChunk(syncItem, null);
         }
@@ -143,7 +144,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         #region from sync provider
 
-        private string GetItemAsContent(object item)
+        private static string GetItemAsContent(object item)
         {
             var settings = new JsonSerializerSettings
                 {
