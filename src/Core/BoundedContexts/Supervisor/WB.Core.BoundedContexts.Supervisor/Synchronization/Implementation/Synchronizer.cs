@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -17,15 +18,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.feedReader = feedReader;
         }
 
-        public void FillLocalCopyOfFeed()
+        public async Task FillLocalCopyOfFeed()
         {
-            var lastStoredFeedEntry = this.localFeedStorage.GetLastEntryAsync().Result;
-            var newEvents = feedReader.ReadAfterAsync(lastStoredFeedEntry).Result;
+            var lastStoredFeedEntry = this.localFeedStorage.GetLastEntry();
+            var newEvents = await feedReader.ReadAfterAsync(lastStoredFeedEntry);
 
-            foreach (var userChangedEvent in newEvents)
-            {
-                this.localFeedStorage.Store(userChangedEvent);
-            }
+            this.localFeedStorage.Store(newEvents);
         }
     }
 }

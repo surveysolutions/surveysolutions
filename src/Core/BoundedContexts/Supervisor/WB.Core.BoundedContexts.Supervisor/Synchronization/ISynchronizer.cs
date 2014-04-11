@@ -1,7 +1,9 @@
-﻿namespace WB.Core.BoundedContexts.Supervisor.Synchronization
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public interface ISynchronizer
     {
-        void FillLocalCopyOfFeed();
+        Task FillLocalCopyOfFeed();
     }
 }

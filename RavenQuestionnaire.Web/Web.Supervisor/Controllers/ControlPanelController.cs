@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Security;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using Raven.Client.Linq.Indexing;
+using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Synchronization;
 using Web.Supervisor.Code;
@@ -17,10 +19,14 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IServiceLocator serviceLocator;
         private readonly IIncomePackagesRepository incomePackagesRepository;
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository)
+        private readonly ISynchronizer synchronizer;
+
+        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
+            ISynchronizer synchronizer)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
+            this.synchronizer = synchronizer;
         }
 
         /// <remarks>
@@ -175,8 +181,9 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public ActionResult Synchronize()
+        public async Task<ActionResult> Synchronize()
         {
+            await synchronizer.FillLocalCopyOfFeed();
             return Json(new object());
         }
     }

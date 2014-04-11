@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using Raven.Client;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Raven.PlainStorage;
 
@@ -16,7 +19,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.PlainStorage
 
         private static string EntityName
         {
-            get { return typeof (TEntity).Name; }
+            get { return typeof(TEntity).Name; }
         }
 
         public TEntity GetById(string id)
@@ -47,6 +50,21 @@ namespace WB.Core.Infrastructure.Raven.Implementation.PlainStorage
             }
         }
 
+        public void Store(IEnumerable<Tuple<TEntity, string>> entities)
+        {
+            using (IDocumentSession session = this.OpenSession())
+            {
+                foreach (var entity in entities)
+                {
+                    string ravenId = ToRavenId(entity.Item2);
+                    session.Store(entity: entity.Item1, id: ravenId);
+                }
+                
+                session.SaveChanges(); 
+            }
+
+        }
+
         public void Store(TEntity entity, string id)
         {
             using (IDocumentSession session = this.OpenSession())
@@ -58,7 +76,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.PlainStorage
             }
         }
 
-        private IDocumentSession OpenSession()
+        protected IDocumentSession OpenSession()
         {
             return this.storageProvider.GetDocumentStore().OpenSession();
         }

@@ -13,13 +13,14 @@
     <button class="btn btn-default" id="synchnizationStart">Synchronize</button>
     <div id="synchronizationMessage"></div>
 </div>
-
-<script>
-    $(function() {
-        $('#synchnizationStart').click(function() {
-            $.post('@Url.Action("Synchronize", "ControlPanel")', function() {
-                $('#synchronizationMessage').html('Synchronization started');
+@section scripts {
+    <script type="text/javascript">
+        $(function() {
+            $('#synchnizationStart').click(function() {
+                $.post('@Url.Action("Synchronize", "ControlPanel")', function() {
+                    $('#synchronizationMessage').html('Synchronization started');
+                });
             });
         });
-    });
-</script>
+    </script>
+}

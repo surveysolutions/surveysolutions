@@ -128,7 +128,7 @@ namespace Web.Supervisor.App_Start
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: areHeadquartersFunctionsEnabled),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
-                
+                new RavenPlainStorageInfrastructureModule(ravenSettings),
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
