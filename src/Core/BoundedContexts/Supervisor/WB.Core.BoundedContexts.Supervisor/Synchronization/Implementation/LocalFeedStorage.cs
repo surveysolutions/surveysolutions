@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Raven.Client;
-using Raven.Client.Linq;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Raven.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
     internal class LocalFeedStorage : ILocalFeedStorage
     {
-        private readonly IQueryablePlainStorageAccessor<UserChangedFeedEntry> plainStorageProvider;
+        private readonly IQueryablePlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage;
 
-        public LocalFeedStorage(IQueryablePlainStorageAccessor<UserChangedFeedEntry> plainStorageProvider)
+        public LocalFeedStorage(IQueryablePlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage)
         {
-            if (plainStorageProvider == null) throw new ArgumentNullException("plainStorageProvider");
+            if (plainStorage == null) throw new ArgumentNullException("plainStorage");
 
-            this.plainStorageProvider = plainStorageProvider;
+            this.plainStorage = plainStorage;
         }
 
-        public UserChangedFeedEntry GetLastEntry()
+        public LocalUserChangedFeedEntry GetLastEntry()
         {
-            return plainStorageProvider.Query(_ => _.OrderByDescending(x => x.Timestamp).FirstOrDefault());
+            return this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).FirstOrDefault());
         }
 
-        public void Store(IEnumerable<UserChangedFeedEntry> userChangedEvent)
+        public void Store(LocalUserChangedFeedEntry userChangedEvent)
         {
-            plainStorageProvider.Store(userChangedEvent.Select(@event => Tuple.Create(@event, @event.EntryId)));
+            this.Store(new List<LocalUserChangedFeedEntry>{userChangedEvent});
+        }
+
+        public void Store(IEnumerable<LocalUserChangedFeedEntry> userChangedEvent)
+        {
+            this.plainStorage.Store(userChangedEvent.Select(@event => Tuple.Create(@event, @event.EntryId)));
+        }
+
+        public IEnumerable<LocalUserChangedFeedEntry> GetNotProcessedSupervisorRelatedEvents(string supervisorId)
+        {
+            return this.plainStorage.Query(_ => _.Where(x => x.IsProcessed == false && x.SupervisorId == supervisorId).OrderBy(x => x.Timestamp).ToList());
         }
     }
 }
