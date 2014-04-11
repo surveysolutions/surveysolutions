@@ -1,4 +1,5 @@
-﻿@using Mono.CSharp
+﻿@using Lucene.Net.Index
+@using Mono.CSharp
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @using Web.Supervisor.Utils
@@ -14,6 +15,7 @@
                 <tr>
                     <th>Code</th>
                     <th>Message</th>
+                    <th>Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +24,14 @@
                     <tr>
                         <th>@item.Code</th>
                         <th>@item.Message</th>
+                        <th>
+                            @foreach (var reference in item.References)
+                            {
+                                <span>@reference.Type  : @reference.Content , File name: @reference.DataFile</span>
+
+                            }
+                            <br />
+                        </th>
                     </tr>
                 }
 

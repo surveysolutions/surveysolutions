@@ -117,6 +117,11 @@
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\PreloadingVerificationMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="Services\IDataFileExportService.cs" />
@@ -131,6 +136,8 @@
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />
     <Compile Include="Synchronization\Users\SupervisorFeedEntry.cs" />
     <Compile Include="Synchronization\Users\UserChangedFeedEntry.cs" />
+    <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReference.cs" />
+    <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
@@ -307,6 +314,12 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\PreloadingVerificationMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -17,21 +17,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAcc
         {
             get
             {
-                bool isFirst = true;
                 using (var fileReader = new StreamReader(this.sampleStream))
                 {
                     using (var csvReader = new CsvReader(fileReader))
                     {
-                        while (csvReader.Read())
+                        var isRead = csvReader.Read();
+
+                        if (csvReader.FieldHeaders != null && csvReader.FieldHeaders.Length > 0)
                         {
-                            if (isFirst)
-                            {
-                                yield return csvReader.FieldHeaders;
-                                isFirst = false;
-                            }
-                            yield return csvReader.CurrentRecord;
+                            yield return csvReader.FieldHeaders;
                         }
 
+                        while (isRead)
+                        {
+                            yield return csvReader.CurrentRecord;
+                            isRead = csvReader.Read();
+                        }
                     }
                 }
             }
