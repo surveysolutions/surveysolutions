@@ -126,4 +126,7 @@
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>Column wasn't mapped on question in questionnaire template</value>
   </data>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>File wan't mapped on roster in questionnaire template</value>
+  </data>
 </root>
