@@ -73,6 +73,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorContextModule.cs" />
+    <Compile Include="Synchronization\ILocalFeedStorage.cs" />
+    <Compile Include="Synchronization\Implementation\UserChangedFeedReader.cs" />
+    <Compile Include="Synchronization\IUserChangedFeedReader.cs" />
+    <Compile Include="Synchronization\Implementation\Synchronizer.cs" />
+    <Compile Include="Synchronization\ISynchronizer.cs" />
     <Compile Include="Users\IHeadquartersLoginService.cs" />
     <Compile Include="Users\Implementation\HeadquartersLoginService.cs" />
     <Compile Include="HeadquartersSettings.cs" />
@@ -113,6 +118,10 @@
     <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
+      <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
+      <Name>WB.Core.SharedKernels.SurveyManagement</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>

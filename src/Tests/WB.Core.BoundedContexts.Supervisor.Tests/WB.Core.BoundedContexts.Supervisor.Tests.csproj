@@ -67,6 +67,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -129,6 +130,7 @@
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireCacheInitializerTests\when_initialize_caches_for_questionnaire_with_question_which_has_enablement_condition.cs" />
+    <Compile Include="ResourceHelper.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\FileBasedDataExportServiceTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_present.cs" />
@@ -156,6 +158,10 @@
     <Compile Include="Factories\ExportViewFactoryTests\ExportViewFactoryTestsContext.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roster_max_2_rows_and_MultyOptionLinkedQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and__.cs" />
+    <Compile Include="Synchronization\MockHelpers.cs" />
+    <Compile Include="Synchronization\UserChangedFeedReaderTests\when_no_events_stored_yet.cs" />
+    <Compile Include="Synchronization\UserChangedFeedReaderTests\when_recent_feed_contains_one_new_event.cs" />
+    <Compile Include="Synchronization\UserChangedFeedReaderTests\when_recent_feed_has_no_last_stored_event.cs" />
     <Compile Include="Users\HeadquartersLoginServiceTests\when_hq_service_fails.cs" />
     <Compile Include="Users\HeadquartersLoginServiceTests\when_invalid_credentials_provided.cs" />
     <Compile Include="Users\HeadquartersLoginServiceTests\when_valid_credentials_provided.cs" />
@@ -223,7 +229,12 @@
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Synchronization\UserChangedFeedReaderTests\Simplefeed.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Synchronization\UserChangedFeedReaderTests\SimpleArchiveFeed.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

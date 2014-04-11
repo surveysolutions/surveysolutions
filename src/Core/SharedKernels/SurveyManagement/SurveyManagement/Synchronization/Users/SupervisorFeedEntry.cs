@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.Infrastructure.ReadSide.Repository;
 
-namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
+namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Users
 {
     public class SupervisorFeedEntry : IReadSideRepositoryEntity
     {
@@ -23,15 +23,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
         public string SupervisorId { get; set; }
 
         public string EntryId { get; private set; }
-    }
-
-    public class UserChangedFeedEntry : SupervisorFeedEntry
-    {
-        public UserChangedFeedEntry(string supervisorId, string entryId)
-            : base(supervisorId, entryId) {}
-
-        public string ChangedUserId { get; set; }
-
-        public DateTime Timestamp { get; set; }
     }
 }
