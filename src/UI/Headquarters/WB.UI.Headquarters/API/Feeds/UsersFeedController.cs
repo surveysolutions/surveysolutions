@@ -8,6 +8,7 @@ using System.Web.Http;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users.Denormalizers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.UI.Headquarters.API.Feeds
 {
