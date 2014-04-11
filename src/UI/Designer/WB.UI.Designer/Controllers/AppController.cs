@@ -22,5 +22,10 @@ namespace WB.UI.Designer.Controllers
         {
             return View();
         }
+
+        public ActionResult Open()
+        {
+            return Redirect("/Designer/app#/QuestionnaireId=1");
+        }
     }
 }
