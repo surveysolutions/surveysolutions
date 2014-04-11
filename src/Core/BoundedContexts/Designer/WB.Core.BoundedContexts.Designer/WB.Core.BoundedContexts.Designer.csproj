@@ -190,7 +190,14 @@
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Questionnaire\Edit\ChapterInfoStatisticsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\GroupInfoView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\GroupMetaInfoView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfoView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfoView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoViewInputModel.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfoViewInputModel.cs" />
     <Compile Include="Views\Questionnaire\Edit\EditAnswerView.cs">
       <SubType>Code</SubType>
@@ -204,6 +211,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityNode.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfoViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemMetaInfoView.cs" />
     <Compile Include="Views\Questionnaire\Indexes\DesignerReportQuestionnaireListViewItem.cs">
       <SubType>Code</SubType>
     </Compile>
