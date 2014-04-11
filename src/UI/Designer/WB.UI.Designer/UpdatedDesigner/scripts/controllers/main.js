@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pocAngularApp')
-  .controller('MainCtrl', function ($scope, $http, $filter) {
+  .controller('MainCtrl', function ($scope, $http) {
 
     $scope.documents = [];
 
@@ -18,7 +18,17 @@ angular.module('pocAngularApp')
       console.log('submit');
     };
 
-    $http.get('../../UpdatedDesigner/data/data.json')
+    $scope.unfold = function () {
+        if(!$('.chapter-panel').hasClass("unfolded")){
+            $('.chapter-panel').addClass("unfolded");
+        }
+    };
+
+    $scope.foldback = function () {
+        $('.chapter-panel').removeClass('unfolded');
+    };
+
+    $http.get('UpdatedDesigner/data/data.json')
       .then(function(result) {
         $scope.documents = result.data;
         $scope.chapters = _.map(result.data.Chapters, function(chapter){

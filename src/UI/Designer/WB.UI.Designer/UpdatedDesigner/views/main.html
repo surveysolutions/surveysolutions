@@ -6,35 +6,35 @@
       <li><a href="" class="search" title="Toggle Search"></a></li>
     </ul>
   </div>
-  <div class="chapter-panel">
-    <div class="foldback-button"></div>
-    <ul class="chapters">
-      <li class="current">
-        <div class="holder">
-          <div class="inner">
-            <h1>Chapter 1. Household</h1>
-            <span>(34 Questions, 4 Groups, 2 Rosters)</span>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="holder">
-          <div class="inner">
-            <h1>Chapter 2. Overall working conditions<br/> and political enviroment</h1>
-            <span>(34 Questions, 4 Groups)</span>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="holder">
-          <div class="inner">
-            <h1>Chapter 3. Nutrition</h1>
-            <span>(34 Questions, 4 Groups, 1 Roster)</span>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
+    <div class="chapter-panel" ng-click="unfold();">
+        <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
+        <ul class="chapters">
+            <li class="current">
+                <div class="holder">
+                    <div class="inner">
+                        <h1>Chapter 1. Household</h1>
+                        <span>(34 Questions, 4 Groups, 2 Rosters)</span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="holder">
+                    <div class="inner">
+                        <h1>Chapter 2. Overall working conditions<br /> and political enviroment</h1>
+                        <span>(34 Questions, 4 Groups)</span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="holder">
+                    <div class="inner">
+                        <h1>Chapter 3. Nutrition</h1>
+                        <span>(34 Questions, 4 Groups, 1 Roster)</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 
   <div class="question-list">
 

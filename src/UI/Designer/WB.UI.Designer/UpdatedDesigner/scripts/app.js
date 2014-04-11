@@ -10,7 +10,7 @@ angular.module('pocAngularApp', [
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: '../../UpdatedDesigner/views/main.html',
+        templateUrl: 'UpdatedDesigner/views/main.html',
         controller: 'MainCtrl'
       })
       .otherwise({
