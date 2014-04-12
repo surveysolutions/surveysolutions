@@ -23,7 +23,7 @@
 <section id="main" class="row">
     <div class="questionnaire-tree col-xs-6">
         <div class="chapter-title">
-            Chapter 1. Household <span>(34 Questions, 4 Groups, 2 Rosters)</span> - {{questionnaire.Title}}
+            {{currentChapter.Title }} <span>({{currentChapter.Statistics.QuestionsCount}} Questions, {{currentChapter.Statistics.GroupsCount}} Groups, {{currentChapter.Statistics.RostersCount}} Rosters)</span>
             <ul class="controls-right">
                 <li><a href="" class="filter" title="Toggle Filter"></a></li>
                 <li><a href="" class="search" title="Toggle Search"></a></li>
@@ -32,27 +32,11 @@
         <div class="chapter-panel" ng-click="unfold();">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters">
-                <li class="current">
+                <li ng-repeat="chapter in questionnaire.Chapters" ng-click="changeChapter(chapter)">
                     <div class="holder">
                         <div class="inner">
-                            <h1>Chapter 1. Household</h1>
-                            <span>(34 Questions, 4 Groups, 2 Rosters)</span>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="holder">
-                        <div class="inner">
-                            <h1>Chapter 2. Overall working conditions<br /> and political enviroment</h1>
-                            <span>(34 Questions, 4 Groups)</span>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="holder">
-                        <div class="inner">
-                            <h1>Chapter 3. Nutrition</h1>
-                            <span>(34 Questions, 4 Groups, 1 Roster)</span>
+                            <h1>{{chapter.Title}}</h1>
+                            <span>({{chapter.Statistics.QuestionsCount}} Questions, {{questionnaire.Statistics.GroupsCount}} Groups, {{questionnaire.Statistics.RostersCount}} Rosters)</span>
                         </div>
                     </div>
                 </li>

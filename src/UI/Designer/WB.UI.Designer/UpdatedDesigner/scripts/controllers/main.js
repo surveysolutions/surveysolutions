@@ -3,10 +3,6 @@
 angular.module('pocAngularApp')
   .controller('MainCtrl', function ($scope, $http, $routeParams) {
 
-    console.log(JSON.stringify($routeParams));
-
-    //$scope.questionnaire = { "Title": "test" };
-
     $scope.documents = [];
 
     $scope.chapters = [];
@@ -16,6 +12,11 @@ angular.module('pocAngularApp')
     $scope.setItem = function (item) {
       $scope.item = item;
       console.log($scope.item);
+    };
+
+    $scope.changeChapter = function (chapter) {
+        $scope.currentChapter = chapter;
+        console.log($scope.currentChapter);
     };
 
     $scope.submit = function () {
@@ -41,9 +42,9 @@ angular.module('pocAngularApp')
     //  });
 
       $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
-      //$http.get('UpdatedDesigner/data/data2.json')
         .success(function (result) {
             $scope.questionnaire = result;
+            $scope.currentChapter = result.Chapters[0];
       });
   })
   .filter("truncateFilter", function(){
