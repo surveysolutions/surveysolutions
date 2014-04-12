@@ -1,9 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
+    [CustomAuthorize]
     public class AppController : BaseController
     {
         private readonly ICommandService commandService;
@@ -23,9 +26,9 @@ namespace WB.UI.Designer.Controllers
             return View();
         }
 
-        public ActionResult Open()
+        public ActionResult Open(Guid id)
         {
-            return Redirect("/Designer/app#/QuestionnaireId=1");
+            return Redirect("/Designer/app#/" + id.FormatGuid());
         }
     }
 }
