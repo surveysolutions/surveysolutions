@@ -9,9 +9,10 @@ angular.module('pocAngularApp', [
 ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'UpdatedDesigner/views/main.html',
-        controller: 'MainCtrl'
+      .when('/:questionnaireId', {
+          templateUrl: 'UpdatedDesigner/views/main.html'
+          ,
+          controller: 'MainCtrl'
       })
       .otherwise({
         redirectTo: '/'

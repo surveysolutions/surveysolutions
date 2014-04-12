@@ -23,33 +23,9 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div id="designer-editor" class="container">
-        <section id="header" class="row">
-            <div class="designer-logo"></div>
-            <div class="breadcrumbs">
-                <ul>
-                    <li><a href="/Designer">Designer home</a></li>
-                    <li><a href="/Designer">My Questionnaires</a></li>
-                </ul>
-            </div>
-            <div class="questionnarie-title">
-                <div class="title">
-                    Tanzania NPS 2012/2013 Household Questionnaire <span>(128Q, 27G, 3R)</span>
-                    <input type="button" class="wb-inline-button error" value="VERIFY" />
-                    <span class="error-message">5 errors in <a href="">3 questions</a></span>
-                </div>
-            </div>
-        </section>
-
-        <section id="spacer" class="row">
-            <div class="left"></div>
-            <div class="right"></div>
-        </section>
-
-        <!-- Add your site or application content here -->
-        <section id="main" class="row" ng-view=""></section>
-
+    <div id="designer-editor" class="container" ng-view>
     </div>
+
     <!--[if lt IE 9]>
     <script src="~/UpdatedDesigner/vendor/es5-shim/es5-shim.js"></script>
     <script src="~/UpdatedDesigner/vendor/json3/lib/json3.min.js"></script>
@@ -69,7 +45,7 @@
 
     <script src="~/UpdatedDesigner/scripts/app.js"></script>
     <script src="~/UpdatedDesigner/scripts/controllers/main.js"></script>
-    
+
     @*<script src="~/UpdatedDesigner/scripts/ujs.js"></script>*@
     <script src="~/UpdatedDesigner/scripts/jquery.mCustomScrollbar.js"></script>
     <script src="~/UpdatedDesigner/scripts/jquery.mousewheel.js"></script>

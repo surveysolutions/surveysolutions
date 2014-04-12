@@ -1,7 +1,11 @@
 'use strict';
 
 angular.module('pocAngularApp')
-  .controller('MainCtrl', function ($scope, $http) {
+  .controller('MainCtrl', function ($scope, $http, $routeParams) {
+
+    console.log(JSON.stringify($routeParams));
+
+    //$scope.questionnaire = { "Title": "test" };
 
     $scope.documents = [];
 
@@ -28,12 +32,18 @@ angular.module('pocAngularApp')
         $('.chapter-panel').removeClass('unfolded');
     };
 
-    $http.get('UpdatedDesigner/data/data.json')
-      .then(function(result) {
-        $scope.documents = result.data;
-        $scope.chapters = _.map(result.data.Chapters, function(chapter){
-          return _.findWhere(result.data.Groups, {Id: chapter.Id});
-        });
+    //$http.get('UpdatedDesigner/data/data.json')
+    //  .then(function(result) {
+    //    $scope.documents = result.data;
+    //    $scope.chapters = _.map(result.data.Chapters, function(chapter){
+    //      return _.findWhere(result.data.Groups, {Id: chapter.Id});
+    //    });
+    //  });
+
+      $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
+      //$http.get('UpdatedDesigner/data/data2.json')
+        .success(function (result) {
+            $scope.questionnaire = result;
       });
   })
   .filter("truncateFilter", function(){
