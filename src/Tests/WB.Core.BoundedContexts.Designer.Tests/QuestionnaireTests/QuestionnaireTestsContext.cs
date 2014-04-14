@@ -148,11 +148,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: groupId, responsibleId: responsibleId);
 
-            questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Title", QuestionType.Text, "text", false, false,
-                                         QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
+            questionnaire.AddTextQuestion(Guid.NewGuid(), groupId, "Title", "text", false, false,
+                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId);
 
-            questionnaire.NewAddQuestion(secondQuestionId, groupId, "Title", QuestionType.Text, "name", false, false,
-                                         QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
+            questionnaire.AddTextQuestion(secondQuestionId, groupId, "Title", "name", false, false,
+                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId);
 
             return questionnaire;
         }
@@ -267,25 +267,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return questionnaire;
         }
 
-        public static Questionnaire CreateQuestionnaireWithAutoAndRegularGroupsAnd1QuestionInAutoGroupAnd2QuestionsInRegular(
-            Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestionId, Guid questionId, Guid responsibleId,
-            QuestionType questionType, Guid questionThatLinkedButNotFromPropagateGroup, QuestionType autoQuestionType = QuestionType.Text)
-        {
-            Questionnaire questionnaire =
-                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
-                    rosterId: autoGroupPublicKey,
-                    secondGroup: secondGroup, autoQuestionId: autoQuestionId, questionId: questionId,
-                    responsibleId: responsibleId,
-                    questionType: questionType, autoQuestionType: autoQuestionType);
-
-            questionnaire.NewAddQuestion(questionThatLinkedButNotFromPropagateGroup, secondGroup, "Title",
-                                         autoQuestionType, "manual2", false, false,
-                                         QuestionScope.Interviewer, "", "", "", "", null, Order.AsIs, responsibleId, null, areAnswersOrdered: false, maxAllowedAnswers: null);
-
-            return questionnaire;
-        }
-
-
         public static Questionnaire CreateQuestionnaireWithTwoRegularGroupsAndQuestionInLast(Guid firstGroup, Guid autoQuestoinId, Guid responsibleId)
         {
             var secondGroup = Guid.NewGuid();
@@ -295,8 +276,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return questionnaire;
         }
 
-        public static void AddQuestion(Questionnaire questionnaire, Guid questionId, Guid groupId, Guid responsible,
-            QuestionType questionType, string alias, Option[] options = null, string condition = "", string validation = "")
+        public static void AddQuestion(Questionnaire questionnaire, Guid questionId, Guid groupId, Guid responsible, QuestionType questionType, string alias, Option[] options = null, string condition = "", string validation = "")
         {
             if (IsNumericQuestion(questionType))
             {
@@ -305,10 +285,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     QuestionScope.Interviewer, condition, validation, "", "", null, new Guid[0], responsible, true, null);
                 return;
             }
-            questionnaire.NewAddQuestion(questionId, groupId, "Title", questionType, alias, false,
+            questionnaire.AddTextQuestion(
+                questionId, 
+                groupId, 
+                "Title", 
+                alias, 
                 false,
-                QuestionScope.Interviewer, condition, validation, "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
-                Order.AsIs, responsible, null, areAnswersOrdered: false, maxAllowedAnswers: null);
+                false,
+                QuestionScope.Interviewer, 
+                condition, 
+                validation, 
+                "", 
+                "", 
+                responsible);
         }
 
 

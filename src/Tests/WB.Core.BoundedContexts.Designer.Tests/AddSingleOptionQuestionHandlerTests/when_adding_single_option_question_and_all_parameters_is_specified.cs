@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -76,9 +77,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .Instructions.ShouldEqual(instructions);
 
-        It should_raise_NewQuestionAdded_event_with_options_specified = () =>
+        It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .Answers.Length.ShouldEqual(options.Length);
+
+        It should_raise_NewQuestionAdded_event_with_same_option_titles_as_specified = () =>
+            eventContext.GetSingleEvent<NewQuestionAdded>()
+                .Answers.Select(x => x.AnswerText).ShouldContainOnly(options.Select(x => x.Title));
+
+        It should_raise_NewQuestionAdded_event_with_same_option_values_as_specified = () =>
+           eventContext.GetSingleEvent<NewQuestionAdded>()
+               .Answers.Select(x => x.AnswerValue).ShouldContainOnly(options.Select(x => x.Value));
 
         It should_raise_NewQuestionAdded_event_with_linkedToQuestionId_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
