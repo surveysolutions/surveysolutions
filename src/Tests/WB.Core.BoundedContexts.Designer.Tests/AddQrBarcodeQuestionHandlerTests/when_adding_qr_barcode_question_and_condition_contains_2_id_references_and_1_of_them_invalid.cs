@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddQrBarcodeQuestionHandlerTest
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.AddQRBarcodeQuestion(questionId: questionId, parentGroupId: chapterId, title: "title",
-                    variableName: "var", isMandatory: false, condition: conditionExpression, instructions: null,
+                    variableName: "var", isMandatory: false, enablementCondition: conditionExpression, instructions: null,
                     responsibleId: responsibleId));
 
         It should_throw_QuestionnaireException = () =>
