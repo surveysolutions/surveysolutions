@@ -54,6 +54,8 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             {
                 foreach (var zip in zips)
                 {
+                    if(zip.IsDirectory)
+                        continue;
                     result.Add(zip.FileName, zip.UncompressedSize);
                 }
             }

@@ -9,6 +9,7 @@ using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
@@ -26,7 +27,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
             interviewLevelToExport = new InterviewDataExportLevelView(Guid.NewGuid(), "1st", null);
             interviewToExport = new InterviewDataExportView(Guid.NewGuid(), 1,
                 new[] { interviewLevelToExport });
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object);
+
+            rosterDataServiceMock=new Mock<IRosterDataService>();
+            rosterDataServiceMock.Setup(x => x.CreateCleanedFileNamesForLevels(Moq.It.IsAny<IDictionary<Guid, string>>()))
+                .Returns(new Dictionary<Guid, string>() { { interviewLevelToExport.LevelId, interviewLevelToExport.LevelName } });
+
+            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object,null, rosterDataServiceMock.Object);
         };
 
         Because of = () =>
@@ -41,6 +47,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
         private static FileBasedDataExportService fileBasedDataExportService;
         
         private static Mock<IDataFileExportService> interviewExportServiceMock;
+        private static Mock<IRosterDataService> rosterDataServiceMock;
         private static InterviewDataExportView interviewToExport;
         private static InterviewDataExportLevelView interviewLevelToExport;
     }

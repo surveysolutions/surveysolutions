@@ -6,6 +6,7 @@ using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
@@ -17,17 +18,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IDataFileExportService dataFileExportService;
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
-
+        private readonly IRosterDataService rosterDataService;
         public FileBasedDataExportService(
             IReadSideRepositoryCleanerRegistry cleanerRegistry, 
             string folderPath,
             IDataFileExportService dataFileExportService, 
             IEnvironmentContentService environmentContentService, 
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor, IRosterDataService rosterDataService)
         {
             this.dataFileExportService = dataFileExportService;
             this.environmentContentService = environmentContentService;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.rosterDataService = rosterDataService;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -77,7 +79,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
 
             var cleanedFileNamesForLevels =
-              this.CreateCleanedFileNamesForLevels(questionnaireExportStructure.HeaderToLevelMap.Values.ToDictionary(h => h.LevelId, h => h.LevelName));
+                rosterDataService.CreateCleanedFileNamesForLevels(
+                    questionnaireExportStructure.HeaderToLevelMap.Values.ToDictionary(h => h.LevelId, h => h.LevelName));
 
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
@@ -101,7 +104,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.ThrowArgumentExceptionIfDataFolderMissing(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion, dataFolderForTemplatePath);
 
             var cleanedFileNamesForLevels =
-                this.CreateCleanedFileNamesForLevels(interviewDataExportView.Levels.ToDictionary(l => l.LevelId, l => l.LevelName));
+                rosterDataService.CreateCleanedFileNamesForLevels(interviewDataExportView.Levels.ToDictionary(l => l.LevelId,
+                    l => l.LevelName));
 
             foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
             {
@@ -109,19 +113,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 this.dataFileExportService.AddRecord(interviewDataExportLevelView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName)));
             }
-        }
-
-        private Dictionary<Guid, string> CreateCleanedFileNamesForLevels(Dictionary<Guid, string> allegedLevelNames)
-        {
-            var result = new Dictionary<Guid, string>();
-            var createdFileNames = new HashSet<string>();
-            foreach (var allegedLevelName in allegedLevelNames)
-            {
-                string levelFileName = this.CreateValidFileName(allegedLevelName.Value, createdFileNames);
-                createdFileNames.Add(levelFileName);
-                result.Add(allegedLevelName.Key,levelFileName);
-            }
-            return result;
         }
 
         private void ThrowArgumentExceptionIfDataFolderMissing(Guid questionnaireId, long version, string dataDirectoryPath)
@@ -135,18 +126,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.path, string.Format("exported_data_{0}_{1}", questionnaireId, version));
-        }
-
-        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
-        {
-            string fileNameWithoutInvalidFileNameChars = this.fileSystemAccessor.MakeValidFileName(name);
-            var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(250).ToArray());
-            string fileNameWithNumber = string.Concat(fileNameShortened,
-                i == 0 ? (object) string.Empty : i).ToLower();
-
-            return !createdFileNames.Contains(fileNameWithNumber)
-                ? fileNameWithNumber
-                : this.CreateValidFileName(name, createdFileNames, i + 1);
         }
     }
 }

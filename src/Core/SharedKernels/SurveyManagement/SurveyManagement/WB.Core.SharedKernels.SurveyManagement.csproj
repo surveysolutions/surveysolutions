@@ -111,6 +111,8 @@
     <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
+    <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
+    <Compile Include="Implementation\Services\Preloading\RosterDataService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireCacheInitializer.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
@@ -126,12 +128,14 @@
     <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="Services\IDataFileExportService.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
-    <Compile Include="Services\IPreloadedDataVerifier.cs" />
-    <Compile Include="Services\IPreloadingTemplateService.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
+    <Compile Include="Services\Preloading\IPreloadedDataVerifier.cs" />
+    <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
+    <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
+    <Compile Include="Services\Preloading\IRosterDataService.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Users\SupervisorValidationResult.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />

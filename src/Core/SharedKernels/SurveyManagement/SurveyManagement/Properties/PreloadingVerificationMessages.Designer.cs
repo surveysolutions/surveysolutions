@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Column wasn&apos;t mapped on question in questionnaire template.
+        ///   Looks up a localized string similar to Column can&apos;t be mapped on any question in questionnaire.
         /// </summary>
         internal static string PL0003_ColumnWasntMappedOnQuestion {
             get {
@@ -88,11 +88,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File wan&apos;t mapped on roster in questionnaire template.
+        ///   Looks up a localized string similar to File can&apos;t be mapped on any roster in questionnaire.
         /// </summary>
         internal static string PL0004_FileWasntMappedRoster {
             get {
                 return ResourceManager.GetString("PL0004_FileWasntMappedRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question data type mismatch.
+        /// </summary>
+        internal static string PL0005_QuestionDataTypeMismatch {
+            get {
+                return ResourceManager.GetString("PL0005_QuestionDataTypeMismatch", resourceCulture);
             }
         }
     }
