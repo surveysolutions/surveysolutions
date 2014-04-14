@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -11,6 +9,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly ILocalFeedStorage localFeedStorage;
         private readonly IUserChangedFeedReader feedReader;
         private readonly ILocalUserFeedProcessor localUserFeedProcessor;
+        private bool isSynchronizationRunning;
+        private static readonly object RebuildAllViewsLockObject = new object();
 
         public Synchronizer(ILocalFeedStorage localFeedStorage,
             IUserChangedFeedReader feedReader,
@@ -24,14 +24,39 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.localUserFeedProcessor = localUserFeedProcessor;
         }
 
-        public async Task FillLocalCopyOfFeed()
+        public void Synchronize()
         {
-            var lastStoredFeedEntry = this.localFeedStorage.GetLastEntry();
-            List<LocalUserChangedFeedEntry> newEvents = await feedReader.ReadAfterAsync(lastStoredFeedEntry);
+            new Task(this.SynchronizeImpl).Start();
+        }
 
-            this.localFeedStorage.Store(newEvents);
+        private void SynchronizeImpl()
+        {
+            if (!this.isSynchronizationRunning)
+            {
+                lock (RebuildAllViewsLockObject)
+                {
+                    if (!this.isSynchronizationRunning)
+                    {
+                        try
+                        {
+                            this.isSynchronizationRunning = true;
 
-            await this.localUserFeedProcessor.Process();
+                            var lastStoredFeedEntry = this.localFeedStorage.GetLastEntry();
+                            List<LocalUserChangedFeedEntry> newEvents = this.feedReader.ReadAfterAsync(lastStoredFeedEntry).Result;
+
+                            this.localFeedStorage.Store(newEvents);
+
+                            this.localUserFeedProcessor.Process();
+
+                            this.isSynchronizationRunning = false;
+                        }
+                        finally
+                        {
+                            this.isSynchronizationRunning = false;
+                        }
+                    }
+                }
+            }
         }
     }
 }
