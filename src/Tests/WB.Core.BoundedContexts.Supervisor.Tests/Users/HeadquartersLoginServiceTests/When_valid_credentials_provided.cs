@@ -4,11 +4,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Main.Core.Utility;
 using Moq;
 using Moq.Protected;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
+using NSubstitute;
+using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -19,6 +22,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
     [Subject(typeof(HeadquartersLoginService))]
     public class when_valid_credentials_provided
     {
+        private const string UserDetailsUri = "http://localhost/userDetails";
+
         Establish context = () =>
         {
             commandService = new Mock<ICommandService>();
@@ -31,11 +36,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                     Content = new StringContent(JsonConvert.SerializeObject(new
                     {
                         isValid = true,
-                        userId = userId
+                        userId = userId,
+                        userDetailsUrl = UserDetailsUri
                     }))
                 }));
 
-            service = Create.HeadquartersLoginService(messageHandler: handler.Object,
+            HeadquartersUser = new UserDocument
+            {
+                PublicKey = Guid.NewGuid(),
+                Email = "test@test.com",
+                IsLocked = false,
+                Password = "password"
+            };
+
+            var userReader = new Mock<IHeadquartersUserReader>();
+            userReader.Setup(x => x.GetUserByUri(new Uri(UserDetailsUri)))
+                .ReturnsAsync(HeadquartersUser);
+
+            service = Create.HeadquartersLoginService(headquartersUserReader: userReader.Object, messageHandler: handler.Object,
                 commandService: commandService.Object);
         };
 
@@ -43,12 +61,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
 
         It should_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.Is<CreateUserCommand>(
             command => 
-                command.PublicKey == Guid.Parse(userId) && 
-                command.Password == SimpleHash.ComputeHash("pwd") &&
-                command.UserName == "login")));
+                command.PublicKey == HeadquartersUser.PublicKey && 
+                command.Password == HeadquartersUser.Password &&
+                command.UserName == HeadquartersUser.UserName &&
+                command.Email == HeadquartersUser.Email &&
+                command.IsLocked == HeadquartersUser.IsLocked)));
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;
         static string userId;
+        private static UserDocument HeadquartersUser;
     }
 }

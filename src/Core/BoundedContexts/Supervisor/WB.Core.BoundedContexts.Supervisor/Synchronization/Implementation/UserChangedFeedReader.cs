@@ -6,7 +6,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {

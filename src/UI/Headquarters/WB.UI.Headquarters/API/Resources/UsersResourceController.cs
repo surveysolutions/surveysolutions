@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.UI.Headquarters.API.Resources
 {
@@ -38,10 +40,12 @@ namespace WB.UI.Headquarters.API.Resources
                 };
             }
 
+            string detailsUrl = this.Url.Route("api.userDetails", new { id = userDocument.PublicKey.FormatGuid()});
             var result = new SupervisorValidationResult
             {
                 isValid = !userDocument.IsLocked && !userDocument.IsDeleted && userDocument.Roles.Contains(UserRoles.Supervisor),
-                userId =  userDocument.PublicKey.FormatGuid()
+                userId =  userDocument.PublicKey.FormatGuid(),
+                userDetailsUrl = new Uri(this.Request.RequestUri, detailsUrl).ToString()
             };
 
             return result;

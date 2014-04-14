@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 {
@@ -18,11 +21,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         private readonly ICommandService commandService;
         private readonly HttpMessageHandler messageHandler;
         private readonly HeadquartersSettings headquartersSettings;
+        private readonly IHeadquartersUserReader headquartersUserReader;
 
         public HeadquartersLoginService(ILogger logger, 
             ICommandService commandService,
             HttpMessageHandler messageHandler,
-            HeadquartersSettings headquartersSettings)
+            HeadquartersSettings headquartersSettings,
+            IHeadquartersUserReader headquartersUserReader)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             if (commandService == null) throw new ArgumentNullException("commandService");
@@ -32,6 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
             this.commandService = commandService;
             this.messageHandler = messageHandler;
             this.headquartersSettings = headquartersSettings;
+            this.headquartersUserReader = headquartersUserReader;
         }
 
         public void LoginAndCreateAccount(string login, string password)
@@ -51,11 +57,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                 }
 
                 string responseBody = response.Content.ReadAsStringAsync().Result;
-                dynamic responseFeed = JObject.Parse(responseBody);
-                if ((bool)responseFeed.isValid)
+                var validationResult = JsonConvert.DeserializeObject<SupervisorValidationResult>(responseBody);
+
+                if (validationResult.isValid)
                 {
-                    var publicKey = Guid.Parse((string)responseFeed.userId);
-                    var command = new CreateUserCommand(publicKey, login, SimpleHash.ComputeHash(password), string.Empty, new[] { UserRoles.Supervisor }, false, null);
+                    string userDetailsUrl = validationResult.userDetailsUrl;
+                    UserDocument userDocument = headquartersUserReader.GetUserByUri(new Uri(userDetailsUrl)).Result;
+
+                    var command = new CreateUserCommand(userDocument.PublicKey, 
+                        userDocument.UserName, 
+                        userDocument.Password, 
+                        userDocument.Email, 
+                        new[] { UserRoles.Supervisor }, 
+                        userDocument.IsLocked, 
+                        null);
 
                     this.commandService.Execute(command);
                 }

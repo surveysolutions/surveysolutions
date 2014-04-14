@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using NSubstitute;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -11,7 +12,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
 {
     internal static class Create
     {
-        internal static HeadquartersLoginService HeadquartersLoginService(HttpMessageHandler messageHandler = null, 
+        internal static HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null, 
+            HttpMessageHandler messageHandler = null, 
             ILogger logger = null, 
             ICommandService commandService = null, 
             HeadquartersSettings headquartersSettings = null)
@@ -19,7 +21,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             return new HeadquartersLoginService(logger ?? Substitute.For<ILogger>(), 
                 commandService ?? Substitute.For<ICommandService>(), 
                 messageHandler ?? Substitute.For<HttpMessageHandler>(),
-                headquartersSettings ?? HeadquartersSettings());
+                headquartersSettings ?? HeadquartersSettings(),
+                headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>());
         }
 
         public static Synchronizer Synchronizer(HttpMessageHandler messageHandler = null)
