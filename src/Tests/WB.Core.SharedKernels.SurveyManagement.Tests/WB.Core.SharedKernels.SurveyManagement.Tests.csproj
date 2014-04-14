@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyContext.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\FilebasedPreloadedDataRepositoryTestContext.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_folder_contains_no_archives_GetPreloadedDataMetaInformation_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_folder_contains_no_archives_GetPreloadedData_is_called.cs" />
@@ -67,6 +68,12 @@
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_and_zipped_GetPreloadedData_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformation_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
+    <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_question_which_need_to_be_parsed.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_2_files.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_questionnaire_is_absent.cs" />
     <Compile Include="PreloadingTemplateServiceTests\PreloadingTemplateServiceTestContext.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_archive_were_build_before_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_questionnaire_has_2_levels_and_GetFilePathToPreloadingTemplate_called.cs" />
@@ -74,6 +81,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>

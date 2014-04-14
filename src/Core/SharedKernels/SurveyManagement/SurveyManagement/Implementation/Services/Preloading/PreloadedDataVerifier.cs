@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 yield break;
             }
 
-            if (data.Length > 0)
+            if (data.Length > 1)
             {
                 yield return new PreloadedDataVerificationError("PL0002", PreloadingVerificationMessages.PL0002_MoreThenOneLevel);
             }
@@ -106,7 +106,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 {
                     if(string.IsNullOrEmpty(row[x]))
                         continue;
-
+                    if (columnsToExcluteFromQuestionMapping.Contains(levelData.Header[x]))
+                        continue;
                     var parsedAnswer = questionDataParser.Parse(row[x], levelData.Header[x], getQuestionByStataCaption, getAnswerOptionsAsValues);
                     if (!parsedAnswer.HasValue)
                         yield return
