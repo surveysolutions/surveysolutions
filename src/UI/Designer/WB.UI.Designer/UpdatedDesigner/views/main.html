@@ -30,7 +30,7 @@
                 <li><a href="" class="search" title="Toggle Search"></a></li>
             </ul>
         </div>
-        <div class="chapter-panel" ng-click="unfold();">
+        <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters">
                 <li ng-repeat="chapter in questionnaire.Chapters" ng-click="changeChapter(chapter)" ng-class="{current: currentChapter == chapter}">
@@ -70,7 +70,7 @@
             <form>
                 <p>
                     {{questionnaire.Title}}
-                    <input type="text" name="input" value="{{ item | truncateFilter:documents }}" ng-pattern="word" required ng-trim="false"
+                    <input type="text" name="input" value="{{item|truncateFilter:documents}}" ng-pattern="word" required ng-trim="false"
                            style="width:500px">
                 </p>
                 <p>

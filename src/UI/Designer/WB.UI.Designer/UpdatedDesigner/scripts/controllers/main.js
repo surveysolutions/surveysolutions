@@ -9,14 +9,14 @@ angular.module('pocAngularApp')
 
     $scope.item = null;
 
+    $scope.isFolded = false;
+
     $scope.setItem = function (item) {
       $scope.item = item;
-      console.log($scope.item);
     };
 
     $scope.changeChapter = function (chapter) {
         $scope.currentChapter = chapter;
-        console.log($scope.currentChapter);
     };
 
     $scope.submit = function () {
@@ -24,43 +24,39 @@ angular.module('pocAngularApp')
     };
 
     $scope.unfold = function () {
-        if(!$('.chapter-panel').hasClass("unfolded")){
-            $('.chapter-panel').addClass("unfolded");
-        }
+        $scope.isFolded = true;
     };
 
     $scope.foldback = function () {
-        $('.chapter-panel').removeClass('unfolded');
+        $scope.isFolded = false;
     };
 
     $scope.addNewChapter = function() {
-        console.log('add new chapter');
-        $scope.questionnaire.Chapters.push(
-            {
-                Title: 'New Chapter',
-                GroupId: "6e240642274c4bdea937baa78cd4ad6f",
-                Statistics: {
-                    QuestionsCount: 0,
-                    GroupsCount: 0,
-                    RostersCount: 0
-                }
+        var newChapter = {
+            Title: 'New Chapter',
+            GroupId: "6e240642274c4bdea937baa78cd4ad6f",
+            Statistics: {
+                QuestionsCount: 0,
+                GroupsCount: 0,
+                RostersCount: 0
             }
-        );
+        };
+        $scope.questionnaire.Chapters.push(newChapter);
     }
 
-    //$http.get('UpdatedDesigner/data/data.json')
-    //  .then(function(result) {
-    //    $scope.documents = result.data;
-    //    $scope.chapters = _.map(result.data.Chapters, function(chapter){
-    //      return _.findWhere(result.data.Groups, {Id: chapter.Id});
-    //    });
-    //  });
-
-      $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
+    $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
         .success(function (result) {
             $scope.questionnaire = result;
             $scope.currentChapter = result.Chapters[0];
-      });
+        });
+
+      //$http.get('UpdatedDesigner/data/data.json')
+      //  .then(function(result) {
+      //    $scope.documents = result.data;
+      //    $scope.chapters = _.map(result.data.Chapters, function(chapter){
+      //      return _.findWhere(result.data.Groups, {Id: chapter.Id});
+      //    });
+      //  });
   })
   .filter("truncateFilter", function(){
     return function(input, source){
