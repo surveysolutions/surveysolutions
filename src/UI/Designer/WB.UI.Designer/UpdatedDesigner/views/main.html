@@ -49,20 +49,23 @@
         </div>
 
         <div class="question-list">
-            <div ng-repeat="group in documents.Groups | filter: {Level: 0}">
-                <div class="section item" ng-click="setItem(group)">
-                    {{ group.Title }} - {{questionnaire.Title}}
+            <div ng-repeat="i in items">
+                <div class="section item" ng-click="setItem(i)">
+                    {{i.Title}}
                 </div>
-                <div class="question item cat-multianswer" ng-repeat="child in group.Children" ng-click="setItem(child)">
+                <div class="question item cat-multianswer" ng-repeat="q in i.Questions" ng-click="setItem(q)">
                     <div class="icon"></div>
-                    {{ child | truncateFilter:documents }}
+                    {{ q.Title }}
                     <div class="qname-block">
                         <a href="" class="linked"></a>visit_health<div class="dropdown-btn"></div>
                     </div>
                 </div>
+                <div class="buttons-item">
+                    <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" />
+                    <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" />
+                </div>
             </div>
         </div>
-
     </div>
 
     <div class="question-editor col-xs-6">
@@ -70,7 +73,7 @@
             <form>
                 <p>
                     {{questionnaire.Title}}
-                    <input type="text" name="input" value="{{item|truncateFilter:documents}}" ng-pattern="word" required ng-trim="false"
+                    <input type="text" name="input" value="{{item.Title}}" ng-pattern="word" required ng-trim="false"
                            style="width:500px">
                 </p>
                 <p>
