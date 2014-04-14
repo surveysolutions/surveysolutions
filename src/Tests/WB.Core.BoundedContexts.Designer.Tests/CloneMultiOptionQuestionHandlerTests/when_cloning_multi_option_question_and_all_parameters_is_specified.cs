@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -11,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandler
 {
     internal class when_cloning_multi_option_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandler
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             questionnaire.CloneMultiOptionQuestion(
                 questionId: questionId,
                 title: title,
@@ -51,50 +52,62 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandler
 
                 );
 
-        private Cleanup stuff = () =>
+        Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
         };
 
-        private It should_raise_QuestionCloned_event = () =>
+        It should_raise_QuestionCloned_event = () =>
             eventContext.ShouldContainEvent<QuestionCloned>();
 
-        private It should_raise_QuestionCloned_event_with_QuestionId_specified = () =>
+        It should_raise_QuestionCloned_event_with_QuestionId_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .PublicKey.ShouldEqual(questionId);
 
-        private It should_raise_QuestionCloned_event_with_ParentGroupId_specified = () =>
+        It should_raise_QuestionCloned_event_with_ParentGroupId_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .GroupPublicKey.ShouldEqual(parentGroupId);
 
-        private It should_raise_QuestionCloned_event_with_variable_name_specified = () =>
+        It should_raise_QuestionCloned_event_with_variable_name_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .StataExportCaption.ShouldEqual(variableName);
 
-        private It should_raise_QuestionCloned_event_with_title_specified = () =>
+        It should_raise_QuestionCloned_event_with_title_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .QuestionText.ShouldEqual(title);
 
-        private It should_raise_QuestionCloned_event_with_condition_specified = () =>
+        It should_raise_QuestionCloned_event_with_condition_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        private It should_raise_QuestionCloned_event_with_ismandatory_specified = () =>
+        It should_raise_QuestionCloned_event_with_ismandatory_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .Mandatory.ShouldEqual(isMandatory);
 
-        private It should_raise_QuestionCloned_event_with_instructions_specified = () =>
+        It should_raise_QuestionCloned_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .Instructions.ShouldEqual(instructions);
 
-        private It should_raise_QuestionCloned_event_with_SourceQuestionId_specified = () =>
+        It should_raise_QuestionCloned_event_with_SourceQuestionId_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .SourceQuestionId.ShouldEqual(sourceQuestionId);
 
-        private It should_raise_QuestionCloned_event_with_TargetIndex_specified = () =>
+        It should_raise_QuestionCloned_event_with_TargetIndex_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .TargetIndex.ShouldEqual(targetIndex);
+
+        It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
+            eventContext.GetSingleEvent<QuestionCloned>()
+                .Answers.Length.ShouldEqual(options.Length);
+
+        It should_raise_NewQuestionAdded_event_with_same_option_titles_as_specified = () =>
+            eventContext.GetSingleEvent<QuestionCloned>()
+                .Answers.Select(x => x.AnswerText).ShouldContainOnly(options.Select(x => x.Title));
+
+        It should_raise_NewQuestionAdded_event_with_same_option_values_as_specified = () =>
+           eventContext.GetSingleEvent<QuestionCloned>()
+               .Answers.Select(x => x.AnswerValue).ShouldContainOnly(options.Select(x => x.Value));
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
