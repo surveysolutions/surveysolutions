@@ -13,7 +13,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
     {
         private readonly string dbName;
         private readonly ISQLiteConnectionFactory connectionFactory;
-        private object locker = new object();
+        private readonly object locker = new object();
 
         public SqlitePlainStore(string dbName)
         {
@@ -33,56 +33,51 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
             }
         }
 
-        private void WrapConnection<TEntity>(Action<ISQLiteConnection> action)
+        private void WrapConnection(Action<ISQLiteConnection> action)
         {
             lock (locker)
             {
-                using (
-                    var connection = connectionFactory.Create(FullPathToDataBase))
+                using (var connection = connectionFactory.Create(FullPathToDataBase))
                 {
-                    connection.CreateTable<TEntity>();
+                    connection.CreateTable<PlainStorageRow>();
                     action(connection);
                 }
             }
         }
 
-        private TResult WrapConnectionWithQuery<TResult, TEntity>(Func<ITableQuery<TEntity>, TResult> query)
-            where TEntity : PlainStorageRow, new()
+        private TResult WrapConnectionWithQuery<TResult>(Func<ITableQuery<PlainStorageRow>, TResult> query)
         {
             lock (locker)
             {
-                using (
-                    var connection = connectionFactory.Create(FullPathToDataBase))
+                using (var connection = connectionFactory.Create(FullPathToDataBase))
                 {
-                    connection.CreateTable<TEntity>();
-                    return query.Invoke(connection.Table<TEntity>());
+                    connection.CreateTable<PlainStorageRow>();
+                    return query.Invoke(connection.Table<PlainStorageRow>());
                 }
             }
         }
 
-        public TEntity GetById<TEntity>(string id) where TEntity : PlainStorageRow, new()
+        public PlainStorageRow GetById(string id)
         {
-            var idString = id.ToString();
-            return WrapConnectionWithQuery<TEntity, TEntity>((_) => _.Where((i) => i.Id == idString).FirstOrDefault());
+            return this.WrapConnectionWithQuery(_ => _.Where(i => i.Id == id).FirstOrDefault());
         }
 
-        public void Remove<TEntity>(string id) where TEntity : PlainStorageRow, new()
+        public void Remove(string id)
         {
-            WrapConnection<TEntity>((c) => c.Delete<TEntity>(id.ToString()));
+            WrapConnection(c => c.Delete<PlainStorageRow>(id.ToString()));
         }
 
-        public void Store<TEntity>(TEntity view, string id) where TEntity : PlainStorageRow, new()
+        public void Store(PlainStorageRow row, string id)
         {
-            WrapConnection<TEntity>((connection) =>
+            WrapConnection(connection =>
             {
-
                 try
                 {
-                    connection.Insert(view);
+                    connection.Insert(row);
                 }
                 catch
                 {
-                    connection.Update(view);
+                    connection.Update(row);
                 }
             });
         }
