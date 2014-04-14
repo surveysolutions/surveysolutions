@@ -305,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BaseApiServiceController.cs" />
+    <Compile Include="API\Feeds\PagingExtensions.cs" />
     <Compile Include="API\Feeds\UsersFeedController.cs" />
     <Compile Include="API\Formatters\SyndicationFeedFormatter.cs" />
     <Compile Include="API\InterviewsController.cs" />
