@@ -27,7 +27,21 @@
                         <th>
                             @foreach (var reference in item.References)
                             {
-                                <span>@reference.Type  : @reference.Content , File name: @reference.DataFile</span>
+                                if (!string.IsNullOrEmpty(@reference.Content))
+                                {
+                                    <span>@reference.Type : @reference.Content</span><br/>
+                                }
+                                if (reference.PositionX.HasValue)
+                                {
+                                    <span>Column: @reference.PositionX</span><br/>
+                                }
+
+                                if (reference.PositionY.HasValue)
+                                {
+                                    <span>Row: @reference.PositionY</span><br/>
+                                }
+                                
+                                <span>File name: @reference.DataFile </span>
 
                             }
                             <br />

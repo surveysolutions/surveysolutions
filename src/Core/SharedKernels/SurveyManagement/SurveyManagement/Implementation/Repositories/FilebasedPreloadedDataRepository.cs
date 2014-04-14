@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         private readonly IArchiveUtils archiveUtils;
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
         private const string FolderName = "PreLoadedData";
-        private readonly string csvExtension = ".csv";
+        private const string CsvExtension = ".csv";
         private readonly string path;
         private static ILogger Logger
         {
@@ -68,8 +68,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             {
                 return new PreloadedContentMetaData(id,
                     fileSystemAccessor.GetFileName(filesInDirectory[0]),
-                    archiveUtils.GetArchivedFileNamesAndSize(filesInDirectory[0]).Where(file => file.Key.EndsWith(csvExtension))
-                        .Select(file => new PreloadedFileMetaData(file.Key, file.Value))
+                    archiveUtils.GetArchivedFileNamesAndSize(filesInDirectory[0])
+                        .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(CsvExtension)))
                         .ToArray());
             }
             catch (Exception e)
@@ -106,8 +106,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             }
 
             return
-                fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath)
-                    .Where(filename => filename.EndsWith(csvExtension))
+                fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.GetDirectoriesInDirectory(currentFolderPath)[0])
+                    .Where(filename => filename.EndsWith(CsvExtension))
                     .Select(file => GetPreloadedDataFromFile(id, file))
                     .Where(data => data != null)
                     .ToArray();

@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
@@ -27,24 +28,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
     internal class SampleImportService : ISampleImportService
     {
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
-        private readonly IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
+        private readonly IQuestionDataParser questionDataParser;
         private readonly IQuestionnaireFactory questionnaireFactory;
-
+        private readonly IRosterDataService rosterDataService;
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
         public SampleImportService(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
-                                   IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory, 
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
-            IQuestionnaireFactory questionnaireFactory)
+            IQuestionnaireFactory questionnaireFactory, IQuestionDataParser questionDataParser, IRosterDataService rosterDataService)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-            this.questionnairePreloadingDataItemFactory = questionnairePreloadingDataItemFactory;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
             this.questionnaireFactory = questionnaireFactory;
+            this.questionDataParser = questionDataParser;
+            this.rosterDataService = rosterDataService;
         }
 
         public void CreateSample(Guid questionnaireId, long version, Guid id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
@@ -82,19 +83,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             IQuestionnaire questionnarie = this.questionnaireFactory.CreateTemporaryInstance(bigTemplate);
 
             var i = 1;
-            foreach (var value in data[0].Content)
+            foreach (var preloadedDataByFile in data)
             {
-                try
+                if(!preloadedDataByFile.FileName.Contains(bigTemplate.Title))
+                    continue;
+
+                foreach (var value in preloadedDataByFile.Content)
                 {
-                    this.BuiltInterview(Guid.NewGuid(), value, data[0].Header, questionnarie, bigTemplate.PublicKey, responsibleHeadquarterId,
-                        responsibleSupervisorId);
-                    result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, data[0].Content.Length));
-                    this.tempSampleCreationStorage.Store(result, id.ToString());
-                    i++;
-                }
-                catch(Exception e)
-                {
-                    Logger.Error(e.Message, e);
+                    try
+                    {
+                        this.BuiltInterview(Guid.NewGuid(), value, preloadedDataByFile.Header, questionnarie, bigTemplate.PublicKey,
+                            responsibleHeadquarterId,
+                            responsibleSupervisorId);
+                        result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, preloadedDataByFile.Content.Length));
+                        this.tempSampleCreationStorage.Store(result, id.ToString());
+                        i++;
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e.Message, e);
+                    }
                 }
             }
             result.CompleteProcess();
@@ -121,75 +129,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             var featuredAnswers = new Dictionary<Guid, object>();
             for (int i = 0; i < header.Length; i++)
             {
-                var question = getQuestionByStataCaption(header[i]);
-                if (question == null)
-                    continue;
-                if(question.LinkedToQuestionId.HasValue)
-                    continue;
-                
-                switch (question.QuestionType)
-                {
-                    case QuestionType.Text:
-                        featuredAnswers.Add(question.PublicKey, values[i]);
-                        break;
-
-                    case QuestionType.AutoPropagate:
-                        int intValue;
-                        if (int.TryParse(values[i], out intValue))
-                            featuredAnswers.Add(question.PublicKey, intValue);
-
-                        break;
-
-                    case QuestionType.Numeric:
-                        var numericQuestion = question as INumericQuestion;
-                        if (numericQuestion == null)
-                            continue;    
-                        // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
-                        if (numericQuestion.IsInteger)
-                        {
-                            int intNumericValue;
-                            if (int.TryParse(values[i], out intNumericValue))
-                                featuredAnswers.Add(question.PublicKey, intNumericValue);
-                        }
-                        else
-                        {
-                            decimal decimalNumericValue;
-                            if (decimal.TryParse(values[i], out decimalNumericValue))
-                                featuredAnswers.Add(question.PublicKey, decimalNumericValue);
-                        }
-                        break;
-
-                    case QuestionType.DateTime:
-                        DateTime date;
-                        if (!DateTime.TryParse(values[i], out date))
-                            continue;    
-                            //throw new ArgumentException("date time value can't be parsed");
-                        featuredAnswers.Add(question.PublicKey, date);
-                        break;
-
-                    case QuestionType.SingleOption:
-                        var singleOption = question as SingleQuestion;
-                        if (singleOption != null)
-                        {
-                            decimal answerValue;
-                            if (!decimal.TryParse(values[i], out answerValue))
-                                continue;    
-                                //  throw new ArgumentException("date time value can't be parsed");
-                            if (!getAnswerOptionsAsValues(question.PublicKey).Contains(answerValue))
-                                continue;    
-                                //throw new ArgumentException("passed option is missing");
-                            featuredAnswers.Add(question.PublicKey, answerValue);
-                        }
-                        break;
-
-                    case QuestionType.TextList:
-                    case QuestionType.MultyOption:
-
-                    case QuestionType.GpsCoordinates:
-                    case QuestionType.QRBarcode:
-                        continue;    
-                    //throw new ArgumentException("Unsupported pre-filled question type in sample");
-                }
+                var parsedAnswer = questionDataParser.Parse(values[i], header[i], getQuestionByStataCaption, getAnswerOptionsAsValues);
+                if (parsedAnswer.HasValue)
+                    featuredAnswers.Add(parsedAnswer.Value.Key, parsedAnswer.Value.Value);
             }
             return featuredAnswers;
         }

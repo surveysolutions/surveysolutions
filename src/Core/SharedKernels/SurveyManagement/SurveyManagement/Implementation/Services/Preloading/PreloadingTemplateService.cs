@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataFileExportService dataFileExportService;
         private readonly IArchiveUtils archiveUtils;
+        private readonly IRosterDataService rosterDataService;
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage;
@@ -28,12 +30,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,
             IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage, string folderPath,
-            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils)
+            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils, IRosterDataService rosterDataService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.dataFileExportService = dataFileExportService;
             this.archiveUtils = archiveUtils;
+            this.rosterDataService = rosterDataService;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
@@ -57,10 +60,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
+            var cleanedFileNamesForLevels =
+              rosterDataService.CreateCleanedFileNamesForLevels(
+                  questionnaire.HeaderToLevelMap.Values.ToDictionary(h => h.LevelId, h => h.LevelName));
             foreach (var header in questionnaire.HeaderToLevelMap.Values)
             {
                 var interviewTemplateFilePath = this.fileSystemAccessor.CombinePath(dataDirectoryPath,
-                    dataFileExportService.GetInterviewExportedDataFileName(header.LevelName));
+                    dataFileExportService.GetInterviewExportedDataFileName(cleanedFileNamesForLevels[header.LevelId]));
 
                 dataFileExportService.CreateHeader(header, interviewTemplateFilePath);
             }

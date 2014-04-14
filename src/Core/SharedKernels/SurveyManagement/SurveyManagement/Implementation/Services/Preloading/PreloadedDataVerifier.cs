@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Raven.Abstractions.Extensions;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
@@ -20,15 +24,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     {
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-        private readonly string[] columnsToExcluteFromQuestionMapping = new[] { "Id", "ParentId" };
-        private readonly IDataFileExportService dataFileExportService;
+        private readonly IQuestionDataParser questionDataParser;
+
+        private readonly IQuestionnaireFactory questionnaireFactory;
+        private readonly string[] columnsToExcluteFromQuestionMapping = { "Id", "ParentId" };
+        private readonly IRosterDataService rosterDataService;
         public PreloadedDataVerifier(
             IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
-            IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage, IDataFileExportService dataFileExportService)
+            IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage, IRosterDataService rosterDataService, IQuestionDataParser questionDataParser, IQuestionnaireFactory questionnaireFactory)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.dataFileExportService = dataFileExportService;
+            this.rosterDataService = rosterDataService;
+            this.questionDataParser = questionDataParser;
+            this.questionnaireFactory = questionnaireFactory;
         }
 
         public IEnumerable<PreloadedDataVerificationError> Verify(Guid questionnaireId, long version, PreloadedDataByFile[] data)
@@ -66,15 +75,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 return new[]
                 {
-                    Verify(CoulmnWasntMappedOnQuestionInTemplate, "PL0003", PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
-                    Verifier(FileWasntMappedOnQuestionnaireLevel, "PL0004", PreloadingVerificationMessages.PL0004_FileWasntMappedRoster, PreloadedDataVerificationReferenceType.File)
+                    Verifier(CoulmnWasntMappedOnQuestionInTemplate, "PL0003",PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
+                    Verifier(FileWasntMappedOnQuestionnaireLevel, "PL0004", PreloadingVerificationMessages.PL0004_FileWasntMappedRoster, PreloadedDataVerificationReferenceType.File),
+                    Verifier(QuestionWasntParsed, "PL0005", PreloadingVerificationMessages.PL0005_QuestionDataTypeMismatch, PreloadedDataVerificationReferenceType.Cell)
                 };
             }
         }
 
         private IEnumerable<string> CoulmnWasntMappedOnQuestionInTemplate(PreloadedDataByFile levelData, QuestionnaireDocument questionnaire, QuestionnaireExportStructure exportStructure)
         {
-            var levelExportStructure = this.FindLevel(levelData, exportStructure);
+            var levelExportStructure = rosterDataService.FindLevelInPreloadedData(levelData, exportStructure);
             if(levelExportStructure==null)
                 yield break;
 
@@ -87,35 +97,63 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
-        private bool FileWasntMappedOnQuestionnaireLevel(PreloadedDataByFile levelData, QuestionnaireDocument questionnaire,
-            QuestionnaireExportStructure exportStructure)
+        private IEnumerable<PreloadedDataVerificationReference> QuestionWasntParsed(PreloadedDataByFile levelData, Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
         {
-            var levelExportStructure = this.FindLevel(levelData, exportStructure);
+            for (int y = 0; y < levelData.Content.Length; y++)
+            {
+                var row = levelData.Content[y];
+                for (int x = 0; x < Math.Min(row.Length, levelData.Header.Length); x++)
+                {
+                    if(string.IsNullOrEmpty(row[x]))
+                        continue;
+
+                    var parsedAnswer = questionDataParser.Parse(row[x], levelData.Header[x], getQuestionByStataCaption, getAnswerOptionsAsValues);
+                    if (!parsedAnswer.HasValue)
+                        yield return
+                            new PreloadedDataVerificationReference(x, y, PreloadedDataVerificationReferenceType.Cell, row[x],
+                                levelData.FileName);
+                }
+            }
+        }
+
+        private bool FileWasntMappedOnQuestionnaireLevel(PreloadedDataByFile levelData, QuestionnaireExportStructure exportStructure)
+        {
+            var levelExportStructure = rosterDataService.FindLevelInPreloadedData(levelData, exportStructure);
             if (levelExportStructure == null)
                 return true;
             return false;
         }
 
-        private HeaderStructureForLevel FindLevel(PreloadedDataByFile levelData, QuestionnaireExportStructure exportStructure)
-        {
-            return exportStructure.HeaderToLevelMap.Values.FirstOrDefault(header=>this.dataFileExportService.GetInterviewExportedDataFileName(header.LevelName)==levelData.FileName);
-        }
-
-        private static Func<PreloadedDataByFile[], QuestionnaireDocument, QuestionnaireExportStructure, IEnumerable<PreloadedDataVerificationError>> Verify(
+        private Func<PreloadedDataByFile[], QuestionnaireDocument, QuestionnaireExportStructure, IEnumerable<PreloadedDataVerificationError>> Verifier(
             Func<PreloadedDataByFile, QuestionnaireDocument, QuestionnaireExportStructure, IEnumerable<string>> getErrors, string code, string message, PreloadedDataVerificationReferenceType type)
         {
             return (data, questionnaire, exportStructure) =>
                 data.SelectMany(level => getErrors(level, questionnaire, exportStructure).Select(entity => new PreloadedDataVerificationError(code, message, new PreloadedDataVerificationReference(type, entity,level.FileName))));
         }
 
-        private static Func<PreloadedDataByFile[], QuestionnaireDocument, QuestionnaireExportStructure, IEnumerable<PreloadedDataVerificationError>> Verifier(
-            Func<PreloadedDataByFile, QuestionnaireDocument, QuestionnaireExportStructure, bool> hesErrors, string code, string message, PreloadedDataVerificationReferenceType type)
+        private Func<PreloadedDataByFile[], QuestionnaireDocument, QuestionnaireExportStructure, IEnumerable<PreloadedDataVerificationError>> Verifier(
+            Func<PreloadedDataByFile, QuestionnaireExportStructure, bool> hasErrors, string code, string message, PreloadedDataVerificationReferenceType type)
         {
             return (data, questionnaire, exportStructure) =>
-                data.Where(level => hesErrors(level, questionnaire, exportStructure)).Select(
+                data.Where(level => hasErrors(level, exportStructure)).Select(
                     level =>
                         new PreloadedDataVerificationError(code, message,
                             new PreloadedDataVerificationReference(type, null, level.FileName)));
+        }
+
+        private Func<PreloadedDataByFile[], QuestionnaireDocument, QuestionnaireExportStructure, IEnumerable<PreloadedDataVerificationError>> Verifier(
+           Func<PreloadedDataByFile, Func<string, IQuestion>, Func<Guid, IEnumerable<decimal>>, IEnumerable<PreloadedDataVerificationReference>> getErrors, string code, string message, PreloadedDataVerificationReferenceType type)
+        {
+            return (data, questionnaire, exportStructure) =>
+            {
+                IQuestionnaire questionnarie = questionnaireFactory.CreateTemporaryInstance(questionnaire);
+                return
+                    data.SelectMany(
+                        level => getErrors(level, questionnarie.GetQuestionByStataCaption, questionnarie.GetAnswerOptionsAsValues)
+                            .Select(
+                                entity =>
+                                    new PreloadedDataVerificationError(code, message, entity )));
+            };
         }
     }
 }

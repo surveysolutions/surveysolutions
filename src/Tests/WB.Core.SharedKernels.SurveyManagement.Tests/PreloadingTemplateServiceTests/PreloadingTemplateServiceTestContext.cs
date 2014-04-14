@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateServiceTests
@@ -20,11 +21,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
         protected static PreloadingTemplateService CreatePreloadingTemplateService(IDataFileExportService dataFileExportService = null,
             QuestionnaireExportStructure questionnaireExportStructure = null, IFileSystemAccessor fileSystemAccessor=null)
         {
-            return new PreloadingTemplateService(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object,
+            var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
+            return new PreloadingTemplateService(currentFileSystemAccessor,
                 Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
                     _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure), "",
                 dataFileExportService ?? CreateIDataFileExportServiceMock().Object,
-                Mock.Of<IArchiveUtils>());
+                Mock.Of<IArchiveUtils>(), new RosterDataService(currentFileSystemAccessor));
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

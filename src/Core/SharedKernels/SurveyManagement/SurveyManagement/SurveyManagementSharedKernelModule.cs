@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInfor
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
 
@@ -46,6 +47,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
+            this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
+            this.Bind<IRosterDataService>().To<RosterDataService>();
             this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,

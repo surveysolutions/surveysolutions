@@ -1,4 +1,6 @@
-﻿@using Mono.CSharp
+﻿@using System.Activities.Expressions
+@using System.ServiceModel.Channels
+@using Mono.CSharp
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @using Web.Supervisor.Utils
@@ -15,6 +17,7 @@
                 <tr>
                     <th>File Name</th>
                     <th>File Size</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +26,7 @@
                     <tr>
                         <th>@item.FileName</th>
                         <th>@WB.Core.SharedKernel.Utils.FileSizeUtils.SizeSuffix(item.FileSize)</th>
+                        <th>@(item.CanBeHandled?"":"File format is not supported, data inside it will be ignored")</th>
                     </tr>
                 }
 

@@ -124,9 +124,12 @@
     <value>Preloaded data contains more then one level. Preloading of roster's data are not supported now.</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
-    <value>Column wasn't mapped on question in questionnaire template</value>
+    <value>Column can't be mapped on any question in questionnaire</value>
   </data>
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
-    <value>File wan't mapped on roster in questionnaire template</value>
+    <value>File can't be mapped on any roster in questionnaire</value>
+  </data>
+  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
+    <value>Question data type mismatch</value>
   </data>
 </root>

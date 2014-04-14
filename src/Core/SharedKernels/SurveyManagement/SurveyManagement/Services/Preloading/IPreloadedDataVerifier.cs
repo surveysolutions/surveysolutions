@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Services
+namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
 {
     public interface IPreloadedDataVerifier
     {
