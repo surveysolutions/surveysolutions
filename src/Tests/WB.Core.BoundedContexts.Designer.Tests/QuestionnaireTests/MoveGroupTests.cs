@@ -69,9 +69,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", rosterSizeQuestionId: null,
                 description: null, condition: null, parentGroupId: chapterId, isRoster: false,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
-            questionnaire.NewAddQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion", QuestionType.MultyOption,
-                "rosterSizeQuestion", false, false, QuestionScope.Interviewer, "", "", "", "",
-                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, Order.AsIs, responsibleId, null,
+            questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion", 
+                "rosterSizeQuestion", false, QuestionScope.Interviewer, "", "", "", "", responsibleId,
+                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") },  null,
                 false, null);
             questionnaire.AddGroup(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup",
                 rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId, isRoster: true,
