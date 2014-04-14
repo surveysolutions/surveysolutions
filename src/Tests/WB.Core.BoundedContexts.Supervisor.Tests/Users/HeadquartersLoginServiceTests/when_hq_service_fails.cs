@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,12 +6,9 @@ using Machine.Specifications;
 using Moq;
 using Moq.Protected;
 using Ncqrs.Commanding.ServiceModel;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using Web.Supervisor.Utils;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServiceTests
@@ -33,8 +29,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                 }));
 
             service = Create.HeadquartersLoginService(messageHandler: handler.Object,
-                commandService: commandService.Object,
-                logger: logger.Object);
+                logger: logger.Object, commandService: commandService.Object);
         };
 
         Because of = () => service.LoginAndCreateAccount("login", "pwd");

@@ -133,6 +133,7 @@
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
+    <Compile Include="Synchronization\Users\SupervisorValidationResult.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />
     <Compile Include="Synchronization\Users\SupervisorFeedEntry.cs" />
     <Compile Include="Synchronization\Users\UserChangedFeedEntry.cs" />
