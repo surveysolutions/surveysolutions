@@ -4,10 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Plugins.Sqlite;
 using SQLite;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
@@ -46,11 +44,5 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         {
             this.documentStore.Store<TView>(view,id);
         }
-    }
-
-    public abstract class DenormalizerRow : IView
-    {
-        [PrimaryKey]
-        public string Id { get; set; }
     }
 }

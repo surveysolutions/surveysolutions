@@ -87,9 +87,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
+    <Compile Include="DenormalizerStorage\DenormalizerRow.cs" />
     <Compile Include="DenormalizerStorage\SqliteDenormalizerStore.cs" />
     <Compile Include="DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
     <Compile Include="MvvmCrossSqliteEventStore.cs" />
+    <Compile Include="PlainStorage\PlainStorageRow.cs" />
+    <Compile Include="PlainStorage\SqlitePlainStorageAccessor.cs" />
+    <Compile Include="PlainStorage\SqlitePlainStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoredEvent.cs" />
     <Compile Include="StoredEventExtensions.cs" />
