@@ -33,18 +33,18 @@
         <div class="chapter-panel" ng-click="unfold();">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters">
-                <li ng-repeat="chapter in questionnaire.Chapters" ng-click="changeChapter(chapter)">
+                <li ng-repeat="chapter in questionnaire.Chapters" ng-click="changeChapter(chapter)" ng-class="{current: currentChapter == chapter}">
                     <div class="holder">
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
-                            <span>({{chapter.Statistics.QuestionsCount}} Questions, {{questionnaire.Statistics.GroupsCount}} Groups, {{questionnaire.Statistics.RostersCount}} Rosters)</span>
+                            <span>({{chapter.Statistics.QuestionsCount}} Questions, {{chapter.Statistics.GroupsCount}} Groups, {{chapter.Statistics.RostersCount}} Rosters)</span>
                             <div class="dropdown-button"></div>
                         </div>
                     </div>
                 </li>
             </ul>
             <div class="button-holder">
-                <input type="button" class="wb-inline-button lighter-hover" value="ADD NEW CHAPTER">
+                <input type="button" class="wb-inline-button lighter-hover" value="ADD NEW CHAPTER" ng-click="addNewChapter()">
             </div>
         </div>
 

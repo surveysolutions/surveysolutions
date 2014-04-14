@@ -33,6 +33,21 @@ angular.module('pocAngularApp')
         $('.chapter-panel').removeClass('unfolded');
     };
 
+    $scope.addNewChapter = function() {
+        console.log('add new chapter');
+        $scope.questionnaire.Chapters.push(
+            {
+                Title: 'New Chapter',
+                GroupId: "6e240642274c4bdea937baa78cd4ad6f",
+                Statistics: {
+                    QuestionsCount: 0,
+                    GroupsCount: 0,
+                    RostersCount: 0
+                }
+            }
+        );
+    }
+
     //$http.get('UpdatedDesigner/data/data.json')
     //  .then(function(result) {
     //    $scope.documents = result.data;
