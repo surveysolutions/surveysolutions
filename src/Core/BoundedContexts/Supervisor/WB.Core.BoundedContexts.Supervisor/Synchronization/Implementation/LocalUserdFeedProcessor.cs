@@ -11,6 +11,7 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using Raven.Abstractions.Extensions;
+using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -23,20 +24,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
         private readonly ILocalFeedStorage localFeedStorage;
         private readonly ICommandService commandService;
+        private readonly IHeadquartersUserReader heqHeadquartersUserReader;
         private readonly ILogger logger;
 
         public LocalUserdFeedProcessor(IQueryableReadSideRepositoryReader<UserDocument> users,
             ILocalFeedStorage localFeedStorage,
             ICommandService commandService,
+            IHeadquartersUserReader heqHeadquartersUserReader,
             ILogger logger)
         {
             if (users == null) throw new ArgumentNullException("users");
             if (localFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
+            if (heqHeadquartersUserReader == null) throw new ArgumentNullException("heqHeadquartersUserReader");
             if (logger == null) throw new ArgumentNullException("logger");
 
             this.users = users;
             this.localFeedStorage = localFeedStorage;
             this.commandService = commandService;
+            this.heqHeadquartersUserReader = heqHeadquartersUserReader;
             this.logger = logger;
         }
 
@@ -57,34 +62,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private async Task ProcessOneUserChanges(IEnumerable<LocalUserChangedFeedEntry> userChanges)
         {
-            LocalUserChangedFeedEntry changeThatShouldBeApplied = userChanges.Last(); ;
+            LocalUserChangedFeedEntry changeThatShouldBeApplied = userChanges.Last();
             try
             {
-                using (var httpClient = new HttpClient())
+                var deserializedUserDetails = await this.heqHeadquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri)
+                                                                                  .ConfigureAwait(false);
+
+                this.UpdateOrCreateUser(deserializedUserDetails);
+
+                foreach (var appliedChange in userChanges)
                 {
-                    var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, changeThatShouldBeApplied.UserDetailsUri);
-                    httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
-                    string userDetailsString = await response.Content.ReadAsStringAsync();
-
-                    var deserializedUserDetails = JsonConvert.DeserializeObject<UserDocument>(userDetailsString);
-
-                    this.UpdateOrCreateUser(deserializedUserDetails);
-
-                    foreach (var appliedChange in userChanges)
-                    {
-                        appliedChange.IsProcessed = true;
-                    }
-                    
-                    this.localFeedStorage.Store(changeThatShouldBeApplied);
+                    appliedChange.IsProcessed = true;
                 }
+
+                this.localFeedStorage.Store(changeThatShouldBeApplied);
             }
             catch (ApplicationException e)
             {
                 this.logger.Error(string.Format("Error occured while processing users feed event. EventId {0}. Event marked as processed with error.", changeThatShouldBeApplied.EntryId), e);
                 changeThatShouldBeApplied.ProcessedWithError = true;
-                
+
                 this.localFeedStorage.Store(userChanges);
             }
         }
