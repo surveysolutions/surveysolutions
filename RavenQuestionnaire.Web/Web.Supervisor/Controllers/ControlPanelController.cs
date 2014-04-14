@@ -181,9 +181,9 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Synchronize()
+        public ActionResult Synchronize()
         {
-            await synchronizer.FillLocalCopyOfFeed();
+            synchronizer.Synchronize();
             return Json(new object());
         }
     }
