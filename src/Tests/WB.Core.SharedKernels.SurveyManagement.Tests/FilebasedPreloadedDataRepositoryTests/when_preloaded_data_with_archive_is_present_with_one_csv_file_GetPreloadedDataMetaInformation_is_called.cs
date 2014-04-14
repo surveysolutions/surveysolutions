@@ -35,11 +35,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
 
         Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformation(archiveId);
 
-        It should_result_has_info_about_1_element = () =>
-            result.FilesMetaInformation.Length.ShouldEqual(1);
+        It should_result_has_info_about_2_elements = () =>
+            result.FilesMetaInformation.Length.ShouldEqual(2);
 
-        It should_result_has_info_about_1_element_with_name_1_csv = () =>
+        It should_result_has_info_about_first_element_with_name_1_csv = () =>
           result.FilesMetaInformation[0].FileName.ShouldEqual("1.csv");
+
+        It should_first_element_be_marked_and_CanBeHandled = () =>
+         result.FilesMetaInformation[0].CanBeHandled.ShouldEqual(true);
+
+        It should_result_has_info_about_second_element_with_name_nastya = () =>
+         result.FilesMetaInformation[1].FileName.ShouldEqual("nastya");
+
+        It should_second_element_be_marked_and_CanBeHandled = () =>
+        result.FilesMetaInformation[1].CanBeHandled.ShouldEqual(false);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;

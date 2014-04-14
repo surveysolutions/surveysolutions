@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
@@ -24,13 +25,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
             environmentContentService = new Mock<IEnvironmentContentService>();
             dataFileExportService = new Mock<IDataFileExportService>();
 
+            var level1 = Guid.NewGuid();
+            var level2 = Guid.NewGuid();
+
             fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, dataFileExportService.Object,
                 environmentContentService.Object);
 
             questionnaireExportStructure = new QuestionnaireExportStructure();
 
-            AddLevelToExportStructure(questionnaireExportStructure, Guid.NewGuid(), "level");
-            AddLevelToExportStructure(questionnaireExportStructure, Guid.NewGuid(), "Level");
+            AddLevelToExportStructure(questionnaireExportStructure, level1, "level");
+            AddLevelToExportStructure(questionnaireExportStructure, level2, "Level");
         };
 
         private Because of = () => fileBasedDataExportService.CreateExportedDataStructureByTemplate(questionnaireExportStructure);

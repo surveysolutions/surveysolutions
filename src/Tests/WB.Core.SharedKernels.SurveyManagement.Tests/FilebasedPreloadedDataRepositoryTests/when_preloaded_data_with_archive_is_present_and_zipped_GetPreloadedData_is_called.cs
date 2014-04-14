@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             fileSystemAccessor.Setup(x => x.IsDirectoryExists("PreLoadedData\\" + archiveId.FormatGuid())).Returns(true);
 
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId.FormatGuid())).Returns(new string[] { archiveName + ".zip" });
+            fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(preLoadedData + "\\" + archiveId.FormatGuid())).Returns(new string[] { archiveName });
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(archiveName))
                 .Returns(new string[0]);
 

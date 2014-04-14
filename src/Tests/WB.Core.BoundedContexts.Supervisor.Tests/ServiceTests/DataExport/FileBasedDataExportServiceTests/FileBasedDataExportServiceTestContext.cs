@@ -8,7 +8,9 @@ using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileBasedDataExportServiceTests
@@ -18,11 +20,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
     {
         protected static FileBasedDataExportService CreateFileBasedDataExportService(
             IFileSystemAccessor fileSystemAccessor = null, IDataFileExportService dataFileExportService = null,
-            IEnvironmentContentService environmentContentService = null)
+            IEnvironmentContentService environmentContentService = null, IRosterDataService rosterDataService =null)
         {
+            var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
                 dataFileExportService ?? Mock.Of<IDataFileExportService>(),
-                environmentContentService ?? Mock.Of<IEnvironmentContentService>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
+                rosterDataService ?? new RosterDataService(currentFileSystemAccessor));
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,
