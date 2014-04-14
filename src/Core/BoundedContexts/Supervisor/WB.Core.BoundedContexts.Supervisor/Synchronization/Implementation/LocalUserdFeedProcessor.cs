@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 foreach (var userChanges in events.GroupBy(x => x.ChangedUserId))
                 {
-                    await this.ProcessOneUserChanges(userChanges);
+                    await this.ProcessOneUserChanges(userChanges).ConfigureAwait(false);
                 }
             }
         }

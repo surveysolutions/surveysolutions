@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             {
                 var feedUrl = this.headquartersSettings.UserChangedFeedUrl;
 
-                XDocument feedDocument = await ReadFeedPage(feedUrl, client);
+                XDocument feedDocument = await ReadFeedPage(feedUrl, client).ConfigureAwait(false);
                 IEnumerable<LocalUserChangedFeedEntry> entries = ParseFeed(feedDocument);
                 Uri archiveUrl = GetArchiveUrl(feedDocument);
 
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         break;
                     }
 
-                    XDocument archiveFeedDocument = await ReadFeedPage(archiveUrl, client);
+                    XDocument archiveFeedDocument = await ReadFeedPage(archiveUrl, client).ConfigureAwait(false);
                     archiveUrl = GetArchiveUrl(archiveFeedDocument);
 
                     IEnumerable<LocalUserChangedFeedEntry> archiveEntries = ParseFeed(archiveFeedDocument);
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             var request = new HttpRequestMessage(HttpMethod.Get, feedUrl);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/atom+xml"));
 
-            HttpResponseMessage response = await client.SendAsync(request);
+            HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     response.StatusCode, response.Content));
             }
 
-            string responseBody = await response.Content.ReadAsStringAsync();
+            string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             return XDocument.Parse(responseBody);
         }
