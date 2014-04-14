@@ -1,4 +1,6 @@
- @import "jquery.mCustomScrollbar.css";
+@import "jquery.mCustomScrollbar.css";
+
+@import "prettyCheckable.css";
 /**
  * WorldBank Designer
  * file: markup.css.less
@@ -5864,24 +5866,93 @@ body {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-weight: bold;
   font-size: 12px;
+  line-height: 12px;
 }
 .wb-inline-button:hover {
   background: #dfe3e4;
 }
+.wb-inline-button.lighter-hover:hover {
+  background: #fbfbfc;
+}
 .wb-inline-button.error {
   color: #d20426;
+}
+.dropdown.width60 {
+  width: 60%;
+}
+.dropdown > .wb-dropdown-button,
+.dropdown ul.dropdown-menu {
+  width: 100%;
+}
+.dropdown > .wb-dropdown-button .arrow,
+.dropdown ul.dropdown-menu .arrow {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 40px;
+  background: url(../i/dropdown-arrow.png) no-repeat center center;
+}
+.dropdown > .wb-dropdown-button {
+  background-color: #fff;
+  width: 100%;
+  text-align: left;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  font-weight: normal;
+  color: #c1c7cb;
+}
+.wb-label {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  font-weight: normal;
+  color: #5d5d5d;
+}
+.wb-label > span {
+  color: #bfd8ed;
+}
+.wb-label > span > a {
+  color: #2a81cb;
+}
+.wb-input {
+  border-radius: 4px;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  font-weight: normal;
+  color: #c1c7cb;
+  padding: 10px 15px;
+}
+.wb-input.bg-white {
+  background-color: white;
+  border: solid #dbdfe2 2px;
+}
+.wb-input.width-auto {
+  width: 100%;
+}
+.prettycheckbox > a,
+.prettyradio > a {
+  background: url(../i/pretty-checkable-sprites.png);
+}
+.prettycheckbox label {
+  margin: 7px 6px 4px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 12px;
 }
 /* not needed anymore, because of bootstrap
 *, *:before, *:after {
   .box-sizing();
 }
-*//*dark-thick*/
+*/.mCSB_container {
+  margin-right: 0;
+}
+/*dark-thick*/
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_draggerRail {
   width: 8px;
   background: #000;
   /* rgba fallback */
 
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(88, 101, 109, 0.2);
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -5891,7 +5962,7 @@ body {
   background: #000;
   /* rgba fallback */
 
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(88, 101, 109, 0.5);
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -5907,11 +5978,11 @@ body {
   margin: 5px auto;
 }
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(88, 101, 109, 0.5);
 }
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar,
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(88, 101, 109, 0.5);
 }
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_buttonUp {
   background-position: -96px 0;
@@ -5951,13 +6022,14 @@ body {
   margin: 0;
   padding: 0;
 }
-#designer-editor.container section#header > .breadcrumbs > ul > li {
+#designer-editor.container section#header > .breadcrumbs > ul > li,
+#designer-editor.container section#header > .breadcrumbs > ul > li > a {
   display: inline-block;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
   letter-spacing: 1px;
-  color: #2a81cb;
   text-transform: uppercase;
+  color: #2a81cb;
 }
 #designer-editor.container section#header > .breadcrumbs > ul > li:after {
   position: relative;
@@ -6016,7 +6088,7 @@ body {
 #designer-editor.container section#main > .questionnaire-tree {
   height: 100%;
   padding-left: 75px;
-  padding-top: 45px;
+  padding-top: 55px;
   padding-right: 0;
   background: #dbdfe2;
 }
@@ -6033,7 +6105,7 @@ body {
   font-weight: bold;
   color: #3f3f3f;
   line-height: 55px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.25);
   z-index: 5;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-title > span {
@@ -6105,27 +6177,38 @@ body {
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .foldback-button {
   display: none;
   position: absolute;
+  cursor: pointer;
   top: 0;
   right: -55px;
+  z-index: 15;
   width: 55px;
   height: 55px;
   background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
-  -webkit-box-shadow: 50px 0 50px -15px rgba(0, 0, 0, 0.25);
-  box-shadow: 50px 0 50px -15px rgba(0, 0, 0, 0.25);
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .foldback-button:hover {
   background-position: 0 -55px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded {
   width: 354px;
+  cursor: default;
   background-image: none;
-  -webkit-box-shadow: 50px 0 50px -15px rgba(0, 0, 0, 0.25);
-  box-shadow: 50px 0 50px -15px rgba(0, 0, 0, 0.25);
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded:after {
+  position: absolute;
+  content: '';
+  width: 219px;
+  height: 100%;
+  top: 0;
+  right: -219px;
+  background: url(../i/left-panel-shadow.png) repeat-y;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded > .foldback-button {
   display: block;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded > ul.chapters {
+  display: block;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded > .button-holder {
   display: block;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters {
@@ -6163,39 +6246,66 @@ body {
   font-size: 12px;
   color: #64686d;
 }
+#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .dropdown-button {
+  display: none;
+  position: absolute;
+  top: 11px;
+  right: 8px;
+  vertical-align: middle;
+  width: 37px;
+  height: 30px;
+  background: url(../i/btn-dropdown-blue.png) center -5px no-repeat;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .dropdown-button:hover {
+  background-position: center -42px;
+}
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li.current > .holder > .inner > h1 {
   font-weight: bold;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li:hover {
   background: #dbdfe2 url(../i/chapter-list-li-dots.png) 5px center no-repeat;
 }
+#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li:hover > .holder > .inner > .dropdown-button {
+  display: block;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-panel .button-holder {
+  display: none;
+  width: 100%;
+  margin: 10px 0 0 10px;
+  overflow: hidden;
+}
 #designer-editor.container section#main > .questionnaire-tree > .question-list {
   width: 100%;
   height: 100%;
   overflow: auto;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-list .item {
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item,
+#designer-editor.container section#main > .questionnaire-tree > .question-list .buttons-item {
   position: relative;
-  cursor: pointer;
   height: 35px;
   line-height: 35px;
   border-radius: 4px;
   padding-left: 50px;
   padding-right: 10px;
   margin-right: 28px;
+  overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #404040;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-list .item:first-child {
-  margin-top: 20px;
-}
-#designer-editor.container section#main > .questionnaire-tree > .question-list .item:after {
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item:after,
+#designer-editor.container section#main > .questionnaire-tree > .question-list .buttons-item:after {
   display: block;
   content: '';
   width: 100%;
   height: 1px;
-  background: #fff;
+  background: #e6e9ec;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item {
+  cursor: pointer;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item:first-child {
+  margin-top: 20px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item:hover {
   background-image: url(../i/question-item-dots.png);
@@ -6226,11 +6336,11 @@ body {
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.question {
   margin-left: 20px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-list .item > a.var {
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item > span.var {
   color: #4177a0;
   font-style: italic;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-list .item > span {
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item > span.parenthesis {
   color: #9ca4aa;
   font-weight: normal;
 }
@@ -6272,8 +6382,8 @@ body {
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item > .qname-block {
   position: absolute;
   right: 5px;
-  top: 1px;
-  height: calc(100% - 2px);
+  top: 2px;
+  height: calc(100% - 3px);
   padding-right: 10px;
   background-color: #dbdfe2;
   font-family: "Lucida Console", Monaco, monospace;
@@ -6291,10 +6401,10 @@ body {
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item > .qname-block:before {
   display: block;
   position: absolute;
-  height: calc(100% - 2px);
+  height: 100%;
   content: '';
   width: 75px;
-  top: 1px;
+  top: 0px;
   left: -75px;
   background-image: -webkit-linear-gradient(left, color-stop(rgba(219, 223, 226, 0) 0%), color-stop(#dbdfe2 100%));
   background-image: linear-gradient(to right, rgba(219, 223, 226, 0) 0%, #dbdfe2 100%);
@@ -6303,6 +6413,8 @@ body {
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item > .qname-block > .dropdown-btn {
   display: none;
+  position: relative;
+  left: 10px;
   vertical-align: middle;
   width: 37px;
   height: 30px;
@@ -6315,18 +6427,28 @@ body {
   display: inline-block;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.selected > .qname-block {
+  padding-right: 20px;
+  background-color: #ffffff;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item.selected > .qname-block:before {
   background-image: -webkit-linear-gradient(left, color-stop(rgba(255, 255, 255, 0) 0%), color-stop(#ffffff 100%));
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item:hover > .qname-block {
+  background-color: #edeff1;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item:hover > .qname-block:before {
   background-image: -webkit-linear-gradient(left, color-stop(rgba(237, 239, 241, 0) 0%), color-stop(#edeff1 100%));
   background-image: linear-gradient(to right, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.selected:hover > .qname-block {
+  background-color: #ffffff;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item.selected:hover > .qname-block:before {
   background-image: -webkit-linear-gradient(left, color-stop(rgba(255, 255, 255, 0) 0%), color-stop(#ffffff 100%));
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background-repeat: repeat-x;
@@ -6334,6 +6456,79 @@ body {
 }
 #designer-editor.container section#main > .question-editor {
   height: 100%;
-  padding-top: 10px;
+  padding: 36px 40px;
   background: white;
+}
+#designer-editor.container section#main > .question-editor > .breadcrumbs > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#designer-editor.container section#main > .question-editor > .breadcrumbs > ul > li,
+#designer-editor.container section#main > .question-editor > .breadcrumbs > ul > li > a {
+  display: inline-block;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #4a4a4a;
+}
+#designer-editor.container section#main > .question-editor > .breadcrumbs > ul > li:after {
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  content: '';
+  margin: 0 7px;
+  background: url(../i/breadcrumb-slash.png) no-repeat;
+}
+#designer-editor.container section#main > .question-editor > .group {
+  margin: 25px 0;
+  border-radius: 4px;
+  background: #f1f2f3;
+}
+#designer-editor.container section#main > .question-editor > .group > h1 {
+  border: 2px solid #dbdfe2;
+  border-radius: 4px;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  text-transform: uppercase;
+  background: #fff;
+  padding: 12px;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder {
+  padding: 15px;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder:before,
+#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+  content: " ";
+  display: table;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+  clear: both;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder:before,
+#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+  content: " ";
+  display: table;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+  clear: both;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder > a {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #2a81cb;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder > a.left {
+  float: left;
+}
+#designer-editor.container section#main > .question-editor > .group > .form-holder > a.right {
+  float: right;
 }

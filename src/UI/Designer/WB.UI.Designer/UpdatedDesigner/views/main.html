@@ -6,7 +6,7 @@
             <li><a href="/Designer">My Questionnaires</a></li>
         </ul>
     </div>
-    <div class="questionnarie-title" ng-click="unfold();">
+    <div class="questionnarie-title">
         <div class="title">
             {{questionnaire.Title}} <span>({{questionnaire.Statistics.QuestionsCount}}Q, {{questionnaire.Statistics.GroupsCount}}G, {{questionnaire.Statistics.RostersCount}}R)</span>
             <input type="button" class="wb-inline-button error" value="VERIFY" />
@@ -23,7 +23,8 @@
 <section id="main" class="row">
     <div class="questionnaire-tree col-xs-6">
         <div class="chapter-title">
-            {{currentChapter.Title }} <span>({{currentChapter.Statistics.QuestionsCount}} Questions, {{currentChapter.Statistics.GroupsCount}} Groups, {{currentChapter.Statistics.RostersCount}} Rosters)</span>
+            {{currentChapter.Title }}
+            <span>({{currentChapter.Statistics.QuestionsCount}} Questions, {{currentChapter.Statistics.GroupsCount}} Groups, {{currentChapter.Statistics.RostersCount}} Rosters)</span>
             <ul class="controls-right">
                 <li><a href="" class="filter" title="Toggle Filter"></a></li>
                 <li><a href="" class="search" title="Toggle Search"></a></li>
@@ -37,19 +38,21 @@
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
                             <span>({{chapter.Statistics.QuestionsCount}} Questions, {{questionnaire.Statistics.GroupsCount}} Groups, {{questionnaire.Statistics.RostersCount}} Rosters)</span>
+                            <div class="dropdown-button"></div>
                         </div>
                     </div>
                 </li>
             </ul>
+            <div class="button-holder">
+                <input type="button" class="wb-inline-button lighter-hover" value="ADD NEW CHAPTER">
+            </div>
         </div>
 
         <div class="question-list">
-
             <div ng-repeat="group in documents.Groups | filter: {Level: 0}">
                 <div class="section item" ng-click="setItem(group)">
                     {{ group.Title }} - {{questionnaire.Title}}
                 </div>
-
                 <div class="question item cat-multianswer" ng-repeat="child in group.Children" ng-click="setItem(child)">
                     <div class="icon"></div>
                     {{ child | truncateFilter:documents }}
@@ -57,7 +60,6 @@
                         <a href="" class="linked"></a>visit_health<div class="dropdown-btn"></div>
                     </div>
                 </div>
-
             </div>
         </div>
 
