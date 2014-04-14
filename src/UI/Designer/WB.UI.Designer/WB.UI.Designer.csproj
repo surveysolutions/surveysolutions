@@ -516,6 +516,7 @@
     <Content Include="Scripts\TrafficCop.js" />
     <Content Include="Scripts\TrafficCop.min.gz.js" />
     <Content Include="Scripts\TrafficCop.min.js" />
+    <Content Include="UpdatedDesigner\styles\prettyCheckable.css" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.js" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\angular-mocks.js" />
