@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
 {
     internal class when_preloaded_data_folder_contains_no_archives_GetPreloadedData_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
