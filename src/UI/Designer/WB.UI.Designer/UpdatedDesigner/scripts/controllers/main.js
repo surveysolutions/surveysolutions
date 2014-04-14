@@ -3,8 +3,6 @@
 angular.module('pocAngularApp')
   .controller('MainCtrl', function ($scope, $http, $routeParams) {
 
-    $scope.documents = [];
-
     $scope.chapters = [];
 
     $scope.item = null;
@@ -17,6 +15,7 @@ angular.module('pocAngularApp')
 
     $scope.changeChapter = function (chapter) {
         $scope.currentChapter = chapter;
+        loadChapterDetails();
     };
 
     $scope.submit = function () {
@@ -48,15 +47,15 @@ angular.module('pocAngularApp')
         .success(function (result) {
             $scope.questionnaire = result;
             $scope.currentChapter = result.Chapters[0];
+            loadChapterDetails();
         });
 
-      //$http.get('UpdatedDesigner/data/data.json')
-      //  .then(function(result) {
-      //    $scope.documents = result.data;
-      //    $scope.chapters = _.map(result.data.Chapters, function(chapter){
-      //      return _.findWhere(result.data.Groups, {Id: chapter.Id});
-      //    });
-      //  });
+    function loadChapterDetails() {
+        $http.get('api/questionnaire/chapter/' + $routeParams.questionnaireId + "?chapterId=" + $scope.currentChapter.GroupId)
+        .success(function (result) {
+            console.log(result);
+       });
+    }
   })
   .filter("truncateFilter", function(){
     return function(input, source){
