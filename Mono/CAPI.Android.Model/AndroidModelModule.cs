@@ -2,6 +2,7 @@ using System.IO;
 using Android.OS;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.Backup;
 using CAPI.Android.Core.Model.ChangeLog;
@@ -14,6 +15,7 @@ using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
+using Main.Core.Documents;
 using Main.Core.View;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
@@ -21,6 +23,7 @@ using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -31,6 +34,7 @@ namespace CAPI.Android.Core.Model
     {
         private const string ProjectionStoreName = "Projections";
         private const string EventStoreDatabaseName = "EventStore";
+        private const string PlainStoreName = "PlainStore";
         private readonly string basePath;
 
         public AndroidModelModule(string basePath)
@@ -43,11 +47,13 @@ namespace CAPI.Android.Core.Model
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var snapshotStore = new AndroidSnapshotStore();
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
+            var plainStore = new SqlitePlainStore(PlainStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
             var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
+            var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
             var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
@@ -73,6 +79,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
             this.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
+            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
             this.Bind<IDataCollectionAuthentication, IAuthentication>().To<AndroidAuthentication>().InSingletonScope();
@@ -87,7 +94,7 @@ namespace CAPI.Android.Core.Model
                 .WithConstructorArgument("basePath", basePath)
                 .WithConstructorArgument("backupables", new IBackupable[]
                 {
-                    evenStore, changeLogStore, fileSystem, denormalizerStore,
+                    evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
                     bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
                 });
         }

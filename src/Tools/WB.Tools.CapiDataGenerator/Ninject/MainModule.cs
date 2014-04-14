@@ -2,6 +2,7 @@
 using System.IO;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.EventHandlers;
@@ -12,6 +13,7 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core;
 using Main.Core.Commands;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Main.Core.View;
@@ -32,6 +34,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.ReadSide;
@@ -54,6 +57,7 @@ namespace CapiDataGenerator
     {
         private const string ProjectionStoreName = "Projections";
         private const string EventStoreDatabaseName = "EventStore";
+        private const string PlainStoreName = "PlainStore";
 
         private IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
 
@@ -63,11 +67,13 @@ namespace CapiDataGenerator
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
             var capiEvenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
+            var plainStore = new SqlitePlainStore(PlainStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
             var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
+            var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
             var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
 
@@ -75,7 +81,7 @@ namespace CapiDataGenerator
 
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
 
-            ClearCapiDb(capiEvenStore, denormalizerStore, changeLogStore);
+            ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore);
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore,
                 new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50));
@@ -93,10 +99,13 @@ namespace CapiDataGenerator
             this.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
             this.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
+            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IChangeLogManipulator>().ToConstant(new ChangeLogManipulator(publicStore, draftStore, capiEvenStore, changeLogStore));
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
 
-            this.Bind<IBackup>().To<DefaultBackup>().InSingletonScope().WithConstructorArgument("backupables", new IBackupable[]{capiEvenStore, changeLogStore, denormalizerStore, capiTemplateWriter});
+            this.Bind<IBackup>().To<DefaultBackup>().InSingletonScope()
+                .WithConstructorArgument("backupables",
+                    new IBackupable[]{capiEvenStore, changeLogStore, denormalizerStore, plainStore, capiTemplateWriter});
 
             this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
             
