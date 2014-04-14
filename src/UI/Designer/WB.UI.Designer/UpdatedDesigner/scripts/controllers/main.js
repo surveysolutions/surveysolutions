@@ -4,6 +4,7 @@ angular.module('pocAngularApp')
   .controller('MainCtrl', function ($scope, $http, $routeParams) {
 
     $scope.chapters = [];
+    $scope.items = [];
 
     $scope.item = null;
 
@@ -52,21 +53,8 @@ angular.module('pocAngularApp')
 
     function loadChapterDetails() {
         $http.get('api/questionnaire/chapter/' + $routeParams.questionnaireId + "?chapterId=" + $scope.currentChapter.GroupId)
-        .success(function (result) {
-            console.log(result);
-       });
+            .success(function (result) {
+                $scope.items = result.Groups;
+        });
     }
-  })
-  .filter("truncateFilter", function(){
-    return function(input, source){
-        if(input.Type == 1)
-          return _.findWhere(source.Questions, {Id: input.Id}).Title;
-        else
-          return _.findWhere(source.Groups, {Id: input.Id}).Title;
-    };
-  })
-  .filter("truncateFilter2", function() {
-    return function(input, source) {
-        return _.findWhere(source.Groups, { Id: input.Id }).Children;
-    };
-});
+  });
