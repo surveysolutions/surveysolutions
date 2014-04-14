@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateQrBarcodeQuestionHandlerT
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: titleWithSubstitution,
-                    variableName: "var", isMandatory: false, condition: null, instructions: null,
+                    variableName: "var", isMandatory: false, enablementCondition: null, instructions: null,
                     responsibleId: responsibleId));
 
         It should_throw_QuestionnaireException = () =>

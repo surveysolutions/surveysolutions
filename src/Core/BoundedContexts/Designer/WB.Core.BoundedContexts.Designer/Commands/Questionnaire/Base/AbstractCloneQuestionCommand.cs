@@ -5,10 +5,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class AbstractCloneQuestionCommand : AbstractAddQuestionCommand
     {
         protected AbstractCloneQuestionCommand(Guid responsibleId, Guid questionnaireId, Guid questionId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex)
+            bool isMandatory, string enablementCondition, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex)
             : base(
                 questionnaireId: questionnaireId, questionId: questionId, responsibleId: responsibleId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, parentGroupId: parentGroupId)
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, parentGroupId: parentGroupId)
         {
             this.SourceQuestionId = sourceQuestionId;
             this.TargetIndex = targetIndex;

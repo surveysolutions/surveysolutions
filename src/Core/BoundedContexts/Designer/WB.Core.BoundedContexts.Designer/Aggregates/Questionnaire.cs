@@ -1713,7 +1713,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddNumericQuestion(Guid questionId,
             Guid groupId, string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId,
             bool isInteger, int? countOfDecimalPlaces)
         {
@@ -1729,7 +1729,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NumericQuestionAdded
             {
@@ -1742,7 +1742,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Featured = isFeatured,
                 Capital = false,
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
@@ -1757,7 +1757,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void CloneNumericQuestion(Guid questionId,
             Guid groupId, string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxValue, Guid[] triggeredGroupIds,
             bool isInteger, int? countOfDecimalPlaces)
         {
@@ -1774,7 +1774,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NumericQuestionCloned
             {
@@ -1789,7 +1789,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Capital = false,
 
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
@@ -1807,7 +1807,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateNumericQuestion(Guid questionId,
             string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -1824,7 +1824,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NumericQuestionChanged
             {
@@ -1836,7 +1836,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Featured = isFeatured,
                 Capital = false,
                 QuestionScope = scope,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
@@ -1853,7 +1853,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Question: List (text) command handlers
 
         public void AddTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
@@ -1868,7 +1868,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName,
                 isPrefilled, responsibleId);
 
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
@@ -1879,7 +1879,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
 
@@ -1888,7 +1888,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void CloneTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid sourceQuestionId, int targetIndex,
+            bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId, int? maxAnswerCount)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1904,7 +1904,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled,
                 responsibleId);
 
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
@@ -1915,7 +1915,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
@@ -1926,7 +1926,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -1943,7 +1943,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName,
                 isPrefilled, responsibleId);
 
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(condition, validationExpression);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
@@ -1954,7 +1954,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
-                ConditionExpression = condition,
+                ConditionExpression = enablementCondition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
 
@@ -1967,13 +1967,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Question: QR-Barcode command handlers
 
         public void AddQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid responsibleId)
+            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
-                variableName: variableName, condition: condition, responsibleId: responsibleId);
+                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
 
             this.ApplyEvent(new QRBarcodeQuestionAdded()
             {
@@ -1982,14 +1982,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
-                EnablementCondition = condition,
+                EnablementCondition = enablementCondition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
         }
 
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid responsibleId)
+            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1997,7 +1997,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
-                variableName: variableName, condition: condition, responsibleId: responsibleId);
+                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
 
             this.ApplyEvent(new QRBarcodeQuestionUpdated()
             {
@@ -2005,21 +2005,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
-                EnablementCondition = condition,
+                EnablementCondition = enablementCondition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
         }
 
         public void CloneQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid sourceQuestionId, int targetIndex,
+            bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
-                variableName: variableName, condition: condition, responsibleId: responsibleId);
+                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
 
             this.ApplyEvent(new QRBarcodeQuestionCloned()
             {
@@ -2028,7 +2028,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 IsMandatory = isMandatory,
-                EnablementCondition = condition,
+                EnablementCondition = enablementCondition,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,

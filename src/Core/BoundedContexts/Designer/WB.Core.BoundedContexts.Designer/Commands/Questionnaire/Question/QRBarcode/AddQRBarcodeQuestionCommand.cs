@@ -9,10 +9,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBar
     public class AddQRBarcodeQuestionCommand : AbstractAddQuestionCommand
     {
         public AddQRBarcodeQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName, bool isMandatory,
-            string condition, string instructions, Guid responsibleId, Guid parentGroupId)
+            string enablementCondition, string instructions, Guid responsibleId, Guid parentGroupId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions,
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
                 parentGroupId: parentGroupId) {}
     }
 }

@@ -9,10 +9,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextL
     public class AddTextListQuestionCommand : AbstractAddQuestionCommand
     {
         public AddTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid parentGroupId, string title, string variableName,
-            bool isMandatory, string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, parentGroupId: parentGroupId)
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, parentGroupId: parentGroupId)
         {
             this.MaxAnswerCount = maxAnswerCount;
         }

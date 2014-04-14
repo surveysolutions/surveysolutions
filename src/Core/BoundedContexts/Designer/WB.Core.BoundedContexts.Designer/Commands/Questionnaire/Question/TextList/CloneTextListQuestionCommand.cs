@@ -9,11 +9,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextL
     public class CloneTextListQuestionCommand : AbstractCloneQuestionCommand
     {
         public CloneTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,
-            string title, string variableName, bool isMandatory, string condition, string instructions, Guid responsibleId,
+            string title, string variableName, bool isMandatory, string enablementCondition, string instructions, Guid responsibleId,
             int? maxAnswerCount)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions, parentGroupId: parentGroupId,
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, parentGroupId: parentGroupId,
                 sourceQuestionId: sourceQuestionId, targetIndex: targetIndex)
         {
             this.MaxAnswerCount = maxAnswerCount;
