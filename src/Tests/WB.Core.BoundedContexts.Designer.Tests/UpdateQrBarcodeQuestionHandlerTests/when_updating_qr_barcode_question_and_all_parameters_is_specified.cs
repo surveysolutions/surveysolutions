@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateQrBarcodeQuestionHandlerT
 
         Because of = () =>            
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
-                    variableName: "qr_barcode_question", isMandatory: isMandatory, condition: condition, instructions: instructions,
+                    variableName: "qr_barcode_question", isMandatory: isMandatory, enablementCondition: condition, instructions: instructions,
                     responsibleId: responsibleId);
 
         Cleanup stuff = () =>

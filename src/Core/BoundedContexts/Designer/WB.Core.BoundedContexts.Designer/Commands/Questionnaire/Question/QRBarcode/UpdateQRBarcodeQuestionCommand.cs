@@ -9,9 +9,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBar
     public class UpdateQRBarcodeQuestionCommand : AbstractUpdateQuestionCommand
     {
         public UpdateQRBarcodeQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName, bool isMandatory,
-            string condition, string instructions, Guid responsibleId)
+            string enablementCondition, string instructions, Guid responsibleId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions) {}
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions) {}
     }
 }

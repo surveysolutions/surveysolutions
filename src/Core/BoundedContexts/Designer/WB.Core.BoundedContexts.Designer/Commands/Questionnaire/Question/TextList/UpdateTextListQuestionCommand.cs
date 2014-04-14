@@ -9,10 +9,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextL
     public class UpdateTextListQuestionCommand : AbstractUpdateQuestionCommand
     {
         public UpdateTextListQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName, bool isMandatory,
-            string condition, string instructions, Guid responsibleId, int? maxAnswerCount)
+            string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, condition: condition, instructions: instructions)
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions)
         {
             this.MaxAnswerCount = maxAnswerCount;
         }
