@@ -11,6 +11,7 @@ namespace WB.Core.Infrastructure.PlainStorage
         void Remove(string id);
 
         void Store(TEntity entity, string id);
+
         void Store(IEnumerable<Tuple<TEntity, string>> entities);
     }
 }
