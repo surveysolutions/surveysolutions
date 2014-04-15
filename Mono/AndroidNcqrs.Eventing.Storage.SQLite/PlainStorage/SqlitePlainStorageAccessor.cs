@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
@@ -49,7 +50,20 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
                 SerializedData = SerializeEntity(entity),
             };
 
-            this.documentStore.Store(row, sqliteId);
+            this.documentStore.Store(row);
+        }
+
+        public void Store(IEnumerable<Tuple<TEntity, string>> entities)
+        {
+            IEnumerable<PlainStorageRow> rows =
+                from entity in entities
+                select new PlainStorageRow
+                {
+                    Id = ToSqliteId(entity.Item2),
+                    SerializedData = SerializeEntity(entity.Item1),
+                };
+
+            this.documentStore.Store(rows);
         }
 
         private static string SerializeEntity(TEntity entity)
