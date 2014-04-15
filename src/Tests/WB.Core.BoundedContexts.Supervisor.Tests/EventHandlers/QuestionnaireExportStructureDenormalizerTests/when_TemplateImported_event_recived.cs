@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -32,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.QuestionnaireEx
             dataExportServiceMock=new Mock<IDataExportService>();
             exportViewFactory=new Mock<IExportViewFactory>();
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, exportViewFactory.Object);
+                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>());
         };
 
         Because of = () =>
