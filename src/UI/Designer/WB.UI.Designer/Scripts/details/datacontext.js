@@ -449,7 +449,7 @@
 
         commands[config.commands.createQuestion] = function (question) {
             var command = converQuestionToCommand(question);
-            command.groupId = question.parent().id();
+            command.parentGroupId = question.parent().id();
             return command;
         };
 
@@ -546,7 +546,7 @@
                 title: question.title(),
                 variableName: question.alias(),
                 isMandatory: question.isMandatory(),
-                condition: question.condition(),
+                enablementCondition: question.condition(),
                 instructions: question.instruction()
             };
         };
@@ -567,23 +567,20 @@
         var converQuestionToCommand = function (question) {
             var command = {
                 questionnaireId: questionnaire.id(),
-
                 questionId: question.id(),
                 title: question.title(),
                 type: question.qtype(),
-                alias: question.alias(),
-                isFeatured: question.isFeatured(),
+                variableName: question.alias(),
+                isPreFilled: question.isFeatured(),
                 isMandatory: question.isMandatory(),
                 scope: question.scope(),
-                condition: question.condition(),
+                enablementCondition: question.condition(),
                 validationExpression: question.validationExpression(),
                 validationMessage: question.validationMessage(),
                 instructions: question.instruction()
             };
             switch (command.type) {
                 case "SingleOption":
-                case "YesNo":
-                case "DropDownList":
                 case "MultyOption":
                     command.areAnswersOrdered = question.areAnswersOrdered();
                     command.maxAllowedAnswers = question.maxAllowedAnswers();
@@ -601,12 +598,12 @@
                     break;
                 case "Numeric":
                     command.isInteger = question.isInteger() == 1 ? true : false;
-                    command.isAutopropagating = false;
                     command.countOfDecimalPlaces = command.isInteger == false ? question.countOfDecimalPlaces() : null;
                     command.maxValue = question.maxValue();
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
+                    break;
                 case "TextList":
                     command.maxAnswerCount = question.maxAnswerCount();
                     break;

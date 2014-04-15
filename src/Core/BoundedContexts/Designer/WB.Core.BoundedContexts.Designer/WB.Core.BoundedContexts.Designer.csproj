@@ -86,7 +86,6 @@
     <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
     <Compile Include="Commands\Account\ValidateAccountCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\AbstractNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractAddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractCloneQuestionCommand.cs" />
