@@ -27,14 +27,29 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         {
             if (!this.IsFileExists(filePath))
                 return -1;
-            return new ZlpFileInfo(filePath).Length;
+
+            try
+            {
+                return new FileInfo(filePath).Length;
+            }
+            catch (PathTooLongException)
+            {
+                return new ZlpFileInfo(filePath).Length;
+            }
         }
 
         public DateTime GetCreationTime(string filePath)
         {
             if (!this.IsFileExists(filePath))
                 return DateTime.MinValue;
-            return new ZlpFileInfo(filePath).CreationTime;
+            try
+            {
+                return new FileInfo(filePath).CreationTime;
+            }
+            catch (PathTooLongException)
+            {
+                return new ZlpFileInfo(filePath).CreationTime;
+            }
         }
 
         public bool IsDirectoryExists(string pathToDirectory)

@@ -11,13 +11,12 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question : InterviewTestsContext
+    internal class when_answer_on_integer_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -31,8 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
 
                 => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                    && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                    && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
+                    && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.TextList
                     && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { parentRosterGroupId, nestedRosterGroupId }
 
                     && _.HasGroup(nestedRosterGroupId) == true
@@ -66,15 +64,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 1);
+           interview.AnswerTextListQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, new []{new Tuple<decimal, string>(1,"t1")});
 
         It should_raise_RosterInstancesAdded_event_for_first_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.Instances.Any(instance => instance.GroupId == parentRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 0));
+                => @event.Instances.Any(instance => instance.GroupId == parentRosterGroupId && instance.RosterInstanceId == 1 && instance.OuterRosterVector.Length == 0));
 
         It should_raise_RosterInstancesAdded_event_for_first_nested_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
-                => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
+                => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 1 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 1 })));
 
         It should_not_raise_RosterInstancesRemoved_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
