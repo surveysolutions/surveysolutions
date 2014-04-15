@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedData(Guid.NewGuid());
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedData(Guid.NewGuid().FormatGuid());
 
         It should_result_has_0_elements = () =>
             result.Length.ShouldEqual(0);
