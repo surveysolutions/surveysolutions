@@ -50,11 +50,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         Because of = () =>
             nestedRosters = questionnaire.GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
 
-        It should_rosterGroups_not_be_empty = () =>
-            nestedRosters.ShouldNotBeEmpty();
+        It should_nestedRosters_has_2_elements = () =>
+            nestedRosters.Count().ShouldEqual(2);
 
-        It should_rosterGroups_have_only_1_roster_group = () =>
-            nestedRosters.ShouldContainOnly(rosterGroupId);
+        It should_nestedRosters_contain_rosterGroupId = () =>
+            nestedRosters.ShouldContain(rosterGroupId);
+
+        It should_nestedRosters_contain_nestedRosterId = () =>
+            nestedRosters.ShouldContain(nestedRosterId);
 
         private static IEnumerable<Guid> nestedRosters;
         private static Questionnaire questionnaire;

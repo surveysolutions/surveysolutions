@@ -303,14 +303,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             //### roster
-            var rosterGroupsByRosterSizeQuestion = this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
-            var results = rosterGroupsByRosterSizeQuestion.ToList();
-            foreach (var rosterGroupByRosterSizeQuestion in rosterGroupsByRosterSizeQuestion)
-            {
-                var nestedRosterIds = this.GetNestedRostersOfGroupById(rosterGroupByRosterSizeQuestion);
-                results.RemoveAll(nestedRosterIds.Contains);
-            }
-            return results;
+            return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
         }
 
         public int? GetMaxValueForNumericQuestion(Guid questionId)
