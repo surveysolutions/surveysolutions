@@ -5,6 +5,7 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Shared.Web.Elmah;
+using Web.Supervisor.Filters;
 
 namespace Web.Supervisor
 {
@@ -35,6 +36,7 @@ namespace Web.Supervisor
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new LongWebsiteDirectoryPathFilter());
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)

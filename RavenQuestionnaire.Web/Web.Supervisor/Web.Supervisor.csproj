@@ -351,10 +351,12 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
+    <Compile Include="Filters\LongWebsiteDirectoryPathFilter.cs" />
     <Compile Include="Models\API\BaseApiView.cs" />
     <Compile Include="Models\API\InterviewApiDetails.cs" />
     <Compile Include="Models\API\InterviewApiItem.cs" />
@@ -661,6 +663,11 @@
     </Content>
     <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\ControlPanel\Synchronization.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Error\Forbidden.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -670,7 +677,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
