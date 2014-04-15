@@ -50,11 +50,12 @@
 
         <div class="question-list">
             <div ng-repeat="i in items">
-                <div class="section item" ng-click="setItem(i)">
+                <div class="section item" ng-click="setItem(i)" ng-class="{'selected' : i == item}">
                     {{i.Title}}
                 </div>
                 <div ng-repeat="q in i.Questions" ng-click="setItem(q)"
-                     ng-class="{'question item cat-singleanswer': q.Type == 1, 'question item cat-singleanswer': q.Type == 2, 'question item cat-multianswer' : q.Type == 3, 'question item cat-intedit' : q.Type == 4, 'question item cat-datetime' : q.Type == 5, 'question item cat-geoloc' : q.Type == 6, 'question item cat-textedit' : q.Type == 8, 'question item cat-textarea' : q.Type == 9,  'question item cat-multimedia' : q.Type == 10, 'question item cat-textedit' : q.Type == 7, 'question item cat-singleanswer' : q.Type == 0 }">
+                     class="question item "
+                     ng-class="{'selected' : q == item, 'cat-singleanswer': q.Type == 1, 'cat-singleanswer': q.Type == 2, 'cat-multianswer' : q.Type == 3, 'cat-intedit' : q.Type == 4, 'cat-datetime' : q.Type == 5, 'cat-geoloc' : q.Type == 6, 'cat-textedit' : q.Type == 8, 'cat-textarea' : q.Type == 9,  'cat-multimedia' : q.Type == 10, 'cat-textedit' : q.Type == 7, 'cat-singleanswer' : q.Type == 0 }">
                     <div class="icon"></div>
                     {{ q.Title }}
                     <div class="qname-block">

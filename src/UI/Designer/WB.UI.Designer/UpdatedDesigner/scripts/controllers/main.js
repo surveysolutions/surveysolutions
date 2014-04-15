@@ -57,5 +57,5 @@ angular.module('pocAngularApp')
             .success(function (result) {
                 $scope.items = result.Groups;
         });
-    }
-  });
+    };
+});
