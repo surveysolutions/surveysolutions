@@ -354,6 +354,16 @@ namespace WB.UI.Capi
                         foreach (var exception in evt.Exceptions)
                         {
                             sb.AppendLine(exception.Message);
+
+                            if (exception.InnerException != null)
+                            {
+                                sb.AppendLine(exception.InnerException.Message);
+
+                                if (exception.InnerException.InnerException != null)
+                                {
+                                    sb.AppendLine(exception.InnerException.InnerException.Message);
+                                }
+                            }
                         }
                         this.tvSyncResult.Text = sb.ToString();
                     }
