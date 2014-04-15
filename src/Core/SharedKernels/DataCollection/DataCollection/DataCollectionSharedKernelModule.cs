@@ -21,10 +21,11 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override void Load()
         {
+            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
+
             if (this.usePlainQuestionnaireRepository)
             {
                 this.Bind<IQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
-                this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
             }
             else
             {

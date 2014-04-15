@@ -1,27 +1,32 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler
+    public class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IDataExportService dataExportService;
         private readonly IExportViewFactory exportViewFactory;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public QuestionnaireExportStructureDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportService dataExportService,
-            IExportViewFactory exportViewFactory)
+            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
             this.dataExportService = dataExportService;
             this.exportViewFactory = exportViewFactory;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public string Name
@@ -38,9 +43,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(evnt.Payload.Source, evnt.EventSequence);
+            Guid id = evnt.EventSourceId;
+            long version = evnt.EventSequence;
+            QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
+
+            this.StoreExportStructure(id, version, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
+        {
+            Guid id = evnt.EventSourceId;
+            long version = evnt.Payload.Version;
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+
+            this.StoreExportStructure(id, version, questionnaireDocument);
+        }
+
+        private void StoreExportStructure(Guid id, long version, QuestionnaireDocument questionnaireDocument)
+        {
+            var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, version);
             this.dataExportService.CreateExportedDataStructureByTemplate(questionnaireExportStructure);
-            this.readsideRepositoryWriter.Store(questionnaireExportStructure, evnt.EventSourceId);
+            this.readsideRepositoryWriter.Store(questionnaireExportStructure, id);
         }
     }
 }

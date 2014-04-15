@@ -142,6 +142,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             }
 
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
+            this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version));
         }
 
         private static TResult ExtractObject<TResult>(string initialString, bool isCompressed)

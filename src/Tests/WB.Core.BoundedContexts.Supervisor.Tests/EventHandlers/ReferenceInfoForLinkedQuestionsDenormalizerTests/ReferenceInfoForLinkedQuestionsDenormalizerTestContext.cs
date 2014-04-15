@@ -9,6 +9,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -37,7 +38,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReferenceInfoFo
         {
             return
                 new ReferenceInfoForLinkedQuestionsDenormalizer(questionnaires ??
-                    Mock.Of<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>(), new ReferenceInfoForLinkedQuestionsFactory());
+                    Mock.Of<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>(),
+                    new ReferenceInfoForLinkedQuestionsFactory(),
+                    Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithRosterAndNumericQuestionAndLinedQuestionAfter(Guid questionnaireId, Guid rosterId, Guid linkedId)

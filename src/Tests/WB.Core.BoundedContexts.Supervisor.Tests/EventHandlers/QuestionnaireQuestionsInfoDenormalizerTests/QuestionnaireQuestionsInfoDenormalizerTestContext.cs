@@ -8,6 +8,7 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -33,7 +34,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.QuestionnaireQu
 
         protected static QuestionnaireQuestionsInfoDenormalizer CreateQuestionnaireQuestionsInfoDenormalizer(IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires = null)
         {
-            return new QuestionnaireQuestionsInfoDenormalizer(questionnaires ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>());
+            return new QuestionnaireQuestionsInfoDenormalizer(
+                questionnaires ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWith7NumericQuestionsInDifferentRosters(Guid questionnaireId,

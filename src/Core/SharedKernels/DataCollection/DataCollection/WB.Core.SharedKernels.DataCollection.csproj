@@ -63,6 +63,7 @@
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
+    <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Events\Interview\RosterInstancesRemoved.cs" />
     <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
+    <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />

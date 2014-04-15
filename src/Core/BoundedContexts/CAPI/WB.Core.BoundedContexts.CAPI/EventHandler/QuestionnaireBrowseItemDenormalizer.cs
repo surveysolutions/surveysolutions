@@ -1,27 +1,48 @@
 using System;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
-    public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>
+    public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireBrowseItemDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
+        public QuestionnaireBrowseItemDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.documentStorage = documentStorage;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var document = evnt.Payload.Source;
+            Guid id = evnt.EventSourceId;
+            long version = evnt.EventSequence;
+            QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            var browseItem = new QuestionnaireBrowseItem(document, evnt.EventSequence);
-            this.documentStorage.Store(browseItem, evnt.EventSourceId);
+            this.StoreBrowseItem(id, version, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
+        {
+            Guid id = evnt.EventSourceId;
+            long version = evnt.Payload.Version;
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+
+            this.StoreBrowseItem(id, version, questionnaireDocument);
+        }
+
+        private void StoreBrowseItem(Guid id, long version, QuestionnaireDocument document)
+        {
+            var browseItem = new QuestionnaireBrowseItem(document, version);
+            this.documentStorage.Store(browseItem, id);
         }
     }
 }

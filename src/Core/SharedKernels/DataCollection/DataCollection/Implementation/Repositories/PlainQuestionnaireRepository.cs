@@ -34,6 +34,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.repository.Store(questionnaireDocument, GetRepositoryId(id, version));
         }
 
+        public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
+        {
+            return this.repository.GetById(GetRepositoryId(id, version));
+        }
+
         private static string GetRepositoryId(Guid id, long version)
         {
             return string.Format("{0}${1}", id.FormatGuid(), version);

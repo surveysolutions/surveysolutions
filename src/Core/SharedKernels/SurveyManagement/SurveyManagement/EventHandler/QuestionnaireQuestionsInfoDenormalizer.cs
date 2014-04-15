@@ -1,22 +1,27 @@
 using System;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireQuestionsInfoDenormalizer : IEventHandler, IEventHandler<TemplateImported>
+    public class QuestionnaireQuestionsInfoDenormalizer : IEventHandler, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireQuestionsInfoDenormalizer(IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires)
+        public QuestionnaireQuestionsInfoDenormalizer(IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaires = questionnaires;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public string Name
@@ -36,12 +41,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
+            Guid id = evnt.EventSourceId;
+            long version = evnt.EventSequence;
+            QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
+
+            this.StoreQuestionsInfo(id, version, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
+        {
+            Guid id = evnt.EventSourceId;
+            long version = evnt.Payload.Version;
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+
+            this.StoreQuestionsInfo(id, version, questionnaireDocument);
+        }
+
+        private void StoreQuestionsInfo(Guid id, long version, QuestionnaireDocument questionnaireDocument)
+        {
             var map = new QuestionnaireQuestionsInfo
             {
-                QuestionIdToVariableMap = evnt.Payload.Source.Find<IQuestion>(question => true).ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
+                QuestionIdToVariableMap =
+                    questionnaireDocument.Find<IQuestion>(question => true).ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
             };
-             
-            this.questionnaires.Store(map, RepositoryKeysHelper.GetVersionedKey(evnt.EventSourceId, evnt.EventSequence));
+
+            this.questionnaires.Store(map, RepositoryKeysHelper.GetVersionedKey(id, version));
         }
     }
 }

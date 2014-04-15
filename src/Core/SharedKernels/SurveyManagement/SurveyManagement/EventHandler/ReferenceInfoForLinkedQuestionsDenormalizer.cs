@@ -1,23 +1,30 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class ReferenceInfoForLinkedQuestionsDenormalizer : IEventHandler, IEventHandler<TemplateImported>
+    public class ReferenceInfoForLinkedQuestionsDenormalizer : IEventHandler, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>
     {
         private readonly IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires;
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public ReferenceInfoForLinkedQuestionsDenormalizer(
-            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires, IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory)
+            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires,
+            IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaires = questionnaires;
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public string Name
@@ -37,9 +44,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            evnt.Payload.Source.ConnectChildrenWithParent();
+            Guid id = evnt.EventSourceId;
+            long version = evnt.EventSequence;
+            QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            this.questionnaires.Store(this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(evnt.Payload.Source, evnt.EventSequence), evnt.EventSourceId);
+            this.StoreReferenceInfo(id, version, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
+        {
+            Guid id = evnt.EventSourceId;
+            long version = evnt.Payload.Version;
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+
+            this.StoreReferenceInfo(id, version, questionnaireDocument);
+        }
+
+        private void StoreReferenceInfo(Guid id, long version, QuestionnaireDocument questionnaireDocument)
+        {
+            questionnaireDocument.ConnectChildrenWithParent();
+
+            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions =
+                this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaireDocument, version);
+
+            this.questionnaires.Store(referenceInfoForLinkedQuestions, id);
         }
     }
 }
