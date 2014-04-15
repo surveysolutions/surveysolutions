@@ -4,6 +4,7 @@ angular.module('pocAngularApp')
   .controller('MainCtrl', function ($scope, $http, $routeParams) {
 
     $scope.chapters = [];
+
     $scope.items = [];
 
     $scope.item = null;

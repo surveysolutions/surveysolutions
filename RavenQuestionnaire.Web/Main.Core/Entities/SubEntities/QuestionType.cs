@@ -16,7 +16,6 @@ namespace Main.Core.Entities.SubEntities
 
         Numeric = 4, 
 
-
         DateTime = 5, 
         
         GpsCoordinates = 6, 

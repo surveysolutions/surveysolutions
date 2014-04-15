@@ -53,11 +53,12 @@
                 <div class="section item" ng-click="setItem(i)">
                     {{i.Title}}
                 </div>
-                <div class="question item cat-multianswer" ng-repeat="q in i.Questions" ng-click="setItem(q)">
+                <div ng-repeat="q in i.Questions" ng-click="setItem(q)"
+                     ng-class="{'question item cat-singleanswer': q.Type == 1, 'question item cat-singleanswer': q.Type == 2, 'question item cat-multianswer' : q.Type == 3, 'question item cat-intedit' : q.Type == 4, 'question item cat-datetime' : q.Type == 5, 'question item cat-geoloc' : q.Type == 6, 'question item cat-textedit' : q.Type == 8, 'question item cat-textarea' : q.Type == 9,  'question item cat-multimedia' : q.Type == 10, 'question item cat-textedit' : q.Type == 7, 'question item cat-singleanswer' : q.Type == 0 }">
                     <div class="icon"></div>
                     {{ q.Title }}
                     <div class="qname-block">
-                        <a href="" class="linked"></a>visit_health<div class="dropdown-btn"></div>
+                        <a href="" class="linked"></a>{{q.Variable}}<div class="dropdown-btn"></div>
                     </div>
                 </div>
                 <div class="buttons-item">
