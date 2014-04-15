@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.ServiceModel.Syndication;
 using System.Web.Http;
 using Humanizer;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 
 namespace WB.UI.Headquarters.API.Feeds
 {
     public class InterviewsFeedController : ApiController
     {
-        private const int PageSize = 5;
+        private const int PageSize = 100;
         private const string FeedTitle = "Interviews feed";
         private const string FeedId = "4a07ced802d44447aa350519937502f3";
         private const string ArchiveRouteName = "api.interviewsFeedArchive";

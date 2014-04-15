@@ -9,19 +9,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly ILocalFeedStorage localFeedStorage;
         private readonly IUserChangedFeedReader feedReader;
         private readonly ILocalUserFeedProcessor localUserFeedProcessor;
+        private readonly IInterviewsSynchronizer interviewsSynchronizer;
         private bool isSynchronizationRunning;
         private static readonly object RebuildAllViewsLockObject = new object();
 
         public Synchronizer(ILocalFeedStorage localFeedStorage,
             IUserChangedFeedReader feedReader,
-            ILocalUserFeedProcessor localUserFeedProcessor)
+            ILocalUserFeedProcessor localUserFeedProcessor,
+            IInterviewsSynchronizer interviewsSynchronizer)
         {
             if (localFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (localUserFeedProcessor == null) throw new ArgumentNullException("localUserFeedProcessor");
+            if (interviewsSynchronizer == null) throw new ArgumentNullException("interviewsSynchronizer");
             this.localFeedStorage = localFeedStorage;
             this.feedReader = feedReader;
             this.localUserFeedProcessor = localUserFeedProcessor;
+            this.interviewsSynchronizer = interviewsSynchronizer;
         }
 
         public void Synchronize()
@@ -48,7 +52,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                             this.localUserFeedProcessor.Process();
 
+                            this.interviewsSynchronizer.Synchronzie();
+
                             this.isSynchronizationRunning = false;
+
                         }
                         finally
                         {
