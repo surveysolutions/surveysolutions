@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
+using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
+using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
@@ -25,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IUserChangedFeedReader>().To<UserChangedFeedReader>();
             this.Bind<ILocalUserFeedProcessor>().To<LocalUserdFeedProcessor>();
             this.Bind<IHeadquartersUserReader>().To<HeadquartersUserReader>();
+            this.Bind<IAtomFeedReader>().To<AtomFeedReader>();
 
             this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
         }
