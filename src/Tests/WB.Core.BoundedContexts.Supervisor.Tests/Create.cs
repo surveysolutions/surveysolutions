@@ -25,11 +25,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>());
         }
 
-        public static Synchronizer Synchronizer(HttpMessageHandler messageHandler = null)
-        {
-            throw new NotImplementedException();
-        }
-
         public static UserChangedFeedReader UserChangedFeedReader(HeadquartersSettings settings = null, HttpMessageHandler messageHandler = null)
         {
             return new UserChangedFeedReader(settings ?? HeadquartersSettings(), messageHandler ?? Substitute.For<HttpMessageHandler>());
@@ -37,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
 
         private static HeadquartersSettings HeadquartersSettings()
         {
-            return new HeadquartersSettings(new Uri("http://localhost/"), new Uri("http://localhost/"));
+            return new HeadquartersSettings(new Uri("http://localhost/"), new Uri("http://localhost/"), new Uri("http://localhost/"));
         }
     }
 }
