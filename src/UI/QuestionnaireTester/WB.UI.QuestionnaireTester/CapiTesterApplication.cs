@@ -30,7 +30,9 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.QuestionnaireTester.Authentication;
@@ -173,14 +175,20 @@ namespace WB.UI.QuestionnaireTester
 
         private void InitTemplateStorage(InProcessEventBus bus)
         {
-            var templateDenoramalizer = new QuestionnaireDenormalizer(this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+            var templateDenoramalizer = new QuestionnaireDenormalizer(
+                this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
+                this.kernel.Get<IPlainQuestionnaireRepository>());
+
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
+            bus.RegisterHandler(templateDenoramalizer, typeof(PlainQuestionnaireRegistered));
             
-            var propagationStructureDenormalizer =
-                new QuestionnaireRosterStructureDenormalizer(
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), this.kernel.Get<IQuestionnaireRosterStructureFactory>());
+            var propagationStructureDenormalizer = new QuestionnaireRosterStructureDenormalizer(
+                this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(),
+                this.kernel.Get<IQuestionnaireRosterStructureFactory>(),
+                this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
+            bus.RegisterHandler(propagationStructureDenormalizer, typeof(PlainQuestionnaireRegistered));
         }
 
         public override void OnCreate()

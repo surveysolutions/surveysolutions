@@ -10,11 +10,14 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 
@@ -25,23 +28,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region State
 
         private PlainQuestionnaire plainQuestionnaire;
+        private bool isProxyToPlainQuestionnaireRepository;
+
 
         protected internal void Apply(TemplateImported e)
         {
             this.plainQuestionnaire = new PlainQuestionnaire(e.Source, () => this.Version);
         }
 
+        private void Apply(PlainQuestionnaireRegistered e)
+        {
+            this.isProxyToPlainQuestionnaireRepository = true;
+            this.plainQuestionnaire = null;
+        }
+
         public QuestionnaireState CreateSnapshot()
         {
-            return new QuestionnaireState(
-                this.plainQuestionnaire.QuestionnaireDocument,
-                this.plainQuestionnaire.QuestionCache,
-                this.plainQuestionnaire.GroupCache);
+            return this.isProxyToPlainQuestionnaireRepository
+                ? new QuestionnaireState(
+                    null,
+                    null,
+                    null,
+                    isProxyToPlainQuestionnaireRepository: true)
+                : new QuestionnaireState(
+                    this.plainQuestionnaire.QuestionnaireDocument,
+                    this.plainQuestionnaire.QuestionCache,
+                    this.plainQuestionnaire.GroupCache,
+                    isProxyToPlainQuestionnaireRepository: false);
         }
 
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
         {
-            this.plainQuestionnaire = new PlainQuestionnaire(snapshot.Document, () => this.Version, snapshot.GroupCache, snapshot.QuestionCache);
+            this.isProxyToPlainQuestionnaireRepository = snapshot.IsProxyToPlainQuestionnaireRepository;
+
+            this.plainQuestionnaire = snapshot.IsProxyToPlainQuestionnaireRepository
+                ? null
+                : new PlainQuestionnaire(snapshot.Document, () => this.Version, snapshot.GroupCache, snapshot.QuestionCache);
         }
 
         #endregion
@@ -51,6 +73,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static IQuestionnaireVerifier QuestionnaireVerifier
         {
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireVerifier>(); }
+        }
+
+        public IPlainQuestionnaireRepository PlainQuestionnaireRepository
+        {
+            get { return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>(); }
         }
 
         #endregion
@@ -70,10 +97,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ImportFromQuestionnaireDocument(source);
         }
 
+        public Questionnaire(Guid id, long version)
+            : base(id)
+        {
+            this.RegisterPlainQuestionnaire(version);
+        }
+
 
         private void ImportFromQuestionnaireDocument(IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
+
+
             this.ApplyEvent(new TemplateImported { Source = document });
         }
 
@@ -81,6 +117,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             ThrowIfVerifierFindsErrors(document);
+            this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
+
 
             this.ApplyEvent(new TemplateImported { Source = document });
         }
@@ -93,6 +131,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ImportFromDesignerForTester(IQuestionnaireDocument source)
         {
             ImportFromQuestionnaireDocument(source);
+        }
+
+        public void RegisterPlainQuestionnaire(long version)
+        {
+            QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(this.EventSourceId, version);
+
+            if (questionnaireDocument == null)
+                throw new QuestionnaireException(string.Format(
+                    "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
+                    this.EventSourceId.FormatGuid(), version));
+
+            this.ApplyEvent(new PlainQuestionnaireRegistered(version));
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
@@ -112,6 +162,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (errors.Any())
                 throw new QuestionnaireVerificationException(string.Format("Questionnaire '{0}' can't be imported", document.Title),
                     errors.ToArray());
+        }
+
+        private void ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository()
+        {
+            if (this.isProxyToPlainQuestionnaireRepository)
+                throw new QuestionnaireException("This aggregate is intiated to only redirect events about plain questionnaire repository and is not intended to be used separately.");
         }
 
         public void InitializeQuestionnaireDocument()

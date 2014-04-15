@@ -1,18 +1,27 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     [Obsolete("Remove it when HQ is a separate application")]
     public class QuestionnaireBrowseItemEventHandler : AbstractFunctionalEventHandler<QuestionnaireBrowseItem>,
-        ICreateHandler<QuestionnaireBrowseItem, TemplateImported>
+        ICreateHandler<QuestionnaireBrowseItem, TemplateImported>,
+        ICreateHandler<QuestionnaireBrowseItem, PlainQuestionnaireRegistered>
     {
-        public QuestionnaireBrowseItemEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter)
-            : base(readsideRepositoryWriter) {}
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+
+        public QuestionnaireBrowseItemEventHandler(IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            : base(readsideRepositoryWriter)
+        {
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+        }
 
         public override Type[] UsesViews
         {
@@ -21,9 +30,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public QuestionnaireBrowseItem Create(IPublishedEvent<TemplateImported> evnt)
         {
-            var document = evnt.Payload.Source;
+            long version = evnt.EventSequence;
+            QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            return new QuestionnaireBrowseItem(document, evnt.EventSequence);
+            return CreateBrowseItem(version, questionnaireDocument);
+        }
+
+        public QuestionnaireBrowseItem Create(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
+        {
+            Guid id = evnt.EventSourceId;
+            long version = evnt.Payload.Version;
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+
+            return CreateBrowseItem(version, questionnaireDocument);
+        }
+
+        private static QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument)
+        {
+            return new QuestionnaireBrowseItem(questionnaireDocument, version);
         }
     }
 }

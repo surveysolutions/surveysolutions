@@ -12,7 +12,9 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -27,6 +29,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<InterviewDeclaredInvalid>,
                                       IEventHandler<InterviewStatusChanged>, 
                                       IEventHandler<TemplateImported>,
+                                      IEventHandler<PlainQuestionnaireRegistered>,
 
                                       IEventHandler<TextQuestionAnswered>,
                                       IEventHandler<MultipleOptionsQuestionAnswered>,
@@ -47,15 +50,18 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtOdocumentStorage;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
                                      IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
-                                     IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage)
+                                     IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage,
+                                     IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
             this.surveyDtOdocumentStorage = surveyDTOdocumentStorage;
             this.questionnaireStorage = questionnaireStorage;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
@@ -151,7 +157,24 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            surveyDtOdocumentStorage.Store(new SurveyDto(evnt.EventSourceId, evnt.Payload.Source.Title), evnt.EventSourceId);
+            Guid id = evnt.EventSourceId;
+            QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
+
+            this.StoreSurveyDto(id, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
+        {
+            Guid id = evnt.EventSourceId;
+            long version = evnt.Payload.Version;
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+
+            this.StoreSurveyDto(id, questionnaireDocument);
+        }
+
+        private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument)
+        {
+            this.surveyDtOdocumentStorage.Store(new SurveyDto(id, questionnaireDocument.Title), id);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)

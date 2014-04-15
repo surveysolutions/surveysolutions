@@ -45,6 +45,7 @@ using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -182,7 +183,7 @@ namespace CapiDataGenerator
 
         private void InitCapiTemplateStorage(NcqrCompatibleEventDispatcher bus)
         {
-            var fileSorage = new QuestionnaireDenormalizer(this.capiTemplateVersionedWriter);
+            var fileSorage = new QuestionnaireDenormalizer(this.capiTemplateVersionedWriter, this.Kernel.Get<IPlainQuestionnaireRepository>());
             bus.Register(fileSorage);
         }
 
@@ -198,7 +199,8 @@ namespace CapiDataGenerator
             var dashboardeventHandler =
                 new DashboardDenormalizer(Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                                           Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
-                                          this.capiTemplateVersionedWriter);
+                                          this.capiTemplateVersionedWriter,
+                                          this.Kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.Register(dashboardeventHandler);
         }
