@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
         {
             string fileNameWithoutInvalidFileNameChars = this.fileSystemAccessor.MakeValidFileName(name);
-            var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(250).ToArray());
+            var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(118).ToArray());
             string fileNameWithNumber = string.Concat(fileNameShortened,
                 i == 0 ? (object)string.Empty : i).ToLower();
 
