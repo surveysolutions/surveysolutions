@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
@@ -10,7 +11,11 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -26,32 +31,36 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory;
+        private readonly IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory;
+      
         private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
-        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
+        private readonly IPreloadingTemplateService preloadingTemplateService;
+        private readonly IPreloadedDataRepository preloadedDataRepository;
+        private readonly IPreloadedDataVerifier preloadedDataVerifier;
+
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-                            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
-                            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
-                            IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
-                            IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-                            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
-                            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
-                            ISampleImportService sampleImportService,
-                            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
-                                allUsersAndQuestionnairesFactory)
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
+            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
+            ISampleImportService sampleImportService,
+            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
+                allUsersAndQuestionnairesFactory,
+            IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
+            IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository,
+            IPreloadedDataVerifier preloadedDataVerifier)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.questionnaireItemFactory = questionnaireItemFactory;
-            this.userListViewFactory = userListViewFactory;
-            this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.questionnairePreloadingDataItemFactory = questionnairePreloadingDataItemFactory;
+            this.preloadingTemplateService = preloadingTemplateService;
+            this.preloadedDataRepository = preloadedDataRepository;
+            this.preloadedDataVerifier = preloadedDataVerifier;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -82,32 +91,68 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(this.Filters());
         }
 
-        public ActionResult BatchUpload(Guid id)
+        public ActionResult BatchUpload(Guid id, long version)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            var questionnaireBrowseItem = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
-
             var viewModel = new BatchUploadModel()
             {
-                FeaturedQuestions =  questionnaireBrowseItem.FeaturedQuestions,
-                QuestionnaireId = questionnaireBrowseItem.QuestionnaireId,
-                QuestionnaireTitle = questionnaireBrowseItem.Title
+                QuestionnaireId = id,
+                QuestionnaireVersion = version
             };
 
             return this.View(viewModel);
         }
 
-        public ActionResult SampleCreationResult(Guid id)
+        [HttpPost]
+        public ActionResult BatchUpload(BatchUploadModel model)
+        {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var preloadedDataId = preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformation(preloadedDataId);
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
+        }
+
+        public ActionResult TemplateDownload(Guid id, long version)
+        {
+            var pathToFile = preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
+            return this.File(pathToFile, "application/zip", fileDownloadName: Path.GetFileName(pathToFile));
+        }
+
+        public ActionResult VerifySample(Guid questionnaireId, long version, string id)
+        {
+            var errors = preloadedDataVerifier.Verify(questionnaireId, version, preloadedDataRepository.GetPreloadedData(id));
+            this.ViewBag.SupervisorList =
+              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+            return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id));
+        }
+
+
+        public ActionResult ImportPreloadedData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        {
+            this.sampleImportService.CreateSample(questionnaireId, version, id, preloadedDataRepository.GetPreloadedData(id),
+                this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
+            return this.RedirectToAction("SampleCreationResult", new { id });
+        }
+
+        public ActionResult SampleCreationResult(string id)
         {
             SampleCreationStatus result = this.sampleImportService.GetSampleCreationStatus(id);
             return this.View(result);
         }
 
-        public JsonResult GetSampleCreationStatus(Guid id)
+        public JsonResult GetSampleCreationStatus(string id)
         {
             return this.Json(this.sampleImportService.GetSampleCreationStatus(id));
         }
+
 
         public ActionResult TakeNew(Guid id)
         {

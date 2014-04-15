@@ -56,3 +56,5 @@ src/UI/Headquarters/WB.UI.Headquarters/App_Data/Elmah/
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/ExportedData/
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/PreLoadingTemplates/*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/PreLoadedData/*
+src/UI/Headquarters/WB.UI.Headquarters/App_Data/PreLoadedData/*
+src/UI/Headquarters/WB.UI.Headquarters/App_Data/SampleCreationStatus/*

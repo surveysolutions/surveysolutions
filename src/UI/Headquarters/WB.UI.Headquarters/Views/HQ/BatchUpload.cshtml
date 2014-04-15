@@ -4,51 +4,25 @@
     ViewBag.Title = "Index";
 }
 <div class="row-fluid">
-    <div class="page-header">
-        <h3 class="sinle-line-header">Example of CSV layout for @Model.QuestionnaireTitle</h3>
-    </div>
 
-    
-    <div id="resultField">
-        <table class="table table-striped table-bordered table-condensed table-break-words">
-            <thead>
-                <tr>
-                    @foreach (var item in Model.FeaturedQuestions)
-                    {
-                        <th>@Html.DisplayFor(modelItem => item.Caption)</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < 5; i++)
-                {
-                    <tr>
-                        @foreach (var item in Model.FeaturedQuestions)
-                        {
-                            <th>_</th>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <h3>Upload sample</h3>
+    <h3>Upload preloading data</h3>
+    <a href="@Url.Action("TemplateDownload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion })" class="btn btn-primary">Download template of data struture</a>
     <div>
-        @using (Html.BeginForm("BatchUpload", "HQ", new { id = Model.QuestionnaireId }, FormMethod.Post, new { enctype = "multipart/form-data", role="form" }))
+        @using (Html.BeginForm("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            
-            @Html.HiddenFor(x => x.QuestionnaireId)
 
-            <div class="form-group">
+            @Html.HiddenFor(x => x.QuestionnaireId)
+            @Html.HiddenFor(x => x.QuestionnaireVersion)
+            <div class="control-group">
                 @Html.LabelFor(x => x.File, new { @class = "control-label" })
                 <div class="controls">
                     <input type="file" class="input-large" name="file" />
                     @Html.ValidationMessageFor(x => x.File)
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-actions">
                 <input type="submit" class="btn btn-primary" name="Submit" value="Upload" />
-            </div> 
+            </div>
         }
     </div>
 </div>
