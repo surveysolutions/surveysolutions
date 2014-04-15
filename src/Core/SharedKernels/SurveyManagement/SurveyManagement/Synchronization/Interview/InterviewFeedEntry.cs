@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.Infrastructure.ReadSide.Repository;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
+namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview
 {
     public class InterviewFeedEntry : IReadSideRepositoryEntity
     {
@@ -14,11 +14,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public DateTime Timestamp { get; set; }
 
         public string InterviewId { get; set; }
-    }
 
-    public enum EntryType
-    {
-        SupervisorAssigned = 1,
-        InterviewUnassigned = 2
+        public string UserId { get; set; }
+
+        public bool Processed { get; set; }
+
+        public bool ProcessedWithError { get; set; }
     }
 }

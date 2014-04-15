@@ -4,6 +4,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
@@ -28,7 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 InterviewId = evnt.EventSourceId.FormatGuid(),
                 EntryType = EntryType.SupervisorAssigned,
                 Timestamp = evnt.EventTimeStamp,
-                EntryId = evnt.EventIdentifier.FormatGuid()
+                EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
         }
 
@@ -40,7 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryType = EntryType.InterviewUnassigned,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
-                EntryId = evnt.EventIdentifier.FormatGuid()
+                EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
         }
 

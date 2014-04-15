@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.logger = logger;
         }
 
-        public async Task Process()
+        public void Process()
         {
             var localSupervisors = users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor)));
 
@@ -55,18 +55,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 foreach (var userChanges in events.GroupBy(x => x.ChangedUserId))
                 {
-                    await this.ProcessOneUserChanges(userChanges).ConfigureAwait(false);
+                    this.ProcessOneUserChanges(userChanges);
                 }
             }
         }
 
-        private async Task ProcessOneUserChanges(IEnumerable<LocalUserChangedFeedEntry> userChanges)
+        private void ProcessOneUserChanges(IEnumerable<LocalUserChangedFeedEntry> userChanges)
         {
             LocalUserChangedFeedEntry changeThatShouldBeApplied = userChanges.Last();
             try
             {
-                var deserializedUserDetails = await this.heqHeadquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri)
-                                                                                  .ConfigureAwait(false);
+                var deserializedUserDetails = this.heqHeadquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri)
+                                                                                  .Result;
 
                 this.UpdateOrCreateUser(deserializedUserDetails);
 
