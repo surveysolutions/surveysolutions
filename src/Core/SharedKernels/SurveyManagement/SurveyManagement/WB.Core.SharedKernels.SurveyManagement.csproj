@@ -182,6 +182,7 @@
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
+    <Compile Include="Views\Interview\InterviewFeedEntry.cs" />
     <Compile Include="Views\Interview\InterviewGroupView.cs" />
     <Compile Include="Views\Interview\InterviewLevel.cs" />
     <Compile Include="Views\Interview\InterviewLinkedQuestionView.cs" />

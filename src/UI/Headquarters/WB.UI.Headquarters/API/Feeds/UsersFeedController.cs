@@ -63,11 +63,7 @@ namespace WB.UI.Headquarters.API.Feeds
             response.Content = new ObjectContent(typeof(SyndicationFeed), syndicationFeed, new Formatters.SyndicationFeedFormatter());
             response.Content.Headers.LastModified = changedFeedEntries.Last().Timestamp;
 
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                MaxAge = TimeSpan.FromDays(100),
-                Public = true
-            };
+            response.Headers.CacheControl = Constants.DefaultArchiveCache();
 
             return response;
         }
@@ -75,7 +71,8 @@ namespace WB.UI.Headquarters.API.Feeds
         private void AppendPrevLink(int pageNumber, SyndicationFeed syndicationFeed)
         {
             string prevPageUrl = this.Url.Route("api.usersFeedArchive", new { page = pageNumber });
-            syndicationFeed.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, prevPageUrl), "prev-archive", null, null, 0));
+            var prevPageUri = new Uri(this.Request.RequestUri, prevPageUrl);
+            syndicationFeed.AppendPrevLink(prevPageUri);
         }
 
         private SyndicationFeed GetFeed(List<UserChangedFeedEntry> userChangedFeedEntries)
