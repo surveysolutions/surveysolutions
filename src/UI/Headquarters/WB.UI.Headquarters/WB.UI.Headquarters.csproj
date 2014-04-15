@@ -58,6 +58,10 @@
     <Reference Include="HtmlSanitizationLibrary">
       <HintPath>..\..\..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Humanizer">
+      <HintPath>..\..\..\..\packages\Humanizer.1.21.1\lib\portable-win+net40+sl50+wp8\Humanizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin">
       <HintPath>..\..\..\..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -305,7 +309,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BaseApiServiceController.cs" />
+    <Compile Include="API\Feeds\Constants.cs" />
+    <Compile Include="API\Feeds\InterviewsFeedController.cs" />
     <Compile Include="API\Feeds\PagingExtensions.cs" />
+    <Compile Include="API\Feeds\SyndicationFeedExtensions.cs" />
     <Compile Include="API\Feeds\UsersFeedController.cs" />
     <Compile Include="API\Formatters\SyndicationFeedFormatter.cs" />
     <Compile Include="API\InterviewsController.cs" />
