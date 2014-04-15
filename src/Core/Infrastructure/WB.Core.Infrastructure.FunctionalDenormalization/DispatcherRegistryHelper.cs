@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
 {
     public static class DispatcherRegistryHelper
     {
-        public static void RegisterDenormalizer<T>(IKernel kernel) where T : IEventHandler
+        public static void RegisterDenormalizer<T>(this IKernel kernel) where T : IEventHandler
         {
             Type[] eventHandlerTypes = { typeof (IEventHandler), typeof (IEventHandler<>) };
             var denormalizerType = typeof (T);

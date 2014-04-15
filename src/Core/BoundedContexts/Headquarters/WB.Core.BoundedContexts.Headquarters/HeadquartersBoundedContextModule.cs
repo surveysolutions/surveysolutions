@@ -1,6 +1,8 @@
 ﻿using Ninject.Modules;
+using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -9,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         public override void Load()
         {
             this.Bind<IVersionedQuestionnaireReader>().To<VersionedQuestionnaireReader>();
+            this.Kernel.RegisterDenormalizer<InterviewsFeedDenormalizer>();
         }
     }
 }
