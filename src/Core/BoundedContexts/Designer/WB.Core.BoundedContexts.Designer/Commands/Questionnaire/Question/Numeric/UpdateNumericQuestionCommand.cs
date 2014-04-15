@@ -7,15 +7,49 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numer
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "UpdateNumericQuestion")]
-    public class UpdateNumericQuestionCommand : AbstractNumericQuestionCommand
+    public class UpdateNumericQuestionCommand : AbstractUpdateQuestionCommand
     {
-        public UpdateNumericQuestionCommand(Guid questionnaireId, Guid questionId,
-            string title, bool isAutopropagating, string alias, bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions, int? maxValue,
-            Guid[] triggeredGroupIds, Guid responsibleId,
-            bool isInteger, int? countOfDecimalPlaces)
-            : base(questionnaireId, questionId, title, isAutopropagating, alias, isMandatory, isFeatured,
-                scope, condition, validationExpression, validationMessage, instructions, responsibleId, maxValue, triggeredGroupIds,
-                isInteger, countOfDecimalPlaces) {}
+        public UpdateNumericQuestionCommand(
+            Guid questionnaireId,
+            Guid questionId,
+            string title, 
+            string variableName, 
+            bool isMandatory,
+            bool isPreFilled,
+            QuestionScope scope, 
+            string enablementCondition, 
+            string validationExpression, 
+            string validationMessage, 
+            string instructions,
+            int? maxValue,
+            Guid responsibleId,
+            bool isInteger, 
+            int? countOfDecimalPlaces)
+            : base(
+                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
+                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions)
+        {
+            this.MaxValue = maxValue;
+            this.IsInteger = isInteger;
+            this.CountOfDecimalPlaces = countOfDecimalPlaces;
+            this.IsPreFilled = isPreFilled;
+            this.Scope = scope;
+            this.ValidationMessage = validationMessage;
+            this.ValidationExpression = validationExpression;
+        }
+
+        public int? MaxValue { get; private set; }
+
+        public bool IsInteger { get; private set; }
+
+        public int? CountOfDecimalPlaces { get; private set; }
+
+        public QuestionScope Scope { get; set; }
+
+        public string ValidationMessage { get; set; }
+
+        public string ValidationExpression { get; set; }
+
+        public bool IsPreFilled { get; set; }
     }
 }

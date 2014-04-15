@@ -91,7 +91,7 @@ namespace WB.UI.Designer.Controllers
             var questionCommand = command as AbstractQuestionCommand;
             if (questionCommand != null)
             {
-                questionCommand.Condition = questionCommand.Condition;
+                questionCommand.EnablementCondition = questionCommand.EnablementCondition;
                 questionCommand.ValidationExpression = questionCommand.ValidationExpression;
 
                 return;
