@@ -10,8 +10,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Repositories
 {
     public interface IPreloadedDataRepository
     {
-        Guid Store(Stream preloadedDataFile, string fileName);
-        PreloadedContentMetaData GetPreloadedDataMetaInformation(Guid id);
-        PreloadedDataByFile[] GetPreloadedData(Guid id);
+        string Store(Stream preloadedDataFile, string fileName);
+        PreloadedContentMetaData GetPreloadedDataMetaInformation(string id);
+        PreloadedDataByFile[] GetPreloadedData(string id);
     }
 }

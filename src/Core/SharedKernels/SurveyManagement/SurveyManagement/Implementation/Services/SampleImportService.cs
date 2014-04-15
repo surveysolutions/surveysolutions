@@ -48,25 +48,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.rosterDataService = rosterDataService;
         }
 
-        public void CreateSample(Guid questionnaireId, long version, Guid id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
+        public void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
         {
-            this.tempSampleCreationStorage.Store(new SampleCreationStatus(id), id.ToString());
+            this.tempSampleCreationStorage.Store(new SampleCreationStatus(id), id);
             new Task(() => this.CreateSampleInternal(questionnaireId, version, id, data, responsibleHeadquarterId, responsibleSupervisorId))
                 .Start();
         }
 
-        public SampleCreationStatus GetSampleCreationStatus(Guid id)
+        public SampleCreationStatus GetSampleCreationStatus(string id)
         {
-            return this.tempSampleCreationStorage.GetByName(id.ToString());
+            return this.tempSampleCreationStorage.GetByName(id);
         }
 
-        private void CreateSampleInternal(Guid questionnaireId, long version, Guid id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
+        private void CreateSampleInternal(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
         {
             var result = this.GetSampleCreationStatus(id);
             if (data.Length == 0)
             {
                 result.SetErrorMessage("Data is absent");
-                this.tempSampleCreationStorage.Store(result, id.ToString());
+                this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             if (bigTemplate == null)
             {
                 result.SetErrorMessage("Template is absent");
-                this.tempSampleCreationStorage.Store(result, id.ToString());
+                this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
 
@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                             responsibleHeadquarterId,
                             responsibleSupervisorId);
                         result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, preloadedDataByFile.Content.Length));
-                        this.tempSampleCreationStorage.Store(result, id.ToString());
+                        this.tempSampleCreationStorage.Store(result, id);
                         i++;
                     }
                     catch (Exception e)
@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 }
             }
             result.CompleteProcess();
-            this.tempSampleCreationStorage.Store(result, id.ToString());
+            this.tempSampleCreationStorage.Store(result, id);
         }
 
         private void BuiltInterview(Guid interviewId, string[] values, string[] header, IQuestionnaire template, Guid templateId, Guid headqarterId, Guid supervisorId)

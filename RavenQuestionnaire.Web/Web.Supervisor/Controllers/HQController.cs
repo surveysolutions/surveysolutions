@@ -125,7 +125,7 @@ namespace Web.Supervisor.Controllers
             return this.File(pathToFile, "application/zip", fileDownloadName: Path.GetFileName(pathToFile));
         }
 
-        public ActionResult VerifySample(Guid questionnaireId, long version, Guid id)
+        public ActionResult VerifySample(Guid questionnaireId, long version, string id)
         {
             var errors = preloadedDataVerifier.Verify(questionnaireId, version, preloadedDataRepository.GetPreloadedData(id));
             this.ViewBag.SupervisorList =
@@ -134,20 +134,20 @@ namespace Web.Supervisor.Controllers
         }
 
 
-        public ActionResult ImportPreloadedData(Guid questionnaireId, long version, Guid id, Guid responsibleSupervisor)
+        public ActionResult ImportPreloadedData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
             this.sampleImportService.CreateSample(questionnaireId, version, id, preloadedDataRepository.GetPreloadedData(id),
                 this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
-        public ActionResult SampleCreationResult(Guid id)
+        public ActionResult SampleCreationResult(string id)
         {
             SampleCreationStatus result = this.sampleImportService.GetSampleCreationStatus(id);
             return this.View(result);
         }
 
-        public JsonResult GetSampleCreationStatus(Guid id)
+        public JsonResult GetSampleCreationStatus(string id)
         {
             return this.Json(this.sampleImportService.GetSampleCreationStatus(id));
         }

@@ -19,9 +19,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         private Establish context = () =>
         {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
-            fileSystemAccessor.Setup(x => x.IsDirectoryExists("PreLoadedData\\" + archiveId.FormatGuid())).Returns(true);
+            fileSystemAccessor.Setup(x => x.IsDirectoryExists("PreLoadedData\\" + archiveId)).Returns(true);
 
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId.FormatGuid())).Returns(new string[] { archiveName + ".zip" });
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName + ".zip" });
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(archiveName))
                 .Returns(new string[0]);
 
@@ -57,6 +57,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         private static Mock<IRecordsAccessorFactory> recordsAccessorFactory;
         private static string archiveName = "test";
         private static string preLoadedData = "PreLoadedData";
-        private static Guid archiveId = Guid.NewGuid();
+        private static string archiveId = Guid.NewGuid().FormatGuid();
     }
 }
