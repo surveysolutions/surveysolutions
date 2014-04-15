@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Questionnaire(Guid id, long version)
             : base(id)
         {
-            this.RegisterPlainQuestionnaire(version);
+            this.RegisterPlainQuestionnaire(id, version);
         }
 
 
@@ -133,9 +133,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ImportFromQuestionnaireDocument(source);
         }
 
-        public void RegisterPlainQuestionnaire(long version)
+        public void RegisterPlainQuestionnaire(Guid id, long version)
         {
-            QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(this.EventSourceId, version);
+            QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
             if (questionnaireDocument == null)
                 throw new QuestionnaireException(string.Format(
