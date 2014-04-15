@@ -7,12 +7,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
         public SampleCreationStatus()
         {
         }
-        public SampleCreationStatus(Guid id)
+        public SampleCreationStatus(string id)
         {
             this.Id = id;
         }
 
-        public Guid Id { get;  set; }
+        public string Id { get; set; }
         public bool IsCompleted { get;  set; }
         public string ErrorMessage { get;  set; }
         public string StatusMessage { get;  set; }

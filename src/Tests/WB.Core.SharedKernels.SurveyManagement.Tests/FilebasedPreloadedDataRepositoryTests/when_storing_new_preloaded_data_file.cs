@@ -28,10 +28,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             result.ShouldNotBeNull();
 
         private It should_directory_with_result_in_name_be_created = () =>
-            fileSystemAccessor.Verify(x => x.CreateDirectory(string.Format(@"PreLoadedData\{0}",result.FormatGuid())), Times.Once);
+            fileSystemAccessor.Verify(x => x.CreateDirectory(string.Format(@"PreLoadedData\{0}",result)), Times.Once);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;
-        private static Guid result;
+        private static string result;
     }
 }

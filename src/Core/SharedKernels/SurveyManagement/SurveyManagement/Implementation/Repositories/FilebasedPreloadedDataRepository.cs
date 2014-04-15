@@ -39,10 +39,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 fileSystemAccessor.CreateDirectory(this.path);
         }
 
-        public Guid Store(Stream preloadedDataFile, string fileName)
+        public string Store(Stream preloadedDataFile, string fileName)
         {
-            var currentFolderId = Guid.NewGuid();
-            var currentFolderPath = fileSystemAccessor.CombinePath(path, currentFolderId.FormatGuid());
+            var currentFolderId = Guid.NewGuid().FormatGuid();
+            var currentFolderPath = fileSystemAccessor.CombinePath(path, currentFolderId);
             if (fileSystemAccessor.IsDirectoryExists(currentFolderPath))
                 fileSystemAccessor.DeleteDirectory(currentFolderPath);
 
@@ -54,9 +54,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             return currentFolderId;
         }
 
-        public PreloadedContentMetaData GetPreloadedDataMetaInformation(Guid id)
+        public PreloadedContentMetaData GetPreloadedDataMetaInformation(string id)
         {
-            var currentFolderPath = fileSystemAccessor.CombinePath(path, id.FormatGuid());
+            var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
             if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
                 return null;
 
@@ -79,9 +79,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             }
         }
 
-        public PreloadedDataByFile[] GetPreloadedData(Guid id)
+        public PreloadedDataByFile[] GetPreloadedData(string id)
         {
-            var currentFolderPath = fileSystemAccessor.CombinePath(path, id.FormatGuid());
+            var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
             if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
                 return new PreloadedDataByFile[0];
 
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                     .ToArray();
         }
 
-        private PreloadedDataByFile GetPreloadedDataFromFile(Guid id,string fileInDirectory)
+        private PreloadedDataByFile GetPreloadedDataFromFile(string id, string fileInDirectory)
         {
             string[] header = null;
             var records = new List<string[]>();

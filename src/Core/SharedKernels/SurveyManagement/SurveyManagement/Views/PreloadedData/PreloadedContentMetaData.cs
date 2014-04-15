@@ -8,14 +8,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 {
     public class PreloadedContentMetaData
     {
-        public PreloadedContentMetaData(Guid id, string title, PreloadedFileMetaData[] filesMetaInformation)
+        public PreloadedContentMetaData(string id, string title, PreloadedFileMetaData[] filesMetaInformation)
         {
             this.Id = id;
             this.Title = title;
             this.FilesMetaInformation = filesMetaInformation;
         }
 
-        public Guid Id { get; private set; }
+        public string Id { get; private set; }
         public string Title { get; private set; }
         public PreloadedFileMetaData[] FilesMetaInformation { get; private set; }
     }

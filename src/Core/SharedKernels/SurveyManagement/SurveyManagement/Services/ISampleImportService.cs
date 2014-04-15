@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
     public interface ISampleImportService
     {
-        void CreateSample(Guid questionnaireId, long version, Guid id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId);
-        SampleCreationStatus GetSampleCreationStatus(Guid id);
+        void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId);
+        SampleCreationStatus GetSampleCreationStatus(string id);
     }
 }

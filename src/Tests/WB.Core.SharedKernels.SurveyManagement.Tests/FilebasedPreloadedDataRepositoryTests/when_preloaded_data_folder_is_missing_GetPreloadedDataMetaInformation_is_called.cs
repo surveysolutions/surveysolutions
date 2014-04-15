@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformation(Guid.NewGuid());
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformation(Guid.NewGuid().FormatGuid());
 
         It should_result_be_null = () =>
          result.ShouldBeNull();
