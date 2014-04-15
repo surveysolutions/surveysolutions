@@ -6,15 +6,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class FullQuestionDataCommand : AbstractQuestionCommand
     {
         protected FullQuestionDataCommand(Guid questionnaireId, Guid questionId,
-            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-            Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
+            string title, QuestionType type, string variableName, bool isMandatory, bool isPreFilled,
+            QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions,
+            Option[] options,Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
             : base(
-                questionnaireId, questionId, title, alias, isMandatory, isFeatured, scope, condition,
+                questionnaireId, questionId, title, variableName, isMandatory, isPreFilled, scope, enablementCondition,
                 validationExpression, validationMessage, instructions, responsibleId)
         {
             this.Options = options;
-            this.OptionsOrder = optionsOrder;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.Type = type;
 
@@ -25,7 +24,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 
         public QuestionType Type { get; private set; }
         public Option[] Options { get; private set; }
-        public Order OptionsOrder { get; private set; }
         public Guid? LinkedToQuestionId { get; private set; }
 
         public bool AreAnswersOrdered { get; private set; }

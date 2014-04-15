@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddNumericQuestionHandlerTests
             exception = Catch.Exception(() =>
                 questionnaire.AddNumericQuestion(questionId, groupFromRosterId, "title",
                     false, "var1", false, isPrefilled, QuestionScope.Interviewer, null, null, null, null,
-                    triggeredGroupIds: new Guid[] { }, responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
+                    responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
                     maxValue: null));
 
         It should_throw_QuestionnaireException = () =>

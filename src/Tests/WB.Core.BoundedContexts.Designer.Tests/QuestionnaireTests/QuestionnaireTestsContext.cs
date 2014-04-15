@@ -195,7 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(autoGroupPublicKey, secondGroup, responsibleId);
             questionnaire.AddNumericQuestion(autoQuestoinId, secondGroup, "Title", true, "auto", false, false,
-                QuestionScope.Interviewer, "", "", "", "", null, new Guid[] { autoGroupPublicKey }, responsibleId, true, null);
+                QuestionScope.Interviewer, "", "", "", "", null, responsibleId, true, null);
             return questionnaire;
         }
 
@@ -282,7 +282,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             {
                 questionnaire.AddNumericQuestion(questionId, groupId, "Title", questionType == QuestionType.AutoPropagate, alias, false,
                     false,
-                    QuestionScope.Interviewer, condition, validation, "", "", null, new Guid[0], responsible, true, null);
+                    QuestionScope.Interviewer, condition, validation, "", "", null, responsible, true, null);
                 return;
             }
             questionnaire.AddTextQuestion(

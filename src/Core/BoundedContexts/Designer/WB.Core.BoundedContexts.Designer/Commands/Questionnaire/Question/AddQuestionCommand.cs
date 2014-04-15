@@ -9,18 +9,33 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "NewAddQuestion")]
     public class AddQuestionCommand : FullQuestionDataCommand
     {
-        public AddQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
-            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-            Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
+        public AddQuestionCommand(
+            Guid questionnaireId,
+            Guid questionId, 
+            Guid parentGroupId,
+            string title, 
+            QuestionType type, 
+            string variableName, 
+            bool isMandatory, 
+            bool isPreFilled,
+            QuestionScope scope, 
+            string enablementCondition, 
+            string validationExpression, 
+            string validationMessage,
+            string instructions,
+            Option[] options, 
+            Guid responsibleId, 
+            Guid? linkedToQuestionId,
+            bool areAnswersOrdered, 
+            int? maxAllowedAnswers)
 
-            : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured,
-                scope, condition, validationExpression, validationMessage, instructions, options, optionsOrder,
+            : base(questionnaireId, questionId, title, type, variableName, isMandatory, isPreFilled,
+                scope, enablementCondition, validationExpression, validationMessage, instructions, options, 
                 responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers)
         {
-            this.GroupId = groupId;
+            this.ParentGroupId = parentGroupId;
         }
 
-        public Guid GroupId { get; private set; }
+        public Guid ParentGroupId { get; private set; }
     }
 }
