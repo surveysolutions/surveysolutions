@@ -55,17 +55,17 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public IHttpActionResult Verify(Guid id)
+        public VerificationErrors Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
 
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
-
-            var verificationResult = new VerificationResult
+            var verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            var errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
+            var verificationResult = new VerificationErrors
             {
-                Errors = questoinnaireErrors
+                Errors = errors
             };
-            return this.Ok(verificationResult);
+            return verificationResult;
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
