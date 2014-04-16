@@ -2,6 +2,7 @@
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
@@ -14,15 +15,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
         IEventHandler<InterviewDeleted>
     {
         private readonly IReadSideRepositoryWriter<InterviewFeedEntry> writer;
+        private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews;
 
-        public InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> writer)
+        public InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> writer,
+            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews)
         {
             if (writer == null) throw new ArgumentNullException("writer");
+            if (interviews == null) throw new ArgumentNullException("interviews");
             this.writer = writer;
+            this.interviews = interviews;
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
+            var interview = this.interviews.GetById(evnt.EventSourceId.FormatGuid());
+
             writer.Store(new InterviewFeedEntry
             {
                 SupervisorId = evnt.Payload.SupervisorId.FormatGuid(),
@@ -30,12 +37,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryType = EntryType.SupervisorAssigned,
                 Timestamp = evnt.EventTimeStamp,
                 EntryId = evnt.EventIdentifier.FormatGuid(),
-                UserId = evnt.Payload.UserId.FormatGuid()
+                QuestionnaireId = interview.Document.QuestionnaireId.FormatGuid(),
+                QuestionnaireVersion = interview.Document.QuestionnaireVersion
             }, evnt.EventIdentifier);
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
+            var interview = this.interviews.GetById(evnt.EventSourceId.FormatGuid());
+
             this.writer.Store(new InterviewFeedEntry
             {
                 SupervisorId = evnt.Payload.UserId.FormatGuid(),
@@ -43,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
                 EntryId = evnt.EventIdentifier.FormatGuid(),
-                UserId = evnt.Payload.UserId.FormatGuid()
+                QuestionnaireId = interview.Document.QuestionnaireId.FormatGuid()
             }, evnt.EventIdentifier);
         }
 

@@ -64,13 +64,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                             case EntryType.SupervisorAssigned:
                                 var assignCommand = new AssignSupervisorCommand(
                                     Guid.Parse(interviewFeedEntry.InterviewId),
-                                    Guid.Parse(interviewFeedEntry.UserId),
+                                    new Guid(),
                                     Guid.Parse(interviewFeedEntry.SupervisorId));
                                 this.commandService.Execute(assignCommand);
                                 break;
                             case EntryType.InterviewUnassigned:
                                 var deleteCommand = new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId),
-                                    Guid.Parse(interviewFeedEntry.UserId));
+                                    new Guid());
                                 this.commandService.Execute(deleteCommand);
                                 break;
                             default:
