@@ -98,8 +98,14 @@ namespace WB.UI.Headquarters.API.Feeds
                     Id = entry.EntryId
                 };
 
-                string detailsUrl = this.Url.Route("api.interviewDetails", new { id = entry.InterviewId }); 
-                item.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, detailsUrl), "enclosure", null, null, 0));
+                string interivewDetailsUrl = this.Url.Route("api.interviewDetails", new { id = entry.InterviewId }); 
+                item.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, interivewDetailsUrl), "enclosure", "Related interview", null, 0));
+
+                string questionnaireDetailsUrl = this.Url.Route("api.questionnaireDetails", new {
+                                                     id = entry.QuestionnaireId, 
+                                                     version = entry.QuestionnaireVersion
+                                                 });
+                item.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, questionnaireDetailsUrl), "related", "Related qestionnaire", null, 0));
 
                 item.Content = new TextSyndicationContent(
                     JsonConvert.SerializeObject(entry, Formatting.Indented,
