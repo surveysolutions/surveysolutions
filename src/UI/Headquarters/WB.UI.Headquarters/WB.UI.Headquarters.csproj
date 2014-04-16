@@ -321,6 +321,7 @@
     <Compile Include="API\Formatters\SyndicationFeedFormatter.cs" />
     <Compile Include="API\InterviewsController.cs" />
     <Compile Include="API\QuestionnairesController.cs" />
+    <Compile Include="API\Resources\InterviewsResourceController.cs" />
     <Compile Include="API\Resources\QuestionnairesResourceController.cs" />
     <Compile Include="API\Resources\UsersResourceController.cs" />
     <Compile Include="API\UsersController.cs" />

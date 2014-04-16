@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                             this.localUserFeedProcessor.Process();
 
-                            this.interviewsSynchronizer.Synchronzie();
+                            //this.interviewsSynchronizer.Synchronzie();
 
                             this.isSynchronizationRunning = false;
 

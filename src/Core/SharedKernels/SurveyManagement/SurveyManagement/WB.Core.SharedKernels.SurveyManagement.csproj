@@ -79,6 +79,7 @@
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireExportStructureDenormalizer.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
     <Compile Include="Factories\IExportViewFactory.cs" />
+    <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
     <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\CsvRecordsAccessorFactory.cs" />

@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
     {
         protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(QuestionnaireRosterStructure rosterStructure=null)
         {
-            var questionnaireRosterStructureMockStorage = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>();
+            var questionnaireRosterStructureMockStorage = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>();
             questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(rosterStructure);
             questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<long>())).Returns(rosterStructure);
             return new InterviewEventHandlerFunctional(
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.InterviewEventH
 
             return new InterviewEventHandlerFunctional(
                 userDocumentMockStorage.Object,
-                new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>().Object,
+                new Mock<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>().Object,
                 new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object, 
                 new Mock<ISynchronizationDataStorage>().Object);
         }

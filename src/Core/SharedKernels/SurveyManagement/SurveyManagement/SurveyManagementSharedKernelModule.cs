@@ -49,6 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
             this.Bind<IRosterDataService>().To<RosterDataService>();
+            this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
