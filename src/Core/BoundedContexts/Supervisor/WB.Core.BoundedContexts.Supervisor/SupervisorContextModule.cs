@@ -1,5 +1,9 @@
 ﻿using System.Net.Http;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.Supervisor.Interviews;
+using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Questionnaires;
+using WB.Core.BoundedContexts.Supervisor.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
@@ -26,8 +30,10 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<ISynchronizer>().To<Synchronizer>();
             this.Bind<IInterviewsSynchronizer>().To<InterviewsSynchronizer>();
             this.Bind<IUserChangedFeedReader>().To<UserChangedFeedReader>();
-            this.Bind<ILocalUserFeedProcessor>().To<LocalUserdFeedProcessor>();
+            this.Bind<ILocalUserFeedProcessor>().To<LocalUserFeedProcessor>();
             this.Bind<IHeadquartersUserReader>().To<HeadquartersUserReader>();
+            this.Bind<IHeadquartersQuestionnaireReader>().To<HeadquartersQuestionnaireReader>();
+            this.Bind<IHeadquartersInterviewReader>().To<HeadquartersInterviewReader>();
             this.Bind<IAtomFeedReader>().To<AtomFeedReader>();
 
             this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
