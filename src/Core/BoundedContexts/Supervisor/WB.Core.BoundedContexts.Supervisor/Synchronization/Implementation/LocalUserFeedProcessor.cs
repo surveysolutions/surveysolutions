@@ -19,29 +19,31 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
-    public class LocalUserdFeedProcessor : ILocalUserFeedProcessor
+    public class LocalUserFeedProcessor : ILocalUserFeedProcessor
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
         private readonly ILocalFeedStorage localFeedStorage;
         private readonly ICommandService commandService;
-        private readonly IHeadquartersUserReader heqHeadquartersUserReader;
+        private readonly IHeadquartersUserReader headquartersUserReader;
         private readonly ILogger logger;
 
-        public LocalUserdFeedProcessor(IQueryableReadSideRepositoryReader<UserDocument> users,
+        public LocalUserFeedProcessor(
+            IQueryableReadSideRepositoryReader<UserDocument> users,
             ILocalFeedStorage localFeedStorage,
             ICommandService commandService,
-            IHeadquartersUserReader heqHeadquartersUserReader,
+            IHeadquartersUserReader headquartersUserReader,
             ILogger logger)
         {
             if (users == null) throw new ArgumentNullException("users");
             if (localFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
-            if (heqHeadquartersUserReader == null) throw new ArgumentNullException("heqHeadquartersUserReader");
+            if (commandService == null) throw new ArgumentNullException("commandService");
+            if (headquartersUserReader == null) throw new ArgumentNullException("headquartersUserReader");
             if (logger == null) throw new ArgumentNullException("logger");
 
             this.users = users;
             this.localFeedStorage = localFeedStorage;
             this.commandService = commandService;
-            this.heqHeadquartersUserReader = heqHeadquartersUserReader;
+            this.headquartersUserReader = headquartersUserReader;
             this.logger = logger;
         }
 
@@ -65,8 +67,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             LocalUserChangedFeedEntry changeThatShouldBeApplied = userChanges.Last();
             try
             {
-                var deserializedUserDetails = this.heqHeadquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri)
-                                                                                  .Result;
+                UserDocument deserializedUserDetails = this.headquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri).Result;
 
                 this.UpdateOrCreateUser(deserializedUserDetails);
 

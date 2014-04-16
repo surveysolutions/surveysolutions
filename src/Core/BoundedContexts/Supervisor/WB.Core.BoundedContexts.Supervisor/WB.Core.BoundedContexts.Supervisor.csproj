@@ -73,7 +73,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interviews\IHeadquartersInterviewReader.cs" />
+    <Compile Include="Interviews\Implementation\HeadquartersInterviewReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Questionnaires\IHeadquartersQuestionnaireReader.cs" />
+    <Compile Include="Questionnaires\Implementation\HeadquartersQuestionnaireReader.cs" />
     <Compile Include="SupervisorContextModule.cs" />
     <Compile Include="Synchronization\Atom\Implementation\AtomFeedReader.cs" />
     <Compile Include="Synchronization\Atom\IAtomFeedReader.cs" />
@@ -81,10 +85,11 @@
     <Compile Include="Synchronization\Atom\Link.cs" />
     <Compile Include="Synchronization\ILocalFeedStorage.cs" />
     <Compile Include="Synchronization\ILocalUserFeedProcessor.cs" />
+    <Compile Include="Synchronization\Implementation\HeadquartersEntityReader.cs" />
     <Compile Include="Synchronization\Implementation\InterviewsSynchronizer.cs" />
     <Compile Include="Synchronization\Implementation\LocalFeedStorage.cs" />
     <Compile Include="Synchronization\Implementation\LocalInterviewFeedEntry.cs" />
-    <Compile Include="Synchronization\Implementation\LocalUserdFeedProcessor.cs" />
+    <Compile Include="Synchronization\Implementation\LocalUserFeedProcessor.cs" />
     <Compile Include="Synchronization\Implementation\UserChangedFeedReader.cs" />
     <Compile Include="Synchronization\IInterviewsSynchronizer.cs" />
     <Compile Include="Synchronization\IUserChangedFeedReader.cs" />
@@ -141,6 +146,10 @@
     <ProjectReference Include="..\..\..\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
