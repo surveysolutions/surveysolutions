@@ -9,8 +9,8 @@
     <div class="questionnarie-title">
         <div class="title">
             {{questionnaire.Title}} <span>({{questionnaire.Statistics.QuestionsCount}}Q, {{questionnaire.Statistics.GroupsCount}}G, {{questionnaire.Statistics.RostersCount}}R)</span>
-            <input type="button" class="wb-inline-button error" value="VERIFY" ng-click="verify()" />
-            <span ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href="">{{verificationStatus.errorsCount}} errors</a></span>
+            <input type="button" id="verify-btn" class="wb-inline-button error" value="VERIFY" data-container="body" data-toggle="modal-popover" data-placement="bottom" ng-click="verify()" />
+            <span ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
             <span ng-show="verificationStatus.errorsCount == 0">OK</span>
         </div>
     </div>
@@ -87,25 +87,25 @@
     </div>
 
     <!--
-      <h2>Chapters</h2>
-      <li ng-repeat="chapter in chapters">
-        <b>{{ chapter.Title }}</b>
-      </li>
-
-      <h2>Groups</h2>
-      <ol>
-        <li ng-repeat="group in documents.Groups | filter: {Level: 0}">
-          {{ group.Title }}
-            <ol>
-              <li ng-repeat="child in group.Children">
-                {{ child | truncateFilter:documents }}
-                <ol ng-if="child.Type==10">
-                  <li ng-repeat="c in child| truncateFilter2:documents">
-                    {{ c | truncateFilter:documents}}
-                  </li>
-                </ol>
-              </li>
-            </ol>
+        <h2>Chapters</h2>
+        <li ng-repeat="chapter in chapters">
+            <b>{{ chapter.Title }}</b>
         </li>
-      </ol> -->
+
+        <h2>Groups</h2>
+        <ol>
+            <li ng-repeat="group in documents.Groups | filter: {Level: 0}">
+                {{ group.Title }}
+                <ol>
+                    <li ng-repeat="child in group.Children">
+                        {{ child | truncateFilter:documents }}
+                        <ol ng-if="child.Type==10">
+                            <li ng-repeat="c in child| truncateFilter2:documents">
+                                {{ c | truncateFilter:documents}}
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+        </ol> -->
 </section>

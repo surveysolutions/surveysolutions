@@ -5891,7 +5891,7 @@ body {
   top: 0;
   height: 100%;
   width: 40px;
-  background: url(../i/dropdown-arrow.png) no-repeat center center;
+  background: url(/i/dropdown-arrow.png) no-repeat center center;
 }
 .dropdown > .wb-dropdown-button {
   background-color: #fff;
@@ -5931,7 +5931,7 @@ body {
 }
 .prettycheckbox > a,
 .prettyradio > a {
-  background: url(../i/pretty-checkable-sprites.png);
+  background: url(/i/pretty-checkable-sprites.png);
 }
 .prettycheckbox label {
   margin: 7px 6px 4px 0;
@@ -6012,7 +6012,7 @@ body {
   top: 0;
   width: 55px;
   height: 100%;
-  background: #dbdfe2 url(../i/designer-logo.png) center no-repeat;
+  background: #dbdfe2 url(/i/designer-logo.png) center no-repeat;
 }
 #designer-editor.container section#header > .breadcrumbs {
   margin-top: 18px;
@@ -6039,7 +6039,7 @@ body {
   height: 14px;
   content: '';
   margin: 0 7px;
-  background: url(../i/breadcrumb-slash.png) no-repeat;
+  background: url(/i/breadcrumb-slash.png) no-repeat;
 }
 #designer-editor.container section#header > .questionnarie-title {
   margin-top: 2px;
@@ -6154,10 +6154,10 @@ body {
   background-position: center -40px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right li a.filter {
-  background-image: url(../i/filter-glyph.png);
+  background-image: url(/i/filter-glyph.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right li a.search {
-  background-image: url(../i/search-glyph.png);
+  background-image: url(/i/search-glyph.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel {
   position: absolute;
@@ -6166,7 +6166,7 @@ body {
   z-index: 10;
   width: 55px;
   height: 100%;
-  background: #bcc3c8 url(../i/chapter-panel-btn.png) 0 19px no-repeat;
+  background: #bcc3c8 url(/i/chapter-panel-btn.png) 0 19px no-repeat;
   cursor: pointer;
   -webkit-transition: width 0.4s ease;
   transition: width 0.4s ease;
@@ -6183,7 +6183,7 @@ body {
   z-index: 15;
   width: 55px;
   height: 55px;
-  background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
+  background: #dbdfe2 url(/i/arrow-left.png) center 0 no-repeat;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .foldback-button:hover {
   background-position: 0 -55px;
@@ -6200,7 +6200,7 @@ body {
   height: 100%;
   top: 0;
   right: -219px;
-  background: url(../i/left-panel-shadow.png) repeat-y;
+  background: url(/i/left-panel-shadow.png) repeat-y;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded > .foldback-button {
   display: block;
@@ -6254,7 +6254,7 @@ body {
   vertical-align: middle;
   width: 37px;
   height: 30px;
-  background: url(../i/btn-dropdown-blue.png) center -5px no-repeat;
+  background: url(/i/btn-dropdown-blue.png) center -5px no-repeat;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .dropdown-button:hover {
   background-position: center -42px;
@@ -6263,7 +6263,7 @@ body {
   font-weight: bold;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li:hover {
-  background: #dbdfe2 url(../i/chapter-list-li-dots.png) 5px center no-repeat;
+  background: #dbdfe2 url(/i/chapter-list-li-dots.png) 5px center no-repeat;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li:hover > .holder > .inner > .dropdown-button {
   display: block;
@@ -6308,7 +6308,7 @@ body {
   margin-top: 20px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item:hover {
-  background-image: url(../i/question-item-dots.png);
+  background-image: url(/i/question-item-dots.png);
   background-position: 5px center;
   background-repeat: no-repeat;
   background-color: #edeff1;
@@ -6353,31 +6353,31 @@ body {
   background: transparent center center no-repeat;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-multianswer > .icon {
-  background-image: url(../i/icon-cat-multianswer-sm.png);
+  background-image: url(/i/icon-cat-multianswer-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-singleanswer > .icon {
-  background-image: url(../i/icon-cat-singleanswer-sm.png);
+  background-image: url(/i/icon-cat-singleanswer-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-multimedia > .icon {
-  background-image: url(../i/icon-cat-multimedia-sm.png);
+  background-image: url(/i/icon-cat-multimedia-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-datetime > .icon {
-  background-image: url(../i/icon-cat-datetime-sm.png);
+  background-image: url(/i/icon-cat-datetime-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-geoloc > .icon {
-  background-image: url(../i/icon-cat-geoloc-sm.png);
+  background-image: url(/i/icon-cat-geoloc-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-textarea > .icon {
-  background-image: url(../i/icon-cat-textarea-sm.png);
+  background-image: url(/i/icon-cat-textarea-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-textedit > .icon {
-  background-image: url(../i/icon-cat-textedit-sm.png);
+  background-image: url(/i/icon-cat-textedit-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-floatedit > .icon {
-  background-image: url(../i/icon-cat-floatedit-sm.png);
+  background-image: url(/i/icon-cat-floatedit-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.cat-intedit > .icon {
-  background-image: url(../i/icon-cat-intedit-sm.png);
+  background-image: url(/i/icon-cat-intedit-sm.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item > .qname-block {
   position: absolute;
@@ -6394,7 +6394,7 @@ body {
   display: inline-block;
   height: 100%;
   width: 20px;
-  background: url(../i/icon-qname-block-link.png) center center no-repeat;
+  background: url(/i/icon-qname-block-link.png) center center no-repeat;
   vertical-align: middle;
   margin-right: 3px;
 }
@@ -6418,7 +6418,7 @@ body {
   vertical-align: middle;
   width: 37px;
   height: 30px;
-  background: url(../i/btn-dropdown-blue.png) center -5px no-repeat;
+  background: url(/i/btn-dropdown-blue.png) center -5px no-repeat;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item > .qname-block > .dropdown-btn:hover {
   background-position: center -42px;
@@ -6481,7 +6481,7 @@ body {
   height: 14px;
   content: '';
   margin: 0 7px;
-  background: url(../i/breadcrumb-slash.png) no-repeat;
+  background: url(/i/breadcrumb-slash.png) no-repeat;
 }
 #designer-editor.container section#main > .question-editor > .group {
   margin: 25px 0;
@@ -6531,4 +6531,7 @@ body {
 }
 #designer-editor.container section#main > .question-editor > .group > .form-holder > a.right {
   float: right;
+}
+#verify-popover {
+  display: none;
 }

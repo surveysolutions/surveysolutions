@@ -42,7 +42,8 @@ angular.module('pocAngularApp')
       $scope.verify = function () {
           $http.get('api/questionnaire/verify/' + $routeParams.questionnaireId)
               .success(function (result) {
-                  console.log(result);
+                  $scope.verificationStatus.errors = result.errors;
+                  $scope.verificationStatus.errorsCount = result.errors.length;
               });
       };
 
