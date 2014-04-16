@@ -466,7 +466,7 @@
 
         commands[config.commands.createNumericQuestion] = function (question) {
             var command = converQuestionToCommand(question);
-            command.groupId = question.parent().id();
+            command.parentGroupId = question.parent().id();
             return command;
         };
 
