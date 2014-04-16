@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class QuestionInfoView
     {
