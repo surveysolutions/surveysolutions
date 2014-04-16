@@ -2,36 +2,21 @@
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Domain;
+using WB.Core.SharedKernels.DataCollection.Events.User;
+
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
     public class UserAR : AggregateRootMappedByConvention
     {
-        private string email;
+        private bool isUserLockedBySupervisor;
 
-        private bool isUserLocked;
+        private bool isUserLockedByHQ;
+        
+        public UserAR(){}
 
-        private string passwordHash;
-
-        private UserRoles[] roles;
-
-        private UserLight supervisor;
-
-        private string userName;
-
-        public UserAR()
-        {
-        }
-
-        public UserAR(
-            Guid publicKey, 
-            string userName, 
-            string password, 
-            string email, 
-            UserRoles[] roles, 
-            bool isLocked, 
-            UserLight supervisor)
-            : base(publicKey)
+        public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor, 
+            bool isLockedbyHQ, UserLight supervisor) : base(publicKey)
         {
             //// Check for uniqueness of person name and email!
             this.ApplyEvent(
@@ -39,23 +24,33 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                     {
                         Name = userName, 
                         Password = password, 
-                        Email = email, 
-                        IsLocked = isLocked, 
+                        Email = email,
+                        IsLockedBySupervisor = isLockedbySupervisor,
+                        IsLocked = isLockedbyHQ, 
                         Roles = roles, 
                         Supervisor = supervisor, 
                         PublicKey = publicKey
                     });
         }
 
-        public void ChangeUser(string email, bool isLocked, UserRoles[] roles, string passwordHash)
+        public void ChangeUser(string email, bool isLockedBySupervisor, bool isLockedByHQ, UserRoles[] roles, string passwordHash, Guid userId)
         {
             this.ApplyEvent(new UserChanged { Email = email, Roles = roles, PasswordHash = passwordHash});
 
-            if (isLocked)
+            if (isLockedBySupervisor && !isUserLockedBySupervisor)
+            {
+                this.ApplyEvent(new UserLockedBySupervisor(userId));
+            }
+            else if (!isLockedBySupervisor && isUserLockedBySupervisor)
+            {
+                this.ApplyEvent(new UserUnlockedBySupervisor(userId));
+            }
+
+            if (isLockedByHQ && !isUserLockedByHQ)
             {
                 this.ApplyEvent(new UserLocked());
             }
-            else
+            else if (!isLockedByHQ && isUserLockedByHQ)
             {
                 this.ApplyEvent(new UserUnlocked());
             }
@@ -71,31 +66,44 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             this.ApplyEvent(new UserUnlocked());
         }
 
+        public void LockBySupervisor(Guid userId)
+        {
+            this.ApplyEvent(new UserLockedBySupervisor(userId));
+        }
+
+        public void UnlockBySupervisor(Guid userId)
+        {
+            this.ApplyEvent(new UserUnlockedBySupervisor(userId));
+        }
+
         protected void OnNewUserCreated(NewUserCreated e)
         {
-            this.userName = e.Name;
-            this.email = e.Email;
-            this.passwordHash = e.Password;
-            this.isUserLocked = e.IsLocked;
-            this.roles = e.Roles;
-            this.supervisor = e.Supervisor;
+            this.isUserLockedBySupervisor = e.IsLockedBySupervisor;
+            this.isUserLockedByHQ = e.IsLocked;
+        }
+
+        protected void OnUserLocked(UserLockedBySupervisor @event)
+        {
+            this.isUserLockedBySupervisor = true;
+        }
+
+        protected void OnUserUnlocked(UserUnlockedBySupervisor @event)
+        {
+            this.isUserLockedBySupervisor = false;
         }
 
         protected void OnUserLocked(UserLocked @event)
         {
-            this.isUserLocked = true;
+            this.isUserLockedByHQ = true;
         }
 
         protected void OnUserUnlocked(UserUnlocked @event)
         {
-            this.isUserLocked = false;
+            this.isUserLockedByHQ = false;
         }
 
         protected void OnUserChange(UserChanged e)
         {
-            this.email = e.Email;
-            this.roles = e.Roles;
-            this.passwordHash = e.PasswordHash;
         }
     }
 }

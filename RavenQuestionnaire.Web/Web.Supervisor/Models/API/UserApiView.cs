@@ -24,7 +24,7 @@ namespace Web.Supervisor.Models.API
 
             this.TotalCount = userListView.TotalCount;
             this.Users = userListView.Items.Select(
-                    item => new UserApiItem(item.UserId, item.UserName, item.Email, DateTime.Parse(item.CreationDate), item.IsLocked));
+                    item => new UserApiItem(item.UserId, item.UserName, item.Email, DateTime.Parse(item.CreationDate), item.IsLockedByHQ || item.IsLockedBySupervisor));
 
             this.Offset = userListView.Page;
             this.Limit = userListView.PageSize;
@@ -38,7 +38,7 @@ namespace Web.Supervisor.Models.API
 
             this.TotalCount = userListView.TotalCount;
             this.Users = userListView.Items.Select(
-                    item => new UserApiItem(item.UserId, item.UserName, item.Email, DateTime.Parse(item.CreationDate), item.IsLocked));
+                    item => new UserApiItem(item.UserId, item.UserName, item.Email, DateTime.Parse(item.CreationDate), item.IsLockedByHQ || item.IsLockedBySupervisor));
 
             //this.Offset = userListView.ItemsSummary.Page;
             //this.Limit = questionnaireBrowseView.PageSize;

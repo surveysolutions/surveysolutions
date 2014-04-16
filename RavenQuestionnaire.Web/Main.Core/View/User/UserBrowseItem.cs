@@ -8,12 +8,13 @@ namespace Main.Core.View.User
     /// </summary>
     public class UserBrowseItem
     {
-        public UserBrowseItem(Guid id, string name, string email, DateTime creationDate, bool isLocked, UserLight supervisor)
+        public UserBrowseItem(Guid id, string name, string email, DateTime creationDate, bool isLockedBySupervisor, bool isLockedByHQ, UserLight supervisor)
         {
             this.Id = id;
             this.Email = email;
             this.UserName = name;
-            this.IsLocked = isLocked;
+            this.IsLockedBySupervisor = isLockedBySupervisor;
+            this.IsLockedByHQ = isLockedByHQ;
             this.CreationDate = creationDate;
             if (supervisor != null) 
                 this.SupervisorName = supervisor.Name;
@@ -25,7 +26,9 @@ namespace Main.Core.View.User
 
         public Guid Id { get; private set; }
 
-        public bool IsLocked { get; private set; }
+        public bool IsLockedBySupervisor { get; private set; }
+
+        public bool IsLockedByHQ { get; private set; }
 
         public string SupervisorName { get; set; }
 

@@ -66,7 +66,9 @@
     <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
+    <Compile Include="Commands\User\LockUserBySupervisorCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
+    <Compile Include="Commands\User\UnlockUserBySupervisorCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
@@ -100,6 +102,8 @@
     <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
+    <Compile Include="Events\User\UserLockedBySupervisor.cs" />
+    <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />

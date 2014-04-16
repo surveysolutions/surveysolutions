@@ -52,7 +52,7 @@ namespace CAPI.Android.Core.Model.Authorization
 
                 LoginDTO user = this.documentStorage.Filter(u => u.Login == userNameToLower).FirstOrDefault();
 
-                if (user == null || user.Password != hash || user.IsLocked)
+                if (user == null || user.Password != hash || user.IsLockedBySupervisor || user.IsLockedByHQ)
                     return false;
 
                 currentUser = new UserLight(Guid.Parse(user.Id), user.Login);

@@ -19,7 +19,11 @@ namespace Main.Core.Documents
         public DateTime CreationDate { get; set; }
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
-        public bool IsLocked { get; set; }
+
+        public bool IsLockedByHQ { get; set; }
+
+        public bool IsLockedBySupervisor { get; set; }
+
         public string Password { get; set; }
         public Guid PublicKey { get; set; }
         public List<UserRoles> Roles { get; set; }

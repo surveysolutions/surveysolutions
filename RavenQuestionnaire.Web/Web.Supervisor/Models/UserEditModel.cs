@@ -28,7 +28,11 @@ namespace Web.Supervisor.Models
         [Display(Name = "Email", Order = 4)]
         public string Email { get; set; }
 
-        [Display(Name = "Is locked", Order = 5)]
-        public bool IsLocked { get; set; }
+        [Display(Name = "Is locked by Supervisor", Order = 5)]
+        public bool IsLockedBySupervisor { get; set; }
+
+        [Display(Name = "Is locked by Headquarters", Order = 6)]
+        public bool IsLockedByHQ { get; set; }
+
     }
 }

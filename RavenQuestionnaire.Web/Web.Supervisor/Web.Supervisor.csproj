@@ -431,6 +431,7 @@
     <Compile Include="Models\SupervisorModel.cs" />
     <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
+    <Compile Include="Models\UserViewModelForSupervisor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">

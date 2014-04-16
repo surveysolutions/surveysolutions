@@ -369,6 +369,9 @@ namespace Web.Supervisor.Controllers
                     password = unpw[1];
                 }
                 user = this.GetUser(username, password);
+
+                if (user.isLockedBySupervisor || user.IsLockedByHQ)
+                    return null;
             }
             catch (Exception ex)
             {

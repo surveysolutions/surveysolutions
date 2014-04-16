@@ -94,12 +94,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (this.users.GetById(userDetails.PublicKey) == null)
             {
                 userCommand = new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
-                    userDetails.Roles.ToArray(), userDetails.IsLocked, userDetails.Supervisor);
+                    userDetails.Roles.ToArray(), userDetails.IsLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Supervisor);
             }
             else
             {
                 userCommand = new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
-                    userDetails.Roles.ToArray(), userDetails.IsLocked, userDetails.Password);
+                    userDetails.Roles.ToArray(), userDetails.IsLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Password, Guid.Empty);
             }
 
             this.commandService.Execute(userCommand);

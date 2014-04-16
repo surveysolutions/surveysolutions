@@ -38,7 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                                             id: x.PublicKey,
                                             creationDate: x.CreationDate,
                                             email: x.Email,
-                                            isLocked: x.IsLocked,
+                                            isLockedBySupervisor: x.IsLockedBySupervisor,
+                                            isLockedByHQ:x.IsLockedByHQ,
                                             name: x.UserName,
                                             roles: x.Roles
                                             ));

@@ -177,8 +177,14 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\User\CreateUserCommand.cs">
       <Link>Commands\User\CreateUserCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\User\LockUserBySupervisorCommand.cs">
+      <Link>Commands\User\LockUserBySupervisorCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\User\LockUserCommand.cs">
       <Link>Commands\User\LockUserCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\User\UnlockUserBySupervisorCommand.cs">
+      <Link>Commands\User\UnlockUserBySupervisorCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\User\UnlockUserCommand.cs">
       <Link>Commands\User\UnlockUserCommand.cs</Link>
@@ -398,6 +404,12 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\TemplateImported.cs">
       <Link>Events\Questionnaire\TemplateImported.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserLockedBySupervisor.cs">
+      <Link>Events\User\UserLockedBySupervisor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserUnlockedBySupervisor.cs">
+      <Link>Events\User\UserUnlockedBySupervisor.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Exceptions\InterviewException.cs">
       <Link>Exceptions\InterviewException.cs</Link>

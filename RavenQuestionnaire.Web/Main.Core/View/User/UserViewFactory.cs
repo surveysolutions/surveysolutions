@@ -43,7 +43,7 @@ namespace Main.Core.View.User
                         return null;
                     }
 
-                    return new UserView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLocked, doc.Supervisor);
+                    return new UserView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLockedBySupervisor, doc.IsLockedByHQ, doc.Supervisor);
                 });
             return result;
         }

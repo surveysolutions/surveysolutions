@@ -128,7 +128,7 @@ namespace CapiDataGenerator
             if (this.SupervisorList.Count == 0)
             {
                 var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now,
-                    false, null);
+                    false, false, null);
                 this.SupervisorList = new ObservableCollection<UserListItem>() {emptySupervisor};
                 this.SelectedSupervisor = emptySupervisor;
             }
@@ -547,7 +547,7 @@ namespace CapiDataGenerator
                 users.Add(new UserLight(uId, userName));
                 commandService.Execute(new CreateUserCommand(publicKey: uId, userName: userName,
                     password: SimpleHash.ComputeHash(userName),
-                    email: string.Concat(userName, "@mail.com"), roles: new[] {UserRoles.Operator}, isLocked: false,
+                    email: string.Concat(userName, "@mail.com"), roles: new[] { UserRoles.Operator }, isLockedBySupervisor: false, isLockedByHQ: false,
                     supervsor: new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName)));
                 InvokeOnMainThread(() => InterviewersList.Add(userName));
                 UpdateProgress();

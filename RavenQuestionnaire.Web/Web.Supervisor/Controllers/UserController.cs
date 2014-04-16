@@ -54,7 +54,7 @@ namespace Web.Supervisor.Controllers
                 {
                     this.CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
                                                                   user.Name + "@example.com", new[] { user.Role },
-                                                                  false, null));
+                                                                  false, false, null));
 
                     bool isSupervisor = Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString());
                     bool isHeadquarter = Roles.IsUserInRole(user.Name, UserRoles.Headquarter.ToString());

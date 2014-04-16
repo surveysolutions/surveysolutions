@@ -68,8 +68,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                         userDocument.UserName, 
                         userDocument.Password, 
                         userDocument.Email, 
-                        new[] { UserRoles.Supervisor }, 
-                        userDocument.IsLocked, 
+                        new[] { UserRoles.Supervisor },
+                        userDocument.IsLockedBySupervisor, 
+                        userDocument.IsLockedByHQ, 
                         null);
 
                     this.commandService.Execute(command);

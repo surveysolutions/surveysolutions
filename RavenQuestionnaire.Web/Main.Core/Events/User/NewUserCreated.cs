@@ -14,15 +14,13 @@ namespace Main.Core.Events.User
     {
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets the email.
-        /// </summary>
+
         public string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is locked.
-        /// </summary>
+        //means locked by HQ. For Bakcward compatibility
         public bool IsLocked { get; set; }
+        
+        public bool IsLockedBySupervisor { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

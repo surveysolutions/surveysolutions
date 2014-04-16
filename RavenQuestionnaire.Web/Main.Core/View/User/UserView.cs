@@ -14,7 +14,7 @@ namespace Main.Core.View.User
         }
 
         public UserView(Guid publicKey, string userName, string password, string email, DateTime creationDate, 
-            IEnumerable<UserRoles> roles, bool isLocked, UserLight supervisor)
+            IEnumerable<UserRoles> roles, bool isLockedBySupervisor, bool isLockedByHQ, UserLight supervisor)
         {
             this.PublicKey = publicKey;
             this.UserName = userName;
@@ -22,15 +22,18 @@ namespace Main.Core.View.User
             this.Email = email;
             this.CreationDate = creationDate;
             this.Roles = roles;
-            this.IsLocked = isLocked;
+            this.isLockedBySupervisor = isLockedBySupervisor;
             this.Supervisor = supervisor;
+            this.IsLockedByHQ = isLockedByHQ;
         }
 
         public DateTime CreationDate { get; set; }
 
         public string Email { get; set; }
 
-        public bool IsLocked { get; set; }
+        public bool isLockedBySupervisor { get; set; }
+
+        public bool IsLockedByHQ { get; set; }
 
         public string Password { get; set; }
 
@@ -62,7 +65,7 @@ namespace Main.Core.View.User
         public static UserView New()
         {
             return new UserView(
-                Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, null);
+                Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, false, null);
         }
     }
 }

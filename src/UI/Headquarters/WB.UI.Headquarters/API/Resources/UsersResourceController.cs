@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.API.Resources
             string detailsUrl = this.Url.Route("api.userDetails", new { id = userDocument.PublicKey.FormatGuid()});
             var result = new SupervisorValidationResult
             {
-                isValid = !userDocument.IsLocked && !userDocument.IsDeleted && userDocument.Roles.Contains(UserRoles.Supervisor),
+                isValid = !userDocument.IsLockedByHQ && !userDocument.IsDeleted && userDocument.Roles.Contains(UserRoles.Supervisor),
                 userId =  userDocument.PublicKey.FormatGuid(),
                 userDetailsUrl = new Uri(this.Request.RequestUri, detailsUrl).ToString()
             };

@@ -204,7 +204,7 @@ namespace Web.Supervisor.Controllers
                 {
                     Users =
                         this.supervisorsFactory.Load(new UserListViewInputModel { PageSize = int.MaxValue })
-                            .Items.Where(u => !u.IsLocked)
+                            .Items.Where(u => !u.IsLockedBySupervisor && !u.IsLockedByHQ)
                             .Select(u => new UsersViewItem
                                 {
                                     UserId = u.UserId,

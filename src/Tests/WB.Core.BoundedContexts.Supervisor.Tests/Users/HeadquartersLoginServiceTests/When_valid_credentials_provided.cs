@@ -45,7 +45,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
             {
                 PublicKey = Guid.NewGuid(),
                 Email = "test@test.com",
-                IsLocked = false,
+                IsLockedBySupervisor = false,
+                IsLockedByHQ = false,
                 Password = "password"
             };
 
@@ -65,7 +66,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                 command.Password == HeadquartersUser.Password &&
                 command.UserName == HeadquartersUser.UserName &&
                 command.Email == HeadquartersUser.Email &&
-                command.IsLocked == HeadquartersUser.IsLocked)));
+                command.IsLockedByHQ == HeadquartersUser.IsLockedByHQ &&
+                command.IsLockedBySupervisor == HeadquartersUser.IsLockedBySupervisor)));
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;

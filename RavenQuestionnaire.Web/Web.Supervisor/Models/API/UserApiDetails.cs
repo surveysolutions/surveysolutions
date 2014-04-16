@@ -17,7 +17,7 @@ namespace Web.Supervisor.Models.API
             this.UserName = userView.UserName;
             this.Email = userView.Email;
             this.CreationDate = userView.CreationDate;
-            this.IsLocked = userView.IsLocked;
+            this.IsLocked = userView.IsLockedByHQ || userView.IsLockedBySupervisor;
             this.Roles = userView.Roles;
         }
 

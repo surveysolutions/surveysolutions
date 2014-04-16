@@ -254,7 +254,7 @@ namespace Questionnaire.Core.Web.Security
                         username.ToLower(), 
                         // bad hack due to key insensitivity of login
                         password));
-            return user != null && !user.IsLocked;
+            return user != null && !user.isLockedBySupervisor && !user.IsLockedByHQ;
         }
 
         private MembershipUser MembershipInstance(UserView person)
