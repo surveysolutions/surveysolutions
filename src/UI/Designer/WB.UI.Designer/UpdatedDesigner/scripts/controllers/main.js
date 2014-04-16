@@ -3,59 +3,73 @@
 angular.module('pocAngularApp')
   .controller('MainCtrl', function ($scope, $http, $routeParams) {
 
-    $scope.chapters = [];
+      $scope.chapters = [];
 
-    $scope.items = [];
+      $scope.items = [];
 
-    $scope.item = null;
+      $scope.item = null;
 
-    $scope.isFolded = false;
+      $scope.questionnaire = null;
 
-    $scope.setItem = function (item) {
-      $scope.item = item;
-    };
+      $scope.verificationStatus = {
+          errorsCount: 8,
+          errors: []
+      };
 
-    $scope.changeChapter = function (chapter) {
-        $scope.currentChapter = chapter;
-        loadChapterDetails();
-    };
+      $scope.isFolded = false;
 
-    $scope.submit = function () {
-      console.log('submit');
-    };
+      $scope.setItem = function (item) {
+          $scope.item = item;
+      };
 
-    $scope.unfold = function () {
-        $scope.isFolded = true;
-    };
+      $scope.changeChapter = function (chapter) {
+          $scope.currentChapter = chapter;
+          loadChapterDetails();
+      };
 
-    $scope.foldback = function () {
-        $scope.isFolded = false;
-    };
+      $scope.submit = function () {
+          console.log('submit');
+      };
 
-    $scope.addNewChapter = function() {
-        var newChapter = {
-            Title: 'New Chapter',
-            GroupId: "6e240642274c4bdea937baa78cd4ad6f",
-            Statistics: {
-                QuestionsCount: 0,
-                GroupsCount: 0,
-                RostersCount: 0
-            }
-        };
-        $scope.questionnaire.Chapters.push(newChapter);
-    }
+      $scope.unfold = function () {
+          $scope.isFolded = true;
+      };
 
-    $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
-        .success(function (result) {
-            $scope.questionnaire = result;
-            $scope.currentChapter = result.Chapters[0];
-            loadChapterDetails();
-        });
+      $scope.foldback = function () {
+          $scope.isFolded = false;
+      };
 
-    function loadChapterDetails() {
-        $http.get('api/questionnaire/chapter/' + $routeParams.questionnaireId + "?chapterId=" + $scope.currentChapter.GroupId)
-            .success(function (result) {
-                $scope.items = result.Groups;
-        });
-    };
-});
+      $scope.verify = function () {
+          $http.get('api/questionnaire/verify/' + $routeParams.questionnaireId)
+              .success(function (result) {
+                  console.log(result);
+              });
+      };
+
+      $scope.addNewChapter = function () {
+          var newChapter = {
+              Title: 'New Chapter',
+              GroupId: "6e240642274c4bdea937baa78cd4ad6f",
+              Statistics: {
+                  QuestionsCount: 0,
+                  GroupsCount: 0,
+                  RostersCount: 0
+              }
+          };
+          $scope.questionnaire.Chapters.push(newChapter);
+      }
+
+      $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
+          .success(function (result) {
+              $scope.questionnaire = result;
+              $scope.currentChapter = result.Chapters[0];
+              loadChapterDetails();
+          });
+
+      function loadChapterDetails() {
+          $http.get('api/questionnaire/chapter/' + $routeParams.questionnaireId + "?chapterId=" + $scope.currentChapter.GroupId)
+              .success(function (result) {
+                  $scope.items = result.Groups;
+              });
+      };
+  });

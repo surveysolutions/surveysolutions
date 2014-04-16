@@ -9,8 +9,9 @@
     <div class="questionnarie-title">
         <div class="title">
             {{questionnaire.Title}} <span>({{questionnaire.Statistics.QuestionsCount}}Q, {{questionnaire.Statistics.GroupsCount}}G, {{questionnaire.Statistics.RostersCount}}R)</span>
-            <input type="button" class="wb-inline-button error" value="VERIFY" />
-            <span class="error-message">5 errors in <a href="">3 questions</a></span>
+            <input type="button" class="wb-inline-button error" value="VERIFY" ng-click="verify()" />
+            <span ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href="">{{verificationStatus.errorsCount}} errors</a></span>
+            <span ng-show="verificationStatus.errorsCount == 0">OK</span>
         </div>
     </div>
 </section>
