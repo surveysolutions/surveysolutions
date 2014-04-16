@@ -318,6 +318,7 @@
     <Compile Include="API\Feeds\PagingExtensions.cs" />
     <Compile Include="API\Feeds\SyndicationFeedExtensions.cs" />
     <Compile Include="API\Feeds\UsersFeedController.cs" />
+    <Compile Include="API\Formatters\JsonNetFormatter.cs" />
     <Compile Include="API\Formatters\SyndicationFeedFormatter.cs" />
     <Compile Include="API\InterviewsController.cs" />
     <Compile Include="API\QuestionnairesController.cs" />

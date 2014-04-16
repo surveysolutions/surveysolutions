@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
 
         private static HeadquartersSettings HeadquartersSettings()
         {
-            return new HeadquartersSettings(new Uri("http://localhost/"), new Uri("http://localhost/"), new Uri("http://localhost/"));
+            return new HeadquartersSettings(new Uri("http://localhost/"), new Uri("http://localhost/"), new Uri("http://localhost/"), "");
         }
     }
 }
