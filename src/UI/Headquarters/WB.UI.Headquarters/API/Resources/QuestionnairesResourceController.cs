@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.API.Resources
             this.versionedQuestionnaireReader = versionedQuestionnaireReader;
         }
 
-        [Route("{id}/{version:int}")]
+        [Route("{id}/{version:int}", Name = "api.questionnaireDetails")]
         public HttpResponseMessage Get(string id, long version)
         {
             var document = this.versionedQuestionnaireReader.Get(id, version);

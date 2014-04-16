@@ -15,7 +15,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview
 
         public string InterviewId { get; set; }
 
-        public string UserId { get; set; }
+        public string QuestionnaireId { get; set; }
+
+        public long QuestionnaireVersion { get; set; }
 
         public bool Processed { get; set; }
 
