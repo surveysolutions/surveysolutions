@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
         Establish context = () =>
         {
             var handler = new Mock<HttpMessageHandler>();
-            var settings = new HeadquartersSettings(new Uri("http://localhost"), new Uri("http://localhost/feed"), new Uri("http://locahost/interviewsFeed"));
+            var settings = new HeadquartersSettings(new Uri("http://localhost"), new Uri("http://localhost/feed"), new Uri("http://locahost/interviewsFeed"), "");
 
             handler.SetupResponseFromResource("http://localhost/feed", 
                 "WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFeedReaderTests.Simplefeed.xml");

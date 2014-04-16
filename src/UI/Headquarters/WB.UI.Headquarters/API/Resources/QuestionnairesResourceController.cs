@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Main.Core.Documents;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
+using WB.UI.Headquarters.API.Formatters;
 
 namespace WB.UI.Headquarters.API.Resources
 {
@@ -22,7 +26,12 @@ namespace WB.UI.Headquarters.API.Resources
         public HttpResponseMessage Get(string id, long version)
         {
             var document = this.versionedQuestionnaireReader.Get(id, version);
-            var response = Request.CreateResponse(document);
+
+            var response = Request.CreateResponse((HttpStatusCode)200, document, new JsonNetFormatter(new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.None, 
+                NullValueHandling = NullValueHandling.Ignore
+            }));
 
             response.Headers.CacheControl = new CacheControlHeaderValue
             {

@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API.Feeds
 
             var feed = this.GetFeed(userChangedFeedEntries);
 
-            if (totalFeedEntriesCount > PageSize)
+            if (totalFeedEntriesCount >= PageSize)
             {
                 var prevPage = totalFeedEntriesCount / PageSize;
                 this.AppendPrevLink(prevPage, feed);

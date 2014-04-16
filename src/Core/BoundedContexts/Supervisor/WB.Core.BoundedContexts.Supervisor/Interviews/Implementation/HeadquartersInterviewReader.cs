@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Interviews.Implementation
     {
         public async Task<InterviewSynchronizationDto> GetInterviewByUri(Uri headquartersInterviewUri)
         {
-            return await GetEntityByUri<InterviewSynchronizationDto>(headquartersInterviewUri);
+            return await GetEntityByUri<InterviewSynchronizationDto>(headquartersInterviewUri).ConfigureAwait(false);
         }
     }
 }

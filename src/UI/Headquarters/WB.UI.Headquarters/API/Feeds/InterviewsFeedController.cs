@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.API.Feeds
 
             var feed = this.GetFeed(interviewFeedEntries);
 
-            if (totalFeedEntriesCount > PageSize)
+            if (totalFeedEntriesCount >= PageSize)
             {
                 var prevPage = totalFeedEntriesCount / PageSize;
                 this.AppendPrevLink(prevPage, feed);
@@ -100,12 +100,6 @@ namespace WB.UI.Headquarters.API.Feeds
 
                 string interivewDetailsUrl = this.Url.Route("api.interviewDetails", new { id = entry.InterviewId }); 
                 item.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, interivewDetailsUrl), "enclosure", "Related interview", null, 0));
-
-                string questionnaireDetailsUrl = this.Url.Route("api.questionnaireDetails", new {
-                                                     id = entry.QuestionnaireId, 
-                                                     version = entry.QuestionnaireVersion
-                                                 });
-                item.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, questionnaireDetailsUrl), "related", "Related qestionnaire", null, 0));
 
                 item.Content = new TextSyndicationContent(
                     JsonConvert.SerializeObject(entry, Formatting.Indented,

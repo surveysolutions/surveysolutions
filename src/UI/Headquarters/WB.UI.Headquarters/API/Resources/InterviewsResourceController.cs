@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.API.Resources
 
             InterviewData document = interviewData.Document;
             InterviewSynchronizationDto interviewSynchronizationDto = 
-                factory.BuildFrom(document, Guid.NewGuid(), InterviewStatus.ApprovedByHeadquarters);
+                factory.BuildFrom(document);
             
             return interviewSynchronizationDto;
         }

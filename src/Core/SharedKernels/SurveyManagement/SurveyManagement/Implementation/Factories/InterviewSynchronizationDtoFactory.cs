@@ -19,7 +19,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             this.questionnriePropagationStructures = questionnriePropagationStructures;
         }
 
-        public InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId,InterviewStatus status)
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview)
+        {
+            var result = BuildFrom(interview, Guid.Empty, interview.Status);
+            return result;
+        }
+
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId, InterviewStatus status)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
@@ -60,9 +66,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             }
             return new InterviewSynchronizationDto(interview.InterviewId,
                 status,
-                userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
-                answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
-                validQuestions, invalidQuestions, null, propagatedGroupInstanceCounts, interview.WasCompleted);
+                userId, 
+                interview.QuestionnaireId, 
+                interview.QuestionnaireVersion,
+                answeredQuestions.ToArray(), 
+                disabledGroups, 
+                disabledQuestions,
+                validQuestions, 
+                invalidQuestions, 
+                null, 
+                propagatedGroupInstanceCounts, 
+                interview.WasCompleted);
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(

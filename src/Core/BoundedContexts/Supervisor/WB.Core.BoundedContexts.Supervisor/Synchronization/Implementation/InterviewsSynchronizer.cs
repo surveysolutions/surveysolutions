@@ -73,24 +73,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             foreach (var localSupervisor in localSupervisors)
             {
-                IEnumerable<LocalInterviewFeedEntry> events = this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.PublicKey.FormatGuid()));
+                IEnumerable<LocalInterviewFeedEntry> events = 
+                    this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.PublicKey.FormatGuid() && !x.Processed));
                 foreach (var interviewFeedEntry in events)
                 {
-
                     try
                     {
+                        Uri interviewUri = interviewFeedEntry.InterviewUri;
+                        var interview = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
+                        
+                        var questionanireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
+                                                                   .Replace("{id}", interview.QuestionnaireId.FormatGuid())
+                                                                   .Replace("{version}", interview.QuestionnaireVersion.ToString());
+
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
-                                    Guid.Parse(interviewFeedEntry.QuestionnaireId), interviewFeedEntry.QuestionnaireVersion,
-                                    interviewFeedEntry.QuestionnaireUri);
+                                    interview.QuestionnaireId,
+                                    interview.QuestionnaireVersion,
+                                    new Uri(questionanireDetailsUrl));
                                 this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri);
                                 break;
                             case EntryType.InterviewUnassigned:
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
-                                    Guid.Parse(interviewFeedEntry.QuestionnaireId), interviewFeedEntry.QuestionnaireVersion,
-                                    interviewFeedEntry.QuestionnaireUri);
+                                    interview.QuestionnaireId,
+                                    interview.QuestionnaireVersion,
+                                    new Uri(questionanireDetailsUrl));
                                 this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri);
                                 this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId), Guid.Empty));
                                 break;
@@ -102,6 +111,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         }
 
                         interviewFeedEntry.Processed = true;
+                        interviewFeedEntry.ProcessedWithError = false;
                     }
                     catch (Exception ex)
                     {
@@ -154,14 +164,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
 
-            IEnumerable<AtomFeedEntry<LocalInterviewFeedEntry>> remoteEvents = this.feedReader.ReadAfterAsync<LocalInterviewFeedEntry>(this.settings.InterviewsFeedUrl, lastStoredEntry)
-                .Result;
+            IEnumerable<AtomFeedEntry<LocalInterviewFeedEntry>> remoteEvents = 
+                this.feedReader
+                    .ReadAfterAsync<LocalInterviewFeedEntry>(this.settings.InterviewsFeedUrl, lastStoredEntry)
+                    .Result;
 
             var newEvents = new List<LocalInterviewFeedEntry>();
             foreach (AtomFeedEntry<LocalInterviewFeedEntry> remoteEvent in remoteEvents)
             {
                 var feedEntry = remoteEvent.Content;
-                feedEntry.QuestionnaireUri = remoteEvent.Links.Single(x => x.Rel == "related").Href;
                 feedEntry.InterviewUri = remoteEvent.Links.Single(x => x.Rel == "enclosure").Href;
                 newEvents.Add(feedEntry);
             }
