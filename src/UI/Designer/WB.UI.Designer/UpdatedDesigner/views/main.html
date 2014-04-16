@@ -34,7 +34,7 @@
         <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters">
-                <li ng-repeat="chapter in questionnaire.Chapters" ng-click="changeChapter(chapter)" ng-class="{current: currentChapter == chapter}">
+                <li ng-repeat="chapter in questionnaire.Chapters" ng-class="{current: currentChapterId == chapter.GroupId}" ng-click="changeChapter(chapter)">
                     <div class="holder">
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
@@ -54,9 +54,9 @@
                 <div class="section item" ng-click="setItem(i)" ng-class="{'selected' : i == item}">
                     {{i.Title}}
                 </div>
-                <div ng-repeat="q in i.Questions" ng-click="setItem(q)"
+                <div ng-repeat="q in i.Questions" ng-click="setItem(i, q)"
                      class="question item "
-                     ng-class="{'selected' : q == item, 'cat-singleanswer': q.Type == 1, 'cat-singleanswer': q.Type == 2, 'cat-multianswer' : q.Type == 3, 'cat-intedit' : q.Type == 4, 'cat-datetime' : q.Type == 5, 'cat-geoloc' : q.Type == 6, 'cat-textedit' : q.Type == 8, 'cat-textarea' : q.Type == 9,  'cat-multimedia' : q.Type == 10, 'cat-textedit' : q.Type == 7, 'cat-singleanswer' : q.Type == 0 }">
+                     ng-class="{'selected' : q.QuestionId == currentItemId, 'cat-singleanswer': q.Type == 1, 'cat-singleanswer': q.Type == 2, 'cat-multianswer' : q.Type == 3, 'cat-intedit' : q.Type == 4, 'cat-datetime' : q.Type == 5, 'cat-geoloc' : q.Type == 6, 'cat-textedit' : q.Type == 8, 'cat-textarea' : q.Type == 9,  'cat-multimedia' : q.Type == 10, 'cat-textedit' : q.Type == 7, 'cat-singleanswer' : q.Type == 0 }">
                     <div class="icon"></div>
                     {{ q.Title }}
                     <div class="qname-block">

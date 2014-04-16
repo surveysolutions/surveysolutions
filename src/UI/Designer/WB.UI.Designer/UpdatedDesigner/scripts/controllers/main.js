@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('pocAngularApp')
-  .controller('MainCtrl', function ($scope, $http, $routeParams) {
+  .controller('MainCtrl', function ($scope, $http, $routeParams, $location) {
+
+    console.log($routeParams);
 
       $scope.chapters = [];
 
@@ -18,13 +20,12 @@ angular.module('pocAngularApp')
 
       $scope.isFolded = false;
 
-      $scope.setItem = function (item) {
-          $scope.item = item;
+    $scope.changeChapter = function (chapter) {
+        $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.GroupId);
       };
 
-      $scope.changeChapter = function (chapter) {
-          $scope.currentChapter = chapter;
-          loadChapterDetails();
+    $scope.setItem = function (group, question) {
+        $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.QuestionId);
       };
 
       $scope.submit = function () {
@@ -58,19 +59,36 @@ angular.module('pocAngularApp')
               }
           };
           $scope.questionnaire.Chapters.push(newChapter);
-      }
+    };
 
       $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
           .success(function (result) {
-              $scope.questionnaire = result;
-              $scope.currentChapter = result.Chapters[0];
-              loadChapterDetails();
+            if (result == 'null') {
+                alert('Questionnaire not found');
+            } else {
+                $scope.questionnaire = result;
+
+                if ($routeParams.chapterId) {
+                    $scope.currentChapterId = $routeParams.chapterId;
+                    loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                } else {
+                    $scope.currentChapter = result.Chapters[0];
+                    $scope.currentChapterId = $scope.currentChapter.GroupId;
+                    loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.GroupId);
+                }
+                if ($routeParams.itemId) {
+                    $scope.currentItemId = $routeParams.itemId;
+                    //$scope.item = item;
+                    //$scope.currentItemId = item.QuestionId;
+                }
+            }
           });
 
-      function loadChapterDetails() {
-          $http.get('api/questionnaire/chapter/' + $routeParams.questionnaireId + "?chapterId=" + $scope.currentChapter.GroupId)
+    function loadChapterDetails(questionnaireId, chapterId) {
+        $http.get('api/questionnaire/chapter/' + questionnaireId + "?chapterId=" + chapterId)
               .success(function (result) {
                   $scope.items = result.Groups;
+                $scope.currentChapter = result;
               });
       };
   });
