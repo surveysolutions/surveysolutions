@@ -98,8 +98,8 @@ namespace WB.UI.Headquarters.API.Feeds
                     Id = entry.EntryId
                 };
 
-                //string detailsUrl = this.Url.Route("api.userDetails", new { id = entry.ChangedUserId }); // TODO ank: add link to details
-                //item.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, detailsUrl), "enclosure", null, null, 0));
+                string detailsUrl = this.Url.Route("api.interviewDetails", new { id = entry.InterviewId }); 
+                item.Links.Add(new SyndicationLink(new Uri(this.Request.RequestUri, detailsUrl), "enclosure", null, null, 0));
 
                 item.Content = new TextSyndicationContent(
                     JsonConvert.SerializeObject(entry, Formatting.Indented,
