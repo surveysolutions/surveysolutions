@@ -9,8 +9,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public bool ProcessedWithError { get; set; }
 
-        public Uri QuestionnaireUri { get; set; }
-
         public Uri InterviewUri { get; set; }
     }
 }

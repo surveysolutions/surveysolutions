@@ -28,8 +28,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            var interview = this.interviews.GetById(evnt.EventSourceId.FormatGuid());
-
             writer.Store(new InterviewFeedEntry
             {
                 SupervisorId = evnt.Payload.SupervisorId.FormatGuid(),
@@ -37,23 +35,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryType = EntryType.SupervisorAssigned,
                 Timestamp = evnt.EventTimeStamp,
                 EntryId = evnt.EventIdentifier.FormatGuid(),
-                QuestionnaireId = interview.Document.QuestionnaireId.FormatGuid(),
-                QuestionnaireVersion = interview.Document.QuestionnaireVersion
             }, evnt.EventIdentifier);
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            var interview = this.interviews.GetById(evnt.EventSourceId.FormatGuid());
-
             this.writer.Store(new InterviewFeedEntry
             {
                 SupervisorId = evnt.Payload.UserId.FormatGuid(),
                 EntryType = EntryType.InterviewUnassigned,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
-                EntryId = evnt.EventIdentifier.FormatGuid(),
-                QuestionnaireId = interview.Document.QuestionnaireId.FormatGuid()
+                EntryId = evnt.EventIdentifier.FormatGuid()
             }, evnt.EventIdentifier);
         }
 

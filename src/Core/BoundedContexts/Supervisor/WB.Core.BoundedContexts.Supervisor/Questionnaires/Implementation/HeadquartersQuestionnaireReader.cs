@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Questionnaires.Implementation
     {
         public async Task<QuestionnaireDocument> GetQuestionnaireByUri(Uri headquartersQuestionnaireUri)
         {
-            return await GetEntityByUri<QuestionnaireDocument>(headquartersQuestionnaireUri);
+            return await GetEntityByUri<QuestionnaireDocument>(headquartersQuestionnaireUri).ConfigureAwait(false);
         }
     }
 }
