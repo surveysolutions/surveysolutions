@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public CloneQuestionCommand(
             Guid questionnaireId, 
             Guid questionId, 
-            Guid groupId, 
+            Guid parentGroupId, 
             Guid sourceQuestionId, 
             int targetIndex,
             string title,
@@ -35,12 +35,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             : base(questionnaireId, questionId, title, type, variableName, isMandatory, isPreFilled,
                 scope, enablementCondition, validationExpression, validationMessage, instructions, options, responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers)
         {
-            this.GroupId = groupId;
+            this.ParentGroupId = parentGroupId;
             this.SourceQuestionId = sourceQuestionId;
             this.TargetIndex = targetIndex;
         }
 
-        public Guid GroupId { get; private set; }
+        public Guid ParentGroupId { get; private set; }
         public Guid SourceQuestionId { get; private set; }
         public int TargetIndex { get; private set; }
     }
