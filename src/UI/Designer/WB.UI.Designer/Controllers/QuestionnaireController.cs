@@ -68,9 +68,10 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public JsonResult Verify(Guid id)
         {
-            var questoinnaireErrors = questionnaireVerifier.Verify(this.GetQuestionnaire(id).Source).ToArray();
+            var questionnaireDocument = this.GetQuestionnaire(id).Source;
+            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
 
-            return this.Json(new JsonVerificationResult
+            return this.Json(new VerificationResult
             {
                 Errors = questoinnaireErrors
             });

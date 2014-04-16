@@ -2,9 +2,9 @@
 
 namespace WB.UI.Designer.Models
 {
-    public class JsonVerificationResult : JsonSuccessResult
+    public class VerificationResult : JsonSuccessResult
     {
-        public JsonVerificationResult()
+        public VerificationResult()
         {
             this.Errors = new QuestionnaireVerificationError[0];
         }
