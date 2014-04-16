@@ -7,6 +7,8 @@ using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Designer.Code;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 
