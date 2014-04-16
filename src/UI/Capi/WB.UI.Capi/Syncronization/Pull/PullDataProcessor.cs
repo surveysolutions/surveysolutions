@@ -102,10 +102,10 @@ namespace WB.UI.Capi.Syncronization.Pull
 
             if (this.userStorage.GetById(user.PublicKey) == null)
                 userCommand = new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
-                                                    user.Roles.ToArray(), user.IsLocked, user.Supervisor);
+                                                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ,  user.Supervisor);
             else
                 userCommand = new ChangeUserCommand(user.PublicKey, user.Email,
-                                                    user.Roles.ToArray(), user.IsLocked, user.Password);
+                                                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ, user.Password, Guid.Empty);
 
             this.commandService.Execute(userCommand);
         }

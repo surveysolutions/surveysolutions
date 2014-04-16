@@ -12,26 +12,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
     {
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserListItem"/> class.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="email">
-        /// The email.
-        /// </param>
-        /// <param name="creationDate">
-        /// The creation date.
-        /// </param>
-        /// <param name="isLocked">
-        /// The is locked.
-        /// </param>
-        public UserListItem(Guid id, string name, string email, DateTime creationDate, bool isLocked, List<UserRoles> roles)
-            :base(id, name, email, creationDate, isLocked)
+        public UserListItem(Guid id, string name, string email, DateTime creationDate, bool isLockedBySupervisor, bool isLockedByHQ, List<UserRoles> roles)
+            : base(id, name, email, creationDate, isLockedBySupervisor, isLockedByHQ)
         {
             this.Roles = roles;
         }

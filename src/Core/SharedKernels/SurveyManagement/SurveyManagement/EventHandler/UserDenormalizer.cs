@@ -7,6 +7,7 @@ using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -16,7 +17,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                                     IEventHandler<NewUserCreated>,
                                     IEventHandler<UserChanged>,
                                     IEventHandler<UserLocked>,
-                                    IEventHandler<UserUnlocked>, 
+                                    IEventHandler<UserUnlocked>,
+                                    IEventHandler<UserLockedBySupervisor>,
+                                    IEventHandler<UserUnlockedBySupervisor>,
                                     IEventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -42,7 +45,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     PublicKey = evnt.Payload.PublicKey,
                     CreationDate = DateTime.UtcNow,
                     Email = evnt.Payload.Email,
-                    IsLocked = evnt.Payload.IsLocked,
+                    IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
+                    IsLockedByHQ = evnt.Payload.IsLocked,
                     Supervisor = evnt.Payload.Supervisor,
                     Roles = new List<UserRoles>(evnt.Payload.Roles)
                 };
@@ -66,7 +70,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             UserDocument item = this.users.GetById(@event.EventSourceId);
 
-            item.IsLocked = true;
+            item.IsLockedByHQ = true;
             this.users.Store(item, item.PublicKey);
         }
 
@@ -74,13 +78,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             UserDocument item = this.users.GetById(@event.EventSourceId);
 
-            item.IsLocked = false;
+            item.IsLockedByHQ = false;
             this.users.Store(item, item.PublicKey);
         }
 
         public override Type[] BuildsViews
         {
             get { return new Type[] {typeof (UserDocument), typeof (SynchronizationDelta)}; }
+        }
+
+        public void Handle(IPublishedEvent<UserLockedBySupervisor> evnt)
+        {
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
+
+            item.IsLockedBySupervisor = true;
+            this.users.Store(item, item.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt)
+        {
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
+
+            item.IsLockedBySupervisor = false;
+            this.users.Store(item, item.PublicKey);
         }
     }
 }
