@@ -78,7 +78,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Users =
                     this.interviewersFactory.Load(new InterviewersInputModel(viewerId) { PageSize = int.MaxValue })
-                        .Items.Where(u => !u.IsLocked)
+                        .Items.Where(u => !u.IsLockedBySupervisor && !u.IsLockedByHQ)
                         .Select(u => new UsersViewItem
                         {
                             UserId = u.UserId,

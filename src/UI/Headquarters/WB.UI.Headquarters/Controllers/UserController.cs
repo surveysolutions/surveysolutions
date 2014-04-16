@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
                                                                   userEmail, new[] { UserRoles.Headquarter },
-                                                                  false, null));
+                                                                  false, false, null));
                     if (this.GlobalInfo.GetCurrentUser() == null)
                         this.authentication.SignIn(user.Name, false);
 

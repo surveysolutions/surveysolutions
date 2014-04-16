@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Models.API
             this.UserName = userView.UserName;
             this.Email = userView.Email;
             this.CreationDate = userView.CreationDate;
-            this.IsLocked = userView.IsLocked;
+            this.IsLocked = userView.IsLockedBySupervisor || userView.IsLockedByHQ;
             this.Roles = userView.Roles;
         }
 

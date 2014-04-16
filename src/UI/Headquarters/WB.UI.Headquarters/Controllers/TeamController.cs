@@ -39,9 +39,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                UserView user =
-                    this.userViewFactory.Load(
-                        new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+                UserView user = this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
@@ -49,7 +47,8 @@ namespace WB.UI.Headquarters.Controllers
                                                     userName: model.UserName,
                                                     password: SimpleHash.ComputeHash(model.Password),
                                                     email: model.Email,
-                                                    isLocked: model.IsLocked,
+                                                    isLockedBySupervisor: false,
+                                                    isLockedByHQ: model.IsLocked,
                                                     roles: new[] {UserRoles.Operator},
                                                     supervsor: this.GetUser(model.Id).GetUseLight()));
                     this.Success("Interviewer was successfully created");
@@ -84,7 +83,8 @@ namespace WB.UI.Headquarters.Controllers
                                                     userName: model.UserName,
                                                     password: SimpleHash.ComputeHash(model.Password),
                                                     email: model.Email,
-                                                    isLocked: model.IsLocked,
+                                                    isLockedBySupervisor: false,
+                                                    isLockedByHQ: model.IsLocked,
                                                     roles: new[] {UserRoles.Supervisor},
                                                     supervsor: null));
 
@@ -131,7 +131,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
-                    IsLocked = user.IsLocked,
+                    IsLocked = user.IsLockedByHQ,
                     UserName = user.UserName
                 });
         }
@@ -146,16 +146,18 @@ namespace WB.UI.Headquarters.Controllers
                 if (user != null)
                 {
                     this.CommandService.Execute(
-                        new ChangeUserCommand()
-                            {
-                                PublicKey = user.PublicKey,
-                                PasswordHash = string.IsNullOrEmpty(model.Password)
+                        new ChangeUserCommand(
+                            
+                                user.PublicKey,
+                                model.Email,
+                                user.Roles.ToArray(),
+                                false, //!!
+                                model.IsLocked,
+                                string.IsNullOrEmpty(model.Password)
                                                ? user.Password
                                                : SimpleHash.ComputeHash(model.Password),
-                                Email = model.Email,
-                                IsLocked = model.IsLocked,
-                                Roles = user.Roles.ToArray(),
-                            }
+                                this.GlobalInfo.GetCurrentUser().Id)
+                            
                         );
                     this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                     return this.DetailsBackByUser(user);
