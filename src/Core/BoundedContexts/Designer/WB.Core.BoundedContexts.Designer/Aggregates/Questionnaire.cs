@@ -1842,7 +1842,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             Guid parentGroupId, 
             string title, 
-            bool isAutopropagating, 
             string variableName,
             bool isMandatory, 
             bool isPreFilled,
@@ -1863,7 +1862,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
-            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1873,7 +1871,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = questionId,
                 GroupPublicKey = parentGroupId,
                 QuestionText = title,
-                IsAutopropagating = isAutopropagating,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
                 Featured = isPreFilled,
@@ -1894,7 +1891,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             Guid parentGroupId, 
             string title, 
-            bool isAutopropagating, 
             string variableName,
             bool isMandatory,
             bool isPreFilled,
@@ -1919,7 +1915,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
-            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1929,7 +1924,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = questionId,
                 GroupPublicKey = parentGroupId,
                 QuestionText = title,
-                IsAutopropagating = isAutopropagating,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
                 Featured = isPreFilled,
@@ -1951,7 +1945,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateNumericQuestion(
             Guid questionId,
             string title, 
-            bool isAutopropagating, 
             string variableName,
             bool isMandatory, 
             bool isPreFilled,
@@ -1975,7 +1968,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
-            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1984,7 +1976,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 PublicKey = questionId,
                 QuestionText = title,
-                IsAutopropagating = isAutopropagating,
                 StataExportCaption = variableName,
                 Mandatory = isMandatory,
                 Featured = isPreFilled,
@@ -2734,17 +2725,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         questionId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
-        }
-
-        private void ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(bool isAutoPropagateQuestion, bool isInteger)
-        {
-            if (isAutoPropagateQuestion)
-            {
-                if (!isInteger)
-                    throw new QuestionnaireException(
-                        DomainExceptionType.AutoPropagateQuestionCantBeReal,
-                        "Roster size question can't be real");
-            }
         }
 
         private void ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(bool isInteger, int? countOfDecimalPlaces)
