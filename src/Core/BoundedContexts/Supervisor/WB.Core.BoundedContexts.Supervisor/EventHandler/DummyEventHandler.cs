@@ -23,12 +23,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<GroupsDisabled>,
         IEventHandler<GroupsEnabled>,
         IEventHandler<InterviewSynchronized>,
+        IEventHandler<InterviewRestarted>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeclaredValid>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<SynchronizationMetadataApplied>,
-        IEventHandler
+        IEventHandler<InterviewRejected>,
+    IEventHandler
     {
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
 
@@ -87,6 +89,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public Type[] BuildsViews
         {
             get { return new Type[0]; }
+        }
+
+        public void Handle(IPublishedEvent<InterviewRestarted> evnt){}
+        public void Handle(IPublishedEvent<InterviewRejected> evnt)
+        {
         }
     }
 }

@@ -39,3 +39,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("LoadTestDataGenerator")]
 [assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
+[assembly: InternalsVisibleTo("WB.Tools.EventsConverter")]
