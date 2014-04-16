@@ -1,12 +1,12 @@
-﻿using Main.Core.Documents;
+﻿using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
-using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
-namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class ChapterInfoViewFactory : IViewFactory<ChapterInfoViewInputModel, ChapterInfoView>
     {
@@ -29,10 +29,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 questionnaire.FirstOrDefault<IGroup>(group => group.PublicKey.FormatGuid().Equals(input.ChapterId));
             if (chapter == null) return null;
 
-            var chapterInfoView = new ChapterInfoView {Title = chapter.Title, GroupId = chapter.PublicKey.FormatGuid()};
+            var chapterInfoView = new ChapterInfoView {Title = chapter.Title, ChapterId = chapter.PublicKey.FormatGuid()};
 
             FillGroupsFromChapter(questionnaire: questionnaire, chapterOrGroup: chapter,
-                currentGroupInfoView: chapterInfoView);
+                currentGroupInfoView: null);
 
             return chapterInfoView;
         }
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 var group = groupOrQuestion as IGroup;
                 if (group != null)
                 {
-                    var childGroupInfoView = new GroupInfoView(group.IsRoster)
+                    var childGroupInfoView = new GroupInfoView()
                     {
                         GroupId = group.PublicKey.FormatGuid(),
                         Title = group.Title

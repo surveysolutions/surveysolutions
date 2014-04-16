@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
+﻿namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
     public class QuestionnaireInfoViewInputModel
     {
