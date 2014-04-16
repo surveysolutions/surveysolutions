@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.CloneNumericQuestion(questionId, rosterId, "title",
-                    false, "var1", false, isPrefilled, QuestionScope.Interviewer, null, null, null, null,
+                    "var1", false, isPrefilled, QuestionScope.Interviewer, null, null, null, null,
                     sourceQuestionId, 0, responsibleId, isInteger: false, countOfDecimalPlaces: null,
                     maxValue: null));
 
