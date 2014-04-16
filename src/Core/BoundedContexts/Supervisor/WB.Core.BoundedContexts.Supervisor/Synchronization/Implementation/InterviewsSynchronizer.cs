@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.users = users;
         }
 
-        public void Synchronzie()
+        public void Synchronize()
         {
             this.StoreEventsToLocalStorage();
 
@@ -59,22 +59,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                     try
                     {
+                        Uri questionnareUrl = new Uri(""), interviewUrl = new Uri(""); // TODO: intialize from feed entry
+
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
-                                var assignCommand = new AssignSupervisorCommand(
-                                    Guid.Parse(interviewFeedEntry.InterviewId),
-                                    new Guid(),
-                                    Guid.Parse(interviewFeedEntry.SupervisorId));
-                                this.commandService.Execute(assignCommand);
+                                this.GetQuestionnaireDocumentFromHeadquartersIfNeeded(questionnareUrl);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewUrl);
                                 break;
                             case EntryType.InterviewUnassigned:
-                                var deleteCommand = new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId),
-                                    new Guid());
-                                this.commandService.Execute(deleteCommand);
+                                this.GetQuestionnaireDocumentFromHeadquartersIfNeeded(questionnareUrl);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewUrl);
+                                this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId), Guid.Empty));
                                 break;
                             default:
-                                logger.Warn(string.Format(
+                                this.logger.Warn(string.Format(
                                     "Unknown event of type {0} received in interviews feed. It was skipped and marked as processed with error. EventId: {1}",
                                     interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
                                 break;
@@ -85,7 +84,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     catch (Exception ex)
                     {
                         interviewFeedEntry.ProcessedWithError = true;
-                        logger.Error(string.Format("Interviews synchronization error in event {0}.", interviewFeedEntry.EntryId), ex);
+                        this.logger.Error(string.Format("Interviews synchronization error in event {0}.", interviewFeedEntry.EntryId), ex);
                     }
                     finally
                     {
@@ -93,6 +92,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     }
                 }
             }
+        }
+
+        private void GetQuestionnaireDocumentFromHeadquartersIfNeeded(Uri questionnareUrl)
+        {
+            // TODO
+        }
+
+        private void CreateOrUpdateInterviewFromHeadquarters(Uri interviewUrl)
+        {
+            // TODO
         }
 
         private void StoreEventsToLocalStorage()

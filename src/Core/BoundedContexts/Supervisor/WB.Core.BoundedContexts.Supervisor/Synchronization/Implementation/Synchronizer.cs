@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly ILocalUserFeedProcessor localUserFeedProcessor;
         private readonly IInterviewsSynchronizer interviewsSynchronizer;
         private bool isSynchronizationRunning;
-        private static readonly object RebuildAllViewsLockObject = new object();
+        private static readonly object LockObject = new object();
 
         public Synchronizer(ILocalFeedStorage localFeedStorage,
             IUserChangedFeedReader feedReader,
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             if (!this.isSynchronizationRunning)
             {
-                lock (RebuildAllViewsLockObject)
+                lock (LockObject)
                 {
                     if (!this.isSynchronizationRunning)
                     {
@@ -52,10 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                             this.localUserFeedProcessor.Process();
 
-                            //this.interviewsSynchronizer.Synchronzie();
-
-                            this.isSynchronizationRunning = false;
-
+                            this.interviewsSynchronizer.Synchronize();
                         }
                         finally
                         {

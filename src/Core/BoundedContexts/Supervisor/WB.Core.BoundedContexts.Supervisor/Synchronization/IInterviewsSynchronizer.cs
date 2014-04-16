@@ -2,6 +2,6 @@
 {
     public interface IInterviewsSynchronizer
     {
-        void Synchronzie();
+        void Synchronize();
     }
 }
