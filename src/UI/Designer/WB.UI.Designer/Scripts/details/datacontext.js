@@ -553,14 +553,12 @@
 
         var converQuestionToListCommand = function (question) {
             var command = converQuestionToCommand(question);
-            var variableName = command["alias"];
             delete command.isFeatured;
             delete command.type;
             delete command.alias;
             delete command.scope;
             delete command.validationExpression;
             delete command.validationMessage;
-            command["variableName"] = variableName;
             return command;
         };
 
