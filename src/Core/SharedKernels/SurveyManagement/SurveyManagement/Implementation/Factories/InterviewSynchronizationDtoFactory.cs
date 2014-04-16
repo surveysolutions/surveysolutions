@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnriePropagationStructures;
-        public InterviewSynchronizationDtoFactory(IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnriePropagationStructures)
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        public InterviewSynchronizationDtoFactory(IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures)
         {
             if (questionnriePropagationStructures == null) throw new ArgumentNullException("questionnriePropagationStructures");
             this.questionnriePropagationStructures = questionnriePropagationStructures;

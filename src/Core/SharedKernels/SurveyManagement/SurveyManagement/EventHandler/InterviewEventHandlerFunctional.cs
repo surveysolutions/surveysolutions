@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         ICreateHandler<ViewWithSequence<InterviewData>, InterviewOnClientCreated>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
         private readonly ISynchronizationDataStorage syncStorage;
 
         public override Type[] UsesViews
@@ -295,8 +295,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
-        public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users, 
-            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnriePropagationStructures,
+        public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
+            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewData, 
             ISynchronizationDataStorage syncStorage)
             : base(interviewData)
