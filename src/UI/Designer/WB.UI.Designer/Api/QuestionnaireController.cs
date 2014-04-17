@@ -21,10 +21,10 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<ChapterInfoViewInputModel, ChapterInfoView> chapterInfoViewFactory;
+        private readonly IViewFactory<ChapterInfoViewInputModel, GroupInfoView> chapterInfoViewFactory;
         private readonly IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory;
 
-        public QuestionnaireController(IViewFactory<ChapterInfoViewInputModel, ChapterInfoView> chapterInfoViewFactory,
+        public QuestionnaireController(IViewFactory<ChapterInfoViewInputModel, GroupInfoView> chapterInfoViewFactory,
             IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, 
             IQuestionnaireVerifier questionnaireVerifier, 
@@ -43,7 +43,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public ChapterInfoView Chapter(string id, string chapterId)
+        public GroupInfoView Chapter(string id, string chapterId)
         {
             return
                 chapterInfoViewFactory.Load(new ChapterInfoViewInputModel()
