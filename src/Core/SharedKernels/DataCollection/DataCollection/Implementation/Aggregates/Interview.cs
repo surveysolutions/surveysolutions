@@ -837,6 +837,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SynchronizeInterviewFromHeadquarters(id, userId, interviewDto, synchronizationTime);
         }
+
         private void InitInterview(IQuestionnaire questionnaire)
         {
             List<Identity> initiallyDisabledGroups = GetGroupsToBeDisabledInJustCreatedInterview(questionnaire);
@@ -998,10 +999,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var rosters = CalculateRostersFromInterviewSynchronizationDto(interviewDto);
 
+            var enablementChanges = new EnablementChanges(
+                groupsToBeDisabled: interviewDto.DisabledGroups.Select(ToIdentity).ToList(),
+                questionsToBeDisabled: interviewDto.DisabledQuestions.Select(ToIdentity).ToList(),
+                groupsToBeEnabled: new List<Identity>(),
+                questionsToBeEnabled: new List<Identity>());
+
+            var validityChanges = new ValidityChanges(
+                answersDeclaredInvalid: interviewDto.InvalidAnsweredQuestions.Select(ToIdentity).ToList(),
+                answersDeclaredValid: new List<Identity>());
+
+
             this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
-
             this.ApplyEvent(new SupervisorAssigned(userId, interviewDto.UserId));
-
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
 
             rosters.ForEach(this.ApplyRosterEvents);
@@ -1060,9 +1070,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            //this.ApplyEvents(this.GetEnablementChangesEvents(enablementChanges));
+            this.ApplyEvents(this.GetEnablementChangesEvents(enablementChanges));
 
-            //this.ApplyValidityChangesEvents(validityChanges);
+            this.ApplyValidityChangesEvents(validityChanges);
         }
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, 
@@ -3716,6 +3726,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return new HashSet<string>(
                 synchronizationIdentities.Select(question => ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemPropagationVector)));
+        }
+
+        private static Identity ToIdentity(InterviewItemId synchronizationIdentity)
+        {
+            return new Identity(synchronizationIdentity.Id, synchronizationIdentity.InterviewItemPropagationVector);
         }
 
         /// <remarks>
