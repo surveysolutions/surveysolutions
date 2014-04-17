@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer
             DispatcherRegistryHelper.RegisterDenormalizer<PdfQuestionnaireDenormalizer>(this.Kernel);
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
-            this.Bind<IEventHandler>().To<GroupInfoViewDenormalizer>().InSingletonScope();
+            this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
 
             RegistryHelper.RegisterFactory<QuestionnaireListViewFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<QuestionnaireViewFactory>(this.Kernel);
