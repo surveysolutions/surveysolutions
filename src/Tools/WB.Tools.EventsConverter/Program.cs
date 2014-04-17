@@ -208,51 +208,7 @@ namespace WB.Tools.EventsConverter
                 }
 
                 
-                if (rostersAdded.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesAdded, RosterRowAdded>(streamToSave, eventsFromSingleCommit,
-                        () => new RosterInstancesAdded(rostersAdded.ToArray()), sequence);
-                }
-                if (rostersRemoved.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesRemoved, RosterRowRemoved>(streamToSave, eventsFromSingleCommit,
-                        () => new RosterInstancesRemoved(rostersRemoved.ToArray()), sequence);
-                }
-                if (answersValid.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredValid, AnswerDeclaredValid>(streamToSave, eventsFromSingleCommit,
-                        () => new AnswersDeclaredValid(answersValid.ToArray()), sequence);
-                }
-                if (answersInvalid.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredInvalid, AnswerDeclaredInvalid>(streamToSave, eventsFromSingleCommit,
-                        () => new AnswersDeclaredInvalid(answersInvalid.ToArray()), sequence);
-                }
-                if (questionsEnabled.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<QuestionsEnabled, QuestionEnabled>(streamToSave, eventsFromSingleCommit,
-                        () => new QuestionsEnabled(questionsEnabled.ToArray()), sequence);
-                }
-                if (questionsDisabled.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<QuestionsDisabled, QuestionDisabled>(streamToSave, eventsFromSingleCommit,
-                        () => new QuestionsDisabled(questionsDisabled.ToArray()), sequence);
-                }
-                if (groupsEnabled.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<GroupsEnabled, GroupEnabled>(streamToSave,eventsFromSingleCommit,
-                        () => new GroupsEnabled(groupsEnabled.ToArray()), sequence);
-                }
-                if (groupsDisabled.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<GroupsDisabled, GroupDisabled>(streamToSave,eventsFromSingleCommit,
-                        () => new GroupsDisabled(groupsDisabled.ToArray()), sequence);
-                }
-                if (answersRemoved.Any())
-                {
-                    sequence = AddOrIgnoreAndReturnNewSequence<AnswersRemoved, AnswerRemoved>(streamToSave,eventsFromSingleCommit,
-                        () => new AnswersRemoved(answersRemoved.ToArray()), sequence);
-                }
+                sequence = FlushCompactEvents(eventsFromSingleCommit, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
 
                 streamToSave.Append(new UncommittedEvent(committedEvent.EventIdentifier, committedEvent.EventSourceId, sequence + 1, 1,
                     committedEvent.EventTimeStamp, committedEvent.Payload, committedEvent.EventVersion));
@@ -268,7 +224,62 @@ namespace WB.Tools.EventsConverter
                 rostersAdded = new List<AddedRosterInstance>();
                 rostersRemoved = new List<RosterInstance>();
             }
+
+            sequence = FlushCompactEvents(eventsFromSingleCommit, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
             eventStoreTarget.Store(streamToSave);
+            return sequence;
+        }
+
+        private static long FlushCompactEvents(IEnumerable<CommittedEvent> eventsFromSingleCommit, long sequence, List<AddedRosterInstance> rostersAdded,
+            UncommittedEventStream streamToSave, List<RosterInstance> rostersRemoved, List<Identity> answersValid, List<Identity> answersInvalid, List<Identity> questionsEnabled,
+            List<Identity> questionsDisabled, List<Identity> groupsEnabled, List<Identity> groupsDisabled, List<Identity> answersRemoved)
+        {
+            if (rostersAdded.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesAdded, RosterRowAdded>(streamToSave, eventsFromSingleCommit,
+                    () => new RosterInstancesAdded(rostersAdded.ToArray()), sequence);
+            }
+            if (rostersRemoved.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesRemoved, RosterRowRemoved>(streamToSave, eventsFromSingleCommit,
+                    () => new RosterInstancesRemoved(rostersRemoved.ToArray()), sequence);
+            }
+            if (answersValid.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredValid, AnswerDeclaredValid>(streamToSave, eventsFromSingleCommit,
+                    () => new AnswersDeclaredValid(answersValid.ToArray()), sequence);
+            }
+            if (answersInvalid.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredInvalid, AnswerDeclaredInvalid>(streamToSave, eventsFromSingleCommit,
+                    () => new AnswersDeclaredInvalid(answersInvalid.ToArray()), sequence);
+            }
+            if (questionsEnabled.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<QuestionsEnabled, QuestionEnabled>(streamToSave, eventsFromSingleCommit,
+                    () => new QuestionsEnabled(questionsEnabled.ToArray()), sequence);
+            }
+            if (questionsDisabled.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<QuestionsDisabled, QuestionDisabled>(streamToSave, eventsFromSingleCommit,
+                    () => new QuestionsDisabled(questionsDisabled.ToArray()), sequence);
+            }
+            if (groupsEnabled.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<GroupsEnabled, GroupEnabled>(streamToSave, eventsFromSingleCommit,
+                    () => new GroupsEnabled(groupsEnabled.ToArray()), sequence);
+            }
+            if (groupsDisabled.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<GroupsDisabled, GroupDisabled>(streamToSave, eventsFromSingleCommit,
+                    () => new GroupsDisabled(groupsDisabled.ToArray()), sequence);
+            }
+            if (answersRemoved.Any())
+            {
+                sequence = AddOrIgnoreAndReturnNewSequence<AnswersRemoved, AnswerRemoved>(streamToSave, eventsFromSingleCommit,
+                    () => new AnswersRemoved(answersRemoved.ToArray()), sequence);
+            }
             return sequence;
         }
 
