@@ -93,14 +93,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
                                     new Uri(questionanireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId, interviewFeedEntry.SupervisorId);
                                 break;
                             case EntryType.InterviewUnassigned:
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
                                     new Uri(questionanireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId, interviewFeedEntry.SupervisorId);
                                 this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId), Guid.Empty));
                                 break;
                             default:
@@ -144,18 +144,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             return localQuestionnaireDocument != null;
         }
 
-        private void CreateOrUpdateInterviewFromHeadquarters(Uri interviewUri)
+        private void CreateOrUpdateInterviewFromHeadquarters(Uri interviewUri, string supervisorId, string userId)
         {
             InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
 
+            Guid userIdGuid = Guid.Parse(userId);
             this.commandService.Execute(new ApplySynchronizationMetadata(
                 interviewId: interviewDto.Id,
-                userId: interviewDto.UserId,
+                userId: userIdGuid,
                 questionnaireId: interviewDto.QuestionnaireId,
-                status: interviewDto.Status,
+                status: InterviewStatus.Restored,
                 featuredQuestionsMeta: null,
                 comments: null,
                 valid: true));
+
+            this.commandService.Execute(new AssignSupervisorCommand(interviewDto.Id, userIdGuid, Guid.Parse(supervisorId)));
 
             this.commandService.Execute(new SynchronizeInterviewCommand(interviewDto.Id, Guid.Empty, interviewDto));
         }
