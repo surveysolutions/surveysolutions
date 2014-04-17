@@ -3,7 +3,7 @@
 angular.module('pocAngularApp')
   .controller('MainCtrl', function ($scope, $http, $routeParams, $location, $route) {
 
-    console.log($routeParams);
+      console.log($routeParams);
 
       $scope.chapters = [];
 
@@ -21,11 +21,11 @@ angular.module('pocAngularApp')
       $scope.isFolded = false;
 
       $scope.changeChapter = function (chapter) {
-        $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.GroupId);
+          $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.ChapterId);
       };
 
       $scope.setItem = function (group, question) {
-        $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.QuestionId);
+          $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.QuestionId);
       };
 
       $scope.submit = function () {
@@ -59,29 +59,31 @@ angular.module('pocAngularApp')
               }
           };
           $scope.questionnaire.Chapters.push(newChapter);
-    };
+      };
 
       $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
           .success(function (result) {
-            if (result == 'null') {
-                alert('Questionnaire not found');
-            } else {
-                $scope.questionnaire = result;
+              if (result == 'null') {
+                  alert('Questionnaire not found');
+              } else {
+                  $scope.questionnaire = result;
 
-                if ($routeParams.chapterId) {
-                    $scope.currentChapterId = $routeParams.chapterId;
-                    loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
-                } else {
-                    $scope.currentChapter = result.Chapters[0];
-                    $scope.currentChapterId = $scope.currentChapter.ChapterId;
-                    loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.ChapterId);
-                }
-                if ($routeParams.itemId) {
-                    $scope.currentItemId = $routeParams.itemId;
-                    //$scope.item = item;
-                    //$scope.currentItemId = item.QuestionId;
-                }
-            }
+                  if ($routeParams.chapterId) {
+                      $scope.currentChapterId = $routeParams.chapterId;
+                      console.log($scope.currentChapter);
+                      loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                  } else {
+                      $scope.currentChapter = result.Chapters[0];
+                      $scope.currentChapterId = $scope.currentChapter.ChapterId;
+                      console.log($scope.currentChapterId);
+                      loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.ChapterId);
+                  }
+                  if ($routeParams.itemId) {
+                      $scope.currentItemId = $routeParams.itemId;
+                      //$scope.item = item;
+                      //$scope.currentItemId = item.QuestionId;
+                  }
+              }
           });
 
       //var lastRoute = $route.current;
@@ -91,12 +93,12 @@ angular.module('pocAngularApp')
       //        }
       //});
 
-    function loadChapterDetails(questionnaireId, chapterId) {
-        $http.get('api/questionnaire/chapter/' + questionnaireId + "?chapterId=" + chapterId)
-              .success(function (result) {
-                  $scope.items = result.Groups;
-                $scope.currentChapter = result;
-              });
-    };
-
+      function loadChapterDetails(questionnaireId, chapterId) {
+          $http.get('api/questionnaire/chapter/' + questionnaireId + "?chapterId=" + chapterId)
+                .success(function (result) {
+                    $scope.items = result.Groups;
+                    $scope.currentChapter = result;
+                    console.log($scope.currentChapter);
+                });
+      };
   });
