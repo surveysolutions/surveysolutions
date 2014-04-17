@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Security;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
@@ -30,9 +31,9 @@ namespace WB.UI.Headquarters.API.Resources
         [HttpGet]
         public SupervisorValidationResult ValidateSupervisor(string login, string passwordHash)
         {
-            UserDocument userDocument = users.Query(_ => _.Where(user => user.UserName == login && user.Password == passwordHash)).FirstOrDefault();
+            var isValid = Membership.ValidateUser(login, passwordHash);
 
-            if (userDocument == null)
+            if (!isValid)
             {
                 return new SupervisorValidationResult
                 {
@@ -40,6 +41,7 @@ namespace WB.UI.Headquarters.API.Resources
                 };
             }
 
+            var userDocument = this.users.Query(_ => _.First(x => x.UserName == login));
             string detailsUrl = this.Url.Route("api.userDetails", new { id = userDocument.PublicKey.FormatGuid()});
             var result = new SupervisorValidationResult
             {
