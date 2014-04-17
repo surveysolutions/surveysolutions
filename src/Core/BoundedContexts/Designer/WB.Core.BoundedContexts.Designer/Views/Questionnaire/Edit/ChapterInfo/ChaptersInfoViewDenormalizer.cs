@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -58,24 +57,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
-            var questionnaire = new GroupInfoView()
-            {
-                GroupId = evnt.EventSourceId.FormatGuid(),
-                Groups = new List<GroupInfoView>(),
-                Questions = new List<QuestionInfoView>()
-            };
-
-            return questionnaire;
+            return CreateQuestionnaire(evnt.EventSourceId);
         }
 
         public GroupInfoView Create(IPublishedEvent<TemplateImported> evnt)
         {
-            var questionnaire = new GroupInfoView()
-            {
-                GroupId = evnt.EventSourceId.FormatGuid(),
-                Groups = new List<GroupInfoView>(),
-                Questions = new List<QuestionInfoView>()
-            };
+            var questionnaire = CreateQuestionnaire(evnt.EventSourceId);
 
             evnt.Payload.Source.ConnectChildrenWithParent();
             this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: evnt.Payload.Source);
@@ -85,12 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Create(IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            var questionnaire = new GroupInfoView()
-            {
-                GroupId = evnt.EventSourceId.FormatGuid(),
-                Groups = new List<GroupInfoView>(),
-                Questions = new List<QuestionInfoView>()
-            };
+            var questionnaire = CreateQuestionnaire(evnt.EventSourceId);
 
             evnt.Payload.QuestionnaireDocument.ConnectChildrenWithParent();
             this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: evnt.Payload.QuestionnaireDocument);
@@ -118,26 +100,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupCloned> evnt)
         {
-            var groupInfoView = new GroupInfoView()
-            {
-                GroupId = evnt.Payload.PublicKey.FormatGuid(),
-                Title = evnt.Payload.GroupText,
-                GroupsCount = 0,
-                RostersCount = 0,
-                QuestionsCount = 0
-            };
-
             if (!evnt.Payload.ParentGroupPublicKey.HasValue ||
                 evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.GroupId)
             {
-                currentState.Groups.Add(groupInfoView);
+                this.AddGroup(questionnaire: currentState, parentGroupId: null,
+                    groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText);
             }
             else
             {
-                var existsGroup = this.FindGroup(questionnaireOrGroup: currentState,
-                    groupId: evnt.Payload.ParentGroupPublicKey.Value.FormatGuid());
-
-                existsGroup.Groups.Add(groupInfoView);
+                this.AddGroup(questionnaire: currentState,
+                    parentGroupId: evnt.Payload.ParentGroupPublicKey.Value.FormatGuid(),
+                    groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText);
             }
 
             return currentState;
@@ -460,7 +433,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             parentGroup.Groups.Add(groupInfoView);
         }
 
-        public void AddQuestionnaireItem(GroupInfoView currentState, IGroup sourceQuestionnaireOrGroup)
+        private void AddQuestionnaireItem(GroupInfoView currentState, IGroup sourceQuestionnaireOrGroup)
         {
             foreach (var group in sourceQuestionnaireOrGroup.Children.OfType<IGroup>())
             {
@@ -476,6 +449,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                     questionType: question.QuestionType, questionVariable: question.StataExportCaption,
                     questionConditionExpression: question.ConditionExpression);
             }
+        }
+
+        private static GroupInfoView CreateQuestionnaire(Guid questionnaireId)
+        {
+            return new GroupInfoView()
+            {
+                GroupId = questionnaireId.FormatGuid(),
+                Groups = new List<GroupInfoView>(),
+                Questions = new List<QuestionInfoView>()
+            };
         }
     }
 }
