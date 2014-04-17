@@ -14,5 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview
         public DateTime Timestamp { get; set; }
 
         public string InterviewId { get; set; }
+
+        public string UserId { get; set; }
     }
 }

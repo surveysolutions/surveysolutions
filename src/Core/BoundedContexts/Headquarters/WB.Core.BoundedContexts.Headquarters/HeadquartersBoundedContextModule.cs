@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         public override void Load()
         {
-            this.Bind<IVersionedQuestionnaireReader>().To<VersionedQuestionnaireReader>();
+            this.Bind<IVersionedQuestionnaireReader>().To<VersionedQustionnaireDocumentViewFactory>();
             this.Kernel.RegisterDenormalizer<InterviewsFeedDenormalizer>();
         }
     }

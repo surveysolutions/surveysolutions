@@ -9,12 +9,12 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 {
-    public class VersionedQustionnaireDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>
+    public class VersionedQustionnaireDocumentDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>
     {
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
 
-        public VersionedQustionnaireDenormalizer(IQuestionnaireCacheInitializer questionnaireCacheInitializer,
+        public VersionedQustionnaireDocumentDenormalizer(IQuestionnaireCacheInitializer questionnaireCacheInitializer,
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage)
         {
             if (questionnaireCacheInitializer == null) throw new ArgumentNullException("questionnaireCacheInitializer");
