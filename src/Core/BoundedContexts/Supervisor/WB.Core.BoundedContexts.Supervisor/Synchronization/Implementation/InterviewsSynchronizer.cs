@@ -155,18 +155,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
 
             Guid userIdGuid = Guid.Parse(userId);
-            this.commandService.Execute(new ApplySynchronizationMetadata(
-                interviewId: interviewDto.Id,
-                userId: userIdGuid,
-                questionnaireId: interviewDto.QuestionnaireId,
-                status: InterviewStatus.Restored,
-                featuredQuestionsMeta: null,
-                comments: null,
-                valid: true));
 
-            this.commandService.Execute(new AssignSupervisorCommand(interviewDto.Id, userIdGuid, Guid.Parse(supervisorId)));
-
-            this.commandService.Execute(new SynchronizeInterviewCommand(interviewDto.Id, Guid.Empty, interviewDto));
+            this.commandService.Execute(new SynchronizeInterviewFromHeadquarters(interviewDto.Id, userIdGuid, interviewDto, DateTime.Now));
         }
 
         private void StoreEventsToLocalStorage()
