@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -12,9 +13,10 @@ using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    internal class GroupInfoViewDenormalizer :
+    internal class ChaptersInfoViewDenormalizer :
         AbstractFunctionalEventHandler<GroupInfoView>,
         ICreateHandler<GroupInfoView, NewQuestionnaireCreated>,
+        ICreateHandler<GroupInfoView, TemplateImported>,
         ICreateHandler<GroupInfoView, QuestionnaireCloned>,
         IUpdateHandler<GroupInfoView, NewGroupAdded>,
         IUpdateHandler<GroupInfoView, GroupCloned>,
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
     {
         private readonly IExpressionProcessor expressionProcessor;
 
-        public GroupInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer, IExpressionProcessor expressionProcessor)
+        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer, IExpressionProcessor expressionProcessor)
             : base(writer)
         {
             this.expressionProcessor = expressionProcessor;
@@ -59,8 +61,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var questionnaire = new GroupInfoView()
             {
                 GroupId = evnt.EventSourceId.FormatGuid(),
-                Groups = new List<GroupInfoView>()
+                Groups = new List<GroupInfoView>(),
+                Questions = new List<QuestionInfoView>()
             };
+
+            return questionnaire;
+        }
+
+        public GroupInfoView Create(IPublishedEvent<TemplateImported> evnt)
+        {
+            var questionnaire = new GroupInfoView()
+            {
+                GroupId = evnt.EventSourceId.FormatGuid(),
+                Groups = new List<GroupInfoView>(),
+                Questions = new List<QuestionInfoView>()
+            };
+
+            evnt.Payload.Source.ConnectChildrenWithParent();
+            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: evnt.Payload.Source);
 
             return questionnaire;
         }
@@ -70,38 +88,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var questionnaire = new GroupInfoView()
             {
                 GroupId = evnt.EventSourceId.FormatGuid(),
-                Groups = new List<GroupInfoView>()
+                Groups = new List<GroupInfoView>(),
+                Questions = new List<QuestionInfoView>()
             };
+
+            evnt.Payload.QuestionnaireDocument.ConnectChildrenWithParent();
+            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: evnt.Payload.QuestionnaireDocument);
 
             return questionnaire;
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
-            var groupInfoView = new GroupInfoView()
-            {
-                GroupId = evnt.Payload.PublicKey.FormatGuid(),
-                Title = evnt.Payload.GroupText,
-                Groups = new List<GroupInfoView>(),
-                Questions = new List<QuestionInfoView>(),
-                GroupsCount = 0,
-                RostersCount = 0,
-                QuestionsCount = 0
-            };
-
             if (!evnt.Payload.ParentGroupPublicKey.HasValue ||
                 evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.GroupId)
             {
-                currentState.Groups.Add(groupInfoView);
+                this.AddGroup(questionnaire: currentState, parentGroupId: null,
+                    groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText);
             }
             else
             {
-                var existsGroup = this.FindGroup(questionnaireOrGroup: currentState,
-                    groupId: evnt.Payload.ParentGroupPublicKey.Value.FormatGuid());
-
-                existsGroup.Groups.Add(groupInfoView);
+                this.AddGroup(questionnaire: currentState,
+                    parentGroupId: evnt.Payload.ParentGroupPublicKey.Value.FormatGuid(),
+                    groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText);
             }
-            
+
             return currentState;
         }
 
@@ -288,16 +299,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             var groupOrQuestionKey = evnt.Payload.PublicKey.FormatGuid();
 
-            GroupInfoView groupInfoView = this.FindGroup(currentState, groupOrQuestionKey);
+            var targetGroupKey = evnt.Payload.GroupKey.HasValue
+                ? evnt.Payload.GroupKey.Value.FormatGuid()
+                : currentState.GroupId;
+
+            var targetGroup = this.FindGroup(currentState, targetGroupKey);
+
+
+            var groupInfoView = this.FindGroup(currentState, groupOrQuestionKey);
             if (groupInfoView != null)
             {
+                var parentOfGroup = this.FindParentOfGroup(currentState, groupInfoView.GroupId);
+
+                if (targetGroup.GroupId != parentOfGroup.GroupId)
+                {
+                    targetGroup.Groups.Add(groupInfoView);
+                    parentOfGroup.Groups.Remove(groupInfoView);    
+                }
                 
             }
 
-            QuestionInfoView questionInfoView = this.FindQuestion(currentState, groupOrQuestionKey);
+            var questionInfoView = this.FindQuestion(currentState, groupOrQuestionKey);
             if (questionInfoView != null)
             {
+                var parentOfQuestion = this.FindParentOfQuestion(currentState, questionInfoView.QuestionId);
 
+                if (targetGroup.GroupId != parentOfQuestion.GroupId)
+                {
+                    targetGroup.Questions.Add(questionInfoView);
+                    parentOfQuestion.Questions.Remove(questionInfoView);
+                }
             }
 
             return currentState;
@@ -307,9 +338,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             GroupInfoView findedGroup = null;
 
-            foreach (var groupInfoView in questionnaireOrGroup.Groups)
+            if (questionnaireOrGroup.GroupId == groupId)
+                findedGroup = questionnaireOrGroup;
+            else
             {
-                findedGroup = questionnaireOrGroup.GroupId == groupId ? groupInfoView : this.FindGroup(groupInfoView, groupId);
+                foreach (var groupInfoView in questionnaireOrGroup.Groups)
+                {
+                    findedGroup = this.FindGroup(groupInfoView, groupId);
+                    if (findedGroup != null) break;
+                }
             }
 
             return findedGroup;
@@ -319,11 +356,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             GroupInfoView findedGroup = null;
 
-            foreach (var groupInfoView in questionnaireOrGroup.Groups)
+            if (questionnaireOrGroup.Groups.Any(group => group.GroupId == groupId))
+                findedGroup = questionnaireOrGroup;
+            else
             {
-                findedGroup = questionnaireOrGroup.Groups.Any(group => group.GroupId == groupId)
-                    ? groupInfoView
-                    : this.FindParentOfGroup(groupInfoView, groupId);
+                foreach (var groupInfoView in questionnaireOrGroup.Groups)
+                {
+                    findedGroup = this.FindParentOfGroup(groupInfoView, groupId);
+                    if (findedGroup != null) break;
+                }
             }
 
             return findedGroup;
@@ -333,11 +374,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             QuestionInfoView findedQuestion = null;
 
-            foreach (var groupInfoView in questionnaireOrGroup.Groups)
+            if (questionnaireOrGroup.Questions.Any(question => question.QuestionId == questionId))
+                findedQuestion = questionnaireOrGroup.Questions.Find(question => question.QuestionId == questionId);
+            else
             {
-                findedQuestion = questionnaireOrGroup.Questions.Any(question => question.QuestionId == questionId)
-                    ? questionnaireOrGroup.Questions.Find(question => question.QuestionId == questionId)
-                    : this.FindQuestion(groupInfoView, questionId);
+                foreach (var groupInfoView in questionnaireOrGroup.Groups)
+                {
+                    findedQuestion = this.FindQuestion(groupInfoView, questionId);
+                    if (findedQuestion != null) break;
+                }
             }
 
             return findedQuestion;
@@ -347,11 +392,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             GroupInfoView findedGroup = null;
 
-            foreach (var groupInfoView in questionnaireOrGroup.Groups)
+            if (questionnaireOrGroup.Questions.Any(question => question.QuestionId == questionId))
+                findedGroup = questionnaireOrGroup;
+            else
             {
-                findedGroup = questionnaireOrGroup.Questions.Any(question => question.QuestionId == questionId)
-                    ? groupInfoView
-                    : this.FindParentOfQuestion(groupInfoView, questionId);
+                foreach (var groupInfoView in questionnaireOrGroup.Groups)
+                {
+                    findedGroup = this.FindParentOfQuestion(groupInfoView, questionId);
+                    if (findedGroup != null) break;
+                }
             }
 
             return findedGroup;
@@ -385,13 +434,48 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                         ? new string[0]
                         : expressionProcessor.GetIdentifiersUsedInExpression(questionConditionExpression);
 
-            questionView.QuestionId = questionId;
             questionView.Title = questionTitle;
             questionView.Type = questionType;
             questionView.Variable = questionVariable;
             questionView.LinkedVariables = questionsUsedInConditionExpression;
         }
 
-        
+        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle)
+        {
+            var parentGroup = string.IsNullOrEmpty(parentGroupId)
+                ? questionnaire
+                : this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentGroupId);
+
+            var groupInfoView = new GroupInfoView()
+            {
+                GroupId = groupId,
+                Title = groupTitle,
+                Groups = new List<GroupInfoView>(),
+                Questions = new List<QuestionInfoView>(),
+                GroupsCount = 0,
+                RostersCount = 0,
+                QuestionsCount = 0
+            };
+
+            parentGroup.Groups.Add(groupInfoView);
+        }
+
+        public void AddQuestionnaireItem(GroupInfoView currentState, IGroup sourceQuestionnaireOrGroup)
+        {
+            foreach (var group in sourceQuestionnaireOrGroup.Children.OfType<IGroup>())
+            {
+                this.AddGroup(questionnaire: currentState, groupId: group.PublicKey.FormatGuid(),
+                    parentGroupId: group.GetParent().PublicKey.FormatGuid(), groupTitle: group.Title);
+                this.AddQuestionnaireItem(currentState: currentState, sourceQuestionnaireOrGroup: @group);
+            }
+
+            foreach (var question in sourceQuestionnaireOrGroup.Children.OfType<IQuestion>())
+            {
+                this.AddQuestion(questionnaire: currentState, groupId: question.GetParent().PublicKey.FormatGuid(),
+                    questionId: question.PublicKey.FormatGuid(), questionTitle: question.QuestionText,
+                    questionType: question.QuestionType, questionVariable: question.StataExportCaption,
+                    questionConditionExpression: question.ConditionExpression);
+            }
+        }
     }
 }
