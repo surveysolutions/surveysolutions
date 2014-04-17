@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             questionId = Guid.Parse("21111111111111111111111111111111");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new TextQuestion() { StataExportCaption = "q1", PublicKey = questionId });
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1" }, new string[][] { new string[] { "1", "text" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1", "ParentId" }, new string[][] { new string[] { "1", "text", "" } },
                 "questionnaire.csv");
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire);
