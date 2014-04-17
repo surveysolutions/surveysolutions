@@ -61,6 +61,7 @@
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
     <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />

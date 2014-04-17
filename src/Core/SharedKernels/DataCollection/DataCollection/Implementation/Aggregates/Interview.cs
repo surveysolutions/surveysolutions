@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
 using InterviewDeleted = WB.Core.SharedKernels.DataCollection.Events.Interview.InterviewDeleted;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -639,14 +640,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private class RosterCalculationData
         {
+            public RosterCalculationData(List<RosterIdentity> rosterInstancesToAdd, Dictionary<decimal, string> titlesForRosterInstancesToAdd)
+                : this(
+                    rosterInstancesToAdd: rosterInstancesToAdd,
+                    titlesForRosterInstancesToAdd: titlesForRosterInstancesToAdd,
+                    rosterInstancesToRemove: new List<RosterIdentity>(),
+                    rosterInstancesToChange: new List<RosterIdentity>(),
+                    answersToRemoveByDecreasedRosterSize: new List<Identity>(),
+                    initializedGroupsToBeDisabled: new List<Identity>(),
+                    initializedGroupsToBeEnabled: new List<Identity>(),
+                    initializedQuestionsToBeDisabled: new List<Identity>(),
+                    initializedQuestionsToBeEnabled: new List<Identity>(),
+                    initializedQuestionsToBeInvalid: new List<Identity>(),
+                    rosterInstantiatesFromNestedLevels: new List<RosterCalculationData>()) {}
+
             public RosterCalculationData(List<RosterIdentity> rosterInstancesToAdd, List<RosterIdentity> rosterInstancesToRemove, List<RosterIdentity> rosterInstancesToChange,
                 List<Identity> answersToRemoveByDecreasedRosterSize,
                 List<Identity> initializedGroupsToBeDisabled, List<Identity> initializedGroupsToBeEnabled,
                 List<Identity> initializedQuestionsToBeDisabled, List<Identity> initializedQuestionsToBeEnabled,
                 List<Identity> initializedQuestionsToBeInvalid,
-                Dictionary<decimal, string> titlesForRosterInstancesToAdd, List<RosterCalculationData> rosterInstantiatesFromNestedLevels)
+                Dictionary<decimal, string> titlesForRosterInstancesToAdd,
+                List<RosterCalculationData> rosterInstantiatesFromNestedLevels)
             {
-
                 this.RosterInstancesToAdd = rosterInstancesToAdd;
                 this.RosterInstancesToRemove = rosterInstancesToRemove;
                 this.RosterInstancesToChange = rosterInstancesToChange;
@@ -817,6 +832,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid);
         }
 
+        public Interview(Guid id, Guid userId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
+            : base(id)
+        {
+            this.SynchronizeInterviewFromHeadquarters(id, userId, interviewDto, synchronizationTime);
+        }
         private void InitInterview(IQuestionnaire questionnaire)
         {
             List<Identity> initiallyDisabledGroups = GetGroupsToBeDisabledInJustCreatedInterview(questionnaire);
@@ -970,6 +990,79 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
+        }
+
+        public void SynchronizeInterviewFromHeadquarters(Guid id, Guid userId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion);
+
+            var rosters = CalculateRostersFromInterviewSynchronizationDto(interviewDto);
+
+            this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
+
+            this.ApplyEvent(new SupervisorAssigned(userId, interviewDto.UserId));
+
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
+
+            rosters.ForEach(this.ApplyRosterEvents);
+
+            foreach (var answerDto in interviewDto.Answers)
+            {
+                Guid questionId = answerDto.Id;
+                QuestionType questionType = questionnaire.GetQuestionType(questionId);
+                decimal[] rosterVector = answerDto.QuestionPropagationVector;
+                object answer = answerDto.Answer;
+
+                switch (questionType)
+                {
+                    case QuestionType.Text:
+                        this.ApplyEvent(new TextQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (string) answer));
+                        break;
+
+                    case QuestionType.DateTime:
+                        this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (DateTime) answer));
+                        break;
+
+                    case QuestionType.TextList:
+                        this.ApplyEvent(new TextListQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (Tuple<decimal, string>[]) answer));
+                        break;
+
+                    case QuestionType.GpsCoordinates:
+                        var geoPosition = (GeoPosition) answer;
+                        this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, synchronizationTime,
+                            geoPosition.Latitude, geoPosition.Longitude, geoPosition.Accuracy, geoPosition.Timestamp));
+                        break;
+
+                    case QuestionType.QRBarcode:
+                        this.ApplyEvent(new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (string) answer));
+                        break;
+
+                    case QuestionType.Numeric:
+                        this.ApplyEvent(questionnaire.IsQuestionInteger(questionId)
+                            ? new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (int) answer) as object
+                            : new NumericRealQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal)answer) as object);
+                        break;
+
+                    case QuestionType.SingleOption:
+                        this.ApplyEvent(questionnaire.IsQuestionLinked(questionId)
+                            ? new SingleOptionLinkedQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[]) answer) as object
+                            : new SingleOptionQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal) answer) as object);
+                        break;
+
+                    case QuestionType.MultyOption:
+                        this.ApplyEvent(questionnaire.IsQuestionLinked(questionId)
+                            ? new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[][]) answer) as object
+                            : new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[]) answer) as object);
+                        break;
+
+                    default:
+                        throw new InterviewException(string.Format("Question {0} has unknown type {1}.", FormatQuestionForException(questionId, questionnaire), questionType));
+                }
+            }
+
+            //this.ApplyEvents(this.GetEnablementChangesEvents(enablementChanges));
+
+            //this.ApplyValidityChangesEvents(validityChanges);
         }
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, 
@@ -2553,6 +2646,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
                 initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid,
                 rosterTitles, rosterInstantiatesFromNestedLevels);
+        }
+
+        private static List<RosterCalculationData> CalculateRostersFromInterviewSynchronizationDto(InterviewSynchronizationDto interviewDto)
+        {
+            return interviewDto
+                .RosterGroupInstances
+                .Select(rosterPairDto => CalculateRosterDataFromSingleRosterInstancesSynchronizationDto(rosterPairDto.Value))
+                .ToList();
+        }
+
+        private static RosterCalculationData CalculateRosterDataFromSingleRosterInstancesSynchronizationDto(RosterSynchronizationDto[] rosterInstancesDto)
+        {
+            List<RosterIdentity> rosterInstancesToAdd = rosterInstancesDto
+                .Select(instanceDto => new RosterIdentity(instanceDto.RosterId, instanceDto.OuterScopePropagationVector, instanceDto.RosterInstanceId, instanceDto.SortIndex))
+                .ToList();
+
+            Dictionary<decimal, string> titlesForRosterInstancesToAdd = rosterInstancesDto.ToDictionary(
+                dtoInstance => dtoInstance.RosterInstanceId,
+                dtoInstance => dtoInstance.RosterTitle);
+
+            return new RosterCalculationData(rosterInstancesToAdd, titlesForRosterInstancesToAdd);
         }
 
         private void CalculateChangesInRosterInstances(IQuestionnaire questionnaire, IEnumerable<Guid> rosterIds, decimal[] nearestToOuterRosterVector,
