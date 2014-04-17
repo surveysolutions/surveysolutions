@@ -207,10 +207,7 @@ namespace WB.Tools.EventsConverter
                     }
                 }
 
-                streamToSave.Append(new UncommittedEvent(committedEvent.EventIdentifier, committedEvent.EventSourceId, sequence + 1, 1,
-                    committedEvent.EventTimeStamp, committedEvent.Payload, committedEvent.EventVersion));
-                sequence++;
-
+                
                 if (rostersAdded.Any())
                 {
                     sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesAdded, RosterRowAdded>(streamToSave, eventsFromSingleCommit,
@@ -257,6 +254,9 @@ namespace WB.Tools.EventsConverter
                         () => new AnswersRemoved(answersRemoved.ToArray()), sequence);
                 }
 
+                streamToSave.Append(new UncommittedEvent(committedEvent.EventIdentifier, committedEvent.EventSourceId, sequence + 1, 1,
+                    committedEvent.EventTimeStamp, committedEvent.Payload, committedEvent.EventVersion));
+                sequence++;
 
                 answersValid = new List<Identity>();
                 answersInvalid = new List<Identity>();
