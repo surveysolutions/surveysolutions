@@ -207,6 +207,7 @@
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoStatisticsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewFactory.cs" />
