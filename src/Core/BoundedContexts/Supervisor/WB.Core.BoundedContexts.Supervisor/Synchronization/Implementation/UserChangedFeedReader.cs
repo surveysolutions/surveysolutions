@@ -15,23 +15,31 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     internal class UserChangedFeedReader : IUserChangedFeedReader
     {
         private readonly HeadquartersSettings headquartersSettings;
+        private readonly SynchronizationContext synchronizationContext;
         private readonly IAtomFeedReader atomReader;
 
-        public UserChangedFeedReader(HeadquartersSettings headquartersSettings, HttpMessageHandler messageHandler)
+        public UserChangedFeedReader(HeadquartersSettings headquartersSettings, 
+            HttpMessageHandler messageHandler,
+            SynchronizationContext synchronizationContext)
         {
             if (headquartersSettings == null) throw new ArgumentNullException("headquartersSettings");
             if (messageHandler == null) throw new ArgumentNullException("messageHandler");
+            if (synchronizationContext == null) throw new ArgumentNullException("synchronizationContext");
 
             this.headquartersSettings = headquartersSettings;
+            this.synchronizationContext = synchronizationContext;
             this.atomReader = new AtomFeedReader(messageHandler);
         }
 
         public async Task<List<LocalUserChangedFeedEntry>> ReadAfterAsync(LocalUserChangedFeedEntry lastStoredFeedEntry)
         {
             string lastStoredEntryId = lastStoredFeedEntry != null ? lastStoredFeedEntry.EntryId : null;
+
+            synchronizationContext.PushMessage(string.Format("Reading users feed from URL: {0}", this.headquartersSettings.UserChangedFeedUrl));
             IEnumerable<AtomFeedEntry<LocalUserChangedFeedEntry>> feedEntries = 
                 await atomReader.ReadAfterAsync<LocalUserChangedFeedEntry>(this.headquartersSettings.UserChangedFeedUrl, lastStoredEntryId)
                                 .ConfigureAwait(false);
+            synchronizationContext.PushMessage(string.Format("Received {0} events from feed {1}", feedEntries.Count(), this.headquartersSettings.UserChangedFeedUrl));
 
             var result = from f in feedEntries
                 select new LocalUserChangedFeedEntry(f.Content.SupervisorId, f.Content.EntryId)

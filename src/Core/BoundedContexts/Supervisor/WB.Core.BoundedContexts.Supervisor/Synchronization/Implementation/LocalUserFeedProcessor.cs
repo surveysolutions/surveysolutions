@@ -26,25 +26,29 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly ICommandService commandService;
         private readonly IHeadquartersUserReader headquartersUserReader;
         private readonly ILogger logger;
+        private readonly SynchronizationContext synchronizationContext;
 
         public LocalUserFeedProcessor(
             IQueryableReadSideRepositoryReader<UserDocument> users,
             ILocalFeedStorage localFeedStorage,
             ICommandService commandService,
             IHeadquartersUserReader headquartersUserReader,
-            ILogger logger)
+            ILogger logger,
+            SynchronizationContext synchronizationContext)
         {
             if (users == null) throw new ArgumentNullException("users");
             if (localFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (headquartersUserReader == null) throw new ArgumentNullException("headquartersUserReader");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (synchronizationContext == null) throw new ArgumentNullException("synchronizationContext");
 
             this.users = users;
             this.localFeedStorage = localFeedStorage;
             this.commandService = commandService;
             this.headquartersUserReader = headquartersUserReader;
             this.logger = logger;
+            this.synchronizationContext = synchronizationContext;
         }
 
         public void Process()
@@ -53,7 +57,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             foreach (var localSupervisor in localSupervisors)
             {
+                synchronizationContext.PushMessage(string.Format("Processing events for supervisor {0} with Id {1}", localSupervisor.UserName, localSupervisor.PublicKey));
                 IEnumerable<LocalUserChangedFeedEntry> events = this.localFeedStorage.GetNotProcessedSupervisorRelatedEvents(localSupervisor.PublicKey.FormatGuid());
+                synchronizationContext.PushMessage(string.Format("Reveived {0} non processed events for supervisor {1}", events.Count(), localSupervisor.UserName));
 
                 foreach (var userChanges in events.GroupBy(x => x.ChangedUserId))
                 {
@@ -69,10 +75,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             {
                 UserDocument deserializedUserDetails = this.headquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri).Result;
 
+                this.synchronizationContext.PushMessage(string.Format("Applying user changes for user {0} with id {1}", deserializedUserDetails.UserName, deserializedUserDetails.PublicKey));
                 this.UpdateOrCreateUser(deserializedUserDetails);
 
                 foreach (var appliedChange in userChanges)
                 {
+                    this.synchronizationContext.PushMessage(string.Format("Marking local event {0} as processed", appliedChange.EntryId));
                     appliedChange.IsProcessed = true;
                 }
 
@@ -81,6 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             catch (ApplicationException e)
             {
                 this.logger.Error(string.Format("Error occured while processing users feed event. EventId {0}. Event marked as processed with error.", changeThatShouldBeApplied.EntryId), e);
+                this.synchronizationContext.PushError(string.Format("Failed to process event {0}. Message: {1}", changeThatShouldBeApplied.EntryId, e.Message));
                 changeThatShouldBeApplied.ProcessedWithError = true;
 
                 this.localFeedStorage.Store(userChanges);

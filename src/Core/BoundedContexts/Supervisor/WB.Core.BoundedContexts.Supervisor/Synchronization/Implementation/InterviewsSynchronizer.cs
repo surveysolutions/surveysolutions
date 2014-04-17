@@ -4,7 +4,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.ServiceModel;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
@@ -12,7 +11,6 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -33,6 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly IHeadquartersInterviewReader headquartersInterviewReader;
+        private readonly SynchronizationContext synchronizationContext;
 
         public InterviewsSynchronizer(IAtomFeedReader feedReader, 
             HeadquartersSettings settings, 
@@ -42,7 +41,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IQueryableReadSideRepositoryReader<UserDocument> users,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IHeadquartersQuestionnaireReader headquartersQuestionnaireReader,
-            IHeadquartersInterviewReader headquartersInterviewReader)
+            IHeadquartersInterviewReader headquartersInterviewReader,
+            SynchronizationContext synchronizationContext)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -53,6 +53,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (plainQuestionnaireRepository == null) throw new ArgumentNullException("plainQuestionnaireRepository");
             if (headquartersQuestionnaireReader == null) throw new ArgumentNullException("headquartersQuestionnaireReader");
             if (headquartersInterviewReader == null) throw new ArgumentNullException("headquartersInterviewReader");
+            if (synchronizationContext == null) throw new ArgumentNullException("synchronizationContext");
 
             this.feedReader = feedReader;
             this.settings = settings;
@@ -63,6 +64,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.headquartersQuestionnaireReader = headquartersQuestionnaireReader;
             this.headquartersInterviewReader = headquartersInterviewReader;
+            this.synchronizationContext = synchronizationContext;
         }
 
         public void Synchronize()
@@ -73,6 +75,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             foreach (var localSupervisor in localSupervisors)
             {
+                this.synchronizationContext.PushMessage(string.Format("Synchronizing interviews for supervisor {0}", localSupervisor.UserName));
+
                 IEnumerable<LocalInterviewFeedEntry> events = 
                     this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.PublicKey.FormatGuid() && !x.Processed));
                 foreach (var interviewFeedEntry in events)
@@ -81,10 +85,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     {
                         Uri interviewUri = interviewFeedEntry.InterviewUri;
                         var interview = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
-                        
-                        var questionanireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                                                                   .Replace("{id}", interview.QuestionnaireId.FormatGuid())
-                                                                   .Replace("{version}", interview.QuestionnaireVersion.ToString());
+
+                        string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
+                            .Replace("{id}", interview.QuestionnaireId.FormatGuid())
+                            .Replace("{version}", interview.QuestionnaireVersion.ToString());
+
+                        this.synchronizationContext.PushMessage(string.Format("Pulling questionnaire details from {0}", questionnaireDetailsUrl));
 
                         switch (interviewFeedEntry.EntryType)
                         {
@@ -92,14 +98,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
-                                    new Uri(questionanireDetailsUrl));
+                                    new Uri(questionnaireDetailsUrl));
                                 this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId, interviewFeedEntry.SupervisorId);
                                 break;
                             case EntryType.InterviewUnassigned:
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
-                                    new Uri(questionanireDetailsUrl));
+                                    new Uri(questionnaireDetailsUrl));
                                 this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId, interviewFeedEntry.SupervisorId);
                                 this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId), Guid.Empty));
                                 break;
@@ -130,7 +136,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireId, questionnaireVersion))
                 return;
-
+            this.synchronizationContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnareUri));
             QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
@@ -171,6 +177,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 this.feedReader
                     .ReadAfterAsync<LocalInterviewFeedEntry>(this.settings.InterviewsFeedUrl, lastStoredEntry)
                     .Result;
+            this.synchronizationContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count(), this.settings.InterviewsFeedUrl));
 
             var newEvents = new List<LocalInterviewFeedEntry>();
             foreach (AtomFeedEntry<LocalInterviewFeedEntry> remoteEvent in remoteEvents)
