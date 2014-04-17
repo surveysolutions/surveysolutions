@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
     {
         public async Task<UserDocument> GetUserByUri(Uri headquartersUserUri)
         {
-            return await GetEntityByUri<UserDocument>(headquartersUserUri);
+            return await GetEntityByUri<UserDocument>(headquartersUserUri).ConfigureAwait(false);
         }
     }
 }
