@@ -90,8 +90,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                             .Replace("{id}", interview.QuestionnaireId.FormatGuid())
                             .Replace("{version}", interview.QuestionnaireVersion.ToString());
 
-                        this.synchronizationContext.PushMessage(string.Format("Pulling questionnaire details from {0}", questionnaireDetailsUrl));
-
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
@@ -136,6 +134,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireId, questionnaireVersion))
                 return;
+
             this.synchronizationContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnareUri));
             QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
 
