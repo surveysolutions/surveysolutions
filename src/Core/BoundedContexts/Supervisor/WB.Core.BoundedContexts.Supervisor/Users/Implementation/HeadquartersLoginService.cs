@@ -64,16 +64,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                     string userDetailsUrl = validationResult.userDetailsUrl;
                     UserDocument userDocument = headquartersUserReader.GetUserByUri(new Uri(userDetailsUrl)).Result;
 
-                    var command = new CreateUserCommand(userDocument.PublicKey, 
-                        userDocument.UserName, 
-                        userDocument.Password, 
-                        userDocument.Email, 
+                    var command = new CreateUserCommand(userDocument.PublicKey,
+                        userDocument.UserName,
+                        userDocument.Password,
+                        userDocument.Email,
                         new[] { UserRoles.Supervisor },
-                        userDocument.IsLockedBySupervisor, 
-                        userDocument.IsLockedByHQ, 
+                        userDocument.IsLockedBySupervisor,
+                        userDocument.IsLockedByHQ,
                         null);
 
                     this.commandService.Execute(command);
+                }
+                else
+                {
+                    this.logger.Warn(string.Format("Failed to login user {0}, endpoint used: {1}.", login, requestUri));
                 }
             }
         }

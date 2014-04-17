@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
 using Main.Core.Documents;
@@ -29,16 +30,16 @@ namespace WB.UI.Headquarters.API.Resources
 
         [Route("validateSupervisor")]
         [HttpGet]
-        public SupervisorValidationResult ValidateSupervisor(string login, string passwordHash)
+        public HttpResponseMessage ValidateSupervisor(string login, string passwordHash)
         {
             var isValid = Membership.ValidateUser(login, passwordHash);
 
             if (!isValid)
             {
-                return new SupervisorValidationResult
+                return this.Request.CreateResponse(new SupervisorValidationResult
                 {
                     isValid = false
-                };
+                });
             }
 
             var userDocument = this.users.Query(_ => _.First(x => x.UserName == login));
@@ -50,7 +51,7 @@ namespace WB.UI.Headquarters.API.Resources
                 userDetailsUrl = new Uri(this.Request.RequestUri, detailsUrl).ToString()
             };
 
-            return result;
+            return this.Request.CreateResponse(result);
         }
     }
 }
