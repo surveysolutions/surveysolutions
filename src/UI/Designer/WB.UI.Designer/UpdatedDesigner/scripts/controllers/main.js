@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pocAngularApp')
-  .controller('MainCtrl', function ($scope, $http, $routeParams, $location) {
+  .controller('MainCtrl', function ($scope, $http, $routeParams, $location, $route) {
 
     console.log($routeParams);
 
@@ -20,11 +20,11 @@ angular.module('pocAngularApp')
 
       $scope.isFolded = false;
 
-    $scope.changeChapter = function (chapter) {
+      $scope.changeChapter = function (chapter) {
         $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.GroupId);
       };
 
-    $scope.setItem = function (group, question) {
+      $scope.setItem = function (group, question) {
         $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.QuestionId);
       };
 
@@ -73,8 +73,8 @@ angular.module('pocAngularApp')
                     loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
                 } else {
                     $scope.currentChapter = result.Chapters[0];
-                    $scope.currentChapterId = $scope.currentChapter.GroupId;
-                    loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.GroupId);
+                    $scope.currentChapterId = $scope.currentChapter.ChapterId;
+                    loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.ChapterId);
                 }
                 if ($routeParams.itemId) {
                     $scope.currentItemId = $routeParams.itemId;
@@ -84,11 +84,19 @@ angular.module('pocAngularApp')
             }
           });
 
+      //var lastRoute = $route.current;
+      //    $scope.$on('$locationChangeSuccess', function (event) {
+      //        if (lastRoute.$$route.originalPath === $route.current.$$route.originalPath) {
+      //            $route.current = lastRoute;
+      //        }
+      //});
+
     function loadChapterDetails(questionnaireId, chapterId) {
         $http.get('api/questionnaire/chapter/' + questionnaireId + "?chapterId=" + chapterId)
               .success(function (result) {
                   $scope.items = result.Groups;
                 $scope.currentChapter = result;
               });
-      };
+    };
+
   });
