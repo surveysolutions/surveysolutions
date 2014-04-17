@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryType = EntryType.SupervisorAssigned,
                 Timestamp = evnt.EventTimeStamp,
                 EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
         }
 
@@ -46,7 +47,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryType = EntryType.InterviewUnassigned,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
-                EntryId = evnt.EventIdentifier.FormatGuid()
+                EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
         }
 
