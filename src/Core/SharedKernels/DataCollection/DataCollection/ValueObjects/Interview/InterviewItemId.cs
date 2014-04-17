@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
         private decimal[] interviewItemPropagationVector;
 
-        [Obsolete("please use QuestionPropagationVector instead")] 
+        [Obsolete("please use InterviewItemPropagationVector instead")] 
         public int[] PropagationVector;
 
         public bool CompareWithVector(decimal[] vector)
