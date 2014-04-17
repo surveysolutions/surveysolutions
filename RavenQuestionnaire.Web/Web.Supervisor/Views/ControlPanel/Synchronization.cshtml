@@ -3,24 +3,66 @@
     this.ViewBag.Title = "Control Panel: Synchronization";
 }
 
-<div class="page-header">
-    <h3>
-        Synchronization
-    </h3>
-</div>
+<div class="container-fluid">
+    <div class="page-header">
+        <h3>
+            Synchronization
+        </h3>
+    </div>
 
-<div>
-    <button class="btn btn-default" id="synchnizationStart">Synchronize</button>
-    <div id="synchronizationMessage"></div>
+    <div class="row-fluid">
+        <div class="span12">
+            <button class="btn btn-default" id="synchnizationStart" data-bind="disable: syncronizationRunning, click: StartSynchronization">
+                Synchronize
+            </button>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <h4>
+                Synchronization status
+            </h4>
+        </div>
+        <div class="span6">
+            <h5>Messages</h5>
+            <div id="messages" class="well well-small" data-bind="foreach: Messages" style="overflow-y: scroll">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+        <div class="span5">
+            <h5>Errors</h5>
+            <div id="erros" class="well well-small">
+            </div>
+        </div>
+    </div>
 </div>
 @section scripts {
     <script type="text/javascript">
-        $(function() {
-            $('#synchnizationStart').click(function() {
-                $.post('@Url.Action("Synchronize", "ControlPanel")', function() {
-                    $('#synchronizationMessage').html('Synchronization started');
+
+        function SynchronizationViewModel() {
+            var self = this;
+
+            self.Messages = ko.observableArray([]);
+            self.Errors = ko.observableArray([]);
+            self.syncronizationRunning = ko.observable(true);
+
+            self.StartSynchronization = function() {
+                self.syncronizationRunning(true);
+                $.post('@Url.Action("Synchronize", "ControlPanel")');
+            }
+
+            self.RefreshStatus = function() {
+                $.get('@Url.Action("SynchronizationStatus", "ControlPanel")', function(status) {
+                    self.syncronizationRunning(status.IsRunning);
+                    self.Messages(status.Messages);
+                    self.Errors(status.Errors);
                 });
-            });
-        });
+            }
+        }
+
+        var synchronizationViewModel = new SynchronizationViewModel();
+        ko.applyBindings(synchronizationViewModel);
+        synchronizationViewModel.RefreshStatus();
+        var interval = setInterval(synchronizationViewModel.RefreshStatus, 3000);
     </script>
 }

@@ -20,13 +20,17 @@ namespace Web.Supervisor.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly IIncomePackagesRepository incomePackagesRepository;
         private readonly ISynchronizer synchronizer;
+        private readonly SynchronizationContext synchronizationContext;
 
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
-            ISynchronizer synchronizer)
+        public ControlPanelController(IServiceLocator serviceLocator, 
+            IIncomePackagesRepository incomePackagesRepository,
+            ISynchronizer synchronizer,
+            SynchronizationContext synchronizationContext)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
             this.synchronizer = synchronizer;
+            this.synchronizationContext = synchronizationContext;
         }
 
         /// <remarks>
@@ -185,6 +189,17 @@ namespace Web.Supervisor.Controllers
         {
             synchronizer.Synchronize();
             return Json(new object());
+        }
+
+        public ActionResult SynchronizationStatus()
+        {
+            return Json(new
+            {
+                Status = this.synchronizationContext.GetStatus(),
+                Messages = this.synchronizationContext.GetMessages(),
+                Errors = this.synchronizationContext.GetErrors(),
+                IsRunning = this.synchronizationContext.IsRunning
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }
