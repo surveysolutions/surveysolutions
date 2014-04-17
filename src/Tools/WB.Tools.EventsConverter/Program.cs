@@ -34,7 +34,7 @@ namespace WB.Tools.EventsConverter
             Guid? commitId = null;
             RegisterEvents();
 
-            var eventNumber = 1;
+            var eventNumber = skipEventsCount + 1;
             foreach (CommittedEvent[] eventBulk in eventStoreSource.GetAllEvents(skipEvents: skipEventsCount))
             {
                 foreach (CommittedEvent @event in eventBulk)
@@ -48,6 +48,16 @@ namespace WB.Tools.EventsConverter
                                 var lastEventToStore = eventsFromSingleCommit.Last();
                                 var eventSourceId = eventsFromSingleCommit.First().EventSourceId;
                                 var sequence = eventSequences.ContainsKey(eventSourceId) ? eventSequences[eventSourceId] : 0;
+                                
+                                if (sequence == 0 && skipEventsCount > 0)
+                                {
+                                    var lastEvents = eventStoreTarget.ReadFrom(eventSourceId, 0, long.MaxValue);
+                                    if (lastEvents.Any())
+                                    {
+                                        sequence = lastEvents.Last().EventSequence;
+                                    }
+                                }
+
                                 var newSequence = ProcessEventsFromCommit(eventsFromSingleCommit, sequence, commitId.Value);
                                 eventSequences[eventSourceId] = newSequence;
                                 eventsFromSingleCommit = new List<CommittedEvent>();
