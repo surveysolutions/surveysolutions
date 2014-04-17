@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    this.logger.Error(string.Format("Failed to login user {0} response code: {1}, response content: {2}", login, response.StatusCode, response.Content));
+                    this.logger.Error(string.Format("Failed to login user {0} response code: {1}, Endpoint: {3}. Response content: {2}. ", login, response.StatusCode, response.Content, requestUri));
                     return;
                 }
 
