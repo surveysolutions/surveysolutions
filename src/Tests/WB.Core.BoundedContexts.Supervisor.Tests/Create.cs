@@ -3,6 +3,7 @@ using System.Net.Http;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using NSubstitute;
+using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
@@ -27,7 +28,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
 
         public static UserChangedFeedReader UserChangedFeedReader(HeadquartersSettings settings = null, HttpMessageHandler messageHandler = null)
         {
-            return new UserChangedFeedReader(settings ?? HeadquartersSettings(), messageHandler ?? Substitute.For<HttpMessageHandler>());
+            return new UserChangedFeedReader(settings ?? HeadquartersSettings(), 
+                messageHandler ?? Substitute.For<HttpMessageHandler>(),
+                new SynchronizationContext());
         }
 
         private static HeadquartersSettings HeadquartersSettings()

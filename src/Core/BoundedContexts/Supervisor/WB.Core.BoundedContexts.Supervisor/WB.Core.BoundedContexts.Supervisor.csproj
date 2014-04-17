@@ -96,6 +96,7 @@
     <Compile Include="Synchronization\Implementation\Synchronizer.cs" />
     <Compile Include="Synchronization\ISynchronizer.cs" />
     <Compile Include="Synchronization\LocalUserChangedFeedEntry.cs" />
+    <Compile Include="Synchronization\SynchronizationContext.cs" />
     <Compile Include="Users\IHeadquartersLoginService.cs" />
     <Compile Include="Users\IHeadquartersUserReader.cs" />
     <Compile Include="Users\Implementation\HeadquartersLoginService.cs" />
