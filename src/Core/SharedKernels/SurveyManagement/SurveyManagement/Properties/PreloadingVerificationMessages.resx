@@ -132,4 +132,10 @@
   <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
     <value>Question data type mismatch</value>
   </data>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>Id dublication</value>
+  </data>
+  <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>Service column is absent</value>
+  </data>
 </root>

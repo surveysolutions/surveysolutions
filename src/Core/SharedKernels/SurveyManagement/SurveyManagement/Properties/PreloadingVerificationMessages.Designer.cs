@@ -104,5 +104,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0005_QuestionDataTypeMismatch", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id dublication.
+        /// </summary>
+        internal static string PL0006_IdDublication {
+            get {
+                return ResourceManager.GetString("PL0006_IdDublication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service column is absent.
+        /// </summary>
+        internal static string PL0007_ServiceColumnIsAbsent {
+            get {
+                return ResourceManager.GetString("PL0007_ServiceColumnIsAbsent", resourceCulture);
+            }
+        }
     }
 }
