@@ -17,14 +17,14 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
 {
     internal class QuestionnaireApiControllerTestContext
     {
-        public static QuestionnaireController CreateQuestionnaireController(IViewFactory<ChapterInfoViewInputModel, ChapterInfoView> chapterInfoViewFactory = null,
+        public static QuestionnaireController CreateQuestionnaireController(IViewFactory<ChapterInfoViewInputModel, GroupInfoView> chapterInfoViewFactory = null,
             IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory = null,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IVerificationErrorsMapper verificationErrorsMapper = null)
         {
             return new QuestionnaireController(
-                chapterInfoViewFactory ?? Mock.Of<IViewFactory<ChapterInfoViewInputModel, ChapterInfoView>>(),
+                chapterInfoViewFactory ?? Mock.Of<IViewFactory<ChapterInfoViewInputModel, GroupInfoView>>(),
                 questionnaireInfoViewFactory ?? Mock.Of<IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView>>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
