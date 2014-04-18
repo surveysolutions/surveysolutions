@@ -54,6 +54,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
+                                
                                 <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
                             </ul>
                         </li>
@@ -77,6 +78,12 @@
                         </li>
                     </ul>
                     <ul class="nav pull-right" role="menu">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Synchronization", "Synchronization", "ControlPanel")</li>
+                            </ul>
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
