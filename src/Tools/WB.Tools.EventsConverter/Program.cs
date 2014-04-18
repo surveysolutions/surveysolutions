@@ -22,7 +22,7 @@ namespace WB.Tools.EventsConverter
         private static IStreamableEventStore eventStoreTarget;
 
         static void Main(string[] args)
-        { 
+        {
             int skipEventsCount = args.Length > 2 ? int.Parse(args[2]) : 0;
 
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
@@ -35,11 +35,11 @@ namespace WB.Tools.EventsConverter
             RegisterEvents();
 
             var eventNumber = skipEventsCount + 1;
-            foreach (CommittedEvent[] eventBulk in eventStoreSource.GetAllEvents(skipEvents: skipEventsCount))
+            try
             {
-                foreach (CommittedEvent @event in eventBulk)
+                foreach (CommittedEvent[] eventBulk in eventStoreSource.GetAllEvents(skipEvents: skipEventsCount))
                 {
-                    try
+                    foreach (CommittedEvent @event in eventBulk)
                     {
                         if (@event.CommitId != commitId)
                         {
@@ -48,7 +48,7 @@ namespace WB.Tools.EventsConverter
                                 var lastEventToStore = eventsFromSingleCommit.Last();
                                 var eventSourceId = eventsFromSingleCommit.First().EventSourceId;
                                 var sequence = eventSequences.ContainsKey(eventSourceId) ? eventSequences[eventSourceId] : 0;
-                                
+
                                 if (sequence == 0 && skipEventsCount > 0)
                                 {
                                     var lastEvents = eventStoreTarget.ReadFrom(eventSourceId, 0, long.MaxValue);
@@ -69,13 +69,14 @@ namespace WB.Tools.EventsConverter
                         }
                         eventsFromSingleCommit.Add(@event);
                         eventNumber++;
-                    }
-                    catch (Exception exception)
-                    {
-                        Console.WriteLine(exception.Message);
-                        Console.WriteLine(exception.StackTrace);
+
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+                Console.WriteLine(exception.StackTrace);
             }
         }
 
@@ -100,19 +101,22 @@ namespace WB.Tools.EventsConverter
                 Conventions = { JsonContractResolver = new PropertiesOnlyContractResolver() }
             };
 
-         /*   if (!string.IsNullOrWhiteSpace(this.settings.Username))
-            {
-                store.Credentials = new NetworkCredential(this.settings.Username, this.settings.Password);
-            }*/
+            /*   if (!string.IsNullOrWhiteSpace(this.settings.Username))
+               {
+                   store.Credentials = new NetworkCredential(this.settings.Username, this.settings.Password);
+               }*/
 
             store.Initialize();
 
             return store;
         }
 
+
         private static long ProcessEventsFromCommit(IEnumerable<CommittedEvent> eventsFromSingleCommit, long sequence, Guid commitId)
         {
             var streamToSave = new UncommittedEventStream(commitId);
+
+            int currentFlushGroup = 0; 
 
             var answersValid = new List<Identity>();
             var answersInvalid = new List<Identity>();
@@ -124,91 +128,249 @@ namespace WB.Tools.EventsConverter
             var rostersAdded = new List<AddedRosterInstance>();
             var rostersRemoved = new List<RosterInstance>();
 
+
+            CommittedEvent tmpEvent = null;
             foreach (var committedEvent in eventsFromSingleCommit)
             {
                 var answerValid = committedEvent.Payload as AnswerDeclaredValid;
                 if (answerValid != null)
                 {
+                    if (currentFlushGroup != 1)
+                    {
+                        sequence = FlushCompactEvents(eventsFromSingleCommit,tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
+                    }
+
+                    currentFlushGroup = 1;
+
                     AddrIgnore(answersValid, answerValid.QuestionId, answerValid.PropagationVector);
+                    tmpEvent = committedEvent;
                     continue;
                 }
 
                 var answerInvalid = committedEvent.Payload as AnswerDeclaredInvalid;
                 if (answerInvalid != null)
                 {
+                    if (currentFlushGroup != 2)
+                    {
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
+                    }
+
+                    currentFlushGroup = 2;
+
+
                     AddrIgnore(answersInvalid, answerInvalid.QuestionId, answerInvalid.PropagationVector);
+                    tmpEvent = committedEvent;
                     continue;
                 }
 
                 var questionEnabled = committedEvent.Payload as QuestionEnabled;
                 if (questionEnabled != null)
                 {
+                    if (currentFlushGroup != 3)
+                    {
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
+                    }
+
+                    currentFlushGroup = 3;
+
+
                     AddrIgnore(questionsEnabled, questionEnabled.QuestionId, questionEnabled.PropagationVector);
+                    tmpEvent = committedEvent;
                     continue;
                 }
 
                 var questionDisabled = committedEvent.Payload as QuestionDisabled;
                 if (questionDisabled != null)
                 {
+                    if (currentFlushGroup != 4)
+                    {
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
+                    }
+
+                    currentFlushGroup = 4;
+
+
                     AddrIgnore(questionsDisabled, questionDisabled.QuestionId, questionDisabled.PropagationVector);
+                    tmpEvent = committedEvent;
                     continue;
                 }
 
                 var groupEnabled = committedEvent.Payload as GroupEnabled;
                 if (groupEnabled != null)
                 {
+                    if (currentFlushGroup != 5)
+                    {
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
+                    }
+
+                    currentFlushGroup = 5;
+
+
                     AddrIgnore(groupsEnabled, groupEnabled.GroupId, groupEnabled.PropagationVector);
+                    tmpEvent = committedEvent;
                     continue;
                 }
 
                 var groupDisabled = committedEvent.Payload as GroupDisabled;
                 if (groupDisabled != null)
                 {
+                    if (currentFlushGroup != 6)
+                    {
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
+                    }
+
+                    currentFlushGroup = 6;
+
+
                     AddrIgnore(groupsDisabled, groupDisabled.GroupId, groupDisabled.PropagationVector);
+                    tmpEvent = committedEvent;
                     continue;
                 }
 
                 var answerRemoved = committedEvent.Payload as AnswerRemoved;
                 if (answerRemoved != null)
                 {
+                    if (currentFlushGroup != 7)
+                    {
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
+                    }
+
+                    currentFlushGroup = 7;
+
+
                     AddrIgnore(answersRemoved, answerRemoved.QuestionId, answerRemoved.PropagationVector);
+                    tmpEvent = committedEvent;
                     continue;
                 }
 
                 var rosterAdded = committedEvent.Payload as RosterRowAdded;
                 if (rosterAdded != null)
                 {
-                    if (
-                        !rostersAdded.Any(
-                            identity =>
-                                identity.GroupId == rosterAdded.GroupId &&
-                                    identity.OuterRosterVector.SequenceEqual(rosterAdded.OuterRosterVector) &&
-                                    identity.RosterInstanceId == rosterAdded.RosterInstanceId))
+                    if (currentFlushGroup != 8)
                     {
-                        rostersAdded.Add(new AddedRosterInstance(rosterAdded.GroupId, rosterAdded.OuterRosterVector,
-                            rosterAdded.RosterInstanceId, rosterAdded.SortIndex));
-                        continue;
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
                     }
+
+                    currentFlushGroup = 8;
+                    
+                    rostersAdded.Add(new AddedRosterInstance(rosterAdded.GroupId, rosterAdded.OuterRosterVector,
+                            rosterAdded.RosterInstanceId, rosterAdded.SortIndex));
+                    tmpEvent = committedEvent;
+                        continue;
+                    
                 }
 
                 var rosterRemoved = committedEvent.Payload as RosterRowRemoved;
                 if (rosterRemoved != null)
                 {
-                    if (
-                        !rostersRemoved.Any(
-                            identity =>
-                                identity.GroupId == rosterRemoved.GroupId &&
-                                    identity.OuterRosterVector.SequenceEqual(rosterRemoved.OuterRosterVector) &&
-                                    identity.RosterInstanceId == rosterRemoved.RosterInstanceId))
+                    if (currentFlushGroup != 9)
                     {
-                        rostersRemoved.Add(new RosterInstance(rosterRemoved.GroupId, rosterRemoved.OuterRosterVector,
-                            rosterRemoved.RosterInstanceId));
-                        continue;
+                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                        answersValid = new List<Identity>();
+                        answersInvalid = new List<Identity>();
+                        questionsEnabled = new List<Identity>();
+                        questionsDisabled = new List<Identity>();
+                        groupsEnabled = new List<Identity>();
+                        groupsDisabled = new List<Identity>();
+                        answersRemoved = new List<Identity>();
+                        rostersAdded = new List<AddedRosterInstance>();
+                        rostersRemoved = new List<RosterInstance>();
                     }
+
+                    currentFlushGroup = 9;
+
+
+                    
+                    rostersRemoved.Add(new RosterInstance(rosterRemoved.GroupId, rosterRemoved.OuterRosterVector,
+                            rosterRemoved.RosterInstanceId));
+                    tmpEvent = committedEvent;
+                        continue;
+                    
                 }
 
-                
-                sequence = FlushCompactEvents(eventsFromSingleCommit, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+
+                sequence = FlushCompactEvents(eventsFromSingleCommit,tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
 
                 streamToSave.Append(new UncommittedEvent(committedEvent.EventIdentifier, committedEvent.EventSourceId, sequence + 1, 1,
                     committedEvent.EventTimeStamp, committedEvent.Payload, committedEvent.EventVersion));
@@ -223,61 +385,62 @@ namespace WB.Tools.EventsConverter
                 answersRemoved = new List<Identity>();
                 rostersAdded = new List<AddedRosterInstance>();
                 rostersRemoved = new List<RosterInstance>();
+                tmpEvent = null;
             }
 
-            sequence = FlushCompactEvents(eventsFromSingleCommit, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
+            sequence = FlushCompactEvents(eventsFromSingleCommit,tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
 
             eventStoreTarget.Store(streamToSave);
             return sequence;
         }
 
-        private static long FlushCompactEvents(IEnumerable<CommittedEvent> eventsFromSingleCommit, long sequence, List<AddedRosterInstance> rostersAdded,
+        private static long FlushCompactEvents(IEnumerable<CommittedEvent> eventsFromSingleCommit,CommittedEvent tmpEvent, long sequence, List<AddedRosterInstance> rostersAdded,
             UncommittedEventStream streamToSave, List<RosterInstance> rostersRemoved, List<Identity> answersValid, List<Identity> answersInvalid, List<Identity> questionsEnabled,
             List<Identity> questionsDisabled, List<Identity> groupsEnabled, List<Identity> groupsDisabled, List<Identity> answersRemoved)
         {
             if (rostersAdded.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesAdded, RosterRowAdded>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesAdded, RosterRowAdded>(streamToSave, eventsFromSingleCommit,tmpEvent,
                     () => new RosterInstancesAdded(rostersAdded.ToArray()), sequence);
             }
             if (rostersRemoved.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesRemoved, RosterRowRemoved>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesRemoved, RosterRowRemoved>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new RosterInstancesRemoved(rostersRemoved.ToArray()), sequence);
             }
             if (answersValid.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredValid, AnswerDeclaredValid>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredValid, AnswerDeclaredValid>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new AnswersDeclaredValid(answersValid.ToArray()), sequence);
             }
             if (answersInvalid.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredInvalid, AnswerDeclaredInvalid>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredInvalid, AnswerDeclaredInvalid>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new AnswersDeclaredInvalid(answersInvalid.ToArray()), sequence);
             }
             if (questionsEnabled.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<QuestionsEnabled, QuestionEnabled>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<QuestionsEnabled, QuestionEnabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new QuestionsEnabled(questionsEnabled.ToArray()), sequence);
             }
             if (questionsDisabled.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<QuestionsDisabled, QuestionDisabled>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<QuestionsDisabled, QuestionDisabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new QuestionsDisabled(questionsDisabled.ToArray()), sequence);
             }
             if (groupsEnabled.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<GroupsEnabled, GroupEnabled>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<GroupsEnabled, GroupEnabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new GroupsEnabled(groupsEnabled.ToArray()), sequence);
             }
             if (groupsDisabled.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<GroupsDisabled, GroupDisabled>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<GroupsDisabled, GroupDisabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new GroupsDisabled(groupsDisabled.ToArray()), sequence);
             }
             if (answersRemoved.Any())
             {
-                sequence = AddOrIgnoreAndReturnNewSequence<AnswersRemoved, AnswerRemoved>(streamToSave, eventsFromSingleCommit,
+                sequence = AddOrIgnoreAndReturnNewSequence<AnswersRemoved, AnswerRemoved>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new AnswersRemoved(answersRemoved.ToArray()), sequence);
             }
             return sequence;
@@ -290,18 +453,18 @@ namespace WB.Tools.EventsConverter
             list.Add(new Identity(id, vector));
         }
 
-        private static long AddOrIgnoreAndReturnNewSequence<T, TBase>(UncommittedEventStream stream, IEnumerable<CommittedEvent> eventsFromSingleCommit, Func<T> creator, long sequence) where T : class
+        private static long AddOrIgnoreAndReturnNewSequence<T, TBase>(UncommittedEventStream stream, IEnumerable<CommittedEvent> eventsFromSingleCommit, CommittedEvent baseEvent, Func<T> creator, long sequence) where T : class
         {
-            var baseEvent = eventsFromSingleCommit.FirstOrDefault(evt => evt.Payload is TBase);
-            if(baseEvent==null)
-                return sequence;
-            var eventFromStream = stream.FirstOrDefault(evt => evt.Payload is T);
+        /*    var baseEvent = eventsFromSingleCommit.FirstOrDefault(evt => evt.Payload is TBase);
+            if (baseEvent == null)
+                return sequence;*/
+        /*    var eventFromStream = stream.FirstOrDefault(evt => evt.Payload is T);
             if (eventFromStream != null)
-                return sequence;
-            
+                return sequence;*/
+
             var newSequence = sequence + 1;
 
-            eventFromStream = new UncommittedEvent(baseEvent.EventIdentifier, baseEvent.EventSourceId, newSequence, 1,
+            var eventFromStream = new UncommittedEvent(baseEvent.EventIdentifier, baseEvent.EventSourceId, newSequence, 1,
                 baseEvent.EventTimeStamp, creator(), baseEvent.EventVersion);
             stream.Append(eventFromStream);
             return newSequence;
