@@ -29,6 +29,11 @@ angular.module('pocAngularApp')
           $scope.currentItemId = question.QuestionId;
       };
 
+      $scope.setGroup = function (group) {
+          $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + group.GroupId);
+          $scope.currentItemId = group.GroupId;
+      };
+
       $scope.submit = function () {
           console.log('submit');
       };

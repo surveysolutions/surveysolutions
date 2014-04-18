@@ -51,7 +51,7 @@
 
         <div class="question-list">
             <div ng-repeat="i in items">
-                <div class="section item" ng-click="setItem(i)" ng-class="{'selected' : i == item}">
+                <div class="section item" ng-click="setGroup(i)" ng-class="{'selected' : i.GroupId == currentItemId}">
                     {{i.Title}}
                 </div>
                 <div ng-repeat="q in i.Questions" ng-click="setItem(i, q)"
