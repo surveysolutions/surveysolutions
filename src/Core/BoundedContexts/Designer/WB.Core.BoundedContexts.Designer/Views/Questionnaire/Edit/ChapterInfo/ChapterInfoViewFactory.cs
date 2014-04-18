@@ -3,7 +3,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    public class ChapterInfoViewFactory : IViewFactory<ChapterInfoViewInputModel, GroupInfoView>
+    public class ChapterInfoViewFactory : IViewFactory<ChapterInfoViewInputModel, IQuestionnaireItem>
     {
         private readonly IReadSideRepositoryReader<GroupInfoView> readSideReader;
 
@@ -12,11 +12,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.readSideReader = readSideReader;
         }
 
-        public GroupInfoView Load(ChapterInfoViewInputModel input)
+        public IQuestionnaireItem Load(ChapterInfoViewInputModel input)
         {
             return
                 this.readSideReader.GetById(input.QuestionnaireId)
-                    .Groups.Find(chapter => chapter.GroupId == input.ChapterId);
+                    .Items.Find(chapter => chapter.Id == input.ChapterId);
         }
     }
 }
