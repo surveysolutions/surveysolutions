@@ -39,7 +39,13 @@ namespace WB.UI.Designer.Api
 
         public QuestionnaireInfoView Get(string id)
         {
-            return questionnaireInfoViewFactory.Load(new QuestionnaireInfoViewInputModel() {QuestionnaireId = id});
+            var questionnaireInfoView = questionnaireInfoViewFactory.Load(new QuestionnaireInfoViewInputModel() {QuestionnaireId = id});
+            if (questionnaireInfoView == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
+            }
+
+            return questionnaireInfoView;
         }
 
         [HttpGet]
@@ -51,6 +57,13 @@ namespace WB.UI.Designer.Api
                     QuestionnaireId = id,
                     ChapterId = chapterId
                 });
+
+            if (chapterInfoView == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Chapter with id={0} cannot be found", chapterId));
+            }
+
+            return chapterInfoView;
         }
 
         [HttpGet]
