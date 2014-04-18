@@ -3,10 +3,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.View;
+using Main.Core.View.User;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.UI.Headquarters.API.Resources
@@ -14,18 +15,19 @@ namespace WB.UI.Headquarters.API.Resources
     [RoutePrefix("api/resources/users/v1")]
     public class UsersResourceController : ApiController
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
 
-        public UsersResourceController(IQueryableReadSideRepositoryReader<UserDocument> users)
+        public UsersResourceController(IViewFactory<UserViewInputModel, UserView> viewFactory)
         {
-            this.users = users;
+            this.viewFactory = viewFactory;
         }
 
         [Route("{id}", Name = "api.userDetails")]
         [HttpGet]
-        public UserDocument Details(string id)
+        public UserView Details(string id)
         {
-            return users.GetById(id);
+            UserView userView = viewFactory.Load(new UserViewInputModel(Guid.Parse(id)));
+            return userView;
         }
 
         [Route("validateSupervisor")]
@@ -42,11 +44,11 @@ namespace WB.UI.Headquarters.API.Resources
                 });
             }
 
-            var userDocument = this.users.Query(_ => _.First(x => x.UserName == login));
+            UserView userDocument = this.viewFactory.Load(new UserViewInputModel(login, passwordHash));
             string detailsUrl = this.Url.Route("api.userDetails", new { id = userDocument.PublicKey.FormatGuid()});
             var result = new SupervisorValidationResult
             {
-                isValid = !userDocument.IsLockedByHQ && !userDocument.IsDeleted && userDocument.Roles.Contains(UserRoles.Supervisor),
+                isValid = isValid,
                 userId =  userDocument.PublicKey.FormatGuid(),
                 userDetailsUrl = new Uri(this.Request.RequestUri, detailsUrl).ToString()
             };

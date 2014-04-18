@@ -6,6 +6,7 @@ using System.Web;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
+using Main.Core.View.User;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -47,6 +48,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                 var requestUri = this.BuildValidationUri(login, password);
                 var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.CacheControl = new CacheControlHeaderValue {
+                    NoCache = true
+                };
 
                 HttpResponseMessage response = client.SendAsync(request).Result;
 
@@ -62,14 +66,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                 if (validationResult.isValid)
                 {
                     string userDetailsUrl = validationResult.userDetailsUrl;
-                    UserDocument userDocument = headquartersUserReader.GetUserByUri(new Uri(userDetailsUrl)).Result;
+                    UserView userDocument = headquartersUserReader.GetUserByUri(new Uri(userDetailsUrl)).Result;
 
                     var command = new CreateUserCommand(userDocument.PublicKey,
                         userDocument.UserName,
                         userDocument.Password,
                         userDocument.Email,
                         new[] { UserRoles.Supervisor },
-                        userDocument.IsLockedBySupervisor,
+                        userDocument.isLockedBySupervisor,
                         userDocument.IsLockedByHQ,
                         null);
 
