@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     {
                         foreach (var inner in ex.InnerExceptions)
                         {
-                            this.MarkAsProcessedWithError(interviewFeedEntry, inn);
+                            this.MarkAsProcessedWithError(interviewFeedEntry, inner);
                         }
                     }
                     catch (Exception ex)
