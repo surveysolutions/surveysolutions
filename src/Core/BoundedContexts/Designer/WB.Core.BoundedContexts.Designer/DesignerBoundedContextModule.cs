@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -20,6 +21,7 @@ namespace WB.Core.BoundedContexts.Designer
     {
         public override void Load()
         {
+            this.Bind<IQuestionDetailsFactory>().To<QuestionDetailsFactory>().InSingletonScope();
             this.Bind<IJsonExportService>().To<JsonExportService>().InSingletonScope();
             this.Bind<IQuestionnaireDocumentUpgrader>().To<QuestionnaireDocumentUpgrader>().InSingletonScope();
             this.Bind<IQuestionFactory>().To<QuestionFactory>().InSingletonScope();
@@ -33,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
+            this.Bind<IEventHandler>().To<QuestionnaireInfoDenormalizer>().InSingletonScope();
 
             RegistryHelper.RegisterFactory<QuestionnaireListViewFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<QuestionnaireViewFactory>(this.Kernel);
