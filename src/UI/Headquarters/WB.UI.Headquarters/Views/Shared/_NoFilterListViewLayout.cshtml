@@ -18,10 +18,8 @@
 }
 @RenderSection("header", false)
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        @RenderSection("gridnavigation", false)
-    </div>
+<div class="well well-sm">
+    @RenderSection("gridnavigation", false)
 </div>
 <div id="list">
     <!-- ko if:IsPageLoaded()  -->
