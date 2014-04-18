@@ -75,10 +75,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             foreach (var localSupervisor in localSupervisors)
             {
-                this.synchronizationContext.PushMessage(string.Format("Synchronizing interviews for supervisor {0}", localSupervisor.UserName));
-
                 IEnumerable<LocalInterviewFeedEntry> events = 
                     this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.PublicKey.FormatGuid() && !x.Processed));
+
+                this.synchronizationContext.PushMessage(string.Format("Synchronizing interviews for supervisor {0}. Events count: {1}", localSupervisor.UserName, events.Count()));
+                
                 foreach (var interviewFeedEntry in events)
                 {
                     try
@@ -124,7 +125,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     {
                         foreach (var inner in ex.InnerExceptions)
                         {
-                            this.MarkAsProcessedWithError(interviewFeedEntry, inner);
+                            this.MarkAsProcessedWithError(interviewFeedEntry, inn);
                         }
                     }
                     catch (Exception ex)
