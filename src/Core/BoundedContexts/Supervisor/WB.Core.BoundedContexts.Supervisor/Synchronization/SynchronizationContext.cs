@@ -16,11 +16,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             IsRunning = true;
             synchronizationMessages.Clear();
             synchronizationErrors.Clear();
+            this.PushMessage("Synchronization started");
         }
 
         public void Stop()
         {
             IsRunning = false;
+            this.PushMessage("Synchronization done");
         }
 
         public void PushMessage(string message)
