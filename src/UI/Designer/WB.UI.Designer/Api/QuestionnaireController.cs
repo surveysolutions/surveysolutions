@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public IQuestionnaireItem Chapter(string id, string chapterId)
         {
-            return
+            var chapterInfoView =
                 chapterInfoViewFactory.Load(new ChapterInfoViewInputModel()
                 {
                     QuestionnaireId = id,
