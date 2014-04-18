@@ -31,7 +31,8 @@
         </div>
         <div class="span5">
             <h5>Errors</h5>
-            <div id="erros" class="well well-small">
+            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: Errors">
+                <p data-bind="text: $data"></p>
             </div>
         </div>
     </div>
