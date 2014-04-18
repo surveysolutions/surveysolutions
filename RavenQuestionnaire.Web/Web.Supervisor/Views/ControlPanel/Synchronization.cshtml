@@ -53,10 +53,14 @@
             }
 
             self.RefreshStatus = function() {
-                $.get('@Url.Action("SynchronizationStatus", "ControlPanel")', function(status) {
-                    self.syncronizationRunning(status.IsRunning);
-                    self.Messages(status.Messages);
-                    self.Errors(status.Errors);
+                $.ajax({
+                    url: '@Url.Action("SynchronizationStatus", "ControlPanel")',
+                    cache: false,
+                    success: function(status) {
+                        self.syncronizationRunning(status.IsRunning);
+                        self.Messages(status.Messages);
+                        self.Errors(status.Errors);
+                    }
                 });
             }
         }
