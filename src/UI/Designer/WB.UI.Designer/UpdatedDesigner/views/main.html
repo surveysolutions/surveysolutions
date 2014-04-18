@@ -8,7 +8,7 @@
     </div>
     <div class="questionnarie-title">
         <div class="title">
-            {{questionnaire.Title}} <span>({{questionnaire.Statistics.QuestionsCount}}Q, {{questionnaire.Statistics.GroupsCount}}G, {{questionnaire.Statistics.RostersCount}}R)</span>
+            {{questionnaire.Title}} <span>({{questionnaire.QuestionsCount}}Q, {{questionnaire.GroupsCount}}G, {{questionnaire.RostersCount}}R)</span>
             <input type="button" id="verify-btn" class="wb-inline-button error" value="VERIFY" data-container="body" data-toggle="modal-popover" data-placement="bottom" ng-click="verify()" />
             <span ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
             <span ng-show="verificationStatus.errorsCount == 0">OK</span>
@@ -25,7 +25,7 @@
     <div class="questionnaire-tree col-xs-6">
         <div class="chapter-title">
             {{currentChapter.Title }}
-            <span>({{currentChapter.Statistics.QuestionsCount}} Questions, {{currentChapter.Statistics.GroupsCount}} Groups, {{currentChapter.Statistics.RostersCount}} Rosters)</span>
+            <span>({{currentChapter.QuestionsCount}} Questions, {{currentChapter.GroupsCount}} Groups, {{currentChapter.RostersCount}} Rosters)</span>
             <ul class="controls-right">
                 <li><a href="" class="filter" title="Toggle Filter"></a></li>
                 <li><a href="" class="search" title="Toggle Search"></a></li>
@@ -34,11 +34,11 @@
         <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters">
-                <li ng-repeat="chapter in questionnaire.Chapters" ng-class="{current: currentChapterId == chapter.GroupId}" ng-click="changeChapter(chapter)">
+                <li ng-repeat="chapter in questionnaire.Chapters" ng-class="{current: currentChapterId == chapter.ChapterId}" ng-click="changeChapter(chapter)">
                     <div class="holder">
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
-                            <span>({{chapter.Statistics.QuestionsCount}} Questions, {{chapter.Statistics.GroupsCount}} Groups, {{chapter.Statistics.RostersCount}} Rosters)</span>
+                            <span>({{chapter.QuestionsCount}} Questions, {{chapter.GroupsCount}} Groups, {{chapter.RostersCount}} Rosters)</span>
                             <div class="dropdown-button"></div>
                         </div>
                     </div>
