@@ -832,10 +832,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid);
         }
 
-        public Interview(Guid id, Guid userId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
+        public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : base(id)
         {
-            this.SynchronizeInterviewFromHeadquarters(id, userId, interviewDto, synchronizationTime);
+            this.SynchronizeInterviewFromHeadquarters(id, userId, supervisorId, interviewDto, synchronizationTime);
         }
 
         private void InitInterview(IQuestionnaire questionnaire)
@@ -993,7 +993,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
         }
 
-        public void SynchronizeInterviewFromHeadquarters(Guid id, Guid userId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
+        public void SynchronizeInterviewFromHeadquarters(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion);
 
@@ -1011,7 +1011,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
-            this.ApplyEvent(new SupervisorAssigned(userId, interviewDto.UserId));
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
 
             rosters.ForEach(this.ApplyRosterEvents);

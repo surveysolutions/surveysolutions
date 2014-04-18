@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.API.Resources
 
             var response = Request.CreateResponse((HttpStatusCode)200, document, new JsonNetFormatter(new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.None, 
+                TypeNameHandling = TypeNameHandling.Auto, 
                 NullValueHandling = NullValueHandling.Ignore
             }));
 
