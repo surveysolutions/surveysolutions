@@ -97,15 +97,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
                                     new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId, interviewFeedEntry.SupervisorId);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId,
+                                    interviewFeedEntry.SupervisorId);
                                 break;
                             case EntryType.InterviewUnassigned:
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
                                     new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId, interviewFeedEntry.SupervisorId);
-                                this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId), Guid.Empty));
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId,
+                                    interviewFeedEntry.SupervisorId);
+                                this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId),
+                                    Guid.Empty));
                                 break;
                             default:
                                 this.logger.Warn(string.Format(
@@ -117,10 +120,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         interviewFeedEntry.Processed = true;
                         interviewFeedEntry.ProcessedWithError = false;
                     }
+                    catch (AggregateException ex)
+                    {
+                        foreach (var inner in ex.InnerExceptions)
+                        {
+                            this.MarkAsProcessedWithError(interviewFeedEntry, inner);
+                        }
+                    }
                     catch (Exception ex)
                     {
-                        interviewFeedEntry.ProcessedWithError = true;
-                        this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}", interviewFeedEntry.EntryId, ex.Message));
+                        this.MarkAsProcessedWithError(interviewFeedEntry, ex);
                         this.logger.Error(string.Format("Interviews synchronization error in event {0}.", interviewFeedEntry.EntryId), ex);
                     }
                     finally
@@ -129,6 +138,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     }
                 }
             }
+        }
+
+        private void MarkAsProcessedWithError(LocalInterviewFeedEntry interviewFeedEntry, Exception ex)
+        {
+            interviewFeedEntry.ProcessedWithError = true;
+            this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}",
+                interviewFeedEntry.EntryId, ex.Message));
         }
 
         private void StoreQuestionnaireDocumentFromHeadquartersIfNeeded(Guid questionnaireId, long questionnaireVersion, Uri questionnareUri)
