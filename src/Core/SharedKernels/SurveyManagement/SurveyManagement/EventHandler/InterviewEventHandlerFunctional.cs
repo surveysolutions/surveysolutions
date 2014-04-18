@@ -334,7 +334,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 ResponsibleId = userId, // Creator is responsible
-                ResponsibleRole = responsible.Roles.FirstOrDefault()
+                ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
             };
             var emptyVector = new decimal[0];
             interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(eventSourceId, null, emptyVector));
