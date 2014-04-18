@@ -34,12 +34,19 @@
         <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters">
-                <li ng-repeat="chapter in questionnaire.Chapters" ng-class="{current: currentChapterId == chapter.ChapterId}" ng-click="changeChapter(chapter)">
+                <li ng-repeat="chapter in questionnaire.Chapters" ng-class="{current: currentChapterId == chapter.ChapterId}" ng-click="changeChapter(chapter);">
                     <div class="holder">
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
                             <span>({{chapter.QuestionsCount}} Questions, {{chapter.GroupsCount}} Groups, {{chapter.RostersCount}} Rosters)</span>
-                            <div class="dropdown-button"></div>
+                            <div class="dropdown-button">
+                            </div>
+                            <div>
+                                <a ng-click="addNewChapter()">Add new</a>&nbsp;
+                                <a ng-click="editChapter()">Edit</a>&nbsp;
+                                <a ng-click="cloneChapter()">Clone</a>&nbsp;
+                                <a ng-click="deleteChapter()">Delete</a>
+                            </div>
                         </div>
                     </div>
                 </li>

@@ -22,7 +22,7 @@ angular.module('pocAngularApp')
           $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.ChapterId);
           $scope.currentChapterId = chapter.ChapterId;
           loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
-      };
+      };     
 
       $scope.setItem = function (group, question) {
           $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.QuestionId);
@@ -55,14 +55,28 @@ angular.module('pocAngularApp')
       };
 
       $scope.addNewChapter = function () {
+          var newId = guid();
           var newChapter = {
               Title: 'New Chapter',
-              GroupId: "6e240642274c4bdea937baa78cd4ad6f",
+              GroupId: newId,
               QuestionsCount: 0,
               GroupsCount: 0,
               RostersCount: 0
           };
+          $scope.currentChapterId = newId;
           $scope.questionnaire.Chapters.push(newChapter);
+      };
+
+      $scope.editChapter = function (chapter) {
+          console.log(chapter);
+      };
+
+      $scope.cloneChapter = function (chapter) {
+          $scope.questionnaire.Chapters.push(chapter);
+      };
+
+      $scope.deleteChapter = function (chapter) {
+          //$scope.questionnaire.Chapters.remove(chapter);
       };
 
       $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
@@ -99,4 +113,14 @@ angular.module('pocAngularApp')
                     console.log(JSON.stringify($scope.currentChapter));
           });
       };
-  });
+
+      function guid() {
+          function s4() {
+              return Math.floor((1 + Math.random()) * 0x10000)
+                         .toString(16)
+                         .substring(1);
+          }
+          return s4() + s4() + s4()+ s4()+
+                 s4() + s4() + s4() + s4();
+      };
+});
