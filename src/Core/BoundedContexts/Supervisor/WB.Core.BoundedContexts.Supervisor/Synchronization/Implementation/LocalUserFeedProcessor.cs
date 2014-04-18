@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.View.User;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
@@ -73,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             LocalUserChangedFeedEntry changeThatShouldBeApplied = userChanges.Last();
             try
             {
-                UserDocument deserializedUserDetails = this.headquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri).Result;
+                UserView deserializedUserDetails = this.headquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri).Result;
 
                 this.synchronizationContext.PushMessage(string.Format("Applying user changes for user {0} with id {1}", deserializedUserDetails.UserName, deserializedUserDetails.PublicKey));
                 this.UpdateOrCreateUser(deserializedUserDetails);
@@ -96,19 +97,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
-        private void UpdateOrCreateUser(UserDocument userDetails)
+        private void UpdateOrCreateUser(UserView userDetails)
         {
             ICommand userCommand = null;
 
             if (this.users.GetById(userDetails.PublicKey) == null)
             {
                 userCommand = new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
-                    userDetails.Roles.ToArray(), userDetails.IsLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Supervisor);
+                    userDetails.Roles.ToArray(), userDetails.isLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Supervisor);
             }
             else
             {
                 userCommand = new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
-                    userDetails.Roles.ToArray(), userDetails.IsLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Password, Guid.Empty);
+                    userDetails.Roles.ToArray(), userDetails.isLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Password, Guid.Empty);
             }
 
             this.commandService.Execute(userCommand);
