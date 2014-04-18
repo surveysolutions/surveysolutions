@@ -4,6 +4,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     public class GeoLocationDetailsView : QuestionDetailsView
     {
-        public readonly QuestionType QuestionType = QuestionType.GpsCoordinates;
+        public GeoLocationDetailsView()
+        {
+            Type = QuestionType.GpsCoordinates;
+        }
+
+        public override sealed QuestionType Type { get; set; }
     }
 }

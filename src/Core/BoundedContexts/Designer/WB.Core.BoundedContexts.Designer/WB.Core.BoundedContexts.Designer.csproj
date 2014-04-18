@@ -211,6 +211,7 @@
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\CategoricalOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DateTimeDetailsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\EventConverter.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GeoLocationDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />

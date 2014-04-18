@@ -6,8 +6,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     public class SingleOptionDetailsView : QuestionDetailsView
     {
-        public readonly QuestionType QuestionType = QuestionType.SingleOption;
+        public SingleOptionDetailsView()
+        {
+            Type = QuestionType.SingleOption;
+        }
         public Guid? LinkedToQuestionId { get; set; }
-        public List<CategoricalOption> Options { get; set; }
+        public CategoricalOption[] Options { get; set; }
+        public override QuestionType Type { get; set; }
     }
 }
