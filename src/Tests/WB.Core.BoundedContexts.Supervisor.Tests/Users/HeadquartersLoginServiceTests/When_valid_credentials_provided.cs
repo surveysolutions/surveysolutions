@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Utility;
+using Main.Core.View.User;
 using Moq;
 using Moq.Protected;
 using Ncqrs.Commanding.ServiceModel;
@@ -41,11 +42,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                     }))
                 }));
 
-            HeadquartersUser = new UserDocument
+            HeadquartersUser = new UserView
             {
                 PublicKey = Guid.NewGuid(),
                 Email = "test@test.com",
-                IsLockedBySupervisor = false,
+                isLockedBySupervisor = false,
                 IsLockedByHQ = false,
                 Password = "password"
             };
@@ -67,11 +68,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                 command.UserName == HeadquartersUser.UserName &&
                 command.Email == HeadquartersUser.Email &&
                 command.IsLockedByHQ == HeadquartersUser.IsLockedByHQ &&
-                command.IsLockedBySupervisor == HeadquartersUser.IsLockedBySupervisor)));
+                command.IsLockedBySupervisor == HeadquartersUser.isLockedBySupervisor)));
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;
         static string userId;
-        private static UserDocument HeadquartersUser;
+        private static UserView HeadquartersUser;
     }
 }
