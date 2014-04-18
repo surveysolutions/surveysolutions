@@ -101,8 +101,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     QuestionnaireVersion = questionnaireVersion,
                     QuestionnaireTitle = questionnarie.Questionnaire.Title,
                     ResponsibleId = userId, // Creator is responsible
-                    ResponsibleName = this.users.GetById(userId).UserName,
-                    ResponsibleRole = responsible.Roles.FirstOrDefault()
+                    ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
+                    ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
                 };
         }
 
@@ -137,7 +137,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
-                var supervisorName = this.users.GetById(evnt.Payload.SupervisorId).UserName;
+                UserDocument userDocument = this.users.GetById(evnt.Payload.SupervisorId);
+                var supervisorName = userDocument != null ? userDocument.UserName : "<UNKNOWN SUPERVISOR>";
 
                 interview.ResponsibleId = evnt.Payload.SupervisorId;
                 interview.ResponsibleName = supervisorName;

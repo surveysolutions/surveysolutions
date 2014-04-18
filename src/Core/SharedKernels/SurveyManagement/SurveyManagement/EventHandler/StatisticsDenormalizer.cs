@@ -145,16 +145,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 this.questionnaires.GetById(
                     interviewBriefItem.QuestionnaireId,interviewBriefItem.QuestionnaireVersion).Title;
             var responsible = this.users.GetById(interviewBriefItem.ResponsibleId);
-            string responsibleName=responsible.UserName;
+            string responsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
             Guid? teamLeadId = null;
             string teamLeadName = "";
 
-            if (responsible.Roles.Contains(UserRoles.Supervisor))
+            if (responsible != null && responsible.Roles.Contains(UserRoles.Supervisor))
             {
                 teamLeadId = responsible.PublicKey;
                 teamLeadName = responsibleName;
             }
-            if (responsible.Supervisor != null)
+            if (responsible != null && responsible.Supervisor != null)
             {
                 teamLeadId = responsible.Supervisor.Id;
                 teamLeadName = this.users.GetById(teamLeadId.Value).UserName;
