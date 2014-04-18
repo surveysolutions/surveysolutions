@@ -3,11 +3,10 @@ using WB.Core.Infrastructure.ReadSide.Repository;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    public class GroupInfoView : GroupInfoStatisticsView, IReadSideRepositoryEntity
+    public class GroupInfoView : GroupInfoStatisticsView, IQuestionnaireItem, IReadSideRepositoryEntity
     {
-        public string GroupId { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
-        public List<QuestionInfoView> Questions { get; set; }
-        public List<GroupInfoView> Groups { get; set; }
+        public List<IQuestionnaireItem> Items { get; set; }
     }
 }
