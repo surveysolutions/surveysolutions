@@ -4,6 +4,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     public class QrBarcodeDetailsView : QuestionDetailsView
     {
-        public readonly QuestionType QuestionType = QuestionType.QRBarcode;
+        public QrBarcodeDetailsView()
+        {
+            Type = QuestionType.QRBarcode;
+        }
+        public override sealed QuestionType Type { get; set; }
     }
 }

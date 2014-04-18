@@ -6,9 +6,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     public class MultiOptionDetailsView : QuestionDetailsView
     {
-        public readonly QuestionType QuestionType = QuestionType.MultyOption;
+        public MultiOptionDetailsView()
+        {
+            Type = QuestionType.MultyOption;
+        }
+        public override sealed QuestionType Type { get; set; }
         public Guid? LinkedToQuestionId { get; set; }
-        public List<CategoricalOption> Options { get; set; }
+        public CategoricalOption[] Options { get; set; }
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
     }

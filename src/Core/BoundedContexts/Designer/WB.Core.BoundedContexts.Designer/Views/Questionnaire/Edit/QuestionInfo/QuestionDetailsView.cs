@@ -26,5 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public string ValidationExpression { get; set; }
 
         public string ValidationMessage { get; set; }
+
+        public abstract QuestionType Type { get; set; }
     }
 }
