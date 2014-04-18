@@ -120,6 +120,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     catch (Exception ex)
                     {
                         interviewFeedEntry.ProcessedWithError = true;
+                        this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}", interviewFeedEntry.EntryId, ex.Message));
                         this.logger.Error(string.Format("Interviews synchronization error in event {0}.", interviewFeedEntry.EntryId), ex);
                     }
                     finally
