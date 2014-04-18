@@ -71,14 +71,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             this.StoreEventsToLocalStorage();
 
-            var localSupervisors = users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor)));
+            var localSupervisors = users.Query(_ => _.Where(x => x.Roles.Any(role => role == UserRoles.Supervisor)));
 
             foreach (var localSupervisor in localSupervisors)
             {
                 IEnumerable<LocalInterviewFeedEntry> events = 
                     this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.PublicKey.FormatGuid() && !x.Processed));
 
-                this.synchronizationContext.PushMessage(string.Format("Synchronizing interviews for supervisor {0}. Events count: {1}", localSupervisor.UserName, events.Count()));
+                this.synchronizationContext.PushMessage(string.Format("Synchronizing interviews for supervisor '{0}'. Events count: {1}", localSupervisor.UserName, events.Count()));
                 
                 foreach (var interviewFeedEntry in events)
                 {
@@ -98,16 +98,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
                                     new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId,
-                                    interviewFeedEntry.SupervisorId);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.SupervisorId,
+                                    interviewFeedEntry.UserId);
                                 break;
                             case EntryType.InterviewUnassigned:
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
                                     interview.QuestionnaireId,
                                     interview.QuestionnaireVersion,
                                     new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.UserId,
-                                    interviewFeedEntry.SupervisorId);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.SupervisorId,
+                                    interviewFeedEntry.UserId);
                                 this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId),
                                     Guid.Empty));
                                 break;
@@ -169,11 +169,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void CreateOrUpdateInterviewFromHeadquarters(Uri interviewUri, string supervisorId, string userId)
         {
+            this.synchronizationContext.PushMessage(string.Format("Loading interview using {0} URL", interviewUri));
             InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
 
-            Guid userIdGuid = Guid.Parse(userId);
+            var userIdGuid = Guid.Parse(userId);
+            var supervisorIdGuid = Guid.Parse(supervisorId);
 
-            this.commandService.Execute(new SynchronizeInterviewFromHeadquarters(interviewDto.Id, userIdGuid, interviewDto, DateTime.Now));
+            this.commandService.Execute(new SynchronizeInterviewFromHeadquarters(interviewDto.Id, userIdGuid, supervisorIdGuid, interviewDto, DateTime.Now));
         }
 
         private void StoreEventsToLocalStorage()
