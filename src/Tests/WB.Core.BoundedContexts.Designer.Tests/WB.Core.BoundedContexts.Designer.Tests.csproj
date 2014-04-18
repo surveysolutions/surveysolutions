@@ -385,6 +385,8 @@
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_rosters_and_1_head_question.cs" />
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_propagating_questions.cs" />
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties.cs" />
+    <Compile Include="QuestionnaireInfoViewFactoryTests\QuestionnaireInfoViewFactoryContext.cs" />
+    <Compile Include="QuestionnaireInfoViewFactoryTests\when_loading_view.cs" />
     <Compile Include="QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
     <Compile Include="QuestionnaireTests\CloneGroupTests.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_paralell_roster_scope.cs" />
