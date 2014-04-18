@@ -42,6 +42,11 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
             return new QuestionnaireInfoView();
         }
 
+        public static GroupInfoView CreateChapterInfoView()
+        {
+            return new GroupInfoView();
+        }
+
         public static QuestionnaireDocument CreateQuestionnaireDocument()
         {
             return new QuestionnaireDocument();
