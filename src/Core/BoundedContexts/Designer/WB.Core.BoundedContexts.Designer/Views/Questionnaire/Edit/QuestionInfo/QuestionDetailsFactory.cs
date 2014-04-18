@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
@@ -6,10 +8,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     internal class QuestionDetailsFactory : IQuestionDetailsFactory
     {
-        public QuestionDetailsView CreateQuestion(IQuestion question)
+        public QuestionDetailsView CreateQuestion(IQuestion question, Guid parentGroupId)
         {
             var questionView = CreateQuestionByType(question.QuestionType);
-
+            questionView.Id = question.PublicKey;
+            questionView.ParentGroupId = parentGroupId;
             questionView.QuestionScope = question.QuestionScope;
             questionView.Title = question.QuestionText;
             questionView.VariableName = question.StataExportCaption;
@@ -45,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             if (singleoptionQuestion != null)
             {
                 var singleoptionQuestionView = ((SingleOptionDetailsView)questionView);
-                singleoptionQuestionView.LinkedToQuestionId = singleoptionQuestionView.LinkedToQuestionId;
+                singleoptionQuestionView.LinkedToQuestionId = singleoptionQuestion.LinkedToQuestionId;
                 singleoptionQuestionView.Options = this.CreateCategoricalOptions(singleoptionQuestion.Answers);
                 return singleoptionQuestionView;
             }
@@ -61,9 +64,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return questionView;
         }
 
-        private List<CategoricalOption> CreateCategoricalOptions(List<IAnswer> answers)
+        private CategoricalOption[] CreateCategoricalOptions(List<IAnswer> answers)
         {
-            return null;
+            return answers.Select(x => new CategoricalOption
+            {
+                Title = x.AnswerText,
+                Value = decimal.Parse(x.AnswerValue)
+            }).ToArray();
         }
 
         private static QuestionDetailsView CreateQuestionByType(QuestionType type)
