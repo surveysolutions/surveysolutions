@@ -394,6 +394,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<SupervisorAssigned> evnt)
         {
             currentState.Document.ResponsibleId = evnt.Payload.SupervisorId;
+            currentState.Document.SupervisorId = evnt.Payload.SupervisorId;
             currentState.Document.ResponsibleRole = UserRoles.Supervisor;
             currentState.Sequence = evnt.EventSequence;
             return currentState;

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using Ionic.Zlib;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -19,17 +22,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IRosterDataService rosterDataService;
+        private readonly ILogger logger;
+
         public FileBasedDataExportService(
             IReadSideRepositoryCleanerRegistry cleanerRegistry, 
             string folderPath,
             IDataFileExportService dataFileExportService, 
             IEnvironmentContentService environmentContentService, 
-            IFileSystemAccessor fileSystemAccessor, IRosterDataService rosterDataService)
+            IFileSystemAccessor fileSystemAccessor, IRosterDataService rosterDataService, ILogger logger)
         {
             this.dataFileExportService = dataFileExportService;
             this.environmentContentService = environmentContentService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.rosterDataService = rosterDataService;
+            this.logger = logger;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -71,9 +77,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (this.fileSystemAccessor.IsDirectoryExists(dataFolderForTemplatePath))
             {
-                throw new InterviewDataExportException(
-                    string.Format("export structure for questionnaire with id'{0}' and version '{1}' was build before",
-                        questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version));
+                string copyPath = this.GetPreviousCopiesFolderPath();
+
+                this.logger.Error(string.Format("Directory for export structure already exists: {0}. Will be moved to {1}.",
+                    dataFolderForTemplatePath, copyPath));
+
+                this.fileSystemAccessor.CopyFileOrDirectory(dataFolderForTemplatePath, copyPath);
+
+                this.logger.Info(string.Format("Existing directory for export structure {0} copied to {1}", dataFolderForTemplatePath, copyPath));
+
+                this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
+
+                this.logger.Info(string.Format("Existing directory for export structure {0} deleted", dataFolderForTemplatePath));
             }
 
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
@@ -121,6 +136,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 throw new InterviewDataExportException(
                     string.Format("data files are absent for questionnaire with id '{0}' and version '{1}'",
                         questionnaireId, version));
+        }
+
+        private string GetPreviousCopiesFolderPath()
+        {
+            return this.fileSystemAccessor.CombinePath(this.path, string.Format("_prv_{0}", DateTime.Now.Ticks));
         }
 
         private string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
