@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using Raven.Client.Linq.Indexing;
@@ -178,6 +179,12 @@ namespace Web.Supervisor.Controllers
         }
 
         #endregion
+
+        public ActionResult Headquarters()
+        {
+            bool areHeadquartersFunctionsEnabled = bool.Parse(WebConfigurationManager.AppSettings["HeadquartersFunctionsEnabled"]);
+            return this.View(areHeadquartersFunctionsEnabled);
+        }
 
         public ActionResult Synchronization()
         {

@@ -669,6 +669,7 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
+    <Content Include="Views\ControlPanel\Headquarters.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

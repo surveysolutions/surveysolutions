@@ -91,7 +91,7 @@ namespace Web.Supervisor.App_Start
             }
 
             bool areHeadquartersFunctionsEnabled;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out areHeadquartersFunctionsEnabled))
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["HeadquartersFunctionsEnabled"], out areHeadquartersFunctionsEnabled))
             {
                 areHeadquartersFunctionsEnabled = false;
             }
