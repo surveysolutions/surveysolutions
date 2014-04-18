@@ -102,14 +102,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                     interviewFeedEntry.UserId);
                                 break;
                             case EntryType.InterviewUnassigned:
-                                this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
-                                    interview.QuestionnaireId,
-                                    interview.QuestionnaireVersion,
-                                    new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.SupervisorId,
-                                    interviewFeedEntry.UserId);
-                                this.commandService.Execute(new DeleteInterviewCommand(Guid.Parse(interviewFeedEntry.InterviewId),
-                                    Guid.Empty));
+                                this.commandService.Execute(new DeleteInterviewCommand(
+                                    interviewId: Guid.Parse(interviewFeedEntry.InterviewId),
+                                    userId: Guid.Parse(interviewFeedEntry.UserId)));
                                 break;
                             default:
                                 this.logger.Warn(string.Format(
