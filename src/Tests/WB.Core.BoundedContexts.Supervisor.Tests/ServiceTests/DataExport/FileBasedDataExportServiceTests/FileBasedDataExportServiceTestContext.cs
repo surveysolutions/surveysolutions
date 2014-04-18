@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
@@ -26,7 +27,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
             return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
                 dataFileExportService ?? Mock.Of<IDataFileExportService>(),
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
-                rosterDataService ?? new RosterDataService(currentFileSystemAccessor));
+                rosterDataService ?? new RosterDataService(currentFileSystemAccessor),
+                Mock.Of<ILogger>());
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,

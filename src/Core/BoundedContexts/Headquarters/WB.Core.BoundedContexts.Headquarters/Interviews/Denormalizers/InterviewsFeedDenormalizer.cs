@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Raven.Client.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
@@ -41,9 +42,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
+            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+
             this.writer.Store(new InterviewFeedEntry
             {
-                SupervisorId = evnt.Payload.UserId.FormatGuid(),
+                SupervisorId = interviewData.SupervisorId.GetValueOrDefault().FormatGuid(),
                 EntryType = EntryType.InterviewUnassigned,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
