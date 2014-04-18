@@ -209,7 +209,7 @@
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewInputModel.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoViewInputModel.cs" />
