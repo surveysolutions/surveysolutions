@@ -41,14 +41,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);
 
-        It should_error_has_code_PL0007 = () =>
-            result.First().Code.ShouldEqual("PL0007");
+        It should_error_has_code_PL0008 = () =>
+            result.First().Code.ShouldEqual("PL0008");
 
         It should_error_has_type_of_reference_cell = () =>
             result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
-        It should_error_PositionX_be_equal_to_0 = () =>
-          result.First().References.First().PositionX.ShouldEqual(0);
+        It should_error_PositionX_be_equal_to_1 = () =>
+          result.First().References.First().PositionX.ShouldEqual(1);
 
         It should_error_PositionY_be_equal_to_0 = () =>
           result.First().References.First().PositionY.ShouldEqual(0);

@@ -5,12 +5,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 
 namespace Core.Supervisor.Tests.Merger
 {
@@ -32,7 +32,7 @@ namespace Core.Supervisor.Tests.Merger
                         new RosterScopeDescription(fixedRosterId, string.Empty, false, new Dictionary<Guid, RosterTitleQuestionDescription>()
                         {
                             { fixedRosterId, null }
-                        })
+                        }, new Dictionary<Guid, Guid[]>())
                     }
                 }
             };
