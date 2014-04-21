@@ -90,7 +90,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             catch (ApplicationException e)
             {
                 this.logger.Error(string.Format("Error occured while processing users feed event. EventId {0}. Event marked as processed with error.", changeThatShouldBeApplied.EntryId), e);
-                this.synchronizationContext.PushError(string.Format("Failed to process event {0}. Message: {1}", changeThatShouldBeApplied.EntryId, e.Message));
+
+                this.synchronizationContext.PushError(string.Format("Failed to process event {0}. Message: {1}. InnerMessage: {2}", changeThatShouldBeApplied.EntryId, e.Message, e.InnerException != null ? e.InnerException.Message : "No inner exception"));
                 changeThatShouldBeApplied.ProcessedWithError = true;
 
                 this.localFeedStorage.Store(userChanges);

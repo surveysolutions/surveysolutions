@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+using Quartz;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
-    internal class Synchronizer : ISynchronizer
+    internal class Synchronizer : ISynchronizer, IJob
     {
         private readonly ILocalFeedStorage localFeedStorage;
         private readonly IUserChangedFeedReader feedReader;
@@ -35,11 +34,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void Synchronize()
         {
-            new Task(this.SynchronizeImpl).Start();
-        }
-
-        private void SynchronizeImpl()
-        {
             if (!this.isSynchronizationRunning)
             {
                 lock (LockObject)
@@ -53,18 +47,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                             var lastStoredFeedEntry = this.localFeedStorage.GetLastEntry();
 
-                            if (lastStoredFeedEntry != null)
-                            {
-                                synchronizationContext.PushMessage(string.Format("Last synchronized userentry id {0}, date {1}", lastStoredFeedEntry.EntryId, lastStoredFeedEntry.Timestamp));
-                            }
-                            else
-                            {
-                                synchronizationContext.PushMessage(string.Format("Nothing synchronized yet, loading full users event stream"));
-                            }
+                            this.synchronizationContext.PushMessage(lastStoredFeedEntry != null
+                                ? string.Format("Last synchronized userentry id {0}, date {1}", lastStoredFeedEntry.EntryId,
+                                    lastStoredFeedEntry.Timestamp)
+                                : string.Format("Nothing synchronized yet, loading full users event stream"));
 
                             List<LocalUserChangedFeedEntry> newEvents = this.feedReader.ReadAfterAsync(lastStoredFeedEntry).Result;
 
-                            synchronizationContext.PushMessage(string.Format("Saving {0} new events to local storage", newEvents.Count));
+                            this.synchronizationContext.PushMessage(string.Format("Saving {0} new events to local storage", newEvents.Count));
                             this.localFeedStorage.Store(newEvents);
 
                             this.localUserFeedProcessor.Process();
@@ -79,6 +69,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     }
                 }
             }
+        }
+
+        public void Execute(IJobExecutionContext context)
+        {
+            this.Synchronize();
         }
     }
 }

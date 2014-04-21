@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.ServiceModel;
+using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
@@ -139,8 +140,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void MarkAsProcessedWithError(LocalInterviewFeedEntry interviewFeedEntry, Exception ex)
         {
             interviewFeedEntry.ProcessedWithError = true;
-            this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}",
-                interviewFeedEntry.EntryId, ex.Message));
+            this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Inner exception: {2}",
+                interviewFeedEntry.EntryId, ex.Message, ex.InnerException != null ? ex.InnerException.Message : "No inner exception"));
         }
 
         private void StoreQuestionnaireDocumentFromHeadquartersIfNeeded(Guid questionnaireId, long questionnaireVersion, Uri questionnareUri)
