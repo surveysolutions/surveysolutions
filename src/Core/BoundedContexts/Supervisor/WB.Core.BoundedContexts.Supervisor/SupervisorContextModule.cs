@@ -1,5 +1,8 @@
 ﻿using System.Net.Http;
+using Ninject.Activation;
 using Ninject.Modules;
+using Quartz;
+using Quartz.Impl;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
@@ -16,10 +19,13 @@ namespace WB.Core.BoundedContexts.Supervisor
     public class SupervisorBoundedContextModule : NinjectModule
     {
         private readonly HeadquartersSettings headquartersSettings;
+        private readonly SchedulerSettings schedulerSettings;
 
-        public SupervisorBoundedContextModule(HeadquartersSettings headquartersSettings)
+        public SupervisorBoundedContextModule(HeadquartersSettings headquartersSettings,
+            SchedulerSettings schedulerSettings)
         {
             this.headquartersSettings = headquartersSettings;
+            this.schedulerSettings = schedulerSettings;
         }
 
         public override void Load()
@@ -36,6 +42,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IHeadquartersInterviewReader>().To<HeadquartersInterviewReader>();
             this.Bind<IAtomFeedReader>().To<AtomFeedReader>();
             this.Bind<SynchronizationContext>().ToSelf().InSingletonScope();
+            this.Bind<SchedulerSettings>().ToConstant(this.schedulerSettings);
+            this.Bind<BackgroundSyncronizationTasks>().ToSelf();
 
             this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
         }
