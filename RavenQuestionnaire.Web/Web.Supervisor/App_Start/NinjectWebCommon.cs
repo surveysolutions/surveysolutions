@@ -36,6 +36,7 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
 using Web.Supervisor.App_Start;
+using Web.Supervisor.Code;
 using Web.Supervisor.Code.CommandDeserialization;
 using Web.Supervisor.Injections;
 using WebActivatorEx;
@@ -161,8 +162,11 @@ namespace Web.Supervisor.App_Start
             var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             kernel.Bind<IDomainRepository>().ToConstant(repository);
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
-            
-            ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
+
+            if (!LegacyOptions.HqFunctionsEnabled)
+            {
+                ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
+            }
 
             if (bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]))
             {

@@ -76,12 +76,15 @@
                         <li class="@(page == MenuItem.Teams ? "active" : "")">
                             <a href="@Url.Action("Interviewers", "Team")"><i class="icon-user"></i>Interviewers</a>
                         </li>
-                        <li>
-                            <a href="@Url.Action("Synchronization", "ControlPanel")" target="_blank">
-                                <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                Synchronization
-                            </a>
-                        </li>
+                        @if (!LegacyOptions.HqFunctionsEnabled)
+                        {
+                            <li>
+                                <a href="@Url.Action("Synchronization", "ControlPanel")" target="_blank">
+                                    <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    Synchronization
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <ul class="nav pull-right" role="menu">
                         <li class="dropdown">
@@ -186,43 +189,52 @@
                 setMinHeight();
             });
 
-            var refreshSyncStatus = function() {
-                $.ajax({
-                    method: 'GET',
-                    cache: false,
-                    url: '@Url.RouteUrl("api.SyncStatus", new { httproute = true})',
-                    success: function(data) {
-                        if (!data.StartedAt) {
-                            return;
-                        }
-                        var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAt).fromNow());
-                        if (data.FinisedAt) {
-                            title += '<br /> finished {0} <br/> {1} errors'.f(moment(data.FinisedAt).fromNow(), data.ErrorsCount);
-                        }
-                        $('#synchronizationStatus').tooltip({
-                            title: title,
-                            placement: 'bottom',
-                            html: true
-                        }).attr('data-original-title', title)
-                          .tooltip('fixTitle');
-
-                        if (data.IsRunning) {
-                            $('#synchronizationStatus').attr('class', '').addClass('label label-warning');
-                        } else {
-                            if (data.IsHqReachable) {
-                                $('#synchronizationStatus').attr('class', '').addClass('label label-success');
-                            } else {
-                                $('#synchronizationStatus').attr('class', '').addClass('label badge-important');
-                            }
-                        }
-                    }
-                });
-
-            }
-
-            setInterval(refreshSyncStatus, 3000);
+            
+          
         });
     </script>
+    @if (!LegacyOptions.HqFunctionsEnabled) { 
+        <script>
+            $(function() {
+                var refreshSyncStatus = function () {
+                    $.ajax({
+                        method: 'GET',
+                        cache: false,
+                        url: '@Url.RouteUrl("api.SyncStatus", new { httproute = true})',
+                        success: function (data) {
+                            if (!data.StartedAt) {
+                                return;
+                            }
+                            var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAt).fromNow());
+                            if (data.FinisedAt) {
+                                title += '<br /> finished {0} <br/> {1} errors'.f(moment(data.FinisedAt).fromNow(), data.ErrorsCount);
+                            }
+                            $('#synchronizationStatus').tooltip({
+                                title: title,
+                                placement: 'bottom',
+                                html: true
+                            }).attr('data-original-title', title)
+                                .tooltip('fixTitle');
+
+                            if (data.IsRunning) {
+                                $('#synchronizationStatus').attr('class', '').addClass('label label-warning');
+                            } else {
+                                if (data.IsHqReachable) {
+                                    $('#synchronizationStatus').attr('class', '').addClass('label label-success');
+                                } else {
+                                    $('#synchronizationStatus').attr('class', '').addClass('label badge-important');
+                                }
+                            }
+                        }
+                    });
+
+                }
+
+                setInterval(refreshSyncStatus, 3000);
+            });
+        </script>
+    }
+
     @RenderSection("scripts", false)
 </body>
 </html>

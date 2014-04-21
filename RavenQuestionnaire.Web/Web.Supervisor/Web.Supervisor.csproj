@@ -356,6 +356,7 @@
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
+    <Compile Include="Code\LegacyOptions.cs" />
     <Compile Include="Code\LocalizationExtensions.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
