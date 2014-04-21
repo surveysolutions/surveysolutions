@@ -60,7 +60,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return this.tempSampleCreationStorage.GetByName(id);
         }
 
-        private void CreateSampleInternal(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
+        private void CreateSampleInternal(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data,
+            Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
         {
             var result = this.GetSampleCreationStatus(id);
             if (data.Length == 0)
@@ -83,28 +84,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             IQuestionnaire questionnarie = this.questionnaireFactory.CreateTemporaryInstance(bigTemplate);
 
             var i = 1;
-            foreach (var preloadedDataByFile in data)
-            {
-                if(!preloadedDataByFile.FileName.Contains(bigTemplate.Title))
-                    continue;
+            var topLevelData = data.FirstOrDefault(d => d.FileName.Contains(bigTemplate.Title));
 
-                foreach (var value in preloadedDataByFile.Content)
+            if (topLevelData == null)
+            {
+                result.SetErrorMessage("Template is absent");
+                this.tempSampleCreationStorage.Store(result, id);
+                return;
+            }
+
+            foreach (var value in topLevelData.Content)
+            {
+                try
                 {
-                    try
-                    {
-                        this.BuiltInterview(Guid.NewGuid(), value, preloadedDataByFile.Header, questionnarie, bigTemplate.PublicKey,
-                            responsibleHeadquarterId,
-                            responsibleSupervisorId);
-                        result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, preloadedDataByFile.Content.Length));
-                        this.tempSampleCreationStorage.Store(result, id);
-                        i++;
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Error(e.Message, e);
-                    }
+                    this.BuiltInterview(Guid.NewGuid(), value, topLevelData.Header, questionnarie, bigTemplate.PublicKey,
+                        responsibleHeadquarterId,
+                        responsibleSupervisorId);
+                    result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, topLevelData.Content.Length));
+                    this.tempSampleCreationStorage.Store(result, id);
+                    i++;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.Message, e);
                 }
             }
+
             result.CompleteProcess();
             this.tempSampleCreationStorage.Store(result, id);
         }
