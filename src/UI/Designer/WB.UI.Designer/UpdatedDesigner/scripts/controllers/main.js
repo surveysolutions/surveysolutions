@@ -22,7 +22,7 @@ angular.module('pocAngularApp')
           $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.ChapterId);
           $scope.currentChapterId = chapter.ChapterId;
           loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
-      };     
+      };
 
       $scope.setItem = function (group, question) {
           $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.QuestionId);
@@ -56,6 +56,7 @@ angular.module('pocAngularApp')
 
       $scope.addNewChapter = function () {
           var newId = guid();
+          console.log(newId);
           var newChapter = {
               Title: 'New Chapter',
               GroupId: newId,
@@ -65,6 +66,16 @@ angular.module('pocAngularApp')
           };
           $scope.currentChapterId = newId;
           $scope.questionnaire.Chapters.push(newChapter);
+
+          $http({
+              method: 'POST',
+              url: 'command/execute',
+              data: {
+                  "type": "AddGroup",
+                  "command": "{\"questionnaireId\":\"7c97b192-5b02-44b7-82ed-6741a5035fae\",\"groupId\":\"" + newChapter.GroupId + "\",\"title\":\""+ newChapter.Title +"\",\"description\":\"\",\"condition\":\"\",\"isRoster\":false,\"rosterSizeQuestionId\":null,\"rosterSizeSource\":\"Question\",\"rosterFixedTitles\":null,\"rosterTitleQuestionId\":null,\"parentGroupId\":null}"
+              },
+              headers: { 'Content-Type': 'application/json; ' }
+          }).success();
       };
 
       $scope.editChapter = function (chapter) {
@@ -76,7 +87,20 @@ angular.module('pocAngularApp')
       };
 
       $scope.deleteChapter = function (chapter) {
-          //$scope.questionnaire.Chapters.remove(chapter);
+          $http({
+              method: 'POST',
+              url: 'command/execute',
+              data: {
+                  "type": "DeleteGroup",
+                  "command": "{\"questionnaireId\":\"7c97b192-5b02-44b7-82ed-6741a5035fae\",\"groupId\":\"" + chapter.ChapterId + "\"}"
+              },
+              headers: { 'Content-Type': 'application/json;' }
+          }).success(function() {
+              var index = $scope.questionnaire.Chapters.indexOf(chapter);
+              if (index > -1) {
+                  $scope.questionnaire.Chapters.splice(index, 1);
+              }
+          });
       };
 
       $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
@@ -108,9 +132,9 @@ angular.module('pocAngularApp')
       function loadChapterDetails(questionnaireId, chapterId) {
           $http.get('api/questionnaire/chapter/' + questionnaireId + "?chapterId=" + chapterId)
                 .success(function (result) {
-                    $scope.items = result.Groups;
+                    $scope.items = result.Items;
                     $scope.currentChapter = result;
-                    console.log(JSON.stringify($scope.currentChapter));
+                    //console.log(JSON.stringify($scope.currentChapter));
           });
       };
 
