@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
+using Quartz;
 using Raven.Client.Linq.Indexing;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.Infrastructure.ReadSide;
@@ -22,16 +23,19 @@ namespace Web.Supervisor.Controllers
         private readonly IIncomePackagesRepository incomePackagesRepository;
         private readonly ISynchronizer synchronizer;
         private readonly SynchronizationContext synchronizationContext;
+        private readonly IScheduler scheduler;
 
         public ControlPanelController(IServiceLocator serviceLocator, 
             IIncomePackagesRepository incomePackagesRepository,
             ISynchronizer synchronizer,
-            SynchronizationContext synchronizationContext)
+            SynchronizationContext synchronizationContext,
+            IScheduler scheduler)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
             this.synchronizer = synchronizer;
             this.synchronizationContext = synchronizationContext;
+            this.scheduler = scheduler;
         }
 
         /// <remarks>
@@ -194,7 +198,7 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult Synchronize()
         {
-            synchronizer.Synchronize();
+            this.scheduler.TriggerJob(new JobKey("HQ sync", "Synchronization"));
             return Json(new object());
         }
 

@@ -16,9 +16,12 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using Ninject.Extensions.Quartz;
 using Ninject.Web.Common;
+using Quartz;
 using Questionnaire.Core.Web.Binding;
 using WB.Core.BoundedContexts.Supervisor;
+using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Files;
@@ -109,6 +112,7 @@ namespace Web.Supervisor.App_Start
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
+            var schedulerSettings = new SchedulerSettings(int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
             var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
             var headquartersSettings = new HeadquartersSettings(
@@ -145,7 +149,7 @@ namespace Web.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])),
-                new SupervisorBoundedContextModule(headquartersSettings));
+                new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -158,8 +162,8 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IDomainRepository>().ToConstant(repository);
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
             
-#warning dirty index registrations
-            // SuccessMarker.Start(kernel);
+            ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
+            ServiceLocator.Current.GetInstance<IScheduler>().Start();
             return kernel;
         }
 
