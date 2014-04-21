@@ -138,4 +138,7 @@
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
     <value>Service column is absent</value>
   </data>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>Roster record is orphan</value>
+  </data>
 </root>

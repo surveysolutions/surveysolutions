@@ -40,6 +40,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                         new Group("nested group")
                         {
                             PublicKey = nestedRosterId,
+                            RosterFixedTitles = new string[0],
+                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
                             IsRoster = true
                         }
                     }

@@ -122,5 +122,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0007_ServiceColumnIsAbsent", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster record is orphan.
+        /// </summary>
+        internal static string PL0008_OrphanRosterRecord {
+            get {
+                return ResourceManager.GetString("PL0008_OrphanRosterRecord", resourceCulture);
+            }
+        }
     }
 }
