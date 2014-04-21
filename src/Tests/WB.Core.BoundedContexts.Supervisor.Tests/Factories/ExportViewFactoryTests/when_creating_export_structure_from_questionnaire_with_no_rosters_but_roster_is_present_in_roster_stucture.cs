@@ -10,7 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Supervisor.Factories;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using It = Machine.Specifications.It;
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTe
                                 RosterScopes =
                                     new Dictionary<Guid, RosterScopeDescription>()
                                     {
-                                        { misteriousRosterGroupId, new RosterScopeDescription(misteriousRosterGroupId, string.Empty, false, null) }
+                                        { misteriousRosterGroupId, new RosterScopeDescription(misteriousRosterGroupId, string.Empty, false, null, new Dictionary<Guid, Guid[]>()) }
                                     }
                             });
 

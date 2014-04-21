@@ -1,6 +1,5 @@
 ﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Factories;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;

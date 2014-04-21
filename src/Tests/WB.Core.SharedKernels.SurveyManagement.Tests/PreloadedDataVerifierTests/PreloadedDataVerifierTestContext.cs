@@ -8,7 +8,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Factories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Factories;
@@ -41,7 +40,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                                 ? null
                                 : new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
                                     new QuestionnaireRosterStructureFactory()).CreateQuestionnaireExportStructure(questionnaireDocument, 1))),
-                    new RosterDataService(Mock.Of<IFileSystemAccessor>()), questionDataParser?? Mock.Of<IQuestionDataParser>(), new QuestionnaireFactory());
+                    new RosterDataService(Mock.Of<IFileSystemAccessor>()), questionDataParser ?? Mock.Of<IQuestionDataParser>(),
+                    new QuestionnaireFactory(),
+                    Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>(
+                        _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) ==
+                        (questionnaireDocument == null
+                            ? null
+                            : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1))));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)
