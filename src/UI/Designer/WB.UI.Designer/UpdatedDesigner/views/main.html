@@ -57,12 +57,12 @@
 
         <div class="question-list">
             <div ng-repeat="i in items">
-                <div class="section item" ng-click="setGroup(i)" ng-class="{'selected' : i.GroupId == currentItemId}">
+                <div class="section item" ng-click="setGroup(i)" ng-class="{'selected' : i.Id == currentItemId}">
                     {{i.Title}}
                 </div>
                 <div ng-repeat="q in i.Items" ng-click="setItem(i, q)"
                      class="question item "
-                     ng-class="{'selected' : q.QuestionId == currentItemId, 'cat-singleanswer': q.Type == 1, 'cat-singleanswer': q.Type == 2, 'cat-multianswer' : q.Type == 3, 'cat-intedit' : q.Type == 4, 'cat-datetime' : q.Type == 5, 'cat-geoloc' : q.Type == 6, 'cat-textedit' : q.Type == 8, 'cat-textarea' : q.Type == 9,  'cat-multimedia' : q.Type == 10, 'cat-textedit' : q.Type == 7, 'cat-singleanswer' : q.Type == 0 }">
+                     ng-class="{'selected' : q.Id == currentItemId, 'cat-singleanswer': q.Type == 1, 'cat-singleanswer': q.Type == 2, 'cat-multianswer' : q.Type == 3, 'cat-intedit' : q.Type == 4, 'cat-datetime' : q.Type == 5, 'cat-geoloc' : q.Type == 6, 'cat-textedit' : q.Type == 8, 'cat-textarea' : q.Type == 9,  'cat-multimedia' : q.Type == 10, 'cat-textedit' : q.Type == 7, 'cat-singleanswer' : q.Type == 0 }">
                     <div class="icon"></div>
                     {{ q.Title }}
                     <div class="qname-block">

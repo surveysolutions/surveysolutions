@@ -25,13 +25,13 @@ angular.module('pocAngularApp')
         };
 
         $scope.setItem = function(group, question) {
-            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.QuestionId);
-            $scope.currentItemId = question.QuestionId;
+            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.Id);
+            $scope.currentItemId = question.Id;
         };
 
         $scope.setGroup = function(group) {
-            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + group.GroupId);
-            $scope.currentItemId = group.GroupId;
+            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + group.Id);
+            $scope.currentItemId = group.Id;
         };
 
         $scope.submit = function() {
