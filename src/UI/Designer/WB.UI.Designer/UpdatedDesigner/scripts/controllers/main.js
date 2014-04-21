@@ -126,21 +126,23 @@ angular.module('pocAngularApp')
         };
 
         $scope.deleteChapter = function(chapter) {
-            $http({
-                method: 'POST',
-                url: 'command/execute',
-                data: {
-                    "type": "DeleteGroup",
-                    "command": "{\"questionnaireId\":\"" + $routeParams.questionnaireId + "\"," +
-                        "\"groupId\":\"" + chapter.ChapterId + "\"}"
-                },
-                headers: { 'Content-Type': 'application/json;' }
-            }).success(function() {
-                var index = $scope.questionnaire.Chapters.indexOf(chapter);
-                if (index > -1) {
-                    $scope.questionnaire.Chapters.splice(index, 1);
-                }
-            });
+            if (confirm("Are you sure want to delete?")) {
+                $http({
+                    method: 'POST',
+                    url: 'command/execute',
+                    data: {
+                        "type": "DeleteGroup",
+                        "command": "{\"questionnaireId\":\"" + $routeParams.questionnaireId + "\"," +
+                            "\"groupId\":\"" + chapter.ChapterId + "\"}"
+                    },
+                    headers: { 'Content-Type': 'application/json;' }
+                }).success(function() {
+                    var index = $scope.questionnaire.Chapters.indexOf(chapter);
+                    if (index > -1) {
+                        $scope.questionnaire.Chapters.splice(index, 1);
+                    }
+                });
+            }
         };
 
         $scope.editChapter = function(chapter) {
