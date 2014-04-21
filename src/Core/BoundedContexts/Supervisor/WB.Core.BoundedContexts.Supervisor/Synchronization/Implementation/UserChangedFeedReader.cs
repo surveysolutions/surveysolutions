@@ -33,22 +33,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public async Task<List<LocalUserChangedFeedEntry>> ReadAfterAsync(LocalUserChangedFeedEntry lastStoredFeedEntry)
         {
-            string lastStoredEntryId = lastStoredFeedEntry != null ? lastStoredFeedEntry.EntryId : null;
+            try
+            {
+                string lastStoredEntryId = lastStoredFeedEntry != null ? lastStoredFeedEntry.EntryId : null;
 
-            synchronizationContext.PushMessage(string.Format("Reading users feed from URL: {0}", this.headquartersSettings.UserChangedFeedUrl));
-            IEnumerable<AtomFeedEntry<LocalUserChangedFeedEntry>> feedEntries = 
-                await atomReader.ReadAfterAsync<LocalUserChangedFeedEntry>(this.headquartersSettings.UserChangedFeedUrl, lastStoredEntryId)
-                                .ConfigureAwait(false);
-            synchronizationContext.PushMessage(string.Format("Received {0} events from feed {1}", feedEntries.Count(), this.headquartersSettings.UserChangedFeedUrl));
+                synchronizationContext.PushMessage(string.Format("Reading users feed from URL: {0}", this.headquartersSettings.UserChangedFeedUrl));
 
-            var result = from f in feedEntries
-                select new LocalUserChangedFeedEntry(f.Content.SupervisorId, f.Content.EntryId)
-                {
-                    Timestamp = f.Content.Timestamp,
-                    ChangedUserId = f.Content.ChangedUserId,
-                    UserDetailsUri = f.Links.First(l => l.Rel == "enclosure").Href
-                };
-            return result.ToList();
+                IEnumerable<AtomFeedEntry<LocalUserChangedFeedEntry>> feedEntries = 
+                    await atomReader.ReadAfterAsync<LocalUserChangedFeedEntry>(this.headquartersSettings.UserChangedFeedUrl, lastStoredEntryId)
+                        .ConfigureAwait(false);
+
+                this.synchronizationContext.MarkHqAsReachable();
+                synchronizationContext.PushMessage(string.Format("Received {0} events from feed {1}", feedEntries.Count(), this.headquartersSettings.UserChangedFeedUrl));
+
+                var result = from f in feedEntries
+                    select new LocalUserChangedFeedEntry(f.Content.SupervisorId, f.Content.EntryId)
+                    {
+                        Timestamp = f.Content.Timestamp,
+                        ChangedUserId = f.Content.ChangedUserId,
+                        UserDetailsUri = f.Links.First(l => l.Rel == "enclosure").Href
+                    };
+                return result.ToList();
+            }
+            catch (HttpRequestException)
+            {
+                this.synchronizationContext.MarkHqAsUnReachable();
+                throw;
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation

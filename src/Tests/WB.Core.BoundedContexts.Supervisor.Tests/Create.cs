@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests
 {
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
         {
             return new UserChangedFeedReader(settings ?? HeadquartersSettings(), 
                 messageHandler ?? Substitute.For<HttpMessageHandler>(),
-                new SynchronizationContext());
+                new SynchronizationContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>()));
         }
 
         private static HeadquartersSettings HeadquartersSettings()
