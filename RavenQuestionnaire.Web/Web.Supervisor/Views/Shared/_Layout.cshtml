@@ -29,13 +29,13 @@
                         <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a></li>
+                                <li class="@(page == MenuItem.Surveys ? "active" : "")"><a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a></li>
                                 <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("SupervisorsAndStatuses", "HQ")">Teams and Statuses</a></li>
                                 <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("MapReport", "HQ")">Map Report</a></li>
                             </ul>
-                            <li class="@(page == MenuItem.Docs ? "active" : "")">
-                                <a href="@Url.Action("Interviews", "HQ")"><i class="icon-list-alt"></i>Interviews</a>
-                            </li>
+                        <li class="@(page == MenuItem.Docs ? "active" : "")">
+                            <a href="@Url.Action("Interviews", "HQ")"><i class="icon-list-alt"></i>Interviews</a>
+                        </li>
                         <li class="@(page == MenuItem.Teams ? "active" : "")">
                             <a href="@Url.Action("Index", "Team")"><i class="icon-user"></i>Supervisors</a>
                         </li>
@@ -54,7 +54,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                
+
                                 <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
                             </ul>
                         </li>
@@ -67,23 +67,23 @@
                         <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a></li>
+                                <li class="@(page == MenuItem.Surveys ? "active" : "")"><a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a></li>
                                 <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("TeamMembersAndStatuses", "Survey")">Team members and Statuses</a></li>
                             </ul>
-                            <li class="@(page == MenuItem.Docs ? "active" : "")">
-                                <a href="@Url.Action("Interviews", "Survey")"><i class="icon-list-alt"></i>Interviews</a>
-                            </li>
+                        <li class="@(page == MenuItem.Docs ? "active" : "")">
+                            <a href="@Url.Action("Interviews", "Survey")"><i class="icon-list-alt"></i>Interviews</a>
+                        </li>
                         <li class="@(page == MenuItem.Teams ? "active" : "")">
                             <a href="@Url.Action("Interviewers", "Team")"><i class="icon-user"></i>Interviewers</a>
                         </li>
+                        <li>
+                            <a href="@Url.Action("Synchronization", "ControlPanel")" target="_blank">
+                                <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                Synchronization
+                            </a>
+                        </li>
                     </ul>
                     <ul class="nav pull-right" role="menu">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Synchronization", "Synchronization", "ControlPanel")</li>
-                            </ul>
-                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -124,7 +124,7 @@
                                     </li>
                                 </ul>
                                 @RenderSection("output", false)
-                               
+
                             </div>
                         </div>
                     </div>
@@ -185,6 +185,42 @@
             $(window).resize(function () {
                 setMinHeight();
             });
+
+            var refreshSyncStatus = function() {
+                $.ajax({
+                    method: 'GET',
+                    cache: false,
+                    url: '@Url.RouteUrl("api.SyncStatus", new { httproute = true})',
+                    success: function(data) {
+                        if (!data.StartedAt) {
+                            return;
+                        }
+                        var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAt).fromNow());
+                        if (data.FinisedAt) {
+                            title += '<br /> finished {0} <br/> {1} errors'.f(moment(data.FinisedAt).fromNow(), data.ErrorsCount);
+                        }
+                        $('#synchronizationStatus').tooltip({
+                            title: title,
+                            placement: 'bottom',
+                            html: true
+                        }).attr('data-original-title', title)
+                          .tooltip('fixTitle');
+
+                        if (data.IsRunning) {
+                            $('#synchronizationStatus').attr('class', '').addClass('label label-warning');
+                        } else {
+                            if (data.IsHqReachable) {
+                                $('#synchronizationStatus').attr('class', '').addClass('label label-success');
+                            } else {
+                                $('#synchronizationStatus').attr('class', '').addClass('label badge-important');
+                            }
+                        }
+                    }
+                });
+
+            }
+
+            setInterval(refreshSyncStatus, 3000);
         });
     </script>
     @RenderSection("scripts", false)

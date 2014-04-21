@@ -163,7 +163,11 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
             
             ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
-            ServiceLocator.Current.GetInstance<IScheduler>().Start();
+
+            if (bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]))
+            {
+                ServiceLocator.Current.GetInstance<IScheduler>().Start();
+            }
             return kernel;
         }
 

@@ -28,6 +28,7 @@
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
+                "~/Scripts/moment.js",
                 "~/Scripts/modernizr-{version}.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/knockout-{version}.js",
@@ -69,7 +70,6 @@
 
             bundles.Add(
                 new ScriptBundle("~/js/interview-details").Include(
-                    "~/Scripts/moment.js",
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",

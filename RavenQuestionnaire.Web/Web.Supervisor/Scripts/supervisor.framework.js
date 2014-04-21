@@ -1,4 +1,13 @@
-﻿function Supervisor() { }
+﻿String.prototype.format = String.prototype.f = function () {
+    var args = arguments;
+    return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
+        if (m == "{{") { return "{"; }
+        if (m == "}}") { return "}"; }
+        return args[n];
+    });
+};
+
+function Supervisor() { }
 Supervisor.prototype = {};
 Supervisor.Framework = function () { };
 Supervisor.Framework.prototype = {};
