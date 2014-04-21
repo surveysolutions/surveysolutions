@@ -104,9 +104,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                     return new PreloadedDataByFile[0];
                 }
             }
+            var unzippedFiles = fileSystemAccessor.GetFilesInDirectory(currentFolderPath).Where(filename => filename.EndsWith(CsvExtension)).ToArray();
+            
+            if (unzippedFiles.Length == 0)
+            {
+                var unzippedDirectories = fileSystemAccessor.GetDirectoriesInDirectory(currentFolderPath);
+                if (unzippedDirectories == null || unzippedDirectories.Length == 0)
+                    return new PreloadedDataByFile[0];
 
-            return
-                fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.GetDirectoriesInDirectory(currentFolderPath)[0])
+                unzippedFiles = fileSystemAccessor.GetFilesInDirectory(unzippedDirectories[0]);
+            }
+
+            return unzippedFiles
                     .Where(filename => filename.EndsWith(CsvExtension))
                     .Select(file => GetPreloadedDataFromFile(id, file))
                     .Where(data => data != null)
