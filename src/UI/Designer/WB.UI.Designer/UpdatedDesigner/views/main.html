@@ -55,24 +55,29 @@
             </div>
         </div>
 
+        <script type="text/ng-template" id="tree_item_renderer.html">
+            <div ng-click="setitem(i)" ng-if="i.Type == 7"
+                 class="question item"
+                 ng-class="{'selected' : i.Id == currentItemId, 'cat-singleanswer': i.Type == 1, 'cat-singleanswer': i.Type == 2, 'cat-multianswer' : i.Type == 3, 'cat-intedit' : i.Type == 4, 'cat-datetime' : i.Type == 5, 'cat-geoloc' : i.Type == 6, 'cat-textedit' : i.Type == 8, 'cat-textarea' : i.Type == 9,  'cat-multimedia' : i.Type == 10, 'cat-textedit' : i.Type == 7, 'cat-singleanswer' : i.Type == 0 }">
+                <div class="icon"></div>
+                {{ i.Title }}
+                <div class="qname-block">
+                    <a href="" class="linked"></a>{{i.Variable}}<div class="dropdown-btn"></div>
+                </div>
+            </div>
+            <div class="section item" ng-click="setGroup(i)" ng-class="{'selected' : i.Id == currentItemId}" ng-if="i.Type != 7">
+                {{i.Title}}
+            </div>
+            <!--<div class="buttons-item" ng-if="i.Type != 7">
+                <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" />
+                <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" />
+            </div>-->
+            <div ng-repeat="i in i.Items" ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+            </div>
+        </script>
+
         <div class="question-list">
-            <div ng-repeat="i in items">
-                <div class="section item" ng-click="setGroup(i)" ng-class="{'selected' : i.Id == currentItemId}">
-                    {{i.Title}}
-                </div>
-                <div ng-repeat="q in i.Items" ng-click="setItem(i, q)"
-                     class="question item "
-                     ng-class="{'selected' : q.Id == currentItemId, 'cat-singleanswer': q.Type == 1, 'cat-singleanswer': q.Type == 2, 'cat-multianswer' : q.Type == 3, 'cat-intedit' : q.Type == 4, 'cat-datetime' : q.Type == 5, 'cat-geoloc' : q.Type == 6, 'cat-textedit' : q.Type == 8, 'cat-textarea' : q.Type == 9,  'cat-multimedia' : q.Type == 10, 'cat-textedit' : q.Type == 7, 'cat-singleanswer' : q.Type == 0 }">
-                    <div class="icon"></div>
-                    {{ q.Title }}
-                    <div class="qname-block">
-                        <a href="" class="linked"></a>{{q.Variable}}<div class="dropdown-btn"></div>
-                    </div>
-                </div>
-                <div class="buttons-item">
-                    <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" />
-                    <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" />
-                </div>
+            <div ng-repeat="i in items" ng-include="'tree_item_renderer.html'">
             </div>
         </div>
     </div>
@@ -83,7 +88,7 @@
                 <p>
                     {{questionnaire.Title}}
                     <input type="text" name="input" value="{{item.Title}}" ng-pattern="word" required ng-trim="false"
-                           style="width:500px">
+                           style="width: 500px">
                 </p>
                 <p>
                     <input type="submit" value="Save" ng-click="submit()">
@@ -91,27 +96,4 @@
             </form>
         </div>
     </div>
-
-    <!--
-        <h2>Chapters</h2>
-        <li ng-repeat="chapter in chapters">
-            <b>{{ chapter.Title }}</b>
-        </li>
-
-        <h2>Groups</h2>
-        <ol>
-            <li ng-repeat="group in documents.Groups | filter: {Level: 0}">
-                {{ group.Title }}
-                <ol>
-                    <li ng-repeat="child in group.Children">
-                        {{ child | truncateFilter:documents }}
-                        <ol ng-if="child.Type==10">
-                            <li ng-repeat="c in child| truncateFilter2:documents">
-                                {{ c | truncateFilter:documents}}
-                            </li>
-                        </ol>
-                    </li>
-                </ol>
-            </li>
-        </ol> -->
 </section>

@@ -24,7 +24,7 @@ angular.module('pocAngularApp')
             loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
         };
 
-        $scope.setItem = function(group, question) {
+        $scope.setItem = function(question) {
             $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.Id);
             $scope.currentItemId = question.Id;
         };
