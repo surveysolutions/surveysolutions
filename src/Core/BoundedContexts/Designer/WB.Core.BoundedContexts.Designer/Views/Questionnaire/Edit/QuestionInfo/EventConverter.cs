@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -189,7 +190,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             FullQuestionDataEvent e = evnt.Payload;
             var data = new QuestionData(
                 e.PublicKey,
-                e.QuestionType,
+               GetQuestionType(e.QuestionType),
                 e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
@@ -203,7 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.Instructions,
                 e.Triggers,
                 null,
-                e.Answers,
+                 GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
                 e.IsInteger,
                 null,
@@ -218,7 +219,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             QuestionCloned e = evnt.Payload;
             var data = new QuestionData(
                 e.PublicKey,
-                e.QuestionType,
+                GetQuestionType(e.QuestionType),
                 e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
@@ -232,7 +233,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.Instructions,
                 e.Triggers,
                 null,
-                e.Answers,
+                 GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
                 e.IsInteger,
                 null,
@@ -247,7 +248,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             QuestionChanged e = evnt.Payload;
             var data = new QuestionData(
                 e.PublicKey,
-                e.QuestionType,
+                GetQuestionType(e.QuestionType),
                 e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
@@ -261,7 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.Instructions,
                 e.Triggers,
                 null,
-                e.Answers,
+                GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
                 e.IsInteger,
                 null,
@@ -270,6 +271,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null);
             return data;
         }
+
+       
 
         public static QuestionData NumericQuestionAddedToQuestionData(IPublishedEvent<NumericQuestionAdded> evnt)
         {
@@ -357,5 +360,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null);
             return data;
         }
+
+        #region for very-very old and invalid events
+        private static QuestionType GetQuestionType(QuestionType type)
+        {
+            if (type == QuestionType.AutoPropagate)
+                return QuestionType.Numeric;
+
+            if (type == QuestionType.YesNo || type == QuestionType.DropDownList)
+                return QuestionType.SingleOption;
+
+            return type;
+        }
+
+        internal static Answer[] GetValidAnswersCollection(Answer[] answers)
+        {
+            if (answers == null)
+                return null;
+
+            foreach (var answer in answers)
+            {
+                if (string.IsNullOrWhiteSpace(answer.AnswerValue))
+                {
+                    answer.AnswerValue = (new Random().NextDouble() * 100).ToString("0.00");
+                }
+                if (string.IsNullOrWhiteSpace(answer.AnswerText))
+                {
+                    answer.AnswerText = "Option " + answer.AnswerValue;
+                }
+            }
+            return answers;
+        } 
+        #endregion
     }
 }

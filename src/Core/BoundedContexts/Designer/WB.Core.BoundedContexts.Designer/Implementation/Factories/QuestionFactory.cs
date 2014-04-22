@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 
             UpdateQuestion(
                 q,
-                data.QuestionType == QuestionType.AutoPropagate ? QuestionType.Numeric : data.QuestionType,
+                data.QuestionType,
                 data.QuestionScope,
                 data.QuestionText,
                 data.StataExportCaption,
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Triggers,
                 data.MaxValue,
                 data.LinkedToQuestionId,
-                data.QuestionType == QuestionType.AutoPropagate? true : data.IsInteger,
+                data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger,
                 data.CountOfDecimalPlaces,
                 data.AreAnswersOrdered,
                 data.MaxAllowedAnswers,
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             }
         }
 
-        private static void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question, Guid? linkedToQuestionId)
+        private static void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question, Guid? linkedToQuestionId)
         {
             if (question.Answers != null)
             {
@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.Instructions = instructions;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
-            
+
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
             {

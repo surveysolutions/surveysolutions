@@ -60,8 +60,13 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             if (this.IsDeleter(evt))
             {
                 T currentState = this.GetViewById(evt.EventSourceId, storage);
-                this.GetType().GetMethod("Delete", new [] { eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, currentState, storage);
+                var methodInfo = this.GetType().GetMethod("Delete", new[] { typeof(T), eventType });
+                methodInfo.Invoke(this, new object[]
+                {
+                    currentState, 
+                    this.CreatePublishedEvent(evt)
+                });
+                this.RemoveView(evt.EventSourceId, storage);
             }
         }
 
@@ -91,6 +96,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
         private void SaveView(Guid id, T newState, IReadSideRepositoryWriter<T> storage)
         {
             storage.Store(newState, id);
+        }
+
+        private void RemoveView(Guid id, IReadSideRepositoryWriter<T> storage)
+        {
+            storage.Remove(id);
         }
 
         private T GetViewById(Guid id, IReadSideRepositoryWriter<T> storage)

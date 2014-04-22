@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Factories.ExportViewFactoryTe
                     PublicKey = rosterSizeQuestionId,
                     QuestionType = QuestionType.MultyOption,
                     Answers =
-                        new List<IAnswer>()
+                        new List<Answer>()
                         {
                             new Answer() { AnswerText = "option 1", AnswerValue = "op1" },
                             new Answer() { AnswerText = "option 2", AnswerValue = "opt2" }
