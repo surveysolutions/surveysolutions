@@ -24,14 +24,9 @@ angular.module('designerApp')
             loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
         };
 
-        $scope.setItem = function(question) {
-            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + question.Id);
-            $scope.currentItemId = question.Id;
-        };
-
-        $scope.setGroup = function(group) {
-            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + group.Id);
-            $scope.currentItemId = group.Id;
+        $scope.setItem = function (item) {
+            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + item.Id);
+            $scope.currentItemId = item.Id;
         };
 
         $scope.submit = function() {
