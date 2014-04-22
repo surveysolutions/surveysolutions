@@ -164,6 +164,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(evnt));
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            if (oldQuestion == null)
+            {
+                return currentState;
+            }
             currentState.Questions.Remove(oldQuestion);
             currentState.Questions.Add(this.questionDetailsFactory.CreateQuestion(question, oldQuestion.ParentGroupId));
             return currentState;
@@ -180,11 +184,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
-            if (question == null)
+            var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.QuestionId);
+            if (oldQuestion == null)
             {
                 return currentState;
             }
-            var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.QuestionId);
             currentState.Questions.Remove(oldQuestion);
             currentState.Questions.Add(this.questionDetailsFactory.CreateQuestion(question, oldQuestion.ParentGroupId));
             return currentState;
