@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function($scope, $http, $routeParams, $location, $route, commandService) {
+    .controller('MainCtrl', function ($scope, $http, $routeParams, $location, $route, commandService, questionnaireService) {
 
         $scope.chapters = [];
 
@@ -96,7 +96,7 @@ angular.module('designerApp')
             console.log(chapter);
         };
 
-        $http.get('api/questionnaire/get/' + $routeParams.questionnaireId)
+        questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
             .success(function(result) {
                 if (result == 'null') {
                     alert('Questionnaire not found');
@@ -124,7 +124,7 @@ angular.module('designerApp')
         });
 
         function loadChapterDetails(questionnaireId, chapterId) {
-            $http.get('api/questionnaire/chapter/' + questionnaireId + "?chapterId=" + chapterId)
+            questionnaireService.getChapterById(questionnaireId, chapterId)
                 .success(function(result) {
                     $scope.items = result.Items;
                     $scope.currentChapter = result;
