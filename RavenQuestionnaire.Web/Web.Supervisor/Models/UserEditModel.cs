@@ -32,7 +32,7 @@ namespace Web.Supervisor.Models
         public bool IsLockedBySupervisor { get; set; }
 
         [Display(Name = "Is locked by Headquarters", Order = 6)]
-        public bool IsLockedByHQ { get; set; }
+        public bool IsLockedByHeadquarters { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -13,16 +14,14 @@ using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Web;
-
     public class TeamController : BaseController
     {
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
 
-        public TeamController(ICommandService commandService, 
-                              IGlobalInfoProvider globalInfo, 
-                              ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory)
+        public TeamController(ICommandService commandService,
+            IGlobalInfoProvider globalInfo,
+            ILogger logger,
+            IViewFactory<UserViewInputModel, UserView> userViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.userViewFactory = userViewFactory;
@@ -32,7 +31,7 @@ namespace Web.Supervisor.Controllers
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(Guid id)
         {
-            return this.View(new UserCreateModel() {Id = id});
+            return this.View(new UserCreateModel() { Id = id });
         }
 
         [HttpPost]
@@ -47,16 +46,16 @@ namespace Web.Supervisor.Controllers
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
-                                                    publicKey: Guid.NewGuid(),
-                                                    userName: model.UserName,
-                                                    password: SimpleHash.ComputeHash(model.Password),
-                                                    email: model.Email,
-                                                    isLockedBySupervisor: model.IsLockedBySupervisor,
-                                                    isLockedByHQ: model.IsLockedByHQ,
-                                                    roles: new[] {UserRoles.Operator},
-                                                    supervsor: this.GetUser(model.Id).GetUseLight()));
+                        publicKey: Guid.NewGuid(),
+                        userName: model.UserName,
+                        password: SimpleHash.ComputeHash(model.Password),
+                        email: model.Email,
+                        isLockedBySupervisor: model.IsLockedBySupervisor,
+                        isLockedByHQ: model.IsLockedByHeadquarters,
+                        roles: new[] { UserRoles.Operator },
+                        supervsor: this.GetUser(model.Id).GetUseLight()));
                     this.Success("Interviewer was successfully created");
-                    return this.RedirectToAction("Interviewers", new {id = model.Id});
+                    return this.RedirectToAction("Interviewers", new { id = model.Id });
                 }
                 else
                 {
@@ -85,14 +84,14 @@ namespace Web.Supervisor.Controllers
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
-                                                    publicKey: Guid.NewGuid(),
-                                                    userName: model.UserName,
-                                                    password: SimpleHash.ComputeHash(model.Password),
-                                                    email: model.Email,
-                                                    isLockedBySupervisor: model.IsLockedBySupervisor,
-                                                    isLockedByHQ: model.IsLockedByHQ,
-                                                    roles: new[] {UserRoles.Supervisor},
-                                                    supervsor: null));
+                        publicKey: Guid.NewGuid(),
+                        userName: model.UserName,
+                        password: SimpleHash.ComputeHash(model.Password),
+                        email: model.Email,
+                        isLockedBySupervisor: false,
+                        isLockedByHQ: model.IsLockedByHeadquarters,
+                        roles: new[] { UserRoles.Supervisor },
+                        supervsor: null));
 
                     this.Success("Supervisor was successfully created");
                     return this.RedirectToAction("Index");
@@ -131,29 +130,45 @@ namespace Web.Supervisor.Controllers
         {
             var user = this.GetUser(id);
 
-            if(user == null) 
+            if (user == null)
                 throw new HttpException(404, string.Empty);
-
 
             bool isHeadquarter = Roles.IsUserInRole(this.GlobalInfo.GetCurrentUser().Name, UserRoles.Headquarter.ToString());
 
-            var model = isHeadquarter
-                ? new UserViewModel()
+            bool isChangingUserSupervisor = Roles.IsUserInRole(user.UserName, UserRoles.Supervisor.ToString());
+
+            UserViewModel model;
+
+            if (isHeadquarter)
+            {
+                model = isChangingUserSupervisor
+                    ? new SupervisorUserViewModel()
+                    {
+                        Id = user.PublicKey,
+                        Email = user.Email,
+                        IsLockedByHeadquarters = user.IsLockedByHQ,
+                        IsLockedBySupervisor = user.IsLockedBySupervisor,
+                        UserName = user.UserName
+                    }
+                    : new UserViewModel()
+                    {
+                        Id = user.PublicKey,
+                        Email = user.Email,
+                        IsLockedByHeadquarters = user.IsLockedByHQ,
+                        IsLockedBySupervisor = user.IsLockedBySupervisor,
+                        UserName = user.UserName
+                    };
+            }
+            else
+                model = new UserViewModelForSupervisor()
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
-                    IsLockedByHQ = user.IsLockedByHQ,
-                    IsLockedBySupervisor = user.IsLockedBySupervisor,
-                    UserName = user.UserName
-                }
-                : new UserViewModelForSupervisor()
-                {
-                    Id = user.PublicKey,
-                    Email = user.Email,
-                    IsLockedByHQ = user.IsLockedByHQ,
+                    IsLockedByHeadquarters = user.IsLockedByHQ,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     UserName = user.UserName
                 };
+
             return this.View(model);
         }
 
@@ -168,20 +183,20 @@ namespace Web.Supervisor.Controllers
                 {
                     bool isHeadquarter = Roles.IsUserInRole(this.GlobalInfo.GetCurrentUser().Name, UserRoles.Headquarter.ToString());
                     //check for intruders
-                    var newLockByHQ = isHeadquarter ? model.IsLockedByHQ : user.IsLockedByHQ;
+                    var updatedLockByHQ = isHeadquarter ? model.IsLockedByHeadquarters : user.IsLockedByHQ;
 
                     this.CommandService.Execute(
                         new ChangeUserCommand(
-                                user.PublicKey,
-                                model.Email,
-                                user.Roles.ToArray(),
-                                model.IsLockedBySupervisor,
-                                newLockByHQ,
-                                string.IsNullOrEmpty(model.Password)
-                                               ? user.Password
-                                               : SimpleHash.ComputeHash(model.Password),
-                                this.GlobalInfo.GetCurrentUser().Id
-                        ));
+                            user.PublicKey,
+                            model.Email,
+                            user.Roles.ToArray(),
+                            model.IsLockedBySupervisor,
+                            updatedLockByHQ,
+                            string.IsNullOrEmpty(model.Password)
+                                ? user.Password
+                                : SimpleHash.ComputeHash(model.Password),
+                            this.GlobalInfo.GetCurrentUser().Id
+                            ));
                     this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                     return this.DetailsBackByUser(user);
                 }
@@ -204,8 +219,8 @@ namespace Web.Supervisor.Controllers
         private ActionResult DetailsBackByUser(UserView user)
         {
             return this.GlobalInfo.IsHeadquarter && user.Supervisor == null
-                       ? this.RedirectToAction("Index")
-                       : this.RedirectToAction("Interviewers", new {id = user.Supervisor.Id});
+                ? this.RedirectToAction("Index")
+                : this.RedirectToAction("Interviewers", new { id = user.Supervisor.Id });
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Web.Supervisor.Models
+﻿using System.ComponentModel;
+using System.Web.Mvc;
+
+namespace Web.Supervisor.Models
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -18,7 +21,7 @@
         }
 
         [Required]
-        public string Password
+        public new string Password
         {
             get
             {
@@ -27,6 +30,20 @@
             set
             {
                 base.Password = value;
+            }
+        }
+
+        [HiddenInput(DisplayValue = false)]
+        [Display(Order = 5)]
+        public new bool IsLockedBySupervisor
+        {
+            get
+            {
+                return base.IsLockedBySupervisor;
+            }
+            set
+            {
+                base.IsLockedBySupervisor = value;
             }
         }
        

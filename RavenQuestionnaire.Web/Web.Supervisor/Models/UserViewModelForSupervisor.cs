@@ -6,16 +6,16 @@ namespace Web.Supervisor.Models
     public class UserViewModelForSupervisor : UserViewModel
     {
         [ReadOnly(true)]
-        [Display(Name = "Is Locked by Headquarters", Order = 6)]
-        public new bool IsLockedByHQ
+        [Display(Order = 6)]
+        public new bool IsLockedByHeadquarters
         {
             get
             {
-                return base.IsLockedByHQ;
+                return base.IsLockedByHeadquarters;
             }
             set
             {
-                base.IsLockedByHQ = value;
+                base.IsLockedByHeadquarters = value;
             }
         }
     }

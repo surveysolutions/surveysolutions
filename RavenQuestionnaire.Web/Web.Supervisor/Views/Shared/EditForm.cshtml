@@ -4,7 +4,9 @@
 
 @foreach (var property in Model.VisibleProperties())
 {
-    using (Html.ControlGroupFor(property.Name))
+    if (property.GetAttribute<System.Web.Mvc.HiddenInputAttribute>() == null)
+    {
+        using (Html.ControlGroupFor(property.Name))
         {
             @Html.Label(property.Name.ToSeparatedWords(), new { @class = "control-label" })
             <div class="controls">
@@ -22,4 +24,5 @@
                 }
             </div>
         }
+    }
 }
