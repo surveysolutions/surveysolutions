@@ -44,8 +44,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
             var status = this.statusStorage.GetById(StoreStatusKey) ?? new SynchronizationStatus();
             status.IsRunning = false;
-            status.FinisedAt = DateTime.Now;
-            status.FinishedAtUtc = DateTime.UtcNow;
+            if (status.IsHqReachable.HasValue && status.IsHqReachable.Value)
+            {
+                status.FinisedAt = DateTime.Now;
+                status.FinishedAtUtc = DateTime.UtcNow;
+            }
             status.ErrorsCount = this.synchronizationErrors.Count;
             this.statusStorage.Store(status, StoreStatusKey);
         }
