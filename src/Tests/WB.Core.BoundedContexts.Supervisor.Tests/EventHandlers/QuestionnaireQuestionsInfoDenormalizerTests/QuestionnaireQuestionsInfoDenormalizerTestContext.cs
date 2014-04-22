@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.QuestionnaireQu
                         PublicKey = multiId,
                         QuestionType = QuestionType.MultyOption,
                         StataExportCaption = "multyOptions",
-                        Answers = new List<IAnswer>()
+                        Answers = new List<Answer>()
                         {
                             new Answer { PublicKey = Guid.NewGuid(), AnswerValue = "1.5", AnswerText = "Option 1" },
                             new Answer { PublicKey = Guid.NewGuid(), AnswerValue = "2.5", AnswerText = "Option 2" }

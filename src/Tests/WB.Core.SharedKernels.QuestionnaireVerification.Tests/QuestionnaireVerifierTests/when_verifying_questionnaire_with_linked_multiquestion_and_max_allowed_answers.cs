@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new MultyOptionsQuestion()
                     {
                         PublicKey = multyOptionsQuestionId,
-                        Answers = new List<IAnswer>() { new Answer(), new Answer() },
+                        Answers = new List<Answer>() { new Answer(), new Answer() },
                         MaxAllowedAnswers = 3,
                         LinkedToQuestionId = linkedQuestionId
                     }

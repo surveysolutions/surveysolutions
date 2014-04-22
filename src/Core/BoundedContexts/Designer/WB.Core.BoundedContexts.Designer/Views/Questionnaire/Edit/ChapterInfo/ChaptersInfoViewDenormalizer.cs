@@ -285,7 +285,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 var parentOfGroup = this.FindParentOfGroupOrQuestion(currentState, groupOrQuestionView.Id);
 
                 parentOfGroup.Items.Remove(groupOrQuestionView);
-                targetGroup.Items.Insert(evnt.Payload.TargetIndex, groupOrQuestionView);
+                targetGroup.Items.Insert(Math.Min(evnt.Payload.TargetIndex, targetGroup.Items.Count), groupOrQuestionView);
             }
 
             return currentState;
@@ -347,6 +347,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: groupId);
 
+            if (groupView == null)
+            {
+                return;
+            }
+
             var questionsUsedInConditionExpression = string.IsNullOrEmpty(questionConditionExpression)
                         ? new string[0]
                         : expressionProcessor.GetIdentifiersUsedInExpression(questionConditionExpression);
@@ -365,6 +370,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             QuestionType questionType, string questionVariable, string questionConditionExpression)
         {
             var questionView = this.FindQuestion(questionnaireOrGroup: questionnaire, questionId: questionId);
+
+            if (questionView == null)
+                return;
 
             var questionsUsedInConditionExpression = string.IsNullOrEmpty(questionConditionExpression)
                         ? new string[0]

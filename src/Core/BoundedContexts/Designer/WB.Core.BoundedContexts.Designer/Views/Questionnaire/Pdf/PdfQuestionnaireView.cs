@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                         {
                             PublicId = childQuestion.PublicKey,
                             Title = childQuestion.QuestionText,
-                            Answers = (childQuestion.Answers ?? new List<IAnswer>()).Select(x => new PdfAnswerView
+                            Answers = (childQuestion.Answers ?? new List<Answer>()).Select(x => new PdfAnswerView
                             {
                                 Title = x.AnswerText,
                                 AnswerType = x.AnswerType,

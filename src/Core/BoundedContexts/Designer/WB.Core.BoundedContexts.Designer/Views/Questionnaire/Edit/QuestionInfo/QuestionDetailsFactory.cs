@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -11,6 +12,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionDetailsView CreateQuestion(IQuestion question, Guid parentGroupId)
         {
             var questionView = CreateQuestionByType(question.QuestionType);
+            if (questionView == null)
+                return null;
             questionView.Id = question.PublicKey;
             questionView.ParentGroupId = parentGroupId;
             questionView.QuestionScope = question.QuestionScope;
@@ -64,9 +67,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return questionView;
         }
 
-        private CategoricalOption[] CreateCategoricalOptions(List<IAnswer> answers)
+        private CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
         {
-            return answers.Select(x => new CategoricalOption
+            return EventConverter.GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
             {
                 Title = x.AnswerText,
                 Value = decimal.Parse(x.AnswerValue)
