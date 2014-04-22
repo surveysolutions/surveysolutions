@@ -1,6 +1,6 @@
 ﻿@{
     this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
-    this.ViewBag.Title = "Control Panel: Synchronization";
+    this.ViewBag.Title = "HQ Synchronization";
 }
 
 <div class="container-fluid">
@@ -49,12 +49,12 @@
 
             self.StartSynchronization = function() {
                 self.syncronizationRunning(true);
-                $.post('@Url.Action("Synchronize", "ControlPanel")');
+                $.post('@Url.Action("Synchronize", "HqSync")');
             }
 
             self.RefreshStatus = function() {
                 $.ajax({
-                    url: '@Url.Action("SynchronizationStatus", "ControlPanel")',
+                    url: '@Url.Action("SynchronizationStatus", "HqSync")',
                     cache: false,
                     success: function(status) {
                         self.syncronizationRunning(status.IsRunning);

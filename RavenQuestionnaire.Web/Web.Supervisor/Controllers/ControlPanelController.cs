@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
-using Quartz;
 using Raven.Client.Linq.Indexing;
-using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Synchronization;
 using Web.Supervisor.Code;
@@ -21,21 +19,12 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IServiceLocator serviceLocator;
         private readonly IIncomePackagesRepository incomePackagesRepository;
-        private readonly ISynchronizer synchronizer;
-        private readonly SynchronizationContext synchronizationContext;
-        private readonly IScheduler scheduler;
 
         public ControlPanelController(IServiceLocator serviceLocator, 
-            IIncomePackagesRepository incomePackagesRepository,
-            ISynchronizer synchronizer,
-            SynchronizationContext synchronizationContext,
-            IScheduler scheduler)
+            IIncomePackagesRepository incomePackagesRepository)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
-            this.synchronizer = synchronizer;
-            this.synchronizationContext = synchronizationContext;
-            this.scheduler = scheduler;
         }
 
         /// <remarks>
@@ -188,29 +177,6 @@ namespace Web.Supervisor.Controllers
         {
             bool areHeadquartersFunctionsEnabled = bool.Parse(WebConfigurationManager.AppSettings["HeadquartersFunctionsEnabled"]);
             return this.View(areHeadquartersFunctionsEnabled);
-        }
-
-        public ActionResult Synchronization()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Synchronize()
-        {
-            this.scheduler.TriggerJob(new JobKey("HQ sync", "Synchronization"));
-            return Json(new object());
-        }
-
-        public ActionResult SynchronizationStatus()
-        {
-            return Json(new
-            {
-                Status = this.synchronizationContext.GetStatus(),
-                Messages = this.synchronizationContext.GetMessages(),
-                Errors = this.synchronizationContext.GetErrors(),
-                IsRunning = this.synchronizationContext.IsRunning
-            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -339,7 +339,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BaseApiServiceController.cs" />
-    <Compile Include="API\HqSynchronizationController.cs" />
     <Compile Include="API\InterviewsController.cs" />
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\UsersController.cs" />
@@ -363,6 +362,7 @@
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HqSyncController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
@@ -680,7 +680,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Views\HQ\VerifySample.cshtml" />
-    <Content Include="Views\ControlPanel\Synchronization.cshtml" />
+    <Content Include="Views\HqSync\Synchronization.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />

@@ -113,7 +113,8 @@ namespace Web.Supervisor.App_Start
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
-            var schedulerSettings = new SchedulerSettings(int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
+            var schedulerSettings = new SchedulerSettings(bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]), 
+                int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
             var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
             var headquartersSettings = new HeadquartersSettings(
@@ -169,10 +170,8 @@ namespace Web.Supervisor.App_Start
                 ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
             }
 
-            if (bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]))
-            {
-                ServiceLocator.Current.GetInstance<IScheduler>().Start();
-            }
+            ServiceLocator.Current.GetInstance<IScheduler>().Start();
+            
             return kernel;
         }
 
