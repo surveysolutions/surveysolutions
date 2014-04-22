@@ -358,6 +358,7 @@
     <Content Include="UpdatedDesigner\scripts\jquery.mCustomScrollbar.js" />
     <Content Include="UpdatedDesigner\scripts\jquery.mousewheel.js" />
     <Content Include="UpdatedDesigner\scripts\markup.js" />
+    <Content Include="UpdatedDesigner\scripts\services\commandService.js" />
     <Content Include="UpdatedDesigner\scripts\ujs.js" />
     <Content Include="UpdatedDesigner\scripts\wb-designer-editor.js" />
     <Content Include="UpdatedDesigner\styles\jquery.mCustomScrollbar.css" />
