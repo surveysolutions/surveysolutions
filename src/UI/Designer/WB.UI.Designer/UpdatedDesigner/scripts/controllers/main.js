@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pocAngularApp')
+angular.module('designerApp')
     .controller('MainCtrl', function($scope, $http, $routeParams, $location, $route) {
 
         $scope.chapters = [];

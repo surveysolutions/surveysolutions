@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pocAngularApp', [
+angular.module('designerApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
