@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Main.Core.View.User;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
@@ -45,10 +42,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         {
             using (var client = new HttpClient(messageHandler))
             {
-                /*
+                
                 if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(headquartersSettings.AccessToken);
-                */
+                
                 var requestUri = this.BuildValidationUri(login, password);
                 var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
