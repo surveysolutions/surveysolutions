@@ -10,6 +10,7 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -899,6 +900,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(evnt);
             }
+        }
+
+        public Interview(Guid id, long version, Guid userId, Guid supervisorId, Guid questionnaireId, PreloadedDataDto preloadedData,
+            DateTime answersTime)
+            : base(id)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+
+    /*        this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions);
+
+            var interviewChangeStructures = new InterviewChangeStructures();
+            var newAnswers = answersToFeaturedQuestions.ToDictionary(answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector), answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
+
+            foreach (var newAnswer in answersToFeaturedQuestions)
+            {
+                string key = ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
+
+                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
+                interviewChangeStructures.State.AnsweredQuestions.Add(key);
+            }
+
+            interviewChangeStructures.Changes.Add(new InterviewChanges(
+                new List<object>() { new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version) },
+                null, null, null, null, null, null));
+
+            InitInterview(questionnaire, interviewChangeStructures);
+            CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime, newAnswers);
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
+
+            //apply events
+            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
+            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);*/
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)

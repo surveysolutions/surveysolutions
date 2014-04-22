@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 try
                 {
                     this.BuiltInterview(Guid.NewGuid(), topLevelData.FileName, value, topLevelData.Header,
-                        new[] { preloadedDataService.GetRecordIdValueAsDecimal(value, idColumnIndex) },
+                        value[idColumnIndex],
                         data.Except(new[] { topLevelData }).ToArray(),
                         questionnarie, preloadedDataService, bigTemplate.PublicKey,version,
                         responsibleHeadquarterId,
@@ -132,23 +132,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.tempSampleCreationStorage.Store(result, id);
         }
 
-        private void BuiltInterview(Guid interviewId, string levelName, string[] values, string[] header, decimal[] rosterVector, PreloadedDataByFile[] rosterData,
+        private void BuiltInterview(Guid interviewId, string levelName, string[] values, string[] header,string id, PreloadedDataByFile[] rosterData,
             IQuestionnaire template, IPreloadedDataService preloadedDataService, Guid templateId, long version, Guid headqarterId, Guid supervisorId)
         {
             var answersToFeaturedQuestions = this.CreateAnswerList(values, header,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption, getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
 
-            var rosterAnswers = this.GetAnswers(levelName, rosterVector, rosterData, preloadedDataService, template);
+            var rosterAnswers = this.GetAnswers(levelName, id, new decimal[0], rosterData, preloadedDataService, template);
+            var levels = new List<PreloadedLevelDto>() { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions) };
+            levels.AddRange(rosterAnswers);
+            var preloadedData = new PreloadedDataDto(id, levels.ToArray());
 
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            commandInvoker.Execute(new CreateInterviewCommand(interviewId, headqarterId, templateId, version, answersToFeaturedQuestions,
+            commandInvoker.Execute(new CreateInterviewWithPreloadedData(interviewId, headqarterId, templateId, version, preloadedData,
                 DateTime.UtcNow, supervisorId));
         }
 
-        private PreloadedLevelDto[] GetAnswers(string levelName, decimal[] rosterVector, PreloadedDataByFile[] rosterData, IPreloadedDataService preloadedDataService, IQuestionnaire template)
+        private PreloadedLevelDto[] GetAnswers(string levelName, string parentId, decimal[] rosterVector, PreloadedDataByFile[] rosterData, IPreloadedDataService preloadedDataService, IQuestionnaire template)
         {
             var result = new List<PreloadedLevelDto>();
-            var rowId = rosterVector.Last();
             var childFiles = preloadedDataService.GetChildDataFiles(levelName, rosterData);
 
             foreach (var preloadedDataByFile in childFiles)
@@ -157,7 +159,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 var idColumnIndex = preloadedDataService.GetIdColumnIndex(preloadedDataByFile);
                 var childRecrordsOfCurrentRow =
                     preloadedDataByFile.Content.Where(
-                        record => preloadedDataService.GetRecordIdValueAsDecimal(record, parentIdColumnIndex) == rowId).ToArray();
+                        record => record[parentIdColumnIndex] == parentId).ToArray();
 
                 foreach (var rosterRow in childRecrordsOfCurrentRow)
                 {
@@ -169,9 +171,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         getQuestionByStataCaption: template.GetQuestionByStataCaption,
                         getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
 
-                    result.Add(new PreloadedLevelDto(newRosterVetor.Skip(1).ToArray(), rosterAnswers));
+                    result.Add(new PreloadedLevelDto(newRosterVetor, rosterAnswers));
 
-                    result.AddRange(this.GetAnswers(preloadedDataByFile.FileName, newRosterVetor, rosterData, preloadedDataService, template));
+                    result.AddRange(this.GetAnswers(preloadedDataByFile.FileName, rosterRow[idColumnIndex], newRosterVetor, rosterData, preloadedDataService, template));
                 }
             }
 
