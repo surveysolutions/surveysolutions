@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerSingleOptionLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, linkedOption2Vector);
+            interview.AnswerSingleOptionLinkedQuestion( userId, questionId, rosterVector, DateTime.Now, linkedOption2Vector);
 
         Cleanup stuff = () =>
         {
