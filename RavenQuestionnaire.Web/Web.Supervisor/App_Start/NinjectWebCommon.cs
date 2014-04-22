@@ -120,7 +120,8 @@ namespace Web.Supervisor.App_Start
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.LoginServiceEndpoint"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.UserChangedFeed"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsFeed"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString()
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString(),
+                WebConfigurationManager.AppSettings["Headquarters.AccessToken"]
                 );
 
             bool useStreamingForAllEvents;

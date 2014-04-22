@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             this.headquartersSettings = headquartersSettings;
             this.synchronizationContext = synchronizationContext;
-            this.atomReader = new AtomFeedReader(messageHandler);
+            this.atomReader = new AtomFeedReader(messageHandler, headquartersSettings);
         }
 
         public async Task<List<LocalUserChangedFeedEntry>> ReadAfterAsync(LocalUserChangedFeedEntry lastStoredFeedEntry)

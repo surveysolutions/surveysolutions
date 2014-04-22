@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
-using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Main.Core.View.User;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
+using WB.UI.Headquarters.API.Attributes;
 
 namespace WB.UI.Headquarters.API.Resources
 {
+    [TokenValidationAuthorizationAttribute]
     [RoutePrefix("api/resources/users/v1")]
     public class UsersResourceController : ApiController
     {

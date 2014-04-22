@@ -14,6 +14,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.WebApi.FilterBindingSyntax;
 using Questionnaire.Core.Web.Binding;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Logging;
@@ -30,6 +31,7 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
+using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.Code.CommandDeserialization;
 using WB.UI.Headquarters.Injections;
 using WebActivatorEx;
@@ -138,6 +140,11 @@ namespace WB.UI.Headquarters
                 NcqrsEnvironment.Get<IAggregateSnapshotter>());
             kernel.Bind<IDomainRepository>().ToConstant(repository);
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
+
+            kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
+
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .WhenControllerHas<TokenValidationAuthorizationAttribute>();
 
 #warning dirty index registrations
             // SuccessMarker.Start(kernel);
