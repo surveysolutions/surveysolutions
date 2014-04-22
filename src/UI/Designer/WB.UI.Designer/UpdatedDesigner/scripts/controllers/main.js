@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function ($scope, $http, $routeParams, $location, $route, commandService, questionnaireService) {
+    .controller('MainCtrl', function ($scope, $routeParams, $location, $route, commandService, questionnaireService, verificationService) {
 
         $scope.chapters = [];
 
@@ -42,8 +42,7 @@ angular.module('designerApp')
         };
 
         $scope.verify = function() {
-            $http.get('api/questionnaire/verify/' + $routeParams.questionnaireId)
-                .success(function(result) {
+            verificationService.verify($routeParams.questionnaireId).success(function (result) {
                     $scope.verificationStatus.errors = result.errors;
                     $scope.verificationStatus.errorsCount = result.errors.length;
                 });
