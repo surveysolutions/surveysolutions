@@ -164,6 +164,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                if (existingQuestion == null)
+                {
+                    return questionnaire;
+                }
                 existingQuestion.ConditionExpression = @event.ConditionExpression;
                 existingQuestion.ValidationExpression = @event.ValidationExpression;
 
@@ -251,6 +255,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                if (existingQuestion == null)
+                {
+                    return questionnaire;
+                }
                 existingQuestion.ConditionExpression = @event.ConditionExpression;
                 existingQuestion.ValidationExpression = @event.ValidationExpression;
 
@@ -305,6 +313,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                if (existingQuestion == null)
+                {
+                    return questionnaire;
+                }
                 existingQuestion.ConditionExpression = @event.ConditionExpression;
                 
                 existingQuestion.Title = @event.QuestionText;

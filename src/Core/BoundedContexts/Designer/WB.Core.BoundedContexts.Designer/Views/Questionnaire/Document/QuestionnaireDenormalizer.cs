@@ -176,8 +176,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             IQuestion result = questionFactory.CreateQuestion(data);
+            IGroup group = item.Find<IGroup>(groupId);
 
-            if (result == null)
+            if (result == null || group == null)
             {
                 return;
             }
@@ -194,9 +195,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         protected void UpdateQuestion(IPublishableEvent evnt, QuestionData data)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            var question = item.Find<AbstractQuestion>(data.PublicKey);
+            if (document == null)
+            {
+                return;
+            }
+
+            var question = document.Find<AbstractQuestion>(data.PublicKey);
+
             if (question == null)
             {
                 return;
@@ -204,25 +211,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             IQuestion newQuestion = this.questionFactory.CreateQuestion(data);
 
-            item.ReplaceQuestionWithNew(question, newQuestion);
+            document.ReplaceQuestionWithNew(question, newQuestion);
 
-            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+            document.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 
             if (newQuestion.Capital)
-                item.MoveHeadQuestionPropertiesToRoster(question.PublicKey, null);
+                document.MoveHeadQuestionPropertiesToRoster(question.PublicKey, null);
 
-            this.UpdateQuestionnaire(evnt, item);
+            this.UpdateQuestionnaire(evnt, document);
         }
 
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             IQuestion result = questionFactory.CreateQuestion(data);
+            IGroup group = item.Find<IGroup>(groupId);
 
-            if (result == null)
+            if (result == null || group == null)
             {
                 return;
             }
+
             item.Insert(index, result, groupId);
 
             item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
