@@ -363,6 +363,7 @@
     <Content Include="UpdatedDesigner\i\icon-cat-textarea-sm.png" />
     <Content Include="UpdatedDesigner\i\icon-cat-textedit-sm.png" />
     <Content Include="UpdatedDesigner\i\icon-qname-block-link.png" />
+    <Content Include="UpdatedDesigner\i\left-panel-shadow.png" />
     <Content Include="UpdatedDesigner\i\question-item-dots.png" />
     <Content Include="UpdatedDesigner\i\search-glyph.png" />
     <Content Include="UpdatedDesigner\scripts\app.js" />
@@ -696,7 +697,6 @@
     <Content Include="UpdatedDesigner\vendor\underscore\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\underscore\package.json" />
     <Content Include="UpdatedDesigner\vendor\underscore\README.md" />
-    <Content Include="UpdatedDesigner\data\data.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
