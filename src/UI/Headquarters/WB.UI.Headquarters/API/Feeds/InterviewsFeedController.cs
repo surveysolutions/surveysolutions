@@ -8,9 +8,12 @@ using Humanizer;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
+using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Headquarters.API.Filters;
 
 namespace WB.UI.Headquarters.API.Feeds
 {
+    [TokenValidationAuthorizationAttribute]
     public class InterviewsFeedController : ApiController
     {
         private const int PageSize = 100;

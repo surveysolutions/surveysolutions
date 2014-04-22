@@ -9,9 +9,12 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users.Denormalizers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
+using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Headquarters.API.Filters;
 
 namespace WB.UI.Headquarters.API.Feeds
 {
+    [TokenValidationAuthorizationAttribute]
     public class UsersFeedController : ApiController
     {
         private readonly IQueryableReadSideRepositoryReader<UserChangedFeedEntry> userChangedReader;

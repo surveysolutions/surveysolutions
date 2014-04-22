@@ -6,10 +6,13 @@ using System.Web.Http;
 using Main.Core.Documents;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
+using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Formatters;
 
 namespace WB.UI.Headquarters.API.Resources
 {
+    [TokenValidationAuthorizationAttribute]
     [RoutePrefix("api/resources/questionnaires/v1")]
     public class QuestionnairesResourceController : ApiController
     {

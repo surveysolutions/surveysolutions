@@ -6,9 +6,12 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Headquarters.API.Filters;
 
 namespace WB.UI.Headquarters.API.Resources
 {
+    [TokenValidationAuthorizationAttribute]
     [RoutePrefix("api/resources/interviews/v1")]
     public class InterviewsResourceController : ApiController
     {

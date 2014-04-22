@@ -12,18 +12,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
     internal class AtomFeedReader : IAtomFeedReader
     {
         private readonly HttpMessageHandler messageHandler;
+        private readonly HeadquartersSettings headquartersSettings;
         private const string AtomXmlNamespace = "http://www.w3.org/2005/Atom";
 
-        public AtomFeedReader(HttpMessageHandler messageHandler)
+        public AtomFeedReader(HttpMessageHandler messageHandler, HeadquartersSettings settings)
         {
             if (messageHandler == null) throw new ArgumentNullException("messageHandler");
             this.messageHandler = messageHandler;
+            this.headquartersSettings = settings;
         }
 
         public async Task<IEnumerable<AtomFeedEntry<T>>> ReadAfterAsync<T>(Uri feedUri, string lastReceivedEntryId)
         {
             using (var client = new HttpClient(this.messageHandler))
             {
+                if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(headquartersSettings.AccessToken);
+
                 XDocument feedDocument = await ReadFeedPage(feedUri, client).ConfigureAwait(false);
                 IEnumerable<AtomFeedEntry<T>> entries = ParseFeed<T>(feedDocument);
                 Uri archiveUrl = GetArchiveUrl(feedDocument);
