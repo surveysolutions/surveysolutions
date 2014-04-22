@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function ($scope, $routeParams, $location, $route, questionnaireService, verificationService) {
+    .controller('MainCtrl', function ($scope, $routeParams, $location, $route, questionnaireService) {
 
         $scope.chapters = [];
 
@@ -11,11 +11,6 @@ angular.module('designerApp')
 
         $scope.questionnaire = null;
 
-        $scope.verificationStatus = {
-            errorsCount: 8,
-            errors: []
-        };
-
         $scope.setItem = function (item) {
             $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + item.Id);
             $scope.currentItemId = item.Id;
@@ -23,17 +18,6 @@ angular.module('designerApp')
 
         $scope.submit = function() {
             console.log('submit');
-        };
-
-        $scope.verify = function() {
-            verificationService.verify($routeParams.questionnaireId).success(function (result) {
-                    $scope.verificationStatus.errors = result.errors;
-                    $scope.verificationStatus.errorsCount = result.errors.length;
-                });
-        };
-
-        $scope.editChapter = function(chapter) {
-            console.log(chapter);
         };
 
         questionnaireService.getQuestionnaireById($routeParams.questionnaireId)

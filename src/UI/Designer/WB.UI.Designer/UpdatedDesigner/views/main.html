@@ -7,7 +7,7 @@
         </ul>
     </div>
     <div class="questionnarie-title">
-        <div class="title">
+        <div class="title" ng-controller="VerificationCtrl">
             {{questionnaire.Title}} <span>({{questionnaire.QuestionsCount}}Q, {{questionnaire.GroupsCount}}G, {{questionnaire.RostersCount}}R)</span>
             <input type="button" id="verify-btn" class="wb-inline-button error" value="VERIFY" data-container="body" data-toggle="modal-popover" data-placement="bottom" ng-click="verify()" />
             <span ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>

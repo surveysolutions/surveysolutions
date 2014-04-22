@@ -15,6 +15,10 @@ angular.module('designerApp')
             $scope.isFolded = false;
         };
 
+        $scope.editChapter = function (chapter) {
+            console.log(chapter);
+        };
+
         $scope.addNewChapter = function () {
             var newId = guid();
 
