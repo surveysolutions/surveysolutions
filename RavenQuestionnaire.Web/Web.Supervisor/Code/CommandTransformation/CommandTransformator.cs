@@ -57,7 +57,7 @@ namespace Web.Supervisor.Code.CommandTransformation
 
             var resultCommand = new CreateInterviewCommand(command.InterviewId,
                                                            globalInfo.GetCurrentUser().Id,
-                                                           command.QuestionnaireId,
+                                                           command.QuestionnaireId,command.QuestionnaireVersion,
                                                            answers,
                                                            DateTime.UtcNow,
                                                            command.SupervisorId);

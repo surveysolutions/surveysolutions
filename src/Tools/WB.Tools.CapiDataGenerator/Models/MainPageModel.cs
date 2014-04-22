@@ -576,7 +576,7 @@ namespace CapiDataGenerator
                     Guid interviewId = Guid.NewGuid();
 
                     commandService.Execute(new CreateInterviewCommand(interviewId: interviewId,
-                        questionnaireId: template.PublicKey,
+                        questionnaireId: template.PublicKey,version:1,
                         supervisorId: SelectedSupervisor.UserId,
                         userId: interviewer.Id,
                         answersTime: DateTime.UtcNow,
