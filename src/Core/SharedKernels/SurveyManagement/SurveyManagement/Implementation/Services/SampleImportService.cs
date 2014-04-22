@@ -14,11 +14,14 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
@@ -28,10 +31,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
     internal class SampleImportService : ISampleImportService
     {
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
         private readonly IQuestionDataParser questionDataParser;
         private readonly IQuestionnaireFactory questionnaireFactory;
-        private readonly IRosterDataService rosterDataService;
+        private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -39,13 +44,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
         public SampleImportService(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
-            IQuestionnaireFactory questionnaireFactory, IQuestionDataParser questionDataParser, IRosterDataService rosterDataService)
+            IQuestionnaireFactory questionnaireFactory, IQuestionDataParser questionDataParser,
+            IPreloadedDataServiceFactory preloadedDataServiceFactory,
+            IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage,
+            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
             this.questionnaireFactory = questionnaireFactory;
             this.questionDataParser = questionDataParser;
-            this.rosterDataService = rosterDataService;
+            this.preloadedDataServiceFactory = preloadedDataServiceFactory;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
         }
 
         public void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
@@ -72,9 +82,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             }
 
             var bigTemplateObject = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
-
+            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaireId, version);
+            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(questionnaireId, version);
             var bigTemplate = bigTemplateObject == null ? null : bigTemplateObject.Questionnaire;
-            if (bigTemplate == null)
+
+            if (bigTemplate == null || questionnaireExportStructure == null || questionnaireRosterStructure==null)
             {
                 result.SetErrorMessage("Template is absent");
                 this.tempSampleCreationStorage.Store(result, id);
@@ -92,14 +104,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
-
+            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
+                questionnaireRosterStructure);
+            var idColumnIndex = preloadedDataService.GetIdColumnIndex(topLevelData);
             foreach (var value in topLevelData.Content)
             {
                 try
                 {
-                    this.BuiltInterview(Guid.NewGuid(), value, topLevelData.Header, questionnarie, bigTemplate.PublicKey,
+                    this.BuiltInterview(Guid.NewGuid(), topLevelData.FileName, value, topLevelData.Header,
+                        new[] { preloadedDataService.GetRecordIdValueAsDecimal(value, idColumnIndex) },
+                        data.Except(new[] { topLevelData }).ToArray(),
+                        questionnarie, preloadedDataService, bigTemplate.PublicKey,version,
                         responsibleHeadquarterId,
                         responsibleSupervisorId);
+
                     result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, topLevelData.Content.Length));
                     this.tempSampleCreationStorage.Store(result, id);
                     i++;
@@ -114,16 +132,53 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.tempSampleCreationStorage.Store(result, id);
         }
 
-        private void BuiltInterview(Guid interviewId, string[] values, string[] header, IQuestionnaire template, Guid templateId, Guid headqarterId, Guid supervisorId)
+        private void BuiltInterview(Guid interviewId, string levelName, string[] values, string[] header, decimal[] rosterVector, PreloadedDataByFile[] rosterData,
+            IQuestionnaire template, IPreloadedDataService preloadedDataService, Guid templateId, long version, Guid headqarterId, Guid supervisorId)
         {
-            var answersToFeaturedQuestions = this.CreateFeaturedAnswerList(values, header,
+            var answersToFeaturedQuestions = this.CreateAnswerList(values, header,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption, getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
 
+            var rosterAnswers = this.GetAnswers(levelName, rosterVector, rosterData, preloadedDataService, template);
+
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            commandInvoker.Execute(new CreateInterviewCommand(interviewId, headqarterId, templateId, answersToFeaturedQuestions, DateTime.UtcNow, supervisorId));
+            commandInvoker.Execute(new CreateInterviewCommand(interviewId, headqarterId, templateId, version, answersToFeaturedQuestions,
+                DateTime.UtcNow, supervisorId));
         }
 
-        private Dictionary<Guid, object> CreateFeaturedAnswerList(string[] values, string[] header,
+        private PreloadedLevelDto[] GetAnswers(string levelName, decimal[] rosterVector, PreloadedDataByFile[] rosterData, IPreloadedDataService preloadedDataService, IQuestionnaire template)
+        {
+            var result = new List<PreloadedLevelDto>();
+            var rowId = rosterVector.Last();
+            var childFiles = preloadedDataService.GetChildDataFiles(levelName, rosterData);
+
+            foreach (var preloadedDataByFile in childFiles)
+            {
+                var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(preloadedDataByFile);
+                var idColumnIndex = preloadedDataService.GetIdColumnIndex(preloadedDataByFile);
+                var childRecrordsOfCurrentRow =
+                    preloadedDataByFile.Content.Where(
+                        record => preloadedDataService.GetRecordIdValueAsDecimal(record, parentIdColumnIndex) == rowId).ToArray();
+
+                foreach (var rosterRow in childRecrordsOfCurrentRow)
+                {
+                    var newRosterVetor = new decimal[rosterVector.Length + 1];
+                    rosterVector.CopyTo(newRosterVetor, 0);
+                    newRosterVetor[newRosterVetor.Length - 1] = preloadedDataService.GetRecordIdValueAsDecimal(rosterRow, idColumnIndex);
+
+                    var rosterAnswers = this.CreateAnswerList(rosterRow, preloadedDataByFile.Header,
+                        getQuestionByStataCaption: template.GetQuestionByStataCaption,
+                        getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
+
+                    result.Add(new PreloadedLevelDto(newRosterVetor.Skip(1).ToArray(), rosterAnswers));
+
+                    result.AddRange(this.GetAnswers(preloadedDataByFile.FileName, newRosterVetor, rosterData, preloadedDataService, template));
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        private Dictionary<Guid, object> CreateAnswerList(string[] values, string[] header,
             Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
         {
             if (values.Length < header.Length)

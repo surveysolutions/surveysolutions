@@ -21,20 +21,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IDataFileExportService dataFileExportService;
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IRosterDataService rosterDataService;
+        private readonly IDataFileService dataFileService;
         private readonly ILogger logger;
 
         public FileBasedDataExportService(
             IReadSideRepositoryCleanerRegistry cleanerRegistry, 
             string folderPath,
             IDataFileExportService dataFileExportService, 
-            IEnvironmentContentService environmentContentService, 
-            IFileSystemAccessor fileSystemAccessor, IRosterDataService rosterDataService, ILogger logger)
+            IEnvironmentContentService environmentContentService,
+            IFileSystemAccessor fileSystemAccessor, IDataFileService dataFileService, ILogger logger)
         {
             this.dataFileExportService = dataFileExportService;
             this.environmentContentService = environmentContentService;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.rosterDataService = rosterDataService;
+            this.dataFileService = dataFileService;
             this.logger = logger;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
 
@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void CreateExportedDataStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure)
         {
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
+            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version); 
 
             if (this.fileSystemAccessor.IsDirectoryExists(dataFolderForTemplatePath))
             {
@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
 
             var cleanedFileNamesForLevels =
-                rosterDataService.CreateCleanedFileNamesForLevels(
+                this.dataFileService.CreateCleanedFileNamesForLevels(
                     questionnaireExportStructure.HeaderToLevelMap.Values.ToDictionary(h => h.LevelId, h => h.LevelName));
 
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.ThrowArgumentExceptionIfDataFolderMissing(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion, dataFolderForTemplatePath);
 
             var cleanedFileNamesForLevels =
-                rosterDataService.CreateCleanedFileNamesForLevels(interviewDataExportView.Levels.ToDictionary(l => l.LevelId,
+                this.dataFileService.CreateCleanedFileNamesForLevels(interviewDataExportView.Levels.ToDictionary(l => l.LevelId,
                     l => l.LevelName));
 
             foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
