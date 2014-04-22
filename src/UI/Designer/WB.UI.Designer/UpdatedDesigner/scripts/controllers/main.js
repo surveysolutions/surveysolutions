@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function($scope, $http, $routeParams, $location, $route) {
+    .controller('MainCtrl', function($scope, $http, $routeParams, $location, $route, commandService) {
 
         $scope.chapters = [];
 
@@ -51,7 +51,6 @@ angular.module('designerApp')
 
         $scope.addNewChapter = function() {
             var newId = guid();
-            console.log(newId);
 
             var newChapter = {
                 Title: 'New Chapter',
@@ -61,54 +60,16 @@ angular.module('designerApp')
                 RostersCount: 0
             };
 
-            $http({
-                method: 'POST',
-                url: 'command/execute',
-                data: {
-                    "type": "AddGroup",
-                    "command": "{\"questionnaireId\":\"" + $routeParams.questionnaireId + "\"," +
-                        "\"groupId\":\"" + newChapter.ChapterId + "\"," +
-                        "\"title\":\"" + newChapter.Title + "\"," +
-                        "\"description\":\"\",\"condition\":\"\"," +
-                        "\"isRoster\":false," +
-                        "\"rosterSizeQuestionId\":null," +
-                        "\"rosterSizeSource\":\"Question\"," +
-                        "\"rosterFixedTitles\":null," +
-                        "\"rosterTitleQuestionId\":null," +
-                        "\"parentGroupId\":null}"
-                },
-                headers: { 'Content-Type': 'application/json; ' }
-            }).success(function() {
+            commandService.addGroup($routeParams.questionnaireId, newChapter).success(function () {
                 $scope.questionnaire.Chapters.push(newChapter);
             });
         };
 
         $scope.cloneChapter = function(chapter) {
             var newId = guid();
-            console.log(newId);
             var chapterDescription = "";
 
-            $http({
-                method: 'POST',
-                url: 'command/execute',
-                data: {
-                    "type": "CloneGroupWithoutChildren",
-                    "command": "{\"questionnaireId\":\"" + $routeParams.questionnaireId + "\"," +
-                        "\"groupId\":\"" + newId + "\"," +
-                        "\"title\":\"" + chapter.Title + "\"," +
-                        "\"description\":\"" + chapterDescription + "\"," +
-                        "\"condition\":\"\"," +
-                        "\"isRoster\":false," +
-                        "\"rosterSizeQuestionId\":null," +
-                        "\"rosterSizeSource\":\"Question\"," +
-                        "\"rosterFixedTitles\":null," +
-                        "\"rosterTitleQuestionId\":null," +
-                        "\"parentGroupId\":null," +
-                        "\"sourceGroupId\":\"" + chapter.ChapterId + "\"," +
-                        "\"targetIndex\":1}"
-                },
-                headers: { 'Content-Type': 'application/json; ' }
-            }).success(function() {
+            commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function () {
                 var newChapter = {
                     Title: chapter.Title,
                     ChapterId: newId,
@@ -122,16 +83,7 @@ angular.module('designerApp')
 
         $scope.deleteChapter = function(chapter) {
             if (confirm("Are you sure want to delete?")) {
-                $http({
-                    method: 'POST',
-                    url: 'command/execute',
-                    data: {
-                        "type": "DeleteGroup",
-                        "command": "{\"questionnaireId\":\"" + $routeParams.questionnaireId + "\"," +
-                            "\"groupId\":\"" + chapter.ChapterId + "\"}"
-                    },
-                    headers: { 'Content-Type': 'application/json;' }
-                }).success(function() {
+                commandService.deleteGroup($routeParams.questionnaireId, chapter).success(function () {
                     var index = $scope.questionnaire.Chapters.indexOf(chapter);
                     if (index > -1) {
                         $scope.questionnaire.Chapters.splice(index, 1);
