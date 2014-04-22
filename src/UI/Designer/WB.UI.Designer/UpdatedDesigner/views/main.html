@@ -31,7 +31,7 @@
                 <li><a href="" class="search" title="Toggle Search"></a></li>
             </ul>
         </div>
-        <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}">
+        <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters">
                 <li ng-repeat="chapter in questionnaire.Chapters" ng-class="{current: currentChapterId == chapter.ChapterId}" ng-click="changeChapter(chapter);">
