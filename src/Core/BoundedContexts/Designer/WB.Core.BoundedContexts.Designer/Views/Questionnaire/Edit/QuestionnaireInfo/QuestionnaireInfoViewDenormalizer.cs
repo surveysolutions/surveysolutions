@@ -5,7 +5,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -113,7 +112,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (!evnt.Payload.ParentGroupPublicKey.HasValue ||
                 evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.QuestionnaireId)
             {
-                CreateChapter(currentState: currentState, chapterId: groupId, chapterTitle: evnt.Payload.GroupText);
+                CreateChapter(currentState: currentState, chapterId: groupId, chapterTitle: evnt.Payload.GroupText,
+                    orderIndex: evnt.Payload.TargetIndex);
             }
 
             currentState.GroupsCount += 1;
