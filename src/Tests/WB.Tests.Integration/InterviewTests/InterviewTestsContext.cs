@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests
             return new Interview(
                 interviewId ?? new Guid("A0A0A0A0B0B0B0B0A0A0A0A0B0B0B0B0"),
                 userId ?? new Guid("F111F111F111F111F111F111F111F111"),
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),1,
                 answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
                 answersTime ?? new DateTime(2012, 12, 20),
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
