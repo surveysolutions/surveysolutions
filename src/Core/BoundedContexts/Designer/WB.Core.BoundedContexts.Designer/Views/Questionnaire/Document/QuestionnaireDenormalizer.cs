@@ -1,16 +1,14 @@
 using System;
-using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
@@ -160,88 +158,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<QuestionCloned> evnt)
         {
             QuestionCloned e = evnt.Payload;
-            CloneQuestion(evnt, e.GroupPublicKey.Value, e.TargetIndex,
-                new QuestionData(
-                    e.PublicKey,
-                    e.QuestionType,
-                    e.QuestionScope,
-                    e.QuestionText,
-                    e.StataExportCaption,
-                    e.ConditionExpression,
-                    e.ValidationExpression,
-                    e.ValidationMessage,
-                    e.AnswerOrder,
-                    e.Featured,
-                    e.Mandatory,
-                    e.Capital,
-                    e.Instructions,
-                    e.Triggers,
-                    DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
-                    e.Answers,
-                    e.LinkedToQuestionId,
-                    e.IsInteger,
-                    null,
-                    e.AreAnswersOrdered,
-                    e.MaxAllowedAnswers,
-                    null));
+            CloneQuestion(evnt, e.GroupPublicKey.Value, e.TargetIndex,EventConverter.QuestionClonedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
-            FullQuestionDataEvent e = evnt.Payload;
-            AddQuestion(evnt, evnt.Payload.GroupPublicKey.Value,
-                new QuestionData(
-                    e.PublicKey,
-                    e.QuestionType,
-                    e.QuestionScope,
-                    e.QuestionText,
-                    e.StataExportCaption,
-                    e.ConditionExpression,
-                    e.ValidationExpression,
-                    e.ValidationMessage,
-                    e.AnswerOrder,
-                    e.Featured,
-                    e.Mandatory,
-                    e.Capital,
-                    e.Instructions,
-                    e.Triggers,
-                    DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
-                    e.Answers,
-                    e.LinkedToQuestionId,
-                    e.IsInteger,
-                    null,
-                    e.AreAnswersOrdered,
-                    e.MaxAllowedAnswers,
-                    null));
+            AddQuestion(evnt, evnt.Payload.GroupPublicKey.Value, EventConverter.NewQuestionAddedToQuestionData(evnt));
         }
 
         //// move it out of there
         public void Handle(IPublishedEvent<QuestionChanged> evnt)
         {
-            QuestionChanged e = evnt.Payload;
-            UpdateQuestion(evnt, new QuestionData(
-                e.PublicKey,
-                e.QuestionType,
-                e.QuestionScope,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                e.AnswerOrder,
-                e.Featured,
-                e.Mandatory,
-                e.Capital,
-                e.Instructions,
-                e.Triggers,
-                DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
-                e.Answers,
-                e.LinkedToQuestionId,
-                e.IsInteger,
-                null,
-                e.AreAnswersOrdered,
-                e.MaxAllowedAnswers,
-                null));
+            UpdateQuestion(evnt, EventConverter.QuestionChangedToQuestionData(evnt));
         }
 
         protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
@@ -307,175 +235,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
         {
-            NumericQuestionAdded e = evnt.Payload;
-            AddQuestion(evnt, evnt.Payload.GroupPublicKey,
-                new QuestionData(
-                    e.PublicKey,
-                    QuestionType.Numeric,
-                    e.QuestionScope,
-                    e.QuestionText,
-                    e.StataExportCaption,
-                    e.ConditionExpression,
-                    e.ValidationExpression,
-                    e.ValidationMessage,
-                    Order.AZ, 
-                    e.Featured,
-                    e.Mandatory,
-                    e.Capital,
-                    e.Instructions,
-                    e.Triggers,
-                    DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
-                    null,
-                    null,
-                    e.IsInteger, 
-                    e.CountOfDecimalPlaces,
-                    null,
-                    null,
-                    null));
+            AddQuestion(evnt, evnt.Payload.GroupPublicKey,EventConverter.NumericQuestionAddedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
         {
             NumericQuestionCloned e = evnt.Payload;
-            CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
-                new QuestionData(
-                    e.PublicKey,
-                    QuestionType.Numeric,
-                    e.QuestionScope,
-                    e.QuestionText,
-                    e.StataExportCaption,
-                    e.ConditionExpression,
-                    e.ValidationExpression,
-                    e.ValidationMessage,
-                    Order.AZ,
-                    e.Featured,
-                    e.Mandatory,
-                    e.Capital,
-                    e.Instructions,
-                    e.Triggers,
-                    DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
-                    null,
-                    null,
-                    e.IsInteger, 
-                    e.CountOfDecimalPlaces,
-                    null,
-                    null,
-                    null));
+            CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex, EventConverter.NumericQuestionClonedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
         {
-            NumericQuestionChanged e = evnt.Payload;
-            UpdateQuestion(evnt, new QuestionData(
-                e.PublicKey,
-                QuestionType.Numeric,
-                e.QuestionScope,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                Order.AZ,
-                e.Featured,
-                e.Mandatory,
-                e.Capital,
-                e.Instructions,
-                e.Triggers,
-                DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue, actualMaxValue: e.MaxAllowedValue),
-                null, 
-                null,
-                e.IsInteger, 
-                e.CountOfDecimalPlaces,
-                null,
-                null,
-                null));
+            UpdateQuestion(evnt, EventConverter.NumericQuestionChangedToQuestionData(evnt));
         }
-
 
         public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
         {
-            TextListQuestionAdded e = evnt.Payload;
-            AddQuestion(evnt, evnt.Payload.GroupId,
-                new QuestionData(
-                    e.PublicKey,
-                    QuestionType.TextList,
-                    QuestionScope.Interviewer,
-                    e.QuestionText,
-                    e.StataExportCaption,
-                    e.ConditionExpression,
-                    null,
-                    null,
-                    Order.AZ,
-                    false,
-                    e.Mandatory,
-                    false,
-                    e.Instructions,
-                    new List<Guid>(), 
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    e.MaxAnswerCount));
+            AddQuestion(evnt, evnt.Payload.GroupId, EventConverter.TextListQuestionAddedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
         {
             TextListQuestionCloned e = evnt.Payload;
-            CloneQuestion(evnt, e.GroupId, e.TargetIndex,
-                new QuestionData(
-                    e.PublicKey,
-                    QuestionType.TextList,
-                    QuestionScope.Interviewer,
-                    e.QuestionText,
-                    e.StataExportCaption,
-                    e.ConditionExpression,
-                    null,
-                    null,
-                    Order.AZ,
-                    false,
-                    e.Mandatory,
-                    false,
-                    e.Instructions,
-                    new List<Guid>(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    e.MaxAnswerCount));
+            CloneQuestion(evnt, e.GroupId, e.TargetIndex, EventConverter.TextListQuestionClonedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<TextListQuestionChanged> evnt)
         {
-            TextListQuestionChanged e = evnt.Payload;
-            UpdateQuestion(evnt, new QuestionData(
-                e.PublicKey,
-                QuestionType.TextList,
-                QuestionScope.Interviewer,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.ConditionExpression,
-                null,
-                null,
-                Order.AZ,
-                false,
-                e.Mandatory,
-                false,
-                e.Instructions,
-                new List<Guid>(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                e.MaxAnswerCount));
+            UpdateQuestion(evnt, EventConverter.TextListQuestionChangedToQuestionData(evnt));
         }
         
         public void Handle(IPublishedEvent<ImageUpdated> evnt)
@@ -608,88 +395,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
         {
-            QRBarcodeQuestionAdded e = evnt.Payload;
-            AddQuestion(evnt, evnt.Payload.ParentGroupId,
-              new QuestionData(
-                  e.QuestionId,
-                  QuestionType.QRBarcode,
-                  QuestionScope.Interviewer,
-                  e.Title,
-                  e.VariableName,
-                  e.EnablementCondition,
-                  null,
-                  null,
-                  Order.AZ,
-                  false,
-                  e.IsMandatory,
-                  false,
-                  e.Instructions,
-                  new List<Guid>(),
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null));
+            AddQuestion(evnt, evnt.Payload.ParentGroupId,EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
-            QRBarcodeQuestionUpdated e = evnt.Payload;
-            UpdateQuestion(evnt, new QuestionData(
-                e.QuestionId,
-                QuestionType.QRBarcode,
-                QuestionScope.Interviewer,
-                e.Title,
-                e.VariableName,
-                e.EnablementCondition,
-                null,
-                null,
-                Order.AZ,
-                false,
-                e.IsMandatory,
-                false,
-                e.Instructions,
-                new List<Guid>(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null));
+            UpdateQuestion(evnt, EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> evnt)
         {
             QRBarcodeQuestionCloned e = evnt.Payload;
-            CloneQuestion(evnt, e.ParentGroupId, e.TargetIndex,
-                new QuestionData(
-                    e.QuestionId,
-                    QuestionType.QRBarcode,
-                    QuestionScope.Interviewer,
-                    e.Title,
-                    e.VariableName,
-                    e.EnablementCondition,
-                    null,
-                    null,
-                    Order.AZ,
-                    false,
-                    e.IsMandatory,
-                    false,
-                    e.Instructions,
-                    new List<Guid>(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null));
+            CloneQuestion(evnt, e.ParentGroupId, e.TargetIndex,EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
         }
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
@@ -712,16 +429,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public Type[] BuildsViews
         {
             get { return new Type[] { typeof(QuestionnaireDocument) }; }
-        }
-
-        private static int? DetermineActualMaxValueForGenericQuestion(QuestionType questionType, int legacyMaxValue)
-        {
-            return questionType == QuestionType.AutoPropagate ? legacyMaxValue as int? : null;
-        }
-
-        private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
-        {
-            return isAutopropagating ? legacyMaxValue : actualMaxValue;
         }
     }
 }
