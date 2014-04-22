@@ -2,11 +2,13 @@
 {
     public class SchedulerSettings
     {
-        public SchedulerSettings(int hqSynchronizationInterval)
+        public SchedulerSettings(bool schedulerEnabled, int hqSynchronizationInterval)
         {
+            this.SchedulerEnabled = schedulerEnabled;
             this.HqSynchronizationInterval = hqSynchronizationInterval;
         }
 
-        public int HqSynchronizationInterval { get; set; }
+        public bool SchedulerEnabled { get; private set; }
+        public int HqSynchronizationInterval { get; private set; }
     }
 }

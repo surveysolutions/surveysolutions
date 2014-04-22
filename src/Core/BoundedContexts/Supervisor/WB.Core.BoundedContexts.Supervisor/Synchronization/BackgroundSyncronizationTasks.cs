@@ -22,18 +22,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         {
             IJobDetail job = JobBuilder.Create<Synchronizer>()
                 .WithIdentity("HQ sync", "Synchronization")
+                .StoreDurably(true)
                 .Build();
 
-            // Trigger the job to run now, and then every 40 seconds
-            ITrigger trigger = TriggerBuilder.Create()
-              .WithIdentity("HQ sync trigger", "Synchronization")
-              .StartNow()
-              .WithSimpleSchedule(x => x
-                  .WithIntervalInSeconds(schedulerSettigns.HqSynchronizationInterval)
-                  .RepeatForever())
-              .Build();
 
-            this.scheduler.ScheduleJob(job, trigger);
+            if (this.schedulerSettigns.SchedulerEnabled)
+            {
+                // Trigger the job to run now, and then every 40 seconds
+                ITrigger trigger = TriggerBuilder.Create()
+                    .WithIdentity("HQ sync trigger", "Synchronization")
+                    .StartNow()
+                    .WithSimpleSchedule(x => x
+                        .WithIntervalInSeconds(schedulerSettigns.HqSynchronizationInterval)
+                        .RepeatForever())
+                    .Build();
+
+                this.scheduler.ScheduleJob(job, trigger);
+            }
+
+            this.scheduler.AddJob(job, true);
         }
     }
 }
