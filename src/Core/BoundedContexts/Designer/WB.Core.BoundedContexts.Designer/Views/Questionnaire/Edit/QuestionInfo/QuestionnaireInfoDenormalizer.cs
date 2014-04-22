@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         ICreateHandler<QuestionDetailsCollectionView, NewQuestionnaireCreated>,
         ICreateHandler<QuestionDetailsCollectionView, QuestionnaireCloned>,
         ICreateHandler<QuestionDetailsCollectionView, TemplateImported>,
-        IUpdateHandler<QuestionDetailsCollectionView, NewQuestionAdded>, 
+        IUpdateHandler<QuestionDetailsCollectionView, NewQuestionAdded>,
         IUpdateHandler<QuestionDetailsCollectionView, QuestionChanged>,
         IUpdateHandler<QuestionDetailsCollectionView, QuestionCloned>,
         IUpdateHandler<QuestionDetailsCollectionView, QuestionDeleted>,
@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         IUpdateHandler<QuestionDetailsCollectionView, QRBarcodeQuestionUpdated>,
         IUpdateHandler<QuestionDetailsCollectionView, QRBarcodeQuestionCloned>,
         IUpdateHandler<QuestionDetailsCollectionView, QuestionnaireItemMoved>
+        //,IDeleteHandler<QuestionDetailsCollectionView, QuestionnaireDeleted>
     {
         private readonly IQuestionDetailsFactory questionDetailsFactory;
         private readonly IQuestionFactory questionFactory;
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public override Type[] BuildsViews
         {
-            get { return base.BuildsViews.Union(new[] { typeof (QuestionDetailsCollectionView) }).ToArray(); }
+            get { return base.BuildsViews.Union(new[] { typeof(QuestionDetailsCollectionView) }).ToArray(); }
         }
 
         public QuestionDetailsCollectionView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -86,6 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return
                 questionnaire.GetAllQuestions<IQuestion>()
                     .Select(question => this.questionDetailsFactory.CreateQuestion(question, question.GetParent().PublicKey))
+                    .Where(q => q != null)
                     .ToList();
         }
 
@@ -107,6 +109,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QuestionChangedToQuestionData(evnt));
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            if (oldQuestion == null)
+            {
+                return currentState;
+            }
             currentState.Questions.Remove(oldQuestion);
             currentState.Questions.Add(questionDetailsFactory.CreateQuestion(question, oldQuestion.ParentGroupId));
             return currentState;
@@ -123,6 +129,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(evnt));
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            if (oldQuestion == null)
+            {
+                return currentState;
+            }
             currentState.Questions.Remove(oldQuestion);
             currentState.Questions.Add(this.questionDetailsFactory.CreateQuestion(question, oldQuestion.ParentGroupId));
             return currentState;
@@ -170,6 +180,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
+            if (question == null)
+            {
+                return currentState;
+            }
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.QuestionId);
             currentState.Questions.Remove(oldQuestion);
             currentState.Questions.Add(this.questionDetailsFactory.CreateQuestion(question, oldQuestion.ParentGroupId));
@@ -194,9 +208,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionDetailsCollectionView Update(QuestionDetailsCollectionView currentState, IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
             var question = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
-            if (question != null && evnt.Payload.GroupKey != null) 
+            if (question != null && evnt.Payload.GroupKey != null)
                 question.ParentGroupId = evnt.Payload.GroupKey.Value;
             return currentState;
         }
+
+        //public void Delete(QuestionDetailsCollectionView currentState, IPublishedEvent<QuestionnaireDeleted> evnt) { }
     }
 }

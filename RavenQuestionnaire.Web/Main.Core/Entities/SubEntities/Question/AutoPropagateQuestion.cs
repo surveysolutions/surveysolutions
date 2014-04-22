@@ -21,7 +21,7 @@ namespace Main.Core.Entities.SubEntities.Question
        
         public int MaxValue { get; set; }
 
-        public override void AddAnswer(IAnswer answer)
+        public override void AddAnswer(Answer answer)
         {
             throw new NotImplementedException();
         }

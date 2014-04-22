@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             List<Guid> triggers = null,
             int maxValue = 0,
             string variableName = "variableName",
-            List<IAnswer> options = null,
+            List<Answer> options = null,
             Order answerOrder = Order.AsIs,
             bool capital = false,
             bool featured = false)

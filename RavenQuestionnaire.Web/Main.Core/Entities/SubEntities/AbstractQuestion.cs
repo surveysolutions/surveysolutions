@@ -13,7 +13,7 @@ namespace Main.Core.Entities.SubEntities
         protected AbstractQuestion()
         {
             this.Cards = new List<Image>();
-            this.Answers = new List<IAnswer>();
+            this.Answers = new List<Answer>();
         }
 
         protected AbstractQuestion(string text)
@@ -24,7 +24,7 @@ namespace Main.Core.Entities.SubEntities
 
         public Order AnswerOrder { get; set; }
 
-        public List<IAnswer> Answers { get; set; }
+        public List<Answer> Answers { get; set; }
 
         public bool Capital { get; set; }
 
@@ -125,7 +125,7 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid? LinkedToQuestionId { get; set; }
 
-        public abstract void AddAnswer(IAnswer answer);
+        public abstract void AddAnswer(Answer answer);
 
         public void AddCard(Image card)
         {
@@ -177,8 +177,8 @@ namespace Main.Core.Entities.SubEntities
             }
 
             // handle reference part
-            question.Answers = new List<IAnswer>();
-            foreach (IAnswer answer in this.Answers)
+            question.Answers = new List<Answer>();
+            foreach (Answer answer in this.Answers)
             {
                 question.Answers.Add(answer.Clone());
             }

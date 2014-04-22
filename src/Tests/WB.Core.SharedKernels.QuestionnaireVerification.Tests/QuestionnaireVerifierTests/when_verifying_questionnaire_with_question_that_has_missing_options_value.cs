@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionWithMissingValues,
                 QuestionType = QuestionType.SingleOption,
-                Answers = new List<IAnswer>() { new Answer() { AnswerText = "some answer"} }
+                Answers = new List<Answer>() { new Answer() { AnswerText = "some answer"} }
             });
 
             verifier = CreateQuestionnaireVerifier();

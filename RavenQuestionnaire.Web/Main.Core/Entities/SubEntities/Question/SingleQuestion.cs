@@ -19,7 +19,7 @@ namespace Main.Core.Entities.SubEntities.Question
             this.Children = new List<IComposite>();
         }
 
-        public override void AddAnswer(IAnswer answer)
+        public override void AddAnswer(Answer answer)
         {
             if (answer == null)
             {
@@ -33,7 +33,8 @@ namespace Main.Core.Entities.SubEntities.Question
 
             this.Answers.Add(answer);
         }
-        
+
+
         public override T Find<T>(Guid publicKey)
         {
             return null;

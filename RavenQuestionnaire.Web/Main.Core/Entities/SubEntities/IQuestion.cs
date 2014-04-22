@@ -9,7 +9,7 @@ namespace Main.Core.Entities.SubEntities
     /// </summary>
     public interface IQuestion : IComposite, IConditional
     {
-        List<IAnswer> Answers { get; set; }
+        List<Answer> Answers { get; set; }
         Order AnswerOrder { get; set; }
         bool Capital { get; set; }
         List<Image> Cards { get; set; }
@@ -36,7 +36,7 @@ namespace Main.Core.Entities.SubEntities
 
         Guid? LinkedToQuestionId { get; set; }
 
-        void AddAnswer(IAnswer answer);
+        void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
 
         [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfQuestion instead")]

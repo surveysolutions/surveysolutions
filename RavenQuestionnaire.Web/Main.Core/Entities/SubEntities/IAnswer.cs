@@ -1,3 +1,4 @@
+
 using System;
 
 namespace Main.Core.Entities.SubEntities
@@ -53,6 +54,6 @@ namespace Main.Core.Entities.SubEntities
         /// <returns>
         /// The <see cref="IAnswer"/>.
         /// </returns>
-        IAnswer Clone();
+        Answer Clone();
     }
 }

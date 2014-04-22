@@ -31,7 +31,7 @@ namespace Main.Core.Tests.Entities
         [Test]
         public void ClonedQeustion_TargetIsProperlySet()
         {
-            var answers = new List<IAnswer> { new Answer() { AnswerText = "hi" }, new Answer(){AnswerText = "there"}, new Answer() };
+            var answers = new List<Answer> { new Answer() { AnswerText = "hi" }, new Answer(){AnswerText = "there"}, new Answer() };
 
             var question = new SingleQuestion(Guid.NewGuid(), "test")
                 {

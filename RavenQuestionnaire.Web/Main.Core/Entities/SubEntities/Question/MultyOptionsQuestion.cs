@@ -16,7 +16,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
         }
 
-        public override void AddAnswer(IAnswer answer)
+        public override void AddAnswer(Answer answer)
         {
             if (answer == null)
             {
