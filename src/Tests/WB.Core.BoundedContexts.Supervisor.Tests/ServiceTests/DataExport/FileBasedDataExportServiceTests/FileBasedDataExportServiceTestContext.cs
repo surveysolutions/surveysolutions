@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -21,13 +22,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests.DataExport.FileB
     {
         protected static FileBasedDataExportService CreateFileBasedDataExportService(
             IFileSystemAccessor fileSystemAccessor = null, IDataFileExportService dataFileExportService = null,
-            IEnvironmentContentService environmentContentService = null, IRosterDataService rosterDataService =null)
+            IEnvironmentContentService environmentContentService = null, IDataFileService preloadedDataService = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
                 dataFileExportService ?? Mock.Of<IDataFileExportService>(),
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
-                rosterDataService ?? new RosterDataService(currentFileSystemAccessor),
+                preloadedDataService ?? new DataFileService(currentFileSystemAccessor),
                 Mock.Of<ILogger>());
         }
 

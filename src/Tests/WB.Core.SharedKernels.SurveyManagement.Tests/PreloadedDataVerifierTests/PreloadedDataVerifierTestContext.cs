@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -27,6 +28,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
     {
         protected static PreloadedDataVerifier CreatePreloadedDataVerifier(QuestionnaireDocument questionnaireDocument = null, IQuestionDataParser questionDataParser=null)
         {
+            var questionnaireExportStructure = (questionnaireDocument == null
+                ? null
+                : new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
+                    new QuestionnaireRosterStructureFactory()).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
+            var questionnaireRosterStructure = (questionnaireDocument == null
+                ? null
+                : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
             return
                 new PreloadedDataVerifier(
                     Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>(
@@ -36,17 +44,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                                 : null)),
                     Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
                         _ =>
-                            _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == (questionnaireDocument == null
-                                ? null
-                                : new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
-                                    new QuestionnaireRosterStructureFactory()).CreateQuestionnaireExportStructure(questionnaireDocument, 1))),
-                    new RosterDataService(Mock.Of<IFileSystemAccessor>()), questionDataParser ?? Mock.Of<IQuestionDataParser>(),
+                            _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
+                    questionDataParser ?? Mock.Of<IQuestionDataParser>(),
                     new QuestionnaireFactory(),
                     Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>(
-                        _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) ==
-                        (questionnaireDocument == null
-                            ? null
-                            : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1))));
+                        _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireRosterStructure),
+                    Mock.Of<IPreloadedDataServiceFactory>(
+                        _ => _.CreatePreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure) ==
+                            new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure)));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)
