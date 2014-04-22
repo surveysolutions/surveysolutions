@@ -45,6 +45,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         {
             using (var client = new HttpClient(messageHandler))
             {
+                /*
+                if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(headquartersSettings.AccessToken);
+                */
                 var requestUri = this.BuildValidationUri(login, password);
                 var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
