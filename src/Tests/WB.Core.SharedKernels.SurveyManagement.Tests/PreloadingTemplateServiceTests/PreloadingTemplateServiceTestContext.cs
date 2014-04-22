@@ -8,6 +8,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -26,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
                 Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
                     _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure), "",
                 dataFileExportService ?? CreateIDataFileExportServiceMock().Object,
-                Mock.Of<IArchiveUtils>(), new RosterDataService(currentFileSystemAccessor));
+                Mock.Of<IArchiveUtils>(), new DataFileService(currentFileSystemAccessor));
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

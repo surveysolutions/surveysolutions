@@ -4,26 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
-    internal class RosterDataService : IRosterDataService
+    internal class DataFileService : IDataFileService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        
-        public RosterDataService(IFileSystemAccessor fileSystemAccessor)
+        public DataFileService(IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-        }
-
-        public HeaderStructureForLevel FindLevelInPreloadedData(PreloadedDataByFile levelData, QuestionnaireExportStructure exportStructure)
-        {
-            return
-                exportStructure.HeaderToLevelMap.Values.FirstOrDefault(
-                    header => levelData.FileName.Contains(header.LevelName));
         }
 
         public Dictionary<Guid, string> CreateCleanedFileNamesForLevels(IDictionary<Guid, string> levels)

@@ -824,10 +824,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() { }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid supervisorId)
+        public Interview(Guid id, Guid userId, Guid questionnaireId, long version, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid supervisorId)
             : base(id)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+            IQuestionnaire questionnaire =this.GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
 
             this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions);
 

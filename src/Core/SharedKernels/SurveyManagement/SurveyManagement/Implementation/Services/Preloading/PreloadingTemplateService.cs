@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataFileExportService dataFileExportService;
         private readonly IArchiveUtils archiveUtils;
-        private readonly IRosterDataService rosterDataService;
+        private readonly IDataFileService dataFileService;
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage;
@@ -30,13 +30,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,
             IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage, string folderPath,
-            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils, IRosterDataService rosterDataService)
+            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils, IDataFileService dataFileService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.dataFileExportService = dataFileExportService;
             this.archiveUtils = archiveUtils;
-            this.rosterDataService = rosterDataService;
+            this.dataFileService = dataFileService;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return archiveFilePath;
 
             var cleanedFileNamesForLevels =
-              rosterDataService.CreateCleanedFileNamesForLevels(
+              this.dataFileService.CreateCleanedFileNamesForLevels(
                   questionnaire.HeaderToLevelMap.Values.ToDictionary(h => h.LevelId, h => h.LevelName));
             foreach (var header in questionnaire.HeaderToLevelMap.Values)
             {

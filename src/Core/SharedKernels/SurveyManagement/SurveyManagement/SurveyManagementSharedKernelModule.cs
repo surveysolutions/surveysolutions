@@ -48,8 +48,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
-            this.Bind<IRosterDataService>().To<RosterDataService>();
+            this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
+            this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
+            this.Bind<IDataFileService>().To<DataFileService>();
             this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,

@@ -71,6 +71,8 @@
     <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserBySupervisorCommand.cs" />
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
+    <Compile Include="DataTransferObjects\Preloading\PreloadedDataDto.cs" />
+    <Compile Include="DataTransferObjects\Preloading\PreloadedLevelDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredInvalid.cs" />
