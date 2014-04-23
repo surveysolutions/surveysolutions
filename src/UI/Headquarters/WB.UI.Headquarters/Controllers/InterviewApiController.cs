@@ -113,7 +113,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Supervisor, Headquarter")]
         public NewInterviewDetailsView InterviewDetails(InterviewDetailsViewModel data)
         {
-            var a = this.interviewDetailsFactory.Load(
+            var view = this.interviewDetailsFactory.Load(
                 new InterviewDetailsInputModel()
                 {
                     CompleteQuestionnaireId = data.InterviewId,
@@ -126,12 +126,12 @@ namespace WB.UI.Headquarters.Controllers
             {
                 InterviewInfo = new InterviewInfoModel()
                 {
-                    id = a.PublicKey.ToString(),
-                    questionnaireId = a.QuestionnairePublicKey.ToString(),
-                    title = a.Title,
-                    status = Enum.GetName(typeof(InterviewStatus), a.Status)
+                    id = view.PublicKey.ToString(),
+                    questionnaireId = view.QuestionnairePublicKey.ToString(),
+                    title = view.Title,
+                    status = Enum.GetName(typeof(InterviewStatus), view.Status)
                 },
-                Groups = a.Groups.Select(group => new GroupModel(group.ParentId)
+                Groups = view.Groups.Select(group => new GroupModel(group.ParentId)
                 {
                     id = group.Id.ToString(),
                     depth = group.Depth,

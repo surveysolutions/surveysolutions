@@ -141,15 +141,6 @@ namespace WB.UI.Headquarters.Utils
             return string.Empty;
         }
 
-        /// <summary>
-        /// The ordered by display attr.
-        /// </summary>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IOrderedEnumerable"/>.
-        /// </returns>
         public static IOrderedEnumerable<PropertyInfo> OrderedByDisplayAttr(this IEnumerable<PropertyInfo> collection)
         {
             return collection.OrderBy(
@@ -174,15 +165,6 @@ namespace WB.UI.Headquarters.Utils
             return Regex.Replace(value, "([A-Z][a-z])", " $1").Trim();
         }
 
-        /// <summary>
-        /// The visible properties.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="PropertyInfo[]"/>.
-        /// </returns>
         public static PropertyInfo[] VisibleProperties(this object model)
         {
             return

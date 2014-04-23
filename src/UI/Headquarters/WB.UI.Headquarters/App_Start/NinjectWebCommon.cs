@@ -120,7 +120,7 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
+                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new SyncSettings(reevaluateInterviewWhenSynchronized:false)),
                 new SupervisorCommandDeserializationModule(),
                 new HeadquartersBoundedContextModule(),
                 new SurveyManagementSharedKernelModule(

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.View;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.MetaInfo;
@@ -16,10 +10,13 @@ namespace WB.Core.Synchronization
     public class SynchronizationModule : NinjectModule
     {
         private readonly string currentFolderPath;
+        private readonly SyncSettings syncSettings;
 
-        public SynchronizationModule(string currentFolderPath)
+        public SynchronizationModule(string currentFolderPath,
+            SyncSettings syncSettings)
         {
             this.currentFolderPath = currentFolderPath;
+            this.syncSettings = syncSettings;
         }
 
         public override void Load()
@@ -27,7 +24,7 @@ namespace WB.Core.Synchronization
             this.Bind<ISyncManager>().To<SyncManager>();
             this.Bind<ISyncProvider>().To<SyncProvider.SyncProvider>();
             this.Bind<IBackupManager>().To<DefaultBackupManager>();
-
+            this.Bind<SyncSettings>().ToConstant(this.syncSettings);
 
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
             this.Bind<IChunkWriter>().To<ReadSideChunkWriter>().InSingletonScope();

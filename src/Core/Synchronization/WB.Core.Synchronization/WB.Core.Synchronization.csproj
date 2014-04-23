@@ -83,6 +83,7 @@
     <Compile Include="SyncProvider\SyncProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SyncSettings.cs" />
     <Compile Include="SyncStorage\IChunkReader.cs" />
     <Compile Include="SyncStorage\IncomePackagesRepository.cs" />
     <Compile Include="SyncStorage\InMemoryChunkStorage.cs" />
