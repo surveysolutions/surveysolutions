@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function ($scope, $routeParams, $location, $route, questionnaireService) {
+    .controller('MainCtrl', function($scope, $routeParams, $location, $route, questionnaireService) {
 
         $scope.chapters = [];
 
@@ -11,9 +11,27 @@ angular.module('designerApp')
 
         $scope.questionnaire = null;
 
-        $scope.setItem = function (item) {
+        $scope.currentChapter = null;
+
+        $scope.currentChapterId = null;
+
+        $scope.setItem = function(item) {
             $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + item.Id);
             $scope.currentItemId = item.Id;
+        };
+
+        $scope.changeChapter = function(chapter) {
+            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.ChapterId);
+            $scope.currentChapterId = chapter.ChapterId;
+            $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+        };
+
+        $scope.loadChapterDetails = function(questionnaireId, chapterId) {
+            questionnaireService.getChapterById(questionnaireId, chapterId)
+                .success(function(result) {
+                    $scope.items = result.Items;
+                    $scope.currentChapter = result;
+                });
         };
 
         $scope.submit = function() {
@@ -46,12 +64,4 @@ angular.module('designerApp')
         $scope.$on('$locationChangeSuccess', function() {
             $route.current = lastRoute;
         });
-
-        function loadChapterDetails(questionnaireId, chapterId) {
-            questionnaireService.getChapterById(questionnaireId, chapterId)
-                .success(function(result) {
-                    $scope.items = result.Items;
-                    $scope.currentChapter = result;
-                });
-        };
     });
