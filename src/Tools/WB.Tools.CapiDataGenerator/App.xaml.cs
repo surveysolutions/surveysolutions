@@ -33,7 +33,7 @@ namespace CapiDataGenerator
 
             new StandardKernel(
                 new RavenReadSideInfrastructureModule(ravenSettings),
-                new SynchronizationModule(AppDomain.CurrentDomain.BaseDirectory),
+                new SynchronizationModule(AppDomain.CurrentDomain.BaseDirectory, new SyncSettings(reevaluateInterviewWhenSynchronized: true)),
                 new CapiDataGeneratorRegistry(),
                 new NLogLoggingModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
