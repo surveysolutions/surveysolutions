@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary>, 
         ICreateHandler<InterviewSummary, InterviewCreated>,
+        ICreateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
         IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
@@ -107,6 +108,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewSummary Create(IPublishedEvent<InterviewCreated> evnt)
+        {
+            return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public InterviewSummary Create(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
             return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp);

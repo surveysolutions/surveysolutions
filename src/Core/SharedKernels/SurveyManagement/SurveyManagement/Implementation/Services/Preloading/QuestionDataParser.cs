@@ -14,6 +14,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     {
         public KeyValuePair<Guid, object>? Parse(string answer, string variableName, Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
         {
+            if (string.IsNullOrEmpty(answer))
+                return null;
             var question = getQuestionByStataCaption(variableName);
             if (question == null)
                 return null;

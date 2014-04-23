@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class StatisticsDenormalizer : IEventHandler,
                                           IEventHandler<InterviewCreated>,
+                                          IEventHandler<InterviewFromPreloadedDataCreated>,
                                           IEventHandler<InterviewStatusChanged>,
                                           IEventHandler<SupervisorAssigned>,
                                           IEventHandler<InterviewDeleted>,
@@ -57,6 +58,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
             this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             this.StoreStatisticsItem(interviewBriefItem, statistics);
+        }
+
+        public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        {
+            this.HandleCreation(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion);
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)

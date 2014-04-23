@@ -22,8 +22,9 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class InterviewEventHandlerFunctional : 
-        AbstractFunctionalEventHandler<ViewWithSequence<InterviewData>>, 
-        ICreateHandler<ViewWithSequence<InterviewData>, InterviewCreated>,
+        AbstractFunctionalEventHandler<ViewWithSequence<InterviewData>>,
+        ICreateHandler<ViewWithSequence<InterviewData>, InterviewCreated>, 
+        ICreateHandler<ViewWithSequence<InterviewData>, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewStatusChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, SupervisorAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewerAssigned>,
@@ -307,6 +308,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewCreated> evnt)
+        {
+            return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
+                evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion,
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
