@@ -387,6 +387,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 ? questionnaire
                 : this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentGroupId);
 
+            if (parentGroup == null) 
+                return;
+
             var groupInfoView = new GroupInfoView()
             {
                 Id = groupId,
