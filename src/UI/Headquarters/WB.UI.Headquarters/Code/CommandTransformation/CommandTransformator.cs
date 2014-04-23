@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
 
             var resultCommand = new CreateInterviewCommand(command.InterviewId,
                                                            globalInfo.GetCurrentUser().Id,
-                                                           command.QuestionnaireId,command.QuestionnaireVersion,
+                                                           command.QuestionnaireId,
                                                            answers,
                                                            DateTime.UtcNow,
                                                            command.SupervisorId);

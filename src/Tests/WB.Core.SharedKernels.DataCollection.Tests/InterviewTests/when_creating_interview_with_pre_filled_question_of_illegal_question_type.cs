@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.HasQuestion(prefilledQuestionId) == true);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+                => repository.GetQuestionnaire(questionnaireId) == questionaire);
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         private Because of = () =>
             exception = Catch.Exception(() =>
-            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId));
+            new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId));
 
         Cleanup stuff = () =>
         {

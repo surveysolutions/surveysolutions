@@ -6,7 +6,6 @@ namespace Web.Supervisor.Code.CommandTransformation
     internal class CreateInterviewControllerCommand : IntreviewCommand
     {
         public Guid QuestionnaireId { get; set; }
-        public long QuestionnaireVersion { get; set; }
         public Guid SupervisorId { get; set; }
         public List<UntypedQuestionAnswer> AnswersToFeaturedQuestions { get; set; }
     }
