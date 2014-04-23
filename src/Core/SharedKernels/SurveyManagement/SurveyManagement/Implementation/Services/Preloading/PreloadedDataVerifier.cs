@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 yield break;
 
             var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
-            var idCoulmnIndexInParentFile = preloadedDataService.GetIdColumnIndex(levelData);
+            var idCoulmnIndexInParentFile = preloadedDataService.GetIdColumnIndex(parentDataFile);
             var parentIds = parentDataFile.Content.Select(row => row[idCoulmnIndexInParentFile]).ToList();
 
             for (int y = 0; y < levelData.Content.Length; y++)
@@ -155,6 +155,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
             var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
+            
+            if(idColumnIndex<0 || parentIdColumnIndex<0)
+                yield break;
+            
             var idAndParentContainer = new HashSet<KeyValuePair<decimal, decimal?>>();
             for (int y = 0; y < levelData.Content.Length; y++)
             {
