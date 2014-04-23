@@ -94,12 +94,6 @@ namespace Web.Supervisor.App_Start
                 isEmbeded = false;
             }
 
-            bool areHeadquartersFunctionsEnabled;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["HeadquartersFunctionsEnabled"], out areHeadquartersFunctionsEnabled))
-            {
-                areHeadquartersFunctionsEnabled = false;
-            }
-
             string storePath = isEmbeded
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
@@ -135,7 +129,7 @@ namespace Web.Supervisor.App_Start
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: areHeadquartersFunctionsEnabled),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: !LegacyOptions.HqFunctionsEnabled),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 pageSize.HasValue
