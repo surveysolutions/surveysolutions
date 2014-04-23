@@ -151,9 +151,8 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		public void events_should_be_retrieved_correctly_by_version()
 		{
 			var id = Guid.NewGuid();
-			var sequenceCounter = 0;
 
-			var stream = GetUncommiteEventStream(id);
+		    var stream = GetUncommiteEventStream(id);
 
 			_store.Store(stream);
 

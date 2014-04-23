@@ -38,8 +38,6 @@ namespace Ncqrs.Spec
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
-            Guid commitId = Guid.NewGuid();
-            Guid sourceId = Guid.NewGuid();
             CreationStrategy = new SimpleAggregateRootCreationStrategy();
 
             AggregateRoot = CreationStrategy.CreateAggregateRoot<TAggregateRoot>();
@@ -48,7 +46,6 @@ namespace Ncqrs.Spec
             var history = Given();
             if(history != null)
             {
-                long sequence = 0;
                 var stream = Prepare.Events(history).ForSource(AggregateRoot.EventSourceId);
                 AggregateRoot.InitializeFromHistory(stream);
             }

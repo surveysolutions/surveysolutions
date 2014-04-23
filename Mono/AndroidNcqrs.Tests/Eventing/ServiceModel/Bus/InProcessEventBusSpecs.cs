@@ -32,7 +32,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         public void When_a_catch_all_handler_is_register_it_should_be_called_for_all_events()
         {
             var catchAllEventHandler = new Mock<IEventHandler<object>>();
-			catchAllEventHandler.Expect(h => h.Handle(null));
+			catchAllEventHandler.Setup(h => h.Handle(null));
 
             var bus = new InProcessEventBus();
             bus.RegisterHandler(catchAllEventHandler.Object);

@@ -29,7 +29,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
                 reader.Query(queryable => queryable.FirstOrDefault()));
 
         It should_throw_maintenance_exception = () =>
-            exception.ShouldBeOfType<MaintenanceException>();
+            exception.ShouldBeOfExactType<MaintenanceException>();
 
         private static Exception exception;
         private static RavenReadSideRepositoryReader<IReadSideRepositoryEntity> reader;

@@ -34,7 +34,7 @@ namespace Mono.Android.Crasher.Utils
             {
                 return pm.CheckPermission(permission, _context.PackageName) == Permission.Granted;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 return false;
             }
@@ -56,12 +56,12 @@ namespace Mono.Android.Crasher.Utils
             {
                 return pm.GetPackageInfo(_context.PackageName, 0);
             }
-            catch (PackageManager.NameNotFoundException e)
+            catch (PackageManager.NameNotFoundException)
             {
                 Log.Debug(Constants.LOG_TAG, "Failed to find PackageInfo for current App : " + _context.PackageName);
                 return null;
             }
-            catch (RuntimeException e)
+            catch (RuntimeException)
             {
                 return null;
             }

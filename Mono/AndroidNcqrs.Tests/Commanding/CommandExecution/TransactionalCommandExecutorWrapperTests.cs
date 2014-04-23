@@ -25,7 +25,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution
             var theCommand = new DummyCommand();
             //var theExecutor = new DynamicMock<ICommandExecutor<DummyCommand>>();
 	        var theExecutor = new Mock<ICommandExecutor<DummyCommand>>();
-			theExecutor.Expect(e => e.Execute(null));
+			theExecutor.Setup(e => e.Execute(null));
 
             var theWrapper = new TransactionalCommandExecutorWrapper<DummyCommand>(theExecutor.Object);
 
