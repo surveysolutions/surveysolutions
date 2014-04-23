@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             questionnaire.Title = questionnaireTitle;
             preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId" }, new string[0][],
                 questionnaireTitle + ".csv");
-            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId" }, new string[][] { new string[] { "1", "1" } },
+            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId" }, new string[][] { new string[] { "0", "1" } },
                 rosterTitle + ".csv");
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire);
         };

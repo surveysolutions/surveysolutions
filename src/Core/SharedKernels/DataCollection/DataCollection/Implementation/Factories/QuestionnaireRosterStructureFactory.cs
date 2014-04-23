@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
             {
                 var rosterIdMappedOfRosterTitleQuestionId = this.GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
 
-                var rosterDescription = new RosterScopeDescription(autoPropagatebleQuestion.PublicKey, string.Empty, false,
+                var rosterDescription = new RosterScopeDescription(autoPropagatebleQuestion.PublicKey, string.Empty, RosterScopeType.Numeric,
                     rosterIdMappedOfRosterTitleQuestionId,
                     autoPropagatebleQuestion.Triggers.ToDictionary(trigger => trigger,
                         trigger => this.GetScopeOfQuestionnaireItem(questionnaire.FirstOrDefault<IGroup>(g => g.PublicKey == trigger), groupsMappedOnPropagatableQuestion)));
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
                 var rosterIdWithTitleQuestionIds = this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(questionnaire, groupsFromRosterSizeQuestionScope);
 
                 var rosterDescription = new RosterScopeDescription(rosterSizeQuestion.PublicKey, rosterSizeQuestion.StataExportCaption,
-                    rosterSizeQuestion.QuestionType == QuestionType.TextList, rosterIdWithTitleQuestionIds,
+                    GetRosterScopeTypeByQuestionType(rosterSizeQuestion.QuestionType), rosterIdWithTitleQuestionIds,
                        groupsFromRosterSizeQuestionScope.ToDictionary(roster => roster.PublicKey,
                         roster => this.GetScopeOfQuestionnaireItem(roster, groupsMappedOnPropagatableQuestion)));
 
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
 
             foreach (var fixedRosterGroup in fixedRosterGroups)
             {
-                result.RosterScopes[fixedRosterGroup.PublicKey] = new RosterScopeDescription(fixedRosterGroup.PublicKey, string.Empty, false,
+                result.RosterScopes[fixedRosterGroup.PublicKey] = new RosterScopeDescription(fixedRosterGroup.PublicKey, string.Empty, RosterScopeType.Fixed,
                     new Dictionary<Guid, RosterTitleQuestionDescription> { { fixedRosterGroup.PublicKey, null } },
                     new Dictionary<Guid, Guid[]>()
                     {
@@ -72,6 +72,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
             return result;
         }
 
+        private RosterScopeType GetRosterScopeTypeByQuestionType(QuestionType questionType)
+        {
+            switch (questionType)
+            {
+                case QuestionType.Numeric:
+                    return RosterScopeType.Numeric;
+                case QuestionType.MultyOption:
+                    return RosterScopeType.MultyOption;
+                case QuestionType.TextList:
+                    return RosterScopeType.TextList;
+            }
+            return RosterScopeType.Numeric;
+        }
         private IDictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId(QuestionnaireDocument template)
         {
             var result = new Dictionary<Guid, Guid>();
