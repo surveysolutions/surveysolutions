@@ -864,7 +864,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var preloadedLevel in orderedData)
             {
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
-                this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, interviewChangeStructures.State);
+                this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, interviewChangeStructures.State,false);
 
                 var newAnswers =
                     answersToFeaturedQuestions.ToDictionary(
@@ -1185,7 +1185,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return resultChanges;
         }
 
-        private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions, decimal[] rosterVecor = null, InterviewStateStructures currentInterviewState =null)
+        private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions, decimal[] rosterVecor = null, InterviewStateStructures currentInterviewState = null, bool applyStrongChecks = true)
         {
             var currentRosterVector = rosterVecor ?? EmptyRosterVector;
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -1200,34 +1200,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.CheckTextQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState);
+                        this.CheckTextQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
 
                     case QuestionType.AutoPropagate:
                         this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
-                            answeredQuestion, currentInterviewState);
+                            answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
                             this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
-                                answeredQuestion, currentInterviewState);
+                                answeredQuestion, currentInterviewState, applyStrongChecks);
                         else
                             this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
-                                answeredQuestion, currentInterviewState);
+                                answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
 
                     case QuestionType.DateTime:
-                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState);
+                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
 
                     case QuestionType.SingleOption:
                         this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
-                            answeredQuestion, currentInterviewState);
+                            answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
 
                     case QuestionType.MultyOption:
                         this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[])answer, questionnaire,
-                            answeredQuestion, currentInterviewState);
+                            answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
 
                     default:
@@ -1346,12 +1346,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewDeclaredInvalid());
         }
 
-        private void CheckTextQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState)
+        private void CheckTextQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
-            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            if(applyStrongChecks)
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer)
@@ -1507,18 +1509,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, decimal[] rosterVector, int answer, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewStateStructures currentInterviewState)
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
-            ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-
-            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+            if (applyStrongChecks)
             {
-                ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
+                ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+
+                if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+                {
+                    ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
+                }
             }
         }
 
@@ -1637,15 +1642,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckNumericRealQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal answer, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewStateStructures currentInterviewState)
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
-            ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-            this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
+            if (applyStrongChecks)
+            {
+                ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
+            }
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer)
@@ -1704,12 +1712,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckDateTimeQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewStateStructures currentInterviewState)
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
-            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            if(applyStrongChecks)
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue)
@@ -1771,13 +1780,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckSingleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal selectedValue,
-            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState)
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            if(applyStrongChecks)
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedValues)
@@ -1862,14 +1872,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckMultipleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal[] selectedValues,
-            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState)
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
-            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            if (applyStrongChecks)
+            {
+                ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            }
         }
 
         public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
