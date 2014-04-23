@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
                 maxValuesForRosterSizeQuestions, levelId);
 
-            if (questionnaireLevelStructure.RosterScopes.ContainsKey(levelId) && questionnaireLevelStructure.RosterScopes[levelId].IsTextListRoster)
+            if (questionnaireLevelStructure.RosterScopes.ContainsKey(levelId) && questionnaireLevelStructure.RosterScopes[levelId].ScopeType==RosterScopeType.TextList)
             {
                 structures.IsTextListScope = true;
                 structures.ReferencedNames = new string[]{questionnaireLevelStructure.RosterScopes[levelId].ScopeTriggerName};

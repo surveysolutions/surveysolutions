@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 return;
             }
             var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
-                questionnaireRosterStructure);
+                questionnaireRosterStructure, bigTemplateObject.Questionnaire);
             var idColumnIndex = preloadedDataService.GetIdColumnIndex(topLevelData);
             foreach (var value in topLevelData.Content)
             {

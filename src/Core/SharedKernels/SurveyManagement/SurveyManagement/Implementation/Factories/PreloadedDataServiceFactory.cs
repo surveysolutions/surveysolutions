@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -15,9 +16,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     internal class PreloadedDataServiceFactory : IPreloadedDataServiceFactory
     {
         public IPreloadedDataService CreatePreloadedDataService(QuestionnaireExportStructure exportStructure,
-            QuestionnaireRosterStructure questionnaireRosterStructure)
+            QuestionnaireRosterStructure questionnaireRosterStructure, QuestionnaireDocument questionnaireDocument)
         {
-            return new PreloadedDataService(exportStructure, questionnaireRosterStructure);
+            return new PreloadedDataService(exportStructure, questionnaireRosterStructure, questionnaireDocument);
         }
     }
 }

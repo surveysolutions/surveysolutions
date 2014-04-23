@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 let errors =
                     verifier.Invoke(data, questionnaire.Questionnaire,
                         this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
-                            questionnaireRosterStructure))
+                            questionnaireRosterStructure, questionnaire.Questionnaire))
                 from error in errors
                 select error;
 
@@ -94,7 +94,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     Verifier(IdDublication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
                     Verifier(ServiceColumnsAreAbsent, "PL0007", PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent,
                         PreloadedDataVerificationReferenceType.Column),
-                    Verifier(OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord)
+                    Verifier(OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
+                    Verifier(RosterIdIsInconsistantWithRosterSizeQuestion, "PL0009", PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion)
                 };
             }
         }
@@ -149,6 +150,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
+        private IEnumerable<PreloadedDataVerificationReference> RosterIdIsInconsistantWithRosterSizeQuestion(PreloadedDataByFile levelData,
+            PreloadedDataByFile[] allLevels, QuestionnaireDocument questionnaire, IPreloadedDataService preloadedDataService)
+        {
+            var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
+            if (levelExportStructure == null)
+                yield break;
+
+            var parentDataFile = preloadedDataService.GetParentDataFile(levelData.FileName, allLevels);
+
+            if (parentDataFile == null)
+                yield break;
+
+            var idCoulmnIndexFile = preloadedDataService.GetIdColumnIndex(levelData);
+            var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
+            for (int y = 0; y < levelData.Content.Length; y++)
+            {
+                var parentIdValue = levelData.Content[y][parentIdColumnIndex];
+                var idValue = levelData.Content[y][idCoulmnIndexFile];
+                decimal[] ids = preloadedDataService.GetAvalibleIdListForParent(parentDataFile,levelExportStructure.LevelId, parentIdValue);
+                
+                if(ids==null)
+                    continue;
+                
+                decimal decimalId;
+                if (!decimal.TryParse(idValue, out decimalId))
+                    yield return
+                        new PreloadedDataVerificationReference(idCoulmnIndexFile, y, PreloadedDataVerificationReferenceType.Cell, idValue,
+                            levelData.FileName);
+                if(!ids.Contains(decimalId))
+                    yield return
+                       new PreloadedDataVerificationReference(idCoulmnIndexFile, y, PreloadedDataVerificationReferenceType.Cell, idValue,
+                           levelData.FileName);
+            }
+        }
+
         private IEnumerable<PreloadedDataVerificationReference> IdDublication(PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService,
             Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
@@ -158,8 +194,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             
             if(idColumnIndex<0 || parentIdColumnIndex<0)
                 yield break;
-            
-            var idAndParentContainer = new HashSet<KeyValuePair<decimal, decimal?>>();
+
+            var idAndParentContainer = new HashSet<KeyValuePair<string, string>>();
             for (int y = 0; y < levelData.Content.Length; y++)
             {
                 var idValue = levelData.Content[y][idColumnIndex];
@@ -170,24 +206,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                             levelData.FileName);
                     continue;
                 }
-                decimal decimalId;
-                if(!decimal.TryParse(idValue, out decimalId))
-                    yield return
-                       new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "",
-                           levelData.FileName);
-                decimal? parentId = null;
                 var parentIdValue = levelData.Content[y][parentIdColumnIndex];
-                if (!string.IsNullOrEmpty(parentIdValue))
-                {
-                    decimal decimalParentId;
-                    if (!decimal.TryParse(parentIdValue, out decimalParentId))
-                        yield return
-                            new PreloadedDataVerificationReference(parentIdColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "",
-                                levelData.FileName);
-
-                    parentId = decimalParentId;
-                }
-                var idAndParentPair = new KeyValuePair<decimal, decimal?>(decimalId, parentId);
+                var idAndParentPair = new KeyValuePair<string, string>(idValue, parentIdValue);
                 if (idAndParentContainer.Contains(idAndParentPair))
                 {
                     yield return
@@ -198,7 +218,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 idAndParentContainer.Add(idAndParentPair);
             }
         }
-
 
         private IEnumerable<PreloadedDataVerificationReference> QuestionWasntParsed(PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService, Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)

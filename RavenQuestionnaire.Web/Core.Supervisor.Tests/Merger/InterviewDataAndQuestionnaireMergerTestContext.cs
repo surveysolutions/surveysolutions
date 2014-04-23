@@ -29,7 +29,7 @@ namespace Core.Supervisor.Tests.Merger
                 {
                     {
                         fixedRosterId,
-                        new RosterScopeDescription(fixedRosterId, string.Empty, false, new Dictionary<Guid, RosterTitleQuestionDescription>()
+                        new RosterScopeDescription(fixedRosterId, string.Empty, RosterScopeType.Fixed, new Dictionary<Guid, RosterTitleQuestionDescription>()
                         {
                             { fixedRosterId, null }
                         }, new Dictionary<Guid, Guid[]>())

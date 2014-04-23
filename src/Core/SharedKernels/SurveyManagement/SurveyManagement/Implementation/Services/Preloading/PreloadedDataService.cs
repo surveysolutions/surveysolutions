@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -15,11 +17,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     {
         private readonly QuestionnaireExportStructure exportStructure;
         private readonly QuestionnaireRosterStructure questionnaireRosterStructure;
+        private readonly QuestionnaireDocument questionnaireDocument;
         
-        public PreloadedDataService(QuestionnaireExportStructure exportStructure, QuestionnaireRosterStructure questionnaireRosterStructure)
+        public PreloadedDataService(QuestionnaireExportStructure exportStructure, QuestionnaireRosterStructure questionnaireRosterStructure, QuestionnaireDocument questionnaireDocument)
         {
             this.exportStructure = exportStructure;
             this.questionnaireRosterStructure = questionnaireRosterStructure;
+            this.questionnaireDocument = questionnaireDocument;
         }
 
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
@@ -50,6 +54,57 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
 
             return GetDataFileByLevelName(allLevels, parentLevel.LevelName);
+        }
+
+        public decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, Guid levelId, string parentIdValue)
+        {
+            var parentIdIndex = this.GetIdColumnIndex(parentDataFile);
+            var row = parentDataFile.Content.FirstOrDefault(record => record[parentIdIndex] == parentIdValue);
+            if (row == null)
+                return null;
+
+            if (!questionnaireRosterStructure.RosterScopes.ContainsKey(levelId))
+                return null;
+
+            var rosterScopeDescription = questionnaireRosterStructure.RosterScopes[levelId];
+            if (rosterScopeDescription.ScopeType == RosterScopeType.Fixed)
+            {
+                return
+                    questionnaireDocument.FirstOrDefault<IGroup>(g => g.PublicKey == levelId)
+                        .RosterFixedTitles.Select((t, i) => (decimal) i)
+                        .ToArray();
+            }
+            var rosterSizeQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelId);
+            if (rosterScopeDescription.ScopeType == RosterScopeType.Numeric)
+            {
+                var indexOfNumericRosterSizeQuestion = parentDataFile.Header.ToList().FindIndex(header => header == rosterSizeQuestion.StataExportCaption);
+                var valueOfNumericQuestion = row[indexOfNumericRosterSizeQuestion];
+                int intValueOfNumericQuestion;
+                if (!int.TryParse(valueOfNumericQuestion, out  intValueOfNumericQuestion))
+                    return null;
+                return Enumerable.Range(0, intValueOfNumericQuestion).Select(i => (decimal)i).ToArray();
+            }
+
+        /*    var parentExportStructure = exportStructure.HeaderToLevelMap[FindLevelInPreloadedData(parentDataFile.FileName).LevelId];
+            var rosterSizeHeaderItem =
+                parentExportStructure.HeaderItems.Values.FirstOrDefault(h => h.VariableName == rosterSizeQuestion.StataExportCaption);
+            
+            if (rosterSizeHeaderItem == null)
+                return new decimal[0];
+
+            var indexesOfNumericRosterSizeQuestion = new List<int>();
+            for (int i = 0; i < parentDataFile.Header.Length; i++)
+            {
+                if (rosterSizeHeaderItem.ColumnNames.Contains(parentDataFile.Header[i]))
+                    indexesOfNumericRosterSizeQuestion.Add(i);
+            }
+
+            if (rosterScopeDescription.ScopeType == RosterScopeType.TextList)
+            {
+                
+            }*/
+
+            return null;
         }
 
         public PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)

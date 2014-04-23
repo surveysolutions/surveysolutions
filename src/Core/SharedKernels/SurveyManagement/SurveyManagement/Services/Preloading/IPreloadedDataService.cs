@@ -20,5 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         decimal GetRecordIdValueAsDecimal(string[] dataFileRecord, int idColumnIndex);
         int GetIdColumnIndex(PreloadedDataByFile dataFile);
         int GetParentIdColumnIndex(PreloadedDataByFile dataFile);
+        decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, Guid levelId, string parentIdValue);
     }
 }
