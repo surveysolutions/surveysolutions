@@ -139,7 +139,7 @@ namespace Web.Supervisor.App_Start
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
+                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new SyncSettings(reevaluateInterviewWhenSynchronized:true)),
                 new SupervisorCommandDeserializationModule(),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),

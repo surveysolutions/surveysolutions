@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                    IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-                                    IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory)
+                                   IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;

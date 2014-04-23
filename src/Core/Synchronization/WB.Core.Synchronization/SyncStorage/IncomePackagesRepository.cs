@@ -26,12 +26,13 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
         private readonly ILogger logger;
+        private readonly SyncSettings syncSettings;
 
         private const string FolderName = "IncomingData";
         private const string ErrorFolderName = "IncomingDataWithErrors"; 
         private const string FileExtension = "sync";
 
-        public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger)
+        public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger, SyncSettings syncSettings)
         {
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
@@ -42,6 +43,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             this.userStorage = userStorage;
             this.logger = logger;
+            this.syncSettings = syncSettings;
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -79,7 +81,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
         }
 
-
         private string GetItemFileName(Guid id)
         {
             return Path.Combine(path, string.Format("{0}.{1}", id, FileExtension));
@@ -98,7 +99,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var fileContent = File.ReadAllText(fileName);
 
-            var items = GetContentAsItem<AggregateRootEvent[]>(fileContent);
+            var items = this.GetContentAsItem<AggregateRootEvent[]>(fileContent);
             if (items.Length > 0)
             {
                 var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
@@ -119,7 +120,10 @@ namespace WB.Core.Synchronization.SyncStorage
                 File.Delete(fileName);
 
                 bus.Publish(incomeEvents);
-                commandService.Execute(new ReevaluateSynchronizedInterview(id));
+                if (this.syncSettings.ReevaluateInterviewWhenSynchronized)
+                {
+                    commandService.Execute(new ReevaluateSynchronizedInterview(id));
+                }
             }
             else
             {
