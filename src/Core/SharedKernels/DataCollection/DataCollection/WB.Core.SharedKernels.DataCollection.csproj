@@ -90,6 +90,7 @@
     <Compile Include="Events\Interview\GroupsDisabled.cs" />
     <Compile Include="Events\Interview\GroupsEnabled.cs" />
     <Compile Include="Events\Interview\InterviewApprovedByHQ.cs" />
+    <Compile Include="Events\Interview\InterviewFromPreloadedDataCreated.cs" />
     <Compile Include="Events\Interview\InterviewOnClientCreated.cs" />
     <Compile Include="Events\Interview\InterviewRejectedByHQ.cs" />
     <Compile Include="Events\Interview\QRBarcodeQuestionAnswered.cs" />
