@@ -66,13 +66,17 @@
                 </div>
             </div>
             <div class="section item" ng-click="setItem(item)" ng-class="{'selected' : item.Id == currentItemId}" ng-if="!isQuestion(item)">
+                <span ng-click="collapse(item)" ng-show="!item.collapsed">&nbsp;[-]&nbsp;&nbsp;</span>
+                <span ng-click="expand(item)" ng-show="item.collapsed">&nbsp;[+]&nbsp;&nbsp;</span>
                 {{item.Title}}
             </div>
-            <div class="buttons-item" ng-if="!isQuestion(item)">
-                <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" />
-                <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" />
+            <div class="buttons-item" ng-if="!isQuestion(item)" ng-show="!item.collapsed">
+                <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
+                <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
             </div>
-            <div ng-repeat="item in item.Items" ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+            <div ng-show="!item.collapsed">
+                <div ng-repeat="item in item.Items" ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+                </div>
             </div>
         </script>
 

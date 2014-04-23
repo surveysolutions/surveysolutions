@@ -34,8 +34,24 @@ angular.module('designerApp')
                 });
         };
 
-        $scope.isQuestion = function (item) {
+        $scope.isQuestion = function(item) {
             return item.hasOwnProperty('Type');
+        };
+
+        $scope.addQuestion = function(item) {
+            console.log(item);
+        };
+
+        $scope.addGroup = function(item) {
+            console.log(item);
+        };
+
+        $scope.collapse = function (item) {
+            item.collapsed = true;
+        };
+
+        $scope.expand = function (item) {
+            item.collapsed = false;
         };
 
         $scope.submit = function() {
