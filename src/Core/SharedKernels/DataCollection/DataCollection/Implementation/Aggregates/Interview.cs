@@ -49,6 +49,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
+        private void Apply(InterviewFromPreloadedDataCreated @event)
+        {
+            this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
+        }
+
         private void Apply(InterviewForTestingCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
@@ -822,45 +828,135 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
+        private void ApplyEvents(IEnumerable<object> eventsToBeRaised)
+        {
+            foreach (object evnt in eventsToBeRaised)
+            {
+                this.ApplyEvent(evnt);
+            }
+        }
+
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() { }
+
+        public Interview(Guid id, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedData, DateTime answersTime,
+            Guid supervisorId)
+            : base(id)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
+
+            var interviewChangeStructures = new InterviewChangeStructures();
+
+            interviewChangeStructures.Changes.Add(new InterviewChanges(
+               new List<object>() { new InterviewFromPreloadedDataCreated(userId, questionnaireId, questionnaire.Version) },
+                null, null, null, null, null, null));
+
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
+
+            foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
+            {
+                interviewChangeStructures.Changes.Add(new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null, null));
+            }
+
+
+
+            var orderedData = preloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
+            foreach (var preloadedLevel in orderedData)
+            {
+                var answersToFeaturedQuestions = preloadedLevel.Answers;
+                this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, interviewChangeStructures.State);
+
+                var newAnswers =
+                    answersToFeaturedQuestions.ToDictionary(
+                        answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, preloadedLevel.RosterVector),
+                        answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
+
+                foreach (var newAnswer in answersToFeaturedQuestions)
+                {
+                    string key = ConvertIdAndRosterVectorToString(newAnswer.Key, preloadedLevel.RosterVector);
+
+                    interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
+                    interviewChangeStructures.State.AnsweredQuestions.Add(key);
+                }
+
+                CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime,
+                   newAnswers, preloadedLevel.RosterVector);
+            }
+
+            InitInterview(questionnaire, interviewChangeStructures);
+            //apply events
+
+            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+        }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid supervisorId)
             : base(id)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
-            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions);
-
-            var nterviewChangeStructures = new InterviewChangeStructures();
+            var interviewChangeStructures = new InterviewChangeStructures();
             var newAnswers = answersToFeaturedQuestions.ToDictionary(answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector), answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
 
+            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, EmptyRosterVector, interviewChangeStructures.State);
             foreach (var newAnswer in answersToFeaturedQuestions)
             {
                 string key = ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
 
-                nterviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
-                nterviewChangeStructures.State.AnsweredQuestions.Add(key);
+                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
+                interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }
 
-            nterviewChangeStructures.Changes.Add(new InterviewChanges(new List<object>()
+            interviewChangeStructures.Changes.Add(new InterviewChanges(new List<object>()
             {
                 new InterviewCreated(userId, questionnaireId, questionnaire.Version),
                 new InterviewStatusChanged(InterviewStatus.Created, comment: null)
             },
                 null, null, null, null, null, null));
 
-            InitInterview(questionnaire, nterviewChangeStructures);
+            InitInterview(questionnaire, interviewChangeStructures);
 
-            CalculateChangesByFeaturedQuestion(nterviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime, newAnswers);
+            CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime, newAnswers);
 
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(nterviewChangeStructures.State, questionnaire);
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             //apply events
-            this.ApplyInterviewChanges(nterviewChangeStructures.Changes);
+            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
             fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+        }
+
+        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)
+            : base(id)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+
+            var interviewChangeStructures = new InterviewChangeStructures();
+
+            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, EmptyRosterVector, interviewChangeStructures.State);
+            var newAnswers = answersToFeaturedQuestions.ToDictionary(answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector), answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
+
+            foreach (var newAnswer in answersToFeaturedQuestions)
+            {
+                string key = ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
+
+                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
+                interviewChangeStructures.State.AnsweredQuestions.Add(key);
+            }
+
+            interviewChangeStructures.Changes.Add(new InterviewChanges(
+                new List<object>() { new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version) },
+                null, null, null, null, null, null));
+
+            InitInterview(questionnaire, interviewChangeStructures);
+            CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime, newAnswers);
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
+
+            //apply events
+            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
+            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion,  DateTime answersTime, Guid supervisorId)
@@ -894,77 +990,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
-        private void ApplyEvents(IEnumerable<object> eventsToBeRaised)
-        {
-            foreach (object evnt in eventsToBeRaised)
-            {
-                this.ApplyEvent(evnt);
-            }
-        }
-
-        public Interview(Guid id, long version, Guid userId, Guid supervisorId, Guid questionnaireId, PreloadedDataDto preloadedData,
-            DateTime answersTime)
-            : base(id)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
-
-    /*        this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions);
-
-            var interviewChangeStructures = new InterviewChangeStructures();
-            var newAnswers = answersToFeaturedQuestions.ToDictionary(answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector), answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
-
-            foreach (var newAnswer in answersToFeaturedQuestions)
-            {
-                string key = ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
-
-                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
-                interviewChangeStructures.State.AnsweredQuestions.Add(key);
-            }
-
-            interviewChangeStructures.Changes.Add(new InterviewChanges(
-                new List<object>() { new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version) },
-                null, null, null, null, null, null));
-
-            InitInterview(questionnaire, interviewChangeStructures);
-            CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime, newAnswers);
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
-
-            //apply events
-            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);*/
-        }
-
-        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)
-            : base(id)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
-
-            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions);
-
-            var interviewChangeStructures = new InterviewChangeStructures();
-            var newAnswers = answersToFeaturedQuestions.ToDictionary(answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector), answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
-
-            foreach (var newAnswer in answersToFeaturedQuestions)
-            {
-                string key = ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
-
-                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
-                interviewChangeStructures.State.AnsweredQuestions.Add(key);
-            }
-
-            interviewChangeStructures.Changes.Add(new InterviewChanges(
-                new List<object>() { new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version) },
-                null, null, null, null, null,null));
-
-            InitInterview(questionnaire, interviewChangeStructures);
-            CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime, newAnswers);
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
-
-            //apply events
-            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
-        }
-
         public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
             : base(id)
         {
@@ -994,8 +1019,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CalculateChangesByFeaturedQuestion(InterviewChangeStructures changeStructures, Guid userId, IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
-            DateTime answersTime, Dictionary<Identity, object> newAnswers)
+            DateTime answersTime, Dictionary<Identity, object> newAnswers, decimal[] rosterVector=null)
         {
+            var currentQuestionRosterVector = rosterVector ?? EmptyRosterVector;
             Func<InterviewStateStructures, Identity, object> getAnswer = (currentState, question) => newAnswers.Any(x => AreEqual(question, x.Key))
                 ? newAnswers.SingleOrDefault(x => AreEqual(question, x.Key))
                 : GetEnabledQuestionAnswerSupportedInExpressions(changeStructures.State, question);
@@ -1005,7 +1031,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid questionId = answerToFeaturedQuestion.Key;
                 object answer = answerToFeaturedQuestion.Value;
 
-                var answeredQuestion = new Identity(questionId, EmptyRosterVector);
+                var answeredQuestion = new Identity(questionId, currentQuestionRosterVector);
                 QuestionType questionType = questionnaire.GetQuestionType(questionId);
 
                 InterviewChanges interviewChanges;
@@ -1014,35 +1040,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     case QuestionType.Text:
                         interviewChanges =
-                            this.CalculateInterviewChangesOnAnswerTextQuestion(changeStructures.State, userId, questionId, EmptyRosterVector, answersTime, (string)answer, answeredQuestion, getAnswer, questionnaire);
+                            this.CalculateInterviewChangesOnAnswerTextQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (string)answer, answeredQuestion, getAnswer, questionnaire);
                         break;
 
                     case QuestionType.AutoPropagate:
                         interviewChanges =
-                            this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(changeStructures.State, userId, questionId, EmptyRosterVector, answersTime, (int)answer, answeredQuestion, getAnswer, questionnaire);
+                            this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (int)answer, answeredQuestion, getAnswer, questionnaire);
                         break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
                             interviewChanges =
-                                this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(changeStructures.State, userId, questionId, EmptyRosterVector, answersTime, (int)answer, answeredQuestion, getAnswer, questionnaire);
+                                this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (int)answer, answeredQuestion, getAnswer, questionnaire);
                         else
                             interviewChanges =
-                                this.CalculateInterviewChangesOnAnswerNumericRealQuestion(changeStructures.State, userId, questionId, EmptyRosterVector, answersTime, (decimal)answer, answeredQuestion, getAnswer, questionnaire);
+                                this.CalculateInterviewChangesOnAnswerNumericRealQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (decimal)answer, answeredQuestion, getAnswer, questionnaire);
                         break;
 
                     case QuestionType.DateTime:
                         interviewChanges =
-                            this.CalculateInterviewChangesOnAnswerDateTimeQuestion(changeStructures.State, userId, questionId, EmptyRosterVector, answersTime, (DateTime)answer, answeredQuestion, getAnswer, questionnaire);
+                            this.CalculateInterviewChangesOnAnswerDateTimeQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (DateTime)answer, answeredQuestion, getAnswer, questionnaire);
                         break;
 
                     case QuestionType.SingleOption:
                         interviewChanges =
-                            this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(changeStructures.State, userId, questionId, EmptyRosterVector, answersTime, (decimal)answer, answeredQuestion, getAnswer, questionnaire);
+                            this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (decimal)answer, answeredQuestion, getAnswer, questionnaire);
                         break;
 
                     case QuestionType.MultyOption:
                         interviewChanges =
-                            this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(changeStructures.State, userId, questionId, EmptyRosterVector, answersTime, (decimal[])answer, answeredQuestion, getAnswer, questionnaire);
+                            this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (decimal[])answer, answeredQuestion, getAnswer, questionnaire);
                         break;
                         
                     default:
@@ -1159,48 +1185,49 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return resultChanges;
         }
 
-        private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions)
+        private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions, decimal[] rosterVecor = null, InterviewStateStructures currentInterviewState =null)
         {
+            var currentRosterVector = rosterVecor ?? EmptyRosterVector;
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
                 Guid questionId = answerToFeaturedQuestion.Key;
                 object answer = answerToFeaturedQuestion.Value;
 
-                var answeredQuestion = new Identity(questionId, EmptyRosterVector);
+                var answeredQuestion = new Identity(questionId, currentRosterVector);
 
                 QuestionType questionType = questionnaire.GetQuestionType(questionId);
                 
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.CheckTextQuestionInvariants(questionId, EmptyRosterVector, questionnaire, answeredQuestion);
+                        this.CheckTextQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState);
                         break;
 
                     case QuestionType.AutoPropagate:
-                        this.CheckNumericIntegerQuestionInvariants(questionId, EmptyRosterVector, (int) answer, questionnaire,
-                            answeredQuestion);
+                        this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
+                            answeredQuestion, currentInterviewState);
                         break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.CheckNumericIntegerQuestionInvariants(questionId, EmptyRosterVector, (int) answer, questionnaire,
-                                answeredQuestion);
+                            this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
+                                answeredQuestion, currentInterviewState);
                         else
-                            this.CheckNumericRealQuestionInvariants(questionId, EmptyRosterVector, (decimal) answer, questionnaire,
-                                answeredQuestion);
+                            this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
+                                answeredQuestion, currentInterviewState);
                         break;
 
                     case QuestionType.DateTime:
-                        this.CheckDateTimeQuestionInvariants(questionId, EmptyRosterVector, questionnaire, answeredQuestion);
+                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState);
                         break;
 
                     case QuestionType.SingleOption:
-                        this.CheckSingleOptionQuestionInvariants(questionId, EmptyRosterVector, (decimal) answer, questionnaire,
-                            answeredQuestion);
+                        this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
+                            answeredQuestion, currentInterviewState);
                         break;
 
                     case QuestionType.MultyOption:
-                        this.CheckMultipleOptionQuestionInvariants(questionId, EmptyRosterVector, (decimal[]) answer, questionnaire,
-                            answeredQuestion);
+                        this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[])answer, questionnaire,
+                            answeredQuestion, currentInterviewState);
                         break;
 
                     default:
@@ -1319,12 +1346,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewDeclaredInvalid());
         }
 
-        private void CheckTextQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion)
+        private void CheckTextQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer)
@@ -1332,7 +1359,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
-            this.CheckTextQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion);
+            this.CheckTextQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
             
             Func<InterviewStateStructures , Identity, object> getAnswer = (currentState,question) => AreEqual(question, answeredQuestion) ?
                 answer :
@@ -1402,7 +1429,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion);
+            this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, this.interviewState);
 
             Func<InterviewStateStructures , Identity, object> getAnswer = (currentState,question) => AreEqual(question, answeredQuestion) ? 
                 answer : 
@@ -1480,14 +1507,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, decimal[] rosterVector, int answer, IQuestionnaire questionnaire,
-            Identity answeredQuestion)
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
             ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
@@ -1501,7 +1528,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
-            this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion);
+            this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, this.interviewState);
             
             Func<InterviewStateStructures , Identity, object> getAnswer = (currentState, question) => AreEqual(question, answeredQuestion) ? 
                 answer : 
@@ -1610,14 +1637,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckNumericRealQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal answer, IQuestionnaire questionnaire,
-            Identity answeredQuestion)
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
             this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
         }
 
@@ -1626,7 +1653,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion);
+            this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
             Func<InterviewStateStructures, Identity, object> getAnswer = (currentState, question) => AreEqual(question, answeredQuestion) ?
                 answer : 
@@ -1677,12 +1704,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckDateTimeQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion)
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue)
@@ -1690,7 +1717,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion);
+            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, this.interviewState);
 
             Func<InterviewStateStructures , Identity, object> getAnswer = (currentState, question) => AreEqual(question, answeredQuestion) ?
                 selectedValue : 
@@ -1744,13 +1771,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckSingleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal selectedValue,
-            IQuestionnaire questionnaire, Identity answeredQuestion)
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedValues)
@@ -1758,7 +1785,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion);
+            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion, this.interviewState);
 
             Func<InterviewStateStructures, Identity, object> getAnswer = (currentState, question) => AreEqual(question, answeredQuestion) ?
                 selectedValues : 
@@ -1835,14 +1862,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckMultipleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal[] selectedValues,
-            IQuestionnaire questionnaire, Identity answeredQuestion)
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
         public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
