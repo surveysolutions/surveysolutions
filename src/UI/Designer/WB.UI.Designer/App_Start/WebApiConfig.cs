@@ -1,17 +1,14 @@
-﻿using System.Linq;
-using System.Net.Http.Formatting;
-using System.Web.Http;
-using Newtonsoft.Json.Serialization;
-using WB.UI.Designer.Code.MessageHandlers;
+﻿using System.Web.Http;
 
-namespace WB.UI.Designer.App_Start
+namespace WB.UI.Designer
 {
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            config.MessageHandlers.Add(new HttpsVerifier());
-            config.MessageHandlers.Add(new BasicAuthMessageHandler());
+            //Temporary comment Web API auth during investigation how it works with Angular
+            //config.MessageHandlers.Add(new HttpsVerifier());
+            //config.MessageHandlers.Add(new BasicAuthMessageHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",
