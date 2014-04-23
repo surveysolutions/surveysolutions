@@ -25,7 +25,7 @@
     <div class="questionnaire-tree col-xs-6">
         <div class="chapter-title">
             {{currentChapter.Title }}
-            <span>({{currentChapter.QuestionsCount}} Questions, {{currentChapter.GroupsCount}} Groups, {{currentChapter.RostersCount}} Rosters)</span>
+            <!--<span>({{currentChapter.QuestionsCount}} Questions, {{currentChapter.GroupsCount}} Groups, {{currentChapter.RostersCount}} Rosters)</span>-->
             <ul class="controls-right">
                 <li><a href="" class="filter" title="Toggle Filter"></a></li>
                 <li><a href="" class="search" title="Toggle Search"></a></li>
@@ -38,7 +38,7 @@
                     <div class="holder">
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
-                            <span>({{chapter.QuestionsCount}} Questions, {{chapter.GroupsCount}} Groups, {{chapter.RostersCount}} Rosters)</span>
+                            <!--<span>({{chapter.QuestionsCount}} Questions, {{chapter.GroupsCount}} Groups, {{chapter.RostersCount}} Rosters)</span>-->
                             <div class="dropdown-button">
                             </div>
                             <div>
@@ -56,28 +56,28 @@
         </div>
 
         <script type="text/ng-template" id="tree_item_renderer.html">
-            <div ng-click="setItem(i)" ng-if="i.Type == 7"
+            <div ng-click="setItem(item)" ng-if="isQuestion(item)"
                  class="question item"
-                 ng-class="{'selected' : i.Id == currentItemId, 'cat-singleanswer': i.Type == 1, 'cat-singleanswer': i.Type == 2, 'cat-multianswer' : i.Type == 3, 'cat-intedit' : i.Type == 4, 'cat-datetime' : i.Type == 5, 'cat-geoloc' : i.Type == 6, 'cat-textedit' : i.Type == 8, 'cat-textarea' : i.Type == 9,  'cat-multimedia' : i.Type == 10, 'cat-textedit' : i.Type == 7, 'cat-singleanswer' : i.Type == 0 }">
+                 ng-class="{'selected' : item.Id == currentItemId, 'cat-singleanswer': item.Type == 1, 'cat-singleanswer': item.Type == 2, 'cat-multianswer' : item.Type == 3, 'cat-intedit' : item.Type == 4, 'cat-datetime' : item.Type == 5, 'cat-geoloc' : item.Type == 6, 'cat-textedit' : item.Type == 8, 'cat-textarea' : item.Type == 9,  'cat-multimedia' : item.Type == 10, 'cat-textedit' : item.Type == 7, 'cat-singleanswer' : item.Type == 0 }">
                 <div class="icon"></div>
-                {{ i.Title }}
+                {{ item.Title }}
                 <div class="qname-block">
-                    <a href="" class="linked"></a>{{i.Variable}}<div class="dropdown-btn"></div>
+                    <a href="" class="linked"></a>{{item.Variable}}<div class="dropdown-btn"></div>
                 </div>
             </div>
-            <div class="section item" ng-click="setItem(i)" ng-class="{'selected' : i.Id == currentItemId}" ng-if="i.Type != 7">
-                {{i.Title}}
+            <div class="section item" ng-click="setItem(item)" ng-class="{'selected' : item.Id == currentItemId}" ng-if="!isQuestion(item)">
+                {{item.Title}}
             </div>
-            <!--<div class="buttons-item" ng-if="i.Type != 7">
+            <div class="buttons-item" ng-if="!isQuestion(item)">
                 <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" />
                 <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" />
-            </div>-->
-            <div ng-repeat="i in i.Items" ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+            </div>
+            <div ng-repeat="item in item.Items" ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
             </div>
         </script>
 
         <div class="question-list">
-            <div ng-repeat="i in items" ng-include="'tree_item_renderer.html'">
+            <div ng-repeat="item in items" ng-include="'tree_item_renderer.html'">
             </div>
         </div>
     </div>

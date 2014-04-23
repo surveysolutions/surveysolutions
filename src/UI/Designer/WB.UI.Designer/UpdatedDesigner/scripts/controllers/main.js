@@ -34,6 +34,10 @@ angular.module('designerApp')
                 });
         };
 
+        $scope.isQuestion = function (item) {
+            return item.hasOwnProperty('Type');
+        };
+
         $scope.submit = function() {
             console.log('submit');
         };
@@ -47,11 +51,11 @@ angular.module('designerApp')
 
                     if ($routeParams.chapterId) {
                         $scope.currentChapterId = $routeParams.chapterId;
-                        loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                        $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
                     } else {
                         $scope.currentChapter = result.Chapters[0];
                         $scope.currentChapterId = $scope.currentChapter.ChapterId;
-                        loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.ChapterId);
+                        $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.ChapterId);
                     }
                     if ($routeParams.itemId) {
                         $scope.currentItemId = $routeParams.itemId;
