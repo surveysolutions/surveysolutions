@@ -141,4 +141,7 @@
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
     <value>Roster record is orphan</value>
   </data>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>Roster Id is inconsistant with roster size</value>
+  </data>
 </root>

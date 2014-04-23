@@ -233,6 +233,7 @@
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
     <Compile Include="Views\Questionnaire\RosterScopeDescription.cs" />
+    <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
   </ItemGroup>
   <ItemGroup>
