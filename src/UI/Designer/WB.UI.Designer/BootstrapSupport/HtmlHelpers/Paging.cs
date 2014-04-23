@@ -27,20 +27,6 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 {
     public static class PaginiationHelperExtensions
     {
-        /// <summary>
-        /// Renders a bootstrap standard pagination bar
-        /// </summary>
-        /// <remarks>
-        /// http://twitter.github.com/bootstrap/components.html#pagination
-        /// </remarks>
-        /// <param name="helper">The html helper</param>
-        /// <param name="currentPage">Zero-based page number of the page on which the pagination bar should be rendered</param>
-        /// <param name="totalPages">The total number of pages</param>
-        /// <param name="pageUrl">
-        ///     Expression to construct page url (e.g.: x => Url.Action("Index", new {page = x}))
-        /// </param>
-        /// <param name="additionalPagerCssClass">Additional classes for the navigation div (e.g. "pagination-right pagination-mini")</param>
-        /// <returns></returns>
         public static MvcHtmlString Pager(this HtmlHelper helper,
             int currentPage, int totalPages, 
             Func<int, string> pageUrl, 
