@@ -63,7 +63,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 id);
 
             this.synchronizationDataStorage.SaveQuestionnaire(document, version);
-            plainQuestionnaireRepository.StoreQuestionnaire(id, version, questionnaireDocument);
         }
 
         public string Name
