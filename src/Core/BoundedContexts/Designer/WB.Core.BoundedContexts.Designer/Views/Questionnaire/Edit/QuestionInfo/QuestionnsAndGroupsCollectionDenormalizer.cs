@@ -197,12 +197,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description, evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupCloned> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description, evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupDeleted> evnt)
@@ -310,9 +310,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return descendantQuestions;
         }
 
-        private List<GroupDetailsView> GetAllDescendantGroups(QuestionsAndGroupsCollectionView currentState, Guid groupId)
+        private List<GroupAndRosterDetailsView> GetAllDescendantGroups(QuestionsAndGroupsCollectionView currentState, Guid groupId)
         {
-            var descendantGroups = new List<GroupDetailsView>();
+            var descendantGroups = new List<GroupAndRosterDetailsView>();
 
             currentState
                 .Groups
@@ -360,7 +360,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 .ToList();
 
             var groups = questionnaire.GetAllQuestions<Group>()
-                .Select(g => new GroupDetailsView
+                .Select(g => new GroupAndRosterDetailsView
                 {
                     Id = g.PublicKey,
                     Title = g.Title,
@@ -386,20 +386,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return questionCollection;
         }
 
-        private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState, Guid groupId, string title, string description, Guid parentGroupId)
+        private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState, Guid groupId, string title, string description, string enablementCondition, Guid parentGroupId)
         {
             if (currentState == null)
             {
                 return null;
             }
 
-            var group = new GroupDetailsView
+            var group = new GroupAndRosterDetailsView
             {
                 Id = groupId,
                 Title = title,
                 ParentGroupId = parentGroupId,
                 IsRoster = false,
                 Description = description,
+                EnablementCondition = enablementCondition,
                 ParentGroupsIds = new Guid[0],
                 RosterScopeIds = new Guid[0]
             };

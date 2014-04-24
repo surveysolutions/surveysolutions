@@ -209,12 +209,18 @@
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IQuestionnaireItem.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
+    <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\IQuestionnaireInfoFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionBrief.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\CategoricalOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DateTimeDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DescendantItemView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\EventConverter.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GeoLocationDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GroupDetailsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GroupAndRosterDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
@@ -245,6 +251,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
+    <Compile Include="Views\Questionnaire\Edit\RosterDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Indexes\DesignerReportQuestionnaireListViewItem.cs">
       <SubType>Code</SubType>
     </Compile>
