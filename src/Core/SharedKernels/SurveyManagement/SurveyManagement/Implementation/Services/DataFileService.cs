@@ -29,10 +29,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return result;
         }
 
-        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
+        public string CreateValidFileName(string name)
         {
             string fileNameWithoutInvalidFileNameChars = this.fileSystemAccessor.MakeValidFileName(name);
-            var fileNameShortened = new string(fileNameWithoutInvalidFileNameChars.Take(118).ToArray());
+            return new string(fileNameWithoutInvalidFileNameChars.Take(118).ToArray());
+        }
+
+        private string CreateValidFileName(string name, HashSet<string> createdFileNames, int i = 0)
+        {
+            var fileNameShortened = CreateValidFileName(name);
             string fileNameWithNumber = string.Concat(fileNameShortened,
                 i == 0 ? (object)string.Empty : i).ToLower();
 

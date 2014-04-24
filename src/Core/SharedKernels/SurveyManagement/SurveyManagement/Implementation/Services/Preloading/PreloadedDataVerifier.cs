@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     var parsedAnswer = questionDataParser.Parse(row[x], levelData.Header[x], getQuestionByStataCaption, getAnswerOptionsAsValues);
                     if (!parsedAnswer.HasValue)
                         yield return
-                            new PreloadedDataVerificationReference(x, y, PreloadedDataVerificationReferenceType.Cell, row[x],
+                            new PreloadedDataVerificationReference(x, y, PreloadedDataVerificationReferenceType.Cell,string.Format("{0}:{1}", levelData.Header[x], row[x]),
                                 levelData.FileName);
                 }
             }

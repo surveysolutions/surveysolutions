@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     internal interface IDataFileService
     {
         Dictionary<Guid, string> CreateCleanedFileNamesForLevels(IDictionary<Guid, string> levels);
+        string CreateValidFileName(string name);
     }
 }

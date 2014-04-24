@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
@@ -18,19 +19,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly QuestionnaireExportStructure exportStructure;
         private readonly QuestionnaireRosterStructure questionnaireRosterStructure;
         private readonly QuestionnaireDocument questionnaireDocument;
-        
-        public PreloadedDataService(QuestionnaireExportStructure exportStructure, QuestionnaireRosterStructure questionnaireRosterStructure, QuestionnaireDocument questionnaireDocument)
+        private readonly IDataFileService dataFileService;
+
+        public PreloadedDataService(QuestionnaireExportStructure exportStructure, QuestionnaireRosterStructure questionnaireRosterStructure,
+            QuestionnaireDocument questionnaireDocument, IDataFileService dataFileService)
         {
             this.exportStructure = exportStructure;
             this.questionnaireRosterStructure = questionnaireRosterStructure;
             this.questionnaireDocument = questionnaireDocument;
+            this.dataFileService = dataFileService;
         }
 
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
         {
             return
                 exportStructure.HeaderToLevelMap.Values.FirstOrDefault(
-                    header => levelFileName.IndexOf(header.LevelName, StringComparison.OrdinalIgnoreCase) >= 0);
+                    header => levelFileName.IndexOf(dataFileService.CreateValidFileName(header.LevelName), StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+
+        public PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
+        {
+            return allLevels.FirstOrDefault(l => l.FileName.IndexOf(dataFileService.CreateValidFileName(name), StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
         public PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels)
@@ -130,7 +140,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 children
                     .Select(scope => exportStructure.HeaderToLevelMap[scope.ScopeId]).Select(
                         child =>
-                            GetDataFileByLevelName(allLevels, child.LevelName)).ToArray();
+                            GetDataFileByLevelName(allLevels, child.LevelName)).Where(file => file != null).ToArray();
         }
 
         public decimal GetRecordIdValueAsDecimal(string[] dataFileRecord, int idColumnIndex)
@@ -147,11 +157,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         public int GetParentIdColumnIndex(PreloadedDataByFile dataFile)
         {
             return dataFile.Header.ToList().FindIndex(header => header == "ParentId");
-        }
-
-        private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
-        {
-            return allLevels.FirstOrDefault(l => l.FileName.Contains(name));
         }
     }
 }
