@@ -222,20 +222,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private IEnumerable<PreloadedDataVerificationReference> QuestionWasntParsed(PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService, Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
         {
+            var presentQuestions = preloadedDataService.GetColumnIndexesGoupedByQuestionVariableName(levelData);
+            
+            if(presentQuestions==null)
+                yield break;
+            
             for (int y = 0; y < levelData.Content.Length; y++)
             {
                 var row = levelData.Content[y];
-                for (int x = 0; x < Math.Min(row.Length, levelData.Header.Length); x++)
+                foreach (var presentQuestion in presentQuestions)
                 {
-                    if(string.IsNullOrEmpty(row[x]))
-                        continue;
-                    if (this.serviceColumns.Contains(levelData.Header[x]))
-                        continue;
-                    var parsedAnswer = questionDataParser.Parse(row[x], levelData.Header[x], getQuestionByStataCaption, getAnswerOptionsAsValues);
-                    if (!parsedAnswer.HasValue)
-                        yield return
-                            new PreloadedDataVerificationReference(x, y, PreloadedDataVerificationReferenceType.Cell,string.Format("{0}:{1}", levelData.Header[x], row[x]),
-                                levelData.FileName);
+                    foreach (var answerIndex in presentQuestion.Value)
+                    {
+                        var answer = row[answerIndex];
+                        if (string.IsNullOrEmpty(answer))
+                            continue;
+                        var parsedAnswer = questionDataParser.Parse(answer, presentQuestion.Key, getQuestionByStataCaption, getAnswerOptionsAsValues);
+                        if (!parsedAnswer.HasValue)
+                            yield return
+                                new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell, string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                    levelData.FileName);
+                    }
                 }
             }
         }

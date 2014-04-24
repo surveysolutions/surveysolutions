@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             {
                 try
                 {
-                    this.BuiltInterview(Guid.NewGuid(), topLevelData.FileName, value, topLevelData.Header,
+                    this.BuiltInterview(Guid.NewGuid(), topLevelData.FileName, value, preloadedDataService.GetColumnIndexesGoupedByQuestionVariableName(topLevelData),
                         value[idColumnIndex],
                         data.Except(new[] { topLevelData }).ToArray(),
                         questionnarie, preloadedDataService, bigTemplate.PublicKey,version,
@@ -136,10 +136,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.tempSampleCreationStorage.Store(result, id);
         }
 
-        private void BuiltInterview(Guid interviewId, string levelName, string[] values, string[] header,string id, PreloadedDataByFile[] rosterData,
+        private void BuiltInterview(Guid interviewId, string levelName, string[] values, Dictionary<string, int[]> columnIndexesGoupedByQuestionVariableName,string id, PreloadedDataByFile[] rosterData,
             IQuestionnaire template, IPreloadedDataService preloadedDataService, Guid templateId, long version, Guid headqarterId, Guid supervisorId)
         {
-            var answersToFeaturedQuestions = this.CreateAnswerList(values, header,
+            var answersToFeaturedQuestions = this.CreateAnswerList(values, columnIndexesGoupedByQuestionVariableName,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption, getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
 
             var rosterAnswers = this.GetAnswers(levelName, id, new decimal[0], rosterData, preloadedDataService, template);
@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     rosterVector.CopyTo(newRosterVetor, 0);
                     newRosterVetor[newRosterVetor.Length - 1] = preloadedDataService.GetRecordIdValueAsDecimal(rosterRow, idColumnIndex);
 
-                    var rosterAnswers = this.CreateAnswerList(rosterRow, preloadedDataByFile.Header,
+                    var rosterAnswers = this.CreateAnswerList(rosterRow, preloadedDataService.GetColumnIndexesGoupedByQuestionVariableName(preloadedDataByFile),
                         getQuestionByStataCaption: template.GetQuestionByStataCaption,
                         getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
 
@@ -184,18 +184,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return result.ToArray();
         }
 
-        private Dictionary<Guid, object> CreateAnswerList(string[] values, string[] header,
+        private Dictionary<Guid, object> CreateAnswerList(string[] values, Dictionary<string, int[]> columnIndexesGoupedByQuestionVariableName,
             Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
         {
-            if (values.Length < header.Length)
-            {
-                throw new ArgumentOutOfRangeException("Values doesn't much header");
-            }
-
             var featuredAnswers = new Dictionary<Guid, object>();
-            for (int i = 0; i < header.Length; i++)
+
+            foreach (var columnIndexesForVariableName in columnIndexesGoupedByQuestionVariableName)
             {
-                var parsedAnswer = questionDataParser.Parse(values[i], header[i], getQuestionByStataCaption, getAnswerOptionsAsValues);
+                var parsedAnswer = questionDataParser.BuildAnswerForVariableName(values, columnIndexesForVariableName, getQuestionByStataCaption, getAnswerOptionsAsValues);
+
                 if (parsedAnswer.HasValue)
                     featuredAnswers.Add(parsedAnswer.Value.Key, parsedAnswer.Value.Value);
             }

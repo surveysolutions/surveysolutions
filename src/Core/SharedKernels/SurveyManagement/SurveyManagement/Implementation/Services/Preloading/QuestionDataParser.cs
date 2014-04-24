@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
+                case QuestionType.TextList:
                     return new KeyValuePair<Guid, object>(question.PublicKey, answer);
                 case QuestionType.GpsCoordinates:
                     var parsedAnswer = GeoPosition.Parse(answer);
@@ -76,12 +77,55 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     }
                     break;
 
-                    /* case QuestionType.TextList:
-                    case QuestionType.MultyOption:
-                    */
+                case QuestionType.MultyOption:
+                    var multyOption = question as MultyOptionsQuestion;
+                    if (multyOption != null)
+                    {
+                        decimal answerValue;
+                        if (!decimal.TryParse(answer, out answerValue))
+                            break;
+                        if (!getAnswerOptionsAsValues(question.PublicKey).Contains(answerValue))
+                            break;
+                        return new KeyValuePair<Guid, object>(question.PublicKey, answerValue);
+                    }
+                    break;
             }
 
             return null;
+        }
+
+        public KeyValuePair<Guid, object>? BuildAnswerForVariableName(string[] answers, KeyValuePair<string, int[]> columnIndexesForVariableName,
+            Func<string, IQuestion> getQuestionByStataCaption,
+            Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
+        {
+            var typedAnswers = new List<object>();
+            foreach (var answerIndex in columnIndexesForVariableName.Value)
+            {
+                var answer = answers[answerIndex];
+                if (string.IsNullOrEmpty(answer))
+                    continue;
+                var parsedAnswer = Parse(answer, columnIndexesForVariableName.Key, getQuestionByStataCaption,
+                    getAnswerOptionsAsValues);
+                if (!parsedAnswer.HasValue)
+                    continue;
+                typedAnswers.Add(parsedAnswer.Value.Value);
+            }
+            if (typedAnswers.Count == 0)
+                return null;
+
+            var question = getQuestionByStataCaption(columnIndexesForVariableName.Key);
+            if (question == null)
+                return null;
+            switch (question.QuestionType)
+            {
+                case QuestionType.MultyOption:
+                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.Select(a => (decimal) a).ToArray());
+                case QuestionType.TextList:
+                    return new KeyValuePair<Guid, object>(question.PublicKey,
+                        typedAnswers.Select((a, i) => new Tuple<decimal, string>(i, (string) a)).ToArray());
+                default:
+                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.First());
+            }
         }
     }
 }
