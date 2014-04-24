@@ -855,7 +855,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
             {
-                interviewChangeStructures.Changes.Add(new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null, null));
+                var fixedRosterChanges = new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null, null);
+                ApplyChangesToState(interviewChangeStructures.State, fixedRosterChanges);
+                interviewChangeStructures.Changes.Add(fixedRosterChanges);
             }
 
 
