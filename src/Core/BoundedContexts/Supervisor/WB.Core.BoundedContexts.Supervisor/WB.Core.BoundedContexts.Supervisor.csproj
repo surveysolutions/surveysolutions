@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\WebClientExtensions.cs" />
     <Compile Include="Interviews\IHeadquartersInterviewReader.cs" />
     <Compile Include="Interviews\Implementation\HeadquartersInterviewReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

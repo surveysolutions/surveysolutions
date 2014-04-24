@@ -4,7 +4,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.ServiceModel;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
@@ -16,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation

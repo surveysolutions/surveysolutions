@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Supervisor.Extensions;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
 {
@@ -26,8 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
         {
             using (var client = new HttpClient(this.messageHandler))
             {
-                if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(headquartersSettings.AccessToken);
+                client.AppendAuthToken(this.headquartersSettings);
 
                 XDocument feedDocument = await ReadFeedPage(feedUri, client).ConfigureAwait(false);
                 IEnumerable<AtomFeedEntry<T>> entries = ParseFeed<T>(feedDocument);
