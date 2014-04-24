@@ -34,9 +34,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 new SynchronizationContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>()));
         }
 
-        private static HeadquartersSettings HeadquartersSettings()
+        public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null, 
+            Uri usersChangedFeedUri = null, 
+            Uri interviewsFeedUri = null, 
+            string questionnaireDetailsEndpoint = "", 
+            string accessToken = "")
         {
-            return new HeadquartersSettings(new Uri("http://localhost/"), new Uri("http://localhost/"), new Uri("http://localhost/"), "", string.Empty);
+            return new HeadquartersSettings(loginServiceUri ?? new Uri("http://localhost/"), 
+                usersChangedFeedUri ?? new Uri("http://localhost/"), 
+                interviewsFeedUri ?? new Uri("http://localhost/"), 
+                questionnaireDetailsEndpoint, 
+                accessToken);
         }
     }
 }
