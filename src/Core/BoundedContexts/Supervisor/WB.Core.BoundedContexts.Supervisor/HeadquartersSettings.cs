@@ -9,19 +9,22 @@ namespace WB.Core.BoundedContexts.Supervisor
         public Uri InterviewsFeedUrl { get; set; }
         public string QuestionnaireDetailsEndpoint { get; set; }
         public string AccessToken { get; set; }
+        public Uri InterviewsPushUrl { get; set; }
 
-
-        public HeadquartersSettings(Uri loginServiceEndpointUrl, 
-            Uri userChangedFeedUrl, 
-            Uri interviewsFeed,
+        public HeadquartersSettings(
+            Uri loginServiceEndpointUrl,
+            Uri userChangedFeedUrl,
+            Uri interviewsFeedUrl,
             string questionnaireDetailsEndpoint,
-            string accessToken)
+            string accessToken,
+            Uri interviewsPushUrl)
         {
             this.LoginServiceEndpointUrl = loginServiceEndpointUrl;
             this.UserChangedFeedUrl = userChangedFeedUrl;
-            this.InterviewsFeedUrl = interviewsFeed;
+            this.InterviewsFeedUrl = interviewsFeedUrl;
             this.QuestionnaireDetailsEndpoint = questionnaireDetailsEndpoint;
             this.AccessToken = accessToken;
+            this.InterviewsPushUrl = interviewsPushUrl;
         }
     }
 }
