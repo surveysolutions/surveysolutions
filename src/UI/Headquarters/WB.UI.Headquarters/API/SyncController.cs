@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.API.Attributes;
@@ -14,13 +13,11 @@ namespace WB.UI.Headquarters.API
     [TokenValidationAuthorization]
     public class SyncController : ApiController
     {
-        private readonly ILogger logger;
         private readonly ISyncManager syncManager;
 
-        public SyncController(ISyncManager syncManager, ILogger logger)
+        public SyncController(ISyncManager syncManager)
         {
             this.syncManager = syncManager;
-            this.logger = logger;
         }
 
         [HttpPost]
