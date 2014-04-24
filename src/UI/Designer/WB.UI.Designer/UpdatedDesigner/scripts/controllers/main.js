@@ -38,19 +38,39 @@ angular.module('designerApp')
             return item.hasOwnProperty('Type');
         };
 
-        $scope.addQuestion = function(item) {
-            console.log(item);
+        $scope.addQuestion = function (item) {
+            var newId = guid();
+            item.Items.push(
+                {
+                    "Id": newId,
+                    "Title": "New Question",
+                    "Variable": "",
+                    "Type": 7,
+                    "LinkedVariables": [],
+                    "BrokenLinkedVariables": null
+                }
+            );
         };
 
         $scope.addGroup = function(item) {
-            console.log(item);
+            var newId = guid();
+            item.Items.push(
+                {
+                    "Id": newId,
+                    "Title": "New group",
+                    "QuestionsCount": 0,
+                    "GroupsCount": 0,
+                    "RostersCount": 0,
+                    "Items": []
+                }
+            );
         };
 
-        $scope.collapse = function (item) {
+        $scope.collapse = function(item) {
             item.collapsed = true;
         };
 
-        $scope.expand = function (item) {
+        $scope.expand = function(item) {
             item.collapsed = false;
         };
 
@@ -84,4 +104,15 @@ angular.module('designerApp')
         $scope.$on('$locationChangeSuccess', function() {
             $route.current = lastRoute;
         });
+
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+
+            return s4() + s4() + s4() + s4() +
+                s4() + s4() + s4() + s4();
+        };
     });
