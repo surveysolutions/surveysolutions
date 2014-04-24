@@ -36,6 +36,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
+            var dataFileServiceMock = new Mock<IDataFileService>();
+            dataFileServiceMock.Setup(x => x.CreateValidFileName(Moq.It.IsAny<string>())).Returns<string>((name) => name);
             return
                 new PreloadedDataVerifier(
                     Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>(
@@ -52,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                         _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ => _.CreatePreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument) ==
-                            new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, Mock.Of<IDataFileService>())));
+                            new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, dataFileServiceMock.Object)));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)
