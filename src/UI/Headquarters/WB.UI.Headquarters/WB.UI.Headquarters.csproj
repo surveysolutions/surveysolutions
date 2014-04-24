@@ -377,7 +377,7 @@
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\StatusHelper.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
-    <Compile Include="Controllers\SyncController.cs" />
+    <Compile Include="API\SyncController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
