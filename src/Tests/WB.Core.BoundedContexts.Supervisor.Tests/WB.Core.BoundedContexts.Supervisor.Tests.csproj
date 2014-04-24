@@ -200,6 +200,8 @@
     <Compile Include="Users\HeadquartersLoginServiceTests\when_hq_service_fails.cs" />
     <Compile Include="Users\HeadquartersLoginServiceTests\when_invalid_credentials_provided.cs" />
     <Compile Include="Users\HeadquartersLoginServiceTests\when_valid_credentials_provided.cs" />
+    <Compile Include="WebClientExtensionsTests\when_auth_token_is_empty.cs" />
+    <Compile Include="WebClientExtensionsTests\when_auth_token_provided.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

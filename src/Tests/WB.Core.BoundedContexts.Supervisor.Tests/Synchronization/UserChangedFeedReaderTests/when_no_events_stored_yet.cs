@@ -17,13 +17,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
         Establish context = () =>
         {
             var handler = new Mock<HttpMessageHandler>();
-            var settings = new HeadquartersSettings(new Uri("http://localhost"), new Uri("http://localhost/feed"), new Uri("http://localhost/interviewsfeed"), "", string.Empty);
-
             handler.SetupResponseFromResource("http://localhost/feed",
                 "WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFeedReaderTests.Simplefeed.xml");
             handler.SetupResponseFromResource("http://localhost/Headquarters/api/feeds/users/v1/archive/2",
                 "WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFeedReaderTests.SimpleArchiveFeed.xml");
 
+            var settings = Create.HeadquartersSettings(usersChangedFeedUri: new Uri("http://localhost/feed")); 
             feedReader = Create.UserChangedFeedReader(messageHandler: handler.Object,
                 settings: settings);
         };
