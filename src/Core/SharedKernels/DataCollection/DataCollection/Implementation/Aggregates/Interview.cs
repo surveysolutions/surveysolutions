@@ -851,6 +851,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                new List<object>() { new InterviewFromPreloadedDataCreated(userId, questionnaireId, questionnaire.Version) },
                 null, null, null, null, null, null));
 
+            InitInterview(questionnaire, interviewChangeStructures);
+
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
@@ -859,8 +861,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ApplyChangesToState(interviewChangeStructures.State, fixedRosterChanges);
                 interviewChangeStructures.Changes.Add(fixedRosterChanges);
             }
-
-
 
             var orderedData = preloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
             foreach (var preloadedLevel in orderedData)
@@ -884,8 +884,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions, answersTime,
                    newAnswers, preloadedLevel.RosterVector);
             }
-
-            InitInterview(questionnaire, interviewChangeStructures);
             //apply events
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
@@ -1025,7 +1023,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var currentQuestionRosterVector = rosterVector ?? EmptyRosterVector;
             Func<InterviewStateStructures, Identity, object> getAnswer = (currentState, question) => newAnswers.Any(x => AreEqual(question, x.Key))
-                ? newAnswers.SingleOrDefault(x => AreEqual(question, x.Key))
+                ? newAnswers.SingleOrDefault(x => AreEqual(question, x.Key)).Value
                 : GetEnabledQuestionAnswerSupportedInExpressions(changeStructures.State, question);
 
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
