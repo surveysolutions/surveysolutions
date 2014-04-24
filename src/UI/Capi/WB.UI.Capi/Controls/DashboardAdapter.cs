@@ -31,19 +31,23 @@ namespace WB.UI.Capi.Controls
 
             View view = layoutInflater.Inflate(Resource.Layout.dashboard_survey_item, null);
 
-            var llQuestionnairie =
-                view.FindViewById<LinearLayout>(Resource.Id.llQuestionnairie);
+            var llQuestionnairie = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnairie);
             view.SetTag(Resource.Id.QuestionnaireId, dataItem.PublicKey.ToString());
             llQuestionnairie.Focusable = false;
 
             if (dataItem.CreatedOnClient.HasValue && dataItem.CreatedOnClient.Value)
             {
                 Button delButton = new Button(activity);
+
+                var layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
+                
+                delButton.LayoutParameters = layoutParams;
+
                 delButton.SetTypeface(null, TypefaceStyle.Bold);
                 delButton.Text = "-";
-                delButton.SetBackgroundColor(Color.Red);
-                llQuestionnairie.AddView(delButton, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                                                  ViewGroup.LayoutParams.WrapContent));
+                delButton.SetPadding(0,0,0,5);
+                
+                llQuestionnairie.AddView(delButton);
 
                 delButton.Click += (sender, args) =>
                 {

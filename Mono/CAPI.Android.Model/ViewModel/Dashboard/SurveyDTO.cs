@@ -1,32 +1,22 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class SurveyDto : DenormalizerRow
     {
-        public SurveyDto(Guid id, string surveyTitle)
+        public SurveyDto(Guid id, string surveyTitle, long surveyVersion)
         {
-            Id = id.FormatGuid();
-            SurveyTitle = surveyTitle;
+            this.Id = id.FormatGuid();
+            this.SurveyTitle = surveyTitle;
+            this.TemplateMaxVersion = surveyVersion;
         }
 
-        public SurveyDto()
-        {
-        }
+        public SurveyDto() {}
 
         public string SurveyTitle { get; private set; }
+
+        public long TemplateMaxVersion { get; private set; }
     }
 }

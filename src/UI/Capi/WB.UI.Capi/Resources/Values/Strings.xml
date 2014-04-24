@@ -2,6 +2,7 @@
 <resources>
   <string name="ApplicationName">CAPI</string>
   <item  type="id"  name="QuestionnaireId" />
+  <item  type="id"  name="QuestionnaireVersion" />
   <item  type="id"  name="IsInterviewLocal" />
   <item  type="id"  name="ScreenId" />
   <item  type="id"  name="PrpagationKey" />
