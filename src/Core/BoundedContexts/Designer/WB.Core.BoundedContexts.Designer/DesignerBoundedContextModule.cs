@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
-            this.Bind<IEventHandler>().To<QuestionnaireInfoDenormalizer>().InSingletonScope();
+            this.Bind<IEventHandler>().To<QuestionnsAndGroupsCollectionDenormalizer>().InSingletonScope();
 
             RegistryHelper.RegisterFactory<QuestionnaireListViewFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<QuestionnaireViewFactory>(this.Kernel);
