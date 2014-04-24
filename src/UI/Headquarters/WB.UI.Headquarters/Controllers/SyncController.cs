@@ -88,12 +88,8 @@ namespace WB.UI.Headquarters.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult PostPackage(string login, string password, string syncItemContent)
+        public ActionResult PostPackage(string syncItemContent)
         {
-            UserView user = this.GetUserByNameAndPassword();
-            if (user == null)
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
-
             try
             {
                 Stream requestStream = this.Request.InputStream;
@@ -102,7 +98,7 @@ namespace WB.UI.Headquarters.Controllers
                 SyncItem syncItem = null;
                 try
                 {
-                    syncItem = JsonConvert.DeserializeObject<SyncItem>(json,
+                    syncItem = JsonConvert.DeserializeObject<SyncItem>(syncItemContent,
                                                                        new JsonSerializerSettings
                                                                            {
                                                                                TypeNameHandling =

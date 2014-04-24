@@ -12,8 +12,11 @@
 
     <div class="row-fluid">
         <div class="span12">
-            <button class="btn btn-default" id="synchnizationStart" data-bind="disable: syncronizationRunning, click: StartSynchronization">
-                Synchronize
+            <button class="btn btn-default" id="synchnizationStart" data-bind="disable: syncronizationRunning, click: StartPull">
+                Pull
+            </button>
+            <button class="btn btn-default" data-bind="click: StartPush">
+                Push
             </button>
         </div>
     </div>
@@ -47,9 +50,14 @@
             self.Errors = ko.observableArray([]);
             self.syncronizationRunning = ko.observable(true);
 
-            self.StartSynchronization = function() {
+            self.StartPull = function() {
                 self.syncronizationRunning(true);
                 $.post('@Url.Action("Synchronize", "HqSync")');
+            }
+
+            self.StartPush = function() {
+                self.syncronizationRunning(true);
+                $.post('@Url.Action("Push", "HqSync")');
             }
 
             self.RefreshStatus = function() {

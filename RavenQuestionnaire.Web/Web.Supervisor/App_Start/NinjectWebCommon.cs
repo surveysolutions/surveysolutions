@@ -116,8 +116,8 @@ namespace Web.Supervisor.App_Start
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.UserChangedFeed"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsFeed"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString(),
-                WebConfigurationManager.AppSettings["Headquarters.AccessToken"]
-                );
+                WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]));
 
             bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))

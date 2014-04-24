@@ -2,6 +2,8 @@
 {
     public interface IInterviewsSynchronizer
     {
-        void Synchronize();
+        void Pull();
+
+        void Push();
     }
 }

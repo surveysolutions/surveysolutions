@@ -12,14 +12,15 @@ namespace Web.Supervisor.Controllers
     {
         private readonly SynchronizationContext synchronizationContext;
         private readonly IScheduler scheduler;
+        private readonly ISynchronizer synchronizer;
 
-        public HqSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, SynchronizationContext synchronizationContext, IScheduler scheduler)
+        public HqSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, SynchronizationContext synchronizationContext, IScheduler scheduler, ISynchronizer synchronizer)
             : base(commandService, globalInfo, logger)
         {
             this.synchronizationContext = synchronizationContext;
             this.scheduler = scheduler;
+            this.synchronizer = synchronizer;
         }
-
 
         public ActionResult Synchronization()
         {
@@ -30,6 +31,13 @@ namespace Web.Supervisor.Controllers
         public ActionResult Synchronize()
         {
             this.scheduler.TriggerJob(new JobKey("HQ sync", "Synchronization"));
+            return Json(new object());
+        }
+
+        [HttpPost]
+        public ActionResult Push()
+        {
+            this.synchronizer.Push();
             return Json(new object());
         }
 

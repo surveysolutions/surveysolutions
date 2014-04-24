@@ -5,10 +5,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Extensions
 {
     public static class WebClientExtensions
     {
-        public static void AppendAuthToken(this HttpClient client, HeadquartersSettings headquartersSettings)
+        public static HttpClient AppendAuthToken(this HttpClient client, HeadquartersSettings headquartersSettings)
         {
             if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
+            {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(headquartersSettings.AccessToken);
+            }
+
+            return client;
         }
     }
 }

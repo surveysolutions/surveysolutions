@@ -59,6 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public DateTime UpdateDate { get; set; }
         public Dictionary<Guid, QuestionAnswer> AnswersToFeaturedQuestions { get; set; }
         public List<InterviewCommentedStatus> CommentedStatusesHistory { get; set; }
+        public bool WasCreatedOnClient { get; set; }
     }
 
     public class InterviewCommentedStatus

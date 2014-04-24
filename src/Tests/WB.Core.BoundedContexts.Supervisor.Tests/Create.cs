@@ -38,13 +38,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             Uri usersChangedFeedUri = null, 
             Uri interviewsFeedUri = null, 
             string questionnaireDetailsEndpoint = "", 
-            string accessToken = "")
+            string accessToken = "",
+            Uri interviewsPushUrl = null)
         {
             return new HeadquartersSettings(loginServiceUri ?? new Uri("http://localhost/"), 
                 usersChangedFeedUri ?? new Uri("http://localhost/"), 
                 interviewsFeedUri ?? new Uri("http://localhost/"), 
                 questionnaireDetailsEndpoint, 
-                accessToken);
+                accessToken,
+                interviewsPushUrl ?? new Uri("http://localhost"));
         }
     }
 }
