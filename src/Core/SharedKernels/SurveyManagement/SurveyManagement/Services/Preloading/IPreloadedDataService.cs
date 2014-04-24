@@ -21,5 +21,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         int GetIdColumnIndex(PreloadedDataByFile dataFile);
         int GetParentIdColumnIndex(PreloadedDataByFile dataFile);
         decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, Guid levelId, string parentIdValue);
+        Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
     }
 }

@@ -117,6 +117,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return null;
         }
 
+        public Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
+        {
+            var levelExportStructure = FindLevelInPreloadedData(parentDataFile.FileName);
+            if (levelExportStructure == null)
+                return null;
+            var presentQuestions = new Dictionary<string, int[]>();
+            foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
+            {
+                var headerIndexes = new List<int>();
+                for (int i = 0; i < parentDataFile.Header.Length; i++)
+                {
+                    if (exportedHeaderItem.ColumnNames.Contains(parentDataFile.Header[i]))
+                        headerIndexes.Add(i);
+                }
+                if (!headerIndexes.Any())
+                    continue;
+
+                presentQuestions.Add(exportedHeaderItem.VariableName, headerIndexes.ToArray());
+            }
+            return presentQuestions;
+        }
+
         public PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)
         {
             var levelExportStructure = FindLevelInPreloadedData(levelFileName);
