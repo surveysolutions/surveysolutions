@@ -19,6 +19,7 @@ namespace WB.UI.Designer.Api
     {
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<ChapterInfoViewInputModel, IQuestionnaireItem> chapterInfoViewFactory;
@@ -28,13 +29,15 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, 
             IQuestionnaireVerifier questionnaireVerifier, 
-            IVerificationErrorsMapper verificationErrorsMapper)
+            IVerificationErrorsMapper verificationErrorsMapper, 
+            IQuestionnaireInfoFactory questionnaireInfoFactory)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.verificationErrorsMapper = verificationErrorsMapper;
+            this.questionnaireInfoFactory = questionnaireInfoFactory;
         }
 
         public QuestionnaireInfoView Get(string id)
@@ -64,6 +67,27 @@ namespace WB.UI.Designer.Api
             }
 
             return chapterInfoView;
+        }
+
+        [HttpGet]
+        [CamelCase]
+        public NewEditQuestionView EditQuestion(string id, Guid questionId)
+        {
+            return questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+        }
+
+        [HttpGet]
+        [CamelCase]
+        public NewEditGroupView EditGroup(string id, Guid qroupId)
+        {
+            return questionnaireInfoFactory.GetGroupEditView(id, qroupId);
+        }
+
+        [HttpGet]
+        [CamelCase]
+        public NewEditRosterView EditRoster(string id, Guid rosterId)
+        {
+            return questionnaireInfoFactory.GetRosterEditView(id, rosterId);
         }
 
         [HttpGet]

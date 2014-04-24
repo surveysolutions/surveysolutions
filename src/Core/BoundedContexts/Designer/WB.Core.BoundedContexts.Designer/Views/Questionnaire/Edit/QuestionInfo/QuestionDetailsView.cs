@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     public abstract class QuestionDetailsView : DescendantItemView
     {
-        public string ConditionExpression { get; set; }
+        public string EnablementCondition { get; set; }
 
         public bool IsPreFilled { get; set; }
 
