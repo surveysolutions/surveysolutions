@@ -31,6 +31,7 @@ angular.module('designerApp')
                 .success(function(result) {
                     $scope.items = result.Items;
                     $scope.currentChapter = result;
+                    window.ContextMenuController.get().init();
                 });
         };
 

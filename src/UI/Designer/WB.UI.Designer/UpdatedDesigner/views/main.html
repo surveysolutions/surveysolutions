@@ -39,8 +39,7 @@
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
                             <!--<span>({{chapter.QuestionsCount}} Questions, {{chapter.GroupsCount}} Groups, {{chapter.RostersCount}} Rosters)</span>-->
-                            <div class="dropdown-button">
-                            </div>
+                            <div class="dropdown-button" data-action="context-menu" data-target="chapter-panel-context-menu"></div>
                             <div>
                                 <a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a>&nbsp;
                                 <a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a>
