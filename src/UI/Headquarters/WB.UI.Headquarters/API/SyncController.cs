@@ -10,6 +10,7 @@ using WB.UI.Headquarters.API.Attributes;
 
 namespace WB.UI.Headquarters.API
 {
+    [AllowAnonymous]
     [TokenValidationAuthorization]
     public class SyncController : ApiController
     {
