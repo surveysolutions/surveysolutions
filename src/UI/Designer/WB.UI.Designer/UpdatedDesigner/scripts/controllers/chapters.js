@@ -30,7 +30,7 @@ angular.module('designerApp')
                 RostersCount: 0
             };
 
-            commandService.addGroup($routeParams.questionnaireId, newChapter).success(function () {
+            commandService.addChapter($routeParams.questionnaireId, newChapter).success(function () {
                 $scope.questionnaire.Chapters.push(newChapter);
             });
         };

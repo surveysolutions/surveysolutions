@@ -58,16 +58,18 @@ angular.module('designerApp')
 
         $scope.addGroup = function(item) {
             var newId = guid();
-            item.Items.push(
-                {
-                    "Id": newId,
-                    "Title": "New group",
-                    "QuestionsCount": 0,
-                    "GroupsCount": 0,
-                    "RostersCount": 0,
-                    "Items": []
-                }
-            );
+            var newGroup = {
+                "Id": newId,
+                "Title": "New group",
+                "QuestionsCount": 0,
+                "GroupsCount": 0,
+                "RostersCount": 0,
+                "Items": []
+            };
+
+            commandService.addGroup($routeParams.questionnaireId, newGroup, item.Id).success(function () {
+                    item.Items.push(newGroup);
+                });
         };
 
         $scope.collapse = function(item) {

@@ -4,7 +4,7 @@
         var urlBase = 'command/execute';
         var commandService = {};
 
-        commandService.addGroup = function (questionnaireId, chapter) {
+        commandService.addChapter = function (questionnaireId, chapter) {
             return $http({
                 method: 'POST',
                 url: urlBase,
@@ -21,6 +21,28 @@
                         "\"rosterFixedTitles\":null," +
                         "\"rosterTitleQuestionId\":null," +
                         "\"parentGroupId\":null}"
+                },
+                headers: { 'Content-Type': 'application/json; ' }
+            });
+        };
+
+        commandService.addGroup = function (questionnaireId, group, parentGroupId) {
+            return $http({
+                method: 'POST',
+                url: urlBase,
+                data: {
+                    "type": "AddGroup",
+                    "command": "{\"questionnaireId\":\"" + questionnaireId + "\"," +
+                        "\"groupId\":\"" + group.Id + "\"," +
+                        "\"title\":\"" + group.Title + "\"," +
+                        "\"description\":\"\"," +
+                        "\"condition\":\"\"," +
+                        "\"isRoster\":false," +
+                        "\"rosterSizeQuestionId\":null," +
+                        "\"rosterSizeSource\":\"Question\"," +
+                        "\"rosterFixedTitles\":null," +
+                        "\"rosterTitleQuestionId\":null," +
+                        "\"parentGroupId\":\"" + parentGroupId +"\"}"
                 },
                 headers: { 'Content-Type': 'application/json; ' }
             });
