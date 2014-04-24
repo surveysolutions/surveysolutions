@@ -82,6 +82,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
+            if (item == null)
+            {
+                return;
+            }
+            
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
             group.PublicKey = evnt.Payload.PublicKey;
@@ -175,6 +180,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            if (item == null)
+            {
+                return;
+            }
             IQuestion result = questionFactory.CreateQuestion(data);
             IGroup group = item.Find<IGroup>(groupId);
 
@@ -223,23 +232,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             IQuestion result = questionFactory.CreateQuestion(data);
-            IGroup group = item.Find<IGroup>(groupId);
+            IGroup group = document.Find<IGroup>(groupId);
 
             if (result == null || group == null)
             {
                 return;
             }
 
-            item.Insert(index, result, groupId);
+            document.Insert(index, result, groupId);
 
-            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
+            document.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 
             if (result.Capital)
-                item.MoveHeadQuestionPropertiesToRoster(result.PublicKey, groupId);
+                document.MoveHeadQuestionPropertiesToRoster(result.PublicKey, groupId);
 
-            this.UpdateQuestionnaire(evnt, item);
+            this.UpdateQuestionnaire(evnt, document);
         }
 
         public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
@@ -354,9 +363,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<GroupStoppedBeingARoster> @event)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(@event.EventSourceId);
-
-            item.UpdateGroup(@event.Payload.GroupId, group =>
+            QuestionnaireDocument document = this.documentStorage.GetById(@event.EventSourceId);
+            if (document == null)
+            {
+                return;
+            }
+            document.UpdateGroup(@event.Payload.GroupId, group =>
             {
                 group.IsRoster = false;
                 group.RosterSizeSource = RosterSizeSourceType.Question;
@@ -365,7 +377,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 group.RosterFixedTitles = null;
             });
 
-            this.UpdateQuestionnaire(@event, item);
+            this.UpdateQuestionnaire(@event, document);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
