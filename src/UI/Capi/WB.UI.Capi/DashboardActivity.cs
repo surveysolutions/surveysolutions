@@ -70,7 +70,8 @@ namespace WB.UI.Capi
             txtSurveyCount.Text = dashboardSurveyItem.ActiveItems.Count.ToString(CultureInfo.InvariantCulture);
 
             var btnNewInterview = view.FindViewById<Button>(Resource.Id.btnNewInterview);
-            btnNewInterview.SetTag(Resource.Id.QuestionnaireId, dashboardSurveyItem.PublicKey.ToString());
+            btnNewInterview.SetTag(Resource.Id.QuestionnaireId, dashboardSurveyItem.QuestionnaireId.ToString());
+            btnNewInterview.SetTag(Resource.Id.QuestionnaireVersion, dashboardSurveyItem.QuestionnaireMaxVersion.ToString());
 
             btnNewInterview.Click += this.btnNewInterview_ButtonClick;
             
@@ -136,14 +137,16 @@ namespace WB.UI.Capi
             if (target == null)
                 return;
 
-            var id = target.GetTag(Resource.Id.QuestionnaireId).ToString();
+            var questionnaireId = Guid.Parse(target.GetTag(Resource.Id.QuestionnaireId).ToString());
+            var questionnaireVersion = long.Parse(target.GetTag(Resource.Id.QuestionnaireVersion).ToString());
+
             var interviewKey = Guid.NewGuid();
 
             Guid interviewUserId = CapiApplication.Membership.CurrentUser.Id;
             Guid supervisorId = CapiApplication.Membership.SupervisorId;
 
             NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
-                Guid.Parse(id), null, DateTime.UtcNow, supervisorId));
+                questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
 
             logManipulator.CreatePublicRecord(interviewKey);
         
