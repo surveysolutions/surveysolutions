@@ -11,6 +11,13 @@ angular.module('designerApp')
             verificationService.verify($routeParams.questionnaireId).success(function (result) {
                 $scope.verificationStatus.errors = result.errors;
                 $scope.verificationStatus.errorsCount = result.errors.length;
+
+                $('#verify-btn').popover({
+                    'html': true,
+                    content: function () {
+                        return $('#verify-popover').html();
+                    }
+                });
             });
         };
     });
