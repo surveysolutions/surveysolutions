@@ -1065,12 +1065,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (decimal)answer, answeredQuestion, getAnswer, questionnaire);
                         break;
-
                     case QuestionType.MultyOption:
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (decimal[])answer, answeredQuestion, getAnswer, questionnaire);
                         break;
-                        
+                    case QuestionType.QRBarcode:
+                        interviewChanges =
+                            this.CalculateInterviewChangesOnAnswerQRBarcodeQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (string)answer, answeredQuestion, questionnaire);
+                        break;
+                    case QuestionType.GpsCoordinates:
+                        var geoAnswer = answer as GeoPosition;
+                        interviewChanges =
+                            this.CalculateInterviewChangesOnAnswerGeoLocationQuestion(changeStructures.State, userId, questionId,
+                                currentQuestionRosterVector, answersTime, geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy,
+                                geoAnswer.Timestamp, answeredQuestion, questionnaire);
+                        break;    
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial pre-filled question.",
@@ -1081,7 +1090,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changeStructures.Changes.Add(interviewChanges);
             }
         }
-
 
         private static void ApplyChangesToState(InterviewStateStructures state, InterviewChanges changes)
         {
@@ -1229,7 +1237,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[])answer, questionnaire,
                             answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
-
+                    case QuestionType.QRBarcode:
+                        this.CheckQRBarcodeInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
+                        break;
+                    case QuestionType.GpsCoordinates:
+                        this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
+                        break;
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial pre-filled question.",
@@ -1237,7 +1250,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
         }
-
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
@@ -1414,17 +1426,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+
+            CheckQRBarcodeInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
+
+            InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerQRBarcodeQuestion(this.interviewState, userId, questionId, rosterVector, answerTime, answer,
+             answeredQuestion, questionnaire);
+
+            this.ApplyInterviewChanges(interviewChanges);
+        }
+
+
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateStructures state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
+            Identity answeredQuestion, IQuestionnaire questionnaire)
+        {
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+              questionId, rosterVector, questionnaire);
+
+            var answerChanges = new List<object>()
+            {
+                new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer)
+            };
+
+            return new InterviewChanges(answerChanges, null, null,
+                null,
+                null, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
+        }
+
+        private void CheckQRBarcodeInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
+            Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks = true)
+        {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
-
-            this.ApplyEvent(new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
-
-            rosterInstancesWithAffectedTitles.ForEach(roster => this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answer)));
+            if(applyStrongChecks)
+                ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
         }
         
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
@@ -1953,24 +1990,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
+            InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerGeoLocationQuestion(this.interviewState, userId, questionId,
+                rosterVector, answerTime, latitude, longitude, accuracy, timestamp,
+                answeredQuestion, questionnaire);
+
+            this.ApplyInterviewChanges(interviewChanges);
+        }
+
+        private void CheckGpsCoordinatesInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState, bool applyStrongChecks=true)
+        {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            if (applyStrongChecks)
+                ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+        }
 
-
+        private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(InterviewStateStructures state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, DateTimeOffset timestamp, Identity answeredQuestion,
+            IQuestionnaire questionnaire)
+        {
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
+
+            var answerChanges = new List<object>()
+            {
+                new GeoLocationQuestionAnswered(userId, questionId, rosterVector, answerTime, latitude, longitude, accuracy, timestamp)
+            };
+
             string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
-
-
-
-            this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, answerTime, latitude, longitude, accuracy, timestamp));
-
-            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
-
-            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+            return new InterviewChanges(answerChanges, null, new ValidityChanges(
+                    answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
+                    answersDeclaredInvalid: null),
+                null,
+                null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,

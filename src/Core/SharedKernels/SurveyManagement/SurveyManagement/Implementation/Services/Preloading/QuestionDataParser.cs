@@ -25,8 +25,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             switch (question.QuestionType)
             {
                 case QuestionType.Text:
+                case QuestionType.QRBarcode:
                     return new KeyValuePair<Guid, object>(question.PublicKey, answer);
-
+                case QuestionType.GpsCoordinates:
+                    var parsedAnswer = GeoPosition.Parse(answer);
+                    if(parsedAnswer==null)
+                        break;
+                    return new KeyValuePair<Guid, object>(question.PublicKey, parsedAnswer);
                 case QuestionType.AutoPropagate:
                     int intValue;
                     if (int.TryParse(answer, out intValue))
@@ -73,8 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                     /* case QuestionType.TextList:
                     case QuestionType.MultyOption:
-                    case QuestionType.GpsCoordinates:
-                    case QuestionType.QRBarcode:*/
+                    */
             }
 
             return null;
