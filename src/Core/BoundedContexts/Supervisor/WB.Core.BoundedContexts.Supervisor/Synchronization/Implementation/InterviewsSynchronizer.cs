@@ -170,8 +170,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void MarkAsProcessedWithError(LocalInterviewFeedEntry interviewFeedEntry, Exception ex)
         {
             interviewFeedEntry.ProcessedWithError = true;
-            this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Inner exception: {2}",
-                interviewFeedEntry.EntryId, ex.Message, ex.InnerException != null ? ex.InnerException.Message : "No inner exception"));
+            this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}",
+                interviewFeedEntry.EntryId, ex.Message, string.Join(Environment.NewLine, ex.UnwrapAllInnerExceptions().Select(x => x.Message))));
         }
 
         private void StoreQuestionnaireDocumentFromHeadquartersIfNeeded(Guid questionnaireId, long questionnaireVersion, Uri questionnareUri)

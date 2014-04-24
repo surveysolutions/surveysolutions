@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace WB.Core.GenericSubdomains.Utils
 {
@@ -18,6 +19,20 @@ namespace WB.Core.GenericSubdomains.Utils
             }
 
             return null;
+        }
+
+        public static IEnumerable<Exception> UnwrapAllInnerExceptions(this Exception exception)
+        {
+            if (exception == null) throw new ArgumentNullException("exception");
+            yield return exception;
+
+            Exception innerException = exception.InnerException;
+            
+            while (innerException != null)
+            {
+                yield return innerException;
+                innerException = innerException.InnerException;
+            }
         }
     }
 }

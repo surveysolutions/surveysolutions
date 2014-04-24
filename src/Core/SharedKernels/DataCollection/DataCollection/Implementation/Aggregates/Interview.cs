@@ -1267,7 +1267,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             rosters.ForEach(this.ApplyRosterEvents);
 
-            foreach (var answerDto in interviewDto.Answers)
+            foreach (var answerDto in interviewDto.Answers.Where(x => x.Answer != null))
             {
                 Guid questionId = answerDto.Id;
                 QuestionType questionType = questionnaire.GetQuestionType(questionId);
