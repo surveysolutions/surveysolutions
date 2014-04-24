@@ -293,13 +293,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             using (var client = new HttpClient().AppendAuthToken(this.settings))
             {
-                var request = new HttpRequestMessage(HttpMethod.Post, this.settings.InterviewsPushUrl);
-                // todo: access token as extension
-
-                request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    { "syncItemContent", interviewData },
-                });
+                var request = new HttpRequestMessage(HttpMethod.Post, this.settings.InterviewsPushUrl) {
+                    Content = new StringContent(interviewData)
+                };
 
                 HttpResponseMessage response = client.SendAsync(request).Result;
 

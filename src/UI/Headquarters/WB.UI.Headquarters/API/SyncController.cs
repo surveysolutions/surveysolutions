@@ -20,8 +20,7 @@ namespace WB.UI.Headquarters.API
             this.syncManager = syncManager;
         }
 
-        [HttpPost]
-        public async Task<HttpResponseMessage> PostPackage()
+        public async Task<HttpResponseMessage> Post()
         {
             var syncItem = JsonConvert.DeserializeObject<SyncItem>(await this.Request.Content.ReadAsStringAsync(),
                 new JsonSerializerSettings {
