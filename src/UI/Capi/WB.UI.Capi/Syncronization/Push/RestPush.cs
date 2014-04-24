@@ -22,7 +22,7 @@ namespace WB.UI.Capi.Syncronization.Push
 
             try
             {
-                var result = this.webExecutor.ExecuteRestRequestAsync<bool>(getChunckPath, ct,
+                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(getChunckPath, ct,
                     content, login, password, null);
 
                 if (!result)

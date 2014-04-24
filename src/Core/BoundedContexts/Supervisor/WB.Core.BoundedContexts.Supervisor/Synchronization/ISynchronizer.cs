@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public interface ISynchronizer : IJob
     {
-        void Synchronize();
+        void Pull();
+        void Push();
     }
 }

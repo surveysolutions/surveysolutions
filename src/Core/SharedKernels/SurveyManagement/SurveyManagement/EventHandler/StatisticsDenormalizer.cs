@@ -147,9 +147,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private StatisticsLineGroupedByUserAndTemplate CreateNewStatisticsLine(InterviewBrief interviewBriefItem)
         {
-            var questionnaireTitle =
-                this.questionnaires.GetById(
-                    interviewBriefItem.QuestionnaireId,interviewBriefItem.QuestionnaireVersion).Title;
+            QuestionnaireBrowseItem questionnaire = this.questionnaires.GetById(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion);
+            var questionnaireTitle = questionnaire != null ? questionnaire.Title : "<UNKNOWN QUESTIONNAIRE>";
             var responsible = this.users.GetById(interviewBriefItem.ResponsibleId);
             string responsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
             Guid? teamLeadId = null;
