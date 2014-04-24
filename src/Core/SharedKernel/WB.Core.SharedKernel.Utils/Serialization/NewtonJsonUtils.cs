@@ -15,7 +15,8 @@ namespace WB.Core.SharedKernel.Utils.Serialization
                 return new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Objects,
-                    NullValueHandling = NullValueHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    FloatParseHandling = FloatParseHandling.Decimal
                 };
             }
         }
