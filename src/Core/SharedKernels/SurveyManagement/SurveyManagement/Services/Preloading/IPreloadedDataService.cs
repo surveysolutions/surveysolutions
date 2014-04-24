@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels);
 
         PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels);
-
+        PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name);
         decimal GetRecordIdValueAsDecimal(string[] dataFileRecord, int idColumnIndex);
         int GetIdColumnIndex(PreloadedDataByFile dataFile);
         int GetParentIdColumnIndex(PreloadedDataByFile dataFile);

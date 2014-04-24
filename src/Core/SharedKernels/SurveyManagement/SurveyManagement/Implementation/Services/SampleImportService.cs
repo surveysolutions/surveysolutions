@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private readonly IQuestionDataParser questionDataParser;
         private readonly IQuestionnaireFactory questionnaireFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
+        private readonly IDataFileService dataFileService;
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             IQuestionnaireFactory questionnaireFactory, IQuestionDataParser questionDataParser,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IDataFileService dataFileService)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
@@ -56,6 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.dataFileService = dataFileService;
         }
 
         public void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
@@ -93,10 +95,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 return;
             }
 
+            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
+                questionnaireRosterStructure, bigTemplateObject.Questionnaire);
+
             IQuestionnaire questionnarie = this.questionnaireFactory.CreateTemporaryInstance(bigTemplate);
 
             var i = 1;
-            var topLevelData = data.FirstOrDefault(d => d.FileName.Contains(bigTemplate.Title));
+
+            var topLevelData = preloadedDataService.GetDataFileByLevelName(data, bigTemplate.Title);
 
             if (topLevelData == null)
             {
@@ -104,8 +110,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
-            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
-                questionnaireRosterStructure, bigTemplateObject.Questionnaire);
             var idColumnIndex = preloadedDataService.GetIdColumnIndex(topLevelData);
             foreach (var value in topLevelData.Content)
             {
