@@ -367,6 +367,7 @@
     <Content Include="UpdatedDesigner\i\question-item-dots.png" />
     <Content Include="UpdatedDesigner\i\search-glyph.png" />
     <Content Include="UpdatedDesigner\scripts\app.js" />
+    <Content Include="UpdatedDesigner\scripts\contextMenu.js" />
     <Content Include="UpdatedDesigner\scripts\controllers\chapters.js" />
     <Content Include="UpdatedDesigner\scripts\controllers\main.js" />
     <Content Include="UpdatedDesigner\scripts\controllers\verification.js" />
