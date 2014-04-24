@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
@@ -51,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                         _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ => _.CreatePreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument) ==
-                            new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument)));
+                            new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, Mock.Of<IDataFileService>())));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)
