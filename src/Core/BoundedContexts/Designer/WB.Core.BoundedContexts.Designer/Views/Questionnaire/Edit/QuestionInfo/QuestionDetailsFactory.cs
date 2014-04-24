@@ -25,6 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             questionView.IsPreFilled = question.Featured;
             questionView.IsMandatory = question.Mandatory;
             questionView.Instructions = question.Instructions;
+            questionView.RosterScopeIds = new Guid[0];
+            questionView.ParentGroupsIds = new Guid[0];
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
