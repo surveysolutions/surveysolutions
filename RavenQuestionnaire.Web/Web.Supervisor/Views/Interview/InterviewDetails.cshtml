@@ -250,8 +250,7 @@
         <div class="row-fluid" data-bind="with: questionnaire">
             <h3 class="span10 text-overflow-ellipsis pad-left10" data-bind="html: title"></h3>
 
-            @if ((Model.InterviewStatus == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
-                || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+            @if ((Model.InterviewStatus == InterviewStatus.Completed && GlobalInfo.IsSupervisor))
             {
                 <h3 class="span2 nowrap pad-right5 text-right-gray-italic"><a class="btn-link" data-bind="text: status, click: $root.showStatesHistory"></a></h3>
 
@@ -287,8 +286,7 @@
         </div>
         <div class="menubar">
             <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
-            @if ((Model.InterviewStatus == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
-                || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+            @if ((Model.InterviewStatus == InterviewStatus.Completed && GlobalInfo.IsSupervisor))
             {
                 <button class="btn btn-success" data-bind="click: showApproveModal">Approve</button>
                 <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
@@ -398,8 +396,7 @@
         </div>
     </div>
 </div>
-@if ((Model.InterviewStatus == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
-                || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+@if ((Model.InterviewStatus == InterviewStatus.Completed && GlobalInfo.IsSupervisor))
 {
     <div id="approveModal" class="modal fade">
         <div class="modal-dialog">
