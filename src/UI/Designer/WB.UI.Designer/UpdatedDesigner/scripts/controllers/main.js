@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function($scope, $routeParams, $location, $route, questionnaireService) {
+    .controller('MainCtrl', function($scope, $routeParams, $location, $route, questionnaireService, commandService) {
 
         $scope.chapters = [];
 
@@ -40,14 +40,18 @@ angular.module('designerApp')
 
         $scope.addQuestion = function (item) {
             var newId = guid();
-            item.Items.push(
-                {
-                    "Id": newId,
-                    "Title": "New Question",
-                    "Variable": "",
-                    "Type": 7,
-                    "LinkedVariables": [],
-                    "BrokenLinkedVariables": null
+            var self = item;
+            commandService.addQuestion($routeParams.questionnaireId, item, newId).success(function () {
+                        self.Items.push(
+                        {
+                            "Id": newId,
+                            "Title": "New Question",
+                            "Variable": "",
+                            "Type": 7,
+                            "LinkedVariables": [],
+                            "BrokenLinkedVariables": null
+                        }
+                    );
                 }
             );
         };

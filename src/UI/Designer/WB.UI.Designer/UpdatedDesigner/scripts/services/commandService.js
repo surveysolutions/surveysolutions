@@ -26,6 +26,30 @@
             });
         };
 
+        commandService.addQuestion = function (questionnaireId, group, newId) {
+            return $http({
+                method: 'POST',
+                url: urlBase,
+                data: {
+                    "type": "AddQuestion",
+                    "command":"{\"questionnaireId\":\"" + questionnaireId + "\"," +
+                        "\"questionId\":\"" + newId + "\"," +
+                        "\"title\":\"New Question\"," +
+                        "\"type\":\"Text\"," +
+                        "\"variableName\":\"\"," +
+                        "\"isPreFilled\":false," +
+                        "\"isMandatory\":false," +
+                        "\"scope\":\"Interviewer\"," +
+                        "\"enablementCondition\":\"\"," +
+                        "\"validationExpression\":\"\"," +
+                        "\"validationMessage\":\"\"," +
+                        "\"instructions\":\"\"," +
+                        "\"parentGroupId\":\"" + group.Id + "\"}"
+                },
+                headers: { 'Content-Type': 'application/json; ' }
+            });
+        };
+
         commandService.cloneGroupWithoutChildren = function (questionnaireId, newId, chapter, chapterDescription) {
             return $http({
                 method: 'POST',
