@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
@@ -22,8 +23,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             using (var httpClient = new HttpClient())
             {
-                if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(headquartersSettings.AccessToken);
+                httpClient.AppendAuthToken(this.headquartersSettings);
 
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
                 httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

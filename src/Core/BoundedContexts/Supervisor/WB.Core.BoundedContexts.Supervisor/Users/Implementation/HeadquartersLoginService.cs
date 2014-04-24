@@ -7,6 +7,7 @@ using Main.Core.Utility;
 using Main.Core.View.User;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
@@ -42,9 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         {
             using (var client = new HttpClient(messageHandler))
             {
-                
-                if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(headquartersSettings.AccessToken);
+                client.AppendAuthToken(this.headquartersSettings);
                 
                 var requestUri = this.BuildValidationUri(login, password);
                 var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
