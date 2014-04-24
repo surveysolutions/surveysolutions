@@ -208,8 +208,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             });
         }
 
-
-
         public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
