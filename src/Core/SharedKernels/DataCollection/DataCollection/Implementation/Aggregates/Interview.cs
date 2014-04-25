@@ -1081,7 +1081,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             this.CalculateInterviewChangesOnAnswerGeoLocationQuestion(changeStructures.State, userId, questionId,
                                 currentQuestionRosterVector, answersTime, geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy,
                                 geoAnswer.Timestamp, answeredQuestion, questionnaire);
-                        break;    
+                        break;
+                    case QuestionType.TextList:
+                        interviewChanges =
+                            this.CalculateInterviewChangesOnAnswerTextListQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (Tuple<decimal, string>[])answer, answeredQuestion, getAnswer, questionnaire);
+                        break;
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial pre-filled question.",
@@ -1244,6 +1248,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                     case QuestionType.GpsCoordinates:
                         this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
+                        break;
+                    case QuestionType.TextList:
+                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, (Tuple<decimal, string>[])answer, applyStrongChecks);
                         break;
                     default:
                         throw new InterviewException(string.Format(
@@ -1924,43 +1931,63 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+
+        private void CheckTextListInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateStructures currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
+        {
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
+            
+            if (applyStrongChecks)
+            {
+                ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+                ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
+                ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
+                var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
+                ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
+            }
+        }
+
         public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
-            ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
-            ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
-            var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
-            ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
+            CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState, answers);
 
-            var selectedValues = answers.Select(x => x.Item1).ToArray();
-
-            Func<InterviewStateStructures, Identity, object> getAnswer = (currentState,question) => AreEqual(question, answeredQuestion) ?
+            Func<InterviewStateStructures, Identity, object> getAnswer = (currentState, question) => AreEqual(question, answeredQuestion) ?
                 answers :
-                GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState ,question);
+                GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question);
 
+            InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerTextListQuestion(this.interviewState, userId, questionId,
+                rosterVector, answerTime, answers, answeredQuestion, getAnswer, questionnaire);
+
+            this.ApplyInterviewChanges(interviewChanges);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(InterviewStateStructures state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers, Identity answeredQuestion,
+            Func<InterviewStateStructures, Identity, object> getAnswer, IQuestionnaire questionnaire)
+        {
+            var selectedValues = answers.Select(x => x.Item1).ToArray();
             DistinctDecimalList rosterInstanceIds = new DistinctDecimalList(selectedValues.ToList());
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
                 selectedValue => selectedValue,
-                selectedValue => (int?)selectedValue);
+                selectedValue => (int?) selectedValue);
 
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
 
             Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterRosterVector)
                 => rosterIds.Contains(groupId)
-                && AreEqualRosterVectors(groupOuterRosterVector, rosterVector);
+                    && AreEqualRosterVectors(groupOuterRosterVector, rosterVector);
 
-            Func<InterviewStateStructures ,Guid, decimal[], DistinctDecimalList> getRosterInstanceIds = (currentState, groupId, groupOuterRosterVector)
-                => isRoster(groupId, groupOuterRosterVector)
-                    ? rosterInstanceIds
-                    : GetRosterInstanceIds(this.interviewState, groupId, groupOuterRosterVector);
+            Func<InterviewStateStructures, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds =
+                (currentState, groupId, groupOuterRosterVector)
+                    => isRoster(groupId, groupOuterRosterVector)
+                        ? rosterInstanceIds
+                        : GetRosterInstanceIds(this.interviewState, groupId, groupOuterRosterVector);
 
             string questionKey = ConvertIdAndRosterVectorToString(questionId, rosterVector);
 
@@ -1968,22 +1995,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? this.interviewState.TextListAnswers[questionKey]
                 : new Tuple<decimal, string>[0];
 
-            Tuple<decimal, string>[] changedAnswers = answers.Where(tuple => currentAnswer.Any(a => a.Item1 == tuple.Item1 && a.Item2 != tuple.Item2)).ToArray();
+            Tuple<decimal, string>[] changedAnswers =
+                answers.Where(tuple => currentAnswer.Any(a => a.Item1 == tuple.Item1 && a.Item2 != tuple.Item2)).ToArray();
 
-            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromTextListQuestions(this.interviewState, questionnaire, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds,
+            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromTextListQuestions(
+                this.interviewState, questionnaire, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer,
+                getRosterInstanceIds,
                 answers, changedAnswers);
 
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
+                questionnaire);
 
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues, answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues,
+                answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
+            var answerChanges = new List<object>()
+            {
+                new TextListQuestionAnswered(userId, questionId, rosterVector, answerTime, answers)
+            };
 
-            this.ApplyEvent(new TextListQuestionAnswered(userId, questionId, rosterVector, answerTime, answers));
-
-            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
-
-            this.ApplyRosterEvents(rosterCalculationData);
-
-            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+            return new InterviewChanges(answerChanges, null, new ValidityChanges(
+                answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
+                answersDeclaredInvalid: null),
+                rosterCalculationData,
+                null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,

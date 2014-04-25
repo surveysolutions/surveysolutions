@@ -77,6 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
 
             var rosterScopeDescription = questionnaireRosterStructure.RosterScopes[levelId];
+            
             if (rosterScopeDescription.ScopeType == RosterScopeType.Fixed)
             {
                 return
@@ -84,6 +85,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         .RosterFixedTitles.Select((t, i) => (decimal) i)
                         .ToArray();
             }
+            
             var rosterSizeQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelId);
             if (rosterScopeDescription.ScopeType == RosterScopeType.Numeric)
             {
@@ -94,26 +96,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     return null;
                 return Enumerable.Range(0, intValueOfNumericQuestion).Select(i => (decimal)i).ToArray();
             }
-
-        /*    var parentExportStructure = exportStructure.HeaderToLevelMap[FindLevelInPreloadedData(parentDataFile.FileName).LevelId];
-            var rosterSizeHeaderItem =
-                parentExportStructure.HeaderItems.Values.FirstOrDefault(h => h.VariableName == rosterSizeQuestion.StataExportCaption);
+            var columnIndexesGoupedByQuestionVariableName =
+                this.GetColumnIndexesGoupedByQuestionVariableName(parentDataFile)[rosterSizeQuestion.StataExportCaption];
+            if (columnIndexesGoupedByQuestionVariableName == null)
+                return null;
             
-            if (rosterSizeHeaderItem == null)
-                return new decimal[0];
+            var answers = columnIndexesGoupedByQuestionVariableName.Select(coulumnIndex => row[coulumnIndex]).ToList();
 
-            var indexesOfNumericRosterSizeQuestion = new List<int>();
-            for (int i = 0; i < parentDataFile.Header.Length; i++)
+            if (rosterScopeDescription.ScopeType == RosterScopeType.MultyOption)
             {
-                if (rosterSizeHeaderItem.ColumnNames.Contains(parentDataFile.Header[i]))
-                    indexesOfNumericRosterSizeQuestion.Add(i);
+                var multyOptionResult = new List<decimal>();
+                foreach (var answer in answers)
+                {
+                    if(string.IsNullOrEmpty(answer))
+                        continue;
+                    decimal decimalAnswer;
+                    if(decimal.TryParse(answer, out decimalAnswer))
+                        multyOptionResult.Add(decimalAnswer);
+                }
+                return multyOptionResult.ToArray();
             }
-
             if (rosterScopeDescription.ScopeType == RosterScopeType.TextList)
             {
-                
-            }*/
-
+                var textListResult = new List<decimal>();
+                for (int i = 0; i < answers.Count; i++)
+                {
+                    if (string.IsNullOrEmpty(answers[i]))
+                        continue;
+                    textListResult.Add(i + 1);
+                }
+                return textListResult.ToArray();
+            }
             return null;
         }
 
