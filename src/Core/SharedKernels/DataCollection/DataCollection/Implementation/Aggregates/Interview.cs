@@ -433,7 +433,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void Apply(InterviewStatusChanged @event)
+        internal void Apply(InterviewStatusChanged @event)
         {
             this.status = @event.Status;
         }
@@ -443,6 +443,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(InterviewerAssigned @event) { }
 
         private void Apply(InterviewDeleted @event) { }
+
+        private void Apply(InterviewSentToHeadquarters @event) { }
 
         private void Apply(InterviewRestored @event) { }
 
@@ -2289,6 +2291,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewDeleted(userId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+        }
+
+        public void MarkInterviewAsSentToHeadquarters(Guid userId)
+        {
+            this.ApplyEvent(new InterviewDeleted(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            this.ApplyEvent(new InterviewSentToHeadquarters());
         }
 
         public void Restore(Guid userId)

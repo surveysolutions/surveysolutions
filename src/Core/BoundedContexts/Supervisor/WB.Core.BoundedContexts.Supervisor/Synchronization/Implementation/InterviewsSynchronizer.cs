@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -154,13 +155,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
-        public void Push()
+        public void Push(Guid userId)
         {
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
 
             foreach (var interviewId in interviewsToPush)
             {
-                this.PushInterview(interviewId);
+                try
+                {
+                    this.PushInterview(interviewId, userId);
+                }
+                catch (Exception exception)
+                {
+                    this.logger.Error(string.Format("Failed to push interview {0} to Headquarters.", interviewId.FormatGuid()), exception);
+                }
             }
         }
 
@@ -234,7 +242,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private List<Guid> GetInterviewsToPush()
         {
-            // TODO: TLK: replace with QueryAll or custom denormalizer
+            // TODO: TLK: custom denormalizer
 
             return this.interviewSummaryRepositoryWriter.Query(_ => _
                 //.Where(summary => summary.Status == InterviewStatus.ApprovedBySupervisor)
@@ -242,12 +250,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 .ToList());
         }
 
-        private void PushInterview(Guid interviewId)
+        private void PushInterview(Guid interviewId, Guid userId)
         {
             AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interviewId);
 
             if (eventsToSend.Length == 0)
+            {
+                this.logger.Info(string.Format("Interview {0} was not sent to Headquarters because there are no events which should be sent.", interviewId.FormatGuid()));
                 return;
+            }
 
             string dataToBeSent = this.GetInterviewDataToBeSentAsString(interviewId, eventsToSend);
 
@@ -255,13 +266,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             if (interviewSuccessfullySent)
             {
-                this.MarkInterviewAsSentToHeadquarters(interviewId);
+                this.MarkInterviewAsSentToHeadquarters(interviewId, userId);
             }
         }
 
-        private void MarkInterviewAsSentToHeadquarters(Guid interviewId)
+        private void MarkInterviewAsSentToHeadquarters(Guid interviewId, Guid userId)
         {
-            // TODO: TLK
+            this.executeCommand(new MarkInterviewAsSentToHeadquarters(interviewId, userId));
         }
 
         private string GetInterviewDataToBeSentAsString(Guid interviewId, AggregateRootEvent[] eventsToSend)

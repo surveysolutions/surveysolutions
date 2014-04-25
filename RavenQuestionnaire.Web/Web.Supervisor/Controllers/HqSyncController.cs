@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Ncqrs.Commanding.ServiceModel;
 using Quartz;
 using Questionnaire.Core.Web.Helpers;
@@ -13,13 +14,15 @@ namespace Web.Supervisor.Controllers
         private readonly SynchronizationContext synchronizationContext;
         private readonly IScheduler scheduler;
         private readonly ISynchronizer synchronizer;
+        private readonly IGlobalInfoProvider globalInfoProvider;
 
-        public HqSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, SynchronizationContext synchronizationContext, IScheduler scheduler, ISynchronizer synchronizer)
+        public HqSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, SynchronizationContext synchronizationContext, IScheduler scheduler, ISynchronizer synchronizer, IGlobalInfoProvider globalInfoProvider)
             : base(commandService, globalInfo, logger)
         {
             this.synchronizationContext = synchronizationContext;
             this.scheduler = scheduler;
             this.synchronizer = synchronizer;
+            this.globalInfoProvider = globalInfoProvider;
         }
 
         public ActionResult Synchronization()
@@ -37,7 +40,10 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult Push()
         {
-            this.synchronizer.Push();
+            Guid userId = this.globalInfoProvider.GetCurrentUser().Id;
+
+            this.synchronizer.Push(userId);
+
             return Json(new object());
         }
 
