@@ -247,6 +247,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                 EventTimeStamp = uncommittedEvent.EventTimeStamp,
                 Version = uncommittedEvent.EventVersion,
                 CommitId = commitId,
+                Origin = uncommittedEvent.Origin,
                 Data = uncommittedEvent.Payload,
                 EventSequence = uncommittedEvent.EventSequence,
                 EventSourceId = uncommittedEvent.EventSourceId,
