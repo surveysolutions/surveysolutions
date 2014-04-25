@@ -5,9 +5,11 @@ using System.Web;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Main.Core.View.User;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
+using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
@@ -17,7 +19,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
     internal class HeadquartersLoginService : IHeadquartersLoginService
     {
         private readonly ILogger logger;
-        private readonly ICommandService commandService;
+        private readonly Action<ICommand> executeCommand;
         private readonly HttpMessageHandler messageHandler;
         private readonly HeadquartersSettings headquartersSettings;
         private readonly IHeadquartersUserReader headquartersUserReader;
@@ -33,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
             if (headquartersSettings == null) throw new ArgumentNullException("headquartersSettings");
 
             this.logger = logger;
-            this.commandService = commandService;
+            this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
             this.messageHandler = messageHandler;
             this.headquartersSettings = headquartersSettings;
             this.headquartersUserReader = headquartersUserReader;
@@ -77,7 +79,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                         userDocument.IsLockedByHQ,
                         null);
 
-                    this.commandService.Execute(command);
+                    this.executeCommand(command);
                 }
                 else
                 {
