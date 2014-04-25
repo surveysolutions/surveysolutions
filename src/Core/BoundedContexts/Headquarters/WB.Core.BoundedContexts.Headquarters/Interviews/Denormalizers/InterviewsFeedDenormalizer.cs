@@ -13,7 +13,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 {
     internal class InterviewsFeedDenormalizer : BaseDenormalizer,
         IEventHandler<SupervisorAssigned>,
-        IEventHandler<InterviewDeleted>
+        IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewRejectedByHQ>
     {
         private readonly IReadSideRepositoryWriter<InterviewFeedEntry> writer;
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews;
@@ -53,6 +54,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryId = evnt.EventIdentifier.FormatGuid(),
                 UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
+        }
+
+        public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
+        {
+            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+
+            this.writer.Store(new InterviewFeedEntry
+            {
+                InterviewId = evnt.EventSourceId.FormatGuid(),
+                EntryType = EntryType.InterviewRejected,
+                SupervisorId = Monads.Maybe(() => interviewData.SupervisorId.FormatGuid()),
+                Timestamp = evnt.EventTimeStamp,
+                EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid()
+            }, evnt.EventIdentifier.FormatGuid());
         }
 
         public override Type[] BuildsViews

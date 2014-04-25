@@ -8,5 +8,15 @@ namespace WB.Core.GenericSubdomains.Utils
         {
             return guid.ToString("N");
         }
+
+        public static string FormatGuid(this Guid? guid)
+        {
+            if (!guid.HasValue)
+            {
+                return null;
+            }
+
+            return FormatGuid(guid.Value);
+        }
     }
 }
