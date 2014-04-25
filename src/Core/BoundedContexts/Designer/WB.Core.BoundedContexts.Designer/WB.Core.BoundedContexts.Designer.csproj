@@ -96,6 +96,7 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\AddDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\CloneDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\UpdateDateTimeQuestionCommand.cs" />
@@ -126,7 +127,7 @@
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\CloneGroupWithoutChildrenCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
