@@ -329,7 +329,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var breadcrumbs = new List<Guid>();
             var rosterScopes = new List<Guid>();
             parentsStack.Push(startGroupIdGuid);
-            var depth = 0;
             while (parentsStack.Any())
             {
                 var ancestorId = parentsStack.Pop();
@@ -345,14 +344,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                         ? @group.Id
                         : @group.RosterSizeQuestionId.Value);
                 }
-                parentsStack.Push(group.ParentGroupId);
-                depth++;
-                if (depth == 100)
+                if (breadcrumbs.Contains(group.ParentGroupId))
                 {
-                    breadcrumbs.Clear();
-                    rosterScopes.Clear();
                     break;
                 }
+                parentsStack.Push(group.ParentGroupId);
             }
             breadcrumbs.Remove(item.Id);
             item.ParentGroupsIds = breadcrumbs.ToArray();
