@@ -1,9 +1,11 @@
-﻿namespace WB.Core.BoundedContexts.Supervisor.Synchronization
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public interface IInterviewsSynchronizer
     {
         void Pull();
 
-        void Push();
+        void Push(Guid userId);
     }
 }

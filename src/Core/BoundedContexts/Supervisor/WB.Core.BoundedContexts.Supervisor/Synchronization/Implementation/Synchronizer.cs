@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
-        public void Push()
+        public void Push(Guid userId)
         {
             if (!this.isSynchronizationRunning)
             {
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 {
                     if (!this.isSynchronizationRunning)
                     {
-                        this.interviewsSynchronizer.Push();
+                        this.interviewsSynchronizer.Push(userId);
                     }
                 }
             }
