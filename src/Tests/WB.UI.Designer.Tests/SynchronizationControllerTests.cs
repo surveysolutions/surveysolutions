@@ -64,7 +64,7 @@ namespace WB.UI.Designer.Tests
             var actionResult = (RedirectToRouteResult)controller.Import(file.Object);
 
             // assert
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>(), It.IsAny<string>()), Times.Once());
 
             Assert.AreEqual(actionResult.RouteValues["action"],"Index");
             Assert.AreEqual(actionResult.RouteValues["controller"], "Questionnaire");
@@ -82,7 +82,7 @@ namespace WB.UI.Designer.Tests
             controller.Import(file.Object);
 
             // assert
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>()), Times.Never());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>(), It.IsAny<string>()), Times.Never());
             Assert.IsTrue(controller.TempData.ContainsKey(Alerts.ERROR));
         }
 

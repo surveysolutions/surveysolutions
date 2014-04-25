@@ -69,7 +69,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
         {
             return new CommittedEvent(
-                x.CommitId, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
+                x.CommitId, x.Origin, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()

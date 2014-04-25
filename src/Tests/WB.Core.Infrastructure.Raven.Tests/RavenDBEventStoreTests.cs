@@ -97,7 +97,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
 
             int sequenceCounter = 0;
 
-            var events = new UncommittedEventStream(Guid.NewGuid());
+            var events = new UncommittedEventStream(Guid.NewGuid(), null);
 
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo",
                                                                                                                                    35),
@@ -124,7 +124,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
 
             int sequenceCounter = 0;
 
-            var events = new UncommittedEventStream(Guid.NewGuid());
+            var events = new UncommittedEventStream(Guid.NewGuid(), null);
 
             events.Append(
                 new UncommittedEvent(
@@ -159,7 +159,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
 
             int sequenceCounter = 0;
 
-            var events = new UncommittedEventStream(Guid.NewGuid());
+            var events = new UncommittedEventStream(Guid.NewGuid(), null);
 
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo",
                                                                                                                                    35),

@@ -62,7 +62,7 @@ namespace WB.Core.Synchronization.Tests
                 var eventSourceId = Guid.NewGuid();
                 for (int j = 0; j < EventsPerArCount; j++)
                 {
-                    eventsPerAr[j] = new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(), eventSourceId,
+                    eventsPerAr[j] = new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId,
                                                                        j + 1, DateTime.Now, new object(), new Version());
                 }
                 eventList.Add(eventsPerAr);
