@@ -155,16 +155,12 @@
     <Compile Include="Eventing\Sourcing\Snapshotting\SimpleSnapshottingPolicy.cs" />
     <Compile Include="Eventing\Storage\DuplicateCommitException.cs" />
     <Compile Include="Eventing\Storage\IStreamableEventStore.cs" />
-    <Compile Include="Eventing\Storage\NoDB\NoDBEventStore.cs" />
-    <Compile Include="Eventing\Storage\NoDB\NoDBSnapshotStore.cs" />
-    <Compile Include="Eventing\Storage\NoDB\StoredEventExtensions.cs" />
     <Compile Include="Eventing\Sourcing\UndefinedValues.cs" />
     <Compile Include="Eventing\Storage\NullSnapshotStore.cs" />
     <Compile Include="Eventing\UncommittedEvent.cs" />
     <Compile Include="Eventing\UncommittedEventStream.cs" />
     <Compile Include="GuidCombGenerator.cs" />
     <Compile Include="Commanding\CommandBase.cs" />
-    <Compile Include="Commanding\CommandExecution\CommandExecutorWrapper.cs" />
     <Compile Include="Commanding\CommandExecution\ICommandExecutorExtensions.cs" />
     <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapper.cs" />
     <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributePropertyMappingStrategy.cs" />
@@ -210,9 +206,6 @@
     <Compile Include="Eventing\Sourcing\ISourcedEventHandler.cs" />
     <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshotable.cs" />
     <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshot.cs" />
-    <EmbeddedResource Include="Eventing\Storage\SQL\TableCreationScript.sql">
-      <CustomToolNamespace>Ncqrs.Eventing.Storage.SQL.SimpleMicrosoftSqlServerEventStore</CustomToolNamespace>
-    </EmbeddedResource>
     <Compile Include="Eventing\ServiceModel\Bus\CompositeEventBus.cs" />
     <Compile Include="Eventing\ServiceModel\Bus\IEventHandler.cs" />
     <Compile Include="Eventing\ServiceModel\Bus\RegisterAllHandlersInAssemblyExtension.cs" />
@@ -235,7 +228,6 @@
     <Compile Include="Eventing\Storage\Serialization\IEventTranslator.cs" />
     <Compile Include="Eventing\Storage\Serialization\IEventFormatter.cs" />
     <Compile Include="Eventing\Storage\Serialization\StringEventTranslator.cs" />
-    <Compile Include="Eventing\Storage\SQL\Queries.cs" />
     <Compile Include="Eventing\Storage\StoredEvent.cs" />
     <Compile Include="IClock.cs" />
     <Compile Include="InternalExtensions.cs" />
@@ -269,7 +261,6 @@
     <Compile Include="Eventing\Storage\ConcurrencyException.cs" />
     <Compile Include="Eventing\Storage\IEventStore.cs" />
     <Compile Include="Eventing\Storage\InMemoryEventStore.cs" />
-    <Compile Include="Eventing\Storage\SQL\MsSqlServerEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

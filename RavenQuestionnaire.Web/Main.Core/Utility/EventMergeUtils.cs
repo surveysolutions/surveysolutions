@@ -60,7 +60,7 @@ namespace Main.Core.Utility
         public static UncommittedEventStream CreateUncommittedEventStream(
             this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream, Guid? dvergentEventId)
         {
-            var uncommitedStream = new UncommittedEventStream(Guid.NewGuid());
+            var uncommitedStream = new UncommittedEventStream(Guid.NewGuid(), null);
 
             if (!stream.Any())
             {

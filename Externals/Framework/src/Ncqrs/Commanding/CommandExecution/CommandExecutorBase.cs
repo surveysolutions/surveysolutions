@@ -46,9 +46,9 @@ namespace Ncqrs.Commanding.CommandExecution
         /// </summary>
         /// <param name="command">The command to execute. This should not be null.</param>
         /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
-        public void Execute(TCommand command)
+        public void Execute(TCommand command, string origin)
         {
-            using (var work = _factory.CreateUnitOfWork(command.CommandIdentifier))
+            using (var work = _factory.CreateUnitOfWork(command.CommandIdentifier, origin))
             {
                 ExecuteInContext(work, command);
             }

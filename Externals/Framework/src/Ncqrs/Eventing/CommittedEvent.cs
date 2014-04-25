@@ -15,6 +15,7 @@ namespace Ncqrs.Eventing
         private readonly Guid _eventSourceId;
         private readonly Guid _commitId;
         private readonly Version _eventVersion;
+        private readonly string _origin;
 
         /// <summary>
         /// If of a commit in which this event was stored (usually corresponds to a command id which caused this event).
@@ -22,6 +23,11 @@ namespace Ncqrs.Eventing
         public Guid CommitId
         {
             get { return _commitId; }
+        }
+
+        public string Origin
+        {
+            get { return _origin; }
         }
 
         /// <summary>
@@ -79,11 +85,12 @@ namespace Ncqrs.Eventing
             get { return _eventSequence; }
         }
 
-        public CommittedEvent(Guid commitId, Guid eventIdentifier, Guid eventSourceId, long eventSequence, DateTime eventTimeStamp, object payload, Version eventVersion)            
+        public CommittedEvent(Guid commitId, string origin, Guid eventIdentifier, Guid eventSourceId, long eventSequence, DateTime eventTimeStamp, object payload, Version eventVersion)            
         {            
             _payload = payload;
             _eventVersion = eventVersion;
             _commitId = commitId;
+            _origin = origin;
             _eventSourceId = eventSourceId;
             _eventSequence = eventSequence;
             _eventIdentifier = eventIdentifier;

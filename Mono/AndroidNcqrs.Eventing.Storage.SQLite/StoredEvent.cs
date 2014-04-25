@@ -11,9 +11,10 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
         }
 
-        public StoredEvent(Guid commitId, Guid eventId, long sequence, DateTime timeStamp, object data,  Version version)
+        public StoredEvent(Guid commitId, string origin, Guid eventId, long sequence, DateTime timeStamp, object data,  Version version)
         {
             CommitId = commitId.ToString();
+            Origin = origin;
             EventId = eventId.ToString();
             Sequence = sequence;
             TimeStamp = timeStamp.Ticks;
@@ -31,7 +32,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
        
 
         public string CommitId { get; set; }
-        
+        public string Origin { get; set; }
        
         public string EventId { get; set; }
         [PrimaryKey]

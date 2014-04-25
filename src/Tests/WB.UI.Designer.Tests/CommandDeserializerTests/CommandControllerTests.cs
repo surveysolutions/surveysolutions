@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Tests
             var updateGroupCommand = CreateInvalidUpdateGroupCommand(responsibleId: responsibleId);
 
             var commandService = Mock.Of<ICommandService>();
-            Mock.Get(commandService).Setup(x => x.Execute(updateGroupCommand)).Throws(CreateTwoLevelException());
+            Mock.Get(commandService).Setup(x => x.Execute(updateGroupCommand, It.IsAny<string>())).Throws(CreateTwoLevelException());
 
             var commandDeserializer = Mock.Of<ICommandDeserializer>(serializer => serializer.Deserialize(commandType, commandJSON) == updateGroupCommand);
 
@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Tests
             var updateGroupCommand = CreateInvalidUpdateGroupCommand(responsibleId: responsibleId);
 
             var commandService = Mock.Of<ICommandService>();
-            Mock.Get(commandService).Setup(x => x.Execute(updateGroupCommand)).Throws(CreateThreeLevelException());
+            Mock.Get(commandService).Setup(x => x.Execute(updateGroupCommand, It.IsAny<string>())).Throws(CreateThreeLevelException());
 
             var commandDeserializer = Mock.Of<ICommandDeserializer>(serializer => serializer.Deserialize(commandType, commandJSON) == updateGroupCommand);
 

@@ -66,10 +66,10 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// </summary>
         /// <param name="command">The command to execute.</param>
         /// <returns>The aggregateroot of type <typeparamref name="TAggRoot"/> on which we executed the command.</returns>
-        void ICommandExecutor<TCommand>.Execute(TCommand command)
+        void ICommandExecutor<TCommand>.Execute(TCommand command, string origin)
         {
             var factory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
-            using (var work = factory.CreateUnitOfWork(command.CommandIdentifier))
+            using (var work = factory.CreateUnitOfWork(command.CommandIdentifier, origin))
             {
                 var aggregateroot = _aggregaterootfetchfunc(_getidfromcommandfunc(command), command.KnownVersion);
                 if (aggregateroot == null)

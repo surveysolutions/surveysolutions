@@ -35,7 +35,7 @@ namespace Ncqrs.Tests.Domain
             store.Expect(s => s.Store(null)).IgnoreArguments();
             bus.Expect(b => b.Publish((IEnumerable<IPublishableEvent>) null)).IgnoreArguments();
 
-            var sut = new UnitOfWork(commandId, domainRepository, store, snapshotStore, bus, snapshottingPolicy);
+            var sut = new UnitOfWork(commandId, null, domainRepository, store, snapshotStore, bus, snapshottingPolicy);
             sut.Accept();
 
             bus.VerifyAllExpectations();

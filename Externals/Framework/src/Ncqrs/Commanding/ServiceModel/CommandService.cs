@@ -11,7 +11,7 @@ namespace Ncqrs.Commanding.ServiceModel
     {
         protected readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly Dictionary<Type, Action<ICommand>> _executors = new Dictionary<Type, Action<ICommand>>();
+        private readonly Dictionary<Type, Action<ICommand, string>> _executors = new Dictionary<Type, Action<ICommand, string>>();
         private readonly List<ICommandServiceInterceptor> _interceptors = new List<ICommandServiceInterceptor>(0);
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Ncqrs.Commanding.ServiceModel
         /// <param name="command">The command to execute.</param>
         /// <exception cref="ArgumentNullException">Occurs when the <i>command</i> was a <c>null</c> dereference.</exception>
         /// <exception cref="ExecutorForCommandNotFoundException">Occurs when the <see cref="ICommandExecutor{TCommand}"/> was not found for on the given <see cref="ICommand"/>.</exception>
-        public virtual void Execute(ICommand command)
+        public virtual void Execute(ICommand command, string origin)
         {
             Type commandType = command.GetType();
             var context = new CommandContext(command);
@@ -47,7 +47,7 @@ namespace Ncqrs.Commanding.ServiceModel
                 context.ExecutorHasBeenCalled = true;
 
                 // Execute the command.
-                executor(command);
+                executor(command, origin);
             }
             catch(Exception caught)
             {
@@ -74,7 +74,7 @@ namespace Ncqrs.Commanding.ServiceModel
             Contract.Requires<ArgumentOutOfRangeException>(typeof(TCommand).IsAssignableFrom(commandType));
 #endif
             if (_executors.ContainsKey(commandType)) return;
-            Action<ICommand> action = (cmd) => executor.Execute((TCommand) cmd);
+            Action<ICommand, string> action = (cmd, origin) => executor.Execute((TCommand) cmd, origin);
             _executors.Add(commandType, action);
         }
 
@@ -87,7 +87,7 @@ namespace Ncqrs.Commanding.ServiceModel
         public virtual void RegisterExecutor<TCommand>(ICommandExecutor<TCommand> executor) where TCommand : ICommand
         {
             if (_executors.ContainsKey(typeof(TCommand))) return;
-            Action<ICommand> action = (cmd) => executor.Execute((TCommand) cmd);
+            Action<ICommand, string> action = (cmd, origin) => executor.Execute((TCommand)cmd, origin);
             _executors.Add(typeof(TCommand), action);
         }
 
@@ -109,9 +109,9 @@ namespace Ncqrs.Commanding.ServiceModel
         /// <returns>
         /// A command executor to use to execute the command or <c>null</c> if not found.
         /// </returns>
-        protected virtual Action<ICommand> GetCommandExecutorForCommand(Type commandType)
+        protected virtual Action<ICommand, string> GetCommandExecutorForCommand(Type commandType)
         {
-            Action<ICommand> result;
+            Action<ICommand, string> result;
             _executors.TryGetValue(commandType, out result);
 
             return result;

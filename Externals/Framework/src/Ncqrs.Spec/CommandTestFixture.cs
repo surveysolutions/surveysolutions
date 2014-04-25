@@ -23,7 +23,7 @@ namespace Ncqrs.Spec
 
         protected override void Execute(TCommand command)
         {
-            CommandExecutor.Execute(command);
+            CommandExecutor.Execute(command, null);
         }
 
         protected abstract ICommandExecutor<ICommand> BuildCommandExecutor();

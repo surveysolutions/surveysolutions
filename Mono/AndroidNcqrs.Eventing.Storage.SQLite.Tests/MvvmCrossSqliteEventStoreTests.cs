@@ -76,7 +76,7 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 
 		private UncommittedEventStream GetUncommiteEventStream(Guid id)
 		{
-			var stream = new UncommittedEventStream(Guid.NewGuid());
+			var stream = new UncommittedEventStream(Guid.NewGuid(), null);
 			var sequenceCounter = 0;
 			stream.Append(
 				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo", 35),
@@ -130,7 +130,7 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 			var id = Guid.NewGuid();
 			var utcNow = DateTime.UtcNow; //.Date.AddHours(9).AddTicks(-1);
 
-			var stream = new UncommittedEventStream(Guid.NewGuid());
+			var stream = new UncommittedEventStream(Guid.NewGuid(), null);
 			stream.Append(
 				new UncommittedEvent(Guid.NewGuid(), id, 1, 0, utcNow, new CustomerCreatedEvent("Foo", 35),
 				                     new Version(1, 0)));

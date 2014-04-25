@@ -35,10 +35,10 @@ namespace Ncqrs.Commanding.CommandExecution
         /// </summary>
         /// <param name="command">The command to execute. This should not be null.</param>
         /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
-        public void Execute(TCommand command)
+        public void Execute(TCommand command, string origin)
         {
             var transactionService = NcqrsEnvironment.Get<ITransactionService>();
-            transactionService.ExecuteInTransaction(() => _executor.Execute(command));
+            transactionService.ExecuteInTransaction(() => _executor.Execute(command, origin));
         }
     }
 }

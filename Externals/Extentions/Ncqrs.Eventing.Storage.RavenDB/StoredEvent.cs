@@ -15,6 +15,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public long EventSequence { get; set; }
         public Guid EventSourceId { get; set; }
         public Guid CommitId { get; set; }
+        public string Origin { get; set; }
         public Guid EventIdentifier { get; set; }
         public DateTime EventTimeStamp { get; set; }
         

@@ -73,7 +73,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var commitedStream = new CommittedEventStream(
                 eventSourceGuid, 
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceGuid, 1, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceGuid, 1, DateTime.Now, new object(), new Version()));
             var result = stream.CreateUncommittedEventStream(commitedStream, null);
             Assert.AreEqual(result.Count(), 2);
             Assert.AreEqual(result.First().EventSequence, 2);
@@ -113,9 +113,9 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var commitedStream = new CommittedEventStream(
                 eventSourceGuid,
                 new CommittedEvent(
-                    Guid.NewGuid(), rootGuid, eventSourceGuid, 1, DateTime.Now, new object(), new Version()),
+                    Guid.NewGuid(), null, rootGuid, eventSourceGuid, 1, DateTime.Now, new object(), new Version()),
                 new CommittedEvent(
-                    Guid.NewGuid(), sharedEventGuid, eventSourceGuid, 2, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, sharedEventGuid, eventSourceGuid, 2, DateTime.Now, new object(), new Version()));
             var result = stream.CreateUncommittedEventStream(commitedStream, stream[0].EventIdentifier);
             Assert.AreEqual(result.Count(), 2);
             Assert.AreEqual(result.First().EventSequence, 3);
@@ -161,9 +161,9 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var commitedStream = new CommittedEventStream(
                 eventSourceGuid, 
                 new CommittedEvent(
-                    Guid.NewGuid(), rootGuid, eventSourceGuid, 1, DateTime.Now, new object(), new Version()), 
+                    Guid.NewGuid(), null, rootGuid, eventSourceGuid, 1, DateTime.Now, new object(), new Version()), 
                 new CommittedEvent(
-                    Guid.NewGuid(), sharedEventGuid, eventSourceGuid, 2, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, sharedEventGuid, eventSourceGuid, 2, DateTime.Now, new object(), new Version()));
             var result = stream.CreateUncommittedEventStream(commitedStream, stream[0].EventIdentifier);
             Assert.AreEqual(result.Count(), 1);
             Assert.AreEqual(result.First().EventSequence, 3);
@@ -197,7 +197,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var baseStream = new CommittedEventStream(
                 eventSourceId,
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
             var result = stream.FindDivergentEventGuid(baseStream);
             Assert.AreEqual(result, null);
         }
@@ -216,12 +216,12 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var baseStream = new CommittedEventStream(
                 eventSourceId,
                   new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()),
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()),
                 new CommittedEvent(
-                    Guid.NewGuid(), sharedEvent, eventSourceId, 2, DateTime.Now, new object(), new Version()),
+                    Guid.NewGuid(), null, sharedEvent, eventSourceId, 2, DateTime.Now, new object(), new Version()),
 
                     new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 3, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 3, DateTime.Now, new object(), new Version()));
             var result = stream.FindDivergentEventGuid(baseStream);
             Assert.AreEqual(result, sharedEvent);
         }
@@ -240,7 +240,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var baseStream = new CommittedEventStream(
                 eventSourceId, 
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
             var result = stream.FindDivergentEventGuid(baseStream);
             Assert.AreEqual(result, null);
         }
@@ -256,9 +256,9 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var baseStream = new CommittedEventStream(
                 eventSourceId, 
                 new CommittedEvent(
-                    Guid.NewGuid(), sharedEventid, eventSourceId, 1, DateTime.Now, new object(), new Version()), 
+                    Guid.NewGuid(), null, sharedEventid, eventSourceId, 1, DateTime.Now, new object(), new Version()), 
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 2, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 2, DateTime.Now, new object(), new Version()));
 
             var stream = new List<AggregateRootEvent>
                 {
@@ -282,11 +282,11 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var baseStream = new CommittedEventStream(
                 eventSourceId, 
                 new CommittedEvent(
-                    Guid.NewGuid(), sharedEventid, eventSourceId, 1, DateTime.Now, new object(), new Version()), 
+                    Guid.NewGuid(), null, sharedEventid, eventSourceId, 1, DateTime.Now, new object(), new Version()), 
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 2, DateTime.Now, new object(), new Version()), 
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 2, DateTime.Now, new object(), new Version()), 
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 3, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 3, DateTime.Now, new object(), new Version()));
 
             var stream = new List<AggregateRootEvent>
                 {
@@ -309,9 +309,9 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var baseStream = new CommittedEventStream(
                 eventSourceId, 
                 new CommittedEvent(
-                    Guid.NewGuid(), sharedEventid, eventSourceId, 1, DateTime.Now, new object(), new Version()), 
+                    Guid.NewGuid(), null, sharedEventid, eventSourceId, 1, DateTime.Now, new object(), new Version()), 
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 2, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 2, DateTime.Now, new object(), new Version()));
 
             var stream = new List<AggregateRootEvent>
                 {
@@ -348,7 +348,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var baseStream = new CommittedEventStream(
                 eventSourceId, 
                 new CommittedEvent(
-                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
+                    Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
 
             var stream = new List<AggregateRootEvent>
                 {

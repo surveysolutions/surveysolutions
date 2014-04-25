@@ -17,7 +17,7 @@ namespace Ncqrs.Commanding.CommandExecution
         /// </summary>
         /// <param name="command">The command to execute. This should not be null.</param>
         /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
-        void Execute(TCommand command);
+        void Execute(TCommand command, string origin);
     }
     #if USE_CONTRACTS
     [ContractClassFor(typeof(ICommandExecutor<>))]

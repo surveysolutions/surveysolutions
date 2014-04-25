@@ -70,10 +70,6 @@
       <Project>{5DEEE833-95C4-4D28-AAA7-E281FF1569D8}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNcqrs.Tests\AndroidNcqrs.Tests.csproj">
-      <Project>{B1AA86AF-1FFA-4D20-B612-D7C119635438}</Project>
-      <Name>AndroidNcqrs.Tests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model.Tests\CAPI.Android.Core.Model.Tests.csproj">
       <Project>{79488597-3210-4c72-a2e5-d4eec269d3fe}</Project>
       <Name>CAPI.Android.Core.Model.Tests</Name>

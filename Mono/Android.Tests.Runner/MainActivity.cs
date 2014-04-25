@@ -6,7 +6,6 @@ using Main.Core.Tests.Entities;
 using NUnitLite;
 using NUnitLite.MonoDroid;
 using Ncqrs.Eventing.Storage.SQLite.Tests;
-using Ncqrs.Tests;
 
 namespace Android.Tests.Runner
 {
@@ -15,7 +14,6 @@ namespace Android.Tests.Runner
     {
         protected override IEnumerable<TestAssemblyInfo> GetAssembliesForTest()
         {
-            yield return NcqrsTests();
             yield return MainCoreTests();
             yield return SQliteEventStoreTests();
             yield return AndroidAppTests();
@@ -43,12 +41,6 @@ namespace Android.Tests.Runner
             return new TestAssemblyInfo(assembly/*, typeof(CommonInfrastuctureTests)*/);
         }
 
-        private TestAssemblyInfo NcqrsTests()
-        {
-            var assembly = typeof (NcqrsEnvironmentSpecs).Assembly;
-
-            return new TestAssemblyInfo(assembly);
-        }
         #endregion
 
         protected override Type GetDetailsActivityType

@@ -24,7 +24,7 @@ namespace Ncqrs.Spec
                 var comittedEvents = new List<CommittedEvent>();
                 foreach (var evnt in _events)
                 {
-                    var committedEvent = new CommittedEvent(commitId, Guid.NewGuid(), id, sequence, DateTime.UtcNow,
+                    var committedEvent = new CommittedEvent(commitId, null, Guid.NewGuid(), id, sequence, DateTime.UtcNow,
                                                             evnt, new Version(1, 0));
                     sequence++;
                     comittedEvents.Add(committedEvent);
@@ -38,7 +38,7 @@ namespace Ncqrs.Spec
                 int sequence = initialVersion;
 
                 var comittedEvents = new List<CommittedEvent>();
-                var result = new UncommittedEventStream(commitId);
+                var result = new UncommittedEventStream(commitId, null);
                 foreach (var evnt in _events)
                 {
                     var uncommittedEvent = new UncommittedEvent(Guid.NewGuid(), id, sequence, initialVersion, DateTime.UtcNow,

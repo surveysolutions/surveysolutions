@@ -97,7 +97,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
             var executor = new UoWMappedCommandExecutor(mapper);
 
             var command = new CorrectlyMappedCommand { Bar = 25, Foo = "Hello world" };
-            executor.Execute(command);
+            executor.Execute(command, null);
 
             TargetAggRoot.FooValue.Should().Be(command.Foo);
             TargetAggRoot.BarValue.Should().Be(command.Bar);

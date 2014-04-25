@@ -26,9 +26,9 @@ namespace Ncqrs.Tests.Commanding
             var aCommand = MockRepository.GenerateMock<ICommand>();
             var theWrapper = new TransactionalCommandExecutorWrapper<ICommand>(aExecutor);
 
-            theWrapper.Execute(aCommand);
+            theWrapper.Execute(aCommand, null);
 
-            aExecutor.AssertWasCalled(e=>e.Execute(aCommand));
+            aExecutor.AssertWasCalled(e => e.Execute(aCommand, null));
         }
     }
 }

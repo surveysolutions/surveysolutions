@@ -163,7 +163,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
         {
-            var uncommitedStream = new UncommittedEventStream(Guid.NewGuid());
+            var uncommitedStream = new UncommittedEventStream(Guid.NewGuid(), null);
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {

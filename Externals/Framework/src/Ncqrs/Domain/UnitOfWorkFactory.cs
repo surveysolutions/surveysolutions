@@ -9,7 +9,7 @@ namespace Ncqrs.Domain
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
-        public IUnitOfWorkContext CreateUnitOfWork(Guid commandId)
+        public IUnitOfWorkContext CreateUnitOfWork(Guid commandId, string origin)
         {
             if(UnitOfWorkContext.Current != null)
             {
@@ -24,7 +24,7 @@ namespace Ncqrs.Domain
             var aggregateSnappshotter = NcqrsEnvironment.Get<IAggregateSnapshotter>();
 
             var repository = new DomainRepository(aggregateCreationStrategy, aggregateSnappshotter);
-            var unitOfWork = new UnitOfWork(commandId, repository, store, snapshotStore, bus, snapshottingPolicy);
+            var unitOfWork = new UnitOfWork(commandId, origin, repository, store, snapshotStore, bus, snapshottingPolicy);
             UnitOfWorkContext.Bind(unitOfWork);
             return unitOfWork;
         }

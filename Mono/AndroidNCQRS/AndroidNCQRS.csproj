@@ -65,9 +65,6 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\CommandExecutorBase.cs">
       <Link>Commanding\CommandExecution\CommandExecutorBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\CommandExecutorWrapper.cs">
-      <Link>Commanding\CommandExecution\CommandExecutorWrapper.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\DefaultTransactionService.cs">
       <Link>Commanding\CommandExecution\DefaultTransactionService.cs</Link>
     </Compile>
@@ -425,15 +422,6 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\IStreamableEventStore.cs">
       <Link>Eventing\Storage\IStreamableEventStore.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\NoDB\NoDBEventStore.cs">
-      <Link>Eventing\Storage\NoDB\NoDBEventStore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\NoDB\NoDBSnapshotStore.cs">
-      <Link>Eventing\Storage\NoDB\NoDBSnapshotStore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\NoDB\StoredEventExtensions.cs">
-      <Link>Eventing\Storage\NoDB\StoredEventExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\NullSnapshotStore.cs">
       <Link>Eventing\Storage\NullSnapshotStore.cs</Link>
     </Compile>
@@ -469,12 +457,6 @@
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\SimpleEventTypeResolver.cs">
       <Link>Eventing\Storage\SimpleEventTypeResolver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\SQL\MsSqlServerEventStore.cs">
-      <Link>Eventing\Storage\SQL\MsSqlServerEventStore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\SQL\Queries.cs">
-      <Link>Eventing\Storage\SQL\Queries.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\StoredEvent.cs">
       <Link>Eventing\Storage\StoredEvent.cs</Link>
@@ -521,17 +503,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Storage\SQL\TableCreationScript.sql">
-      <Link>Eventing\Storage\SQL\TableCreationScript.sql</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

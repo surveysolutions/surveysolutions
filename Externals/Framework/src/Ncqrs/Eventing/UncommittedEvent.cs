@@ -16,6 +16,7 @@ namespace Ncqrs.Eventing
         private readonly long _initialVersionOfEventSource;
         private readonly Version _eventVersion;
         private Guid _commitId;
+        private string _origin;
 
         /// <summary>
         /// Gets the initial version of event source (the version it was just after creating/retrieving from the store)
@@ -80,9 +81,15 @@ namespace Ncqrs.Eventing
             get { return _commitId; }
         }
 
-        public void OnAppendedToStream(Guid streamCommitId)
+        public string Origin
+        {
+            get { return _origin; }
+        }
+
+        public void OnAppendedToStream(Guid streamCommitId, string streamOrigin)
         {
             _commitId = streamCommitId;
+            _origin = streamOrigin;
         }
 
         public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, long eventSequence, long initialVersionOfEventSource, DateTime eventTimeStamp, object payload, Version eventVersion)            

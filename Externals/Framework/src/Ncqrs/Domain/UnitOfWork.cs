@@ -31,7 +31,7 @@ namespace Ncqrs.Domain
         private readonly IEventBus _eventBus;
         private readonly ISnapshottingPolicy _snapshottingPolicy;
 
-        public UnitOfWork(Guid commandId, IDomainRepository domainRepository, IEventStore eventStore, ISnapshotStore snapshotStore, IEventBus eventBus, ISnapshottingPolicy snapshottingPolicy) : base(commandId)
+        public UnitOfWork(Guid commandId, string origin, IDomainRepository domainRepository, IEventStore eventStore, ISnapshotStore snapshotStore, IEventBus eventBus, ISnapshottingPolicy snapshottingPolicy) : base(commandId)
         {
             #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(domainRepository != null);
@@ -45,7 +45,7 @@ namespace Ncqrs.Domain
             _eventBus = eventBus;
             _snapshotStore = snapshotStore;
             _eventStore = eventStore;
-            _eventStream = new UncommittedEventStream(commandId);
+            _eventStream = new UncommittedEventStream(commandId, origin);
             _dirtyInstances = new Queue<AggregateRoot>();
         }
 

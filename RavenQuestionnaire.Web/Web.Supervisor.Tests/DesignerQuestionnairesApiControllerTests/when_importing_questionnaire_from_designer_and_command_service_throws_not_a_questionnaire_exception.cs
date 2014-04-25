@@ -28,7 +28,7 @@ namespace Web.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
 
             var commandService = Mock.Of<ICommandService>();
             Mock.Get(commandService)
-                .Setup(cs => cs.Execute(it.IsAny<ICommand>()))
+                .Setup(cs => cs.Execute(it.IsAny<ICommand>(), it.IsAny<string>()))
                 .Throws(commandServiceException);
 
             controller = CreateDesignerQuestionnairesApiController(commandService: commandService,

@@ -14,7 +14,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// Executes the given command of type <typeparamref name="TCommand"/> for the mapped aggregateroot.
         /// </summary>
         /// <param name="command">The <see cref="TCommand"/> to execute.</param>
-        internal abstract void Execute(TCommand command);
+        internal abstract void Execute(TCommand command, string origin);
     }
 
     /// <summary>
@@ -39,12 +39,12 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// Executes the given command of type <typeparamref name="TCommand"/> for the mapped aggregateroot.
         /// </summary>
         /// <param name="command">The <see cref="TCommand"/> to execute.</param>
-        internal override void Execute(TCommand command)
+        internal override void Execute(TCommand command, string origin)
         {
             #if !MONODROID
             Contract.Requires<ArgumentNullException>(command != null, "command can not be null.");
 #endif
-            _mappedaggregaterootmethod.Execute(command);
+            _mappedaggregaterootmethod.Execute(command, origin);
         }
 
         /// <summary>

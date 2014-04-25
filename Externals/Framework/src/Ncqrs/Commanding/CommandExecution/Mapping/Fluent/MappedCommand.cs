@@ -36,9 +36,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// </summary>
         /// <param name="command">The command to execute.</param>
         /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
-        void ICommandExecutor<TCommand>.Execute(TCommand command)
+        void ICommandExecutor<TCommand>.Execute(TCommand command, string origin)
         {
-            _executablecommand.Execute(command);
+            _executablecommand.Execute(command, origin);
         }
     }
 }

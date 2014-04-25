@@ -55,7 +55,7 @@ namespace WB.Tools.CapiDataGenerator.Models
 
         private static void StoreInternal(UncommittedEventStream eventStream, IDictionary<Guid, long> eventsequences, IEventStore eventstore)
         {
-            var eventstream = new UncommittedEventStream(eventStream.CommitId);
+            var eventstream = new UncommittedEventStream(eventStream.CommitId, null);
 
             foreach (var @event in eventStream)
             {

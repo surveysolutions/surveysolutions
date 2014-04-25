@@ -50,7 +50,7 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
             var item = provider.CheckAndCreateNewSyncActivity(clientIdentifier);
 
             //Assert
-            commandService.Verify(x => x.Execute(It.IsAny<CreateClientDeviceCommand>()),Times.Once());
+            commandService.Verify(x => x.Execute(It.IsAny<CreateClientDeviceCommand>(), It.IsAny<string>()), Times.Once());
             Assert.That(item.ClientInstanceKey, Is.EqualTo(clientIdentifier.ClientInstanceKey));
         }
 

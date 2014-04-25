@@ -33,6 +33,7 @@ namespace Main.Core.Events
             this.EventTimeStamp = committedEvent.EventTimeStamp;
             this.EventVersion = committedEvent.EventVersion;
             this.CommitId = committedEvent.CommitId;
+            this.Origin = committedEvent.Origin;
         }
 
         #endregion
@@ -44,6 +45,8 @@ namespace Main.Core.Events
         /// If of a commit in which this event was stored (usually corresponds to a command id which caused this event).
         /// </summary>
         public Guid CommitId { get; set; }
+
+        public string Origin { get; set; }
 
         /// <summary>
         /// Gets or sets the unique identifier for this event.

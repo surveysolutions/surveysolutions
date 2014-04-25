@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
 
         Because of = () => service.LoginAndCreateAccount("login", "pwd");
 
-        It should_not_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.IsAny<CreateUserCommand>()), Times.Never);
+        It should_not_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.IsAny<CreateUserCommand>(), Moq.It.IsAny<string>()), Times.Never);
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;

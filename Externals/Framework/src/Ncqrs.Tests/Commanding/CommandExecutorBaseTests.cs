@@ -63,9 +63,9 @@ namespace Ncqrs.Tests.Commanding
                                    CommandIdentifier = Guid.NewGuid()
                                };
             var executor = new FooCommandExecutor(factory);
-            executor.Execute(aCommand);
+            executor.Execute(aCommand, null);
 
-            factory.AssertWasCalled(f => f.CreateUnitOfWork(aCommand.CommandIdentifier));
+            factory.AssertWasCalled(f => f.CreateUnitOfWork(aCommand.CommandIdentifier, null));
         }
 
         [Test]
@@ -73,11 +73,11 @@ namespace Ncqrs.Tests.Commanding
         {            
             var context = MockRepository.GenerateMock<IUnitOfWorkContext>();
             var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid())).Return(context).IgnoreArguments();
+            factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid(), null)).Return(context).IgnoreArguments();
 
             var aCommand = new FooCommand();
             var executor = new FooCommandExecutor(factory);
-            executor.Execute(aCommand);
+            executor.Execute(aCommand, null);
 
             executor.LastGivenContext.Should().Be(context);
         }
@@ -89,7 +89,7 @@ namespace Ncqrs.Tests.Commanding
             var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 
             var executor = new FooCommandExecutor(factory);
-            executor.Execute(theCommand);
+            executor.Execute(theCommand, null);
 
             executor.LastGivenCommand.Should().Be(theCommand);
         }

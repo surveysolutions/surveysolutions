@@ -16,28 +16,10 @@ namespace Main.Core.Commands
         {
             this.logger = logger;
         }
-        #region Fields
 
-        /// <summary>
-        /// The repeat try count.
-        /// </summary>
         private const int RepeatTryCount = 50;
-        
-        /// <summary>
-        /// The logger.
-        /// </summary>
-        
-        #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The execute.
-        /// </summary>
-        /// <param name="command">
-        /// The command.
-        /// </param>
-        public override void Execute(ICommand command)
+        public override void Execute(ICommand command, string origin)
         {
             bool inProgress = true;
             int currentTry = 1;
@@ -46,7 +28,7 @@ namespace Main.Core.Commands
             {
                 try
                 {
-                    base.Execute(command);
+                    base.Execute(command, origin);
                     inProgress = false;
                 }
                 catch (ConcurrencyException exc)
@@ -56,7 +38,5 @@ namespace Main.Core.Commands
                 }
             }
         }
-
-        #endregion
     }
 }

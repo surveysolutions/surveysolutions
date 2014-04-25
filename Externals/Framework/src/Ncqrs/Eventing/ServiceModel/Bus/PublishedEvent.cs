@@ -51,6 +51,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         private readonly Guid _eventSourceId;
         private readonly Version _eventVersion;
         private readonly Guid _commitId;
+        private readonly string _origin;
 
         /// <summary>
         /// Id of the commit this event belongs to (usually corresponds to command id).
@@ -58,6 +59,11 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         public Guid CommitId
         {
             get { return _commitId; }
+        }
+
+        public string Origin
+        {
+            get { return _origin; }
         }
 
         /// <summary>
@@ -124,6 +130,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             _eventIdentifier = evnt.EventIdentifier;
             _eventTimeStamp = evnt.EventTimeStamp;
             _commitId = evnt.CommitId;
+            _origin = evnt.Origin;
         }
     }
 }

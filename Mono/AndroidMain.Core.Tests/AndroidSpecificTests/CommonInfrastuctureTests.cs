@@ -99,7 +99,7 @@ namespace AndroidMain.Core.Tests.CommonTests
                 storedEvent.Data, 
                 new Version(1, 0));
 
-            var result = new UncommittedEventStream(storedEvent.EventSourceId);
+            var result = new UncommittedEventStream(storedEvent.EventSourceId, null);
             result.Append(@event);
 
             return result;

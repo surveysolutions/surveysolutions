@@ -55,7 +55,7 @@ namespace Ncqrs.Tests.Commanding.ServiceModel
             Interceptor1 = MockRepository.GenerateMock<ICommandServiceInterceptor>();
             Interceptor2 = MockRepository.GenerateMock<ICommandServiceInterceptor>();
 
-            ExecutorForCommandWithExecutorThatThrowsException.Stub(e=>e.Execute(null)).IgnoreArguments().Throw(new Exception());
+            ExecutorForCommandWithExecutorThatThrowsException.Stub(e => e.Execute(null, null)).IgnoreArguments().Throw(new Exception());
 
             service.RegisterExecutor(ExecutorForCommandWithExecutor);
             service.RegisterExecutor(ExecutorForCommandWithExecutorThatThrowsException);
@@ -103,7 +103,7 @@ namespace Ncqrs.Tests.Commanding.ServiceModel
             ExecutorForCommandWithExecutor.Replay();
             TheService.Execute(theCommand);
 
-            ExecutorForCommandWithExecutor.AssertWasCalled(e => e.Execute(theCommand));
+            ExecutorForCommandWithExecutor.AssertWasCalled(e => e.Execute(theCommand, null));
         }
     }
 }

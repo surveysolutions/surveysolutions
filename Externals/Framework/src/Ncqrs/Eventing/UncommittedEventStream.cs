@@ -12,6 +12,7 @@ namespace Ncqrs.Eventing
     public class UncommittedEventStream : IEnumerable<UncommittedEvent>
     {
         private readonly Guid _commitId;
+        private readonly string _origin;
         private Guid? _singleSource;
         private bool _hasSingleSource = true;
         private readonly List<UncommittedEvent> _events = new List<UncommittedEvent>();
@@ -21,9 +22,10 @@ namespace Ncqrs.Eventing
         /// Creates new uncommitted event stream.
         /// </summary>
         /// <param name="commitId"></param>
-        public UncommittedEventStream(Guid commitId)
+        public UncommittedEventStream(Guid commitId, string origin)
         {
             _commitId = commitId;
+            _origin = origin;
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace Ncqrs.Eventing
                 _singleSource = evnt.EventSourceId;
             }
             _events.Add(evnt);
-            evnt.OnAppendedToStream(_commitId);
+            evnt.OnAppendedToStream(_commitId, _origin);
             UpdateEventSourceInformation(evnt);
         }
 
@@ -127,6 +129,11 @@ namespace Ncqrs.Eventing
         public Guid CommitId
         {
             get { return _commitId; }
+        }
+
+        public string Origin
+        {
+            get { return this._origin; }
         }
 
         public IEnumerator<UncommittedEvent> GetEnumerator()

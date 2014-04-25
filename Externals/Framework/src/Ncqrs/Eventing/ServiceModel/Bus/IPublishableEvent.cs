@@ -32,6 +32,8 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// </summary>
         Guid CommitId { get; }
 
+        string Origin { get; }
+
         /// <summary>
         /// Gets the event payload.
         /// </summary>
