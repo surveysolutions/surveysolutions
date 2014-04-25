@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
             if (group != null)
             {
-                group.ParentGroupId = evnt.Payload.GroupKey.Value;
+                group.ParentGroupId = evnt.Payload.GroupKey ?? Guid.Empty;
                 var descendantQuestion = this.GetAllDescendantQuestions(currentState, group.Id);
                 descendantQuestion.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
             }
@@ -329,6 +329,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var breadcrumbs = new List<Guid>();
             var rosterScopes = new List<Guid>();
             parentsStack.Push(startGroupIdGuid);
+            var depth = 0;
             while (parentsStack.Any())
             {
                 var ancestorId = parentsStack.Pop();
@@ -345,6 +346,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                         : @group.RosterSizeQuestionId.Value);
                 }
                 parentsStack.Push(group.ParentGroupId);
+                depth++;
+                if (depth == 100)
+                {
+                    breadcrumbs.Clear();
+                    rosterScopes.Clear();
+                    break;
+                }
             }
             breadcrumbs.Remove(item.Id);
             item.ParentGroupsIds = breadcrumbs.ToArray();
