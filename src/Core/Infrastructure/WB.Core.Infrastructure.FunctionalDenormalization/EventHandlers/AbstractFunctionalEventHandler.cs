@@ -43,7 +43,16 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             {
                 T currentState = this.GetViewById(evt.EventSourceId, storage);
                 var newState = (T)this.GetType().GetMethod("Update", new [] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, newState, storage);
+
+                if (newState != null)
+                {
+                    this.SaveView(evt.EventSourceId, newState, storage);
+                }
+                else
+                {
+                    this.RemoveView(evt.EventSourceId, storage);
+                }
+
                 return;
             }
 

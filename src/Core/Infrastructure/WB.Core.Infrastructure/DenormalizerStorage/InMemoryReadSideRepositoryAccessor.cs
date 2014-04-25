@@ -37,10 +37,11 @@ namespace Main.DenormalizerStorage
             return query.Invoke(this.repository.Values.AsQueryable());
         }
 
-        public IEnumerable<TView> QueryAll(Expression<Func<TView, bool>> query)
+        public IEnumerable<TView> QueryAll(Expression<Func<TView, bool>> condition)
         {
-            return 
-            repository.Values.Where(query.Compile());
+            return condition != null
+                ? repository.Values.Where(condition.Compile())
+                : repository.Values;
         }
 
         public void Remove(string id)

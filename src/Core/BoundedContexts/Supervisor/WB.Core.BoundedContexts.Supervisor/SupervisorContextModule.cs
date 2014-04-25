@@ -5,6 +5,7 @@ using Quartz;
 using Quartz.Impl;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
+using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.BoundedContexts.Supervisor
 {
@@ -44,6 +46,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<SynchronizationContext>().ToSelf().InSingletonScope();
             this.Bind<SchedulerSettings>().ToConstant(this.schedulerSettings);
             this.Bind<BackgroundSyncronizationTasks>().ToSelf();
+
+            this.Bind<IEventHandler>().To<ReadyToSendToHeadquartersInterviewDenormalizer>().InSingletonScope();
 
             this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
         }
