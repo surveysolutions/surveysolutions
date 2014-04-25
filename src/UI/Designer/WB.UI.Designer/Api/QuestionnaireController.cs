@@ -73,21 +73,36 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public NewEditQuestionView EditQuestion(string id, Guid questionId)
         {
-            return questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+            var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+            if (editQuestionView == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or question with id={1} cannot be found", id, questionId));
+            }
+            return editQuestionView;
         }
 
         [HttpGet]
         [CamelCase]
         public NewEditGroupView EditGroup(string id, Guid qroupId)
         {
-            return questionnaireInfoFactory.GetGroupEditView(id, qroupId);
+            var editGroupView = questionnaireInfoFactory.GetGroupEditView(id, qroupId);
+            if (editGroupView == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or group with id={1} cannot be found", id, qroupId));
+            }
+            return editGroupView;
         }
 
         [HttpGet]
         [CamelCase]
         public NewEditRosterView EditRoster(string id, Guid rosterId)
         {
-            return questionnaireInfoFactory.GetRosterEditView(id, rosterId);
+            var editRosterView = questionnaireInfoFactory.GetRosterEditView(id, rosterId);
+            if (editRosterView == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or roster with id={1} cannot be found", id, rosterId));
+            }
+            return editRosterView;
         }
 
         [HttpGet]
