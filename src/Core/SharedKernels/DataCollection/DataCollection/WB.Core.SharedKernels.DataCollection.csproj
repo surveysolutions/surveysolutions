@@ -93,6 +93,9 @@
     <Compile Include="Events\Interview\InterviewFromPreloadedDataCreated.cs" />
     <Compile Include="Events\Interview\InterviewOnClientCreated.cs" />
     <Compile Include="Events\Interview\InterviewRejectedByHQ.cs" />
+    <Compile Include="Events\Interview\InterviewSentToHeadquarters.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Interview\QRBarcodeQuestionAnswered.cs" />
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />

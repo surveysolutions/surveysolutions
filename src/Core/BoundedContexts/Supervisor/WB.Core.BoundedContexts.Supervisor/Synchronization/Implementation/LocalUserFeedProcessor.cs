@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
         private readonly ILocalFeedStorage localFeedStorage;
-        private readonly ICommandService commandService;
+        private readonly Action<ICommand> executeCommand;
         private readonly IHeadquartersUserReader headquartersUserReader;
         private readonly ILogger logger;
         private readonly SynchronizationContext synchronizationContext;
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             this.users = users;
             this.localFeedStorage = localFeedStorage;
-            this.commandService = commandService;
+            this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
             this.headquartersUserReader = headquartersUserReader;
             this.logger = logger;
             this.synchronizationContext = synchronizationContext;
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     userDetails.Roles.ToArray(), userDetails.isLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Password, Guid.Empty);
             }
 
-            this.commandService.Execute(userCommand);
+            this.executeCommand(userCommand);
         }
     }
 }

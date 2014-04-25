@@ -6,6 +6,7 @@ using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -22,6 +23,7 @@ using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -33,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IAtomFeedReader feedReader;
         private readonly HeadquartersSettings settings;
         private readonly ILogger logger;
-        private readonly ICommandService commandService;
+        private readonly Action<ICommand> executeCommand;
         private readonly IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -75,7 +77,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.feedReader = feedReader;
             this.settings = settings;
             this.logger = logger;
-            this.commandService = commandService;
+            this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
             this.plainStorage = plainStorage;
             this.users = users;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
@@ -114,18 +116,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
-                                this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(
-                                    interview.QuestionnaireId,
-                                    interview.QuestionnaireVersion,
-                                    new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.SupervisorId,
-                                    interviewFeedEntry.UserId);
+                                this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(interview.QuestionnaireId, interview.QuestionnaireVersion, new Uri(questionnaireDetailsUrl));
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.SupervisorId, interviewFeedEntry.UserId);
                                 break;
+
                             case EntryType.InterviewUnassigned:
-                                this.commandService.Execute(new DeleteInterviewCommand(
-                                    interviewId: Guid.Parse(interviewFeedEntry.InterviewId),
-                                    userId: Guid.Parse(interviewFeedEntry.UserId)));
+                                this.CancelInterview(interviewFeedEntry, interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
                                 break;
+
                             default:
                                 this.logger.Warn(string.Format(
                                     "Unknown event of type {0} received in interviews feed. It was skipped and marked as processed with error. EventId: {1}",
@@ -183,7 +181,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
-            this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion));
+            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion));
         }
 
         private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
@@ -201,7 +199,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             var userIdGuid = Guid.Parse(userId);
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
-            this.commandService.Execute(new SynchronizeInterviewFromHeadquarters(interviewDto.Id, userIdGuid, supervisorIdGuid, interviewDto, DateTime.Now));
+            this.executeCommand(new SynchronizeInterviewFromHeadquarters(interviewDto.Id, userIdGuid, supervisorIdGuid, interviewDto, DateTime.Now));
+        }
+
+        private void CancelInterview(LocalInterviewFeedEntry interviewFeedEntry, string interviewId, string userId)
+        {
+            Guid interviewIdGuid = Guid.Parse(interviewId);
+            Guid userIdGuid = Guid.Parse(userId);
+
+            this.executeCommand(new DeleteInterviewCommand(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
         private void StoreEventsToLocalStorage()
@@ -334,11 +340,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            // TODO: filter event stream
-
             List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, long.MaxValue).ToList();
 
-            AggregateRootEvent[] eventsToSend = storedEvents.Select(storedEvent => new AggregateRootEvent(storedEvent)).ToArray();
+            int indexOfLastEventSentToHeadquarters = storedEvents.FindLastIndex(storedEvent => storedEvent.Payload is InterviewSentToHeadquarters);
+            int countOfEventsSentToHeadquarters = indexOfLastEventSentToHeadquarters + 1;
+
+            AggregateRootEvent[] eventsToSend = storedEvents
+                .Skip(countOfEventsSentToHeadquarters)
+                .Where(storedEvent => storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin)
+                .Select(storedEvent => new AggregateRootEvent(storedEvent))
+                .ToArray();
 
             return eventsToSend;
         }
