@@ -61,14 +61,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
 
         Because of = () => service.LoginAndCreateAccount("login", "pwd");
 
-        It should_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.Is<CreateUserCommand>(
-            command => 
+        It should_create_new_local_user = () => commandService.Verify(x => x.Execute(
+            Moq.It.Is<CreateUserCommand>(command => 
                 command.PublicKey == HeadquartersUser.PublicKey && 
                 command.Password == HeadquartersUser.Password &&
                 command.UserName == HeadquartersUser.UserName &&
                 command.Email == HeadquartersUser.Email &&
                 command.IsLockedByHQ == HeadquartersUser.IsLockedByHQ &&
-                command.IsLockedBySupervisor == HeadquartersUser.isLockedBySupervisor)));
+                command.IsLockedBySupervisor == HeadquartersUser.isLockedBySupervisor),
+            Moq.It.IsAny<string>()));
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;

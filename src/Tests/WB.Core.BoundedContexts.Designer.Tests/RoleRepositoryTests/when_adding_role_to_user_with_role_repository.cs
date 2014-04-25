@@ -23,10 +23,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.RoleRepositoryTests
             roleRepository.AddUserToRole(null, validatedRole.ToString(), validatedUserId);
 
         It should_execute_AddRoleToAccountCommand_with_specified_UserId = () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<AddRoleToAccountCommand>(cp => cp.AccountId == validatedUserId)));
+            commandService.Verify(command => command.Execute(Moq.It.Is<AddRoleToAccountCommand>(cp => cp.AccountId == validatedUserId), Moq.It.IsAny<string>()));
 
         It should_execute_AddRoleToAccountCommand_with_specified_role = () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<AddRoleToAccountCommand>(cp => cp.Role == validatedRole)));
+            commandService.Verify(command => command.Execute(Moq.It.Is<AddRoleToAccountCommand>(cp => cp.Role == validatedRole), Moq.It.IsAny<string>()));
 
         private static CQRSRoleRepository roleRepository;
         private static Mock<ICommandService> commandService;
