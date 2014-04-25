@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<GroupsDisabled>,
         IEventHandler<GroupsEnabled>,
         IEventHandler<InterviewSynchronized>,
+        IEventHandler<InterviewSentToHeadquarters>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeclaredValid>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
@@ -66,6 +67,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<GroupsEnabled> evnt) { }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt) {}
+
+        public void Handle(IPublishedEvent<InterviewSentToHeadquarters> evnt) {}
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt) {}
 
