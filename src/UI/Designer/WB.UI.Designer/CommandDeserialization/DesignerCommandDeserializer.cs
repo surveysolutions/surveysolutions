@@ -22,6 +22,7 @@ namespace WB.UI.Designer.CommandDeserialization
                         {"UpdateGroup", typeof (UpdateGroupCommand)},
                         {"AddGroup", typeof (AddGroupCommand)},
                         {"CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand)},
+                        {"CloneGroup", typeof (CloneGroupCommand)},
                         {"DeleteGroup", typeof (DeleteGroupCommand)},
                         {"MoveGroup", typeof (MoveGroupCommand)},
                         {"UpdateQuestion", typeof (UpdateQuestionCommand)},
