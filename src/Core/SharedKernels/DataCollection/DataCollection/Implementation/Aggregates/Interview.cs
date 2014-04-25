@@ -2770,6 +2770,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         InterviewStatus.SupervisorAssigned,
                         InterviewStatus.Restarted);
                     return;
+                case InterviewStatus.ApprovedBySupervisor:
+                    this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                        InterviewStatus.RejectedByHeadquarters,
+                        InterviewStatus.SupervisorAssigned);
+                    return;
             }
             throw new InterviewException(string.Format(
                 "Status {0} not allowed to be changed with ApplySynchronizationMetadata command",
