@@ -59,12 +59,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 Guid questionnaireId = evnt.EventSourceId;
                 PdfQuestionnaireView initialQuestionnaire = this.repositoryWriter.GetById(questionnaireId);
-                if(initialQuestionnaire!=null)
-                    initialQuestionnaire.ReconnectWithParent();
-                PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
-                if (updatedQuestionnaire != null)
+                if (initialQuestionnaire != null)
                 {
-                    this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
+                    initialQuestionnaire.ReconnectWithParent();
+                    PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
+                    if (updatedQuestionnaire != null)
+                    {
+                        this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
+                    }
                 }
             }
             catch (ApplicationException e)
@@ -212,6 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
+
                 var newQuestion = new PdfQuestionView
                 {
                     PublicId = @event.PublicKey,
