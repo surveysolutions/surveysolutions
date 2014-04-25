@@ -12,6 +12,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
+using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Logging;
@@ -45,7 +46,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly SynchronizationContext synchronizationContext;
         private readonly IEventStore eventStore;
         private readonly IJsonUtils jsonUtils;
-        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
+        private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
 
         public InterviewsSynchronizer(IAtomFeedReader feedReader, 
             HeadquartersSettings settings, 
@@ -59,7 +61,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             SynchronizationContext synchronizationContext,
             IEventStore eventStore,
             IJsonUtils jsonUtils,
-            IQueryableReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
+            IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -74,6 +77,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (eventStore == null) throw new ArgumentNullException("eventStore");
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
+            if (readyToSendInterviewsRepositoryWriter == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryWriter");
 
             this.feedReader = feedReader;
             this.settings = settings;
@@ -88,6 +92,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.eventStore = eventStore;
             this.jsonUtils = jsonUtils;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
+            this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
         }
 
         public void Pull()
@@ -242,12 +247,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private List<Guid> GetInterviewsToPush()
         {
-            // TODO: TLK: custom denormalizer
-
-            return this.interviewSummaryRepositoryWriter.Query(_ => _
-                //.Where(summary => summary.Status == InterviewStatus.ApprovedBySupervisor)
-                .Select(summary => summary.InterviewId)
-                .ToList());
+            return this.readyToSendInterviewsRepositoryWriter
+                .QueryAll()
+                .Select(interview => interview.InterviewId)
+                .ToList();
         }
 
         private void PushInterview(Guid interviewId, Guid userId)

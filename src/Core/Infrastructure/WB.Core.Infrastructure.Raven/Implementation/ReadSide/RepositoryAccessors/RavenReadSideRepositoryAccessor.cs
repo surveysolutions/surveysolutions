@@ -49,10 +49,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             return this.QueryImpl(query);
         }
 
-        public IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query)
+        public IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> condition)
         {
             var retval = new List<TEntity>();
-            foreach (var docBulk in this.GetAllDocuments(query))
+            foreach (var docBulk in this.GetAllDocuments(condition))
             {
                 retval.AddRange(docBulk);
             }
@@ -64,13 +64,13 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             get { return this.ravenStore.Conventions.MaxNumberOfRequestsPerSession; }
         }
 
-        private IEnumerable<IQueryable<TEntity>> GetAllDocuments(Expression<Func<TEntity, bool>> whereClause)
+        private IEnumerable<IQueryable<TEntity>> GetAllDocuments(Expression<Func<TEntity, bool>> condition)
         {
             int skipResults = 0;
 
             while (true)
             {
-                var nextGroupOfPoints = this.GetPagedDocuments(whereClause, skipResults, this.MaxNumberOfRequestsPerSession);
+                var nextGroupOfPoints = this.GetPagedDocuments(condition, skipResults, this.MaxNumberOfRequestsPerSession);
                 if (!nextGroupOfPoints.Any())
                     yield break;
                 skipResults += this.MaxNumberOfRequestsPerSession;
@@ -78,9 +78,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        private IQueryable<TEntity> GetPagedDocuments(Expression<Func<TEntity, bool>> whereClause, int start, int pageSize)
+        private IQueryable<TEntity> GetPagedDocuments(Expression<Func<TEntity, bool>> condition, int start, int pageSize)
         {
-            return this.QueryImpl(queryable => Queryable.Skip(queryable.Where(whereClause), start).Take(pageSize));
+            return condition != null
+                ? this.QueryImpl(queryable => Queryable.Skip(queryable.Where(condition), start).Take(pageSize))
+                : this.QueryImpl(queryable => Queryable.Skip(queryable, start).Take(pageSize));
         }
     }
 }
