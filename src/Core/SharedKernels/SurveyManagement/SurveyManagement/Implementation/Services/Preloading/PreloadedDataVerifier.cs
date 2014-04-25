@@ -106,7 +106,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
                 yield break;
-
             foreach (var columnName in levelData.Header)
             {
                 if (this.serviceColumns.Contains(columnName))

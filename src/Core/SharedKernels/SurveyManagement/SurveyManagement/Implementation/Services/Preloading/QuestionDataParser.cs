@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.Select(a => (decimal) a).ToArray());
                 case QuestionType.TextList:
                     return new KeyValuePair<Guid, object>(question.PublicKey,
-                        typedAnswers.Select((a, i) => new Tuple<decimal, string>(i, (string) a)).ToArray());
+                        typedAnswers.Select((a, i) => new Tuple<decimal, string>(i + 1, (string) a)).ToArray());
                 default:
                     return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.First());
             }
