@@ -68,7 +68,7 @@
                     "~/Scripts/lib/knockout.asyncCommand.js", 
                     "~/Scripts/lib/knockout.dirtyFlag.js", 
                     "~/Scripts/knockout.validation.debug.js", 
-                    "~/Scripts/lib/knockout-sortable.js", 
+                    "~/Scripts/knockout-sortable.js", 
                     // Other 3rd party libraries
                     "~/Scripts/lodash.underscore.js", 
                     "~/Scripts/moment.js", 
