@@ -1,8 +1,26 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function($scope, $routeParams, $location, $route, questionnaireService, commandService) {
+    .controller('MainCtrl', function ($scope, $routeParams, $location, $route, questionnaireService, commandService, verificationService) {
 
+        $scope.verificationStatus = {
+            errorsCount: 0,
+            errors: []
+        };
+
+        $scope.verify = function () {
+            verificationService.verify($routeParams.questionnaireId).success(function (result) {
+                $scope.verificationStatus.errors = result.errors;
+                $scope.verificationStatus.errorsCount = result.errors.length;
+
+                if ($scope.verificationStatus.errorsCount > 0) {
+                    $('#verification-modal').modal({
+                        backdrop: false,
+                        show: true
+                    });
+                }
+            });
+        };
         $scope.chapters = [];
 
         $scope.items = [];
