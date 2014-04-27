@@ -229,7 +229,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionnsAndGroupsCollectionDenormalizer.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\SingleOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />

@@ -338,6 +338,30 @@ namespace Main.Core.Documents
             return result;
         }
 
+        public IEnumerable<Group> GetAllGroups()
+        {
+            var result = new List<Group>();
+            var groups = new Queue<IComposite>();
+            groups.Enqueue(this);
+
+            while (groups.Count != 0)
+            {
+                IComposite queueItem = groups.Dequeue();
+                var @group = queueItem as Group;
+                if (@group != null)
+                {
+                    result.Add(@group);
+                }
+
+                foreach (IComposite child in queueItem.Children)
+                {
+                    groups.Enqueue(child);
+                }
+            }
+
+            return result;
+        }
+
         internal IEnumerable<IQuestion> GetAllQuestions()
         {
             var treeStack = new Stack<IComposite>();
