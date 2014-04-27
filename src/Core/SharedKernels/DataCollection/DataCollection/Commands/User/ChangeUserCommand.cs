@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.User
         {
         }
 
-        public ChangeUserCommand(Guid publicKey, string email, UserRoles[] roles, bool isLockedBySupervisor, bool isLockedByHQ, 
+        public ChangeUserCommand(Guid publicKey, string email, UserRoles[] roles, bool? isLockedBySupervisor, bool isLockedByHQ, 
             string passwordHash, Guid userId)
             : base(publicKey)
         {
@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.User
 
         public string Email { get; set; }
 
-        public bool IsLockedBySupervisor { get; set; }
+        public bool? IsLockedBySupervisor { get; set; }
 
         public bool IsLockedByHQ { get; set; }
 

@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View.User;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using Newtonsoft.Json;
-using Raven.Abstractions.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
@@ -110,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             else
             {
                 userCommand = new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
-                    userDetails.Roles.ToArray(), userDetails.isLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Password, Guid.Empty);
+                    userDetails.Roles.ToArray(), null, userDetails.IsLockedByHQ, userDetails.Password, Guid.Empty);
             }
 
             this.executeCommand(userCommand);
