@@ -33,15 +33,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                     });
         }
 
-        public void ChangeUser(string email, bool isLockedBySupervisor, bool isLockedByHQ, UserRoles[] roles, string passwordHash, Guid userId)
+        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, UserRoles[] roles, string passwordHash, Guid userId)
         {
             this.ApplyEvent(new UserChanged { Email = email, Roles = roles, PasswordHash = passwordHash});
 
-            if (isLockedBySupervisor && !isUserLockedBySupervisor)
+            if (isLockedBySupervisor.HasValue && isLockedBySupervisor.Value && !isUserLockedBySupervisor)
             {
                 this.ApplyEvent(new UserLockedBySupervisor(userId));
             }
-            else if (!isLockedBySupervisor && isUserLockedBySupervisor)
+            else if (isLockedBySupervisor.HasValue && !isLockedBySupervisor.Value && isUserLockedBySupervisor)
             {
                 this.ApplyEvent(new UserUnlockedBySupervisor(userId));
             }
