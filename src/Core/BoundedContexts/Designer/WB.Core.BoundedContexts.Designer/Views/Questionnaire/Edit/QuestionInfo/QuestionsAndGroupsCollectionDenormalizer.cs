@@ -13,7 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
-    internal class QuestionnsAndGroupsCollectionDenormalizer : AbstractFunctionalEventHandler<QuestionsAndGroupsCollectionView>,
+    internal class QuestionsAndGroupsCollectionDenormalizer : AbstractFunctionalEventHandler<QuestionsAndGroupsCollectionView>,
         ICreateHandler<QuestionsAndGroupsCollectionView, NewQuestionnaireCreated>,
         ICreateHandler<QuestionsAndGroupsCollectionView, QuestionnaireCloned>,
         ICreateHandler<QuestionsAndGroupsCollectionView, TemplateImported>,
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         private readonly IQuestionDetailsFactory questionDetailsFactory;
         private readonly IQuestionFactory questionFactory;
 
-        public QuestionnsAndGroupsCollectionDenormalizer(IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
+        public QuestionsAndGroupsCollectionDenormalizer(IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
             IQuestionDetailsFactory questionDetailsFactory, IQuestionFactory questionFactory)
             : base(readsideRepositoryWriter)
         {
@@ -187,8 +187,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             if (group != null)
             {
                 group.ParentGroupId = evnt.Payload.GroupKey ?? Guid.Empty;
+                UpdateBreadcrumbs(currentState, group, group.Id);
+
+                var descendantGroups = this.GetAllDescendantGroups(currentState, group.Id);
+                descendantGroups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
+
                 var descendantQuestion = this.GetAllDescendantQuestions(currentState, group.Id);
-                descendantQuestion.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
+                descendantQuestion.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
             }
             return currentState;
         }
@@ -363,7 +368,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 .Where(q => q != null)
                 .ToList();
 
-            var groups = questionnaire.GetAllQuestions<Group>()
+            var groups = questionnaire.GetAllGroups()
                 .Select(g => new GroupAndRosterDetailsView
                 {
                     Id = g.PublicKey,
@@ -374,7 +379,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
-                    ParentGroupId = g.GetParent().PublicKey
+                    ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey
                 })
                 .ToList();
 
@@ -384,8 +389,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 Groups = groups
             };
 
-            groups.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
-            questions.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.Id));
+            groups.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.Id));
+            questions.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
 
             return questionCollection;
         }
@@ -446,5 +451,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             currentState.Questions.Add(questionDetailsView);
             return currentState;
         }
+
     }
 }
