@@ -5,121 +5,101 @@
             var urlBase = 'command/execute';
             var commandService = {};
 
-            commandService.addChapter = function(questionnaireId, chapter) {
+            function commandCall(type, command) {
                 return $http({
                     method: 'POST',
                     url: urlBase,
                     data: {
-                        "type": "AddGroup",
-                        "command": JSON.stringify({
-                            "questionnaireId": questionnaireId,
-                            "groupId": chapter.ChapterId,
-                            "title": chapter.Title,
-                            "description": "",
-                            "condition": "",
-                            "isRoster": false,
-                            "rosterSizeQuestionId": null,
-                            "rosterSizeSource": "Question",
-                            "rosterFixedTitles": null,
-                            "rosterTitleQuestionId": null,
-                            "parentGroupId": null
-                        })
+                        "type": type,
+                        "command": JSON.stringify(command)
                     },
                     headers: { 'Content-Type': 'application/json; ' }
                 });
+            }
+
+            commandService.addChapter = function(questionnaireId, chapter) {
+                var command = {
+                    "questionnaireId": questionnaireId,
+                    "groupId": chapter.ChapterId,
+                    "title": chapter.Title,
+                    "description": "",
+                    "condition": "",
+                    "isRoster": false,
+                    "rosterSizeQuestionId": null,
+                    "rosterSizeSource": "Question",
+                    "rosterFixedTitles": null,
+                    "rosterTitleQuestionId": null,
+                    "parentGroupId": null
+                };
+
+                return commandCall("AddGroup", command);
             };
 
             commandService.addGroup = function(questionnaireId, group, parentGroupId) {
-                return $http({
-                    method: 'POST',
-                    url: urlBase,
-                    data: {
-                        "type": "AddGroup",
-                        "command": JSON.stringify({
-                            "questionnaireId": questionnaireId,
-                            "groupId": group.Id,
-                            "title": group.Title,
-                            "description": "",
-                            "condition": "",
-                            "isRoster": false,
-                            "rosterSizeQuestionId": null,
-                            "rosterSizeSource": "Question",
-                            "rosterFixedTitles": null,
-                            "rosterTitleQuestionId": null,
-                            "parentGroupId": parentGroupId
-                        })
-                    },
-                    headers: { 'Content-Type': 'application/json; ' }
-                });
+                var command = {
+                    "questionnaireId": questionnaireId,
+                    "groupId": group.Id,
+                    "title": group.Title,
+                    "description": "",
+                    "condition": "",
+                    "isRoster": false,
+                    "rosterSizeQuestionId": null,
+                    "rosterSizeSource": "Question",
+                    "rosterFixedTitles": null,
+                    "rosterTitleQuestionId": null,
+                    "parentGroupId": parentGroupId
+                };
+
+                return commandCall("AddGroup", command);
             };
 
             commandService.addQuestion = function(questionnaireId, group, newId) {
-                return $http({
-                    method: 'POST',
-                    url: urlBase,
-                    data: {
-                        "type": "AddQuestion",
-                        "command": JSON.stringify({
-                            "questionnaireId": questionnaireId,
-                            "questionId": newId,
-                            "title": "New Question",
-                            "type": "Text",
-                            "variableName": "",
-                            "isPreFilled": false,
-                            "isMandatory": false,
-                            "scope": "Interviewer",
-                            "enablementCondition": "",
-                            "validationExpression": "",
-                            "validationMessage": "",
-                            "instructions": "",
-                            "parentGroupId": group.Id
-                        })
-                    },
-                    headers: { 'Content-Type': 'application/json; ' }
-                });
+                var command = {
+                    "questionnaireId": questionnaireId,
+                    "questionId": newId,
+                    "title": "New Question",
+                    "type": "Text",
+                    "variableName": "",
+                    "isPreFilled": false,
+                    "isMandatory": false,
+                    "scope": "Interviewer",
+                    "enablementCondition": "",
+                    "validationExpression": "",
+                    "validationMessage": "",
+                    "instructions": "",
+                    "parentGroupId": group.Id
+                };
+
+                return commandCall("AddQuestion", command);
             };
 
             commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter, chapterDescription) {
-                return $http({
-                    method: 'POST',
-                    url: urlBase,
-                    data: {
-                        "type": "CloneGroupWithoutChildren",
-                        "command": JSON.stringify({
-                            "questionnaireId": questionnaireId,
-                            "groupId": newId,
-                            "title": chapter.Title,
-                            "description": chapterDescription,
-                            "condition": "",
-                            "isRoster": false,
-                            "rosterSizeQuestionId": null,
-                            "rosterSizeSource": "Question",
-                            "rosterFixedTitles": null,
-                            "rosterTitleQuestionId": null,
-                            "parentGroupId": null,
-                            "sourceGroupId": chapter.ChapterId,
-                            "targetIndex": 1
-                        })
-                    },
-                    headers: { 'Content-Type': 'application/json; ' }
-                });
+                var command = {
+                    "questionnaireId": questionnaireId,
+                    "groupId": newId,
+                    "title": chapter.Title,
+                    "description": chapterDescription,
+                    "condition": "",
+                    "isRoster": false,
+                    "rosterSizeQuestionId": null,
+                    "rosterSizeSource": "Question",
+                    "rosterFixedTitles": null,
+                    "rosterTitleQuestionId": null,
+                    "parentGroupId": null,
+                    "sourceGroupId": chapter.ChapterId,
+                    "targetIndex": 1
+                };
+
+                return commandCall("CloneGroupWithoutChildren", command);
             };
 
             commandService.deleteGroup = function(questionnaireId, chapter) {
-                return $http({
-                    method: 'POST',
-                    url: urlBase,
-                    data: {
-                        "type": "DeleteGroup",
-                        "command": JSON.stringify(
-                            {
-                                "questionnaireId": questionnaireId,
-                                "groupId": chapter.ChapterId
-                            }
-                        )
-                    },
-                    headers: { 'Content-Type': 'application/json;' }
-                });
+                var command = {
+                    "questionnaireId": questionnaireId,
+                    "groupId": chapter.ChapterId
+                };
+
+                return commandCall("DeleteGroup", command);
             };
 
             return commandService;
