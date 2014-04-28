@@ -33,13 +33,15 @@ angular.module('designerApp')
 
         $scope.currentChapterId = null;
 
-        $scope.setItem = function(item) {
-            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + $scope.currentChapterId + '/item/' + item.Id);
+        $scope.setItem = function (item) {
+            var url = utilityService.format('/{0}/chapter/{1}/item/{2}', $routeParams.questionnaireId, $scope.currentChapterId, item.Id);
+            $location.path(url);
             $scope.currentItemId = item.Id;
         };
 
         $scope.changeChapter = function(chapter) {
-            $location.path('/' + $routeParams.questionnaireId + '/chapter/' + chapter.ChapterId);
+            var url = utilityService.format('/{0}/chapter/{1}', $routeParams.questionnaireId, chapter.ChapterId);
+            $location.path(url);
             $scope.currentChapterId = chapter.ChapterId;
             $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
         };
