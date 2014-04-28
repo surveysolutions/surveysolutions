@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         It should_return_not_null_questions_collection_in_result_view = () =>
             newState.Questions.ShouldNotBeNull();
 
-        It should_return_7_items_in_questions_collection = () =>
+        It should_return_6_items_in_questions_collection = () =>
             newState.Questions.Count.ShouldEqual(6);
 
         It should_return_question_N7_with_title_equals_newTitle = () =>
