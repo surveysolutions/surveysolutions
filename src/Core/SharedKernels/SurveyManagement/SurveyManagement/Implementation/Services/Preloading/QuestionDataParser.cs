@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -12,11 +14,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 {
     internal class QuestionDataParser : IQuestionDataParser
     {
-        public KeyValuePair<Guid, object>? Parse(string answer, string variableName, Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
+        public KeyValuePair<Guid, object>? Parse(string answer, string variableName, QuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrEmpty(answer))
                 return null;
-            var question = getQuestionByStataCaption(variableName);
+            var question = GetQuestionByVariableName(questionnaire, variableName);
             if (question == null)
                 return null;
             if (question.LinkedToQuestionId.HasValue)
@@ -71,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         decimal answerValue;
                         if (!decimal.TryParse(answer, out answerValue))
                             break;
-                        if (!getAnswerOptionsAsValues(question.PublicKey).Contains(answerValue))
+                        if (!GetAnswerOptionsAsValues(question).Contains(answerValue))
                             break;
                         return new KeyValuePair<Guid, object>(question.PublicKey, answerValue);
                     }
@@ -84,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         decimal answerValue;
                         if (!decimal.TryParse(answer, out answerValue))
                             break;
-                        if (!getAnswerOptionsAsValues(question.PublicKey).Contains(answerValue))
+                        if (!GetAnswerOptionsAsValues(question).Contains(answerValue))
                             break;
                         return new KeyValuePair<Guid, object>(question.PublicKey, answerValue);
                     }
@@ -94,38 +96,59 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return null;
         }
 
-        public KeyValuePair<Guid, object>? BuildAnswerForVariableName(string[] answers, KeyValuePair<string, int[]> columnIndexesForVariableName,
-            Func<string, IQuestion> getQuestionByStataCaption,
-            Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
+        public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(string[] answers, string variableName, QuestionnaireDocument questionnaire)
         {
             var typedAnswers = new List<object>();
-            foreach (var answerIndex in columnIndexesForVariableName.Value)
+
+            foreach (var answer in answers)
             {
-                var answer = answers[answerIndex];
-                if (string.IsNullOrEmpty(answer))
-                    continue;
-                var parsedAnswer = Parse(answer, columnIndexesForVariableName.Key, getQuestionByStataCaption,
-                    getAnswerOptionsAsValues);
+                var parsedAnswer = Parse(answer, variableName, questionnaire);
                 if (!parsedAnswer.HasValue)
                     continue;
                 typedAnswers.Add(parsedAnswer.Value.Value);
             }
+
             if (typedAnswers.Count == 0)
                 return null;
 
-            var question = getQuestionByStataCaption(columnIndexesForVariableName.Key);
+            var question = GetQuestionByVariableName(questionnaire, variableName);
             if (question == null)
                 return null;
+
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.Select(a => (decimal) a).ToArray());
+                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.Select(a => (decimal)a).ToArray());
                 case QuestionType.TextList:
                     return new KeyValuePair<Guid, object>(question.PublicKey,
-                        typedAnswers.Select((a, i) => new Tuple<decimal, string>(i + 1, (string) a)).ToArray());
+                        typedAnswers.Select((a, i) => new Tuple<decimal, string>(i + 1, (string)a)).ToArray());
                 default:
                     return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.First());
             }
+        }
+
+        private IQuestion GetQuestionByVariableName(QuestionnaireDocument questionnaire, string variableName)
+        {
+            return questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption.Equals(variableName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private decimal[] GetAnswerOptionsAsValues(IQuestion question)
+        {
+            return
+                question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue))
+                    .Where(o => o.HasValue)
+                    .Select(o => o.Value)
+                    .ToArray();
+        }
+
+        private decimal? ParseAnswerOptionValueOrThrow(string value)
+        {
+            decimal parsedValue;
+
+            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
+                return null;
+
+            return parsedValue;
         }
     }
 }
