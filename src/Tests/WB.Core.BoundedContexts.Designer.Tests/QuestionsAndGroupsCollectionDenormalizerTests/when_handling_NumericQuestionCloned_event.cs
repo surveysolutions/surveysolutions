@@ -13,61 +13,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDenormalizerTests
 {
-    internal class when_handling_QRBarcodeQuestionCloned_event : QuestionsAndGroupsCollectionViewInitializer
-    {
-        Establish context = () =>
-        {
-            InitializePreviousState();
-            questionDetailsFactoryMock = new Mock<IQuestionDetailsFactory>();
-            questionDetailsFactoryMock
-                .Setup(x => x.CreateQuestion(Moq.It.IsAny<IQuestion>(), Moq.It.IsAny<Guid>()))
-                .Returns((IQuestion q, Guid p) => new NumericDetailsView
-                {
-                    Id = q.PublicKey,
-                    ParentGroupId = p
-                });
-
-            questionFactoryMock = new Mock<IQuestionFactory>();
-            questionFactoryMock
-                .Setup(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()))
-                .Returns((QuestionData q) => new TextQuestion { PublicKey = q.PublicKey });
-
-            evnt = CreateQRBarcodeQuestionClonedEvent(questionId, parentGroupId: g3Id);
-
-            denormalizer = CreateQuestionnaireInfoDenormalizer(
-                questionDetailsFactory: questionDetailsFactoryMock.Object,
-                questionFactory: questionFactoryMock.Object);
-        };
-
-        Because of = () =>
-            newState = denormalizer.Update(previousState, evnt);
-
-        It should_return_not_null_view = () =>
-            newState.ShouldNotBeNull();
-
-        It should_return_not_null_questions_collection_in_result_view = () =>
-            newState.Questions.ShouldNotBeNull();
-
-        It should_return_7_items_in_questions_collection = () =>
-            newState.Questions.Count.ShouldEqual(7);
-
-        It should_return_question_N7_with_parent_id_equals_g3Id = () =>
-            newState.Questions.Single(x => x.Id == questionId).ParentGroupId.ShouldEqual(g3Id);
-
-        It should_return_question_N7_with_parent_group_ids_contains_only_g3Id_g2Id_g1Id = () =>
-            newState.Questions.Single(x => x.Id == questionId).ParentGroupsIds.ShouldContainOnly(g3Id, g2Id, g1Id);
-
-        It should_return_question_N7_with_roster_scope_ids_contains_only_g3Id_q2Id = () =>
-            newState.Questions.Single(x => x.Id == questionId).RosterScopeIds.ShouldContainOnly(g3Id, q2Id);
-
-        private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
-        private static IPublishedEvent<QRBarcodeQuestionCloned> evnt;
-        private static QuestionsAndGroupsCollectionView newState = null;
-        private static Mock<IQuestionDetailsFactory> questionDetailsFactoryMock = null;
-        private static Mock<IQuestionFactory> questionFactoryMock;
-        private static Guid questionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-    }
-
     internal class when_handling_NumericQuestionCloned_event : QuestionsAndGroupsCollectionViewInitializer
     {
         Establish context = () =>
