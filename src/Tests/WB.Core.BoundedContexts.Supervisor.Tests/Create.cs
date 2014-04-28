@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
         {
             return new UserChangedFeedReader(settings ?? HeadquartersSettings(), 
                 messageHandler ?? Substitute.For<HttpMessageHandler>(),
-                new SynchronizationContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>()));
+                new HeadquartersPullContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>()));
         }
 
         public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null, 

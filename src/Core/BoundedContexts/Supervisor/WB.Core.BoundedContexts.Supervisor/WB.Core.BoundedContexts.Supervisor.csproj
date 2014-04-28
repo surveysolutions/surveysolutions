@@ -93,6 +93,8 @@
     <Compile Include="Synchronization\Atom\AtomFeedEntry.cs" />
     <Compile Include="Synchronization\Atom\Link.cs" />
     <Compile Include="Synchronization\BackgroundSyncronizationTasks.cs" />
+    <Compile Include="Synchronization\HeadquartersPushContext.cs" />
+    <Compile Include="Synchronization\HeadquartersSynchronizationContext.cs" />
     <Compile Include="Synchronization\ILocalFeedStorage.cs" />
     <Compile Include="Synchronization\ILocalUserFeedProcessor.cs" />
     <Compile Include="Synchronization\Implementation\Constants.cs" />
@@ -108,7 +110,7 @@
     <Compile Include="Synchronization\ISynchronizer.cs" />
     <Compile Include="Synchronization\LocalUserChangedFeedEntry.cs" />
     <Compile Include="Synchronization\SchedulerSettings.cs" />
-    <Compile Include="Synchronization\SynchronizationContext.cs" />
+    <Compile Include="Synchronization\HeadquartersPullContext.cs" />
     <Compile Include="Synchronization\SynchronizationStatus.cs" />
     <Compile Include="Users\IHeadquartersLoginService.cs" />
     <Compile Include="Users\IHeadquartersUserReader.cs" />

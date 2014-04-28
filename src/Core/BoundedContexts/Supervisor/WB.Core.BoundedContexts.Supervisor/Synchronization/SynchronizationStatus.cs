@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         public DateTime? StartedAt { get; set; }
         public DateTime? StartedAtUtc { get; set; }
         public bool? IsHqReachable { get; set; }
-        public DateTime? FinisedAt { get; set; }
+        public DateTime? FinishedAt { get; set; }
         public DateTime? FinishedAtUtc { get; set; }
         public int ErrorsCount { get; set; }
     }
