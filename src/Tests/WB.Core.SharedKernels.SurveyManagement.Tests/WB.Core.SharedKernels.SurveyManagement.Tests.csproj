@@ -82,6 +82,30 @@
     <Compile Include="PreloadingTemplateServiceTests\when_questionnaire_has_2_levels_and_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_questionnaire_is_missing_and_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionDataParserTests\QuestionDataParserTestContext.cs" />
+    <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_multy_option_qustion.cs" />
+    <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_numeric_qustion.cs" />
+    <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_textlist_qustion.cs" />
+    <Compile Include="QuestionDataParserTests\when_parsing_empty_string_as_an_answer.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question_and_answer_cant_be_parsed.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_datetime_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_cant_be_parsed.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_geolocation_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_geolocation_question_which_cant_be_parsed.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_linked_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_multy_option_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_multy_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_multy_option_question_and_answer_cant_is_not_decimal.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_nonexistent_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_int_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_question_and_answer_cant_be_parsed.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_cant_be_parsed.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_is_not_decimal.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_text_question.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
