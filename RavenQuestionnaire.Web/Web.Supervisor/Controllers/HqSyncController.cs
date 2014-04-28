@@ -11,15 +11,17 @@ namespace Web.Supervisor.Controllers
     [Authorize(Roles = "Supervisor")]
     public class HqSyncController : BaseController
     {
-        private readonly SynchronizationContext synchronizationContext;
+        private readonly HeadquartersPullContext headquartersPullContext;
+        private readonly HeadquartersPushContext headquartersPushContext;
         private readonly IScheduler scheduler;
         private readonly ISynchronizer synchronizer;
         private readonly IGlobalInfoProvider globalInfoProvider;
 
-        public HqSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, SynchronizationContext synchronizationContext, IScheduler scheduler, ISynchronizer synchronizer, IGlobalInfoProvider globalInfoProvider)
+        public HqSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, HeadquartersPullContext headquartersPullContext, HeadquartersPushContext headquartersPushContext, IScheduler scheduler, ISynchronizer synchronizer, IGlobalInfoProvider globalInfoProvider)
             : base(commandService, globalInfo, logger)
         {
-            this.synchronizationContext = synchronizationContext;
+            this.headquartersPullContext = headquartersPullContext;
+            this.headquartersPushContext = headquartersPushContext;
             this.scheduler = scheduler;
             this.synchronizer = synchronizer;
             this.globalInfoProvider = globalInfoProvider;
@@ -47,20 +49,31 @@ namespace Web.Supervisor.Controllers
             return Json(new object());
         }
 
-        public ActionResult SynchronizationStatus()
+        public ActionResult PullStatus()
         {
             return Json(new
             {
-                Status = this.synchronizationContext.GetStatus(),
-                Messages = this.synchronizationContext.GetMessages(),
-                Errors = this.synchronizationContext.GetErrors(),
-                IsRunning = this.synchronizationContext.IsRunning,
+                Status = this.headquartersPullContext.GetStatus(),
+                Messages = this.headquartersPullContext.GetMessages(),
+                Errors = this.headquartersPullContext.GetErrors(),
+                IsRunning = this.headquartersPullContext.IsRunning,
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PushStatus()
+        {
+            return Json(new
+            {
+                Status = this.headquartersPushContext.GetStatus(),
+                Messages = this.headquartersPushContext.GetMessages(),
+                Errors = this.headquartersPushContext.GetErrors(),
+                IsRunning = this.headquartersPushContext.IsRunning,
             }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetSyncStatus()
         {
-            SynchronizationStatus synchronizationStatus = this.synchronizationContext.GetPersistedStatus();
+            SynchronizationStatus synchronizationStatus = this.headquartersPullContext.GetPersistedStatus();
 
             var result = synchronizationStatus ?? new SynchronizationStatus();
             return Json(result, JsonRequestBehavior.AllowGet);

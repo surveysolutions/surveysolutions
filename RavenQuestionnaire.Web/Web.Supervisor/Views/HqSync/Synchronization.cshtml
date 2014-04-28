@@ -15,7 +15,7 @@
             <button class="btn btn-default" id="synchnizationStart" data-bind="disable: syncronizationRunning, click: StartPull">
                 Pull
             </button>
-            <button class="btn btn-default" data-bind="click: StartPush">
+            <button class="btn btn-default" data-bind="disable: syncronizationRunning, click: StartPush">
                 Push
             </button>
         </div>
@@ -23,18 +23,37 @@
     <div class="row-fluid">
         <div class="span12">
             <h4>
-                Synchronization status
+                Pull status
             </h4>
         </div>
         <div class="span6">
             <h5>Messages</h5>
-            <div id="messages" class="well well-small" data-bind="foreach: Messages" style="overflow-y: scroll">
+            <div id="messages" class="well well-small" data-bind="foreach: PullMessages" style="overflow-y: scroll">
                 <p data-bind="text: $data"></p>
             </div>
         </div>
         <div class="span5">
             <h5>Errors</h5>
-            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: Errors">
+            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: PullErrors">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <h4>
+                Push status
+            </h4>
+        </div>
+        <div class="span6">
+            <h5>Messages</h5>
+            <div id="messages" class="well well-small" data-bind="foreach: PushMessages" style="overflow-y: scroll">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+        <div class="span5">
+            <h5>Errors</h5>
+            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: PushErrors">
                 <p data-bind="text: $data"></p>
             </div>
         </div>
@@ -46,9 +65,14 @@
         function SynchronizationViewModel() {
             var self = this;
 
-            self.Messages = ko.observableArray([]);
-            self.Errors = ko.observableArray([]);
-            self.syncronizationRunning = ko.observable(true);
+            self.PullMessages = ko.observableArray([]);
+            self.PullErrors = ko.observableArray([]);
+            self.pullRunning = ko.observable(true);
+            self.PushMessages = ko.observableArray([]);
+            self.PushErrors = ko.observableArray([]);
+            self.pushRunning = ko.observable(true);
+
+            self.syncronizationRunning = ko.computed(function() { return self.pullRunning() || self.pushRunning(); });
 
             self.StartPull = function() {
                 self.syncronizationRunning(true);
@@ -62,12 +86,21 @@
 
             self.RefreshStatus = function() {
                 $.ajax({
-                    url: '@Url.Action("SynchronizationStatus", "HqSync")',
+                    url: '@Url.Action("PullStatus", "HqSync")',
                     cache: false,
                     success: function(status) {
-                        self.syncronizationRunning(status.IsRunning);
-                        self.Messages(status.Messages);
-                        self.Errors(status.Errors);
+                        self.pullRunning(status.IsRunning);
+                        self.PullMessages(status.Messages);
+                        self.PullErrors(status.Errors);
+                    }
+                });
+                $.ajax({
+                    url: '@Url.Action("PushStatus", "HqSync")',
+                    cache: false,
+                    success: function (status) {
+                        self.pushRunning(status.IsRunning);
+                        self.PushMessages(status.Messages);
+                        self.PushErrors(status.Errors);
                     }
                 });
             }
