@@ -38,11 +38,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
         public void Handle(IPublishableEvent evt, IReadSideRepositoryWriter<T> storage)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
-            
+
             if (this.IsUpgrader(evt))
             {
                 T currentState = this.GetViewById(evt.EventSourceId, storage);
-                var newState = (T)this.GetType().GetMethod("Update", new [] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                var newState = (T)this.GetType().GetMethod("Update", new[] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
 
                 if (newState != null)
                 {
@@ -60,7 +60,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             {
                 var newObject =
                     (T)this.GetType()
-                        .GetMethod("Create", new [] { eventType })
+                        .GetMethod("Create", new[] { eventType })
                         .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
                 this.SaveView(evt.EventSourceId, newObject, storage);
                 return;
@@ -73,6 +73,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
                 var newState = (T)methodInfo.Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
                 this.SaveView(evt.EventSourceId, newState, storage);
             }
+        }
+
+        private void RemoveView(Guid id, IReadSideRepositoryWriter<T> storage)
+        {
+            storage.Remove(id);
         }
 
         public void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
