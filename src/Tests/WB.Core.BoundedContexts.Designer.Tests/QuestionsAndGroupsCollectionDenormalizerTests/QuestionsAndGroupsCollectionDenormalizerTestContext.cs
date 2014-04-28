@@ -47,23 +47,27 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
-        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId,
-            string title = "New Group X")
+        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title)
         {
             return ToPublishedEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
                 GroupText = title,
+                ParentGroupPublicKey = parentGroupId,
+                Description = description,
+                ConditionExpression = enablementCondition
             });
         }
 
-        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId,
-            string title = "New Cloned Group X")
+        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title)
         {
             return ToPublishedEvent(new GroupCloned
             {
                 PublicKey = groupId,
                 GroupText = title,
+                ParentGroupPublicKey = parentGroupId,
+                Description = description,
+                ConditionExpression = enablementCondition
             });
         }
 
@@ -119,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid? rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             return
                 ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
@@ -231,7 +235,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
-        
+        protected static IPublishedEvent<QuestionnaireDeleted> CreateQuestionnaireDeletedEvent()
+        {
+            return ToPublishedEvent(new QuestionnaireDeleted
+            {
+            });
+        }
+
         protected static IPublishedEvent<NewQuestionnaireCreated> CreateNewQuestionnaireCreatedEvent()
         {
             return ToPublishedEvent(new NewQuestionnaireCreated

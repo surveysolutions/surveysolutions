@@ -13,38 +13,37 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
-    internal class QuestionsAndGroupsCollectionDenormalizer : AbstractFunctionalEventHandler<QuestionsAndGroupsCollectionView>,
-        ICreateHandler<QuestionsAndGroupsCollectionView, NewQuestionnaireCreated>,
-        ICreateHandler<QuestionsAndGroupsCollectionView, QuestionnaireCloned>,
-        ICreateHandler<QuestionsAndGroupsCollectionView, TemplateImported>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, NewQuestionAdded>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionChanged>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionCloned>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionDeleted>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionAdded>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionChanged>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionCloned>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionAdded>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionChanged>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionCloned>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionAdded>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionUpdated>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionCloned>,
-        IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireItemMoved>
+    internal class QuestionsAndGroupsCollectionDenormalizer : AbstractFunctionalEventHandler<QuestionsAndGroupsCollectionView>
+        , ICreateHandler<QuestionsAndGroupsCollectionView, NewQuestionnaireCreated>
+        , ICreateHandler<QuestionsAndGroupsCollectionView, QuestionnaireCloned>
+        , ICreateHandler<QuestionsAndGroupsCollectionView, TemplateImported>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, NewQuestionAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionChanged>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionDeleted>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionChanged>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionChanged>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionUpdated>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireItemMoved>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NewGroupAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupDeleted>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupCloned>
-        , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupBecameARoster>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, RosterChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupStoppedBeingARoster>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupUpdated>
-
-        //,IDeleteHandler<QuestionDetailsCollectionView, QuestionnaireDeleted>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireDeleted>
     {
         private readonly IQuestionDetailsFactory questionDetailsFactory;
         private readonly IQuestionFactory questionFactory;
 
-        public QuestionsAndGroupsCollectionDenormalizer(IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
+        public QuestionsAndGroupsCollectionDenormalizer(
+            IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
             IQuestionDetailsFactory questionDetailsFactory, IQuestionFactory questionFactory)
             : base(readsideRepositoryWriter)
         {
@@ -59,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public override Type[] BuildsViews
         {
-            get { return base.BuildsViews.Union(new[] { typeof(QuestionsAndGroupsCollectionView) }).ToArray(); }
+            get { return base.BuildsViews.Union(new[] { typeof (QuestionsAndGroupsCollectionView) }).ToArray(); }
         }
 
         public QuestionsAndGroupsCollectionView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -96,49 +95,57 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NumericQuestionAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<NumericQuestionAdded> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NumericQuestionChanged> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<NumericQuestionChanged> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NumericQuestionCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<NumericQuestionCloned> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<TextListQuestionAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<TextListQuestionAdded> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<TextListQuestionCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<TextListQuestionCloned> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<TextListQuestionChanged> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<TextListQuestionChanged> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QRBarcodeQuestionAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<QRBarcodeQuestionAdded> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
             IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
@@ -153,9 +160,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionDeleted> evnt)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.QuestionId);
@@ -163,11 +170,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireItemMoved> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             if (evnt.Payload.GroupKey == null)
@@ -202,19 +210,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description, evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description,
+                evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupCloned> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description, evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description,
+                evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupDeleted> evnt)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var shouldBeDeletedGroups = GetAllDescendantGroups(currentState, evnt.Payload.GroupPublicKey);
@@ -226,31 +236,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupBecameARoster> evnt)
-        {
-            if (currentState == null)
-            {
-                return null;
-            }
-            var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupId);
-            if (group == null)
-                return currentState;
-            group.IsRoster = true;
-
-            return currentState;
-        }
-
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<RosterChanged> evnt)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupId);
             if (group == null)
                 return currentState;
 
+            group.IsRoster = true;
             group.RosterSizeQuestionId = evnt.Payload.RosterSizeQuestionId;
             group.RosterSizeSourceType = evnt.Payload.RosterSizeSource;
             group.RosterFixedTitles = evnt.Payload.RosterFixedTitles;
@@ -264,11 +261,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupStoppedBeingARoster> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<GroupStoppedBeingARoster> evnt)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupId);
@@ -276,7 +274,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return currentState;
 
             group.IsRoster = false;
-            group.RosterSizeQuestionId = Guid.Empty;
+            group.RosterSizeQuestionId = null;
+            group.RosterFixedTitles = null;
+            group.RosterTitleQuestionId = null;
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
             var questions = this.GetAllDescendantQuestions(currentState, evnt.Payload.GroupId);
@@ -288,9 +288,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupUpdated> evnt)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupPublicKey);
@@ -299,7 +299,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             group.Title = evnt.Payload.GroupText;
             group.Description = evnt.Payload.Description;
+            group.EnablementCondition = evnt.Payload.ConditionExpression;
 
+            return currentState;
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            if (currentState == null)
+            {
+                return null;
+            }
+            currentState.IsDeleted = true;
+            currentState.Questions.Clear();
+            currentState.Groups.Clear();
             return currentState;
         }
 
@@ -395,11 +408,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return questionCollection;
         }
 
-        private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState, Guid groupId, string title, string description, string enablementCondition, Guid parentGroupId)
+        private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState,
+            Guid groupId, string title, string description, string enablementCondition, Guid parentGroupId)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var group = new GroupAndRosterDetailsView
@@ -419,11 +433,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
-        private QuestionsAndGroupsCollectionView UpdateStateWithAddedQuestion(QuestionsAndGroupsCollectionView currentState, Guid parentGroupId, IQuestion question)
+        private QuestionsAndGroupsCollectionView UpdateStateWithAddedQuestion(QuestionsAndGroupsCollectionView currentState,
+            Guid parentGroupId, IQuestion question)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var questionDetailsView = this.questionDetailsFactory.CreateQuestion(question, parentGroupId);
@@ -432,11 +447,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
-        private QuestionsAndGroupsCollectionView UpdateStateWithUpdatedQuestion(QuestionsAndGroupsCollectionView currentState, IQuestion question)
+        private QuestionsAndGroupsCollectionView UpdateStateWithUpdatedQuestion(QuestionsAndGroupsCollectionView currentState,
+            IQuestion question)
         {
-            if (currentState == null)
+            if (currentState == null || currentState.IsDeleted)
             {
-                return null;
+                return currentState;
             }
 
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == question.PublicKey);
@@ -452,5 +468,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
+       
     }
 }
