@@ -75,8 +75,10 @@
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_questionnaire_is_absent.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_empty_id_cell.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_id_dublicats.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_inconsistent_roster_row.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_no_id_and_parent_columns.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_orphan_roster_data.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_roster_row_with_invalid_id.cs" />
     <Compile Include="PreloadingTemplateServiceTests\PreloadingTemplateServiceTestContext.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_archive_were_build_before_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_questionnaire_has_2_levels_and_GetFilePathToPreloadingTemplate_called.cs" />
