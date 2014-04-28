@@ -424,6 +424,16 @@
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_propagating_questions.cs" />
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties.cs" />
     <Compile Include="ChapterInfoViewFactoryTests\ChapterInfoViewFactoryContext.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\QuestionnaireInfoFactoryTestContext.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_group_edit_view.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_group_edit_view_and_group_is_absent.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_group_edit_view_and_questionnaire_is_absent.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_question_edit_view.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_question_edit_view_and_questionnaire_is_absent.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_question_edit_view_and_question_is_absent.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_roster_edit_view.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_roster_edit_view_and_questionnaire_is_absent.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_roster_edit_view_and_roster_is_absent.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\QuestionsAndGroupsCollectionDenormalizerTestContext.cs" />
     <Compile Include="ChapterInfoViewFactoryTests\when_loading_view_and_chapter_exists.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\QuestionnaireInfoViewDenormalizerTestContext.cs" />

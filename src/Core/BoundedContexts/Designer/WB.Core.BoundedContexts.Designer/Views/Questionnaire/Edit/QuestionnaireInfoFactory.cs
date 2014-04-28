@@ -159,7 +159,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private string GetBreadcrumbsAsString(QuestionsAndGroupsCollectionView questionsCollection, QuestionDetailsView question)
         {
-            return string.Join(" / ", question.ParentGroupsIds.Select(x => questionsCollection.Groups.Single(g => g.Id == x).Title));
+            return string.Join(" / ", question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x).Title));
         }
     }
 }
