@@ -15,19 +15,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     internal class UserChangedFeedReader : IUserChangedFeedReader
     {
         private readonly HeadquartersSettings headquartersSettings;
-        private readonly SynchronizationContext synchronizationContext;
+        private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IAtomFeedReader atomReader;
 
         public UserChangedFeedReader(HeadquartersSettings headquartersSettings, 
             HttpMessageHandler messageHandler,
-            SynchronizationContext synchronizationContext)
+            HeadquartersPullContext headquartersPullContext)
         {
             if (headquartersSettings == null) throw new ArgumentNullException("headquartersSettings");
             if (messageHandler == null) throw new ArgumentNullException("messageHandler");
-            if (synchronizationContext == null) throw new ArgumentNullException("synchronizationContext");
+            if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
 
             this.headquartersSettings = headquartersSettings;
-            this.synchronizationContext = synchronizationContext;
+            this.headquartersPullContext = headquartersPullContext;
             this.atomReader = new AtomFeedReader(messageHandler, headquartersSettings);
         }
 
@@ -37,14 +37,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             {
                 string lastStoredEntryId = lastStoredFeedEntry != null ? lastStoredFeedEntry.EntryId : null;
 
-                synchronizationContext.PushMessage(string.Format("Reading users feed from URL: {0}", this.headquartersSettings.UserChangedFeedUrl));
+                this.headquartersPullContext.PushMessage(string.Format("Reading users feed from URL: {0}", this.headquartersSettings.UserChangedFeedUrl));
 
                 IEnumerable<AtomFeedEntry<LocalUserChangedFeedEntry>> feedEntries = 
                     await atomReader.ReadAfterAsync<LocalUserChangedFeedEntry>(this.headquartersSettings.UserChangedFeedUrl, lastStoredEntryId)
                         .ConfigureAwait(false);
 
-                this.synchronizationContext.MarkHqAsReachable();
-                synchronizationContext.PushMessage(string.Format("Received {0} events from feed {1}", feedEntries.Count(), this.headquartersSettings.UserChangedFeedUrl));
+                this.headquartersPullContext.MarkHqAsReachable();
+                this.headquartersPullContext.PushMessage(string.Format("Received {0} events from feed {1}", feedEntries.Count(), this.headquartersSettings.UserChangedFeedUrl));
 
                 var result = from f in feedEntries
                     select new LocalUserChangedFeedEntry(f.Content.SupervisorId, f.Content.EntryId)
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
             catch (HttpRequestException)
             {
-                this.synchronizationContext.MarkHqAsUnReachable();
+                this.headquartersPullContext.MarkHqAsUnReachable();
                 throw;
             }
         }

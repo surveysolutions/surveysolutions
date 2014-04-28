@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly IHeadquartersInterviewReader headquartersInterviewReader;
-        private readonly SynchronizationContext synchronizationContext;
+        private readonly HeadquartersPullContext headquartersPullContext;
+        private readonly HeadquartersPushContext headquartersPushContext;
         private readonly IEventStore eventStore;
         private readonly IJsonUtils jsonUtils;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
@@ -58,7 +59,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IHeadquartersQuestionnaireReader headquartersQuestionnaireReader,
             IHeadquartersInterviewReader headquartersInterviewReader,
-            SynchronizationContext synchronizationContext,
+            HeadquartersPullContext headquartersPullContext,
+            HeadquartersPushContext headquartersPushContext,
             IEventStore eventStore,
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
@@ -73,7 +75,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (plainQuestionnaireRepository == null) throw new ArgumentNullException("plainQuestionnaireRepository");
             if (headquartersQuestionnaireReader == null) throw new ArgumentNullException("headquartersQuestionnaireReader");
             if (headquartersInterviewReader == null) throw new ArgumentNullException("headquartersInterviewReader");
-            if (synchronizationContext == null) throw new ArgumentNullException("synchronizationContext");
+            if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
+            if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
             if (eventStore == null) throw new ArgumentNullException("eventStore");
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
@@ -88,7 +91,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.headquartersQuestionnaireReader = headquartersQuestionnaireReader;
             this.headquartersInterviewReader = headquartersInterviewReader;
-            this.synchronizationContext = synchronizationContext;
+            this.headquartersPullContext = headquartersPullContext;
+            this.headquartersPushContext = headquartersPushContext;
             this.eventStore = eventStore;
             this.jsonUtils = jsonUtils;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
@@ -106,7 +110,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 IEnumerable<LocalInterviewFeedEntry> events = 
                     this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.PublicKey.FormatGuid() && !x.Processed));
 
-                this.synchronizationContext.PushMessage(string.Format("Synchronizing interviews for supervisor '{0}'. Events count: {1}", localSupervisor.UserName, events.Count()));
+                this.headquartersPullContext.PushMessage(string.Format("Synchronizing interviews for supervisor '{0}'. Events count: {1}", localSupervisor.UserName, events.Count()));
                 
                 foreach (var interviewFeedEntry in events)
                 {
@@ -175,17 +179,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void Push(Guid userId)
         {
+            this.headquartersPushContext.PushMessage("Getting interviews to be pushed.");
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
+            this.headquartersPushContext.PushMessage(string.Format("Found {0} interviews to push.", interviewsToPush.Count));
 
-            foreach (var interviewId in interviewsToPush)
+            for (int interviewIndex = 0; interviewIndex < interviewsToPush.Count; interviewIndex++)
             {
+                var interviewId = interviewsToPush[interviewIndex];
+
                 try
                 {
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(), interviewIndex, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
+                    this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
                     this.logger.Error(string.Format("Failed to push interview {0} to Headquarters.", interviewId.FormatGuid()), exception);
+                    this.headquartersPushContext.PushError(string.Format("Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
+                        interviewId.FormatGuid(), exception.Message, string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
             }
         }
@@ -194,7 +206,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void MarkAsProcessedWithError(LocalInterviewFeedEntry interviewFeedEntry, Exception ex)
         {
             interviewFeedEntry.ProcessedWithError = true;
-            this.synchronizationContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}",
+            this.headquartersPullContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}",
                 interviewFeedEntry.EntryId, ex.Message, string.Join(Environment.NewLine, ex.UnwrapAllInnerExceptions().Select(x => x.Message))));
         }
 
@@ -203,7 +215,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireId, questionnaireVersion))
                 return;
 
-            this.synchronizationContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnareUri));
+            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnareUri));
             QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
@@ -219,7 +231,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void CreateOrUpdateInterviewFromHeadquarters(Uri interviewUri, string supervisorId, string userId)
         {
-            this.synchronizationContext.PushMessage(string.Format("Loading interview using {0} URL", interviewUri));
+            this.headquartersPullContext.PushMessage(string.Format("Loading interview using {0} URL", interviewUri));
             InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
 
             var userIdGuid = Guid.Parse(userId);
@@ -244,7 +256,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 this.feedReader
                     .ReadAfterAsync<LocalInterviewFeedEntry>(this.settings.InterviewsFeedUrl, lastStoredEntry)
                     .Result;
-            this.synchronizationContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count(), this.settings.InterviewsFeedUrl));
+            this.headquartersPullContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count(), this.settings.InterviewsFeedUrl));
 
             var newEvents = new List<LocalInterviewFeedEntry>();
             foreach (AtomFeedEntry<LocalInterviewFeedEntry> remoteEvent in remoteEvents)

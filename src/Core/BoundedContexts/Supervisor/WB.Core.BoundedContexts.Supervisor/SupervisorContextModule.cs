@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IHeadquartersQuestionnaireReader>().To<HeadquartersQuestionnaireReader>();
             this.Bind<IHeadquartersInterviewReader>().To<HeadquartersInterviewReader>();
             this.Bind<IAtomFeedReader>().To<AtomFeedReader>();
-            this.Bind<SynchronizationContext>().ToSelf().InSingletonScope();
+            this.Bind<HeadquartersPullContext>().ToSelf().InSingletonScope();
+            this.Bind<HeadquartersPushContext>().ToSelf().InSingletonScope();
             this.Bind<SchedulerSettings>().ToConstant(this.schedulerSettings);
             this.Bind<BackgroundSyncronizationTasks>().ToSelf();
 
