@@ -38,7 +38,9 @@ namespace Main.Core.Entities.SubEntities
         {
             if (string.IsNullOrEmpty(value))
                 return null;
-
+            var indexOfSquareBracket = value.IndexOf('[');
+            if (indexOfSquareBracket < 0)
+                return null;
             var subStringWithCoordinates = value.Substring(0, value.IndexOf('['));
             if(string.IsNullOrEmpty(subStringWithCoordinates))
                 return null;
