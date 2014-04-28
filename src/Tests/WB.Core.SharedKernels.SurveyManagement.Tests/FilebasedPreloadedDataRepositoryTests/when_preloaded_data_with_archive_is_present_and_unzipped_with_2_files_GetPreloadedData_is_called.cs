@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName + ".zip" });
             fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName});
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(archiveName))
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId + "\\Unzipped"))
                 .Returns(new string[] { "1.csv", "2.csv" });
             archiveUtils=new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(true);
