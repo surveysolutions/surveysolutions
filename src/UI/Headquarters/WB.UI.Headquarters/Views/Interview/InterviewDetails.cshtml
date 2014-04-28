@@ -257,8 +257,8 @@
                 @if (((Model.InterviewStatus == InterviewStatus.Completed || Model.InterviewStatus == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
                     || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
                 {
-                <button class="btn btn-success  btn-xs" data-bind="click: showApproveModal">Approve</button>
-                <button class="btn btn-danger  btn-xs" data-bind="click: showRejectModal">Reject</button>
+                <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
+                <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
                 }
                 <a href="#/all" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
                 <a href="#/flaged" class="btn btn-default  btn-xs" data-bind="css: { 'btn-primary': filter() == 'flaged' }">
@@ -365,7 +365,7 @@
                     <label for="commentBox">Your comment</label>
                     <textarea id="commentBox" data-bind="value: $root.currentComment, valueUpdate: 'afterkeydown'" class="form-control"></textarea>
                 </div>
-                <button class="btn" type="button" data-bind="click: $root.addComment, disable: $root.currentComment() == ''">Add comment</button>
+                <button class="btn btn-default" type="button" data-bind="click: $root.addComment, disable: $root.currentComment() == ''">Add comment</button>
             </div>
         </div>
     </div>

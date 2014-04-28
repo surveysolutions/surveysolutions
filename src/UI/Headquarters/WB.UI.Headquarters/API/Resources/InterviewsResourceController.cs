@@ -38,7 +38,10 @@ namespace WB.UI.Headquarters.API.Resources
             InterviewSynchronizationDto interviewSynchronizationDto = 
                 factory.BuildFrom(document);
 
-            var result = Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto);
+            var result = Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto, new JsonNetFormatter(new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            }));
 
             return result;
         }
