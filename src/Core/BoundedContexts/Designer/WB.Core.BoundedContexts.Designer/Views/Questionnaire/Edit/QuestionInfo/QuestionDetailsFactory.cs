@@ -71,6 +71,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         private CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
         {
+            if (answers == null)
+                return null;
             return EventConverter.GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
             {
                 Title = x.AnswerText,

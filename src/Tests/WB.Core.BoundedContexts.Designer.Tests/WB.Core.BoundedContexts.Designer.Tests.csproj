@@ -369,6 +369,15 @@
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="PdfTests\PdfQuestionViewTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\QuestionDetailsFactoryTestContext.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_datetime_question_details_view.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_geo_location_details_view.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_multi_option_details_view.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_numeric_question_details_view.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_qr_barcode_question_details_view.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_single_option_details_view.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_text_list_question_details_view.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_text_question_details_view.cs" />
     <Compile Include="QuestionFactoryTests\QuestionFactoryTestContext.cs" />
     <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__QRBarcode__.cs" />
     <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__Text__.cs" />
