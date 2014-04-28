@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             Dictionary<string, object> answersSupportedInExpressions, Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswers,
             Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, Dictionary<string, Tuple<decimal, string>[]> textListAnswers,
             HashSet<string> answeredQuestions,
-            HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, Interview.DistinctDecimalList> rosterGroupInstanceIds,
+            HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, DistinctDecimalList> rosterGroupInstanceIds,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
         {
             this.QuestionnaireId = questionnaireId;
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public HashSet<string> AnsweredQuestions { get; private set; }
         public HashSet<string> DisabledGroups { get; private set; }
         public HashSet<string> DisabledQuestions { get; private set; }
-        public Dictionary<string, Interview.DistinctDecimalList> RosterGroupInstanceIds { get; private set; }
+        public Dictionary<string, DistinctDecimalList> RosterGroupInstanceIds { get; private set; }
         public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
         public bool WasCompleted { get; private set; }
