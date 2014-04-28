@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         private readonly IArchiveUtils archiveUtils;
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
         private const string FolderName = "PreLoadedData";
+        private const string UnzippedFoldername = "Unzipped";
         private const string CsvExtension = ".csv";
         private readonly string path;
         private static ILogger Logger
@@ -90,13 +91,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 return new PreloadedDataByFile[0];
 
             var archivePath = archivesInDirectory[0];
-            var unzippedDirectoryPath = archivePath.Substring(0, archivePath.LastIndexOf('.'));
+            var unzippedDirectoryPath = fileSystemAccessor.CombinePath(currentFolderPath, UnzippedFoldername);
 
             if (!fileSystemAccessor.IsDirectoryExists(unzippedDirectoryPath))
             {
                 try
                 {
-                    archiveUtils.Unzip( archivePath, currentFolderPath);
+                    archiveUtils.Unzip(archivePath, unzippedDirectoryPath);
                 }
                 catch (Exception e)
                 {
@@ -104,11 +105,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                     return new PreloadedDataByFile[0];
                 }
             }
-            var unzippedFiles = fileSystemAccessor.GetFilesInDirectory(currentFolderPath).Where(filename => filename.EndsWith(CsvExtension)).ToArray();
+            var unzippedFiles = fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath).Where(filename => filename.EndsWith(CsvExtension)).ToArray();
             
             if (unzippedFiles.Length == 0)
             {
-                var unzippedDirectories = fileSystemAccessor.GetDirectoriesInDirectory(currentFolderPath);
+                var unzippedDirectories = fileSystemAccessor.GetDirectoriesInDirectory(unzippedDirectoryPath);
                 if (unzippedDirectories == null || unzippedDirectories.Length == 0)
                     return new PreloadedDataByFile[0];
 
