@@ -838,6 +838,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new List<decimal>(rosterVector) { value }.ToArray();
         }
 
+        public void RejectInterviewFromHeadquarters(Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime, string comment)
+        {
+            this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
+            this.ApplyEvent(new InterviewRestored(userId));
+
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
+            foreach (var answerDto in interviewDto.Answers.Where(x => x.Comments != null))
+            {
+                Guid questionId = answerDto.Id;
+                decimal[] rosterVector = answerDto.QuestionPropagationVector;
+                this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, synchronizationTime, answerDto.Comments));
+            }
+        }
+
         private static bool AreEqual(Identity identityA, Identity identityB)
         {
             return identityA.Id == identityB.Id
@@ -1803,10 +1817,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     case QuestionType.Numeric:
                         this.ApplyEvent(questionnaire.IsQuestionInteger(questionId)
-                            ? new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (int)answer) as
-                                object
-                            : new NumericRealQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal)answer) as
-                                object);
+                            ? new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, Convert.ToInt32(answer)) as object
+                            : new NumericRealQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal)answer) as object);
                         break;
 
                     case QuestionType.SingleOption:

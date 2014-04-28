@@ -67,7 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 SupervisorId = Monads.Maybe(() => interviewData.SupervisorId.FormatGuid()),
                 Timestamp = evnt.EventTimeStamp,
                 EntryId = evnt.EventIdentifier.FormatGuid(),
-                UserId = evnt.Payload.UserId.FormatGuid()
+                UserId = evnt.Payload.UserId.FormatGuid(),
+                Comment = evnt.Payload.Comment
             }, evnt.EventIdentifier.FormatGuid());
         }
 

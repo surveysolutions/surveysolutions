@@ -65,6 +65,7 @@
     <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
