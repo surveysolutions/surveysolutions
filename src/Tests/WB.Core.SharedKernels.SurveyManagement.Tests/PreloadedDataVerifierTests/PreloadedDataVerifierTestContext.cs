@@ -48,13 +48,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                     Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
                         _ =>
                             _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
-                    questionDataParser ?? Mock.Of<IQuestionDataParser>(),
-                    new QuestionnaireFactory(),
                     Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>(
                         _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
-                        _ => _.CreatePreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument) ==
-                            new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, dataFileServiceMock.Object)));
+                        _ =>
+                            _.CreatePreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument) ==
+                                new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument,
+                                    dataFileServiceMock.Object, Mock.Of<IQuestionDataParser>())));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)

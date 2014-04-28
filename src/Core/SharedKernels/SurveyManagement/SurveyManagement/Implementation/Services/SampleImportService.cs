@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.View;
@@ -34,10 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
-        private readonly IQuestionDataParser questionDataParser;
-        private readonly IQuestionnaireFactory questionnaireFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
-        private readonly IDataFileService dataFileService;
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -45,19 +43,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
         public SampleImportService(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
-            IQuestionnaireFactory questionnaireFactory, IQuestionDataParser questionDataParser,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IDataFileService dataFileService)
+            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
-            this.questionnaireFactory = questionnaireFactory;
-            this.questionDataParser = questionDataParser;
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
-            this.dataFileService = dataFileService;
         }
 
         public void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
@@ -98,33 +92,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                 questionnaireRosterStructure, bigTemplateObject.Questionnaire);
 
-            IQuestionnaire questionnarie = this.questionnaireFactory.CreateTemporaryInstance(bigTemplate);
+            result.SetStatusMessage("Data parsing");
+            this.tempSampleCreationStorage.Store(result, id);
 
-            var i = 1;
+            var interviewForCreate = preloadedDataService.CreatePreloadedDataDto(data);
 
-            var topLevelData = preloadedDataService.GetDataFileByLevelName(data, bigTemplate.Title);
-
-            if (topLevelData == null)
+            if (interviewForCreate == null)
             {
-                result.SetErrorMessage("Template is absent");
+                result.SetErrorMessage("Data pasing error");
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
-            var idColumnIndex = preloadedDataService.GetIdColumnIndex(topLevelData);
-            foreach (var value in topLevelData.Content)
+
+            var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
+            for (int i = 0; i < interviewForCreate.Length; i++)
             {
                 try
                 {
-                    this.BuiltInterview(Guid.NewGuid(), topLevelData.FileName, value, preloadedDataService.GetColumnIndexesGoupedByQuestionVariableName(topLevelData),
-                        value[idColumnIndex],
-                        data.Except(new[] { topLevelData }).ToArray(),
-                        questionnarie, preloadedDataService, bigTemplate.PublicKey,version,
-                        responsibleHeadquarterId,
-                        responsibleSupervisorId);
+                    commandInvoker.Execute(new CreateInterviewWithPreloadedData(Guid.NewGuid(), responsibleHeadquarterId,
+                        bigTemplate.PublicKey, version, interviewForCreate[i],
+                        DateTime.UtcNow, responsibleSupervisorId));
 
-                    result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, topLevelData.Content.Length));
+                    result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, interviewForCreate.Length));
                     this.tempSampleCreationStorage.Store(result, id);
-                    i++;
                 }
                 catch (Exception e)
                 {
@@ -134,69 +124,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
             result.CompleteProcess();
             this.tempSampleCreationStorage.Store(result, id);
-        }
-
-        private void BuiltInterview(Guid interviewId, string levelName, string[] values, Dictionary<string, int[]> columnIndexesGoupedByQuestionVariableName,string id, PreloadedDataByFile[] rosterData,
-            IQuestionnaire template, IPreloadedDataService preloadedDataService, Guid templateId, long version, Guid headqarterId, Guid supervisorId)
-        {
-            var answersToFeaturedQuestions = this.CreateAnswerList(values, columnIndexesGoupedByQuestionVariableName,
-                getQuestionByStataCaption: template.GetQuestionByStataCaption, getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
-
-            var rosterAnswers = this.GetAnswers(levelName, id, new decimal[0], rosterData, preloadedDataService, template);
-            var levels = new List<PreloadedLevelDto>() { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions) };
-            levels.AddRange(rosterAnswers);
-            var preloadedData = new PreloadedDataDto(id, levels.ToArray());
-
-            var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            commandInvoker.Execute(new CreateInterviewWithPreloadedData(interviewId, headqarterId, templateId, version, preloadedData,
-                DateTime.UtcNow, supervisorId));
-        }
-
-        private PreloadedLevelDto[] GetAnswers(string levelName, string parentId, decimal[] rosterVector, PreloadedDataByFile[] rosterData, IPreloadedDataService preloadedDataService, IQuestionnaire template)
-        {
-            var result = new List<PreloadedLevelDto>();
-            var childFiles = preloadedDataService.GetChildDataFiles(levelName, rosterData);
-
-            foreach (var preloadedDataByFile in childFiles)
-            {
-                var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(preloadedDataByFile);
-                var idColumnIndex = preloadedDataService.GetIdColumnIndex(preloadedDataByFile);
-                var childRecrordsOfCurrentRow =
-                    preloadedDataByFile.Content.Where(
-                        record => record[parentIdColumnIndex] == parentId).ToArray();
-
-                foreach (var rosterRow in childRecrordsOfCurrentRow)
-                {
-                    var newRosterVetor = new decimal[rosterVector.Length + 1];
-                    rosterVector.CopyTo(newRosterVetor, 0);
-                    newRosterVetor[newRosterVetor.Length - 1] = preloadedDataService.GetRecordIdValueAsDecimal(rosterRow, idColumnIndex);
-
-                    var rosterAnswers = this.CreateAnswerList(rosterRow, preloadedDataService.GetColumnIndexesGoupedByQuestionVariableName(preloadedDataByFile),
-                        getQuestionByStataCaption: template.GetQuestionByStataCaption,
-                        getAnswerOptionsAsValues: template.GetAnswerOptionsAsValues);
-
-                    result.Add(new PreloadedLevelDto(newRosterVetor, rosterAnswers));
-
-                    result.AddRange(this.GetAnswers(preloadedDataByFile.FileName, rosterRow[idColumnIndex], newRosterVetor, rosterData, preloadedDataService, template));
-                }
-            }
-
-            return result.ToArray();
-        }
-
-        private Dictionary<Guid, object> CreateAnswerList(string[] values, Dictionary<string, int[]> columnIndexesGoupedByQuestionVariableName,
-            Func<string, IQuestion> getQuestionByStataCaption, Func<Guid, IEnumerable<decimal>> getAnswerOptionsAsValues)
-        {
-            var featuredAnswers = new Dictionary<Guid, object>();
-
-            foreach (var columnIndexesForVariableName in columnIndexesGoupedByQuestionVariableName)
-            {
-                var parsedAnswer = questionDataParser.BuildAnswerForVariableName(values, columnIndexesForVariableName, getQuestionByStataCaption, getAnswerOptionsAsValues);
-
-                if (parsedAnswer.HasValue)
-                    featuredAnswers.Add(parsedAnswer.Value.Key, parsedAnswer.Value.Value);
-            }
-            return featuredAnswers;
         }
     }
 }

@@ -17,15 +17,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     internal class PreloadedDataServiceFactory : IPreloadedDataServiceFactory
     {
         private readonly IDataFileService dataFileService;
-        public PreloadedDataServiceFactory(IDataFileService dataFileService)
+        private readonly IQuestionDataParser dataParser;
+        public PreloadedDataServiceFactory(IDataFileService dataFileService, IQuestionDataParser dataParser)
         {
             this.dataFileService = dataFileService;
+            this.dataParser = dataParser;
         }
 
         public IPreloadedDataService CreatePreloadedDataService(QuestionnaireExportStructure exportStructure,
             QuestionnaireRosterStructure questionnaireRosterStructure, QuestionnaireDocument questionnaireDocument)
         {
-            return new PreloadedDataService(exportStructure, questionnaireRosterStructure, questionnaireDocument, dataFileService);
+            return new PreloadedDataService(exportStructure, questionnaireRosterStructure, questionnaireDocument, dataFileService, dataParser);
         }
     }
 }
