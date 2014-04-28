@@ -127,9 +127,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                 break;
 
                             case EntryType.InterviewUnassigned:
-                                this.CancelInterview(interviewFeedEntry, interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
                                 break;
-
+                            case EntryType.InterviewRejected:
+                                this.RejectInterview(interviewFeedEntry);
+                                break;
                             default:
                                 this.logger.Warn(string.Format(
                                     "Unknown event of type {0} received in interviews feed. It was skipped and marked as processed with error. EventId: {1}",
@@ -158,6 +160,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     }
                 }
             }
+        }
+
+        private void RejectInterview(LocalInterviewFeedEntry feedEntry)
+        {
+            this.synchronizationContext.PushMessage(string.Format("Loading interview using {0} URL", feedEntry.InterviewUri));
+            InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(feedEntry.InterviewUri).Result;
+
+            var userIdGuid = Guid.Parse(feedEntry.UserId);
+            var supervisorIdGuid = Guid.Parse(feedEntry.SupervisorId);
+
+            this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDto.Id, userIdGuid, supervisorIdGuid, interviewDto, DateTime.Now, feedEntry.Comment));
         }
 
         public void Push(Guid userId)
@@ -215,7 +228,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.executeCommand(new SynchronizeInterviewFromHeadquarters(interviewDto.Id, userIdGuid, supervisorIdGuid, interviewDto, DateTime.Now));
         }
 
-        private void CancelInterview(LocalInterviewFeedEntry interviewFeedEntry, string interviewId, string userId)
+        private void CancelInterview(string interviewId, string userId)
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
             Guid userIdGuid = Guid.Parse(userId);

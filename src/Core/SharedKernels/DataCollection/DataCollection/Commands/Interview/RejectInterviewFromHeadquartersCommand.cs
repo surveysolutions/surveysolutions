@@ -1,0 +1,25 @@
+using System;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+
+namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
+{
+    [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "RejectInterviewFromHeadquarters")]
+    public class RejectInterviewFromHeadquartersCommand : InterviewCommand
+    {
+        public Guid SupervisorId { get; set; }
+        public InterviewSynchronizationDto InterviewDto { get; set; }
+        public DateTime SynchronizationTime { get; set; }
+        public string Comment { get; set; }
+
+        public RejectInterviewFromHeadquartersCommand(Guid interviewId, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime, string comment)
+            : base(interviewId, userId)
+        {
+            this.SupervisorId = supervisorId;
+            this.InterviewDto = interviewDto;
+            this.SynchronizationTime = synchronizationTime;
+            this.Comment = comment;
+        }
+    }
+}
