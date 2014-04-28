@@ -118,7 +118,17 @@
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\EnablementChanges.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Identity.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterCalculationData.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterIdentity.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerGeoLocationQuestionCommand.cs" />
@@ -193,6 +203,7 @@
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ValidityChanges.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\EnumerableExtensions.cs">
       <SubType>Code</SubType>
