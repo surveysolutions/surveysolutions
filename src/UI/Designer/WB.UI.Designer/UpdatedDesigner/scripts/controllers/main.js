@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('designerApp')
-    .controller('MainCtrl', function ($scope, $routeParams, $location, $route, questionnaireService, commandService, verificationService) {
+    .controller('MainCtrl', function ($scope, $routeParams, $location, $route, questionnaireService, commandService, verificationService, utilityService) {
 
         $scope.verificationStatus = {
             errorsCount: 0,
             errors: []
         };
 
-        $scope.verify = function () {
-            verificationService.verify($routeParams.questionnaireId).success(function (result) {
+        $scope.verify = function() {
+            verificationService.verify($routeParams.questionnaireId).success(function(result) {
                 $scope.verificationStatus.errors = result.errors;
                 $scope.verificationStatus.errorsCount = result.errors.length;
 
@@ -57,11 +57,11 @@ angular.module('designerApp')
             return item.hasOwnProperty('Type');
         };
 
-        $scope.addQuestion = function (item) {
-            var newId = guid();
+        $scope.addQuestion = function(item) {
+            var newId = utilityService.guid();
             var self = item;
-            commandService.addQuestion($routeParams.questionnaireId, item, newId).success(function () {
-                        self.Items.push(
+            commandService.addQuestion($routeParams.questionnaireId, item, newId).success(function() {
+                    self.Items.push(
                         {
                             "Id": newId,
                             "Title": "New Question",
@@ -76,7 +76,7 @@ angular.module('designerApp')
         };
 
         $scope.addGroup = function(item) {
-            var newId = guid();
+            var newId = utilityService.guid();
             var newGroup = {
                 "Id": newId,
                 "Title": "New group",
@@ -86,9 +86,9 @@ angular.module('designerApp')
                 "Items": []
             };
 
-            commandService.addGroup($routeParams.questionnaireId, newGroup, item.Id).success(function () {
-                    item.Items.push(newGroup);
-                });
+            commandService.addGroup($routeParams.questionnaireId, newGroup, item.Id).success(function() {
+                item.Items.push(newGroup);
+            });
         };
 
         $scope.collapse = function(item) {
@@ -128,16 +128,5 @@ angular.module('designerApp')
         var lastRoute = $route.current;
         $scope.$on('$locationChangeSuccess', function() {
             $route.current = lastRoute;
-        });
-
-        function guid() {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-
-            return s4() + s4() + s4() + s4() +
-                s4() + s4() + s4() + s4();
-        };
+        }); 
     });

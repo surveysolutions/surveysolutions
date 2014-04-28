@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 angular.module('designerApp')
-    .controller('ChaptersCtrl', function ($scope, $routeParams, $location, $route, commandService) {
+    .controller('ChaptersCtrl', function ($scope, $routeParams, $location, $route, commandService, utilityService) {
 
         $scope.chapters = [];
 
@@ -20,7 +20,7 @@ angular.module('designerApp')
         };
 
         $scope.addNewChapter = function () {
-            var newId = guid();
+            var newId = utilityService.guid();
 
             var newChapter = {
                 Title: 'New Chapter',
@@ -36,7 +36,7 @@ angular.module('designerApp')
         };
 
         $scope.cloneChapter = function (chapter) {
-            var newId = guid();
+            var newId = utilityService.guid();
             var chapterDescription = "";
 
             commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function () {
@@ -60,16 +60,5 @@ angular.module('designerApp')
                     }
                 });
             }
-        };
-
-        function guid() {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-
-            return s4() + s4() + s4() + s4() +
-                s4() + s4() + s4() + s4();
         };
     });
