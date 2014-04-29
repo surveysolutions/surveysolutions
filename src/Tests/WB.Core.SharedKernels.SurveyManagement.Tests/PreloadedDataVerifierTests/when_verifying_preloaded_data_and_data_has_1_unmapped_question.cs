@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTests
 {
@@ -19,8 +23,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1", "ParentId" }, null, "questionnaire.csv");
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire);
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1", "ParentId" }, null, QuestionnaireCsvFileName);
+
+            preloadedDataServiceMock=new Mock<IPreloadedDataService>();
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
+            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
         Because of =
@@ -42,5 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFile;
+        private static Mock<IPreloadedDataService> preloadedDataServiceMock;
+        private const string QuestionnaireCsvFileName = "questionnaire.csv";
     }
 }

@@ -11,6 +11,7 @@ using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using It = Machine.Specifications.It;
 
@@ -27,7 +28,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1", "ParentId" }, new string[][] { new string[] { "1", "text", "" } },
                 "questionnaire.csv");
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire);
+            preloadedDataServiceMock = new Mock<IPreloadedDataService>();
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(Moq.It.IsAny<string>()))
+                .Returns(new HeaderStructureForLevel()
+                {
+                    HeaderItems =
+                        new Dictionary<Guid, ExportedHeaderItem>
+                        {
+                            { Guid.NewGuid(), new ExportedHeaderItem() { VariableName = "q1", ColumnNames = new[] { "q1" } } }
+                        }
+                });
+
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexesGoupedByQuestionVariableName(preloadedDataByFile))
+                .Returns(new Dictionary<string, int[]> { { "q1", new[] { 1 } } });
+            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
         Because of =
@@ -50,5 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         private static Guid questionnaireId;
         private static Guid questionId;
         private static PreloadedDataByFile preloadedDataByFile;
+
+        private static Mock<IPreloadedDataService> preloadedDataServiceMock;
     }
 }

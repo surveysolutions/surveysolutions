@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
     [Subject(typeof(PreloadedDataVerifier))]
     internal class PreloadedDataVerifierTestContext
     {
-        protected static PreloadedDataVerifier CreatePreloadedDataVerifier(QuestionnaireDocument questionnaireDocument = null, IQuestionDataParser questionDataParser=null)
+        protected static PreloadedDataVerifier CreatePreloadedDataVerifier(QuestionnaireDocument questionnaireDocument = null, IQuestionDataParser questionDataParser = null, IPreloadedDataService preloadedDataService=null)
         {
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
@@ -52,9 +52,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                         _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ =>
-                            _.CreatePreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument) ==
-                                new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument,
-                                    dataFileServiceMock.Object, Mock.Of<IQuestionDataParser>())));
+                            _.CreatePreloadedDataService(Moq.It.IsAny<QuestionnaireExportStructure>(), Moq.It.IsAny<QuestionnaireRosterStructure>(), Moq.It.IsAny<QuestionnaireDocument>()) ==
+                                (preloadedDataService ?? Mock.Of<IPreloadedDataService>())));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)
