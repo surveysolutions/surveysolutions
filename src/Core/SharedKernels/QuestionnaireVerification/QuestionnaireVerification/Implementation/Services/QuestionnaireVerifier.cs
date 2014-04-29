@@ -107,6 +107,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
                     Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
                     Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
+                    Verifier<IQuestion>(QuestionHasEmptyVariableName, "WB0057", VerificationMessages.WB0057_QuestionHasEmptyVariableName),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -386,6 +387,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return false;
 
             return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
+        }
+
+        private bool QuestionHasEmptyVariableName(IQuestion arg)
+        {
+            return string.IsNullOrWhiteSpace(arg.StataExportCaption);
         }
 
         private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion entity, QuestionnaireDocument questionnaire)
@@ -974,6 +980,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
         }
+
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
             List<QuestionnaireVerificationError> errorList, Func<T, QuestionnaireVerificationError> getErrorOrNull)
