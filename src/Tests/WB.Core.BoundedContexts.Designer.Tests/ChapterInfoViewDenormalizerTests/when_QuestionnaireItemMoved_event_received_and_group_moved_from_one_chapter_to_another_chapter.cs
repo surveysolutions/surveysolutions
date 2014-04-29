@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             ((GroupInfoView)viewState.Items[1]).Items[0].ShouldBeOfExactType<GroupInfoView>();
 
         It should_groupInfoView_second_chapter_first_item_id_be_equal_to_group1Id = () =>
-            ((GroupInfoView)viewState.Items[1]).Items[0].Id.ShouldEqual(group1Id);
+            ((GroupInfoView)viewState.Items[1]).Items[0].ItemId.ShouldEqual(group1Id);
 
         private static string chapter1Id = "33333333333333333333333333333333";
         private static string chapter2Id = "11111111111111111111111111111111";

@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class QuestionInfoView : IQuestionnaireItem
     {
-        public string Id { get; set; }
+        public string ItemId { get; set; }
         public string Title { get; set; }
         public string Variable { get; set; }
         public QuestionType Type { get; set; }
