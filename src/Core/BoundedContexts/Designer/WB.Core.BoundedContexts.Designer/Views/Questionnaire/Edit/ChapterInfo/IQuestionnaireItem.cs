@@ -2,6 +2,6 @@
 {
     public interface IQuestionnaireItem
     {
-        string Id { get; }
+        string ItemId { get; }
     }
 }

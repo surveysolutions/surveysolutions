@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
             this.AddGroup(questionnaire: currentState,
-                parentGroupId: !evnt.Payload.ParentGroupPublicKey.HasValue || evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.Id
+                parentGroupId: !evnt.Payload.ParentGroupPublicKey.HasValue || evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.ItemId
                     ? null
                     : evnt.Payload.ParentGroupPublicKey.Value.FormatGuid(),
                 groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText);
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupCloned> evnt)
         {
             this.AddGroup(questionnaire: currentState,
-                parentGroupId: !evnt.Payload.ParentGroupPublicKey.HasValue || evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.Id
+                parentGroupId: !evnt.Payload.ParentGroupPublicKey.HasValue || evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.ItemId
                     ? null
                     : evnt.Payload.ParentGroupPublicKey.Value.FormatGuid(),
                 groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText, orderIndex: evnt.Payload.TargetIndex);
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var parentGroupView = this.FindParentOfGroupOrQuestion(questionnaireOrGroup: currentState,
                 groupId: groupId);
 
-            parentGroupView.Items.Remove(parentGroupView.Items.Find(group => group.Id == groupId));
+            parentGroupView.Items.Remove(parentGroupView.Items.Find(group => group.ItemId == groupId));
 
             return currentState;
         }
@@ -210,7 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var parentGroupOfQuestion = this.FindParentOfGroupOrQuestion(currentState, questionId);
 
             parentGroupOfQuestion.Items.Remove(
-                parentGroupOfQuestion.Items.Find(question => question.Id == questionId));
+                parentGroupOfQuestion.Items.Find(question => question.ItemId == questionId));
 
             return currentState;
         }
@@ -261,7 +261,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             var targetGroupKey = evnt.Payload.GroupKey.HasValue
                 ? evnt.Payload.GroupKey.Value.FormatGuid()
-                : currentState.Id;
+                : currentState.ItemId;
 
             var targetGroup = this.FindGroup(currentState, targetGroupKey);
 
@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var groupOrQuestionView = this.FindGroupOrQuestion<IQuestionnaireItem>(currentState, groupOrQuestionKey);
             if (groupOrQuestionView != null)
             {
-                var parentOfGroup = this.FindParentOfGroupOrQuestion(currentState, groupOrQuestionView.Id);
+                var parentOfGroup = this.FindParentOfGroupOrQuestion(currentState, groupOrQuestionView.ItemId);
 
                 parentOfGroup.Items.Remove(groupOrQuestionView);
                 targetGroup.Items.Insert(Math.Min(evnt.Payload.TargetIndex, targetGroup.Items.Count), groupOrQuestionView);
@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             IQuestionnaireItem retVal = null;
 
-            if (questionnaireOrGroup.Id == groupOrQuestionId)
+            if (questionnaireOrGroup.ItemId == groupOrQuestionId)
                 retVal = questionnaireOrGroup;
             else
             {
@@ -315,7 +315,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             GroupInfoView findedGroup = null;
 
-            if (questionnaireOrGroup.Items.Any(group => group.Id == groupId))
+            if (questionnaireOrGroup.Items.Any(group => group.ItemId == groupId))
                 findedGroup = questionnaireOrGroup;
             else
             {
@@ -345,7 +345,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             var questionInfoView = new QuestionInfoView()
             {
-                Id = questionId,
+                ItemId = questionId,
                 Title = questionTitle,
                 Type = questionType,
                 Variable = questionVariable,
@@ -392,7 +392,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             var groupInfoView = new GroupInfoView()
             {
-                Id = groupId,
+                ItemId = groupId,
                 Title = groupTitle,
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,
@@ -432,7 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             return new GroupInfoView()
             {
-                Id = questionnaireId.FormatGuid(),
+                ItemId = questionnaireId.FormatGuid(),
                 Items = new List<IQuestionnaireItem>(),
             };
         }

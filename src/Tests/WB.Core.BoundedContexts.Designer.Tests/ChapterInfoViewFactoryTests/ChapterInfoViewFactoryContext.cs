@@ -11,8 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewFactoryTests
         {
             return new GroupInfoView()
             {
-                Id = questionnaireId,
-                Items = new List<IQuestionnaireItem>() {new GroupInfoView() {Id = chapterId}}
+                ItemId = questionnaireId,
+                Items = new List<IQuestionnaireItem>() {new GroupInfoView() {ItemId = chapterId}}
             };
         }
 
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewFactoryTests
         {
             return new GroupInfoView()
             {
-                Id = questionnaireId,
+                ItemId = questionnaireId,
                 Items = new List<IQuestionnaireItem>()
             };
         }

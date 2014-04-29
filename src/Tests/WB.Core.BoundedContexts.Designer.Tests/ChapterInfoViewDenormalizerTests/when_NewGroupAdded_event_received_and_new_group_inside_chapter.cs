@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             viewState.Items.Count.ShouldEqual(1);
 
         It should_groupInfoView_first_item_id_be_equal_to_chapterId = () =>
-            viewState.Items[0].Id.ShouldEqual(chapterId);
+            viewState.Items[0].ItemId.ShouldEqual(chapterId);
 
         It should_groupInfoView_first_chapter_items_not_be_null = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldNotBeNull();
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             ((GroupInfoView)viewState.Items[0]).Items.Count.ShouldEqual(1);
 
         It should_groupInfoView_first_chapter_first_item_id_be_equal_to_groupId = () =>
-            ((GroupInfoView)viewState.Items[0]).Items[0].Id.ShouldEqual(groupId);
+            ((GroupInfoView)viewState.Items[0]).Items[0].ItemId.ShouldEqual(groupId);
 
         It should_groupInfoView_first_chapter_first_item_title_be_equal_to_groupTitle = () =>
             ((GroupInfoView)((GroupInfoView)viewState.Items[0]).Items[0]).Title.ShouldEqual(groupTitle);

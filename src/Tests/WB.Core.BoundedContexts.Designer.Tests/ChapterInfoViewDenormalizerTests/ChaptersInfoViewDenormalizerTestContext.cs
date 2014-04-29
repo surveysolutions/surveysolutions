@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         protected static GroupInfoView CreateGroupInfoViewWith1Chapter(string chapterId)
         {
             var questionnaireInfoView = CreateGroupInfoView();
-            questionnaireInfoView.Items.Add(new GroupInfoView() {Id = chapterId, Items = new List<IQuestionnaireItem>()});
+            questionnaireInfoView.Items.Add(new GroupInfoView() {ItemId = chapterId, Items = new List<IQuestionnaireItem>()});
 
             return questionnaireInfoView;
         }
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         protected static GroupInfoView CreateGroupInfoViewWith1ChapterAnd1GroupInsideChapter(string chapterId, string groupId)
         {
             var questionnaireInfoView = CreateGroupInfoViewWith1Chapter(chapterId);
-            ((GroupInfoView)questionnaireInfoView.Items[0]).Items.Add(new GroupInfoView() { Id = groupId, Items = new List<IQuestionnaireItem>() });
+            ((GroupInfoView)questionnaireInfoView.Items[0]).Items.Add(new GroupInfoView() { ItemId = groupId, Items = new List<IQuestionnaireItem>() });
 
             return questionnaireInfoView;
         }
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         protected static GroupInfoView CreateGroupInfoViewWith1ChapterAnd1QuestionInsideChapter(string chapterId, string questionId)
         {
             var questionnaireInfoView = CreateGroupInfoViewWith1Chapter(chapterId);
-            ((GroupInfoView) questionnaireInfoView.Items[0]).Items.Add(new QuestionInfoView() {Id = questionId});
+            ((GroupInfoView) questionnaireInfoView.Items[0]).Items.Add(new QuestionInfoView() {ItemId = questionId});
 
             return questionnaireInfoView;
         }
@@ -55,10 +55,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             var questionnaireInfoView = CreateGroupInfoViewWith1ChapterAnd1QuestionInsideChapter(chapter1Id, question1Id);
             questionnaireInfoView.Items.Add(new GroupInfoView()
             {
-                Id = chapter2Id,
+                ItemId = chapter2Id,
                 Items = new List<IQuestionnaireItem>()
                 {
-                    new QuestionInfoView() {Id = question2Id}
+                    new QuestionInfoView() {ItemId = question2Id}
                 }
             });
 
@@ -71,10 +71,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             var questionnaireInfoView = CreateGroupInfoViewWith1ChapterAnd1GroupInsideChapter(chapter1Id, group1Id);
             questionnaireInfoView.Items.Add(new GroupInfoView()
             {
-                Id = chapter2Id,
+                ItemId = chapter2Id,
                 Items = new List<IQuestionnaireItem>()
                 {
-                    new GroupInfoView() {Id = group2Id}
+                    new GroupInfoView() {ItemId = group2Id}
                 }
             });
 

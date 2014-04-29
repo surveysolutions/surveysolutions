@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             return
                 this.readSideReader.GetById(input.QuestionnaireId)
-                    .Items.Find(chapter => chapter.Id == input.ChapterId);
+                    .Items.Find(chapter => chapter.ItemId == input.ChapterId);
         }
     }
 }

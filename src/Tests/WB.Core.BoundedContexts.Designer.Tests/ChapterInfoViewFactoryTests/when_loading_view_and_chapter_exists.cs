@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewFactoryTests
             view.ShouldNotBeNull();
 
         It should_chapter_id_be_equal_chapterId = () =>
-            view.Id.ShouldEqual(chapterId);
+            view.ItemId.ShouldEqual(chapterId);
 
         private static IQuestionnaireItem view;
         private static ChapterInfoViewInputModel input;
