@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
-    [DebuggerDisplay("Id = {Id}, Title = {Title}")]
+    [DebuggerDisplay("Id = {PublicId}, Title = {Title}")]
     public abstract class PdfEntityView
     {
         protected PdfEntityView()

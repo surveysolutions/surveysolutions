@@ -62,12 +62,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 if (initialQuestionnaire != null)
                 {
                     initialQuestionnaire.ReconnectWithParent();
-                    PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
-                    if (updatedQuestionnaire != null)
-                    {
-                        this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
-                    }
                 }
+
+                PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
+                this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
             }
             catch (ApplicationException e)
             {
