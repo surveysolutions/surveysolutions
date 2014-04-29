@@ -40,10 +40,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 
         It should_result_key_be_equal_to_questionId = () =>
             result.Value.Key.ShouldEqual(questionId);
-
-        private static QuestionDataParser questionDataParser;
-        private static KeyValuePair<Guid, object>? result;
-        private static Guid questionId = Guid.NewGuid();
-        private static string questionVarName = "var";
     }
 }

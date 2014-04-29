@@ -28,16 +28,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         It should_result_has_2_error = () =>
            result.Count().ShouldEqual(2);
 
-        It should_firts_error_has_code_PL0007 = () =>
+        It should_return_first_PL0007_error = () =>
             result.First().Code.ShouldEqual("PL0007");
 
-        It should_last_error_has_code_PL0007 = () =>
+        It should_return_second_PL0007_error = () =>
             result.Last().Code.ShouldEqual("PL0007");
 
-        It should_firts_error_has_type_of_reference_file = () =>
+        It should_return_reference_of_first_error_with_Column_type = () =>
             result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
-        It should_last_error_has_type_of_reference_file = () =>
+        It should_return_reference_of_second_error_with_Column_type = () =>
             result.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_firt_error_has_content_with_id = () =>

@@ -12,21 +12,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_text_question : QuestionDataParserTestContext
     {
-        Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
+        Establish context = () =>
+        {
+            answer = "some answer";
+            questionDataParser = CreateQuestionDataParser(); };
 
         Because of =
-            () => result = questionDataParser.Parse(answer, textQuestionVarName, CreateQuestionnaireDocumentWithOneChapter(new TextQuestion() { PublicKey = questionId, QuestionType = QuestionType.Text, StataExportCaption = textQuestionVarName }));
+            () => result = questionDataParser.Parse(answer, questionVarName, CreateQuestionnaireDocumentWithOneChapter(new TextQuestion() { PublicKey = questionId, QuestionType = QuestionType.Text, StataExportCaption = questionVarName }));
 
         It should_result_value_be_equal_to_answer = () =>
             result.Value.Value.ShouldEqual(answer);
 
         It should_result_key_be_equal_to_questionId = () =>
             result.Value.Key.ShouldEqual(questionId);
-
-        private static QuestionDataParser questionDataParser;
-        private static KeyValuePair<Guid, object>? result;
-        private static Guid questionId = Guid.NewGuid();
-        private static string textQuestionVarName = "var";
-        private static string answer = "some answer";
     }
 }

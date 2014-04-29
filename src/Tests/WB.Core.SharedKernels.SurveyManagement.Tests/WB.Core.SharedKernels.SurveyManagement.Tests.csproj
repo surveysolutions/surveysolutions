@@ -69,7 +69,7 @@
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformation_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
-    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_question_which_need_to_be_parsed.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_question_of_wrong_data_type.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_questionnaire_is_absent.cs" />
@@ -87,7 +87,7 @@
     <Compile Include="QuestionDataParserTests\QuestionDataParserTestContext.cs" />
     <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_multy_option_qustion.cs" />
     <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_numeric_qustion.cs" />
-    <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_textlist_qustion.cs" />
+    <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_textlist_question.cs" />
     <Compile Include="QuestionDataParserTests\when_parsing_empty_string_as_an_answer.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question_and_answer_cant_be_parsed.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
-    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_is_not_decimal.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_text_question.cs" />
   </ItemGroup>
   <ItemGroup>

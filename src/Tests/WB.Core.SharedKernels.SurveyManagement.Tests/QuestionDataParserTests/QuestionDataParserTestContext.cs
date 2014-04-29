@@ -35,5 +35,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
                 }
             };
         }
+
+        protected static QuestionDataParser questionDataParser;
+        protected static KeyValuePair<Guid, object>? result;
+        protected static Guid questionId = Guid.NewGuid();
+        protected static string questionVarName = "var";
+        protected static string answer;
     }
 }
