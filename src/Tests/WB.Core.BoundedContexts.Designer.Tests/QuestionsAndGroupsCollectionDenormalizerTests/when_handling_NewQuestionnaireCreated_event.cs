@@ -21,9 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         It should_return_not_null_view = () =>
             newState.ShouldNotBeNull();
 
-        It should_return_view_with_is_deleted_set_in_false = () =>
-           newState.IsDeleted.ShouldBeFalse();
-
         It should_return_not_null_questions_collection_in_result_view = () =>
             newState.Questions.ShouldBeEmpty();
 

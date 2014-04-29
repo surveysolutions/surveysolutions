@@ -18,16 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             newState = denormalizer.Update(previousState, evnt);
 
         It should_return_not_null_view = () =>
-            newState.ShouldNotBeNull();
-
-        It should_return_view_with_is_deleted_set_in_true = () =>
-            newState.IsDeleted.ShouldBeTrue();
-
-        It should_return_not_null_questions_collection_in_result_view = () =>
-            newState.Questions.ShouldBeEmpty();
-
-        It should_return_not_null_groups_collection_in_result_sview = () =>
-            newState.Groups.ShouldBeEmpty();
+            newState.ShouldBeNull();
 
         private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
         private static IPublishedEvent<QuestionnaireDeleted> evnt;
