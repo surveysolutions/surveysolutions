@@ -442,6 +442,7 @@
     <Content Include="UpdatedDesigner\scripts\markup.js" />
     <Content Include="UpdatedDesigner\scripts\services\commandService.js" />
     <Content Include="UpdatedDesigner\scripts\services\questionnaireService.js" />
+    <Content Include="UpdatedDesigner\scripts\services\utilityService.js" />
     <Content Include="UpdatedDesigner\scripts\services\verificationService.js" />
     <Content Include="UpdatedDesigner\scripts\ujs.js" />
     <Content Include="UpdatedDesigner\scripts\wb-designer-editor.js" />
