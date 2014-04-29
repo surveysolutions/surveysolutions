@@ -157,6 +157,9 @@
     <Compile Include="EventHandlers\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
+    <Compile Include="EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizerTests\InterviewEventHandlerFunctionalTestContext.cs" />
+    <Compile Include="EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizerTests\when_status_changed_to_any_which_is_not_approved_by_supervisor.cs" />
+    <Compile Include="EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizerTests\when_status_changed_to_approved_by_supervisor.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
