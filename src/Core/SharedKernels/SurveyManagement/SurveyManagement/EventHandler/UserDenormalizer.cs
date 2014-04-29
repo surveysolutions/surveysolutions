@@ -72,6 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedByHQ = true;
             this.users.Store(item, item.PublicKey);
+            this.syncStorage.SaveUser(item);
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> @event)
@@ -80,6 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedByHQ = false;
             this.users.Store(item, item.PublicKey);
+            this.syncStorage.SaveUser(item);
         }
 
         public override Type[] BuildsViews
@@ -93,6 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedBySupervisor = true;
             this.users.Store(item, item.PublicKey);
+            this.syncStorage.SaveUser(item);
         }
 
         public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt)
@@ -101,6 +104,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedBySupervisor = false;
             this.users.Store(item, item.PublicKey);
+            this.syncStorage.SaveUser(item);
         }
     }
 }
