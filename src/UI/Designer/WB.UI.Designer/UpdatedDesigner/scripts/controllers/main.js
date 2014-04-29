@@ -37,7 +37,7 @@ angular.module('designerApp')
             $scope.currentChapterId = null;
 
             $scope.setItem = function(item) {
-                var url = utilityService.format('/{0}/chapter/{1}/item/{2}', $routeParams.questionnaireId, $scope.currentChapterId, item.Id);
+                var url = utilityService.format('/{0}/chapter/{1}/item/{2}', $routeParams.questionnaireId, $scope.currentChapterId, item.ItemId);
                 $location.path(url);
             };
 
@@ -88,7 +88,7 @@ angular.module('designerApp')
                     "RostersCount": 0,
                     "Items": []
                 };
-                commandService.addGroup($routeParams.questionnaireId, emptyGroup, item.Id).success(function() {
+                commandService.addGroup($routeParams.questionnaireId, emptyGroup, item.ItemId).success(function() {
                     item.Items.push(emptyGroup);
                 });
             };
