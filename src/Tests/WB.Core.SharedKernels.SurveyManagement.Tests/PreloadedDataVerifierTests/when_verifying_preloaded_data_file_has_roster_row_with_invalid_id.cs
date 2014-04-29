@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTests
 {
@@ -30,13 +34,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                 questionnaireTitle + ".csv");
             preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId" }, new string[][] { new string[] { "unparsed", "1" } },
                 rosterTitle + ".csv");
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire);
+
+            files = new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel };
+            preloadedDataServiceMock = new Mock<IPreloadedDataService>();
+            preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);
+            preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(1);
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(Moq.It.IsAny<string>())).Returns(new HeaderStructureForLevel());
+            preloadedDataServiceMock.Setup(x => x.GetParentDataFile(preloadedDataByFileRosterLevel.FileName, files))
+                .Returns(preloadedDataByFileTopLevel);
+
+            preloadedDataServiceMock.Setup(x => x.GetAvalibleIdListForParent(preloadedDataByFileTopLevel, Moq.It.IsAny<Guid>(), "1"))
+                .Returns(new decimal[] { 0 });
+
+            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.Verify(questionnaireId, 1, new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel });
+                    preloadedDataVerifier.Verify(questionnaireId, 1, files);
 
         It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);
@@ -64,5 +80,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         private static PreloadedDataByFile preloadedDataByFileRosterLevel;
         private static string questionnaireTitle = "questionnaire";
         private static string rosterTitle = "roster";
+
+        private static Mock<IPreloadedDataService> preloadedDataServiceMock;
+        private static PreloadedDataByFile[] files;
     }
 }
