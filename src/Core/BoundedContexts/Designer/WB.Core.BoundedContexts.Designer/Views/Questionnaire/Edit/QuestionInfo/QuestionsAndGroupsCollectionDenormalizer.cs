@@ -160,9 +160,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionDeleted> evnt)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.QuestionId);
@@ -173,9 +173,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             if (evnt.Payload.GroupKey == null)
@@ -222,9 +222,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupDeleted> evnt)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var shouldBeDeletedGroups = GetAllDescendantGroups(currentState, evnt.Payload.GroupPublicKey);
@@ -238,9 +238,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<RosterChanged> evnt)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupId);
@@ -264,9 +264,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<GroupStoppedBeingARoster> evnt)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupId);
@@ -288,9 +288,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupUpdated> evnt)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupPublicKey);
@@ -306,14 +306,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            if (currentState == null)
-            {
-                return null;
-            }
-            currentState.IsDeleted = true;
-            currentState.Questions.Clear();
-            currentState.Groups.Clear();
-            return currentState;
+            return null;
         }
 
         private List<QuestionDetailsView> GetAllDescendantQuestions(QuestionsAndGroupsCollectionView currentState, Guid groupId)
@@ -411,9 +404,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState,
             Guid groupId, string title, string description, string enablementCondition, Guid parentGroupId)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var group = new GroupAndRosterDetailsView
@@ -436,9 +429,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         private QuestionsAndGroupsCollectionView UpdateStateWithAddedQuestion(QuestionsAndGroupsCollectionView currentState,
             Guid parentGroupId, IQuestion question)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var questionDetailsView = this.questionDetailsFactory.CreateQuestion(question, parentGroupId);
@@ -450,9 +443,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         private QuestionsAndGroupsCollectionView UpdateStateWithUpdatedQuestion(QuestionsAndGroupsCollectionView currentState,
             IQuestion question)
         {
-            if (currentState == null || currentState.IsDeleted)
+            if (currentState == null)
             {
-                return currentState;
+                return null;
             }
 
             var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == question.PublicKey);
