@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);
 
-        It should_error_has_code_PL0001 = () =>
+        It should_return_single_PL0001_error = () =>
             result.First().Code.ShouldEqual("PL0001");
 
         private static PreloadedDataVerifier preloadedDataVerifier;

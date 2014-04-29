@@ -31,10 +31,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);
 
-        It should_error_has_code_PL0006 = () =>
+        It should_return_single_PL0006_error = () =>
             result.First().Code.ShouldEqual("PL0006");
 
-        It should_error_has_type_of_reference_cell = () =>
+        It should_return_reference_with_Cell_type = () =>
             result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_PositionX_be_equal_to_0 = () =>
