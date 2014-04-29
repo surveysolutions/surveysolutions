@@ -261,4 +261,7 @@
   <data name="WB0056_QuestionShouldNotHaveCircularReferences" xml:space="preserve">
     <value>Circular references are not allowed</value>
   </data>
+  <data name="WB0057_QuestionHasEmptyVariableName" xml:space="preserve">
+    <value>Question has empty variable name.</value>
+  </data>
 </root>
