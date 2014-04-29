@@ -64,14 +64,14 @@
         <script type="text/ng-template" id="tree_item_renderer.html">
             <div ng-click="setItem(item)" ng-if="isQuestion(item)"
                  class="question item"
-                 ng-class="{'selected' : item.Id == currentItemId, 'cat-singleanswer': item.Type == 1, 'cat-singleanswer': item.Type == 2, 'cat-multianswer' : item.Type == 3, 'cat-intedit' : item.Type == 4, 'cat-datetime' : item.Type == 5, 'cat-geoloc' : item.Type == 6, 'cat-textedit' : item.Type == 8, 'cat-textarea' : item.Type == 9,  'cat-multimedia' : item.Type == 10, 'cat-textedit' : item.Type == 7, 'cat-singleanswer' : item.Type == 0 }">
+                 ng-class="{'selected' : item.ItemId == currentItemId, 'cat-singleanswer': item.Type == 1, 'cat-singleanswer': item.Type == 2, 'cat-multianswer' : item.Type == 3, 'cat-intedit' : item.Type == 4, 'cat-datetime' : item.Type == 5, 'cat-geoloc' : item.Type == 6, 'cat-textedit' : item.Type == 8, 'cat-textarea' : item.Type == 9,  'cat-multimedia' : item.Type == 10, 'cat-textedit' : item.Type == 7, 'cat-singleanswer' : item.Type == 0 }">
                 <div class="icon"></div>
                 {{ item.Title }}
                 <div class="qname-block">
                     <a href class="linked"></a>{{item.Variable}}<div class="dropdown-btn"></div>
                 </div>
             </div>
-            <div class="section item" ng-click="setItem(item)" ng-class="{'selected' : item.Id == currentItemId}" ng-if="!isQuestion(item)">
+            <div class="section item" ng-click="setItem(item)" ng-class="{'selected' : item.ItemId == currentItemId}" ng-if="!isQuestion(item)">
                 <span ng-click="collapse(item)" ng-show="!item.collapsed">&nbsp;[-]&nbsp;&nbsp;</span>
                 <span ng-click="expand(item)" ng-show="item.collapsed">&nbsp;[+]&nbsp;&nbsp;</span>
                 {{item.Title}}
