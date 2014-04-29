@@ -2,7 +2,7 @@
 
 angular.module('designerApp')
     .controller('MainCtrl', [
-        '$scope', '$routeParams', '$location', '$route', 'questionnaireService', 'commandService', 'verificationService',
+        '$scope', '$routeParams', '$location', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService',
         function($scope, $routeParams, $location, $route, questionnaireService, commandService, verificationService, utilityService) {
 
             $scope.verificationStatus = {
@@ -65,24 +65,23 @@ angular.module('designerApp')
             $scope.addQuestion = function(item) {
                 var newId = utilityService.guid();
                 var self = item;
+                var emptyQuestion = {
+                    "Id": newId,
+                    "Title": "New Question",
+                    "Variable": "",
+                    "Type": 7,
+                    "LinkedVariables": [],
+                    "BrokenLinkedVariables": null
+                };
                 commandService.addQuestion($routeParams.questionnaireId, item, newId).success(function() {
-                        self.Items.push(
-                            {
-                                "Id": newId,
-                                "Title": "New Question",
-                                "Variable": "",
-                                "Type": 7,
-                                "LinkedVariables": [],
-                                "BrokenLinkedVariables": null
-                            }
-                        );
+                        self.Items.push(emptyQuestion);
                     }
                 );
             };
 
             $scope.addGroup = function(item) {
                 var newId = utilityService.guid();
-                var newGroup = {
+                var emptyGroup = {
                     "Id": newId,
                     "Title": "New group",
                     "QuestionsCount": 0,
@@ -90,9 +89,8 @@ angular.module('designerApp')
                     "RostersCount": 0,
                     "Items": []
                 };
-
-                commandService.addGroup($routeParams.questionnaireId, newGroup, item.Id).success(function() {
-                    item.Items.push(newGroup);
+                commandService.addGroup($routeParams.questionnaireId, emptyGroup, item.Id).success(function() {
+                    item.Items.push(emptyGroup);
                 });
             };
 
