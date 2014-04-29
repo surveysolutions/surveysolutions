@@ -507,11 +507,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerCommented> evnt)
         {
             var commenter = this.users.GetById(evnt.Payload.UserId);
-            if (commenter == null)
-                return currentState;
 
             return new ViewWithSequence<InterviewData>(this.SaveComment(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                evnt.Payload.Comment, evnt.Payload.UserId, commenter.UserName, evnt.Payload.CommentTime), evnt.EventSequence);
+                evnt.Payload.Comment, evnt.Payload.UserId, commenter != null ? commenter.UserName : "<Unknown user>", evnt.Payload.CommentTime), evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -41,11 +42,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             {
                 foreach (var interviewQuestion in interviewLevel.GetAllQuestions())
                 {
-                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.RosterVector,
-                        interviewQuestion.Answer,
-                        interviewQuestion.Comments.Any()
-                            ? interviewQuestion.Comments.Last().Text
-                            : null);
+                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, 
+                        interviewLevel.RosterVector,
+                        interviewQuestion.Answer, 
+                        Monads.Maybe(() => interviewQuestion.Comments.LastOrDefault().Text));
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
