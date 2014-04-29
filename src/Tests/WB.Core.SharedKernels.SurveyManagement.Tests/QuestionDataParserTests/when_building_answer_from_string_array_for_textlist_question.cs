@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
-    internal class when_building_answer_from_string_array_for_textlist_qustion : QuestionDataParserTestContext
+    internal class when_building_answer_from_string_array_for_textlist_question : QuestionDataParserTestContext
     {
         Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
 
@@ -37,10 +37,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 
         It should_result_key_be_equal_to_questionId = () =>
             result.Value.Key.ShouldEqual(questionId);
-
-        private static QuestionDataParser questionDataParser;
-        private static KeyValuePair<Guid, object>? result;
-        private static Guid questionId = Guid.NewGuid();
-        private static string questionVarName = "var";
     }
 }

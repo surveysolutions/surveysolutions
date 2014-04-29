@@ -12,7 +12,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_numeric_real_question : QuestionDataParserTestContext
     {
-        Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
+        Establish context = () =>
+        {
+            answer = "1.22";
+            questionDataParser = CreateQuestionDataParser(); 
+        };
 
         Because of =
             () => result = questionDataParser.Parse(answer, questionVarName, CreateQuestionnaireDocumentWithOneChapter(new NumericQuestion() { PublicKey = questionId, QuestionType = QuestionType.Numeric, IsInteger = false, StataExportCaption = questionVarName }));
@@ -22,11 +26,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 
         It should_result_key_be_equal_to_questionId = () =>
             result.Value.Key.ShouldEqual(questionId);
-
-        private static QuestionDataParser questionDataParser;
-        private static KeyValuePair<Guid, object>? result;
-        private static Guid questionId = Guid.NewGuid();
-        private static string questionVarName = "var";
-        private static string answer = "1.22";
     }
 }

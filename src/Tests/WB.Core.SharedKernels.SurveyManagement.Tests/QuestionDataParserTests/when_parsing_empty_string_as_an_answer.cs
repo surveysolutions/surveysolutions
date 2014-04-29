@@ -18,8 +18,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 
         It should_result_be_null = () =>
             result.ShouldBeNull();
-
-        private static QuestionDataParser questionDataParser;
-        private static KeyValuePair<Guid, object>? result;
     }
 }

@@ -10,20 +10,17 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
-    internal class when_pasing_answer_on_single_option_question_and_answer_cant_is_not_decimal : QuestionDataParserTestContext
+    internal class when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed : QuestionDataParserTestContext
     {
-        Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
+        Establish context = () =>
+        {
+            answer = "unparsed";
+            questionDataParser = CreateQuestionDataParser(); };
 
         Because of =
             () => result = questionDataParser.Parse(answer, questionVarName, CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion() { PublicKey = questionId, QuestionType = QuestionType.SingleOption, StataExportCaption = questionVarName }));
 
         It should_result_be_null = () =>
             result.ShouldBeNull();
-
-        private static QuestionDataParser questionDataParser;
-        private static KeyValuePair<Guid, object>? result;
-        private static Guid questionId = Guid.NewGuid();
-        private static string questionVarName = "var";
-        private static string answer = "unparsed";
     }
 }

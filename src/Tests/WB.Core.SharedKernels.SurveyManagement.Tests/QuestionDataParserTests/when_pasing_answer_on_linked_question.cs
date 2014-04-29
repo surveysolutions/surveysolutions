@@ -15,13 +15,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
 
         Because of =
-            () => result = questionDataParser.Parse("some answer", linkedQuestionVarName, CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion() { LinkedToQuestionId = Guid.NewGuid(), StataExportCaption = linkedQuestionVarName }));
+            () => result = questionDataParser.Parse("some answer", questionVarName, CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion() { LinkedToQuestionId = Guid.NewGuid(), StataExportCaption = questionVarName }));
 
         It should_result_be_null = () =>
             result.ShouldBeNull();
-
-        private static QuestionDataParser questionDataParser;
-        private static KeyValuePair<Guid, object>? result;
-        private static string linkedQuestionVarName="var";
     }
 }

@@ -27,10 +27,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         It should_result_has_1_error = () =>
            result.Count().ShouldEqual(1);
 
-        It should_error_has_code_PL0002 = () =>
+        It should_return_single_PL0004_error = () =>
             result.First().Code.ShouldEqual("PL0004");
 
-        It should_error_has_type_of_reference_file = () =>
+        It should_return_reference_with_File_type = () =>
             result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.File);
 
         private static PreloadedDataVerifier preloadedDataVerifier;

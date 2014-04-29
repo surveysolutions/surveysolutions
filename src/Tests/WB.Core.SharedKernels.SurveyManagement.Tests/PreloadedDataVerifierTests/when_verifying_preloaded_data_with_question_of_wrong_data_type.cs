@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_and_data_has_1_question_which_need_to_be_parsed : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_with_question_of_wrong_data_type : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
@@ -38,10 +38,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);
 
-        It should_error_has_code_PL0005 = () =>
+        It should_return_single_PL0005_error = () =>
             result.First().Code.ShouldEqual("PL0005");
 
-        It should_error_has_type_of_reference_cell = () =>
+        It should_return_reference_with_Cell_type = () =>
             result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         private static PreloadedDataVerifier preloadedDataVerifier;
