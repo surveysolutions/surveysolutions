@@ -283,6 +283,8 @@
     <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_is_too_long.cs" />
     <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_not_unique.cs" />
     <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_start_with_digit.cs" />
+    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_group_and_source_group_does_not_exist.cs" />
+    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_group_and_group_already_exists.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_all_parameters_is_specified.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_question_already_exists.cs" />
@@ -291,6 +293,7 @@
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_contains_substitution_to_self.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_is_empty.cs" />
+    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_group_and_user_dont_have_permissions.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_user_dont_have_permissions.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_contains_invalid_characters.cs" />
@@ -465,6 +468,16 @@
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_paralell_roster_scope.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_under_deeper_roster.cs" />
     <Compile Include="QuestionnaireTests\when_changing_roster_group_to_simple_group_but_question_inside_group_is_used_as_link_and_group_inside_other_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_multioptions_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_single_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_geo_position_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_datetime_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_text_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_qr_barcode_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_numeric_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_text_list_question.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_roster_by_question_and_roster_title_question_inside_roster.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_chapter_with_roster_by_fixed_titles_and_text_question_inside_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_with_roster_size_question_from_top_level_to_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />
