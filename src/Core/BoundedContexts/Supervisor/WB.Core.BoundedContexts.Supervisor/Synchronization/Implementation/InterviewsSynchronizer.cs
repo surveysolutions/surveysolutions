@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void RejectInterview(LocalInterviewFeedEntry feedEntry)
         {
-            this.synchronizationContext.PushMessage(string.Format("Loading interview using {0} URL", feedEntry.InterviewUri));
+            this.headquartersPullContext.PushMessage(string.Format("Loading interview using {0} URL", feedEntry.InterviewUri));
             InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(feedEntry.InterviewUri).Result;
 
             var userIdGuid = Guid.Parse(feedEntry.UserId);
