@@ -167,7 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository()
         {
             if (this.isProxyToPlainQuestionnaireRepository)
-                throw new QuestionnaireException("This aggregate is intiated to only redirect events about plain questionnaire repository and is not intended to be used separately.");
+                throw new QuestionnaireException("This aggregate instance only supports sending of plain questionnaire repository events and it is not intended to be used separately.");
         }
 
         public void InitializeQuestionnaireDocument()
