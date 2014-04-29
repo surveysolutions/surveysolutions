@@ -177,6 +177,7 @@
     <Compile Include="Domain\TestDataConfigurator.cs" />
     <Compile Include="Entities\GroupTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
+    <Compile Include="Entities\SubEntities\GeoPositionTests\when_parsing_string_i_order_to_create_GeoPosition_object.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
@@ -212,7 +213,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AbstractFactories\" />
-    <Folder Include="Entities\SubEntities\" />
     <Folder Include="Export\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
