@@ -918,135 +918,157 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var sourceGroup = this.innerDocument.FirstOrDefault<IGroup>(group => group.PublicKey == sourceGroupId);
             var parentGroupId = sourceGroup.GetParent() == null ? (Guid?)null : sourceGroup.GetParent().PublicKey;
 
+            this.FillGroup(groupId: groupId, parentGroupId: parentGroupId, responsibleId: responsibleId,
+                sourceGroup: sourceGroup, targetIndex: targetIndex);
+        }
+
+        private void FillGroup(Guid groupId, Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup,
+            int targetIndex)
+        {
             this.CloneGroupWithoutChildren(groupId: groupId, responsibleId: responsibleId, parentGroupId: parentGroupId,
-                sourceGroupId: sourceGroupId, title: sourceGroup.Title, targetIndex: targetIndex,
+                sourceGroupId: sourceGroup.PublicKey, title: sourceGroup.Title, targetIndex: targetIndex,
                 description: sourceGroup.Description, condition: sourceGroup.ConditionExpression,
                 isRoster: sourceGroup.IsRoster, rosterSizeSource: sourceGroup.RosterSizeSource,
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId,
                 rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
                 rosterFixedTitles: sourceGroup.RosterFixedTitles);
 
-            foreach (var questionnaireItem in sourceGroup.Children.FindAll(item=>true))
+            foreach (var questionnaireItem in sourceGroup.Children)
             {
                 var itemId = Guid.NewGuid();
                 var sourceItemId = questionnaireItem.PublicKey;
-                var parentItemId = questionnaireItem.GetParent().PublicKey;
-                var itemTargetIndex = this.GetGroupById(parentItemId).Children.IndexOf(questionnaireItem);
+                var itemTargetIndex = sourceGroup.Children.IndexOf(questionnaireItem);
 
-                var group = questionnaireItem as IGroup;
-                if (group != null)
+                var @group = questionnaireItem as IGroup;
+                if (@group != null)
                 {
-                    this.CloneGroupWithoutChildren(groupId: itemId, responsibleId: responsibleId,
-                        parentGroupId: parentItemId, sourceGroupId: sourceItemId, title: group.Title,
-                        targetIndex: itemTargetIndex, description: group.Description, condition: group.ConditionExpression,
-                        isRoster: group.IsRoster, rosterSizeSource: group.RosterSizeSource,
-                        rosterSizeQuestionId: group.RosterSizeQuestionId,
-                        rosterTitleQuestionId: group.RosterTitleQuestionId, rosterFixedTitles: group.RosterFixedTitles);
+                    this.FillGroup(groupId: itemId, parentGroupId: groupId, responsibleId: responsibleId,
+                        sourceGroup: @group, targetIndex: itemTargetIndex);
+                    continue;
                 }
 
                 var question = questionnaireItem as IQuestion;
-                if (question != null)
+                if (question == null) continue;
+
+
+                var variableName = string.Empty;
+                var title = question.QuestionText;
+                var isMandatory = question.Mandatory;
+                var enablementCondition = question.ConditionExpression;
+                var instructions = question.Instructions;
+
+                var numericQuestion = question as INumericQuestion;
+                if (numericQuestion != null)
                 {
-                    var variableName = string.Empty;
-                    var title = question.QuestionText;
-                    var isMandatory = question.Mandatory;
-                    var enablementCondition = question.ConditionExpression;
-                    var instructions = question.Instructions;
+                    this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                        variableName: variableName, parentGroupId: groupId, title: title,
+                        isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
+                        scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
+                        validationExpression: numericQuestion.ValidationExpression,
+                        validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
+                        sourceQuestionId: sourceItemId, responsibleId: responsibleId,
+                        maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
+                        countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
+                    continue;
+                }
 
-                    var numericQuestion = question as INumericQuestion;
-                    if (numericQuestion != null)
-                    {
-                        this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, parentGroupId: parentItemId, title: title,
-                            isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
-                            scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
-                            validationExpression: numericQuestion.ValidationExpression,
-                            validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
-                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                            maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
-                            countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
-                    }
+                var textListQuestion = question as ITextListQuestion;
+                if (textListQuestion != null)
+                {
+                    this.ApplyTextListQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                        variableName: variableName, parentGroupId: groupId, title: title,
+                        isMandatory: isMandatory, enablementCondition: enablementCondition,
+                        instructions: instructions,
+                        sourceQuestionId: sourceItemId, responsibleId: responsibleId,
+                        maxAnswerCount: textListQuestion.MaxAnswerCount);
+                    continue;
+                }
 
-                    var textListQuestion = question as ITextListQuestion;
-                    if (textListQuestion != null)
-                    {
-                        this.ApplyTextListQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, parentGroupId: parentItemId, title: title,
-                            isMandatory: isMandatory, enablementCondition: enablementCondition,
-                            instructions: instructions,
-                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                            maxAnswerCount: textListQuestion.MaxAnswerCount);
-                    }
+                var qrBarcodeQuestion = question as IQRBarcodeQuestion;
+                if (qrBarcodeQuestion != null)
+                {
+                    this.ApplyQRBarcodeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                        variableName: variableName, parentGroupId: groupId, title: title,
+                        isMandatory: isMandatory, enablementCondition: enablementCondition,
+                        instructions: instructions,
+                        sourceQuestionId: sourceItemId, responsibleId: responsibleId);
+                    continue;
+                }
 
-                    var qrBarcodeQuestion = question as IQRBarcodeQuestion;
-                    if (qrBarcodeQuestion != null)
-                    {
-                        this.ApplyQRBarcodeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, parentGroupId: parentItemId, title: title,
-                            isMandatory: isMandatory, enablementCondition: enablementCondition,
-                            instructions: instructions,
-                            sourceQuestionId: sourceItemId, responsibleId: responsibleId);
-                    }
+                var textQuestion = question as TextQuestion;
+                if (textQuestion != null)
+                {
+                    this.ApplyTextQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                        variableName: variableName, parentGroupId: groupId, title: title, isMandatory: isMandatory,
+                        enablementCondition: enablementCondition, responsibleId: responsibleId,
+                        sourceQuestionId: sourceItemId, instructions: instructions, isPreFilled: textQuestion.Featured,
+                        scope: textQuestion.QuestionScope, validationExpression: textQuestion.ValidationExpression,
+                        validationMessage: textQuestion.ValidationMessage);
+                    continue;
+                }
 
-                    var geoLocationQuestion = question as GpsCoordinateQuestion;
-                    if (geoLocationQuestion != null)
-                    {
-                        this.ApplyGeoLocationQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, title: title, isMandatory: isMandatory,
-                            enablementCondition: enablementCondition, instructions: instructions,
-                            parentGroupId: parentItemId, sourceQuestionId: sourceItemId,
-                            responsibleId: responsibleId);
-                    }
+                var geoLocationQuestion = question as GpsCoordinateQuestion;
+                if (geoLocationQuestion != null)
+                {
+                    this.ApplyGeoLocationQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                        variableName: variableName, title: title, isMandatory: isMandatory,
+                        enablementCondition: enablementCondition, instructions: instructions,
+                        parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                        responsibleId: responsibleId);
+                    continue;
+                }
 
-                    var dateTitmeQuestion = question as DateTimeQuestion;
-                    if (dateTitmeQuestion != null)
-                    {
-                        this.ApplyDateTimeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, title: title, isMandatory: isMandatory,
-                            enablementCondition: enablementCondition, instructions: instructions,
-                            parentGroupId: parentItemId, sourceQuestionId: sourceItemId,
-                            responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
-                            isPreFilled: dateTitmeQuestion.Featured,
-                            validationExpression: dateTitmeQuestion.ValidationExpression,
-                            validationMessage: dateTitmeQuestion.ValidationMessage);
-                    }
+                var dateTitmeQuestion = question as DateTimeQuestion;
+                if (dateTitmeQuestion != null)
+                {
+                    this.ApplyDateTimeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                        variableName: variableName, title: title, isMandatory: isMandatory,
+                        enablementCondition: enablementCondition, instructions: instructions,
+                        parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                        responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
+                        isPreFilled: dateTitmeQuestion.Featured,
+                        validationExpression: dateTitmeQuestion.ValidationExpression,
+                        validationMessage: dateTitmeQuestion.ValidationMessage);
+                    continue;
+                }
 
-                    var categoricalMultiQuestion = question as MultyOptionsQuestion;
-                    if (categoricalMultiQuestion != null)
-                    {
-                        this.ApplyCategoricalMultiAnswersQuestionClonedEvent(questionId: itemId,
-                            targetIndex: itemTargetIndex, variableName: variableName, title: title, isMandatory: isMandatory,
-                            enablementCondition: enablementCondition, parentGroupId: parentItemId,
-                            sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
-                            scope: categoricalMultiQuestion.QuestionScope,
-                            validationExpression: categoricalMultiQuestion.ValidationExpression,
-                            validationMessage: categoricalMultiQuestion.ValidationMessage,
-                            linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
-                            areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
-                            maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
-                            options:
-                                categoricalMultiQuestion.Answers.Select(
-                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                    .ToArray());
-                    }
+                var categoricalMultiQuestion = question as MultyOptionsQuestion;
+                if (categoricalMultiQuestion != null)
+                {
+                    this.ApplyCategoricalMultiAnswersQuestionClonedEvent(questionId: itemId,
+                        targetIndex: itemTargetIndex, variableName: variableName, title: title, isMandatory: isMandatory,
+                        enablementCondition: enablementCondition, parentGroupId: groupId,
+                        sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
+                        scope: categoricalMultiQuestion.QuestionScope,
+                        validationExpression: categoricalMultiQuestion.ValidationExpression,
+                        validationMessage: categoricalMultiQuestion.ValidationMessage,
+                        linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
+                        areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
+                        maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
+                        options:
+                            categoricalMultiQuestion.Answers.Select(
+                                answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
+                                .ToArray());
+                    continue;
+                }
 
-                    var categoricalSingleQuestion = question as SingleQuestion;
-                    if (categoricalSingleQuestion != null)
-                    {
-                        this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: itemId,
-                            targetIndex: itemTargetIndex, variableName: variableName, title: title, isMandatory: isMandatory,
-                            enablementCondition: enablementCondition, parentGroupId: parentItemId,
-                            sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
-                            scope: categoricalSingleQuestion.QuestionScope,
-                            validationExpression: categoricalSingleQuestion.ValidationExpression,
-                            validationMessage: categoricalSingleQuestion.ValidationMessage,
-                            linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
-                            isPreFilled: categoricalSingleQuestion.Featured,
-                            options:
-                                categoricalSingleQuestion.Answers.Select(
-                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                    .ToArray());
-                    }
+                var categoricalSingleQuestion = question as SingleQuestion;
+                if (categoricalSingleQuestion != null)
+                {
+                    this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: itemId,
+                        targetIndex: itemTargetIndex, variableName: variableName, title: title, isMandatory: isMandatory,
+                        enablementCondition: enablementCondition, parentGroupId: groupId,
+                        sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
+                        scope: categoricalSingleQuestion.QuestionScope,
+                        validationExpression: categoricalSingleQuestion.ValidationExpression,
+                        validationMessage: categoricalSingleQuestion.ValidationMessage,
+                        linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
+                        isPreFilled: categoricalSingleQuestion.Featured,
+                        options:
+                            categoricalSingleQuestion.Answers.Select(
+                                answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
+                                .ToArray());
+                    continue;
                 }
             }
         }

@@ -27,6 +27,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return (T)eventContext.Events.Last(e => e.Payload is T).Payload;
         }
 
+        public static IEnumerable<T> GetSpecificEvents<T>(EventContext eventContext) where T : class
+        {
+            return eventContext.Events.Where(evnt => evnt.Payload is T).Select(evnt => (T)evnt.Payload);
+        }
+
         public static Questionnaire CreateQuestionnaire(Guid responsibleId)
         {
             return new Questionnaire(publicKey: Guid.NewGuid(), title: "title", createdBy: responsibleId);
@@ -50,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             
         }
 
-        private static Questionnaire CreateQuestionnaire(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire")
+        public static Questionnaire CreateQuestionnaire(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire")
         {
             return new Questionnaire(publicKey: questionnaireId ?? Guid.NewGuid(), title: text, createdBy: responsibleId);
         }
