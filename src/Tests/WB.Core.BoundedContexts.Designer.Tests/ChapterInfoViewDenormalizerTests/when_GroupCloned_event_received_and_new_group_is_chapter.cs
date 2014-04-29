@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             viewState.Items.Count.ShouldEqual(2);
 
         It should_groupInfoView_first_item_id_be_equal_to_chapter2Id = () =>
-            viewState.Items[0].Id.ShouldEqual(chapter2Id);
+            viewState.Items[0].ItemId.ShouldEqual(chapter2Id);
 
         It should_groupInfoView_first_item_title_be_equal_to_chapterTitle = () =>
             ((GroupInfoView)viewState.Items[0]).Title.ShouldEqual(chapter2Title);

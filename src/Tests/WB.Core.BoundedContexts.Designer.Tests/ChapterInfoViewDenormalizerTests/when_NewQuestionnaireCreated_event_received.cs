@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
                 }, new Guid(questionnaireId)));
 
         It should_groupInfoView_Id_be_equal_to_questionnaireId = () =>
-            viewState.Id.ShouldEqual(questionnaireId);
+            viewState.ItemId.ShouldEqual(questionnaireId);
 
         It should_groupInfoView_Items_not_be_null = () =>
             viewState.Items.ShouldNotBeNull();

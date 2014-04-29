@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             ((GroupInfoView)viewState.Items[0]).Items[0].ShouldBeOfExactType<QuestionInfoView>();
 
         It should_groupInfoView_first_chapter_first_item_id_be_equal_to_questionId = () =>
-            ((GroupInfoView)viewState.Items[0]).Items[0].Id.ShouldEqual(questionId);
+            ((GroupInfoView)viewState.Items[0]).Items[0].ItemId.ShouldEqual(questionId);
 
         It should_groupInfoView_first_chapter_first_question_title_be_equal_to_questionTitle = () =>
             ((QuestionInfoView)((GroupInfoView)viewState.Items[0]).Items[0]).Title.ShouldEqual(questionTitle);
