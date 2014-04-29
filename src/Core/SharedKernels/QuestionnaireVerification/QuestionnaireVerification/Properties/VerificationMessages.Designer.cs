@@ -493,5 +493,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0056_QuestionShouldNotHaveCircularReferences", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has empty variable name..
+        /// </summary>
+        internal static string WB0057_QuestionHasEmptyVariableName {
+            get {
+                return ResourceManager.GetString("WB0057_QuestionHasEmptyVariableName", resourceCulture);
+            }
+        }
     }
 }
