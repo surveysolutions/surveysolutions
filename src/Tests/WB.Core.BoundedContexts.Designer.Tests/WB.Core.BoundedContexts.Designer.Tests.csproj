@@ -178,6 +178,9 @@
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_not_digital_option_value.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_not_unique_option_title.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_not_unique_option_value.cs" />
+    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
+    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
+    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_prefilled.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
