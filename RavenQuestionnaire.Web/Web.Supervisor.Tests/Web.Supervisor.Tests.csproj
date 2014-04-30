@@ -233,6 +233,10 @@
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\UI\Supervisor\Web.Supervisor\Web.Supervisor.csproj">
+      <Project>{41e11b34-5beb-48e6-b9b0-2dea05cfa7fb}</Project>
+      <Name>Web.Supervisor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
