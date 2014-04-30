@@ -83,9 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
             this.AddGroup(questionnaire: currentState,
-                parentGroupId: !evnt.Payload.ParentGroupPublicKey.HasValue || evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.ItemId
-                    ? null
-                    : evnt.Payload.ParentGroupPublicKey.Value.FormatGuid(),
+                parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
                 groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText);
 
 
@@ -95,9 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupCloned> evnt)
         {
             this.AddGroup(questionnaire: currentState,
-                parentGroupId: !evnt.Payload.ParentGroupPublicKey.HasValue || evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.ItemId
-                    ? null
-                    : evnt.Payload.ParentGroupPublicKey.Value.FormatGuid(),
+                parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
                 groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText, orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
@@ -435,6 +431,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 ItemId = questionnaireId.FormatGuid(),
                 Items = new List<IQuestionnaireItem>(),
             };
+        }
+
+        private static string GetNullAsParentForChapterOrParentGroupIdForGroup(Guid? sourceParentGroupId, string questionnaireId)
+        {
+            return !sourceParentGroupId.HasValue || sourceParentGroupId.Value.FormatGuid() == questionnaireId
+                ? null
+                : sourceParentGroupId.Value.FormatGuid();
         }
     }
 }

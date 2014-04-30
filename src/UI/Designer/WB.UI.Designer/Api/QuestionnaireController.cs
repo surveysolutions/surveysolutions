@@ -22,10 +22,10 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<ChapterInfoViewInputModel, IQuestionnaireItem> chapterInfoViewFactory;
+        private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory;
 
-        public QuestionnaireController(IViewFactory<ChapterInfoViewInputModel, IQuestionnaireItem> chapterInfoViewFactory,
+        public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, 
             IQuestionnaireVerifier questionnaireVerifier, 
@@ -54,13 +54,7 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public IQuestionnaireItem Chapter(string id, string chapterId)
         {
-            var chapterInfoView =
-                chapterInfoViewFactory.Load(new ChapterInfoViewInputModel()
-                {
-                    QuestionnaireId = id,
-                    ChapterId = chapterId
-                });
-
+            var chapterInfoView = chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
             if (chapterInfoView == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Chapter with id={0} cannot be found", chapterId));
