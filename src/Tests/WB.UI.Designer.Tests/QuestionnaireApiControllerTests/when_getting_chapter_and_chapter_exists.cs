@@ -13,9 +13,8 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
         {
             var chapterInfoView = CreateChapterInfoView();
 
-            var chapterInfoViewFactory =
-                Mock.Of<IViewFactory<ChapterInfoViewInputModel, IQuestionnaireItem>>(
-                    x => x.Load(Moq.It.IsAny<ChapterInfoViewInputModel>()) == chapterInfoView);
+            var chapterInfoViewFactory = Mock.Of<IChapterInfoViewFactory>(
+                    x => x.Load(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()) == chapterInfoView);
 
             controller = CreateQuestionnaireController(chapterInfoViewFactory: chapterInfoViewFactory);
         };

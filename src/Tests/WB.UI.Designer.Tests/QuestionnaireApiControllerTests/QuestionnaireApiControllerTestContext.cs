@@ -16,7 +16,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
 {
     internal class QuestionnaireApiControllerTestContext
     {
-        public static QuestionnaireController CreateQuestionnaireController(IViewFactory<ChapterInfoViewInputModel, IQuestionnaireItem> chapterInfoViewFactory = null,
+        public static QuestionnaireController CreateQuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory = null,
             IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory = null,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
             IQuestionnaireInfoFactory questionnaireInfoFactory = null)
         {
             return new QuestionnaireController(
-                chapterInfoViewFactory ?? Mock.Of<IViewFactory<ChapterInfoViewInputModel, IQuestionnaireItem>>(),
+                chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
                 questionnaireInfoViewFactory ?? Mock.Of<IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView>>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),

@@ -10,8 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewFactoryTests
     {
         Establish context = () =>
         {
-            input = CreateChapterInfoViewInputModel(questionnaireId, chapterId);
-
             var repositoryMock = new Mock<IQueryableReadSideRepositoryReader<GroupInfoView>>();
 
             repositoryMock
@@ -22,13 +20,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewFactoryTests
         };
 
         Because of = () =>
-            view = factory.Load(input);
+            view = factory.Load(questionnaireId, chapterId);
 
         It should_chapter_be_null = () =>
             view.ShouldBeNull();
 
         private static IQuestionnaireItem view;
-        private static ChapterInfoViewInputModel input;
         private static ChapterInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string chapterId = "22222222222222222222222222222222";

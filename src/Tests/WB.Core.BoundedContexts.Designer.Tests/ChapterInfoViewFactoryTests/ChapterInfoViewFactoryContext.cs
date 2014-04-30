@@ -25,11 +25,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewFactoryTests
             };
         }
 
-        protected static ChapterInfoViewInputModel CreateChapterInfoViewInputModel(string questionnaireId, string chapterId)
-        {
-            return new ChapterInfoViewInputModel() {QuestionnaireId = questionnaireId, ChapterId = chapterId};
-        }
-
         protected static ChapterInfoViewFactory CreateChapterInfoViewFactory(
             IQueryableReadSideRepositoryReader<GroupInfoView> repository = null)
         {
