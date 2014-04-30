@@ -107,6 +107,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             RaisePropertyChanged(() => this.Text);
         }
 
+        public virtual void SubstituteRosterTitle(string rosterTitle)
+        {
+            this.referencedQuestionAnswers[StringUtil.RosterTitleSubstitutionReference] = string.IsNullOrEmpty(rosterTitle)
+             ? StringUtil.DefaultSubstitutionText
+             : rosterTitle;
+
+            this.ReplaceSubstitutionVariables();
+
+            RaisePropertyChanged(() => this.Text);
+        }
+
         private void ReplaceSubstitutionVariables()
         {
             this.Text = this.SourceText;
