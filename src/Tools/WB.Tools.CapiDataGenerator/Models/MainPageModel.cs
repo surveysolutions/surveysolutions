@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -88,6 +89,14 @@ namespace CapiDataGenerator
             }
         }
 
+        private IPlainQuestionnaireRepository questionnaireRepository
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>();
+            }
+        }
+
         static readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
@@ -122,17 +131,15 @@ namespace CapiDataGenerator
         {
             base.InitFromBundle(parameters);
 
-            this.SupervisorList =
-                new ObservableCollection<UserListItem>(
-                    userListViewFactory.Load(new UserListViewInputModel() {Role = UserRoles.Supervisor}).Items);
+            this.SupervisorList = new ObservableCollection<UserListItem>(
+                    userListViewFactory.Load(new UserListViewInputModel() { Role = UserRoles.Supervisor }).Items);
             if (this.SupervisorList.Count == 0)
             {
-                var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now,
-                    false, false, null);
-                this.SupervisorList = new ObservableCollection<UserListItem>() {emptySupervisor};
+                var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now, false, false, null);
+                this.SupervisorList = new ObservableCollection<UserListItem>() { emptySupervisor };
                 this.SelectedSupervisor = emptySupervisor;
             }
-            var hq = userListViewFactory.Load(new UserListViewInputModel() {Role = UserRoles.Headquarter})
+            var hq = userListViewFactory.Load(new UserListViewInputModel() { Role = UserRoles.Headquarter })
                 .Items.FirstOrDefault();
             if (hq == null)
             {
@@ -144,6 +151,7 @@ namespace CapiDataGenerator
                 this.HeadquarterName = this._headquarterUser.Name;
             }
 
+            this.WorkingModeList = new ObservableCollection<string>(Enum.GetNames(typeof(GenerationMode)));
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -271,37 +279,7 @@ namespace CapiDataGenerator
                 RaisePropertyChanged(() => Progress);
             }
         }
-
-        private bool putAllEventsToSupervisorDB = false;
-        public bool PutAllEventsToSupervisorDB
-        {
-            get
-            {
-                return putAllEventsToSupervisorDB;
-            }
-            set
-            {
-                putAllEventsToSupervisorDB = value;
-                RaisePropertyChanged(() => PutAllEventsToSupervisorDB);
-            }
-        }
-
-        private bool _onlyForSupervisor = false;
-        public bool OnlyForSupervisor
-        {
-            get
-            {
-                return _onlyForSupervisor;
-            }
-            set
-            {
-                _onlyForSupervisor = value;
-                RaisePropertyChanged(() => OnlyForSupervisor);
-            }
-        }
-
         
-
         private UserListItem _selectedSupervisor = null;
         public UserListItem SelectedSupervisor
         {
@@ -313,6 +291,34 @@ namespace CapiDataGenerator
             {
                 _selectedSupervisor = value;
                 RaisePropertyChanged(() => SelectedSupervisor);
+            }
+        }
+
+        private GenerationMode? selectedWorkingMode = null;
+        public GenerationMode? SelectedWorkingMode
+        {
+            get
+            {
+                return selectedWorkingMode;
+            }
+            set
+            {
+                selectedWorkingMode = value;
+                RaisePropertyChanged(() => SelectedWorkingMode);
+            }
+        }
+
+        private ObservableCollection<string> workingModeList = new ObservableCollection<string>();
+        public ObservableCollection<string> WorkingModeList
+        {
+            get
+            {
+                return workingModeList;
+            }
+            set
+            {
+                workingModeList = value;
+                RaisePropertyChanged(() => WorkingModeList);
             }
         }
 
@@ -433,9 +439,8 @@ namespace CapiDataGenerator
                         statusesCount = 100;
                         StatusesCount = statusesCount.ToString();
                     }
-
-                    AppSettings.Instance.PutAllEventsToSupervisorDB = this.PutAllEventsToSupervisorDB;
-                    var onlyForSupervisor = this.OnlyForSupervisor;
+                    
+                    AppSettings.Instance.CurrentMode = this.SelectedWorkingMode.Value;
 
                     var questions = questionnaireDocument.GetAllQuestions().Where(x => !x.Featured).ToList();
                     var questionsCount = questions.Count();
@@ -449,18 +454,19 @@ namespace CapiDataGenerator
                     this.EnableCacheInAllRepositoryWriters();
                     try
                     {
-                        AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
                         var users = CreateInterviewers(interviewersCount);
                         var questionnaire = new Questionnaire(questionnaireDocument);
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
-                        var interviews = this.CreateInterviews(questionnaireDocument, interviewsCount, users, onlyForSupervisor, questionnaire, state);
+                        this.ImportTemplate(questionnaireDocument);
+
+                        var interviews = this.CreateInterviews(questionnaireDocument, interviewsCount, users, questionnaire, state);
 
                         CreateAnswers(answersCount, interviews, questions, questionnaire, questionnaireDocument, state);
                         CreateComments(commentsCount, interviews, questions, questionnaire);
-                        ChangeStatuses(statusesCount, interviews, onlyForSupervisor);
+                        ChangeStatuses(statusesCount, interviews);
 
-                        if (!onlyForSupervisor)
+                        if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor)
                         {
                             Log("create backup");
                             string backupPath = backupService.Backup();
@@ -487,18 +493,40 @@ namespace CapiDataGenerator
             });
         }
 
-        private void ChangeStatuses(int statusesCount, Dictionary<Guid, Guid> interviews, bool onlyForSupervisor)
+        private void ImportTemplate(IQuestionnaireDocument template)
+        {
+            this.Log("import template");
+            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template));
+
+            this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, 1, template as QuestionnaireDocument);
+
+            //this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, 1));
+        }
+
+        private void ChangeStatuses(int statusesCount, Dictionary<Guid, Guid> interviews)
         {
             for (int z = 0; z < statusesCount; z++)
             {
                 var interview = interviews.ElementAt(z);
+
                 commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment"));
 
                 changeLogManipulator.CloseDraftRecord(interview.Key);
 
-                if (onlyForSupervisor)
+                if (AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterApproved || 
+                    AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterRejected ||
+                    AppSettings.Instance.CurrentMode == GenerationMode.DataSplitSupervisorHeadquarter )
                 {
                     commandService.Execute(new ApproveInterviewCommand(interview.Key, interview.Value, "auto approve comment"));
+                }
+
+                if (AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterApproved)
+                {
+                    commandService.Execute(new HqApproveInterviewCommand(interview.Key, interview.Value, "auto hq approve comment"));
+                }
+                else if (AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterRejected)
+                {
+                    commandService.Execute(new HqRejectInterviewCommand(interview.Key, interview.Value, "auto hq reject comment"));
                 }
 
                 UpdateProgress();
@@ -547,7 +575,7 @@ namespace CapiDataGenerator
                 users.Add(new UserLight(uId, userName));
                 commandService.Execute(new CreateUserCommand(publicKey: uId, userName: userName,
                     password: SimpleHash.ComputeHash(userName),
-                    email: string.Concat(userName, "@mail.com"), roles: new[] { UserRoles.Operator }, isLockedBySupervisor: false, isLockedByHQ: false,
+                    email: string.Concat(userName, "@example.com"), roles: new[] { UserRoles.Operator }, isLockedBySupervisor: false, isLockedByHQ: false,
                     supervsor: new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName)));
                 InvokeOnMainThread(() => InterviewersList.Add(userName));
                 UpdateProgress();
@@ -557,12 +585,9 @@ namespace CapiDataGenerator
             return users;
         }
 
-        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int interviewCount, List<UserLight> users, bool onlyForSupervisor,
+        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int interviewCount, List<UserLight> users,
             IQuestionnaire questionnaire, State state)
         {
-            Log("import template");
-            commandService.Execute(new ImportFromDesigner(_headquarterUser.Id, template));
-
             var featuredQuestions = template.GetFeaturedQuestions();
 
             var interviews = new Dictionary<Guid, Guid>();
@@ -589,33 +614,36 @@ namespace CapiDataGenerator
                     UpdateProgress();
                 }
             }
-            AppSettings.Instance.AreSupervisorEventsNowPublishing = onlyForSupervisor;
-            for (int i = 0; i < interviews.Count; i++)
+
+            if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor)
             {
-                LogStatus("synchronize interview", i, interviews.Count);
+                for (int i = 0; i < interviews.Count; i++)
+                {
+                    LogStatus("creating synchronize interview events", i, interviews.Count);
 
-                var interviewData = interviews.ElementAt(i);
+                    var interviewData = interviews.ElementAt(i);
 
-                commandService.Execute(new SynchronizeInterviewCommand(
-                    interviewId: interviewData.Key,
-                    userId: interviewData.Value,
-                    sycnhronizedInterview: new InterviewSynchronizationDto(
-                        id: interviewData.Key,
-                        status: InterviewStatus.InterviewerAssigned,
+                    commandService.Execute(new SynchronizeInterviewCommand(
+                        interviewId: interviewData.Key,
                         userId: interviewData.Value,
-                        questionnaireId: template.PublicKey,
-                        questionnaireVersion: 1,
-                        answers: new AnsweredQuestionSynchronizationDto[0],
-                        disabledGroups: new HashSet<InterviewItemId>(),
-                        disabledQuestions: new HashSet<InterviewItemId>(),
-                        validAnsweredQuestions: new HashSet<InterviewItemId>(),
-                        invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
-                        propagatedGroupInstanceCounts: null,
-                        rosterGroupInstances: GetRosterGroupInstancesForSynchronization(questionnaire, state),
-                        wasCompleted: false)));
+                        sycnhronizedInterview: new InterviewSynchronizationDto(
+                            id: interviewData.Key,
+                            status: InterviewStatus.InterviewerAssigned,
+                            userId: interviewData.Value,
+                            questionnaireId: template.PublicKey,
+                            questionnaireVersion: 1,
+                            answers: new AnsweredQuestionSynchronizationDto[0],
+                            disabledGroups: new HashSet<InterviewItemId>(),
+                            disabledQuestions: new HashSet<InterviewItemId>(),
+                            validAnsweredQuestions: new HashSet<InterviewItemId>(),
+                            invalidAnsweredQuestions: new HashSet<InterviewItemId>(),
+                            propagatedGroupInstanceCounts: null,
+                            rosterGroupInstances: GetRosterGroupInstancesForSynchronization(questionnaire, state),
+                            wasCompleted: false)));
 
-                changeLogManipulator.CreateOrReopenDraftRecord(interviewData.Key);
-                UpdateProgress();
+                    changeLogManipulator.CreateOrReopenDraftRecord(interviewData.Key);
+                    UpdateProgress();
+                }
             }
 
             return interviews;
@@ -889,7 +917,9 @@ namespace CapiDataGenerator
 
         private void Log(string message, string linkText = null, string link = null)
         {
-            var logEntry = new LogMessage(message);
+            var logMessage = string.Format("[{0}] {1}", DateTime.Now.ToString("G"), message);
+
+            var logEntry = new LogMessage(logMessage);
             logEntry.Link = link;
             logEntry.LinkText = linkText;
 
@@ -898,7 +928,7 @@ namespace CapiDataGenerator
 
         private void LogStatus(string message, int progress, int count)
         {
-            var output = string.Format("{0}: {1} of {2}", message, progress + 1, count);
+            var output = string.Format("[{0}] {1}: {2} of {3}", DateTime.Now.ToString("G"), message, progress + 1, count);
             InvokeOnMainThread(() =>  {
                 if (LogMessages.Any(x => x.Message.Contains(message)))
                 {

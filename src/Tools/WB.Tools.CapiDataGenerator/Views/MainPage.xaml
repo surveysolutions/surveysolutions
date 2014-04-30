@@ -39,20 +39,22 @@
                 <TextBox HorizontalAlignment="Left" Height="23" Margin="20,309,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding StatusesCount, Mode=TwoWay}"/>
                 <TextBlock HorizontalAlignment="Left" Margin="73,313,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Left" Margin="18,10,0,0" TextWrapping="Wrap" Text="Select supervisor:" VerticalAlignment="Top"/>
-                <ComboBox HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top" Width="125" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
+                <TextBlock HorizontalAlignment="Left" Margin="18,55,0,0" TextWrapping="Wrap" Text="Select mode:" VerticalAlignment="Top"/>
+                <ComboBox HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top" Width="170" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding UserName}"></TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <CheckBox Content="Put all event to Supervisor DB" 
-                          ToolTip="Do not split between CAPI/SV"
-                          HorizontalAlignment="Left" Margin="18,53,0,0" VerticalAlignment="Top" 
-                          IsChecked="{Binding PutAllEventsToSupervisorDB, Mode=TwoWay}"/>
+                <ComboBox HorizontalAlignment="Left" Margin="132,55,0,0" VerticalAlignment="Top" Width="170" ItemsSource="{Binding WorkingModeList}" SelectedItem="{Binding SelectedWorkingMode}">
+                </ComboBox>
+
+<!--
                 <CheckBox Content="Generate only Supervisor-side events" 
-                          HorizontalAlignment="Left" Margin="18,73,0,0" VerticalAlignment="Top" 
+                          HorizontalAlignment="Left" Margin="18,80,0,0" VerticalAlignment="Top" 
                           IsChecked="{Binding OnlyForSupervisor, Mode=TwoWay}"/>
+-->
             </Grid>
         </GroupBox>
 
@@ -90,14 +92,13 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
+                                <TextBox Text="{Binding Path=Message, Mode=OneWay}" TextWrapping="Wrap" 
+                                     IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0"/>
                                 <TextBlock>
                                     <Hyperlink NavigateUri="{Binding Path=Link}" Click="Hyperlink_OnClick">
                                         <TextBlock Text="{Binding Path=LinkText}" />
                                     </Hyperlink>
                                 </TextBlock>
-                                <TextBox Text="{Binding Path=Message, Mode=OneWay}" TextWrapping="Wrap" 
-                                     IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0"/>
-                              
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

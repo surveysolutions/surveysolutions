@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.ReadSide.Repository;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tools.CapiDataGenerator;
 
 namespace CapiDataGenerator
@@ -28,24 +27,42 @@ namespace CapiDataGenerator
         {
             return evnt =>
             {
-                if (AppSettings.Instance.PutAllEventsToSupervisorDB)
+                if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitSupervisorHeadquarter)
                 {
                     handler.Handle((IPublishedEvent<TEvent>)evnt);
                 }
-                else
+                else if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor)
                 {
                     bool isCapiHandler = handler.GetType().ToString().Contains("CAPI");
 
-                    Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
+                   /* Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
 
-                    Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || o is NewUserCreated ||
-                                                            o is TemplateImported;
+                    Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || 
+                                                            o is NewUserCreated ||
+                                                            o is TemplateImported */
+
+                    Func<object, bool> isSupervisorEvent = (o) => o is NewUserCreated ||
+                                              o is TemplateImported ||
+                                              o is InterviewCreated ||
+                                              o is InterviewApproved ||
+                                              o is InterviewerAssigned;
+
+
+                    Func<object, bool> isCapiEventToHandle = (o) => o is InterviewCompleted || 
+                        o is NewUserCreated ||
+                        o is InterviewSynchronized || 
+                        o is TemplateImported;
 
                     if ((isSupervisorEvent(evnt.Payload) && !isCapiHandler) ||
-                        (isCapiEvent(evnt.Payload) && isCapiHandler))
+                        (isCapiEventToHandle(evnt.Payload) && isCapiHandler))
                     {
                         handler.Handle((IPublishedEvent<TEvent>)evnt);
                     }
+                }
+                else if (AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterApproved || 
+                         AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterRejected)
+                {
+                    
                 }
             };
         }
