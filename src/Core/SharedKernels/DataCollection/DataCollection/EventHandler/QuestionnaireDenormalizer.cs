@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnarieStorage = questionnarieStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
