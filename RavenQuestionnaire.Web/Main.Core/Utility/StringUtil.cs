@@ -181,6 +181,8 @@ namespace Main.Core.Utility
             return allOccurenses.ToArray();
         }
 
+        public const string RosterTitleSubstitutionReference = "rostertitle";
+
         public static string ReplaceSubstitutionVariable(this string text, string variable, string replaceTo)
         {
             return text.Replace(string.Format("{1}{0}{1}", variable, SubstitutionVariableDelimiter), replaceTo);

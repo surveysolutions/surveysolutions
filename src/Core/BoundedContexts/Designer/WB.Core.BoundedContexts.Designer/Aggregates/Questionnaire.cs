@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Constants
 
         private const int MaxCountOfDecimalPlaces = 15;
-        private const string RosterTitleSubstitutionReference = "rostertitle";
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.SingleOption,
@@ -2576,7 +2575,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
 
-            var keywords = new[] { "this", RosterTitleSubstitutionReference };
+            var keywords = new[] { "this", StringUtil.RosterTitleSubstitutionReference };
             foreach (var keyword in keywords)
             {
                 if (stataCaption.ToLower() == keyword)
@@ -3265,7 +3264,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var substitutionReference in substitutionReferences)
             {
-                if (substitutionReference == RosterTitleSubstitutionReference)
+                if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
                 {
                     if (propagationQuestionsVector.Length > 0)
                         continue;
