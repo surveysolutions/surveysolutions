@@ -418,6 +418,7 @@
     <Content Include="UpdatedDesigner\i\chapter-list-li-dots.png" />
     <Content Include="UpdatedDesigner\i\chapter-panel-btn.png" />
     <Content Include="UpdatedDesigner\i\designer-logo.png" />
+    <Content Include="UpdatedDesigner\i\dropdown-arrow.png" />
     <Content Include="UpdatedDesigner\i\filter-glyph.png" />
     <Content Include="UpdatedDesigner\i\icon-cat-datetime-sm.png" />
     <Content Include="UpdatedDesigner\i\icon-cat-floatedit-sm.png" />
@@ -430,6 +431,7 @@
     <Content Include="UpdatedDesigner\i\icon-cat-textedit-sm.png" />
     <Content Include="UpdatedDesigner\i\icon-qname-block-link.png" />
     <Content Include="UpdatedDesigner\i\left-panel-shadow.png" />
+    <Content Include="UpdatedDesigner\i\pretty-checkable-sprites.png" />
     <Content Include="UpdatedDesigner\i\question-item-dots.png" />
     <Content Include="UpdatedDesigner\i\search-glyph.png" />
     <Content Include="UpdatedDesigner\scripts\app.js" />
