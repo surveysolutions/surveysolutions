@@ -22,12 +22,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new NumericQuestion
                 {
                     PublicKey = rosterSizeQuestionId,
+                    StataExportCaption = "var",
                     IsInteger = true,
                     MaxValue = 5
                 },
                 new NumericQuestion
                 {
                     PublicKey = rosterSizeQuestionForChildRoster1Id,
+                    StataExportCaption = "var",
                     IsInteger = true,
                     MaxValue = 5
                 },
@@ -46,6 +48,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                 new NumericQuestion
                                 {
                                     PublicKey = rosterSizeQuestionWithInvalidRosterLevelId,
+                                    StataExportCaption = "var",
                                     IsInteger = true,
                                     MaxValue = 5
                                 }

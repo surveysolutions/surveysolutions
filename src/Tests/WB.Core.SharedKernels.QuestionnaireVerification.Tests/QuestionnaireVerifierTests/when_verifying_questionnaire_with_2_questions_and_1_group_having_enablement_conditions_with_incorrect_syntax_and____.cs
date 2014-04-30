@@ -27,10 +27,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             correctGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion { PublicKey = firstIncorrectQuestionId, ConditionExpression = InvalidExpression },
-                new TextQuestion { PublicKey = secondIncorrectQuestionId, ConditionExpression = InvalidExpression },
+                new TextQuestion { PublicKey = firstIncorrectQuestionId, ConditionExpression = InvalidExpression, StataExportCaption = "var" },
+                new TextQuestion { PublicKey = secondIncorrectQuestionId, ConditionExpression = InvalidExpression, StataExportCaption = "var" },
                 new Group { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
-                new NumericQuestion { PublicKey = correctQuestionId, ConditionExpression = ValidExpression },
+                new NumericQuestion { PublicKey = correctQuestionId, ConditionExpression = ValidExpression, StataExportCaption = "var" },
                 new Group { PublicKey = correctGroupId, ConditionExpression = ValidExpression }
             );
 

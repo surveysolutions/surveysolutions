@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         new NumericQuestion
                         {
                             PublicKey = rosterSizeQuestionId,
+                            StataExportCaption = "var",
                             IsInteger = true,
                             MaxValue = 5
                         }

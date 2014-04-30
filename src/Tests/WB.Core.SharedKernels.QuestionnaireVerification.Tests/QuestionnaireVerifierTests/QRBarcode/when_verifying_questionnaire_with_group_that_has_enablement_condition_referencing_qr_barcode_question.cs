@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             barcodeQuestionId = Guid.Parse("12222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new QRBarcodeQuestion { PublicKey = barcodeQuestionId });
+            questionnaire.Children.Add(new QRBarcodeQuestion { PublicKey = barcodeQuestionId, StataExportCaption = "var"});
             questionnaire.Children.Add(new Group { PublicKey = groupWithEnablementConditionId, ConditionExpression = "some condition" });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor

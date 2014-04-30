@@ -20,10 +20,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             multiAnswerQuestionId = Guid.Parse("12222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new TextListQuestion("Text") { PublicKey = multiAnswerQuestionId });
+            questionnaire.Children.Add(new TextListQuestion("Text") { PublicKey = multiAnswerQuestionId, StataExportCaption = "var" });
             questionnaire.Children.Add(new NumericQuestion
             {
                 PublicKey = questionWithCustomValidation,
+                StataExportCaption = "var",
                 IsInteger = true,
                 MaxValue = 5,
                 ValidationExpression = "some validation"

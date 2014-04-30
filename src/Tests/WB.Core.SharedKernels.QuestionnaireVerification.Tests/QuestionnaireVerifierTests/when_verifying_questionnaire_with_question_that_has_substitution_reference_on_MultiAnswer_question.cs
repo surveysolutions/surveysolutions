@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new SingleQuestion
                 {
                     PublicKey = questionWithSubstitutionReferenceTomultiAnswerQuestionId,
+                    StataExportCaption = "var",
                     QuestionText = string.Format("hello %{0}%!", unsupported)
                 });
 

@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionWithMissingValues,
+                StataExportCaption = "var",
                 QuestionType = QuestionType.SingleOption,
                 Answers = new List<Answer>() { new Answer() { AnswerText = "some answer"} }
             });

@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 IsRoster = true,
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 RosterFixedTitles = fixedTitles.ToArray(),
-                Children = new List<IComposite>() { new TextQuestion() }
+                Children = new List<IComposite>() { new TextQuestion(){StataExportCaption = "var"} }
             });
 
             verifier = CreateQuestionnaireVerifier();

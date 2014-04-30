@@ -24,11 +24,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
+                StataExportCaption = "var",
                 LinkedToQuestionId = referencedQuestionId,
                 QuestionType = QuestionType.MultyOption
             });
             var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
-            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric });
+            rosterGroup.Children.Add(new NumericQuestion()
+            {
+                PublicKey = referencedQuestionId,
+                QuestionType = QuestionType.Numeric,
+                StataExportCaption = "var"
+            });
             questionnaire.Children.Add(rosterGroup);
             verifier = CreateQuestionnaireVerifier();
         };

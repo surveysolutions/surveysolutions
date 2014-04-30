@@ -21,10 +21,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = notSupportedForLinkingQuestionId,
+                StataExportCaption = "var",
                 QuestionType = QuestionType.SingleOption
             });
 
-            questionnaire.Children.Add(new SingleQuestion() { PublicKey = linkedQuestionId, LinkedToQuestionId = notSupportedForLinkingQuestionId });
+            questionnaire.Children.Add(new SingleQuestion()
+            {
+                PublicKey = linkedQuestionId,
+                LinkedToQuestionId = notSupportedForLinkingQuestionId,
+                StataExportCaption = "var"
+            });
             verifier = CreateQuestionnaireVerifier();
         };
 

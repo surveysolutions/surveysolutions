@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new TextQuestion());
+            questionnaire.Children.Add(new TextQuestion() { StataExportCaption = "var" });
             questionnaire.Children.Add(new Group()
             {
                 PublicKey = rosterGroupId,
