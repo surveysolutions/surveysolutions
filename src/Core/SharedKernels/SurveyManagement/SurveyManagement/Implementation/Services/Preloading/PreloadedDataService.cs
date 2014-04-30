@@ -183,6 +183,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return presentQuestions;
         }
 
+        private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
+        {
+            return allLevels.FirstOrDefault(l => l.FileName.IndexOf(dataFileService.CreateValidFileName(name), StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
         private PreloadedLevelDto[] GetAnswers(string levelName, string parentId, decimal[] rosterVector, PreloadedDataByFile[] rosterData)
         {
             var result = new List<PreloadedLevelDto>();
@@ -276,11 +281,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     .Select(scope => exportStructure.HeaderToLevelMap[scope.ScopeId]).Select(
                         child =>
                             GetDataFileByLevelName(allLevels, child.LevelName)).Where(file => file != null).ToArray();
-        }
-
-        private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
-        {
-            return allLevels.FirstOrDefault(l => l.FileName.IndexOf(dataFileService.CreateValidFileName(name), StringComparison.OrdinalIgnoreCase) >= 0);
         }
     }
 }
