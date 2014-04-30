@@ -412,6 +412,18 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\bootstrap-select.css" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\bootstrap-select.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\bootstrap-select.min.css" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\bootstrap-select.min.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-es-CL.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-es-CL.min.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-eu.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-eu.min.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-pt_BR.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-pt_BR.min.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-ru-RU.js" />
+    <Content Include="UpdatedDesigner\externals\bootstrap-select-1.5.2\i18n\defaults-ru_RU.min.js" />
     <Content Include="UpdatedDesigner\i\arrow-left.png" />
     <Content Include="UpdatedDesigner\i\breadcrumb-slash.png" />
     <Content Include="UpdatedDesigner\i\btn-dropdown-blue.png" />
@@ -432,6 +444,8 @@
     <Content Include="UpdatedDesigner\i\icon-qname-block-link.png" />
     <Content Include="UpdatedDesigner\i\left-panel-shadow.png" />
     <Content Include="UpdatedDesigner\i\pretty-checkable-sprites.png" />
+    <Content Include="UpdatedDesigner\i\pretty-checkable-sprites-org.png" />
+    <Content Include="UpdatedDesigner\i\pretty-checkable-sprites.png" />
     <Content Include="UpdatedDesigner\i\question-item-dots.png" />
     <Content Include="UpdatedDesigner\i\search-glyph.png" />
     <Content Include="UpdatedDesigner\scripts\app.js" />
@@ -451,6 +465,7 @@
     <Content Include="UpdatedDesigner\scripts\services\verificationService.js" />
     <Content Include="UpdatedDesigner\scripts\ujs.js" />
     <Content Include="UpdatedDesigner\scripts\wb-designer-editor.js" />
+    <Content Include="UpdatedDesigner\styles\dropdown.css" />
     <Content Include="UpdatedDesigner\styles\jquery.mCustomScrollbar.css" />
     <Content Include="UpdatedDesigner\styles\main.css" />
     <Content Include="App_Readme\Elmah.txt" />
