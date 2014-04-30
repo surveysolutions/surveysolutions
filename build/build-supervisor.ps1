@@ -40,7 +40,7 @@ try {
 
 	BuildSupervisor `
 		-Solution 'src\WB without Xamarin.sln' `
-		-Project 'src\UI\Supervisor\Web.Supervisor.csproj' `
+		-Project 'src\UI\Supervisor\Web.Supervisor\Web.Supervisor.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-AndroidPackageName $PackageName `
 		-BuildNumber $BuildNumber
