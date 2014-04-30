@@ -82,7 +82,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         
         private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
             new Dictionary<QuestionViewModel, IList<QuestionViewModel>>();
-        
+
+        private Dictionary<Guid, IList<QuestionViewModel>> rostersParticipationInSubstitutionReferences =
+           new Dictionary<Guid, IList<QuestionViewModel>>();
 
         private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(IEnumerable<QuestionViewModel> questionsToSubscribe)
         {
@@ -93,6 +95,23 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
                 foreach (var substitutionReference in questionsWithSubstitution.SubstitutionReferences)
                 {
+                    if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
+                    {
+                        if (questionsWithSubstitution.QuestionRosterScope.Any())
+                        {
+                            var rosterId = questionsWithSubstitution.QuestionRosterScope.Last();
+                            if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterId))
+                            {
+                                rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution);
+                            }
+                            else
+                            {
+                                rostersParticipationInSubstitutionReferences.Add(rosterId,
+                                    new List<QuestionViewModel> { questionsWithSubstitution });
+                            }
+                        }
+                        continue;
+                    }
                     var referencedQuestion = this.FindReferencedQuestion(substitutionReference, questionsWithSubstitution);
                     if(referencedQuestion ==null)
                         continue;
@@ -557,6 +576,21 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
 
             screen.UpdateScreenName(rosterTitle);
+
+            if (!this.rostersParticipationInSubstitutionReferences.ContainsKey(groupId))
+                return;
+
+            foreach (var participationQuestion in this.rostersParticipationInSubstitutionReferences[groupId])
+            {
+                var rosterId = participationQuestion.QuestionRosterScope.Last();
+                var rosterScreen =
+                    Screens[new InterviewItemId(rosterId, participationQuestion.PublicKey.InterviewItemPropagationVector)] as
+                        QuestionnairePropagatedScreenViewModel;
+                if (rosterScreen == null)
+                    continue;
+                
+                participationQuestion.SubstituteRosterTitle(rosterScreen.ScreenName);
+            }
         }
 
         public IEnumerable<QuestionViewModel> FindQuestion(Func<QuestionViewModel, bool> filter)
