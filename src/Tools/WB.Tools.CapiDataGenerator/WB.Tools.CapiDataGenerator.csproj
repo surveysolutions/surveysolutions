@@ -296,10 +296,6 @@
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Supervisor\Web.Supervisor\Web.Supervisor.csproj">
-      <Project>{41e11b34-5beb-48e6-b9b0-2dea05cfa7fb}</Project>
-      <Name>Web.Supervisor</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="sqlite3.dll">

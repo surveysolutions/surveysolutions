@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.Synchronization;
-using WB.Supervisor.CompleteQuestionnaireDenormalizer;
 
 namespace CapiDataGenerator
 {
