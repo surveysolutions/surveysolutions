@@ -34,9 +34,11 @@
                 if (contextQuestion.isFeatured())
                     return { isValid: false, errorMessage: 'Pre-filled question cannot use variables for substitution but following variables are used: %' + titleVariables.join('%, %') + '%.' };
 
-
+                var rostertitle = 'rostertitle';
                 var existingVariables = dc().questions.getAllVariables();
-                var variableNotExists = function(variable) { return !_.contains(existingVariables, variable); };
+                var variableNotExists = function(variable) {
+                    return variable != rostertitle && !_.contains(existingVariables, variable);
+                };
 
                 var notExistingTitleVariables = _.filter(titleVariables, variableNotExists);
 
@@ -45,6 +47,8 @@
 
 
                 var variableTypeIsNotSuppoted = function (variable) {
+                    if (variable == rostertitle)
+                        return false;
                     var question = dc().questions.getLocalByVariable(variable);
                     return !_.contains(questionTypesSupportedForSubstitution, question.qtype());
                 };
