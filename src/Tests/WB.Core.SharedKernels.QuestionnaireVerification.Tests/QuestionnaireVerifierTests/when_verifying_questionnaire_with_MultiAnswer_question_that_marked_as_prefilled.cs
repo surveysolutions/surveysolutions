@@ -20,11 +20,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = prefilledTextListquestionId,
+                StataExportCaption = "var",
                 Featured = true
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
+                StataExportCaption = "var",
                 PublicKey = Guid.Parse("20000000000000000000000000000000")
             });
 

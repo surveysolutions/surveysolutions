@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionWithSubstitutionReferenceToNotSupportedTypeId,
+                StataExportCaption = "var",
                 QuestionText = string.Format("hello %{0}%!", unsupported)
             });
 

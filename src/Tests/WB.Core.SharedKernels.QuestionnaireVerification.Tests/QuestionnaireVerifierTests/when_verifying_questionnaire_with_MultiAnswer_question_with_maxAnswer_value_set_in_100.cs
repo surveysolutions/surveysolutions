@@ -19,12 +19,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = multiAnswerQuestionWithMaxCountId,
+                StataExportCaption = "var",
                 MaxAnswerCount = 100
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = Guid.Parse("20000000000000000000000000000000"),
+                StataExportCaption = "var",
                 MaxAnswerCount = null
             });
          

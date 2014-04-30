@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion()
+                new TextQuestion() {StataExportCaption = "var"}
                 );
 
             verifier = CreateQuestionnaireVerifier();

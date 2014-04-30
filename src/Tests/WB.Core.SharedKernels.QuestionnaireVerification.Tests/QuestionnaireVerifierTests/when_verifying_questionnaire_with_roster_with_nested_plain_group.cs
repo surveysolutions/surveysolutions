@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
 
-            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterSizeQiestionId, IsInteger = true, MaxValue = 5 });
+            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterSizeQiestionId, IsInteger = true, MaxValue = 5, StataExportCaption = "var" });
             questionnaire.Children.Add(new Group()
             {
                 PublicKey = rosterGroupId,

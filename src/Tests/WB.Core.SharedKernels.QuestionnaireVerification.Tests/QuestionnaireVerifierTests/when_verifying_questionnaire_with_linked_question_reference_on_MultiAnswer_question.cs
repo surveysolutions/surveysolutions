@@ -20,11 +20,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new TextListQuestion
                 {
                     PublicKey = notSupportedForLinkingQuestionId,
+                    StataExportCaption = "var",
                     QuestionType = QuestionType.TextList
                 },
                 new SingleQuestion
                 {
-                    PublicKey = linkedQuestionId, 
+                    PublicKey = linkedQuestionId,
+                    StataExportCaption = "var",
                     LinkedToQuestionId = notSupportedForLinkingQuestionId
                 });
 

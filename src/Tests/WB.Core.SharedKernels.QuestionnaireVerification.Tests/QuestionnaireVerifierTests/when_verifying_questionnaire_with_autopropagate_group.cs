@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             autopropagateGroupId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new TextQuestion() { PublicKey = Guid.NewGuid() });
+            questionnaire.Children.Add(new TextQuestion() { PublicKey = Guid.NewGuid(), StataExportCaption = "var" });
             questionnaire.Children.Add(new Group() { PublicKey = autopropagateGroupId, Propagated = Propagate.AutoPropagated });
 
             verifier = CreateQuestionnaireVerifier();

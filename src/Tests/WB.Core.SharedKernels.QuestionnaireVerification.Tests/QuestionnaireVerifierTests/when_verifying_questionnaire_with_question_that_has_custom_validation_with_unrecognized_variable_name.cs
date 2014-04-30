@@ -19,7 +19,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionWithCustomValidation = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new SingleQuestion() { PublicKey = questionWithCustomValidation, ValidationExpression = "some random expression" });
+            questionnaire.Children.Add(new SingleQuestion()
+            {
+                PublicKey = questionWithCustomValidation,
+                ValidationExpression = "some random expression",
+                StataExportCaption = "var"
+            });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 

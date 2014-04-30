@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     PublicKey = rosterGroupId,
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.Question,
-                    Children = new List<IComposite>() { new NumericQuestion() }
+                    Children = new List<IComposite>() { new NumericQuestion(){StataExportCaption = "var"} }
                 });
 
             verifier = CreateQuestionnaireVerifier();

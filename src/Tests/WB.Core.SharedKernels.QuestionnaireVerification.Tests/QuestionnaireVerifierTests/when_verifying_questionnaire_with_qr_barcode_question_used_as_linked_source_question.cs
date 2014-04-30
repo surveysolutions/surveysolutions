@@ -18,10 +18,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         {
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 5 });
+            questionnaire.Children.Add(new NumericQuestion()
+            {
+                PublicKey = rosterSizeQuestionId,
+                IsInteger = true,
+                MaxValue = 5,
+                StataExportCaption = "var"
+            });
             questionnaire.Children.Add(new MultyOptionsQuestion()
             {
                 PublicKey = multiQuestionLinkedToQRBarcodeQuestionId,
+                StataExportCaption = "var",
                 LinkedToQuestionId = qrBarcodeQuestionId
             });
             questionnaire.Children.Add(new Group()
@@ -34,7 +41,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     new QRBarcodeQuestion()
                     {
-                        PublicKey = qrBarcodeQuestionId
+                        PublicKey = qrBarcodeQuestionId,
+                        StataExportCaption = "var"
                     }
                 }
             });
