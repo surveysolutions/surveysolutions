@@ -82,7 +82,7 @@ namespace CapiDataGenerator
 
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
 
-            ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore);
+            ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore,
                 new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50));
