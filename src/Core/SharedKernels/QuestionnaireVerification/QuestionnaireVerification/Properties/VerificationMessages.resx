@@ -264,4 +264,10 @@
   <data name="WB0057_QuestionHasEmptyVariableName" xml:space="preserve">
     <value>Question has empty variable name.</value>
   </data>
+  <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+    <value>Question has variable name reserved for service needs.</value>
+  </data>
+  <data name="WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
+    <value>If question uses %rostertitle% in title it need to be placed inside roster</value>
+  </data>
 </root>
