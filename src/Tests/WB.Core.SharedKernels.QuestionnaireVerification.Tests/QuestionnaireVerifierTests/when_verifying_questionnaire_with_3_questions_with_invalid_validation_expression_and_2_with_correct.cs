@@ -26,11 +26,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             secondCorrectQuestionId = Guid.Parse("2222EEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = InvalidExpression },
-                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = InvalidExpression },
-                new NumericQuestion { PublicKey = thirdIncorrectQuestionId, ValidationExpression = InvalidExpression },
-                new NumericQuestion { PublicKey = firstCorrectQuestionId, ValidationExpression = ValidExpression },
-                new NumericQuestion { PublicKey = secondCorrectQuestionId, ValidationExpression = ValidExpression }
+                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = InvalidExpression, StataExportCaption = "var" },
+                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = InvalidExpression, StataExportCaption = "var" },
+                new NumericQuestion { PublicKey = thirdIncorrectQuestionId, ValidationExpression = InvalidExpression, StataExportCaption = "var" },
+                new NumericQuestion { PublicKey = firstCorrectQuestionId, ValidationExpression = ValidExpression, StataExportCaption = "var" },
+                new NumericQuestion { PublicKey = secondCorrectQuestionId, ValidationExpression = ValidExpression, StataExportCaption = "var" }
             );
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor

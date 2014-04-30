@@ -15,7 +15,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new SingleQuestion() { PublicKey = linkedQuestionId, LinkedToQuestionId = Guid.NewGuid() });
+            questionnaire.Children.Add(new SingleQuestion()
+            {
+                PublicKey = linkedQuestionId,
+                LinkedToQuestionId = Guid.NewGuid(),
+                StataExportCaption = "var"
+            });
             verifier = CreateQuestionnaireVerifier();
         };
 

@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
             questionnaire.Children.Add(new QRBarcodeQuestion()
             {
-                PublicKey = rosterSizeQuestionId
+                PublicKey = rosterSizeQuestionId,
+                StataExportCaption = "var"
             });
 
             verifier = CreateQuestionnaireVerifier();

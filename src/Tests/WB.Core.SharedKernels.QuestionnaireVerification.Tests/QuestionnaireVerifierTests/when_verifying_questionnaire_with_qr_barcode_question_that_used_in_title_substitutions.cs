@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new TextQuestion()
             {
                 PublicKey = questionWithSubstitutionToQRBarcodeId,
+                StataExportCaption = "var",
                 QuestionText = string.Format("question with substitution to %{0}%", qrBarcodeQuestionVariableName)
             });
             questionnaire.Children.Add(new QRBarcodeQuestion()

@@ -24,14 +24,27 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             var rosterQuestionId2 = Guid.Parse("11100000000000000000000000000000");
 
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterQuestionId1, IsInteger = true, MaxValue = 3 });
-            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterQuestionId2, IsInteger = true, MaxValue = 3 });
+            questionnaire.Children.Add(new NumericQuestion()
+            {
+                PublicKey = rosterQuestionId1,
+                IsInteger = true,
+                MaxValue = 3,
+                StataExportCaption = "var"
+            });
+            questionnaire.Children.Add(new NumericQuestion()
+            {
+                PublicKey = rosterQuestionId2,
+                IsInteger = true,
+                MaxValue = 3,
+                StataExportCaption = "var"
+            });
 
             var rosterGroup1 = new Group() { PublicKey = rosterGroupId1, IsRoster = true, RosterSizeQuestionId = rosterQuestionId1 };
             rosterGroup1.Children.Add(new NumericQuestion()
             {
                 PublicKey = questionWithSubstitutionsIdFromLevel1,
-                QuestionText = string.Format("hello %{0}%", questionSubstitutionsSourceFromLevel2VariableName)
+                QuestionText = string.Format("hello %{0}%", questionSubstitutionsSourceFromLevel2VariableName),
+                StataExportCaption = "var"
             });
             questionnaire.Children.Add(rosterGroup1);
 

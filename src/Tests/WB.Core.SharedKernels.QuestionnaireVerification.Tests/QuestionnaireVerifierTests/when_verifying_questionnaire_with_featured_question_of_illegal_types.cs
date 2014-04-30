@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = featuredQuestionWithSubstitutionsId,
+                StataExportCaption = "var",
                 Featured = true,
                 QuestionText = "hello %word%!"
             });

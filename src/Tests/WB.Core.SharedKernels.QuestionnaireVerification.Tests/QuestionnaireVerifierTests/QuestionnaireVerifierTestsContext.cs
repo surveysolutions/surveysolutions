@@ -37,7 +37,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     new NumericQuestion
                     {
-                        PublicKey = rosterQuestionId, 
+                        PublicKey = rosterQuestionId,
+                        StataExportCaption = "var",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -51,6 +52,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
+                                StataExportCaption = "var",
                                 PublicKey = questionIdFromRoster
                             }
                         }
@@ -68,6 +70,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = Guid.Parse("a3333333333333333333333333333333"), 
+                        StataExportCaption = "var",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -80,6 +83,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
+                                StataExportCaption = "var",
                                 PublicKey = questionIdFromOtherRosterWithSameLevel
                             }
                         }
@@ -105,6 +109,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterGroupId, 
+                        StataExportCaption = "var",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -117,6 +122,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
+                                StataExportCaption = "var",
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
@@ -138,6 +144,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = Guid.Parse("a3333333333333333333333333333333"), 
+                        StataExportCaption = "var",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -150,6 +157,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
+                                StataExportCaption = "var",
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
@@ -176,6 +184,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterGroupId, 
+                        StataExportCaption = "var",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -188,12 +197,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
+                                StataExportCaption = "var",
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
                     },
                     new SingleQuestion
                     {
+                        StataExportCaption = "var",
                         PublicKey = questionWithCustomValidation,
                         ConditionExpression = "some random expression"
                     }

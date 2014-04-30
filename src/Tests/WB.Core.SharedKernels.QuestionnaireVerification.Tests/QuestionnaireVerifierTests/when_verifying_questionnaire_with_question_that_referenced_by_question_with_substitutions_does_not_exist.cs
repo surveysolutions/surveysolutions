@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionWithNotExistingSubstitutionsId,
+                StataExportCaption = "var",
                 QuestionText = "hello %unknown%!"
             });
 

@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new NumericQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
+                StataExportCaption = "var",
                 IsInteger = true,
                 MaxValue = 5
             });

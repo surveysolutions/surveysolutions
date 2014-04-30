@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             secondIncorrectQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion },
-                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion },
-                new TextQuestion { PublicKey = Guid.NewGuid() },
+                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = "var" },
+                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = "var" },
+                new TextQuestion { PublicKey = Guid.NewGuid(), StataExportCaption = "var" },
                 new Group { PublicKey = Guid.NewGuid() }
             );
 

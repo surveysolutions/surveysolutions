@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new QRBarcodeQuestion()
             {
                 PublicKey = questionId,
+                StataExportCaption = "var",
                 Featured = true
             });
 

@@ -20,7 +20,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             var rosterSizeQuestionId = Guid.Parse("11133333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument();
 
-            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4});
+            questionnaire.Children.Add(new NumericQuestion()
+            {
+                PublicKey = rosterSizeQuestionId,
+                IsInteger = true,
+                MaxValue = 4,
+                StataExportCaption = "var"
+            });
             var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
 
             rosterGroup.Children.Add(new NumericQuestion()
@@ -32,6 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionWithSubstitutionsId,
+                StataExportCaption = "var",
                 QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName)
             });
 

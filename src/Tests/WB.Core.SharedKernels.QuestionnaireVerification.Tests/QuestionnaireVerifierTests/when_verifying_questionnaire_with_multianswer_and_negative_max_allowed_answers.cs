@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new MultyOptionsQuestion()
             {
                 PublicKey = multyOptionsQuestionId,
+                StataExportCaption = "var",
                 Answers = new List<Answer>() { new Answer() { AnswerValue = "1" }, new Answer() { AnswerValue = "2" } },
                 MaxAllowedAnswers = 3
             });
