@@ -23,7 +23,8 @@ angular.module('designerApp')
 
             $scope.editChapter = function(chapter) {
                 chapter.isMenuOpen = false;
-                //navigationService.editChapter($routeParams.questionnaireId, chapter.ItemId);
+                console.log(chapter);
+                navigationService.editChapter($routeParams.questionnaireId, chapter.ChapterId);
             };
 
             $scope.addNewChapter = function() {

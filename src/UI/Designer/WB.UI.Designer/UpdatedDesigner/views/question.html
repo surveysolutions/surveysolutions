@@ -1,0 +1,11 @@
+﻿<form>
+    <h3>Question</h3>
+    <p>
+        Question Title
+        <input type="text" name="input" value="{{activeQuestion.Title}}" ng-pattern="word" required ng-trim="false"
+               style="width: 500px">
+    </p>
+    <p>
+        <input type="submit" value="Save" ng-click="saveQuestion()">
+    </p>
+</form>

@@ -1,0 +1,11 @@
+﻿<form>
+    <h3>Chapter</h3>
+    <p>
+        Chapter Title
+        <input type="text" name="input" value="{{activeChapter.Title}}" ng-pattern="word" required ng-trim="false"
+               style="width: 500px">
+    </p>
+    <p>
+        <input type="submit" value="Save" ng-click="saveChapter()">
+    </p>
+</form>

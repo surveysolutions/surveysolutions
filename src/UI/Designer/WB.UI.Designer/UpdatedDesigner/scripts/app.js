@@ -23,6 +23,11 @@ angular.module('designerApp', [
           controller: 'MainCtrl',
           reloadOnSearch: false
       })
+      .when('/:questionnaireId/editchapter/:chapterId', {
+            templateUrl: 'UpdatedDesigner/views/main.html',
+            controller: 'MainCtrl',
+            reloadOnSearch: false
+        })
       .otherwise({
         redirectTo: '/'
       });

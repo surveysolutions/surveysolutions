@@ -39,6 +39,13 @@ angular.module('designerApp')
             $scope.setItem = function(item) {
                 navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, item.ItemId);
                 $scope.currentItemId = item.ItemId;
+                if ($scope.isQuestion(item)) {
+                    $scope.activeChapter = undefined;
+                    $scope.activeQuestion = item;
+                } else {
+                    $scope.activeQuestion = undefined;
+                    $scope.activeChapter = item;
+                }
             };
 
             $scope.changeChapter = function(chapter) {

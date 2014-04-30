@@ -95,17 +95,9 @@
     </div>
 
     <div class="question-editor col-xs-6">
-        <div ng-if="item != undefined">
-            <form>
-                <p>
-                    {{questionnaire.Title}}
-                    <input type="text" name="input" value="{{item.Title}}" ng-pattern="word" required ng-trim="false"
-                           style="width: 500px">
-                </p>
-                <p>
-                    <input type="submit" value="Save" ng-click="submit()">
-                </p>
-            </form>
+        <div ng-if="activeChapter != undefined"  ng-include src="'UpdatedDesigner/views/chapter.html'" ng-controller="ChapterCtrl">
+        </div>
+        <div ng-if="activeQuestion != undefined" ng-include src="'UpdatedDesigner/views/question.html'" ng-controller="QuestionCtrl">
         </div>
     </div>
 </section>
