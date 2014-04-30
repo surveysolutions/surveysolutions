@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
                     Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
                     Verifier<IQuestion>(QuestionHasEmptyVariableName, "WB0057", VerificationMessages.WB0057_QuestionHasEmptyVariableName),
-
+                    Verifier<IQuestion>(QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -116,6 +116,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByQuestionsWithSubstitutions,
                 };
             }
+        }
+
+        private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
+        {
+            return question.StataExportCaption == StringUtil.RosterTitleSubstitutionReference;
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
@@ -841,6 +846,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return QuestionWithTitleSubstitutionCantReferenceSelf(questionWithSubstitution);
             }
 
+            if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
+            {
+                if (vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions.Length == 0)
+                {
+                    return QuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster(questionWithSubstitution);
+                }
+            }
             var questionSourceOfSubstitution =
                 questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == substitutionReference);
 
@@ -955,6 +967,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return new QuestionnaireVerificationError("WB0016",
                 VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                CreateReference(questionsWithSubstitution));
+        }
+
+        private static QuestionnaireVerificationError QuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster(
+            IQuestion questionsWithSubstitution)
+        {
+            return new QuestionnaireVerificationError("WB0059",
+                VerificationMessages.WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster,
                 CreateReference(questionsWithSubstitution));
         }
 
