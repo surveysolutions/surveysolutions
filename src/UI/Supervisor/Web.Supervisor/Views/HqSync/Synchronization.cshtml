@@ -1,0 +1,114 @@
+﻿@{
+    this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+    this.ViewBag.Title = "HQ Synchronization";
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h3>
+            Synchronization
+        </h3>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <button class="btn btn-default" id="synchnizationStart" data-bind="disable: syncronizationRunning, click: StartPull">
+                Pull
+            </button>
+            <button class="btn btn-default" data-bind="disable: syncronizationRunning, click: StartPush">
+                Push
+            </button>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <h4>
+                Pull status
+            </h4>
+        </div>
+        <div class="span6">
+            <h5>Messages</h5>
+            <div id="messages" class="well well-small" data-bind="foreach: PullMessages" style="overflow-y: scroll">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+        <div class="span5">
+            <h5>Errors</h5>
+            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: PullErrors">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <h4>
+                Push status
+            </h4>
+        </div>
+        <div class="span6">
+            <h5>Messages</h5>
+            <div id="messages" class="well well-small" data-bind="foreach: PushMessages" style="overflow-y: scroll">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+        <div class="span5">
+            <h5>Errors</h5>
+            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: PushErrors">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+
+        function SynchronizationViewModel() {
+            var self = this;
+
+            self.PullMessages = ko.observableArray([]);
+            self.PullErrors = ko.observableArray([]);
+            self.pullRunning = ko.observable(true);
+            self.PushMessages = ko.observableArray([]);
+            self.PushErrors = ko.observableArray([]);
+            self.pushRunning = ko.observable(true);
+
+            self.syncronizationRunning = ko.computed(function() { return self.pullRunning() || self.pushRunning(); });
+
+            self.StartPull = function() {
+                self.syncronizationRunning(true);
+                $.post('@Url.Action("Synchronize", "HqSync")');
+            }
+
+            self.StartPush = function() {
+                self.syncronizationRunning(true);
+                $.post('@Url.Action("Push", "HqSync")');
+            }
+
+            self.RefreshStatus = function() {
+                $.ajax({
+                    url: '@Url.Action("PullStatus", "HqSync")',
+                    cache: false,
+                    success: function(status) {
+                        self.pullRunning(status.IsRunning);
+                        self.PullMessages(status.Messages);
+                        self.PullErrors(status.Errors);
+                    }
+                });
+                $.ajax({
+                    url: '@Url.Action("PushStatus", "HqSync")',
+                    cache: false,
+                    success: function (status) {
+                        self.pushRunning(status.IsRunning);
+                        self.PushMessages(status.Messages);
+                        self.PushErrors(status.Errors);
+                    }
+                });
+            }
+        }
+
+        var synchronizationViewModel = new SynchronizationViewModel();
+        ko.applyBindings(synchronizationViewModel);
+        synchronizationViewModel.RefreshStatus();
+        var interval = setInterval(synchronizationViewModel.RefreshStatus, 3000);
+    </script>
+}

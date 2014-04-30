@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+   <parameter name="The RavenDB instance address"
+      description="Provide the address for RavenDB instance"
+      defaultValue="http://localhost:8080">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Raven.DocumentStore']/@value" />
+   </parameter>
+   <parameter name="Events database name"
+      description="The database where the events will be stored"
+      defaultValue="SupervisorEvents">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Raven.Databases.Events']/@value" />
+   </parameter>
+   <parameter name="Views database name"
+      description="The database where the read side will be stored"
+      defaultValue="SupervisorViews">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Raven.Databases.Views']/@value" />
+   </parameter>
+   <parameter name="Plain storage"
+      description=""
+      defaultValue="SupervisorPlainStorage">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
+   </parameter>
+   <parameter name="Embeded Headquarters"
+      description="Does this Supervisor have Headquarters functions as well?"
+      defaultValue="true">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='HeadquartersFunctionsEnabled']/@value" />
+   </parameter>
+   <parameter name="Headquarters location"
+      description="Provide the address for the headquarters"
+      defaultValue="http://localhost/Headquarters">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Headquarters.BaseUrl']/@value" />
+   </parameter>
+   <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://localhost/Designer/PublicService.svc" tags="">
+    <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="//system.serviceModel/client/endpoint/@address" />
+  </parameter>
+</parameters>

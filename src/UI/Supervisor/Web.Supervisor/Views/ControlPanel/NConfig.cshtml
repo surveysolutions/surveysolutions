@@ -1,0 +1,14 @@
+﻿@{
+    this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: NConfig";
+}
+
+<b>Value of Test Parameter:</b><br/>
+@(System.Configuration.ConfigurationManager.AppSettings["Test"] ?? "<null>")
+
+<br/><br/>
+
+<b>Dump:</b><br/>
+<pre style="height: 300px; overflow-y: scroll;">
+@Html.Raw(NConfig.NConfigurator.Default.DumpDiagnostics())
+</pre>
