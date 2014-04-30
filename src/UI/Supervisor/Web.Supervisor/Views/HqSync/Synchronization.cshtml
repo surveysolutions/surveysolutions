@@ -75,12 +75,12 @@
             self.syncronizationRunning = ko.computed(function() { return self.pullRunning() || self.pushRunning(); });
 
             self.StartPull = function() {
-                self.syncronizationRunning(true);
+                self.pullRunning(true);
                 $.post('@Url.Action("Synchronize", "HqSync")');
             }
 
             self.StartPush = function() {
-                self.syncronizationRunning(true);
+                self.pushRunning(true);
                 $.post('@Url.Action("Push", "HqSync")');
             }
 
