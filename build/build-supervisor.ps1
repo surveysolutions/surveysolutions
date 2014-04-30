@@ -39,8 +39,8 @@ try {
 		-OutFileName $PackageName
 
 	BuildSupervisor `
-		-Solution 'src\Supervisor.sln' `
-		-Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
+		-Solution 'src\WB without Xamarin.sln' `
+		-Project 'src\UI\Supervisor\Web.Supervisor.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-AndroidPackageName $PackageName `
 		-BuildNumber $BuildNumber

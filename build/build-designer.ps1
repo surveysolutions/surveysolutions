@@ -22,7 +22,7 @@ try {
 		-OutFileName $PackageName
 
 	BuildDesigner `
-		-Solution 'src\Designer.sln' `
+		-Solution 'src\WB without Xamarin.sln' `
 		-Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
 		-BuildConfiguration $BuildConfiguration `
 		-AndroidPackageName $PackageName -BuildNumber $BuildNumber

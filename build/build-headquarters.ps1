@@ -7,7 +7,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 try {
 	BuildHeadquarters `
-		-Solution 'src\Headquarters.sln' `
+		-Solution 'src\WB without Xamarin.sln' `
 		-Project 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj' `
 		-BuildConfiguration $BuildConfiguration
 }
