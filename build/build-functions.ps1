@@ -172,27 +172,10 @@ function BuildSupervisor($Solution, $Project, $CapiProject, $BuildConfiguration,
 	AddArtifacts $Project $BuildConfiguration
 }
 
-
-function BuildDesigner($Solution, $Project, $CapiTesterProject, $BuildConfiguration, $VersionPrefix, $BuildNumber) {
-
+function BuildDesigner($Solution, $Project, $BuildConfiguration) {
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
-
-	$PahToManifest =  (Join-Path (Get-Location).Path "src\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\Properties\AndroidManifest.xml")
-	UpdateAndroidAppManifest $VersionPrefix $BuildNumber $PahToManifest
-	BuildAndroidApp $CapiTesterProject $BuildConfiguration | %{ if (-not $_) { Exit } }
-
-	$FinalPackageName = "WBCapiTester.apk" 
-
-	SignAndPackCapi -KeyStorePass $KeystorePassword `
-					-CapiProject $CapiTesterProject `
-					-TempPackageNamePrefixWithPath "src/UI/QuestionnaireTester/WB.UI.QuestionnaireTester/bin/$BuildConfiguration/CAPI.Android.Tester" `
-					-FinalPackageName $FinalPackageName | %{ if (-not $_) { Exit } }
-
-	CopyCapi -Project $Project `
-			 -CapiProject $CapiTesterProject `
-			 -FinalPackageName $FinalPackageName
 
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
