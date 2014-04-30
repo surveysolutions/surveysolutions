@@ -2,8 +2,8 @@
 
 angular.module('designerApp')
     .controller('MainCtrl', [
-        '$scope', '$routeParams', '$location', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService',
-        function($scope, $routeParams, $location, $route, questionnaireService, commandService, verificationService, utilityService) {
+        '$scope', '$routeParams', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'navigationService',
+        function($scope, $routeParams, $route, questionnaireService, commandService, verificationService, utilityService, navigationService) {
 
             $scope.verificationStatus = {
                 errorsCount: 0,
@@ -37,14 +37,12 @@ angular.module('designerApp')
             $scope.currentChapterId = null;
 
             $scope.setItem = function(item) {
-                var url = utilityService.format('/{0}/chapter/{1}/item/{2}', $routeParams.questionnaireId, $scope.currentChapterId, item.ItemId);
-                $location.path(url);
+                navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, item.ItemId);
                 $scope.currentItemId = item.ItemId;
             };
 
             $scope.changeChapter = function(chapter) {
-                var url = utilityService.format('/{0}/chapter/{1}', $routeParams.questionnaireId, chapter.ChapterId);
-                $location.path(url);
+                navigationService.openChapter($routeParams.questionnaireId, chapter.ChapterId);
                 $scope.currentChapterId = chapter.ChapterId;
                 $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
             };

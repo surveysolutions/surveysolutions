@@ -1,10 +1,9 @@
 ﻿'use strict';
 
 angular.module('designerApp')
-    .controller('ChaptersCtrl',
-    [
-        '$scope', '$routeParams', '$location', '$route', 'commandService', 'utilityService',
-        function($scope, $routeParams, $location, $route, commandService, math) {
+    .controller('ChaptersCtrl', [
+        '$scope', '$routeParams', '$location', '$route', 'commandService', 'utilityService', 'navigationService',
+        function($scope, $routeParams, $location, $route, commandService, math, navigationService) {
 
             $scope.chapters = [];
 
@@ -18,12 +17,13 @@ angular.module('designerApp')
                 $scope.isFolded = false;
             };
 
-            $scope.openMenu = function (chapter) {
+            $scope.openMenu = function(chapter) {
                 chapter.isMenuOpen = true;
             };
 
-            $scope.editChapter = function (chapter) {
+            $scope.editChapter = function(chapter) {
                 chapter.isMenuOpen = false;
+                //navigationService.editChapter($routeParams.questionnaireId, chapter.ItemId);
             };
 
             $scope.addNewChapter = function() {
@@ -42,7 +42,7 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.cloneChapter = function (chapter) {
+            $scope.cloneChapter = function(chapter) {
                 chapter.isMenuOpen = false;
                 var newId = math.guid();
                 var chapterDescription = "";
@@ -59,7 +59,7 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.deleteChapter = function (chapter) {
+            $scope.deleteChapter = function(chapter) {
                 chapter.isMenuOpen = false;
                 if (confirm("Are you sure want to delete?")) {
                     commandService.deleteGroup($routeParams.questionnaireId, chapter).success(function() {
