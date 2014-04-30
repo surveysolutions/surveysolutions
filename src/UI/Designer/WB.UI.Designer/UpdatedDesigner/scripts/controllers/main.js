@@ -39,6 +39,7 @@ angular.module('designerApp')
             $scope.setItem = function(item) {
                 var url = utilityService.format('/{0}/chapter/{1}/item/{2}', $routeParams.questionnaireId, $scope.currentChapterId, item.ItemId);
                 $location.path(url);
+                $scope.currentItemId = item.ItemId;
             };
 
             $scope.changeChapter = function(chapter) {

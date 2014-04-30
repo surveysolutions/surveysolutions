@@ -39,7 +39,7 @@
                         <div class="inner">
                             <h1>{{chapter.Title}}</h1>
                             <!--<span>({{chapter.QuestionsCount}} Questions, {{chapter.GroupsCount}} Groups, {{chapter.RostersCount}} Rosters)</span>-->
-                            <div class="btn-group">
+                            <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
                                 <a class="dropdown-toggle" data-toggle="dropdown"></a>
                                 <ul class="dropdown-menu">
                                     <li><a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a></li>
@@ -47,11 +47,11 @@
                                     <li><a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a></li>
                                 </ul>
                             </div>
-                            <!--<div>
+                            <div>
                                 <a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a>&nbsp;
                                 <a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a>
                                 <a ng-click="cloneChapter(chapter);$event.stopPropagation()">Clone</a><small>(without childs)</small>&nbsp;
-                            </div>-->
+                            </div>
                         </div>
                     </div>
                 </li>

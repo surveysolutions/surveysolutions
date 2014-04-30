@@ -18,8 +18,12 @@ angular.module('designerApp')
                 $scope.isFolded = false;
             };
 
-            $scope.editChapter = function(chapter) {
-                console.log(chapter);
+            $scope.openMenu = function (chapter) {
+                chapter.isMenuOpen = true;
+            };
+
+            $scope.editChapter = function (chapter) {
+                chapter.isMenuOpen = false;
             };
 
             $scope.addNewChapter = function() {
@@ -38,7 +42,8 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.cloneChapter = function(chapter) {
+            $scope.cloneChapter = function (chapter) {
+                chapter.isMenuOpen = false;
                 var newId = math.guid();
                 var chapterDescription = "";
 
@@ -54,7 +59,8 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.deleteChapter = function(chapter) {
+            $scope.deleteChapter = function (chapter) {
+                chapter.isMenuOpen = false;
                 if (confirm("Are you sure want to delete?")) {
                     commandService.deleteGroup($routeParams.questionnaireId, chapter).success(function() {
                         var index = $scope.questionnaire.Chapters.indexOf(chapter);
