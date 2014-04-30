@@ -1,11 +1,30 @@
-﻿<form>
-    <h3>Chapter</h3>
-    <p>
-        Chapter Title
-        <input type="text" name="input" value="{{activeChapter.Title}}" ng-pattern="word" required ng-trim="false"
-               style="width: 500px">
-    </p>
-    <p>
-        <input type="submit" value="Save" ng-click="saveChapter()">
-    </p>
-</form>
+﻿<div class="breadcrumbs">
+    <ul>
+        <li><a href="#">Chapter 1. Household</a></li>
+        <li><a href="#">members information</a></li>
+    </ul>
+</div>
+    
+<div class="group">
+    <h1>Title</h1>
+
+    <div class="form-holder">
+        <div class="comment-block">
+            <input type="text" class="wb-input bg-white width-auto" value="{{activeChapter.Title}}" ng-pattern="word" required ng-trim="false">
+        </div>
+    </div>
+</div>
+
+<div class="comment-block">
+    <label class="wb-label">Description <span>(<a>?</a>)</span></label><br>
+    <input type="text" class="wb-input bg-white width-auto">
+</div>
+
+<div class="comment-block">
+    <label class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
+    <input type="text" class="wb-input bg-white width-auto">
+</div>
+
+<p>
+    <input type="submit" value="Save" ng-click="saveChapter()">
+</p>

@@ -94,12 +94,12 @@
         </div>
     </div>
 
-    <div class="question-editor col-xs-6">
-        <div ng-if="activeChapter != undefined"  ng-include src="'UpdatedDesigner/views/chapter.html'" ng-controller="ChapterCtrl">
-        </div>
-        <div ng-if="activeQuestion != undefined" ng-include src="'UpdatedDesigner/views/question.html'" ng-controller="QuestionCtrl">
-        </div>
+    <div class="question-editor col-xs-6" ng-if="activeChapter != undefined" ng-include src="'UpdatedDesigner/views/chapter.html'" ng-controller="ChapterCtrl">
     </div>
+    
+    <div class="question-editor col-xs-6" ng-if="activeQuestion != undefined" ng-include src="'UpdatedDesigner/views/question.html'" ng-controller="QuestionCtrl">
+    </div>
+
 </section>
 
 <div id="verification-modal" class="modal fade">
