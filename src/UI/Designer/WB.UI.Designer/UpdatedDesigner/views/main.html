@@ -9,7 +9,7 @@
     <div class="questionnarie-title">
         <div class="title">
             <!--ng-controller="VerificationCtrl"-->
-            {{questionnaire.Title}} <span>({{questionnaire.QuestionsCount}}Q, {{questionnaire.GroupsCount}}G, {{questionnaire.RostersCount}}R)</span>
+            {{questionnaire.title}} <span>({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
             <input type="button" class="wb-inline-button error" value="VERIFY" ng-click="verify()" />
             <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
             <span ng-show="verificationStatus.errorsCount == 0">OK</span>
