@@ -21,10 +21,12 @@ angular.module('designerApp')
                 chapter.isMenuOpen = true;
             };
 
-            $scope.editChapter = function(chapter) {
-                chapter.isMenuOpen = false;
+            $scope.editChapter = function (chapter) {
                 console.log(chapter);
-                navigationService.editChapter($routeParams.questionnaireId, chapter.ChapterId);
+                chapter.isMenuOpen = false;
+                chapter.ItemId = chapter.ChapterId;
+                $scope.setItem(chapter);
+                //navigationService.editChapter($routeParams.questionnaireId, chapter.ChapterId);
             };
 
             $scope.addNewChapter = function() {
