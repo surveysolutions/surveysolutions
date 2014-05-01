@@ -1,5 +1,7 @@
 ﻿angular.module('designerApp')
-    .factory('questionnaireService', ['$http', function ($http) {
+    .factory('questionnaireService', [
+        '$http', 'utilityService',
+        function ($http, string) {
 
         var urlBase = 'api/questionnaire';
         var questionnaireService = {};
@@ -10,6 +12,10 @@
 
         questionnaireService.getChapterById = function (questionnaireId, chapterId) {
             return $http.get(urlBase + '/chapter/' + questionnaireId + "?chapterId=" + chapterId);
+        };
+
+        questionnaireService.getGroupEditForm = function (questionnaireId, groupId) {
+            return $http.get(urlBase + '/EditForm/' + questionnaireId + "?groupId=" + groupId);
         };
 
         return questionnaireService;
