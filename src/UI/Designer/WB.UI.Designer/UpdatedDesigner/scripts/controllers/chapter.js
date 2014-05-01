@@ -2,16 +2,28 @@
 
 angular.module('designerApp')
     .controller('ChapterCtrl', [
-        '$scope', '$routeParams',
-        function($scope, $routeParams) {
+        '$scope', '$routeParams', 'questionnaireService', 'commandService',
+        function($scope, $routeParams, questionnaireService, commandService) {
+
+            $scope.loadGroup = function() {
+                questionnaireService.getGroupEditForm($routeParams.questionnaireId, $scope.activeChapter.ItemId).success(function(result) {
+                        var group = result.group;
+                        $scope.activeChapter.description = group.description;
+                        $scope.activeChapter.enablementCondition = group.enablementCondition;
+                    }
+                );
+            }
+
             console.log($scope.activeChapter);
+            $scope.loadGroup();
 
             $scope.$watch('activeChapter', function(newVal) {
-                console.log($scope.activeChapter);
+                $scope.loadGroup();
             });
 
             $scope.saveChapter = function() {
-                console.log('save chapter');
+                console.log($scope.activeChapter);
+                commandService.updateGroup($routeParams.questionnaireId, $scope.activeChapter);
             };
         }
     ]);

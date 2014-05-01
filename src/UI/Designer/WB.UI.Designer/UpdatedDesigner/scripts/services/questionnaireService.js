@@ -15,7 +15,7 @@
         };
 
         questionnaireService.getGroupEditForm = function (questionnaireId, groupId) {
-            return $http.get(urlBase + '/EditForm/' + questionnaireId + "?groupId=" + groupId);
+            return $http.get(urlBase + '/EditGroup/' + questionnaireId + "?qroupId=" + groupId);
         };
 
         return questionnaireService;

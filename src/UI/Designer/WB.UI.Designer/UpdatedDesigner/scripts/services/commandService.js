@@ -53,6 +53,23 @@
                 return commandCall("AddGroup", command);
             };
 
+            commandService.updateGroup = function (questionnaireId, group) {
+                var command = {
+                    "questionnaireId": questionnaireId,
+                    "groupId": group.ItemId,
+                    "title": group.Title,
+                    "description": group.description,
+                    "condition": group.enablementCondition,
+                    "isRoster": false,
+                    "rosterSizeQuestionId": null,
+                    "rosterSizeSource": "Question",
+                    "rosterFixedTitles": null,
+                    "rosterTitleQuestionId": null
+                };
+
+                return commandCall("UpdateGroup", command);
+            };
+
             commandService.addQuestion = function(questionnaireId, group, newId) {
                 var command = {
                     "questionnaireId": questionnaireId,
