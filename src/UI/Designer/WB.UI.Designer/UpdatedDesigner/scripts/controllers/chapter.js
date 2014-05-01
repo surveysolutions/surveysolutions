@@ -10,6 +10,7 @@ angular.module('designerApp')
                         var group = result.group;
                         $scope.activeChapter.description = group.description;
                         $scope.activeChapter.enablementCondition = group.enablementCondition;
+                        $scope.activeChapter.breadcrumbs = result.breadcrumbs;
                     }
                 );
             }
