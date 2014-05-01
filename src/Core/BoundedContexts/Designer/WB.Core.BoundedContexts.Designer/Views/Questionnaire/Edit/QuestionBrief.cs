@@ -7,4 +7,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public Guid Id { get; set; }
         public string Title { get; set; }
     }
+    public class GroupBrief : QuestionBrief { }
 }

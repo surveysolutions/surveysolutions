@@ -101,7 +101,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Title = group.Title,
                     EnablementCondition = group.EnablementCondition,
                     Description = group.Description
-                }
+                },
+                Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
             };
             return result;
         }
@@ -129,7 +130,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 },
                 NotLinkedMultiOptionQuestions = this.GetNotLinkedMultiOptionQuestionBriefs(questionnaire),
                 NumericIntegerQuestions = this.GetNumericIntegerQuestionBriefs(questionnaire),
-                TextListsQuestions = this.GetTextListsQuestionBriefs(questionnaire)
+                TextListsQuestions = this.GetTextListsQuestionBriefs(questionnaire),
+                Breadcrumbs = this.GetBreadcrumbs(questionnaire, roster)
             };
 
             return result;
@@ -232,7 +234,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }).ToArray());
         }
 
-        private GroupBrief[] GetBreadcrumbs(QuestionsAndGroupsCollectionView questionsCollection, QuestionDetailsView question)
+        private GroupBrief[] GetBreadcrumbs(QuestionsAndGroupsCollectionView questionsCollection, DescendantItemView question)
         {
             return question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x)).Select(x => new GroupBrief
             {
