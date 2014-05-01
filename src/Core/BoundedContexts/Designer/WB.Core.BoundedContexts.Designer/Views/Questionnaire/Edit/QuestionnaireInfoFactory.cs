@@ -8,7 +8,78 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class QuestionnaireInfoFactory : IQuestionnaireInfoFactory
     {
+        public class SelectOption
+        {
+            public string Value { get; set; }
+            public string Text { get; set; }
+        }
+
         private readonly IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader;
+
+        private readonly SelectOption[] questionScopeOptions = new SelectOption[]
+        {
+            new SelectOption
+            {
+                Value = "Interviewer",
+                Text = "Interviewer"
+            },
+            new SelectOption
+            {
+                Value ="Supervisor",
+                Text ="Supervisor"
+            },
+            new SelectOption
+            {
+                Value = "Headquarter",
+                Text = "Headquarters"
+            }
+        };
+
+        private readonly SelectOption[] questionTypeOptopns = new SelectOption[]
+        {
+            new SelectOption
+            {
+                Value = "SingleOption",
+                Text = "Categorical: one answer"
+            },
+            new SelectOption
+            {
+                Value = "MultyOption",
+                Text = "Categorical: multiple answers"
+            },
+            new SelectOption
+            {
+                Value = "Numeric",
+                Text = "Numeric"
+            },
+            new SelectOption
+            {
+                Value = "DateTime",
+                Text = "Date"
+            },
+            new SelectOption
+            {
+                Value = "Text",
+                Text = "Text"
+            },
+            new SelectOption
+            {
+                Value = "GpsCoordinates",
+                Text = "Geo Location"
+            }
+            ,
+            new SelectOption
+            {
+                Value = "TextList",
+                Text = "List"
+            },
+            new SelectOption
+            {
+                Value = "QRBarcode",
+                Text = "QR Barcode"
+            }
+        };
+
         public QuestionnaireInfoFactory(IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader)
         {
             this.questionDetailsReader = questionDetailsReader;
@@ -75,7 +146,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var result = new NewEditQuestionView
             {
                 Question = question,
-                SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire)
+                Breadcrumbs = this.GetBreadcrumbs(questionnaire,question),
+                SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire),
+                QuestionTypeOptopns = this.questionTypeOptopns,
+                QuestionScopeOptions = this.questionScopeOptions
             };
 
             return result;
@@ -106,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questions = questionsCollection
                 .Questions.OfType<NumericDetailsView>()
                 .Where(q => q.IsInteger)
-                .Select(q => new 
+                .Select(q => new
                 {
                     Id = q.Id,
                     Title = q.Title,
@@ -120,9 +194,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }).ToArray());
         }
 
-        private Dictionary<string, QuestionBrief[]>  GetNotLinkedMultiOptionQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private Dictionary<string, QuestionBrief[]> GetNotLinkedMultiOptionQuestionBriefs(
+            QuestionsAndGroupsCollectionView questionsCollection)
         {
-           var questions =  questionsCollection
+            var questions = questionsCollection
                 .Questions.OfType<MultiOptionDetailsView>()
                 .Where(q => q.LinkedToQuestionId == null)
                 .Select(q => new
@@ -132,11 +207,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
                 }).ToArray();
 
-           return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
-           {
-               Id = x.Id,
-               Title = x.Title
-           }).ToArray());
+            return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
+            {
+                Id = x.Id,
+                Title = x.Title
+            }).ToArray());
         }
 
         private Dictionary<string, QuestionBrief[]> GetTextListsQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
@@ -157,9 +232,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }).ToArray());
         }
 
+        private GroupBrief[] GetBreadcrumbs(QuestionsAndGroupsCollectionView questionsCollection, QuestionDetailsView question)
+        {
+            return question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x)).Select(x => new GroupBrief
+            {
+                Id = x.Id,
+                Title = x.Title
+            }).ToArray();
+        }
+
         private string GetBreadcrumbsAsString(QuestionsAndGroupsCollectionView questionsCollection, QuestionDetailsView question)
         {
-            return string.Join(" / ", question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x).Title));
+            return string.Join(" / ", GetBreadcrumbs(questionsCollection, question).Select(x => x.Title));
         }
     }
 }

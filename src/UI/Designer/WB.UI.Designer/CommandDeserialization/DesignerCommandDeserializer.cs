@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.DateTime;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.GpsCoordinates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.MultiOption;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numeric;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBarcode;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextList;
 using WB.UI.Shared.Web.CommandDeserialization;
 
@@ -17,31 +22,37 @@ namespace WB.UI.Designer.CommandDeserialization
             get
             {
                 return new Dictionary<string, Type>
-                    {
-                        {"UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand)},
-                        {"UpdateGroup", typeof (UpdateGroupCommand)},
-                        {"AddGroup", typeof (AddGroupCommand)},
-                        {"CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand)},
-                        {"CloneGroup", typeof (CloneGroupCommand)},
-                        {"DeleteGroup", typeof (DeleteGroupCommand)},
-                        {"MoveGroup", typeof (MoveGroupCommand)},
-                        {"UpdateQuestion", typeof (UpdateQuestionCommand)},
-                        {"UpdateNumericQuestion", typeof (UpdateNumericQuestionCommand)},
-                        {"UpdateTextListQuestion", typeof (UpdateTextListQuestionCommand)},
-                        {"AddQuestion", typeof (AddQuestionCommand)},
-                        {"AddNumericQuestion", typeof (AddNumericQuestionCommand)},
-                        {"AddTextListQuestion", typeof (AddTextListQuestionCommand)},
-                        {"CloneQuestion", typeof (CloneQuestionCommand)},
-                        {"CloneNumericQuestion", typeof (CloneNumericQuestionCommand)},
-                        {"CloneTextListQuestion", typeof (CloneTextListQuestionCommand)},
-                        {"DeleteQuestion", typeof (DeleteQuestionCommand)},
-                        {"MoveQuestion", typeof (MoveQuestionCommand)},
-                        {"AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand)},
-                        {"RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand)},
-                        {"AddQRBarcodeQuestion", typeof (AddQRBarcodeQuestionCommand)},
-                        {"UpdateQRBarcodeQuestion", typeof (UpdateQRBarcodeQuestionCommand)},
-                        {"CloneQRBarcodeQuestion", typeof (CloneQRBarcodeQuestionCommand)},
-                    };
+                {
+                    { "UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand) },
+                    { "UpdateGroup", typeof (UpdateGroupCommand) },
+                    { "AddGroup", typeof (AddGroupCommand) },
+                    { "CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand) },
+                    { "CloneGroup", typeof (CloneGroupCommand) },
+                    { "DeleteGroup", typeof (DeleteGroupCommand) },
+                    { "MoveGroup", typeof (MoveGroupCommand) },
+                    { "UpdateQuestion", typeof (UpdateQuestionCommand) },
+                    { "AddQuestion", typeof (AddQuestionCommand) },
+                    { "AddNumericQuestion", typeof (AddNumericQuestionCommand) },
+                    { "AddTextListQuestion", typeof (AddTextListQuestionCommand) },
+                    { "CloneQuestion", typeof (CloneQuestionCommand) },
+                    { "CloneNumericQuestion", typeof (CloneNumericQuestionCommand) },
+                    { "CloneTextListQuestion", typeof (CloneTextListQuestionCommand) },
+                    { "DeleteQuestion", typeof (DeleteQuestionCommand) },
+                    { "MoveQuestion", typeof (MoveQuestionCommand) },
+                    { "AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand) },
+                    { "RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand) },
+                    { "AddQRBarcodeQuestion", typeof (AddQRBarcodeQuestionCommand) },
+                    { "CloneQRBarcodeQuestion", typeof (CloneQRBarcodeQuestionCommand) },
+                    //Update questions command
+                    { "UpdateTextQuestion", typeof (UpdateTextQuestionCommand) },
+                    { "UpdateNumericQuestion", typeof (UpdateNumericQuestionCommand) },
+                    { "UpdateDateTimeQuestion", typeof (UpdateDateTimeQuestionCommand) },
+                    { "UpdateTextListQuestion", typeof (UpdateTextListQuestionCommand) },
+                    { "UpdateQRBarcodeQuestion", typeof (UpdateQRBarcodeQuestionCommand) },
+                    { "UpdateMultiOptionQuestion", typeof (UpdateMultiOptionQuestionCommand) },
+                    { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestionCommand) },
+                    { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestionCommand) },
+                };
             }
 
         }

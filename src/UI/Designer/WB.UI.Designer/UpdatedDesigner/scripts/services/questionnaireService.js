@@ -18,5 +18,9 @@
             return $http.get(urlBase + '/EditGroup/' + questionnaireId + "?qroupId=" + groupId);
         };
 
+        questionnaireService.getQuestionDetailsById = function (questionnaireId, questionId) {
+            return $http.get(urlBase + '/editQuestion/' + questionnaireId + "?questionId=" + questionId);
+        };
+
         return questionnaireService;
     }]);

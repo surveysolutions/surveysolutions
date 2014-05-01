@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .factory('commandService', [
-        '$http', function($http) {
+        '$http', function ($http) {
 
             var urlBase = 'command/execute';
             var commandService = {};
@@ -17,7 +17,59 @@
                 });
             }
 
-            commandService.addChapter = function(questionnaireId, chapter) {
+            commandService.sendUpdateQuestionCommand = function (questionnaireId, question) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    questionId: question.id,
+                    title: question.title,
+                    type: question.type,
+                    variableName: question.variableName,
+                    isPreFilled: question.isPreFilled,
+                    isMandatory: question.isMandatory,
+                    scope: question.questionScope,
+                    enablementCondition: question.enablementCondition,
+                    validationExpression: question.validationExpression,
+                    validationMessage: question.validationMessage,
+                    instructions: question.instruction
+                };
+
+                switch (question.type) {
+                    case "SingleOption":
+                    case "MultyOption":
+                        command.areAnswersOrdered = question.areAnswersOrdered;
+                        command.maxAllowedAnswers = question.maxAllowedAnswers;
+                        command.options = [
+                            {
+                                id: "11111111111111111111111111111111",
+                                title: "Option 1",
+                                value: 1
+                            },
+                            {
+                                id: "22222222222222222222222222222222",
+                                title: "Option 1",
+                                value: 1
+                            }
+                        ];
+                        break;
+                    case "Numeric":
+                        command.isInteger = true;
+                        command.countOfDecimalPlaces = null;
+                        command.maxValue = 20;
+                    case "DateTime":
+                    case "GpsCoordinates":
+                    case "Text":
+                        break;
+                    case "TextList":
+                        command.maxAnswerCount = 10;
+                        break;
+                }
+
+                var commandName = "Update" + question.type + "Question";
+
+                return commandCall(commandName, command);
+            }
+
+            commandService.addChapter = function (questionnaireId, chapter) {
                 var command = {
                     "questionnaireId": questionnaireId,
                     "groupId": chapter.chapterId,
@@ -35,7 +87,7 @@
                 return commandCall("AddGroup", command);
             };
 
-            commandService.addGroup = function(questionnaireId, group, parentGroupId) {
+            commandService.addGroup = function (questionnaireId, group, parentGroupId) {
                 var command = {
                     "questionnaireId": questionnaireId,
                     "groupId": group.id,
@@ -70,7 +122,7 @@
                 return commandCall("UpdateGroup", command);
             };
 
-            commandService.addQuestion = function(questionnaireId, group, newId) {
+            commandService.addQuestion = function (questionnaireId, group, newId) {
                 var command = {
                     "questionnaireId": questionnaireId,
                     "questionId": newId,
@@ -90,7 +142,7 @@
                 return commandCall("AddQuestion", command);
             };
 
-            commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter, chapterDescription) {
+            commandService.cloneGroupWithoutChildren = function (questionnaireId, newId, chapter, chapterDescription) {
                 var command = {
                     "questionnaireId": questionnaireId,
                     "groupId": newId,
@@ -110,7 +162,7 @@
                 return commandCall("CloneGroupWithoutChildren", command);
             };
 
-            commandService.deleteGroup = function(questionnaireId, chapter) {
+            commandService.deleteGroup = function (questionnaireId, chapter) {
                 var command = {
                     "questionnaireId": questionnaireId,
                     "groupId": chapter.chapterId
