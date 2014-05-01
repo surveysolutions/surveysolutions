@@ -852,6 +852,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 {
                     return QuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster(questionWithSubstitution);
                 }
+                return null;
             }
             var questionSourceOfSubstitution =
                 questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == substitutionReference);
