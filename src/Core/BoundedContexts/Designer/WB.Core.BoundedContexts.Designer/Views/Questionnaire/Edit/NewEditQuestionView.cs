@@ -7,5 +7,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         public QuestionDetailsView Question { get; set; }
         public Dictionary<string, QuestionBrief[]> SourceOfLinkedQuestions { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptopns { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] QuestionScopeOptions { get; set; }
+        public GroupBrief[] Breadcrumbs { get; set; }
     }
 }

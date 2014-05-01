@@ -16,6 +16,7 @@ namespace WB.UI.Designer.Filters
         static CamelCaseAttribute()
         {
             _camelCasingFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            _camelCasingFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
