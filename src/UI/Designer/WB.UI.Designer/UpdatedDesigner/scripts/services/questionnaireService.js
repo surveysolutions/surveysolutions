@@ -7,19 +7,23 @@
         var questionnaireService = {};
 
         questionnaireService.getQuestionnaireById = function (questionnaireId) {
-            return $http.get(urlBase + '/get/' + questionnaireId);
+            var url = string.format('{0}/get/{1}', urlBase, questionnaireId);
+            return $http.get(url);
         };
 
         questionnaireService.getChapterById = function (questionnaireId, chapterId) {
-            return $http.get(urlBase + '/chapter/' + questionnaireId + "?chapterId=" + chapterId);
+            var url = string.format('{0}/chapter/{1}?chapterId={2}', urlBase, questionnaireId, chapterId);
+            return $http.get(url);
         };
 
-        questionnaireService.getGroupEditForm = function (questionnaireId, groupId) {
-            return $http.get(urlBase + '/EditGroup/' + questionnaireId + "?qroupId=" + groupId);
+        questionnaireService.getGroupDetailsById = function (questionnaireId, groupId) {
+            var url = string.format('{0}/editGroup/{1}?groupId={2}', urlBase, questionnaireId, groupId);
+            return $http.get(url);
         };
 
         questionnaireService.getQuestionDetailsById = function (questionnaireId, questionId) {
-            return $http.get(urlBase + '/editQuestion/' + questionnaireId + "?questionId=" + questionId);
+            var url = string.format('{0}/editQuestion/{1}?questionId={2}', urlBase, questionnaireId, questionId);
+            return $http.get(url);
         };
 
         return questionnaireService;

@@ -136,7 +136,7 @@
                     "validationExpression": "",
                     "validationMessage": "",
                     "instructions": "",
-                    "parentGroupId": group.id
+                    "parentGroupId": group.itemId
                 };
 
                 return commandCall("AddQuestion", command);

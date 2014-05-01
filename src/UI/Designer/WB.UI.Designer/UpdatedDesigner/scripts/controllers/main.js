@@ -69,7 +69,6 @@ angular.module('designerApp')
 
             $scope.addQuestion = function(item) {
                 var newId = utilityService.guid();
-                var self = item;
                 var emptyQuestion = {
                     "id": newId,
                     "title": "New Question",
@@ -79,7 +78,7 @@ angular.module('designerApp')
                     "brokenLinkedVariables": null
                 };
                 commandService.addQuestion($routeParams.questionnaireId, item, newId).success(function() {
-                        self.items.push(emptyQuestion);
+                        item.items.push(emptyQuestion);
                     }
                 );
             };
@@ -106,7 +105,7 @@ angular.module('designerApp')
             $scope.expand = function(item) {
                 item.collapsed = false;
             };
-            
+
             questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
                 .success(function(result) {
                     if (result == 'null') {

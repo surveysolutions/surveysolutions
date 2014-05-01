@@ -6,7 +6,7 @@ angular.module('designerApp')
         function($scope, $routeParams, questionnaireService, commandService) {
 
             $scope.loadGroup = function() {
-                questionnaireService.getGroupEditForm($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
+                questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function (result) {
                         var group = result.group;
                         $scope.activeChapter.description = group.description;
                         $scope.activeChapter.enablementCondition = group.enablementCondition;
