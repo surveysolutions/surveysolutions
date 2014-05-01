@@ -80,12 +80,12 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public NewEditGroupView EditGroup(string id, Guid qroupId)
+        public NewEditGroupView EditGroup(string id, Guid groupId)
         {
-            var editGroupView = questionnaireInfoFactory.GetGroupEditView(id, qroupId);
+            var editGroupView = questionnaireInfoFactory.GetGroupEditView(id, groupId);
             if (editGroupView == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or group with id={1} cannot be found", id, qroupId));
+                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or group with id={1} cannot be found", id, groupId));
             }
             return editGroupView;
         }
