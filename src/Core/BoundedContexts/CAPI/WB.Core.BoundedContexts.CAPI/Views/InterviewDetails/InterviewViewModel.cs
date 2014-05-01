@@ -83,8 +83,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
             new Dictionary<QuestionViewModel, IList<QuestionViewModel>>();
 
-        private Dictionary<Guid, IList<QuestionViewModel>> rostersParticipationInSubstitutionReferences =
-           new Dictionary<Guid, IList<QuestionViewModel>>();
+        private Dictionary<Guid, IList<Guid>> rostersParticipationInSubstitutionReferences =
+           new Dictionary<Guid, IList<Guid>>();
 
         private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(IEnumerable<QuestionViewModel> questionsToSubscribe)
         {
@@ -102,12 +102,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                             var rosterId = questionsWithSubstitution.QuestionRosterScope.Last();
                             if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterId))
                             {
-                                rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution);
+                                if (!rostersParticipationInSubstitutionReferences[rosterId].Contains(questionsWithSubstitution.PublicKey.Id))
+                                    rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution.PublicKey.Id);
                             }
                             else
                             {
                                 rostersParticipationInSubstitutionReferences.Add(rosterId,
-                                    new List<QuestionViewModel> { questionsWithSubstitution });
+                                    new List<Guid> { questionsWithSubstitution.PublicKey.Id });
                             }
                         }
                         continue;
@@ -576,20 +577,31 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
 
             screen.UpdateScreenName(rosterTitle);
+            UpdateRosterTitleSubstitution(key);
+        }
 
-            if (!this.rostersParticipationInSubstitutionReferences.ContainsKey(groupId))
+        private void UpdateRosterTitleSubstitution(InterviewItemId rosterId)
+        {
+            var level = rosterStructure.RosterScopes.Values.FirstOrDefault(scope => scope.RosterIdToRosterVectorMap.ContainsKey(rosterId.Id));
+            if(level==null)
                 return;
 
-            foreach (var participationQuestion in this.rostersParticipationInSubstitutionReferences[groupId])
+            if (!this.rostersParticipationInSubstitutionReferences.ContainsKey(level.ScopeId))
+                return;
+
+            foreach (var participationQuestion in this.rostersParticipationInSubstitutionReferences[level.ScopeId])
             {
-                var rosterId = participationQuestion.QuestionRosterScope.Last();
                 var rosterScreen =
-                    Screens[new InterviewItemId(rosterId, participationQuestion.PublicKey.InterviewItemPropagationVector)] as
+                    Screens[rosterId] as
                         QuestionnairePropagatedScreenViewModel;
                 if (rosterScreen == null)
                     continue;
-                
-                participationQuestion.SubstituteRosterTitle(rosterScreen.ScreenName);
+
+                var questionKey = new InterviewItemId(participationQuestion, rosterId.InterviewItemPropagationVector);
+
+                if (!Questions.ContainsKey(questionKey))
+                    continue;
+                Questions[questionKey].SubstituteRosterTitle(rosterScreen.ScreenName);
             }
         }
 
@@ -657,6 +669,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             foreach (var screen in screensSiblingByPropagationScopeWithVector)
             {
                 screen.UpdateScreenName(newTitle);
+                UpdateRosterTitleSubstitution(screen.ScreenId);
             }
         }
 
