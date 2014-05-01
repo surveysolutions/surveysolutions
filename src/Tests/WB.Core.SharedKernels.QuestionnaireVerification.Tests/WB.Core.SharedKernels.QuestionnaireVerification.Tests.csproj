@@ -86,6 +86,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_references_itself_in_condition.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_circular_references.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question-inside_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
