@@ -20,8 +20,8 @@
             commandService.addChapter = function(questionnaireId, chapter) {
                 var command = {
                     "questionnaireId": questionnaireId,
-                    "groupId": chapter.ChapterId,
-                    "title": chapter.Title,
+                    "groupId": chapter.chapterId,
+                    "title": chapter.title,
                     "description": "",
                     "condition": "",
                     "isRoster": false,
@@ -38,8 +38,8 @@
             commandService.addGroup = function(questionnaireId, group, parentGroupId) {
                 var command = {
                     "questionnaireId": questionnaireId,
-                    "groupId": group.Id,
-                    "title": group.Title,
+                    "groupId": group.id,
+                    "title": group.title,
                     "description": "",
                     "condition": "",
                     "isRoster": false,
@@ -56,8 +56,8 @@
             commandService.updateGroup = function (questionnaireId, group) {
                 var command = {
                     "questionnaireId": questionnaireId,
-                    "groupId": group.ItemId,
-                    "title": group.Title,
+                    "groupId": group.itemId,
+                    "title": group.title,
                     "description": group.description,
                     "condition": group.enablementCondition,
                     "isRoster": false,
@@ -84,7 +84,7 @@
                     "validationExpression": "",
                     "validationMessage": "",
                     "instructions": "",
-                    "parentGroupId": group.Id
+                    "parentGroupId": group.id
                 };
 
                 return commandCall("AddQuestion", command);
@@ -94,7 +94,7 @@
                 var command = {
                     "questionnaireId": questionnaireId,
                     "groupId": newId,
-                    "title": chapter.Title,
+                    "title": chapter.title,
                     "description": chapterDescription,
                     "condition": "",
                     "isRoster": false,
@@ -103,7 +103,7 @@
                     "rosterFixedTitles": null,
                     "rosterTitleQuestionId": null,
                     "parentGroupId": null,
-                    "sourceGroupId": chapter.ChapterId,
+                    "sourceGroupId": chapter.chapterId,
                     "targetIndex": 1
                 };
 
@@ -113,7 +113,7 @@
             commandService.deleteGroup = function(questionnaireId, chapter) {
                 var command = {
                     "questionnaireId": questionnaireId,
-                    "groupId": chapter.ChapterId
+                    "groupId": chapter.chapterId
                 };
 
                 return commandCall("DeleteGroup", command);

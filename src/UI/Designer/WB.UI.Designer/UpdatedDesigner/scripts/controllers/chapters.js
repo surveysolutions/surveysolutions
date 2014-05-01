@@ -21,27 +21,27 @@ angular.module('designerApp')
                 chapter.isMenuOpen = true;
             };
 
-            $scope.editChapter = function (chapter) {
+            $scope.editChapter = function(chapter) {
                 console.log(chapter);
                 chapter.isMenuOpen = false;
-                chapter.ItemId = chapter.ChapterId;
+                chapter.itemId = chapter.chapterId;
                 $scope.setItem(chapter);
-                //navigationService.editChapter($routeParams.questionnaireId, chapter.ChapterId);
+                //navigationService.editChapter($routeParams.questionnaireId, chapter.chapterId);
             };
 
             $scope.addNewChapter = function() {
                 var newId = math.guid();
 
                 var newChapter = {
-                    Title: 'New Chapter',
-                    ChapterId: newId,
-                    QuestionsCount: 0,
-                    GroupsCount: 0,
-                    RostersCount: 0
+                    title: 'New Chapter',
+                    chapterId: newId,
+                    questionsCount: 0,
+                    groupsCount: 0,
+                    rostersCount: 0
                 };
 
                 commandService.addChapter($routeParams.questionnaireId, newChapter).success(function() {
-                    $scope.questionnaire.Chapters.push(newChapter);
+                    $scope.questionnaire.chapters.push(newChapter);
                 });
             };
 
@@ -52,13 +52,13 @@ angular.module('designerApp')
 
                 commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
                     var newChapter = {
-                        Title: chapter.Title,
-                        ChapterId: newId,
-                        QuestionsCount: 0,
-                        GroupsCount: 0,
-                        RostersCount: 0
+                        title: chapter.title,
+                        chapterId: newId,
+                        questionsCount: 0,
+                        groupsCount: 0,
+                        rostersCount: 0
                     };
-                    $scope.questionnaire.Chapters.push(newChapter);
+                    $scope.questionnaire.chapters.push(newChapter);
                 });
             };
 
@@ -66,9 +66,9 @@ angular.module('designerApp')
                 chapter.isMenuOpen = false;
                 if (confirm("Are you sure want to delete?")) {
                     commandService.deleteGroup($routeParams.questionnaireId, chapter).success(function() {
-                        var index = $scope.questionnaire.Chapters.indexOf(chapter);
+                        var index = $scope.questionnaire.chapters.indexOf(chapter);
                         if (index > -1) {
-                            $scope.questionnaire.Chapters.splice(index, 1);
+                            $scope.questionnaire.chapters.splice(index, 1);
                         }
                     });
                 }
