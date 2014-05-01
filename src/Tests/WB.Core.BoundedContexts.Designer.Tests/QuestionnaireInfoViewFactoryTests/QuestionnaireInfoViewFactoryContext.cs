@@ -11,11 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewFactoryTes
             return new QuestionnaireInfoView() {QuestionnaireId = questionnaireId, Title = questionnaireTitle};
         }
 
-        protected static QuestionnaireInfoViewInputModel CreateQuestionnaireInfoViewInputModel(string questionnaireId)
-        {
-            return new QuestionnaireInfoViewInputModel() {QuestionnaireId = questionnaireId};
-        }
-
         protected static QuestionnaireInfoViewFactory CreateQuestionnaireInfoViewFactory(
             IQueryableReadSideRepositoryReader<QuestionnaireInfoView> repository = null)
         {

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
@@ -25,16 +23,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         Because of = () =>
             viewState =
                 denormalizer.Update(viewState,
-                    CreatePublishableEvent(new QRBarcodeQuestionCloned()
-                    {
-                        QuestionId = Guid.Parse(questionId),
-                        ParentGroupId = Guid.Parse(chapterId),
-                        VariableName = questionVariable,
-                        Title = questionTitle,
-                        EnablementCondition = questionConditionExpression,
-                        SourceQuestionId = Guid.Parse(sourceQuestionId),
-                        TargetIndex = 0
-                    }));
+                    Create.QRBarcodeQuestionClonedEvent(questionId: questionId, parentGroupId: chapterId,
+                        questionVariable: questionVariable, questionTitle: questionTitle,
+                        questionConditionExpression: questionConditionExpression, sourceQuestionId: sourceQuestionId));
 
         It should_groupInfoView_first_chapter_items_not_be_null = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldNotBeNull();

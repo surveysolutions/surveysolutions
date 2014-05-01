@@ -1,9 +1,8 @@
-﻿using Main.Core.View;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
-    public class QuestionnaireInfoViewFactory : IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView>
+    public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
         private readonly IReadSideRepositoryReader<QuestionnaireInfoView> questionnaireStorage;
 
@@ -12,9 +11,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public QuestionnaireInfoView Load(QuestionnaireInfoViewInputModel input)
+        public QuestionnaireInfoView Load(string questionnaireId)
         {
-            return this.questionnaireStorage.GetById(input.QuestionnaireId);
+            return this.questionnaireStorage.GetById(questionnaireId);
         }
     }
 }

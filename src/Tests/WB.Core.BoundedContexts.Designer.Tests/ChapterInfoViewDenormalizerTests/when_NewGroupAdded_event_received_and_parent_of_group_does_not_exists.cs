@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTests
@@ -15,12 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new NewGroupAdded()
-                    {
-                        PublicKey = Guid.Parse(groupId),
-                        ParentGroupPublicKey = Guid.Parse(notExistingGroupId),
-                    }));
+                denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: groupId, parentGroupId: notExistingGroupId));
 
         
 

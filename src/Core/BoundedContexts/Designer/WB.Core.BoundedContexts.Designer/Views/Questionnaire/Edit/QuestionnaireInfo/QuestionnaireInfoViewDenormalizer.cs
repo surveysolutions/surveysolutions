@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         }
 
         private static void CreateChapter(QuestionnaireInfoView currentState, string chapterId, string chapterTitle,
-            int orderIndex = -1)
+            int? orderIndex = null)
         {
             var chapterInfoView = new ChapterInfoView()
             {
@@ -264,9 +264,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 QuestionsCount = 0
             };
 
-            if (orderIndex > -1)
+            if (orderIndex.HasValue)
             {
-                currentState.Chapters.Insert(orderIndex, chapterInfoView);
+                currentState.Chapters.Insert(orderIndex.Value, chapterInfoView);
             }
             else
             {
