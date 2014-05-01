@@ -19,6 +19,12 @@ namespace WB.Core.BoundedContexts.Designer
 {
     public class DesignerBoundedContextModule : NinjectModule
     {
+        private readonly bool isNewDesignerEditPageEnabled;
+        public DesignerBoundedContextModule(bool isNewDesignerEditPageEnabled)
+        {
+            this.isNewDesignerEditPageEnabled = isNewDesignerEditPageEnabled;
+        }
+
         public override void Load()
         {
             this.Bind<IQuestionDetailsFactory>().To<QuestionDetailsFactory>().InSingletonScope();
@@ -33,9 +39,12 @@ namespace WB.Core.BoundedContexts.Designer
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireListViewItemDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<PdfQuestionnaireDenormalizer>(this.Kernel);
 
-            this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
-            this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
-            this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();
+            if (this.isNewDesignerEditPageEnabled)
+            {
+                this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
+                this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
+                this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();    
+            }
 
             RegistryHelper.RegisterFactory<QuestionnaireListViewFactory>(this.Kernel);
             RegistryHelper.RegisterFactory<QuestionnaireViewFactory>(this.Kernel);
