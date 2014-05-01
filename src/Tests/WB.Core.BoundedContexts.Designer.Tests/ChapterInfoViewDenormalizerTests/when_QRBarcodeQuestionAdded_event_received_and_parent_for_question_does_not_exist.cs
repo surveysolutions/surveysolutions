@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using It = Machine.Specifications.It;
 
@@ -16,12 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new QRBarcodeQuestionAdded()
-                    {
-                        QuestionId = Guid.Parse(questionId),
-                        ParentGroupId = Guid.Parse(notExistingGroupId)
-                    }));
+                denormalizer.Update(viewState, Create.QRBarcodeQuestionAddedEvent(questionId: questionId, parentGroupId: notExistingGroupId));
 
         It should_groupInfoView_first_chapter_items_be_empty = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldBeEmpty();

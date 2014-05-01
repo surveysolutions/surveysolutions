@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTests
@@ -13,11 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         };
 
         Because of = () =>
-            viewState = denormalizer.Create(
-                CreatePublishableEvent(new NewQuestionnaireCreated()
-                {
-                    PublicKey = new Guid(questionnaireId),
-                }, new Guid(questionnaireId)));
+            viewState = denormalizer.Create(Create.NewQuestionnaireCreatedEvent(questionnaireId));
 
         It should_groupInfoView_Id_be_equal_to_questionnaireId = () =>
             viewState.ItemId.ShouldEqual(questionnaireId);

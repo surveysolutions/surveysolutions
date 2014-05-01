@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormalizerTests
@@ -15,12 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new NewGroupAdded()
-                    {
-                        PublicKey = Guid.Parse(chapterId),
-                        GroupText = chapterTitle
-                    }));
+                denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: chapterId, groupTitle: chapterTitle));
 
         It should_questionnnaireInfoView_Chapters_not_be_null = () =>
             viewState.Chapters.ShouldNotBeNull();

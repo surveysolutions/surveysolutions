@@ -224,6 +224,7 @@
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\ChaptersInfoViewDenormalizerTestContext.cs" />
+    <Compile Include="Create.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupCloned_event_received_and_new_group_is_chapter.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_NewGroupAdded_event_received_and_parent_of_group_does_not_exists.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_group_moved_from_one_chapter_to_another_chapter.cs" />

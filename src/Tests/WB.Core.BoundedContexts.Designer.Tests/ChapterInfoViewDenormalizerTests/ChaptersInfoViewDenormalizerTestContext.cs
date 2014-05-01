@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -79,19 +77,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             });
 
             return questionnaireInfoView;
-        }
-
-        protected static IPublishedEvent<T> CreatePublishableEvent<T>(T payload)
-        {
-            return CreatePublishableEvent<T>(payload, Guid.Empty);
-        }
-
-        protected static IPublishedEvent<T> CreatePublishableEvent<T>(T payload, Guid eventSourceId)
-        {
-            var publishableEventMock = new Mock<IPublishedEvent<T>>();
-            publishableEventMock.Setup(x => x.Payload).Returns(payload);
-            publishableEventMock.Setup(x => x.EventSourceId).Returns(eventSourceId);
-            return publishableEventMock.Object;
         }
     }
 }

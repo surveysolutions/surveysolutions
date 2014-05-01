@@ -1,5 +1,4 @@
 using Machine.Specifications;
-using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.UI.Designer.Api;
@@ -14,8 +13,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
             var questionnaireInfoView = CreateQuestionnaireInfoView();
 
             var questionnaireInfoViewFactory =
-                Mock.Of<IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView>>(
-                    x => x.Load(Moq.It.IsAny<QuestionnaireInfoViewInputModel>()) == questionnaireInfoView);
+                Mock.Of<IQuestionnaireInfoViewFactory>(x => x.Load(Moq.It.IsAny<string>()) == questionnaireInfoView);
 
             controller = CreateQuestionnaireController(questionnaireInfoViewFactory: questionnaireInfoViewFactory);
         };

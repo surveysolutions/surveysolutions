@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormalizerTests
@@ -15,9 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new QuestionnaireUpdated() {Title = questionnaireTitle},
-                        new Guid(questionnaireId)));
+                denormalizer.Update(viewState, Create.QuestionnaireUpdatedEvent(questionnaireId:questionnaireId, questionnaireTitle: questionnaireTitle));
 
         It should_questionnnaireInfoView_Title_be_equal_to_questionnaireTitle = () =>
             viewState.Title.ShouldEqual(questionnaireTitle);

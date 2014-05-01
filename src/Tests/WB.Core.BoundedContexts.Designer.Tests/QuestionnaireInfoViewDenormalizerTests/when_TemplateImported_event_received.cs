@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormalizerTests
@@ -18,49 +11,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         };
 
         Because of = () =>
-            viewState = denormalizer.Create(
-                CreatePublishableEvent(new TemplateImported()
-                {
-                    Source =
-                        new QuestionnaireDocument()
-                        {
-                            PublicKey = new Guid(questionnaireId),
-                            Title = questionnaireTitle,
-                            Children = new List<IComposite>()
-                            {
-                                new Group()
-                                {
-                                    PublicKey = Guid.Parse(chapter1Id),
-                                    Title = chapter1Title,
-                                    Children = new List<IComposite>()
-                                    {
-                                        new Group()
-                                        {
-                                            Children = new List<IComposite>()
-                                            {
-                                                new Group()
-                                                {
-                                                    IsRoster = true
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                new Group()
-                                {
-                                    PublicKey = Guid.Parse(chapter2Id),
-                                    Title = chapter2Title,
-                                    Children = new List<IComposite>()
-                                    {
-                                        new TextQuestion()
-                                        {
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                }, new Guid(questionnaireId)));
+            viewState =
+                denormalizer.Create(Create.TemplateImportedEvent(questionnaireId: questionnaireId,
+                    questionnaireTitle: questionnaireTitle, chapter1Id: chapter1Id, chapter1Title: chapter1Title,
+                    chapter2Id: chapter2Id, chapter2Title: chapter2Title));
 
         It should_questionnnaireInfoView_QuestionnaireId_be_equal_to_questionnaireId = () =>
             viewState.QuestionnaireId.ShouldEqual(questionnaireId);
