@@ -5,15 +5,30 @@ angular.module('designerApp')
         '$scope', '$routeParams', 'questionnaireService', 'commandService',
         function($scope, $routeParams, questionnaireService, commandService) {
 
-            var questionId = $scope.activeQuestion.ItemId;
             var questionnaireId = $routeParams.questionnaireId;
-            var questionBrief = $scope.activeQuestion;
+            var questionId = null;
+            var questionBrief = null;
+            //console.log($scope.activeQuestion);
 
-            console.log($scope.activeQuestion);
+            //$scope.$watch('activeQuestion', function(newVal) {
+                
+            //});
 
-            $scope.$watch('activeQuestion', function (newVal) {
-                console.log($scope.activeQuestion);
-            });
+            questionId = $scope.activeQuestion.itemId;
+            questionBrief = $scope.activeQuestion;
+
+            questionnaireService.getQuestionDetailsById(questionnaireId, questionId)
+                .success(function (result) {
+                    if (result == 'null') {
+                        alert('Questionnaire not found');
+                    } else {
+                        console.log(result);
+                        $scope.activeQuestion = result.question;
+                        $scope.activeQuestion.questionScopes = result.questionScopeOptions;
+                        $scope.activeQuestion.questionTypes = result.questionTypeOptopns;
+                        $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
+                    }
+                });
 
             $scope.saveQuestion = function() {
                 //console.log(questionBrief);
@@ -24,7 +39,7 @@ angular.module('designerApp')
                         questionBrief.Type = $scope.activeQuestion.type;
                         questionBrief.Variable = $scope.activeQuestion.variableName;
                     } else {
-                       // console.log(result);
+                        // console.log(result);
                         $('#edit-question-save-button').popover({
                             content: result.Error,
                             placement: top,
@@ -33,17 +48,5 @@ angular.module('designerApp')
                     }
                 });
             };
-
-            questionnaireService.getQuestionDetailsById(questionnaireId, questionId)
-                .success(function(result) {
-                    if (result == 'null') {
-                        alert('Questionnaire not found');
-                    } else {
-                        //console.log(result);
-                        $scope.activeQuestion = result.question;
-                        $scope.activeQuestion.questionScopes = result.questionScopeOptions;
-                        $scope.activeQuestion.questionTypes = result.questionTypeOptopns;
-                    }
-                });
         }
     ]);

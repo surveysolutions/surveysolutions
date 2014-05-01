@@ -1,4 +1,10 @@
-﻿<form role="form">
+﻿<div class="breadcrumbs">
+    <ul>
+        <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
+    </ul>
+</div>
+<form role="form">
+
     <h3>Question</h3>
     <div class="form-group">
         <label for="edit-question-title">Question Title</label>
