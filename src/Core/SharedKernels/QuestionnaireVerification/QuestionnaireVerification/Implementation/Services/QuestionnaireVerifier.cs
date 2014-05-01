@@ -1086,15 +1086,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 ? (IGroup)item.GetParent()
                 : (IGroup)item;
 
-            Guid?[] rosterSizeQuestions =
+            Guid[] rosterSizeQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parent, questionnaire)
                     .Where(IsRosterGroup)
-                    .Select(g => g.RosterSizeQuestionId)
+                    .Select(g => g.RosterSizeQuestionId.HasValue?g.RosterSizeQuestionId.Value:g.PublicKey)
                     .ToArray();
 
-            return rosterSizeQuestions.All(id => id.HasValue)
-                ? rosterSizeQuestions.Select(id => id.Value).ToArray()
-                : null;
+            return rosterSizeQuestions.ToArray();
         }
 
         private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
