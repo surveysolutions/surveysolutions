@@ -1,7 +1,10 @@
+using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.Infrastructure.Implementation;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -20,6 +23,8 @@ namespace WB.UI.QuestionnaireTester
 
             var bigSurveyStore = new InMemoryReadSideRepositoryAccessor<InterviewViewModel>();
 
+            var plainQuestionnaireStore = new InMemoryPlainStorageAccessor<QuestionnaireDocument>();
+
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
 
@@ -29,7 +34,8 @@ namespace WB.UI.QuestionnaireTester
             this.Bind<IReadSideRepositoryWriter<InterviewViewModel>>().ToConstant(bigSurveyStore);
             this.Bind<IReadSideRepositoryReader<InterviewViewModel>>().ToConstant(bigSurveyStore);
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            
+
+            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
         }
     }
 }

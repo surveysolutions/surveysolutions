@@ -46,6 +46,7 @@
     <Compile Include="EventHandlerDescription.cs" />
     <Compile Include="FileSystem\IArchiveUtils.cs" />
     <Compile Include="FileSystem\IFileSystemAccessor.cs" />
+    <Compile Include="Implementation\InMemoryPlainStorageAccessor.cs" />
     <Compile Include="Implementation\ReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
