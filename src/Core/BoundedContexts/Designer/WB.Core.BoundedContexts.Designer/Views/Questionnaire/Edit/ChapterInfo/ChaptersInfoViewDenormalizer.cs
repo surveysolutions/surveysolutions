@@ -326,7 +326,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         }
         
         private void AddQuestion(GroupInfoView questionnaire, string groupId, string questionId, string questionTitle,
-            QuestionType questionType, string questionVariable, string questionConditionExpression, int orderIndex = -1)
+            QuestionType questionType, string questionVariable, string questionConditionExpression, int? orderIndex = null)
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: groupId);
 
@@ -348,9 +348,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 LinkedVariables = questionsUsedInConditionExpression
             };
 
-            if (orderIndex > -1)
+            if (orderIndex.HasValue)
             {
-                groupView.Items.Insert(orderIndex, questionInfoView);    
+                groupView.Items.Insert(orderIndex.Value, questionInfoView);    
             }
             else
             {

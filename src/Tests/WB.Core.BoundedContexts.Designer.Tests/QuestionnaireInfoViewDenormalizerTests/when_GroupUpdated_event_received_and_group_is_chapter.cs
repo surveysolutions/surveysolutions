@@ -17,12 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new GroupUpdated()
-                    {
-                        GroupPublicKey = Guid.Parse(chapterId),
-                        GroupText = chapterTitle
-                    }));
+                denormalizer.Update(viewState, Create.GroupUpdatedEvent(groupId: chapterId, groupTitle: chapterTitle));
 
         It should_questionnnaireInfoView_Chapters_not_be_null = () =>
             viewState.Chapters.ShouldNotBeNull();

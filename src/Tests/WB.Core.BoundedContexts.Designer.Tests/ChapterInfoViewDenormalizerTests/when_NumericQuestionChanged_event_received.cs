@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
@@ -24,14 +22,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new NumericQuestionChanged()
-                    {
-                        PublicKey = Guid.Parse(questionId),
-                        StataExportCaption = questionVariable,
-                        QuestionText = questionTitle,
-                        ConditionExpression = questionConditionExpression
-                    }));
+                denormalizer.Update(viewState, Create.NumericQuestionChangedEvent(questionId: questionId, questionVariable: questionVariable,
+                        questionTitle: questionTitle, questionConditionExpression: questionConditionExpression));
 
         It should_groupInfoView_first_chapter_items_not_be_null = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldNotBeNull();

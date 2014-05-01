@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTests
@@ -15,13 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new GroupCloned()
-                    {
-                        PublicKey = Guid.Parse(chapter2Id),
-                        GroupText = chapter2Title,
-                        TargetIndex = 0
-                    }));
+                denormalizer.Update(viewState, Create.GroupClonedEvent(groupId: chapter2Id, groupTitle: chapter2Title));
 
         It should_groupInfoView_Items_not_be_null = () =>
             viewState.Items.ShouldNotBeNull();

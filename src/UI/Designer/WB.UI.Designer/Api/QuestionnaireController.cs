@@ -23,10 +23,10 @@ namespace WB.UI.Designer.Api
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
-        private readonly IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory;
+        private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
-            IViewFactory<QuestionnaireInfoViewInputModel, QuestionnaireInfoView> questionnaireInfoViewFactory,
+            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, 
             IQuestionnaireVerifier questionnaireVerifier, 
             IVerificationErrorsMapper verificationErrorsMapper, 
@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Api
 
         public QuestionnaireInfoView Get(string id)
         {
-            var questionnaireInfoView = questionnaireInfoViewFactory.Load(new QuestionnaireInfoViewInputModel() {QuestionnaireId = id});
+            var questionnaireInfoView = questionnaireInfoViewFactory.Load(id);
             if (questionnaireInfoView == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));

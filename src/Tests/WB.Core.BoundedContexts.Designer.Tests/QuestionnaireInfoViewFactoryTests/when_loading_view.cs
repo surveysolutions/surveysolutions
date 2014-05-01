@@ -10,8 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewFactoryTes
     {
         Establish context = () =>
         {
-            input = CreateQuestionnaireInfoViewInputModel(questionnaireId);
-
             var repositoryMock = new Mock<IQueryableReadSideRepositoryReader<QuestionnaireInfoView>>();
 
             repositoryMock
@@ -22,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewFactoryTes
         };
 
         Because of = () =>
-            view = factory.Load(input);
+            view = factory.Load(questionnaireId);
 
         It should_find_questionnaire = () =>
             view.ShouldNotBeNull();
@@ -34,7 +32,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewFactoryTes
             view.Title.ShouldEqual(questionnaireTitle);
 
         private static QuestionnaireInfoView view;
-        private static QuestionnaireInfoViewInputModel input;
         private static QuestionnaireInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "questionnaire title";

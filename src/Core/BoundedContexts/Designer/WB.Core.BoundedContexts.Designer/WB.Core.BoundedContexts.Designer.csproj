@@ -237,8 +237,8 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\IQuestionnaireInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewInputModel.cs" />
     <Compile Include="Views\Questionnaire\Edit\EditAnswerView.cs">
       <SubType>Code</SubType>
     </Compile>

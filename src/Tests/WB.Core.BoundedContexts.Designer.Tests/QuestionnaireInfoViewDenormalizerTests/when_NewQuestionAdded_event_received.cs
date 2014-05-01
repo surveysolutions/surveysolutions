@@ -1,5 +1,4 @@
 ﻿using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormalizerTests
@@ -13,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         };
 
         Because of = () =>
-            viewState = denormalizer.Update(viewState, CreatePublishableEvent(new NewQuestionAdded()));
+            viewState = denormalizer.Update(viewState, Create.NewQuestionAddedEvent());
 
         It should_questionnnaireInfoView_QuestionsCount_be_1 = () =>
             viewState.QuestionsCount.ShouldEqual(1);

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
@@ -26,47 +20,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         };
 
         Because of = () =>
-            viewState = denormalizer.Create(
-                CreatePublishableEvent(new QuestionnaireCloned()
-                {
-                    QuestionnaireDocument = 
-                        new QuestionnaireDocument()
-                        {
-                            PublicKey = Guid.Parse(questionnaireId),
-                            Children = new List<IComposite>()
-                            {
-                                new Group()
-                                {
-                                    PublicKey = Guid.Parse(chapter1Id),
-                                    Title = chapter1Title,
-                                    Children = new List<IComposite>()
-                                    {
-                                        new Group()
-                                        {
-                                            PublicKey = Guid.Parse(chapter1GroupId),
-                                            Title = chapter1GroupTitle
-                                        }
-                                    }
-                                },
-                                new Group()
-                                {
-                                    PublicKey = Guid.Parse(chapter2Id),
-                                    Title = chapter2Title,
-                                    Children = new List<IComposite>()
-                                    {
-                                        new TextQuestion()
-                                        {
-                                            PublicKey = Guid.Parse(chapter2QuestionId),
-                                            QuestionText = chapter2QuestionTitle,
-                                            StataExportCaption = chapter2QuestionVariable,
-                                            QuestionType = chapter2QuestionType,
-                                            ConditionExpression = chapter2QuestionConditionExpression
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                }, new Guid(questionnaireId)));
+            viewState =
+                denormalizer.Create(Create.QuestionnaireClonedEvent(questionnaireId: questionnaireId,
+                    chapter1Id: chapter1Id, chapter1Title: chapter1Title, chapter1GroupId: chapter1GroupId,
+                    chapter1GroupTitle: chapter1GroupTitle, chapter2Id: chapter2Id, chapter2Title: chapter2Title,
+                    chapter2QuestionId: chapter2QuestionId, chapter2QuestionTitle: chapter2QuestionTitle,
+                    chapter2QuestionVariable: chapter2QuestionVariable,
+                    chapter2QuestionConditionExpression: chapter2QuestionConditionExpression));
 
         It should_groupInfoView_Id_be_equal_to_questionnaireId = () =>
             viewState.ItemId.ShouldEqual(questionnaireId);
@@ -128,8 +88,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         It should_groupInfoView_second_chapter_first_item_variable_be_equal_to_chapter2QuestionVariable = () =>
             ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).Variable.ShouldEqual(chapter2QuestionVariable);
 
-        It should_groupInfoView_second_chapter_first_item_type_be_equal_to_chapter2QuestionType = () =>
-            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).Type.ShouldEqual(chapter2QuestionType);
+        It should_groupInfoView_second_chapter_first_item_type_be_equal_to_text_question_type = () =>
+            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).Type.ShouldEqual(QuestionType.Text);
 
         It should_groupInfoView_second_chapter_first_item_LinkedVariables_not_be_null = () =>
             ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).LinkedVariables.ShouldNotBeNull();
@@ -150,7 +110,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         private static string chapter1GroupTitle = "chapter 1 group title";
         private static string chapter2QuestionTitle = "chapter 2 question title";
         private static string chapter2QuestionVariable = "chapter2textquestion";
-        private static QuestionType chapter2QuestionType = QuestionType.Text;
         private static string variableUsedInChapter2Question = "var1";
         private static string chapter2QuestionConditionExpression = string.Format("[{0}] > 0", variableUsedInChapter2Question);
 

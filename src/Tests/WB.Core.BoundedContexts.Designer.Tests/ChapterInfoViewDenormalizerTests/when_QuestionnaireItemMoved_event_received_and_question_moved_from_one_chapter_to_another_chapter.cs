@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using It = Machine.Specifications.It;
 
@@ -16,13 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
 
         Because of = () =>
             viewState =
-                denormalizer.Update(viewState,
-                    CreatePublishableEvent(new QuestionnaireItemMoved()
-                    {
-                        PublicKey = Guid.Parse(question1Id),
-                        GroupKey = Guid.Parse(chapter2Id),
-                        TargetIndex = 0
-                    }));
+                denormalizer.Update(viewState, Create.QuestionnaireItemMovedEvent(itemId: question1Id, targetGroupId: chapter2Id));
 
         It should_groupInfoView_first_chapter_items_be_empty = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldBeEmpty();
