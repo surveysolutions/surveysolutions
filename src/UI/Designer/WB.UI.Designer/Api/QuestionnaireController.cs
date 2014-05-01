@@ -40,6 +40,8 @@ namespace WB.UI.Designer.Api
             this.questionnaireInfoFactory = questionnaireInfoFactory;
         }
 
+        [HttpGet]
+        [CamelCase]
         public QuestionnaireInfoView Get(string id)
         {
             var questionnaireInfoView = questionnaireInfoViewFactory.Load(id);
@@ -52,6 +54,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
+        [CamelCase]
         public IQuestionnaireItem Chapter(string id, string chapterId)
         {
             var chapterInfoView = chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
