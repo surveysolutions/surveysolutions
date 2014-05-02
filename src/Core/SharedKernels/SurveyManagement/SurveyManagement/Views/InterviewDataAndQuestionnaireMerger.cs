@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -176,8 +177,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, decimal[], Dictionary<decimal[], string>> getAvailableOptions,
             IQuestionnaireDocument questionnaire)
         {
-            var rosterTitle = interviewLevel.RosterRowTitles.ContainsKey(currentGroup.PublicKey)
-                ? string.Format("{0}: {1}", currentGroup.Title, interviewLevel.RosterRowTitles[currentGroup.PublicKey])
+            var rosterTitleFromLevel = interviewLevel.RosterRowTitles.ContainsKey(currentGroup.PublicKey)
+                ? interviewLevel.RosterRowTitles[currentGroup.PublicKey]
+                : null;
+
+            var rosterTitle = !string.IsNullOrEmpty(rosterTitleFromLevel)
+                ? string.Format("{0}: {1}", currentGroup.Title, rosterTitleFromLevel)
                 : currentGroup.Title;
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
             {
@@ -192,7 +197,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
 
                 Dictionary<string, string> answersForTitleSubstitution =
-                    GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector));
+                    GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), rosterTitleFromLevel);
 
                 bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null &&
                     IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
@@ -221,14 +226,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private static Dictionary<string, string> GetAnswersForTitleSubstitution(IQuestion question, Dictionary<string, Guid> variableToIdMap,
             InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
-            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions)
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions, string rosterTitle)
         {
             return question
                 .GetVariablesUsedInTitle()
                 .Select(variableName => new
                 {
                     Variable = variableName,
-                    Answer = GetAnswerForTitleSubstitution(variableName, variableToIdMap, currentInterviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions),
+                    Answer = GetAnswerForTitleSubstitution(variableName, variableToIdMap, currentInterviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions, rosterTitle),
                 })
                 .Where(x => x.Answer != null)
                 .ToDictionary(
@@ -238,8 +243,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private static string GetAnswerForTitleSubstitution(string variableName, Dictionary<string, Guid> variableToIdMap,
             InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
-            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions)
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions, string rosterTitle)
         {
+            if (variableName == StringUtil.RosterTitleSubstitutionReference)
+            {
+                if (string.IsNullOrEmpty(rosterTitle))
+                    return null;
+                return rosterTitle;
+            }
+
             if (!variableToIdMap.ContainsKey(variableName))
                 return null;
 
@@ -327,7 +339,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                     interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
 
             return allLinkedQuestions.Where(question => question.Value != null && question.Value.Enabled && question.Value.Answer != null)
-                .ToDictionary(question => question.Key, question => CreateLinkedQuestionOption(question.Value, question.Key,questionRosterVector, optionsSource,questionnaireRosters, interview));
+                .ToDictionary(question => question.Key,
+                    question =>
+                        CreateLinkedQuestionOption(question.Value, question.Key, questionRosterVector, optionsSource, questionnaireRosters,
+                            interview));
         }
 
         private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, decimal[] questionRosterVector, ReferenceInfoByQuestion optionsSource)
