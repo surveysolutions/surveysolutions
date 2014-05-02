@@ -35,9 +35,9 @@ angular.module('designerApp')
                 $('#edit-question-save-button').popover('destroy');
                 commandService.sendUpdateQuestionCommand(questionnaireId, $scope.activeQuestion).success(function(result) {
                     if (result.IsSuccess) {
-                        questionBrief.Title = $scope.activeQuestion.title;
-                        questionBrief.Type = $scope.activeQuestion.type;
-                        questionBrief.Variable = $scope.activeQuestion.variableName;
+                        questionBrief.title = $scope.activeQuestion.title;
+                        questionBrief.type = $scope.activeQuestion.type;
+                        questionBrief.variable = $scope.activeQuestion.variableName;
                     } else {
                         // console.log(result);
                         $('#edit-question-save-button').popover({
