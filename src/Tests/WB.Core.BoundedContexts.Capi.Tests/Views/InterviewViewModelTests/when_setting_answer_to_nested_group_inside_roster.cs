@@ -89,17 +89,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNestedGroupId, new decimal[] { 0 }))
                 .First()
                 .AnswerObject.ShouldEqual(3);
-
-        It should_count_of_answered_questions_in_next_button_of_dependent_roster_group_be_equal_to_1 = () =>
-            ((QuestionnaireNavigationPanelItem)
-                ((QuestionnairePropagatedScreenViewModel) interviewViewModel.Screens[new InterviewItemId(rosterId2, new decimal[] { 0 })])
-                    .Previous).Answered.ShouldEqual(1);
-
-        It should_count_of_total_questions_in_next_button_of_dependent_roster_group_be_equal_to_1 = () =>
-            ((QuestionnaireNavigationPanelItem)
-                ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId2, new decimal[] { 0 })])
-                    .Previous).Total.ShouldEqual(1);
-
+        
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;

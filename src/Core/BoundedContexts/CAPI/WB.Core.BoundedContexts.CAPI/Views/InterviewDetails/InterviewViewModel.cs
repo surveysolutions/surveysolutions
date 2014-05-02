@@ -29,7 +29,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.FeaturedQuestions = new Dictionary<InterviewItemId, QuestionViewModel>();
         }
 
-        protected ILogger Logger {
+        protected ILogger Logger
+        {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
@@ -79,12 +80,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             #endregion
         }
-        
+
         private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
             new Dictionary<QuestionViewModel, IList<QuestionViewModel>>();
 
-        private Dictionary<Guid, IList<Guid>> rostersParticipationInSubstitutionReferences =
-           new Dictionary<Guid, IList<Guid>>();
+        private Dictionary<Guid, IList<Guid>> rostersParticipationInSubstitutionReferences = new Dictionary<Guid, IList<Guid>>();
 
         private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(IEnumerable<QuestionViewModel> questionsToSubscribe)
         {
@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                         continue;
                     }
                     var referencedQuestion = this.FindReferencedQuestion(substitutionReference, questionsWithSubstitution);
-                    if(referencedQuestion ==null)
+                    if (referencedQuestion == null)
                         continue;
 
                     if (this.questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion))
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 {
                     this.AddPropagateScreen(rosterGroupInstance.Key.Id,
                         rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.RosterInstanceId, rosterInstance.SortIndex);
-                    
+
                     if (!string.IsNullOrEmpty(rosterInstance.RosterTitle))
                         this.UpdateRosterRowTitle(rosterGroupInstance.Key.Id, rosterGroupInstance.Key.InterviewItemPropagationVector,
                         rosterInstance.RosterInstanceId, rosterInstance.RosterTitle);
@@ -294,35 +294,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 rout.Remove(last);
                 last = rout.Last();
             }
-
-            this.CreateNextPreviousButtonsForPropagatedGroups();
-        }
-
-        protected void CreateNextPreviousButtonsForPropagatedGroups()
-        {
-            foreach (var propagationScopeId in this.rosterStructure.RosterScopes.Keys)
-            {
-                var screenSiblingByPropagationScopeIds = this.rosterStructure.RosterScopes[propagationScopeId].RosterIdToRosterTitleQuestionIdMap.Keys.ToArray();
-
-                for (int i = 0; i < screenSiblingByPropagationScopeIds.Length; i++)
-                {
-                    var target = this.propagatedScreenPrototypes[screenSiblingByPropagationScopeIds[i]];
-
-                    IQuestionnaireItemViewModel next = null;
-                    IQuestionnaireItemViewModel previous = null;
-
-                    if (i > 0)
-                    {
-                        previous = new QuestionnaireNavigationPanelItem(new InterviewItemId(screenSiblingByPropagationScopeIds[i - 1]), GetScreenViewModel);
-                    }
-                    if (i < screenSiblingByPropagationScopeIds.Length - 1)
-                    {
-                        next = new QuestionnaireNavigationPanelItem(new InterviewItemId(screenSiblingByPropagationScopeIds[i + 1]), GetScreenViewModel);
-                    }
-
-                    target.AddNextPrevious(next, previous);
-                }
-            }
         }
 
         private IQuestionnaireViewModel GetScreenViewModel(InterviewItemId interviewItemId)
@@ -338,10 +309,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public IDictionary<InterviewItemId, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
-        
+
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
         private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions;
-        private readonly Dictionary<Guid, Guid> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, Guid>(); 
+        private readonly Dictionary<Guid, Guid> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, Guid>();
         private readonly Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
         private readonly QuestionnaireRosterStructure rosterStructure;
         private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> propagatedScreenPrototypes =
@@ -350,7 +321,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private readonly Dictionary<Guid, QuestionnaireGridViewModel> rosterScreenPrototypes =
           new Dictionary<Guid, QuestionnaireGridViewModel>();
 
-        public IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get;private set; }
+        public IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; private set; }
 
         #endregion
 
@@ -387,7 +358,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
                 rosterInstanceId);
 
-            if(this.Screens.ContainsKey(new InterviewItemId(screenId,propagationVector)))
+            if (this.Screens.ContainsKey(new InterviewItemId(screenId, propagationVector)))
                 return;
 
             var screenPrototype = this.propagatedScreenPrototypes[screenId];
@@ -439,7 +410,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (!this.Screens.ContainsKey(screenId))
                 return;
 
-            var screen = this.Screens[screenId] ;
+            var screen = this.Screens[screenId];
 
             var simpleScreen = screen as QuestionnaireScreenViewModel;
             if (simpleScreen != null)
@@ -568,10 +539,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector, index);
             var key = new InterviewItemId(groupId, propagationVector);
-            
-            if(!this.Screens.ContainsKey(key))
+
+            if (!this.Screens.ContainsKey(key))
                 return;
-            
+
             var screen = this.Screens[key] as QuestionnairePropagatedScreenViewModel;
             if (screen == null)
                 return;
@@ -583,7 +554,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private void UpdateRosterTitleSubstitution(InterviewItemId rosterId)
         {
             var level = rosterStructure.RosterScopes.Values.FirstOrDefault(scope => scope.RosterIdToRosterVectorMap.ContainsKey(rosterId.Id));
-            if(level==null)
+            if (level == null)
                 return;
 
             if (!this.rostersParticipationInSubstitutionReferences.ContainsKey(level.ScopeId))
@@ -651,7 +622,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
 
             var question = sender as QuestionViewModel;
-            if (question==null || !this.listOfHeadQuestionsMappedOnScope.ContainsKey(question.PublicKey.Id))
+            if (question == null || !this.listOfHeadQuestionsMappedOnScope.ContainsKey(question.PublicKey.Id))
                 return;
 
             this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[question.PublicKey.Id],
@@ -757,7 +728,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var question = child as IQuestion;
                 if (question != null)
                 {
-                    if(question.QuestionScope==QuestionScope.Interviewer)
+                    if (question.QuestionScope == QuestionScope.Interviewer)
                         header.Add(this.BuildHeader(question));
                     continue;
                 }
@@ -776,7 +747,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 rosterKey, true,
                 (rosterId) => siblings.Select(
                     g => new InterviewItemId(g.PublicKey, rosterId.InterviewItemPropagationVector)),
-                breadcrumbs.Take(breadcrumbs.Count - 1).ToList(), header,this.CollectPropagatedScreen );
+                breadcrumbs.Take(breadcrumbs.Count - 1).ToList(), header, this.CollectPropagatedScreen);
 
             if (isNestedRoster)
                 this.rosterScreenPrototypes.Add(group.PublicKey, roster);
@@ -970,10 +941,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
                 true, question.Instructions,
-                true, question.Mandatory,question.ValidationMessage,
-                (questionRosterVecor, questionRosterScope) => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value, questionRosterVecor, questionRosterScope), 
+                true, question.Mandatory, question.ValidationMessage,
+                (questionRosterVecor, questionRosterScope) => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value, questionRosterVecor, questionRosterScope),
                 question.StataExportCaption, question.GetVariablesUsedInTitle(),
-                multyOptionsQuestion != null? multyOptionsQuestion.AreAnswersOrdered : (bool?) null, 
+                multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
@@ -984,9 +955,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return new TextListQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
-                true, 
+                true,
                 textListQuestion.Instructions,
-                textListQuestion.Comments, 
+                textListQuestion.Comments,
                 true,
                 textListQuestion.Mandatory,
                 textListQuestion.ValidationMessage,
@@ -1007,7 +978,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
                 true, question.Instructions, null,
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
-                multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?) null,
+                multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
@@ -1073,14 +1044,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return questionType;
         }
 
-        private readonly QuestionType[] selectableQuestionTypes = new[]
-            {QuestionType.SingleOption, QuestionType.MultyOption};
+        private readonly QuestionType[] selectableQuestionTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
 
-        private readonly QuestionType[] singleOptionTypeVariation = new[]
-            {QuestionType.SingleOption, QuestionType.DropDownList, QuestionType.YesNo};
+        private readonly QuestionType[] singleOptionTypeVariation = new[] { QuestionType.SingleOption, QuestionType.DropDownList, QuestionType.YesNo };
 
-        private readonly QuestionType[] listQuestionTypes = new[] 
-            { QuestionType.TextList};
+        private readonly QuestionType[] listQuestionTypes = new[] { QuestionType.TextList };
 
         public bool IsQuestionReferencedByAnyLinkedQuestion(Guid questionId)
         {
