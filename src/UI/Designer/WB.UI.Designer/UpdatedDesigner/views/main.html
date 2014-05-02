@@ -62,7 +62,18 @@
                 <div class="icon"></div>
                 {{ item.title }}
                 <div class="qname-block">
-                    <a href class="linked"></a>{{item.variable}}<div class="dropdown-btn"></div>
+                    <a href class="linked"></a>{{item.variable}}
+                    <div class="btn-group">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a>Delete</a>
+                            </li>
+                            <li>
+                                <a>Clone</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="section item" ng-click="setItem(item)" ng-class="{'selected' : item.itemId == currentItemId}" ng-if="!isQuestion(item)">

@@ -15,19 +15,17 @@ angular.module('designerApp')
                 );
             }
 
-            console.log($scope.activeChapter);
             $scope.loadGroup();
 
             $scope.$watch('activeChapter', function(newVal) {
                 $scope.loadGroup();
             });
 
-            $scope.saveChapter = function () {
+            $scope.saveChapter = function() {
                 $("#edit-chapter-save-button").popover('destroy');
                 commandService.updateGroup($routeParams.questionnaireId, $scope.activeChapter).success(function(result) {
                     console.log(result);
                     if (!result.IsSuccess) {
-                        console.log('error');
                         $("#edit-chapter-save-button").popover({
                             content: result.Error,
                             placement: top,
