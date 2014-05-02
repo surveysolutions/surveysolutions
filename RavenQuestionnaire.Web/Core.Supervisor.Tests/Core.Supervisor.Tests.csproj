@@ -156,6 +156,7 @@
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_group_inside_it_.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_roster_inside_i.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_roster_inside_roster_by_different_roster_size_ids.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_roster_inside_roster_by_the_same_roster_size_ids.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_inside_roster.cs" />
