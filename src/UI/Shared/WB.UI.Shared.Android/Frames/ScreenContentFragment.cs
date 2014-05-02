@@ -50,14 +50,7 @@ namespace WB.UI.Shared.Android.Frames
             }
 
             this.top = inflater.Inflate(Resource.Layout.ScreenContentFragment, null);
-            var previousBtn = new GroupView(inflater.Context,
-                                          this.PropagatedModel == null
-                                              ? null
-                                              : this.PropagatedModel.Previous as QuestionnaireNavigationPanelItem, global::Android.Resource.Drawable.ArrowUpFloat);
-
-            previousBtn.ScreenChanged += this.groupView_ScreenChanged;
-            this.llTop.AddView(previousBtn);
-            //  top.Orientation = Orientation.Vertical;
+           
             var breadcrumbs = new BreadcrumbsView(inflater.Context,
                                                   GetBreadcrumbs(),
                                                   this.OnScreenChanged);
@@ -71,16 +64,7 @@ namespace WB.UI.Shared.Android.Frames
             this.llContent.ItemsCanFocus = true;
             this.llContent.ScrollingCacheEnabled = false;
             this.llContent.ChildViewRemoved += this.llContent_ChildViewRemoved;
-            var nextBtn = new GroupView(inflater.Context,
-                                        this.PropagatedModel == null
-                                            ? null
-                                            : this.PropagatedModel.Next as QuestionnaireNavigationPanelItem, global::Android.Resource.Drawable.ArrowDownFloat);
-
-
-            nextBtn.ScreenChanged += this.groupView_ScreenChanged;
-
-            this.llButtom.AddView(nextBtn);
-
+           
             return this.top;
         }
 

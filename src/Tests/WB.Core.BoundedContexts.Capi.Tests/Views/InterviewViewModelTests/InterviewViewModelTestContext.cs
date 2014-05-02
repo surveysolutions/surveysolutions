@@ -58,12 +58,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                         SubscribeScreen(interviewViewModel, interviewViewModel.Screens[questionnaireNavigationPanelItem.PublicKey]);
                 }
 
-                var questionnairePropagatedScreenViewModel = questionnaireScreenViewModel as QuestionnairePropagatedScreenViewModel;
-                if (questionnairePropagatedScreenViewModel != null)
-                {
-                    SubscribeObject(questionnairePropagatedScreenViewModel.Next);
-                    SubscribeObject(questionnairePropagatedScreenViewModel.Previous);   
-                }
             }
             var questionnaireGridViewModel = screen as QuestionnaireGridViewModel;
             if (questionnaireGridViewModel != null)
