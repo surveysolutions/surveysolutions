@@ -90,7 +90,7 @@
             commandService.addGroup = function (questionnaireId, group, parentGroupId) {
                 var command = {
                     "questionnaireId": questionnaireId,
-                    "groupId": group.id,
+                    "groupId": group.itemId,
                     "title": group.title,
                     "description": "",
                     "condition": "",
@@ -101,7 +101,6 @@
                     "rosterTitleQuestionId": null,
                     "parentGroupId": parentGroupId
                 };
-
                 return commandCall("AddGroup", command);
             };
 

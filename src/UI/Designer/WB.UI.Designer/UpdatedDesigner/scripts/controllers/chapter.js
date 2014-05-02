@@ -10,9 +10,6 @@ angular.module('designerApp')
             };
 
             $scope.loadGroup = function() {
-                if (!$scope.isChapter($scope.activeChapter)) {
-                    $scope.activeChapter.chapterId = $scope.activeChapter.itemId;
-                }
                 questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
                         var group = result.group;
                         $scope.activeChapter.description = group.description;
@@ -50,8 +47,13 @@ angular.module('designerApp')
             };
 
             $scope.deleteChapter = function() {
+                var itemId = $scope.activeChapter.itemId;
+                if ($scope.isChapter($scope.activeChapter)) {
+                    itemId = $scope.activeChapter.chapterId;
+                }
+
                 if (confirm("Are you sure want to delete?")) {
-                    commandService.deleteGroup($routeParams.questionnaireId, $scope.activeChapter.chapterId).success(function(result) {
+                    commandService.deleteGroup($routeParams.questionnaireId, itemId).success(function(result) {
                         $("#edit-chapter-save-button").popover('destroy');
                         if (result.IsSuccess) {
                             if ($scope.isChapter($scope.activeChapter)) {
@@ -59,9 +61,11 @@ angular.module('designerApp')
                                 if (index > -1) {
                                     $scope.questionnaire.chapters.splice(index, 1);
                                 }
-                                $scope.close();
-                                navigationService.openQuestionnaire($routeParams.questionnaireId);
+                            } else {
+                                $scope.activeChapter.isDeleted = true;
                             }
+                            navigationService.openQuestionnaire($routeParams.questionnaireId);
+                            $scope.close();
                         } else {
                             $("#edit-chapter-save-button").popover({
                                 content: result.Error,
@@ -76,6 +80,10 @@ angular.module('designerApp')
             $scope.cloneChapter = function() {
                 var newId = math.guid();
                 var chapterDescription = "";
+
+                if (!$scope.isChapter($scope.activeChapter)) {
+                    $scope.activeChapter.chapterId = $scope.activeChapter.itemId;
+                }
 
                 commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, $scope.activeChapter, chapterDescription).success(function(result) {
                     $("#edit-chapter-save-button").popover('destroy');

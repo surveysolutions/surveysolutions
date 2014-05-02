@@ -86,11 +86,8 @@ angular.module('designerApp')
             $scope.addGroup = function(item) {
                 var newId = utilityService.guid();
                 var emptyGroup = {
-                    "id": newId,
+                    "itemId": newId,
                     "title": "New group",
-                    "questionsCount": 0,
-                    "groupsCount": 0,
-                    "rostersCount": 0,
                     "items": []
                 };
                 commandService.addGroup($routeParams.questionnaireId, emptyGroup, item.itemId).success(function() {
