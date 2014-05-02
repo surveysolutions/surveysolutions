@@ -6,7 +6,7 @@ angular.module('designerApp')
         function($scope, $routeParams, questionnaireService, commandService) {
 
             $scope.loadGroup = function() {
-                questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function (result) {
+                questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
                         var group = result.group;
                         $scope.activeChapter.description = group.description;
                         $scope.activeChapter.enablementCondition = group.enablementCondition;
@@ -22,9 +22,19 @@ angular.module('designerApp')
                 $scope.loadGroup();
             });
 
-            $scope.saveChapter = function() {
-                console.log($scope.activeChapter);
-                commandService.updateGroup($routeParams.questionnaireId, $scope.activeChapter);
+            $scope.saveChapter = function () {
+                $("#edit-chapter-save-button").popover('destroy');
+                commandService.updateGroup($routeParams.questionnaireId, $scope.activeChapter).success(function(result) {
+                    console.log(result);
+                    if (!result.IsSuccess) {
+                        console.log('error');
+                        $("#edit-chapter-save-button").popover({
+                            content: result.Error,
+                            placement: top,
+                            animation: true
+                        }).popover('show');
+                    }
+                });
             };
         }
     ]);
