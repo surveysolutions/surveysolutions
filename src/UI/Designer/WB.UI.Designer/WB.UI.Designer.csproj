@@ -454,6 +454,7 @@
     <Content Include="UpdatedDesigner\scripts\controllers\chapters.js" />
     <Content Include="UpdatedDesigner\scripts\controllers\main.js" />
     <Content Include="UpdatedDesigner\scripts\controllers\question.js" />
+    <Content Include="UpdatedDesigner\scripts\controllers\roster.js" />
     <Content Include="UpdatedDesigner\scripts\controllers\verification.js" />
     <Content Include="UpdatedDesigner\scripts\jquery.mCustomScrollbar.js" />
     <Content Include="UpdatedDesigner\scripts\jquery.mousewheel.js" />
@@ -645,6 +646,7 @@
     <Content Include="UpdatedDesigner\views\chapter.html" />
     <Content Include="UpdatedDesigner\views\main.html" />
     <Content Include="UpdatedDesigner\views\question.html" />
+    <Content Include="UpdatedDesigner\views\roster.html" />
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>

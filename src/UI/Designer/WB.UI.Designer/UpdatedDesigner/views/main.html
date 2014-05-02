@@ -101,7 +101,10 @@
 
     <div class="question-editor col-xs-6" ng-if="activeChapter != undefined" ng-include src="'UpdatedDesigner/views/chapter.html'" ng-controller="ChapterCtrl">
     </div>
-    
+
+    <div class="question-editor col-xs-6" ng-if="activeRoster != undefined" ng-include src="'UpdatedDesigner/views/roster.html'" ng-controller="RosterCtrl">
+    </div>
+
     <div class="question-editor col-xs-6" ng-if="activeQuestion != undefined" ng-include src="'UpdatedDesigner/views/question.html'" ng-controller="QuestionCtrl">
     </div>
 
