@@ -162,10 +162,10 @@
                 return commandCall("CloneGroupWithoutChildren", command);
             };
 
-            commandService.deleteGroup = function (questionnaireId, chapter) {
+            commandService.deleteGroup = function (questionnaireId, itemId) {
                 var command = {
                     "questionnaireId": questionnaireId,
-                    "groupId": chapter.chapterId
+                    "groupId": itemId
                 };
 
                 return commandCall("DeleteGroup", command);

@@ -106,6 +106,10 @@ angular.module('designerApp')
                 item.collapsed = false;
             };
 
+            $scope.closePanel = function () {
+                $scope.activeChapter = undefined;
+            };
+
             questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
                 .success(function(result) {
                     if (result == 'null') {

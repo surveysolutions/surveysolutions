@@ -60,7 +60,7 @@ angular.module('designerApp')
             $scope.deleteChapter = function(chapter) {
                 chapter.isMenuOpen = false;
                 if (confirm("Are you sure want to delete?")) {
-                    commandService.deleteGroup($routeParams.questionnaireId, chapter).success(function() {
+                    commandService.deleteGroup($routeParams.questionnaireId, chapter.chapterId).success(function() {
                         var index = $scope.questionnaire.chapters.indexOf(chapter);
                         if (index > -1) {
                             $scope.questionnaire.chapters.splice(index, 1);
