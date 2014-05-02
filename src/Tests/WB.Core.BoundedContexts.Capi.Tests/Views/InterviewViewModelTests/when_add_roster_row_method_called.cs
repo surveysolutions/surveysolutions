@@ -64,12 +64,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             ((QuestionnairePropagatedScreenViewModel) interviewViewModel.Screens[new InterviewItemId(rosterId1, new decimal[] { 0 })])
                 .Breadcrumbs.ToList()[1].ShouldEqual(new InterviewItemId(rosterId1, new decimal[0]));
 
-        It should_contain_next_button_equal_to_roster2 = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId1, new decimal[] { 0 })]).Next.PublicKey.ShouldEqual(new InterviewItemId(rosterId2, new decimal[] { 0 }));
-
-        It should_contain_previous_button_equal_to_roster2 = () =>
-           ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId2, new decimal[] { 0 })]).Previous.PublicKey.ShouldEqual(new InterviewItemId(rosterId1, new decimal[] { 0 }));
-
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
