@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnsweredQuestions.Add(questionKey);
         }
 
-        private void Apply(SingleOptionQuestionAnswered @event)
+        internal void Apply(SingleOptionQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -1549,6 +1549,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
                             !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
+                (state, question) =>
+                    GetEnabledQuestionAnswerSupportedInExpressions(state, question,
+                        (currstate, currquestion) =>
+                            !questionsToBeEnabled.Any(q => AreEqual(q, currquestion)) &&
+                            IsQuestionDisabled(currstate, currquestion));
+
             foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
             {
                 var availableRosterLevels = this.AvailableRosterLevelsForQuestion(this.interviewState, questionnaire,
@@ -1566,9 +1573,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (!this.interviewState.AnsweredQuestions.Contains(questionKey))
                         continue;
 
-                    bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(this.interviewState, questionIdAtInterview,
-                        questionnaire,
-                        GetEnabledQuestionAnswerSupportedInExpressions, a => null);
+                    
+                    bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(this.interviewState,
+                        questionIdAtInterview, questionnaire,
+                        getAnswer, a => null);
 
                     switch (dependentQuestionValidationResult)
                     {
