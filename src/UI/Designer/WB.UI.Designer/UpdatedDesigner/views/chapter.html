@@ -21,9 +21,20 @@
         <label class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
         <input type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.enablementCondition">
     </div>
+    
+    <div class="form-holder">
+        <div class="pull-left">
+            <input type="submit" value="Save" id="edit-chapter-save-button" ng-click="saveChapter()">
+            <a ng-click="cancel()">Cancel</a>
+        </div>        
+        <div class="pull-right">
+            <a ng-click="deleteChapter()">Delete</a>
+            <a ng-click="cloneChapter()">Clone</a>
+        </div>
+    </div>
 
     <p>
-        <input type="submit" value="Save" id="edit-chapter-save-button" ng-click="saveChapter()">
+        
     </p>
 
 </form>

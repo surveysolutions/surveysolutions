@@ -34,10 +34,7 @@ angular.module('designerApp')
 
                 var newChapter = {
                     title: 'New Chapter',
-                    chapterId: newId,
-                    questionsCount: 0,
-                    groupsCount: 0,
-                    rostersCount: 0
+                    chapterId: newId
                 };
 
                 commandService.addChapter($routeParams.questionnaireId, newChapter).success(function() {
@@ -53,12 +50,10 @@ angular.module('designerApp')
                 commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
                     var newChapter = {
                         title: chapter.title,
-                        chapterId: newId,
-                        questionsCount: 0,
-                        groupsCount: 0,
-                        rostersCount: 0
+                        chapterId: newId
                     };
                     $scope.questionnaire.chapters.push(newChapter);
+                    navigationService.openChapter($routeParams.questionnaireId, newId);
                 });
             };
 
