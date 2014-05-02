@@ -96,38 +96,46 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 foreach (var substitutionReference in questionsWithSubstitution.SubstitutionReferences)
                 {
                     if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
-                    {
-                        if (questionsWithSubstitution.QuestionRosterScope.Any())
-                        {
-                            var rosterId = questionsWithSubstitution.QuestionRosterScope.Last();
-                            if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterId))
-                            {
-                                if (!rostersParticipationInSubstitutionReferences[rosterId].Contains(questionsWithSubstitution.PublicKey.Id))
-                                    rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution.PublicKey.Id);
-                            }
-                            else
-                            {
-                                rostersParticipationInSubstitutionReferences.Add(rosterId,
-                                    new List<Guid> { questionsWithSubstitution.PublicKey.Id });
-                            }
-                        }
-                        continue;
-                    }
-                    var referencedQuestion = this.FindReferencedQuestion(substitutionReference, questionsWithSubstitution);
-                    if (referencedQuestion == null)
-                        continue;
-
-                    if (this.questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion))
-                        this.questionsParticipationInSubstitutionReferences[referencedQuestion].Add(questionsWithSubstitution);
+                        HandleRosterTitleInSubstitutions(questionsWithSubstitution);
                     else
-                        this.questionsParticipationInSubstitutionReferences.Add(referencedQuestion, new List<QuestionViewModel> { questionsWithSubstitution });
-
-                    referencedQuestion.PropertyChanged += this.ReferencedQuestionPropertyChanged;
-                    if (!string.IsNullOrEmpty(referencedQuestion.AnswerString))
-                    {
-                        this.ReferencedQuestionPropertyChanged(referencedQuestion, new PropertyChangedEventArgs("AnswerString"));
-                    }
+                        HandleQuestionReferenceInSubstitution(questionsWithSubstitution, substitutionReference);
                 }
+            }
+        }
+
+        private void HandleRosterTitleInSubstitutions(QuestionViewModel questionsWithSubstitution)
+        {
+            if (!questionsWithSubstitution.QuestionRosterScope.Any())
+                return;
+            var rosterId = questionsWithSubstitution.QuestionRosterScope.Last();
+            if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterId))
+            {
+                if (!rostersParticipationInSubstitutionReferences[rosterId].Contains(questionsWithSubstitution.PublicKey.Id))
+                    rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution.PublicKey.Id);
+            }
+            else
+            {
+                rostersParticipationInSubstitutionReferences.Add(rosterId,
+                    new List<Guid> { questionsWithSubstitution.PublicKey.Id });
+            }
+
+        }
+
+        private void HandleQuestionReferenceInSubstitution(QuestionViewModel questionsWithSubstitution, string substitutionReference)
+        {
+            var referencedQuestion = this.FindReferencedQuestion(substitutionReference, questionsWithSubstitution);
+            if (referencedQuestion == null)
+                return;
+
+            if (this.questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion))
+                this.questionsParticipationInSubstitutionReferences[referencedQuestion].Add(questionsWithSubstitution);
+            else
+                this.questionsParticipationInSubstitutionReferences.Add(referencedQuestion, new List<QuestionViewModel> { questionsWithSubstitution });
+
+            referencedQuestion.PropertyChanged += this.ReferencedQuestionPropertyChanged;
+            if (!string.IsNullOrEmpty(referencedQuestion.AnswerString))
+            {
+                this.ReferencedQuestionPropertyChanged(referencedQuestion, new PropertyChangedEventArgs("AnswerString"));
             }
         }
 
