@@ -1164,6 +1164,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
             this.ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
+            this.ThrowIfGroupMovedFromRosterToGroupAndContainsRosterTitleInSubstitution(sourceGroup, targetGroup);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: sourceGroup.IsRoster,
                 rosterSizeSource: sourceGroup.RosterSizeSource,
@@ -2371,6 +2372,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
+        }
+
+        private void ThrowIfGroupMovedFromRosterToGroupAndContainsRosterTitleInSubstitution(IGroup sourceGroup, IGroup targetGroup)
+        {
+            if (this.IsRosterOrInsideRoster(targetGroup) || sourceGroup.IsRoster)
+                return;
+
+            this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(sourceGroup);
         }
 
         private void ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(IGroup sourceGroup, IGroup targetGroup)
