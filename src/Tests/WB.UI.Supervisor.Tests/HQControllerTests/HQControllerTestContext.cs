@@ -19,7 +19,7 @@ using WB.Core.Synchronization;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Tests.HQControllerTests
+namespace WB.UI.Supervisor.Tests.HQControllerTests
 {
     internal class HqControllerTestContext
     {

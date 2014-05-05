@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using Machine.Specifications;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.TabletReportControllerTests
+namespace WB.UI.Supervisor.Tests.TabletReportControllerTests
 {
     internal class when_posting_info_package_is_caller_with_empty_content : TabletReportControllerTestContext
     {

@@ -2,7 +2,7 @@
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 
-namespace Web.Supervisor.Tests
+namespace WB.UI.Supervisor.Tests
 {
     public class AssemblyContext : IAssemblyContext
     {

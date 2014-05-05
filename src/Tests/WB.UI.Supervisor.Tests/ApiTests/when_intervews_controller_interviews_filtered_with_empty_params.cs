@@ -6,7 +6,7 @@ using WB.UI.Supervisor.API;
 using WB.UI.Supervisor.Models.API;
 using It = Machine.Specifications.It;
 
-namespace Web.Supervisor.Tests.ApiTests
+namespace WB.UI.Supervisor.Tests.ApiTests
 {
     internal class when_intervews_controller_interviews_filtered_with_empty_params : ApiTestContext
     {

@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 using it = Moq.It;
 using QuestionnaireVersion = WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.QuestionnaireVersion;
 
-namespace Web.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
+namespace WB.UI.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
 {
     internal class when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception : DesignerQuestionnairesApiControllerTestsContext
     {

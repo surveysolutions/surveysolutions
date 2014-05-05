@@ -9,7 +9,7 @@ using Main.Core.View;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.ImportExportControllerTests
+namespace WB.UI.Supervisor.Tests.ImportExportControllerTests
 {
     internal class when_GetExportedDataAsync_is_called_with_empty_id : ImportExportControllerTestContext
     {
