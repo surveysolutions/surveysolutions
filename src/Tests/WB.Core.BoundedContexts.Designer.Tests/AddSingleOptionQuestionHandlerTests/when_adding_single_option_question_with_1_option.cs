@@ -7,46 +7,36 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandlerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerTests
 {
-    internal class when_updating_multi_option_question_with_empty_options : QuestionnaireTestsContext
+    internal class when_adding_single_option_question_with_1_option : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
-            questionnaire.Apply(new QRBarcodeQuestionAdded
-            {
-                QuestionId = questionId,
-                ParentGroupId = parentGroupId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                IsMandatory = false,
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.Apply(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateMultiOptionQuestion(
+                questionnaire.AddSingleOptionQuestion(
                     questionId: questionId,
+                    parentGroupId: groupFromRosterId,
                     title: title,
                     variableName: variableName,
                     isMandatory: isMandatory,
-                    scope: scope,
+                    isPreFilled: isPrefilled,
+                    scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
-                    responsibleId: responsibleId
-                    , options: options,
-                    linkedToQuestionId: linkedToQuestionId,
-                    areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers
-                    ));
-
+                    responsibleId: responsibleId,
+                    options: options,
+                    linkedToQuestionId: linkedToQuestionId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -58,19 +48,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
         private static Exception exception;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static Guid groupFromRosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static Guid parentGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static bool isPrefilled = false;
         private static bool isMandatory = false;
-        private static string variableName = "multi_var";
+        private static string variableName = "single_var";
         private static string title = "title";
         private static string instructions = "intructions";
         private static string enablementCondition = "";
         private static string validationExpression = "";
         private static string validationMessage = "";
-        private static Option[] options = new Option[0];
+        private static Option[] options = { new Option(Guid.NewGuid(), "1", "option title"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool areAnswersOrdered = false;
-        private static int? maxAllowedAnswers = null;
-        private static QuestionScope scope = QuestionScope.Interviewer;
     }
 }

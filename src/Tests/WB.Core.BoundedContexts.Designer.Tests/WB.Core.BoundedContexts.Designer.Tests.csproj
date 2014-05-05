@@ -170,6 +170,8 @@
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
+    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_max_allowed_answers_less_than_2.cs" />
+    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_1_option.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_empty_options.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_set_in_null.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
+    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_1_option.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_empty_options.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_all_parameters_is_specified.cs" />
@@ -227,6 +230,7 @@
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\ChaptersInfoViewDenormalizerTestContext.cs" />
+    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_max_allowed_answers_less_than_2.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupCloned_event_received_and_new_group_is_chapter.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_NewGroupAdded_event_received_and_parent_of_group_does_not_exists.cs" />
@@ -568,6 +572,7 @@
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
+    <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_max_allowed_answers_less_than_2.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_empty_options.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_in_roster_group_that_used_as_roster_title_question.cs" />

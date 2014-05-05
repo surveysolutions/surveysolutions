@@ -2655,11 +2655,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (!maxAllowedAnswers.HasValue) return;
 
-            if (maxAllowedAnswers.Value < 1)
+            if (maxAllowedAnswers.Value < 2)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.MaxAllowedAnswersIsNotPositive,
-                    "Maximum Allowed Answers for question has to be positive");
+                    DomainExceptionType.MaxAllowedAnswersLessThan2,
+                    "Maximum Allowed Answers for question should be more than one");
             }
 
             if (!linkedToQuestionId.HasValue && maxAllowedAnswers.Value > options.Length)
@@ -2711,10 +2711,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options)
         {
-            if (options == null || !options.Any())
+            if (options == null || !options.Any() || options.Count() < 2)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
+                    DomainExceptionType.SelectorEmpty, "Question with options should have two options at least");
             }
 
             if (options.Any(x => string.IsNullOrEmpty(x.Value)))
