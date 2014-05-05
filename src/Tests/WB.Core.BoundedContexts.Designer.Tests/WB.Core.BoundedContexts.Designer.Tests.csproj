@@ -183,6 +183,10 @@
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
+    <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="UpdateNumericQuestionHandlerTests\when_updating_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
+    <Compile Include="UpdateNumericQuestionHandlerTests\when_updating_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_prefilled.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
