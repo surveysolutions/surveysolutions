@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__categorical_hould_have_options_ = () =>
-            new[] { "question with options should have one option at least" }.ShouldEachConformTo(
+            new[] { "question with options should have two options at least" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;

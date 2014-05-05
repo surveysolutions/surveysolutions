@@ -102,7 +102,7 @@
 
         FeaturedQuestionTitleContainsSubstitutionReference,
 
-        MaxAllowedAnswersIsNotPositive,
+        MaxAllowedAnswersLessThan2,
 
         MaxAllowedAnswersMoreThanOptions,
 
