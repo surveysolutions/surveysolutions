@@ -43,8 +43,22 @@
     <Reference Include="Machine.Specifications.Should">
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage">
+      <HintPath>..\..\..\packages\WindowsAzure.Storage.2.0.6.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
@@ -52,8 +66,28 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Embedded">
+      <HintPath>..\..\..\packages\RavenDB.Embedded.2.5.2851\lib\net45\Raven.Client.Embedded.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database">
+      <HintPath>..\..\..\packages\RavenDB.Database.2.5.2851\lib\net45\Raven.Database.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -130,6 +164,23 @@
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_and_zipped_GetPreloadedData_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformation_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
+    <Compile Include="InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
+    <Compile Include="InterviewQuestionViewTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
+    <Compile Include="MapReportTests\MapReportTestContext.cs" />
+    <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_answer_collection.cs" />
+    <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_no_answer_collection.cs" />
+    <Compile Include="Merger\InterviewDataAndQuestionnaireMergerTestContext.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_firt_level_inside_it.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_it_at_first_level.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_it_at_parallel_roster_level.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_2nd_level_rosters_and_linked_question_on_it_at_top_level.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_group_inside_it_.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_disabled_chapter_roster_inside_i.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_and_fixed_roster_with_titles.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_group_inside_roster.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_roster_inside_roster_by_different_roster_size_ids.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_roster_inside_roster_by_the_same_roster_size_ids.cs" />
     <Compile Include="PreloadedDataServiceTests\PreloadedDataServiceTestContext.cs" />
     <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDto_is_called_for_2_data_files.cs" />
     <Compile Include="PreloadedDataServiceTests\when_FindLevelInPreloadedData_is_called_with_lower_case_file_name.cs" />
@@ -181,6 +232,20 @@
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_text_question.cs" />
     <Compile Include="QuestionnaireCacheInitializerTests\when_initialize_caches_for_questionnaire_with_question_which_has_enablement_condition.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\QuestionnaireQuestionInfoFactoryTestContext.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions_and_questionnaire_is_absent.cs" />
+    <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_geo_questions.cs" />
+    <Compile Include="QuestionnairesAndVersionsFactoryTests\QuestionnairesAndVersionsFactoryTestContext.cs" />
+    <Compile Include="QuestionnairesAndVersionsFactoryTests\when_loading_second_page_with_data.cs" />
+    <Compile Include="RavenIndexes\RavenIndexesTestContext.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_4_misc_questionnaire_browse_items.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_approve_statuses.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_complete_statuses.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_error_statuses.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_initial_statuses.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_redo_statuses.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\FileBasedDataExportServiceTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_present.cs" />
