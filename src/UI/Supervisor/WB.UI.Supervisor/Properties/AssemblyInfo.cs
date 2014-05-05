@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Web.Supervisor")]
+[assembly: AssemblyTitle("WB.UI.Supervisor")]
 [assembly: AssemblyDescription("")]
 
 #if (Debug || DEBUG)
@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: AssemblyCompany("The World Bank")]
-[assembly: AssemblyProduct("Web.Supervisor")]
+[assembly: AssemblyProduct("WB.UI.Supervisor")]
 [assembly: AssemblyCopyright("Copyright © World Bank 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
