@@ -7,9 +7,9 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandlerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandlerTests
 {
-    internal class when_updating_multi_option_question_with_empty_options : QuestionnaireTestsContext
+    internal class when_cloning_single_option_question_with_1_option : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
             questionnaire.Apply(new QRBarcodeQuestionAdded
             {
-                QuestionId = questionId,
+                QuestionId = sourceQuestionId,
                 ParentGroupId = parentGroupId,
                 Title = "old title",
                 VariableName = "old_variable_name",
@@ -30,22 +30,23 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateMultiOptionQuestion(
+                questionnaire.CloneSingleOptionQuestion(
                     questionId: questionId,
                     title: title,
                     variableName: variableName,
                     isMandatory: isMandatory,
+                    isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
-                    responsibleId: responsibleId
-                    , options: options,
-                    linkedToQuestionId: linkedToQuestionId,
-                    areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers
-                    ));
+                    parentGroupId: parentGroupId,
+                    sourceQuestionId: sourceQuestionId,
+                    targetIndex: targetIndex,
+                    responsibleId: responsibleId,
+                    options: options,
+                    linkedToQuestionId: linkedToQuestionId));
 
 
         It should_throw_QuestionnaireException = () =>
@@ -58,19 +59,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
         private static Exception exception;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid sourceQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid parentGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static bool isMandatory = false;
+        private static bool isPreFilled = false;
         private static string variableName = "multi_var";
         private static string title = "title";
         private static string instructions = "intructions";
         private static string enablementCondition = "";
         private static string validationExpression = "";
         private static string validationMessage = "";
-        private static Option[] options = new Option[0];
+        private static Option[] options = { new Option(Guid.NewGuid(), "1", "option title"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool areAnswersOrdered = false;
-        private static int? maxAllowedAnswers = null;
         private static QuestionScope scope = QuestionScope.Interviewer;
+        private static int targetIndex = 1;
     }
 }

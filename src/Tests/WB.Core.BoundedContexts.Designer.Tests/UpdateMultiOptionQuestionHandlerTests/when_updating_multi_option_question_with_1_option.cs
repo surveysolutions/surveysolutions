@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandlerTests
 {
-    internal class when_updating_multi_option_question_with_empty_options : QuestionnaireTestsContext
+    internal class when_updating_multi_option_question_with_1_option : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
         private static string enablementCondition = "";
         private static string validationExpression = "";
         private static string validationMessage = "";
-        private static Option[] options = new Option[0];
+        private static Option[] options = { new Option(Guid.NewGuid(), "1", "option title"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool areAnswersOrdered = false;
         private static int? maxAllowedAnswers = null;

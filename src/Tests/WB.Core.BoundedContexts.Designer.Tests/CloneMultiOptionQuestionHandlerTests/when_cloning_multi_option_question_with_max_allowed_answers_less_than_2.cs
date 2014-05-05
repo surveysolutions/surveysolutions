@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandlerTests
 {
-    internal class when_cloning_multi_option_question_with_empty_options : QuestionnaireTestsContext
+    internal class when_cloning_multi_option_question_with_max_allowed_answers_less_than_2 : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -32,29 +32,33 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandler
             exception = Catch.Exception(() =>
                 questionnaire.CloneMultiOptionQuestion(
                     questionId: questionId,
-                    title: title,
-                    variableName: variableName,
-                    isMandatory: isMandatory,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
+                    title: "title",
+                    variableName: "var",
+                    isMandatory: false,
+                    scope: QuestionScope.Interviewer,
+                    enablementCondition: null,
+                    validationExpression: null,
+                    validationMessage: null,
+                    instructions: null,
                     parentGroupId: parentGroupId,
                     sourceQuestionId: sourceQuestionId,
-                    targetIndex: targetIndex,
+                    targetIndex: 0,
                     responsibleId: responsibleId,
-                    options: options,
-                    linkedToQuestionId: linkedToQuestionId,
-                    areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers));
+                    options: new Option[]
+                    {
+                        new Option(Guid.NewGuid(), "1", "opt1Title"),
+                        new Option(Guid.NewGuid(), "2", "opt2Title")
+                    },
+                    linkedToQuestionId: null,
+                    areAnswersOrdered: false,
+                    maxAllowedAnswers: 1));
 
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__categorical_hould_have_options_ = () =>
-            new[] { "question with options should have two options at least" }.ShouldEachConformTo(
+        It should_throw_exception_with_message_containting__maximum_allowed_answers_should_be_more_than_one__ = () =>
+            new[] { "maximum allowed answers for question should be more than one" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;
@@ -63,18 +67,5 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandler
         private static Guid sourceQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid parentGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static bool isMandatory = false;
-        private static string variableName = "multi_var";
-        private static string title = "title";
-        private static string instructions = "intructions";
-        private static string enablementCondition = "";
-        private static string validationExpression = "";
-        private static string validationMessage = "";
-        private static Option[] options = new Option[0];
-        private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool areAnswersOrdered = false;
-        private static int? maxAllowedAnswers = null;
-        private static QuestionScope scope = QuestionScope.Interviewer;
-        private static int targetIndex = 1;
     }
 }
