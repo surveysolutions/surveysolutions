@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure.Raven
         private IStreamableEventStore singleEventStore;
         private readonly bool useStreamingForAllEvents;
 
-        public RavenWriteSideInfrastructureModule(RavenConnectionSettings settings, bool useStreamingForAllEvents = true,int pageSize = 50)
+        public RavenWriteSideInfrastructureModule(RavenConnectionSettings settings, bool useStreamingForAllEvents = true, int pageSize = 50)
             : base(settings)
         {
             this.pageSize = pageSize; 
