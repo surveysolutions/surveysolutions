@@ -23,12 +23,18 @@ angular.module('designerApp')
                         alert('Questionnaire not found');
                     } else {
                         console.log(result);
-                        $scope.activeQuestion = result.question;
-                        $scope.activeQuestion.questionScopes = result.questionScopeOptions;
-                        $scope.activeQuestion.questionTypes = result.questionTypeOptopns;
-                        $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
+                        $scope.activeQuestion = result;
+                        $scope.activeQuestion.optionValue = "";
+                        $scope.activeQuestion.optionTitle = "";
                     }
                 });
+
+            $scope.addOption = function () {
+                $scope.activeQuestion.options.push({
+                    value: $scope.activeQuestion.optionValue,
+                    title: $scope.activeQuestion.optionTitle
+                });
+            }
 
             $scope.saveQuestion = function() {
                 //console.log(questionBrief);
@@ -48,5 +54,7 @@ angular.module('designerApp')
                     }
                 });
             };
+
+
         }
     ]);
