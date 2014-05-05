@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 
-namespace Web.Supervisor.Tests.ReportDataApiControllerTests
+namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
 {
     internal class when_questionnaires_data_is_being_queried : ReportDataApiControllerTestContext
     {

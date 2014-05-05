@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.ImportExportControllerTests
+namespace WB.UI.Supervisor.Tests.ImportExportControllerTests
 {
     internal class ImportExportControllerTestContext
     {

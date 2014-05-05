@@ -4,7 +4,7 @@ using Machine.Specifications;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Tests.HQControllerTests
+namespace WB.UI.Supervisor.Tests.HQControllerTests
 {
     public class when_BatchUploadModel_model_contains_property__File__to_upload_file_data
     {

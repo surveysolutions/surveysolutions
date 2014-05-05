@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.UI.Supervisor.API;
 
-namespace Web.Supervisor.Tests.ApiTests
+namespace WB.UI.Supervisor.Tests.ApiTests
 {
     internal class ApiTestContext
     {

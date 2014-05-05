@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.ReportDataApiControllerTests
+namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
 {
     internal class ReportDataApiControllerTestContext
     {

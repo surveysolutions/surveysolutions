@@ -12,7 +12,7 @@ using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace Web.Supervisor.Tests.ReportDataApiControllerTests
+namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
 {
     internal class when_map_report_data_is_being_queried : ReportDataApiControllerTestContext
     {

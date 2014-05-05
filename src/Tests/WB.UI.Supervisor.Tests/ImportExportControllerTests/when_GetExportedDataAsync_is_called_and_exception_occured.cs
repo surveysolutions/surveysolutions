@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 
-namespace Web.Supervisor.Tests.ImportExportControllerTests
+namespace WB.UI.Supervisor.Tests.ImportExportControllerTests
 {
     internal class when_GetExportedDataAsync_is_called_and_exception_occured : ImportExportControllerTestContext
     {
