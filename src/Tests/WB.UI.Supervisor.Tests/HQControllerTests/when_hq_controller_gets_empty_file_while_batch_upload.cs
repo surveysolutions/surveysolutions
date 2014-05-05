@@ -9,7 +9,7 @@ using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Models;
 using It = Machine.Specifications.It;
 
-namespace Web.Supervisor.Tests.HQControllerTests
+namespace WB.UI.Supervisor.Tests.HQControllerTests
 {
     internal class when_hq_controller_gets_empty_file_while_batch_upload_and_model_state_is_invalid : HqControllerTestContext
     {

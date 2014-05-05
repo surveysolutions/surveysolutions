@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.DesignerPublicService;
 
-namespace Web.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
+namespace WB.UI.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
 {
     [Subject(typeof(DesignerQuestionnairesApiController))]
     internal class DesignerQuestionnairesApiControllerTestsContext

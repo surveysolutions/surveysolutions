@@ -11,7 +11,7 @@ using WB.UI.Supervisor.Models;
 using It = Machine.Specifications.It;
 using QuestionnaireVersion = WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.QuestionnaireVersion;
 
-namespace Web.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
+namespace WB.UI.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
 {
     internal class when_requesting_questionnaire_and_designer_service_throws_fault_exception : DesignerQuestionnairesApiControllerTestsContext
     {

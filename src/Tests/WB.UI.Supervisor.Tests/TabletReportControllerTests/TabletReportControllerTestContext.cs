@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.TabletReportControllerTests
+namespace WB.UI.Supervisor.Tests.TabletReportControllerTests
 {
     internal class TabletReportControllerTestContext
     {

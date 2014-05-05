@@ -7,7 +7,7 @@ using WB.UI.Supervisor.API;
 using WB.UI.Supervisor.Models.API;
 using It = Machine.Specifications.It;
 
-namespace Web.Supervisor.Tests.ApiTests
+namespace WB.UI.Supervisor.Tests.ApiTests
 {
     internal class when_users_controller_details_is_called_with_not_emty_params : ApiTestContext
     {

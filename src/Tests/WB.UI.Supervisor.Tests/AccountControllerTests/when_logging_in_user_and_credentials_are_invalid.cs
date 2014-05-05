@@ -7,7 +7,7 @@ using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Models;
 using It = Machine.Specifications.It;
 
-namespace Web.Supervisor.Tests.AccountControllerTests
+namespace WB.UI.Supervisor.Tests.AccountControllerTests
 {
     internal class when_logging_in_user_and_credentials_are_invalid : AccountControllerTestsContext
     {

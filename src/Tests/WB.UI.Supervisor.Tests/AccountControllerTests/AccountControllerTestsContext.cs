@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.AccountControllerTests
+namespace WB.UI.Supervisor.Tests.AccountControllerTests
 {
     [Subject(typeof(AccountController))]
     internal class AccountControllerTestsContext

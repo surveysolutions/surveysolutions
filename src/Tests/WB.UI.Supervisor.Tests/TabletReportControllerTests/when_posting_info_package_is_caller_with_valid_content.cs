@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.TabletReportControllerTests
+namespace WB.UI.Supervisor.Tests.TabletReportControllerTests
 {
     internal class when_posting_info_package_is_caller_with_valid_content : TabletReportControllerTestContext
     {

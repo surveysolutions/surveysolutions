@@ -8,7 +8,7 @@ using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Tests.TabletReportControllerTests
+namespace WB.UI.Supervisor.Tests.TabletReportControllerTests
 {
     internal class when_list_of_info_packages_is_requested : TabletReportControllerTestContext
     {
