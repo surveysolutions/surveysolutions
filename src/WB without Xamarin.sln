@@ -162,7 +162,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Supervisor", "Supervisor", "{9465331F-0BD5-495C-B5B6-BE3384A07BF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Supervisor", "UI\Supervisor\Web.Supervisor\Web.Supervisor.csproj", "{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Supervisor", "UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj", "{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
