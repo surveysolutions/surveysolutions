@@ -72,7 +72,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main.Core.Tests", "..\Raven
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionnaire.Core.Web", "..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj", "{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Supervisor.Tests", "..\RavenQuestionnaire.Web\Web.Supervisor.Tests\Web.Supervisor.Tests.csproj", "{0C236AF6-B2AF-4595-B914-FC2DE02BEC56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Supervisor.Tests", "Tests\WB.UI.Supervisor.Tests\WB.UI.Supervisor.Tests.csproj", "{0C236AF6-B2AF-4595-B914-FC2DE02BEC56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynchronizationMessages", "..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj", "{AD672732-3D12-48BC-8612-09547F0065D3}"
 EndProject
