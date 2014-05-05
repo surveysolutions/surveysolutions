@@ -394,8 +394,8 @@ namespace CapiDataGenerator
 
         public void Generate()
         {
-            if (string.IsNullOrEmpty(TemplatePath) || SelectedSupervisor == null || 
-                this._headquarterUser == null)
+            if (string.IsNullOrEmpty(TemplatePath) || SelectedSupervisor == null ||
+                this._headquarterUser == null || SelectedWorkingMode == null)
                 return;
 
             LogMessages.Clear();
