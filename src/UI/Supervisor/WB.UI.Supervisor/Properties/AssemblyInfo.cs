@@ -44,4 +44,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("Web.Supervisor.Tests")]
+[assembly: InternalsVisibleTo("WB.UI.Supervisor.Tests")]
