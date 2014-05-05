@@ -4,7 +4,7 @@ namespace WB.Tools.CapiDataGenerator
 {
     public class AppSettings
     {
-        public bool AreSupervisorEventsNowPublishing;
+        private AppSettings(){}
 
         private static AppSettings _instance;
         public static AppSettings Instance
@@ -12,11 +12,9 @@ namespace WB.Tools.CapiDataGenerator
             get { return _instance ?? (_instance = new AppSettings()); }
         }
 
-        public bool PutAllEventsToSupervisorDB { get; set; }
+        public bool AreSupervisorEventsNowPublishing { get; set; }
 
-        private AppSettings()
-        {
-            
-        }
+      
+        public GenerationMode CurrentMode { set; get; }
     }
 }

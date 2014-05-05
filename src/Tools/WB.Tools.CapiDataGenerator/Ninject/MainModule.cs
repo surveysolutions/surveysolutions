@@ -14,8 +14,6 @@ using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core;
 using Main.Core.Commands;
 using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
-using Main.Core.Events.User;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
@@ -33,16 +31,14 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -60,7 +56,14 @@ namespace CapiDataGenerator
         private const string EventStoreDatabaseName = "EventStore";
         private const string PlainStoreName = "PlainStore";
 
+        private readonly RavenConnectionSettings headquartersSettings;
+
         private IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
+
+        public MainModelModule(RavenConnectionSettings headquartersSettings)
+        {
+            this.headquartersSettings = headquartersSettings;
+        }
 
         public override void Load()
         {
@@ -79,13 +82,18 @@ namespace CapiDataGenerator
             var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
 
             var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
-
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
+            
+            ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);
 
-            ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore);
+            var supervisorEventStore = new RavenDBEventStore(
+                this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50);
 
-            var eventStore = new CapiDataGeneratorEventStore(capiEvenStore,
-                new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50));
+            //manual creation of hq event store
+            var storeProvider = new DocumentStoreProvider(this.headquartersSettings);
+            var headquartersEventStore = new RavenDBEventStore(storeProvider.CreateSeparateInstanceForEventStore(), 50);
+
+            var eventStore = new CapiDataGeneratorEventStore(capiEvenStore, supervisorEventStore, headquartersEventStore);
 
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
