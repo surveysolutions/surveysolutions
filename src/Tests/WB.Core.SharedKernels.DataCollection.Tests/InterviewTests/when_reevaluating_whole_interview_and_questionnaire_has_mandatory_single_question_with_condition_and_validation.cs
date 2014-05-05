@@ -35,6 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.GetCustomValidationExpression(singleQuestion2Id) == validationExpression
                 && _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new[] { singleQuestion2Id }
                 && _.GetCustomEnablementConditionForQuestion(singleQuestion2Id) == enablementCondition
+                && _.IsQuestionMandatory(singleQuestion1Id) == true
+                && _.IsQuestionMandatory(singleQuestion2Id) == true
             );
 
             var expressionProcessor =
