@@ -63,7 +63,7 @@ function BuildSupervisor($Solution, $Project, $BuildConfiguration, $AndroidPacka
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
 
-	RunConfigTransform "RavenQuestionnaire.Web\Web.Supervisor\Web.config" "RavenQuestionnaire.Web\Web.Supervisor\Web.$BuildConfiguration.config"
+	RunConfigTransform "src\UI\Supervisor\WB.UI.Supervisor\Web.config" "src\UI\Supervisor\WB.UI.Supervisor\Web.$BuildConfiguration.config"
 	CopyCapi -Project $Project -PathToFinalCapi $AndroidPackageName -BuildNumber $BuildNumber
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration

@@ -215,11 +215,11 @@ function CreateInstallation($Solution, $Project, $CapiProject, $BuildConfigurati
 
 try {
 	$BuildConfiguration = 'Release'	
-	$PathToBeDeployed = "RavenQuestionnaire.Web\Web.Supervisor\obj\$BuildConfiguration\Package\PackageTmp"
+	$PathToBeDeployed = "src\UI\Supervisor\WB.UI.Supervisor\obj\$BuildConfiguration\Package\PackageTmp"
 	
 	CreateInstallation `
 			-Solution 'src\Supervisor.sln' `
-			-Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
+			-Project 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
 			-CapiProject 'src\UI\Capi\WB.UI.Capi.DataCollection\WB.UI.Capi.DataCollection.csproj' `
 			-BuildConfiguration $BuildConfiguration `
 			-SourceFolder $PathToBeDeployed `
