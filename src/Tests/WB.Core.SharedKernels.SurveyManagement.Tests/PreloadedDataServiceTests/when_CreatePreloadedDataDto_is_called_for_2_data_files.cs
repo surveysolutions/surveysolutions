@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                         CreatePreloadedDataByFile(new[] { "Id", "nq2", "ParentId" }, new[] { new[] { "1", "2", "1" } }, "Roster Group")
                     });
 
-        It should_result_be_not_null = () =>
+        It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
         It should_result_has_1_items = () =>

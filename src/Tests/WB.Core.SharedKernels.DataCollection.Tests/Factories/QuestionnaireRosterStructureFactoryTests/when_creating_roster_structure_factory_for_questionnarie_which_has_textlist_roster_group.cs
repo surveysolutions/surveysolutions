@@ -1,25 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.Factories.QuestionnaireRosterStructureFactoryTests
 {
-    internal class when_creating_roster_structure_factory_for_questionnarie_which_has_fixed_roster_group : QuestionnaireRosterStructureFactoryTestContext
+    internal class when_creating_roster_structure_factory_for_questionnarie_which_has_textlist_roster_group : QuestionnaireRosterStructureFactoryTestContext
     {
         Establish context = () =>
         {
-            fixedRosterGroupId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
+            textlistRosterGroupId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            textlistQuestionId = new Guid("1111BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
+                new TextListQuestion() { PublicKey = textlistQuestionId, QuestionType = QuestionType.TextList },
                 new Group("Roster")
                 {
-                    PublicKey = fixedRosterGroupId,
+                    PublicKey = textlistRosterGroupId,
                     IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    RosterSizeQuestionId = textlistQuestionId
                 }
             );
             questionnaireRosterStructureFactory = CreateQuestionnaireRosterStructureFactory();
@@ -31,19 +37,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Factories.QuestionnaireRost
         It should_contain_1_roster_scope = () =>
             questionnaireRosterStructure.RosterScopes.Count().ShouldEqual(1);
 
-        It should_specify_fixed_roster_id_as_id_of_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Key.ShouldEqual(fixedRosterGroupId);
+        It should_specify_textlist_question_id_as_id_of_roster_scope = () =>
+            questionnaireRosterStructure.RosterScopes.Single().Key.ShouldEqual(textlistQuestionId);
 
-        It should_be_null_roster_title_question_for_fixed_roster_in_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Value
-                .RosterIdToRosterTitleQuestionIdMap[fixedRosterGroupId].ShouldBeNull();
-
-        It should_be_fixed_scope_type_for_fixed_roster_in_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Value.ScopeType.ShouldEqual(RosterScopeType.Fixed);
+        It should_be_textlist_scope_type_for_textlist_roster_in_roster_scope = () =>
+            questionnaireRosterStructure.RosterScopes.Single().Value.ScopeType.ShouldEqual(RosterScopeType.TextList);
 
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private static QuestionnaireRosterStructure questionnaireRosterStructure;
-        private static Guid fixedRosterGroupId;
+        private static Guid textlistRosterGroupId;
+        private static Guid textlistQuestionId;
     }
 }
