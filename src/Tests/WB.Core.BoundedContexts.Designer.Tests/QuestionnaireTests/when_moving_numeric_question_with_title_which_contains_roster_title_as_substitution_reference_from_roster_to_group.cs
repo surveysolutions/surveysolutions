@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -6,34 +10,32 @@ using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.UpdateNumericQuestionHandlerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_updating_numeric_question_with_title_which_contains_roster_title_as_substitution_reference : QuestionnaireTestsContext
+    internal class when_moving_numeric_question_with_title_which_contains_roster_title_as_substitution_reference_from_roster_to_group: QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("11111111111111111111111111111111");
-
+            rosterId = Guid.Parse("21111111111111111111111111111111");
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-
+            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.Apply(new GroupBecameARoster(Guid.NewGuid(), rosterId));
             questionnaire.Apply(new NumericQuestionAdded()
             {
-                GroupPublicKey = chapterId,
                 PublicKey = questionId,
-                StataExportCaption = "var",
-                QuestionText = "title"
+                GroupPublicKey = rosterId,
+                QuestionText = questionTitle,
+                StataExportCaption = "var"
             });
             eventContext = new EventContext();
         };
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateNumericQuestion(questionId, questionTitle, "var", false, false, QuestionScope.Interviewer, null, null, null, null,
-                responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
-                maxValue: null));
+        Because of = () => exception = Catch.Exception(() => questionnaire.MoveQuestion(questionId, chapterId, 1, responsibleId));
 
         Cleanup stuff = () =>
         {
@@ -52,8 +54,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateNumericQuestionHandlerTes
         private static Questionnaire questionnaire;
         private static Guid questionId;
         private static Guid chapterId;
+        private static Guid rosterId;
         private static Guid responsibleId;
-        private static string questionTitle = "title %rostertitle%";
         private static Exception exception;
+        private static string questionTitle = "title %rostertitle%";
     }
 }
