@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                result =
                    preloadedDataService.GetColumnIndexesGoupedByQuestionVariableName(CreatePreloadedDataByFile(new string[]{"nq1"}, null, questionnaireDocument.Title) );
 
-        It should_result_be_not_null = () =>
+        It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
 
         It should_result_has_index_of_numeric_question_only = () =>

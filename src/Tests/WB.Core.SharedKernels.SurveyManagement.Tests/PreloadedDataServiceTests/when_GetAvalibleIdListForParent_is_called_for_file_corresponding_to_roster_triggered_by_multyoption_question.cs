@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                         CreatePreloadedDataByFile(new string[] { "Id", rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" }, new string[][] { new string[] { "1", "3","" } },
                             questionnaireDocument.Title), rosterSizeQuestionId, "1");
 
-        It should_result_be_not_null = () =>
+        It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
         It should_result_have_2_ids_1_and_2 = () =>

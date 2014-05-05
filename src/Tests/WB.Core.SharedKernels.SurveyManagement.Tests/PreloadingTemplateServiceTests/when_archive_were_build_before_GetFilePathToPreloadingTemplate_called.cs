@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
 
         Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(questionnaireId, 1);
 
-        It should_result_be_not_null = () =>
+        It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
 
         It should_return_valid_archive_name = () =>

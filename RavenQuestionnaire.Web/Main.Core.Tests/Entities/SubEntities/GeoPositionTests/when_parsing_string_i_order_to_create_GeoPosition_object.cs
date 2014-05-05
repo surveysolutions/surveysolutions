@@ -41,7 +41,7 @@ namespace Main.Core.Tests.Entities.SubEntities.GeoPositionTests
         It should_result_be_null_for_invalid_accuracy = () =>
             Results[UnparsedAccuracy].ShouldBeNull();
 
-        It should_result_be_not_null_for_valid_format = () =>
+        It should_return_not_null_result_for_valid_format = () =>
             Results[ValidFormat].ShouldNotBeNull();
 
         It should_parsed_result_accuracy_be_equal_3 = () =>
