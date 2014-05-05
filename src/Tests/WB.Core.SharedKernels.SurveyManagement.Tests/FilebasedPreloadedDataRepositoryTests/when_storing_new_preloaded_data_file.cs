@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
 
         Because of = () => result = filebasedPreloadedDataRepository.Store(CreateStream(), "fileName.zip");
 
-        It should_result_be_not_null = () =>
+        It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
         private It should_directory_with_result_in_name_be_created = () =>

@@ -82,9 +82,12 @@
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_fixed_roster_group.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_multyoption_roster_group.cs" />
+    <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_numeric_roster_group.cs" />
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_roster_title_question_inside_roster___.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_textlist_roster_group.cs" />
     <Compile Include="InterviewItemIdTests.cs" />
     <Compile Include="InterviewItemIdTests\InterviewItemIdTestsContext.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_hashcodes_two_instances_with_same_id_and_propagation_vectors_0point0_and_0.cs" />

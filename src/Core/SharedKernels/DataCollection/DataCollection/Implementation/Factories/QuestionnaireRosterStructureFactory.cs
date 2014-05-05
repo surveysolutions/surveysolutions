@@ -19,7 +19,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
             result.Version = version;
 
             var groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId(questionnaire);
-            //### old questionnaires supporting
+
+            this.AddRosterScopesByAutoPropagatedQuestionsBackwardCompatibility(questionnaire, groupsMappedOnPropagatableQuestion, result.RosterScopes);
+            this.AddRosterScopes(questionnaire, groupsMappedOnPropagatableQuestion, result.RosterScopes);
+           
+            return result;
+        }
+
+        private void AddRosterScopesByAutoPropagatedQuestionsBackwardCompatibility(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion, Dictionary<Guid,RosterScopeDescription> rosterScopes)
+        {
             var autoPropagatebleQuestions =
                 questionnaire.Find<IAutoPropagateQuestion>(
                     question =>
@@ -33,13 +41,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
                     rosterIdMappedOfRosterTitleQuestionId,
                     autoPropagatebleQuestion.Triggers.ToDictionary(trigger => trigger,
                         trigger => this.GetScopeOfQuestionnaireItem(questionnaire.FirstOrDefault<IGroup>(g => g.PublicKey == trigger), groupsMappedOnPropagatableQuestion)));
-
-                result.RosterScopes.Add(autoPropagatebleQuestion.PublicKey,
-                    rosterDescription);
+                rosterScopes.Add(autoPropagatebleQuestion.PublicKey, rosterDescription);
             }
+        }
 
-
-            //### roster
+        private void AddRosterScopes(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion,
+            Dictionary<Guid, RosterScopeDescription> rosterScopes)
+        {
             var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question);
             var fixedRosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles).ToList();
 
@@ -57,19 +65,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
                        groupsFromRosterSizeQuestionScope.ToDictionary(roster => roster.PublicKey,
                         roster => this.GetScopeOfQuestionnaireItem(roster, groupsMappedOnPropagatableQuestion)));
 
-                result.RosterScopes.Add(rosterSizeQuestion.PublicKey, rosterDescription);
+                rosterScopes.Add(rosterSizeQuestion.PublicKey, rosterDescription);
             }
 
             foreach (var fixedRosterGroup in fixedRosterGroups)
             {
-                result.RosterScopes[fixedRosterGroup.PublicKey] = new RosterScopeDescription(fixedRosterGroup.PublicKey, string.Empty, RosterScopeType.Fixed,
+                rosterScopes[fixedRosterGroup.PublicKey] = new RosterScopeDescription(fixedRosterGroup.PublicKey, string.Empty, RosterScopeType.Fixed,
                     new Dictionary<Guid, RosterTitleQuestionDescription> { { fixedRosterGroup.PublicKey, null } },
                     new Dictionary<Guid, Guid[]>()
                     {
                         { fixedRosterGroup.PublicKey, this.GetScopeOfQuestionnaireItem(fixedRosterGroup, groupsMappedOnPropagatableQuestion) }
                     });
             }
-            return result;
         }
 
         private RosterScopeType GetRosterScopeTypeByQuestionType(QuestionType questionType)
@@ -85,6 +92,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
             }
             return RosterScopeType.Numeric;
         }
+
         private IDictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId(QuestionnaireDocument template)
         {
             var result = new Dictionary<Guid, Guid>();

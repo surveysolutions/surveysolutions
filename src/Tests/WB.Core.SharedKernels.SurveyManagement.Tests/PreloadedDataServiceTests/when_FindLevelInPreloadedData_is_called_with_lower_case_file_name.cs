@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                result =
                    preloadedDataService.FindLevelInPreloadedData("roster group");
 
-        It should_result_be_not_null = () =>
+        It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
 
         It should_result_levelId_be_equal_to_rosterGroupId = () =>
