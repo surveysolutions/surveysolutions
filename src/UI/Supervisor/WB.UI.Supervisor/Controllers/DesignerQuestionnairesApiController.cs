@@ -16,19 +16,19 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Extensions;
-using Web.Supervisor.DesignerPublicService;
-using Web.Supervisor.Models;
-using IPublicService = Web.Supervisor.DesignerPublicService.IPublicService;
-using QuestionnaireVersion = Web.Supervisor.DesignerPublicService.QuestionnaireVersion;
-using RemoteFileInfo = Web.Supervisor.DesignerPublicService.RemoteFileInfo;
+using WB.UI.Supervisor.DesignerPublicService;
+using WB.UI.Supervisor.Models;
+using IPublicService = WB.UI.Supervisor.DesignerPublicService.IPublicService;
+using QuestionnaireVersion = WB.UI.Supervisor.DesignerPublicService.QuestionnaireVersion;
+using RemoteFileInfo = WB.UI.Supervisor.DesignerPublicService.RemoteFileInfo;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     [Obsolete("Remove when HQ app will be separate")]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
-        internal IPublicService DesignerService
+        internal DesignerPublicService.IPublicService DesignerService
         {
             get { return getDesignerService(this.GlobalInfo); }
             set { SetDesignerService(this.GlobalInfo, value); }
@@ -36,7 +36,7 @@ namespace Web.Supervisor.Controllers
 
         private readonly IStringCompressor zipUtils;
         private readonly ISupportedVersionProvider supportedVersionProvider;
-        private readonly Func<IGlobalInfoProvider, IPublicService> getDesignerService;
+        private readonly Func<IGlobalInfoProvider, DesignerPublicService.IPublicService> getDesignerService;
 
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
@@ -46,7 +46,7 @@ namespace Web.Supervisor.Controllers
         internal DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
-            Func<IGlobalInfoProvider, IPublicService> getDesignerService)
+            Func<IGlobalInfoProvider, DesignerPublicService.IPublicService> getDesignerService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
@@ -54,12 +54,12 @@ namespace Web.Supervisor.Controllers
             this.supportedVersionProvider = supportedVersionProvider;
         }
 
-        private static IPublicService GetDesignerService(IGlobalInfoProvider globalInfoProvider)
+        private static DesignerPublicService.IPublicService GetDesignerService(IGlobalInfoProvider globalInfoProvider)
         {
-            return (IPublicService)HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
+            return (DesignerPublicService.IPublicService)HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
         }
 
-        private static void SetDesignerService(IGlobalInfoProvider globalInfoProvider, IPublicService publicService)
+        private static void SetDesignerService(IGlobalInfoProvider globalInfoProvider, DesignerPublicService.IPublicService publicService)
         {
             HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = publicService;
         }
@@ -89,11 +89,11 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var supportedVerstion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
-                RemoteFileInfo docSource;
+                DesignerPublicService.RemoteFileInfo docSource;
                 try
                 {
                     docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
-                            new QuestionnaireVersion
+                            new DesignerPublicService.QuestionnaireVersion
                             {
                                 Major = supportedVerstion.Major,
                                 Minor = supportedVerstion.Minor,

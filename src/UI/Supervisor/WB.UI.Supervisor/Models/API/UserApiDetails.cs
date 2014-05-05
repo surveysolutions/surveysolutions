@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
-namespace Web.Supervisor.Models.API
+namespace WB.UI.Supervisor.Models.API
 {
     public class UserApiDetails 
     {

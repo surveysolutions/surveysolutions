@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using Web.Supervisor.Models.API.Interview;
+using WB.UI.Supervisor.Models.API.Interview;
 
-namespace Web.Supervisor.Models.API
+namespace WB.UI.Supervisor.Models.API
 {
     public class InterviewApiDetails
     {

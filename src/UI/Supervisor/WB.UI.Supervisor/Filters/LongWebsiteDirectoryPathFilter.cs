@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Web.Supervisor.Filters
+namespace WB.UI.Supervisor.Filters
 {
     public class LongWebsiteDirectoryPathFilter : ActionFilterAttribute
     {

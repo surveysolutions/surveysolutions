@@ -2,7 +2,7 @@
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
-namespace Web.Supervisor.Models.API
+namespace WB.UI.Supervisor.Models.API
 {
     public class QuestionnaireApiView : BaseApiView
     {

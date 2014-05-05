@@ -11,7 +11,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [NoAsyncTimeout]
     public class ImportExportController : AsyncController

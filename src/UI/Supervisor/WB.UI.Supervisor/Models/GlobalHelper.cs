@@ -1,4 +1,4 @@
-﻿namespace Web.Supervisor.Models
+﻿namespace WB.UI.Supervisor.Models
 {
     using System.Web;
     using System.Web.Mvc;

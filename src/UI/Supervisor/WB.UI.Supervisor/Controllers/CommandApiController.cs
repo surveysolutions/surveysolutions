@@ -10,10 +10,10 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Extensions;
-using Web.Supervisor.Code.CommandTransformation;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Code.CommandTransformation;
+using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class CommandApiController : BaseApiController

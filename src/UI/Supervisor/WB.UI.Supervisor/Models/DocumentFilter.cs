@@ -3,7 +3,7 @@ using Main.Core.Documents;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     public class DocumentFilter
     {

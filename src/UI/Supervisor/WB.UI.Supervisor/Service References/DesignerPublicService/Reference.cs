@@ -8,28 +8,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Web.Supervisor.DesignerPublicService {
+namespace WB.UI.Supervisor.DesignerPublicService {
     using System.Runtime.Serialization;
     using System;
     
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerifi" +
+    [DataContract(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerifi" +
         "cation.ValueObjects")]
-    [System.SerializableAttribute()]
+    [Serializable()]
     public partial class QuestionnaireVersion : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private int MajorField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private int MinorField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private int PatchField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -42,7 +42,7 @@ namespace Web.Supervisor.DesignerPublicService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public int Major {
             get {
                 return this.MajorField;
@@ -55,7 +55,7 @@ namespace Web.Supervisor.DesignerPublicService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public int Minor {
             get {
                 return this.MinorField;
@@ -68,7 +68,7 @@ namespace Web.Supervisor.DesignerPublicService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public int Patch {
             get {
                 return this.PatchField;
@@ -93,17 +93,17 @@ namespace Web.Supervisor.DesignerPublicService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireListViewItemMessage", Namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="QuestionnaireListViewItemMessage", Namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire")]
+    [Serializable()]
     public partial class QuestionnaireListViewItemMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private System.Guid IdField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string TitleField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -116,7 +116,7 @@ namespace Web.Supervisor.DesignerPublicService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public System.Guid Id {
             get {
                 return this.IdField;
@@ -129,7 +129,7 @@ namespace Web.Supervisor.DesignerPublicService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Title {
             get {
                 return this.TitleField;
@@ -158,10 +158,10 @@ namespace Web.Supervisor.DesignerPublicService {
         
         // CODEGEN: Generating message contract since the wrapper name (DownloadQuestionnaireRequest) of message DownloadQuestionnaireRequest does not match the default value (DownloadQuestionnaire)
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
-        Web.Supervisor.DesignerPublicService.RemoteFileInfo DownloadQuestionnaire(Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest request);
+        RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
-        System.Threading.Tasks.Task<Web.Supervisor.DesignerPublicService.RemoteFileInfo> DownloadQuestionnaireAsync(Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest request);
+        System.Threading.Tasks.Task<RemoteFileInfo> DownloadQuestionnaireAsync(DownloadQuestionnaireRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
         string DownloadQuestionnaireSource(System.Guid request);
@@ -177,10 +177,10 @@ namespace Web.Supervisor.DesignerPublicService {
         
         // CODEGEN: Generating message contract since the wrapper name (QuestionnaireListRequest) of message QuestionnaireListRequest does not match the default value (GetQuestionnaireList)
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/GetQuestionnaireList", ReplyAction="http://tempuri.org/IPublicService/GetQuestionnaireListResponse")]
-        Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage GetQuestionnaireList(Web.Supervisor.DesignerPublicService.QuestionnaireListRequest request);
+        QuestionnaireListViewMessage GetQuestionnaireList(QuestionnaireListRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/GetQuestionnaireList", ReplyAction="http://tempuri.org/IPublicService/GetQuestionnaireListResponse")]
-        System.Threading.Tasks.Task<Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage> GetQuestionnaireListAsync(Web.Supervisor.DesignerPublicService.QuestionnaireListRequest request);
+        System.Threading.Tasks.Task<QuestionnaireListViewMessage> GetQuestionnaireListAsync(QuestionnaireListRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -193,12 +193,12 @@ namespace Web.Supervisor.DesignerPublicService {
         public System.Guid QuestionnaireId;
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
-        public Web.Supervisor.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion;
+        public QuestionnaireVersion SupportedQuestionnaireVersion;
         
         public DownloadQuestionnaireRequest() {
         }
         
-        public DownloadQuestionnaireRequest(System.Guid QuestionnaireId, Web.Supervisor.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion) {
+        public DownloadQuestionnaireRequest(System.Guid QuestionnaireId, QuestionnaireVersion SupportedQuestionnaireVersion) {
             this.QuestionnaireId = QuestionnaireId;
             this.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
         }
@@ -277,12 +277,12 @@ namespace Web.Supervisor.DesignerPublicService {
         public int TotalCount;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
-        public Web.Supervisor.DesignerPublicService.QuestionnaireListViewItemMessage[] Items;
+        public QuestionnaireListViewItemMessage[] Items;
         
         public QuestionnaireListViewMessage() {
         }
         
-        public QuestionnaireListViewMessage(string Order, int Page, int PageSize, int TotalCount, Web.Supervisor.DesignerPublicService.QuestionnaireListViewItemMessage[] Items) {
+        public QuestionnaireListViewMessage(string Order, int Page, int PageSize, int TotalCount, QuestionnaireListViewItemMessage[] Items) {
             this.Order = Order;
             this.Page = Page;
             this.PageSize = PageSize;
@@ -292,12 +292,12 @@ namespace Web.Supervisor.DesignerPublicService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IPublicServiceChannel : Web.Supervisor.DesignerPublicService.IPublicService, System.ServiceModel.IClientChannel {
+    public interface IPublicServiceChannel : IPublicService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PublicServiceClient : System.ServiceModel.ClientBase<Web.Supervisor.DesignerPublicService.IPublicService>, Web.Supervisor.DesignerPublicService.IPublicService {
+    public partial class PublicServiceClient : System.ServiceModel.ClientBase<IPublicService>, IPublicService {
         
         public PublicServiceClient() {
         }
@@ -319,30 +319,30 @@ namespace Web.Supervisor.DesignerPublicService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        Web.Supervisor.DesignerPublicService.RemoteFileInfo Web.Supervisor.DesignerPublicService.IPublicService.DownloadQuestionnaire(Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest request) {
+        RemoteFileInfo IPublicService.DownloadQuestionnaire(DownloadQuestionnaireRequest request) {
             return base.Channel.DownloadQuestionnaire(request);
         }
         
-        public string DownloadQuestionnaire(System.Guid QuestionnaireId, Web.Supervisor.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion, out long Length, out System.IO.Stream FileByteStream) {
-            Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest inValue = new Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest();
+        public string DownloadQuestionnaire(System.Guid QuestionnaireId, QuestionnaireVersion SupportedQuestionnaireVersion, out long Length, out System.IO.Stream FileByteStream) {
+            DownloadQuestionnaireRequest inValue = new DownloadQuestionnaireRequest();
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
-            Web.Supervisor.DesignerPublicService.RemoteFileInfo retVal = ((Web.Supervisor.DesignerPublicService.IPublicService)(this)).DownloadQuestionnaire(inValue);
+            RemoteFileInfo retVal = ((IPublicService)(this)).DownloadQuestionnaire(inValue);
             Length = retVal.Length;
             FileByteStream = retVal.FileByteStream;
             return retVal.FileName;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Web.Supervisor.DesignerPublicService.RemoteFileInfo> Web.Supervisor.DesignerPublicService.IPublicService.DownloadQuestionnaireAsync(Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest request) {
+        System.Threading.Tasks.Task<RemoteFileInfo> IPublicService.DownloadQuestionnaireAsync(DownloadQuestionnaireRequest request) {
             return base.Channel.DownloadQuestionnaireAsync(request);
         }
         
-        public System.Threading.Tasks.Task<Web.Supervisor.DesignerPublicService.RemoteFileInfo> DownloadQuestionnaireAsync(System.Guid QuestionnaireId, Web.Supervisor.DesignerPublicService.QuestionnaireVersion SupportedQuestionnaireVersion) {
-            Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest inValue = new Web.Supervisor.DesignerPublicService.DownloadQuestionnaireRequest();
+        public System.Threading.Tasks.Task<RemoteFileInfo> DownloadQuestionnaireAsync(System.Guid QuestionnaireId, QuestionnaireVersion SupportedQuestionnaireVersion) {
+            DownloadQuestionnaireRequest inValue = new DownloadQuestionnaireRequest();
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
-            return ((Web.Supervisor.DesignerPublicService.IPublicService)(this)).DownloadQuestionnaireAsync(inValue);
+            return ((IPublicService)(this)).DownloadQuestionnaireAsync(inValue);
         }
         
         public string DownloadQuestionnaireSource(System.Guid request) {
@@ -362,17 +362,17 @@ namespace Web.Supervisor.DesignerPublicService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage Web.Supervisor.DesignerPublicService.IPublicService.GetQuestionnaireList(Web.Supervisor.DesignerPublicService.QuestionnaireListRequest request) {
+        QuestionnaireListViewMessage IPublicService.GetQuestionnaireList(QuestionnaireListRequest request) {
             return base.Channel.GetQuestionnaireList(request);
         }
         
-        public string GetQuestionnaireList(string Filter, int PageIndex, ref int PageSize, string SortOrder, out int Page, out int TotalCount, out Web.Supervisor.DesignerPublicService.QuestionnaireListViewItemMessage[] Items) {
-            Web.Supervisor.DesignerPublicService.QuestionnaireListRequest inValue = new Web.Supervisor.DesignerPublicService.QuestionnaireListRequest();
+        public string GetQuestionnaireList(string Filter, int PageIndex, ref int PageSize, string SortOrder, out int Page, out int TotalCount, out QuestionnaireListViewItemMessage[] Items) {
+            QuestionnaireListRequest inValue = new QuestionnaireListRequest();
             inValue.Filter = Filter;
             inValue.PageIndex = PageIndex;
             inValue.PageSize = PageSize;
             inValue.SortOrder = SortOrder;
-            Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage retVal = ((Web.Supervisor.DesignerPublicService.IPublicService)(this)).GetQuestionnaireList(inValue);
+            QuestionnaireListViewMessage retVal = ((IPublicService)(this)).GetQuestionnaireList(inValue);
             Page = retVal.Page;
             PageSize = retVal.PageSize;
             TotalCount = retVal.TotalCount;
@@ -381,17 +381,17 @@ namespace Web.Supervisor.DesignerPublicService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage> Web.Supervisor.DesignerPublicService.IPublicService.GetQuestionnaireListAsync(Web.Supervisor.DesignerPublicService.QuestionnaireListRequest request) {
+        System.Threading.Tasks.Task<QuestionnaireListViewMessage> IPublicService.GetQuestionnaireListAsync(QuestionnaireListRequest request) {
             return base.Channel.GetQuestionnaireListAsync(request);
         }
         
-        public System.Threading.Tasks.Task<Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage> GetQuestionnaireListAsync(string Filter, int PageIndex, int PageSize, string SortOrder) {
-            Web.Supervisor.DesignerPublicService.QuestionnaireListRequest inValue = new Web.Supervisor.DesignerPublicService.QuestionnaireListRequest();
+        public System.Threading.Tasks.Task<QuestionnaireListViewMessage> GetQuestionnaireListAsync(string Filter, int PageIndex, int PageSize, string SortOrder) {
+            QuestionnaireListRequest inValue = new QuestionnaireListRequest();
             inValue.Filter = Filter;
             inValue.PageIndex = PageIndex;
             inValue.PageSize = PageSize;
             inValue.SortOrder = SortOrder;
-            return ((Web.Supervisor.DesignerPublicService.IPublicService)(this)).GetQuestionnaireListAsync(inValue);
+            return ((IPublicService)(this)).GetQuestionnaireListAsync(inValue);
         }
     }
 }

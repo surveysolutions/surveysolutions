@@ -5,9 +5,10 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Shared.Web.Elmah;
-using Web.Supervisor.Filters;
+using WB.UI.Supervisor.App_Start;
+using WB.UI.Supervisor.Filters;
 
-namespace Web.Supervisor
+namespace WB.UI.Supervisor
 {
     using System;
     using System.Web;
@@ -16,7 +17,7 @@ namespace Web.Supervisor
     using System.Web.Optimization;
     using System.Web.Routing;
 
-    using Web.Supervisor.App_Start;
+    using Supervisor.App_Start;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801

@@ -13,10 +13,10 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Models;
 using System.Linq;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [Authorize]
     public class InterviewApiController : BaseApiController

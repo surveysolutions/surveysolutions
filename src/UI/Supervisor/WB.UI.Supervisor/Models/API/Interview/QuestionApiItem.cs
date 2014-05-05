@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Web.Supervisor.Models.API.Interview
+namespace WB.UI.Supervisor.Models.API.Interview
 {
     public class QuestionApiItem
     {

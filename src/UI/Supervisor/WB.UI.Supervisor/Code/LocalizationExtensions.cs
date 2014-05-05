@@ -1,7 +1,7 @@
 ﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using Web.Supervisor.Properties;
+using WB.UI.Supervisor.Properties;
 
-namespace Web.Supervisor
+namespace WB.UI.Supervisor
 {
     public static class LocalizationExtensions
     {

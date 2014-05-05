@@ -7,9 +7,9 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class InterviewController : BaseController

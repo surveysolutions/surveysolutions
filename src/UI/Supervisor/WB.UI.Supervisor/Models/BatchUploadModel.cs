@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     public class BatchUploadModel
     {

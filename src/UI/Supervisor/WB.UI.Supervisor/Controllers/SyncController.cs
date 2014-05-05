@@ -19,7 +19,7 @@ using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     public class SyncController : AsyncController
     {

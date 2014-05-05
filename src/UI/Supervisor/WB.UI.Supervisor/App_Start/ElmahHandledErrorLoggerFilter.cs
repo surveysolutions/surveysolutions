@@ -1,7 +1,7 @@
 ﻿using System.Web.Http.Filters;
 using Elmah;
 
-namespace Web.Supervisor.App_Start
+namespace WB.UI.Supervisor.App_Start
 {
     public class ElmahHandledErrorLoggerFilter : ExceptionFilterAttribute
     {

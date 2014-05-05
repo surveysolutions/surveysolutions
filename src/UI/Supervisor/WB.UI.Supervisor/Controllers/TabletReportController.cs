@@ -15,7 +15,7 @@ using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.UI.Shared.Web.Filters;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     public class TabletReportController : Controller
     {
