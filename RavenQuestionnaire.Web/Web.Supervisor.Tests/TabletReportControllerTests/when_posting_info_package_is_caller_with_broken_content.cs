@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Machine.Specifications;
 using Moq;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 
 namespace Web.Supervisor.Tests.TabletReportControllerTests

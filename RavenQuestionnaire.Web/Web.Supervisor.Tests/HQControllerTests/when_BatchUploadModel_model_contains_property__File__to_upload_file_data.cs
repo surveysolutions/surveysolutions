@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
-using Web.Supervisor.Controllers;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Controllers;
+using WB.UI.Supervisor.Models;
 
 namespace Web.Supervisor.Tests.HQControllerTests
 {

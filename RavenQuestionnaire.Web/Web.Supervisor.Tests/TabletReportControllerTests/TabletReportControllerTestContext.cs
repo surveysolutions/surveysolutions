@@ -11,7 +11,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.TabletReportControllerTests
 {

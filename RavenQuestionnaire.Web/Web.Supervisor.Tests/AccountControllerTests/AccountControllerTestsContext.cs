@@ -5,7 +5,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.AccountControllerTests
 {

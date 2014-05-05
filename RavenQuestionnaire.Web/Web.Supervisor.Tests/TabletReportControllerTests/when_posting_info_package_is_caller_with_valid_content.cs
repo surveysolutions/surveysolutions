@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using Machine.Specifications;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.TabletInformation;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.TabletReportControllerTests
 {

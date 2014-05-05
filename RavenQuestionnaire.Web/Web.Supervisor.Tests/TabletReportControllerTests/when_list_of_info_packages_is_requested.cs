@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.TabletReportControllerTests
 {

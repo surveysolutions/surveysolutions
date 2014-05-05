@@ -7,7 +7,7 @@ using System.Web;
 using Machine.Specifications;
 using Main.Core.View;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.ImportExportControllerTests
 {
