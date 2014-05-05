@@ -1,4 +1,4 @@
-﻿namespace Web.Supervisor.Controllers
+﻿namespace WB.UI.Supervisor.Controllers
 {
     public class JsonBaseResponse
     {

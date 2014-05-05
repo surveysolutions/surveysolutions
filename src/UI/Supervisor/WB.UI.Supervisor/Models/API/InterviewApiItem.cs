@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace Web.Supervisor.Models.API
+namespace WB.UI.Supervisor.Models.API
 {
     public class InterviewApiItem
     {

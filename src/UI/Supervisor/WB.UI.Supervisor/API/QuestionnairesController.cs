@@ -6,9 +6,9 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-using Web.Supervisor.Models.API;
+using WB.UI.Supervisor.Models.API;
 
-namespace Web.Supervisor.API
+namespace WB.UI.Supervisor.API
 {
     [RoutePrefix("apis/v1/questionnaires")]
     [Authorize(Roles = "Headquarter, Supervisor")]

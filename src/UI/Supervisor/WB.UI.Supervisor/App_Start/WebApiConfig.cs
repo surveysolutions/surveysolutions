@@ -1,9 +1,9 @@
 ﻿using System.Web.Http;
 using System.Web.Http.Dispatcher;
-using Web.Supervisor.Code.MessageHandler;
+using WB.UI.Supervisor.Code.MessageHandler;
 
 
-namespace Web.Supervisor.App_Start
+namespace WB.UI.Supervisor.App_Start
 {
     public static class WebApiConfig
     {

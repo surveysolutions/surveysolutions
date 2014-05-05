@@ -2,9 +2,9 @@
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
-using Web.Supervisor.Utils;
+using WB.UI.Supervisor.Utils;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     public abstract class BaseController : Controller
     {

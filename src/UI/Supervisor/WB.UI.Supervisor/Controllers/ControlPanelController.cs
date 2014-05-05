@@ -8,11 +8,11 @@ using Microsoft.Practices.ServiceLocation;
 using Raven.Client.Linq.Indexing;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Synchronization;
-using Web.Supervisor.Code;
-using Web.Supervisor.DesignerPublicService;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Code;
+using WB.UI.Supervisor.DesignerPublicService;
+using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [AllowAnonymous]
     public class ControlPanelController : Controller

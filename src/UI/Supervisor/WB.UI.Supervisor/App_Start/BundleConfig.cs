@@ -1,4 +1,4 @@
-﻿namespace Web.Supervisor.App_Start
+﻿namespace WB.UI.Supervisor.App_Start
 {
     using System.Web.Optimization;
 

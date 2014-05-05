@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Web.Mvc;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     using System.ComponentModel.DataAnnotations;
 

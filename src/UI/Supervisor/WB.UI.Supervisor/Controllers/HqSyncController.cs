@@ -6,7 +6,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [Authorize(Roles = "Supervisor")]
     public class HqSyncController : BaseController

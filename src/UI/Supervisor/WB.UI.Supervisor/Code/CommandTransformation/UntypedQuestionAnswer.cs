@@ -1,7 +1,7 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 
-namespace Web.Supervisor.Code.CommandTransformation
+namespace WB.UI.Supervisor.Code.CommandTransformation
 {
     internal class UntypedQuestionAnswer
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
 
-namespace Web.Supervisor.Code
+namespace WB.UI.Supervisor.Code
 {
     public class EnumToStringConverter : Newtonsoft.Json.Converters.StringEnumConverter
     {

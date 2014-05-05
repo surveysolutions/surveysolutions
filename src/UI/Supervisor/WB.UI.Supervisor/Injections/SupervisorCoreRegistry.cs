@@ -13,9 +13,9 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.UI.Shared.Web.Filters;
-using Web.Supervisor.Code;
+using WB.UI.Supervisor.Code;
 
-namespace Web.Supervisor.Injections
+namespace WB.UI.Supervisor.Injections
 {
     public class SupervisorCoreRegistry : CoreRegistry
     {

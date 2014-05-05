@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Supervisor.Utils.Attributes
+namespace WB.UI.Supervisor.Utils.Attributes
 {
     using System.Web.Mvc;
 

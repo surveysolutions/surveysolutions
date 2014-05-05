@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Main.Core.Entities.SubEntities;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     public class FeaturedAnswer
     {

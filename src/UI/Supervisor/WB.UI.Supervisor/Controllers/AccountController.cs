@@ -8,9 +8,9 @@ using Questionnaire.Core.Web.Security;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     public class AccountController : Controller
     {

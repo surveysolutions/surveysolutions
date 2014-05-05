@@ -5,7 +5,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Web.Supervisor.Code
+namespace WB.UI.Supervisor.Code
 {
     public class HttpForbiddenResult : HttpStatusCodeResult
     {

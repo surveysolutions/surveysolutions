@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 
-namespace Web.Supervisor.Code.CommandTransformation
+namespace WB.UI.Supervisor.Code.CommandTransformation
 {
     public class CommandTransformator
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Shared.Web.CommandDeserialization;
-using Web.Supervisor.Code.CommandTransformation;
+using WB.UI.Supervisor.Code.CommandTransformation;
 
-namespace Web.Supervisor.Code.CommandDeserialization
+namespace WB.UI.Supervisor.Code.CommandDeserialization
 {
     internal class SupervisorCommandDeserializer : CommandDeserializer
     {

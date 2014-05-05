@@ -1,4 +1,4 @@
-﻿namespace Web.Supervisor.Models
+﻿namespace WB.UI.Supervisor.Models
 {
     /// <summary>
     /// The menu item.
