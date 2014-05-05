@@ -1103,6 +1103,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(group);
                 this.ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(group);
+                this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group);
             }
 
 
@@ -3194,6 +3195,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             throw new QuestionnaireException(
                 string.Format(
                     "This group can't become a roster because contains pre-filled questions: {0}. Toggle pre-filled property for that questions to complete this operation",
+                    string.Join(Environment.NewLine, questionVariables)));
+        }
+
+        private void ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(IGroup group)
+        {
+            var hasAnyQuestionsWithRosterTitleInSubstitutions =
+                this.innerDocument.GetAllQuestions<AbstractQuestion>(@group)
+                    .Any(
+                        question =>
+                            StringUtil.GetAllSubstitutionVariableNames(question.QuestionText)
+                                .Contains(StringUtil.RosterTitleSubstitutionReference));
+
+            if (!hasAnyQuestionsWithRosterTitleInSubstitutions) return;
+
+            var questionVariables = GetFilteredQuestionForException(@group, question => StringUtil.GetAllSubstitutionVariableNames(question.QuestionText)
+                                .Contains(StringUtil.RosterTitleSubstitutionReference));
+
+            throw new QuestionnaireException(
+                string.Format(
+                    "This group can't become a roster because contains questions with reference on roster title in substitution: {0}.",
                     string.Join(Environment.NewLine, questionVariables)));
         }
 
