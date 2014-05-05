@@ -2,8 +2,8 @@
 using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using Web.Supervisor.API;
-using Web.Supervisor.Models.API;
+using WB.UI.Supervisor.API;
+using WB.UI.Supervisor.Models.API;
 using It = Machine.Specifications.It;
 
 namespace Web.Supervisor.Tests.ApiTests

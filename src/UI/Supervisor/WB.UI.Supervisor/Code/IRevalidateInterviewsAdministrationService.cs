@@ -1,4 +1,4 @@
-﻿namespace Web.Supervisor.Code
+﻿namespace WB.UI.Supervisor.Code
 {
     public interface IRevalidateInterviewsAdministrationService
     {

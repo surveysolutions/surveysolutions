@@ -3,8 +3,8 @@ using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-using Web.Supervisor.API;
-using Web.Supervisor.Models.API;
+using WB.UI.Supervisor.API;
+using WB.UI.Supervisor.Models.API;
 using It = Machine.Specifications.It;
 
 namespace Web.Supervisor.Tests.ApiTests

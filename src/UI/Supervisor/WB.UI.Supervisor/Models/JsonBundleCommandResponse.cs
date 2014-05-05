@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     public class JsonBundleCommandResponse
     {

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     public class SupervisorUserViewModel : UserViewModel
     {

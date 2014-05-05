@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Web.Supervisor.API;
+using WB.UI.Supervisor.API;
 using It = Machine.Specifications.It;
 
 namespace Web.Supervisor.Tests.ApiTests

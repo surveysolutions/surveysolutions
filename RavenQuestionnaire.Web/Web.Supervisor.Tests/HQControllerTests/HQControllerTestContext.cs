@@ -16,8 +16,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.Synchronization;
-using Web.Supervisor.Controllers;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Controllers;
+using WB.UI.Supervisor.Models;
 
 namespace Web.Supervisor.Tests.HQControllerTests
 {

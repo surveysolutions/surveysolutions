@@ -1,7 +1,7 @@
 ﻿using System;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     public class JsonCommandResponse: JsonBaseResponse
     {

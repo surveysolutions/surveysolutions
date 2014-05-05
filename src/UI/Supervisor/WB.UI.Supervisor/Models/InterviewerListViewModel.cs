@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 
-namespace Web.Supervisor.Models
+namespace WB.UI.Supervisor.Models
 {
     using System;
 

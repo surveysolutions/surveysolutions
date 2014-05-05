@@ -6,11 +6,11 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
-using Web.Supervisor.Code;
-using Web.Supervisor.DesignerPublicService;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Code;
+using WB.UI.Supervisor.DesignerPublicService;
+using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     [Obsolete("Remove when HQ application will be separate")]

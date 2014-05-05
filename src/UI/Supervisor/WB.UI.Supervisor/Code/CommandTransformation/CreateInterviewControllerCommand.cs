@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Web.Supervisor.Code.CommandTransformation
+namespace WB.UI.Supervisor.Code.CommandTransformation
 {
     internal class CreateInterviewControllerCommand : IntreviewCommand
     {

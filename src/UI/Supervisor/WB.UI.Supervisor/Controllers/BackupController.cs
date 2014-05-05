@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Models;
 
-namespace Web.Supervisor.Controllers
+namespace WB.UI.Supervisor.Controllers
 {
     public class BackupController : AsyncController
     {

@@ -6,8 +6,8 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using Web.Supervisor.Controllers;
-using Web.Supervisor.DesignerPublicService;
+using WB.UI.Supervisor.Controllers;
+using WB.UI.Supervisor.DesignerPublicService;
 
 namespace Web.Supervisor.Tests.DesignerQuestionnairesApiControllerTests
 {

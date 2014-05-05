@@ -2,7 +2,7 @@
 using Microsoft.Security.Application;
 using Newtonsoft.Json;
 
-namespace Web.Supervisor.Code
+namespace WB.UI.Supervisor.Code
 {
     public class HtmlEncodeStringPropertiesConverter : JsonConverter
     {

@@ -1,4 +1,4 @@
-﻿namespace Web.Supervisor.Utils
+﻿namespace WB.UI.Supervisor.Utils
 {
     using System;
     using System.Collections;
@@ -148,7 +148,7 @@
         /// The collection.
         /// </param>
         /// <returns>
-        /// The <see cref="IOrderedEnumerable"/>.
+        /// The <see cref="IOrderedEnumerable{TElement}"/>.
         /// </returns>
         public static IOrderedEnumerable<PropertyInfo> OrderedByDisplayAttr(this IEnumerable<PropertyInfo> collection)
         {

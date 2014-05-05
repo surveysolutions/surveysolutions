@@ -3,7 +3,7 @@ using WB.UI.Shared.Web;
 using System.Collections.Specialized;
 using WB.UI.Shared.Web.Extensions;
 
-namespace Web.Supervisor.Code
+namespace WB.UI.Supervisor.Code
 {
     public sealed class AppSettings
     {

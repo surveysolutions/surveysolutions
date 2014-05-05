@@ -3,8 +3,8 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using Web.Supervisor.Controllers;
-using Web.Supervisor.Models;
+using WB.UI.Supervisor.Controllers;
+using WB.UI.Supervisor.Models;
 using It = Machine.Specifications.It;
 
 namespace Web.Supervisor.Tests.AccountControllerTests

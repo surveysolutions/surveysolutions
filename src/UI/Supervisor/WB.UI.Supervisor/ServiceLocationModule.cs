@@ -3,7 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
 using NinjectAdapter;
 
-namespace Web.Supervisor
+namespace WB.UI.Supervisor
 {
     internal class ServiceLocationModule : NinjectModule
     {

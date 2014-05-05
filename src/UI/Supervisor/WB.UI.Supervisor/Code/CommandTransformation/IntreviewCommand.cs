@@ -1,7 +1,7 @@
 ﻿using System;
 using Ncqrs.Commanding;
 
-namespace Web.Supervisor.Code.CommandTransformation
+namespace WB.UI.Supervisor.Code.CommandTransformation
 {
     internal class IntreviewCommand : ICommand
     {

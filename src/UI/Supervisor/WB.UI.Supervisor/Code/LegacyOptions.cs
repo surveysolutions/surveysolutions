@@ -1,6 +1,6 @@
 ﻿using System.Web.Configuration;
 
-namespace Web.Supervisor.Code
+namespace WB.UI.Supervisor.Code
 {
     public static class LegacyOptions
     {

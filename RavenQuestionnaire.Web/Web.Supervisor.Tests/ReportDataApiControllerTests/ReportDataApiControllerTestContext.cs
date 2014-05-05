@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
-using Web.Supervisor.Controllers;
+using WB.UI.Supervisor.Controllers;
 
 namespace Web.Supervisor.Tests.ReportDataApiControllerTests
 {

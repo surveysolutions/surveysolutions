@@ -5,9 +5,9 @@ using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using Web.Supervisor.Models.API;
+using WB.UI.Supervisor.Models.API;
 
-namespace Web.Supervisor.API
+namespace WB.UI.Supervisor.API
 {
     [Authorize (Roles = "Headquarter, Supervisor")]
     public class InterviewsController : BaseApiServiceController

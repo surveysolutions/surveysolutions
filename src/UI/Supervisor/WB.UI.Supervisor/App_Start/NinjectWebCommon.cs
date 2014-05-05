@@ -35,16 +35,16 @@ using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
-using Web.Supervisor.App_Start;
-using Web.Supervisor.Code;
-using Web.Supervisor.Code.CommandDeserialization;
-using Web.Supervisor.Injections;
+using WB.UI.Supervisor.Code;
+using WB.UI.Supervisor.Code.CommandDeserialization;
+using WB.UI.Supervisor.Injections;
+using WB.UI.Supervisor.App_Start;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
 
-namespace Web.Supervisor.App_Start
+namespace WB.UI.Supervisor.App_Start
 {
     using Microsoft.Practices.ServiceLocation;
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Web.Supervisor.Properties {
+namespace WB.UI.Supervisor.Properties {
     using System;
     
     

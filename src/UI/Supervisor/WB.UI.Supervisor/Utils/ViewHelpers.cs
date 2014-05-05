@@ -1,4 +1,4 @@
-﻿namespace Web.Supervisor.Utils
+﻿namespace WB.UI.Supervisor.Utils
 {
     using System;
     using System.Collections.Generic;
