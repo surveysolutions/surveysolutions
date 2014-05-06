@@ -1056,6 +1056,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        private static IEnumerable<Identity> GetInstancesOfQuestionsInAllRosterLevels(
+            InterviewStateDependentOnAnswers state,
+            Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
+        {
+            int vectorRosterLevel = rosterVector.Length;
+            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
+
+            if (questionRosterLevel > vectorRosterLevel)
+            {
+                Guid[] parentRosterGroupsStartingFromTop =
+                    questionnare.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
+
+                IEnumerable<decimal[]> questionRosterVectors = ExtendRosterVector(state,
+                    rosterVector, questionRosterLevel, parentRosterGroupsStartingFromTop, getRosterInstanceIds);
+
+                foreach (decimal[] questionRosterVector in questionRosterVectors)
+                {
+                    yield return new Identity(questionId, questionRosterVector);
+                }
+            }
+            
+            else if (questionRosterLevel <= vectorRosterLevel)
+            {
+                decimal[] questionRosterVector = ShrinkRosterVector(rosterVector, questionRosterLevel);
+
+                yield return new Identity(questionId, questionRosterVector);
+            }
+        }
+
         private static IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(
             IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnare)
         {
@@ -3872,7 +3902,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             Guid referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestion.Id);
 
-            return GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+            return GetInstancesOfQuestionsInAllRosterLevels(state,
                 referencedQuestionId, linkedQuestion.RosterVector, questionnaire, getRosterInstanceIds);
         }
 
