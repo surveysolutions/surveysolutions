@@ -27,8 +27,12 @@
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
-     <parameterEntry kind="XmlFile"
-        scope="\\web.config$"
-        match="/configuration/appSettings/add[@key='IsNewDesignerEditPageEnabled']/@value" />     
    </parameter>
-</parameters>
+   <parameter name="Enable Updated Designer"
+      description="This parameter show if Updated Designer should be update"
+      defaultValue="false">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/appSettings/add[@key='IsNewDesignerEditPageEnabled']/@value" />
+   </parameter>
+  </parameters>
