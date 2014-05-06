@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
             () => result = questionDataParser.Parse(answer, questionVarName, CreateQuestionnaireDocumentWithOneChapter(new DateTimeQuestion() { PublicKey = questionId, QuestionType = QuestionType.DateTime, StataExportCaption = questionVarName }));
 
         It should_result_be_equal_to_4_28_2014 = () =>
-            result.Value.Value.ShouldEqual(DateTime.Parse("4/28/2014"));
+            result.Value.Value.ShouldEqual(DateTime.Parse("4/28/2014", CultureInfo.InvariantCulture.DateTimeFormat));
 
         It should_result_key_be_equal_to_questionId = () =>
             result.Value.Key.ShouldEqual(questionId);
