@@ -29,7 +29,7 @@
       match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
    </parameter>
    <parameter name="Enable Updated Designer"
-      description="This parameter show if Updated Designer should be update"
+      description="This parameter show if Updated Designer should be enabled"
       defaultValue="false">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
