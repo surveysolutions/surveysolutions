@@ -201,12 +201,13 @@
                         method: 'GET',
                         cache: false,
                         url: '@Url.Action("GetSyncStatus", "HqSync")',
-                        success: function (data) {
+                        success: function (dataString) {
+                            var data = JSON.parse(dataString);
                             if (!data.StartedAt) {
                                 return;
                             }
                             var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAt).fromNow());
-                            if (data.FinisedAt) {
+                            if (data.FinishedAt) {
                                 title += '<br /> last successful sync {0} <br/> applied changes with {1} errors'.f(moment(data.FinisedAt).fromNow(), data.ErrorsCount);
                             }
                             if (data.IsHqReachable === false) {

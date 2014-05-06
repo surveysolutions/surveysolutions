@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Ncqrs.Commanding.ServiceModel;
+using Newtonsoft.Json;
 using Quartz;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
@@ -76,7 +77,11 @@ namespace WB.UI.Supervisor.Controllers
             SynchronizationStatus synchronizationStatus = this.headquartersPullContext.GetPersistedStatus();
 
             var result = synchronizationStatus ?? new SynchronizationStatus();
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return this.Content(JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.None,
+                NullValueHandling = NullValueHandling.Ignore
+            }));
         }
     }
 }
