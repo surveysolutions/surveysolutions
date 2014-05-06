@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                 case QuestionType.DateTime:
                     DateTime date;
-                    if (!DateTime.TryParse(answer, out date))
+                    if (!DateTime.TryParse(answer, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out date))
                         break;
                     return new KeyValuePair<Guid, object>(question.PublicKey, date);
 
