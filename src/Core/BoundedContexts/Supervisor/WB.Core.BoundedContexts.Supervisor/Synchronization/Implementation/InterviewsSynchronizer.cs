@@ -174,6 +174,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             var userIdGuid = Guid.Parse(feedEntry.UserId);
             var supervisorIdGuid = Guid.Parse(feedEntry.SupervisorId);
 
+            this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", feedEntry.InterviewId));
             this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDto.Id, userIdGuid, supervisorIdGuid, interviewDto, DateTime.Now, feedEntry.Comment));
         }
 
