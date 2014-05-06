@@ -61,3 +61,4 @@ src/UI/Headquarters/WB.UI.Headquarters/App_Data/SampleCreationStatus/*
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/
 src/UI/Supervisor/Web.Supervisor/App_Data/Elmah/*
 src/UI/Supervisor/Web.Supervisor/App_Data/ExportedData/*
+src/UI/Supervisor/WB.UI.Supervisor/App_Data
