@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
             viewState.Chapters.Count.ShouldEqual(1);
 
         It should_questionnnaireInfoView_first_chapter_id_be_equal_to_chapterId = () =>
-            viewState.Chapters[0].ChapterId.ShouldEqual(chapterId);
+            viewState.Chapters[0].ItemId.ShouldEqual(chapterId);
 
         It should_questionnnaireInfoView_first_chapter_title_be_equal_to_chapterTitle = () =>
             viewState.Chapters[0].Title.ShouldEqual(chapterTitle);

@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
             viewState.Chapters.Count.ShouldEqual(1);
 
         It should_not_questionnnaireInfoView_Chapters_contains_chapter1 = () =>
-            viewState.Chapters.FirstOrDefault(chapter=>chapter.ChapterId == chapter1Id).ShouldBeNull();
+            viewState.Chapters.FirstOrDefault(chapter=>chapter.ItemId == chapter1Id).ShouldBeNull();
 
         private static string chapter1Id = "33333333333333333333333333333333";
         private static string chapter2Id = "22222222222222222222222222222222";

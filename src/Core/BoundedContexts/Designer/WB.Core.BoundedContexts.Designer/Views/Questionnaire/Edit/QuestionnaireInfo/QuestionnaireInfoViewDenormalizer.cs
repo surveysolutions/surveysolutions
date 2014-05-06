@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 this.groupTitles[groupId] = evnt.Payload.GroupText;
             }
 
-            var chapterView = currentState.Chapters.Find(chapter => chapter.ChapterId == groupId);
+            var chapterView = currentState.Chapters.Find(chapter => chapter.ItemId == groupId);
             if (chapterView != null)
             {
                 chapterView.Title = evnt.Payload.GroupText;
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<GroupDeleted> evnt)
         {
             var chapterView =
-                currentState.Chapters.Find(chapter => chapter.ChapterId == evnt.Payload.GroupPublicKey.FormatGuid());
+                currentState.Chapters.Find(chapter => chapter.ItemId == evnt.Payload.GroupPublicKey.FormatGuid());
             if (chapterView != null)
             {
                 currentState.Chapters.Remove(chapterView);
@@ -220,7 +220,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
             var groupOrQuestionKey = evnt.Payload.PublicKey.FormatGuid();
 
-            var existsChapter = currentState.Chapters.Find(chapter => chapter.ChapterId == groupOrQuestionKey);
+            var existsChapter = currentState.Chapters.Find(chapter => chapter.ItemId == groupOrQuestionKey);
 
             if (existsChapter != null && evnt.Payload.GroupKey.HasValue &&
                 evnt.Payload.GroupKey.Value.FormatGuid() != currentState.QuestionnaireId)
@@ -257,7 +257,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
             var chapterInfoView = new ChapterInfoView()
             {
-                ChapterId = chapterId,
+                ItemId = chapterId,
                 Title = chapterTitle,
                 GroupsCount = 0,
                 RostersCount = 0,
