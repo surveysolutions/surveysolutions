@@ -23,10 +23,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
             viewState.Chapters.Count.ShouldEqual(1);
 
         It should_questionnnaireInfoView_first_chapter_id_be_equal_to_chapterId = () =>
-            viewState.Chapters[0].ChapterId.ShouldEqual(chapterId);
+            viewState.Chapters[0].ItemId.ShouldEqual(chapterId);
 
         It should_not_questionnnaireInfoView_chapters_contains_chapterId = () =>
-            viewState.Chapters.FirstOrDefault(chapter=>chapter.ChapterId == groupId).ShouldBeNull();
+            viewState.Chapters.FirstOrDefault(chapter=>chapter.ItemId == groupId).ShouldBeNull();
 
         It should_questionnnaireInfoView_GroupsCount_be_equal_to_2 = () =>
             viewState.GroupsCount.ShouldEqual(2);

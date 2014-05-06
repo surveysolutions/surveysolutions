@@ -23,13 +23,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
             viewState.Chapters.Count.ShouldEqual(2);
 
         It should_questionnnaireInfoView_first_chapter_id_be_equal_to_groupId = () =>
-            viewState.Chapters[0].ChapterId.ShouldEqual(groupId);
+            viewState.Chapters[0].ItemId.ShouldEqual(groupId);
 
         It should_questionnnaireInfoView_first_chapter_title_be_equal_to_groupTitle = () =>
             viewState.Chapters[0].Title.ShouldEqual(groupTitle);
 
         It should_questionnnaireInfoView_second_chapter_id_be_equal_to_chapterId = () =>
-            viewState.Chapters[1].ChapterId.ShouldEqual(chapterId);
+            viewState.Chapters[1].ItemId.ShouldEqual(chapterId);
 
         private static string chapterId = "33333333333333333333333333333333";
         private static string groupId = "22222222222222222222222222222222";
