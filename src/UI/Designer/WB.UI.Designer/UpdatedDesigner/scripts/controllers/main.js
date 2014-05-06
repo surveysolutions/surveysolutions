@@ -49,8 +49,8 @@ angular.module('designerApp')
             };
 
             $scope.changeChapter = function(chapter) {
-                navigationService.openChapter($routeParams.questionnaireId, chapter.chapterId);
-                $scope.currentChapterId = chapter.chapterId;
+                navigationService.openChapter($routeParams.questionnaireId, chapter.itemId);
+                $scope.currentChapterId = chapter.itemId;
                 $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
             };
 
@@ -70,7 +70,7 @@ angular.module('designerApp')
             $scope.addQuestion = function(item) {
                 var newId = utilityService.guid();
                 var emptyQuestion = {
-                    "id": newId,
+                    "itemId": newId,
                     "title": "New Question",
                     "variable": "",
                     "type": 7,
@@ -119,8 +119,8 @@ angular.module('designerApp')
                             $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
                         } else {
                             $scope.currentChapter = result.chapters[0];
-                            $scope.currentChapterId = $scope.currentChapter.chapterId;
-                            $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapter.chapterId);
+                            $scope.currentChapterId = $scope.currentChapter.itemId;
+                            $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
                         }
                         if ($routeParams.itemId) {
                             $scope.currentItemId = $routeParams.itemId;

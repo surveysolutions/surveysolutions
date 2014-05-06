@@ -5,10 +5,6 @@ angular.module('designerApp')
         '$scope', '$routeParams', 'questionnaireService', 'commandService', 'utilityService', 'navigationService',
         function($scope, $routeParams, questionnaireService, commandService, math, navigationService) {
 
-            $scope.isChapter = function(item) {
-                return item.hasOwnProperty('chapterId');
-            };
-
             $scope.loadGroup = function() {
                 questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
                         var group = result.group;
@@ -47,13 +43,8 @@ angular.module('designerApp')
             };
 
             $scope.deleteChapter = function() {
-                var itemId = $scope.activeChapter.itemId;
-                if ($scope.isChapter($scope.activeChapter)) {
-                    itemId = $scope.activeChapter.chapterId;
-                }
-
                 if (confirm("Are you sure want to delete?")) {
-                    commandService.deleteGroup($routeParams.questionnaireId, itemId).success(function(result) {
+                    commandService.deleteGroup($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
                         $("#edit-chapter-save-button").popover('destroy');
                         if (result.IsSuccess) {
                             if ($scope.isChapter($scope.activeChapter)) {
@@ -81,16 +72,12 @@ angular.module('designerApp')
                 var newId = math.guid();
                 var chapterDescription = "";
 
-                if (!$scope.isChapter($scope.activeChapter)) {
-                    $scope.activeChapter.chapterId = $scope.activeChapter.itemId;
-                }
-
                 commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, $scope.activeChapter, chapterDescription).success(function(result) {
                     $("#edit-chapter-save-button").popover('destroy');
                     if (result.IsSuccess) {
                         var newChapter = {
                             title: $scope.activeChapter.title,
-                            chapterId: newId,
+                            itemId: newId,
                             description: chapterDescription
                         };
                         $scope.questionnaire.chapters.push(newChapter);

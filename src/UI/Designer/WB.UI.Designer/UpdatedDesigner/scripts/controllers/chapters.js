@@ -24,9 +24,9 @@ angular.module('designerApp')
             $scope.editChapter = function(chapter) {
                 console.log(chapter);
                 chapter.isMenuOpen = false;
-                chapter.itemId = chapter.chapterId;
+                chapter.itemId = chapter.itemId;
                 $scope.setItem(chapter);
-                //navigationService.editChapter($routeParams.questionnaireId, chapter.chapterId);
+                //navigationService.editChapter($routeParams.questionnaireId, chapter.itemId);
             };
 
             $scope.addNewChapter = function() {
@@ -34,7 +34,7 @@ angular.module('designerApp')
 
                 var newChapter = {
                     title: 'New Chapter',
-                    chapterId: newId
+                    itemId: newId
                 };
 
                 commandService.addChapter($routeParams.questionnaireId, newChapter).success(function() {
@@ -50,7 +50,7 @@ angular.module('designerApp')
                 commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
                     var newChapter = {
                         title: chapter.title,
-                        chapterId: newId
+                        itemId: newId
                     };
                     $scope.questionnaire.chapters.push(newChapter);
                     navigationService.openChapter($routeParams.questionnaireId, newId);
@@ -60,7 +60,7 @@ angular.module('designerApp')
             $scope.deleteChapter = function(chapter) {
                 chapter.isMenuOpen = false;
                 if (confirm("Are you sure want to delete?")) {
-                    commandService.deleteGroup($routeParams.questionnaireId, chapter.chapterId).success(function() {
+                    commandService.deleteGroup($routeParams.questionnaireId, chapter.itemId).success(function() {
                         var index = $scope.questionnaire.chapters.indexOf(chapter);
                         if (index > -1) {
                             $scope.questionnaire.chapters.splice(index, 1);

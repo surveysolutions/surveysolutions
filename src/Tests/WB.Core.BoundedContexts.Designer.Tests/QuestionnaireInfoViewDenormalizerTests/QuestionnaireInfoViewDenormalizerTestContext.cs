@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         protected static QuestionnaireInfoView CreateQuestionnaireInfoViewWith1Chapter(string chapterId)
         {
             var questionnaireInfoView = CreateQuestionnaireInfoView();
-            questionnaireInfoView.Chapters.Add(new ChapterInfoView() {ChapterId = chapterId});
+            questionnaireInfoView.Chapters.Add(new ChapterInfoView() {ItemId = chapterId});
             questionnaireInfoView.GroupsCount = 1;
 
             return questionnaireInfoView;
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         protected static QuestionnaireInfoView CreateQuestionnaireInfoViewWith2Chapters(string chapter1Id, string chapter2Id)
         {
             var questionnaireInfoView = CreateQuestionnaireInfoViewWith1Chapter(chapter1Id);
-            questionnaireInfoView.Chapters.Add(new ChapterInfoView() { ChapterId = chapter2Id });
+            questionnaireInfoView.Chapters.Add(new ChapterInfoView() { ItemId = chapter2Id });
             questionnaireInfoView.GroupsCount += 1;
 
             return questionnaireInfoView;
