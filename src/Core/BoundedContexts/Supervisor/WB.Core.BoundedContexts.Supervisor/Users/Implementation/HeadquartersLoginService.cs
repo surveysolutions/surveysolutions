@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
@@ -41,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
             this.headquartersUserReader = headquartersUserReader;
         }
 
-        public void LoginAndCreateAccount(string login, string password)
+        public async Task LoginAndCreateAccount(string login, string password)
         {
             using (var client = new HttpClient(messageHandler))
             {
@@ -54,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                     NoCache = true
                 };
 
-                HttpResponseMessage response = client.SendAsync(request).Result;
+                HttpResponseMessage response = await client.SendAsync(request);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -62,13 +63,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                     return;
                 }
 
-                string responseBody = response.Content.ReadAsStringAsync().Result;
+                string responseBody = await response.Content.ReadAsStringAsync();
                 var validationResult = JsonConvert.DeserializeObject<SupervisorValidationResult>(responseBody);
 
                 if (validationResult.isValid)
                 {
                     string userDetailsUrl = validationResult.userDetailsUrl;
-                    UserView userDocument = headquartersUserReader.GetUserByUri(new Uri(userDetailsUrl)).Result;
+                    UserView userDocument = await headquartersUserReader.GetUserByUri(new Uri(userDetailsUrl));
 
                     var command = new CreateUserCommand(userDocument.PublicKey,
                         userDocument.UserName,
