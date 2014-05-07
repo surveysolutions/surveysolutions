@@ -20,6 +20,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         bool Enabled { get; }
         void SetEnabled(bool enabled);
-
+        void SetParentEnabled(bool enabled);
     }
 }
