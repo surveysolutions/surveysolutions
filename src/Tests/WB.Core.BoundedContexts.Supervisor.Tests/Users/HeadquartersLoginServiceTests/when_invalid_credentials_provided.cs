@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                 commandService: commandService.Object);
         };
 
-        Because of = () => service.LoginAndCreateAccount("login", "pwd");
+        Because of = () => service.LoginAndCreateAccount("login", "pwd").Wait();
 
         It should_not_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.IsAny<CreateUserCommand>(), Moq.It.IsAny<string>()), Times.Never);
 
