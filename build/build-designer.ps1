@@ -1,7 +1,4 @@
-param([string]$VersionPrefix,
-[INT]$BuildNumber,
-[string]$BuildConfiguration='release',
-[string]$TesterKeystorePassword)
+param([string]$BuildConfiguration='release')
 
 $ErrorActionPreference = "Stop"
 
@@ -24,8 +21,7 @@ try {
 	BuildDesigner `
 		-Solution 'src\WB without Xamarin.sln' `
 		-Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
-		-BuildConfiguration $BuildConfiguration `
-		-AndroidPackageName $PackageName -BuildNumber $BuildNumber
+		-BuildConfiguration $BuildConfiguration
 }
 catch {
 	Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred']"

@@ -69,24 +69,20 @@ function BuildSupervisor($Solution, $Project, $BuildConfiguration, $AndroidPacka
 	AddArtifacts $Project $BuildConfiguration
 }
 
-function BuildDesigner($Solution, $Project, $BuildConfiguration, $AndroidPackageName, $BuildNumber) {
+function BuildDesigner($Solution, $Project, $BuildConfiguration) {
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
 
 	RunConfigTransform "src\UI\Designer\WB.UI.Designer\Web.config" "src\UI\Designer\WB.UI.Designer\Web.$BuildConfiguration.config"
-	CopyCapi -Project $Project -PathToFinalCapi $AndroidPackageName -BuildNumber $BuildNumber
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
-
 function BuildHeadquarters($Solution, $Project, $BuildConfiguration) {
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	RunTests $BuildConfiguration
-
 	Write-Host "##teamcity[publishArtifacts '$OutFileName']"
-
 	RunConfigTransform "src\UI\Headquarters\WB.UI.Headquarters\Web.config" "src\UI\Headquarters\WB.UI.Headquarters\Web.$BuildConfiguration.config"
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
