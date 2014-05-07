@@ -100,48 +100,41 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
                         HandleRosterTitleInSubstitutions(questionsWithSubstitution);
                     else
-                        HandleQuestionReferenceInSubstitution(questionsWithSubstitution, substitutionReference);
+                        HandleQuestionReferenceInSubstitution(questionnaire, questionsWithSubstitution, substitutionReference);
                 }
             }
         }
 
         private void HandleRosterTitleInSubstitutions(IQuestion questionsWithSubstitution)
         {
-            var rosterId = questionsWithSubstitution.QuestionRosterScope.Last();
+            var rosterId = GetQuestionRosterScope(questionsWithSubstitution).Last();
             if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterId))
             {
-                if (!rostersParticipationInSubstitutionReferences[rosterId].Contains(questionsWithSubstitution.PublicKey.Id))
-                    rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution.PublicKey.Id);
+                if (!rostersParticipationInSubstitutionReferences[rosterId].Contains(questionsWithSubstitution.PublicKey))
+                    rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution.PublicKey);
             }
             else
             {
                 rostersParticipationInSubstitutionReferences.Add(rosterId,
-                    new List<Guid> { questionsWithSubstitution.PublicKey.Id });
+                    new List<Guid> { questionsWithSubstitution.PublicKey });
             }
-
         }
 
-        private void HandleQuestionReferenceInSubstitution(IQuestion questionsWithSubstitution, string substitutionReference)
+        private void HandleQuestionReferenceInSubstitution(IQuestionnaireDocument questionnaire, IQuestion questionsWithSubstitution,
+            string substitutionReference)
         {
-             var referencedQuestion =
-                        questionnaire.FirstOrDefault<IQuestion>(
-                            q => substitutionReference.Equals(q.StataExportCaption, StringComparison.InvariantCultureIgnoreCase));
+            var referencedQuestion =
+                questionnaire.FirstOrDefault<IQuestion>(
+                    q => substitutionReference.Equals(q.StataExportCaption, StringComparison.InvariantCultureIgnoreCase));
 
-                    if (referencedQuestion==null)
-                        continue;
+            if (referencedQuestion == null)
+                return;
 
-                    if (this.questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion.PublicKey))
-                        this.questionsParticipationInSubstitutionReferences[referencedQuestion.PublicKey].Add(questionsWithSubstitution.PublicKey);
-                    else
-                        this.questionsParticipationInSubstitutionReferences.Add(referencedQuestion.PublicKey, new List<Guid> { questionsWithSubstitution.PublicKey });
-        }
-
-#warning nastya_k "subscribedQuestion.PublicKey.InterviewItemPropagationVector.Length > referencedQuestion.PublicKey.InterviewItemPropagationVector.Length" is not correct check for higher propagation level
-        private bool PropagationVectorIsTheSameOrHigher(QuestionViewModel subscribedQuestion, QuestionViewModel referencedQuestion)
-        {
-            if (referencedQuestion.PublicKey.CompareWithVector(subscribedQuestion.PublicKey.InterviewItemPropagationVector))
-                return true;
-            return subscribedQuestion.PublicKey.InterviewItemPropagationVector.Length > referencedQuestion.PublicKey.InterviewItemPropagationVector.Length;
+            if (this.questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion.PublicKey))
+                this.questionsParticipationInSubstitutionReferences[referencedQuestion.PublicKey].Add(questionsWithSubstitution.PublicKey);
+            else
+                this.questionsParticipationInSubstitutionReferences.Add(referencedQuestion.PublicKey,
+                    new List<Guid> { questionsWithSubstitution.PublicKey });
         }
 
         private void BuildRosterTitleQuestions(QuestionnaireRosterStructure rosterStructure)
