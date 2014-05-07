@@ -54,7 +54,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             interviewSynchronizationDto = CreateInterviewSynchronizationDto(
                 answers: new AnsweredQuestionSynchronizationDto[0],
                 propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>());
-            interviewSynchronizationDto.DisabledGroups.Add(new InterviewItemId(rosterGroupId, new decimal[0]));
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
 
             interviewViewModel.SetScreenStatus(new InterviewItemId(chapterId, new decimal[0]), false);
