@@ -60,15 +60,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
         {
             InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
 
+            string supervisorId = Monads.Maybe(() => interviewData.SupervisorId.FormatGuid());
+            string responsibleId = interviewData.ResponsibleId.FormatGuid();
             this.writer.Store(new InterviewFeedEntry
             {
                 InterviewId = evnt.EventSourceId.FormatGuid(),
                 EntryType = EntryType.InterviewRejected,
-                SupervisorId = Monads.Maybe(() => interviewData.SupervisorId.FormatGuid()),
+                SupervisorId = supervisorId,
                 Timestamp = evnt.EventTimeStamp,
                 EntryId = evnt.EventIdentifier.FormatGuid(),
                 UserId = evnt.Payload.UserId.FormatGuid(),
-                Comment = evnt.Payload.Comment
+                Comment = evnt.Payload.Comment,
+                InterviewerId =  supervisorId != responsibleId ? responsibleId : null
             }, evnt.EventIdentifier.FormatGuid());
         }
 

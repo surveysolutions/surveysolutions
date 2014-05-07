@@ -838,12 +838,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new List<decimal>(rosterVector) { value }.ToArray();
         }
 
-        public void RejectInterviewFromHeadquarters(Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime, string comment)
+        public void RejectInterviewFromHeadquarters(Guid userId,
+            Guid supervisorId,
+            Guid? interviewerId,
+            InterviewSynchronizationDto interviewDto,
+            DateTime synchronizationTime,
+            string comment)
         {
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
             this.ApplyEvent(new InterviewRestored(userId));
 
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
+            if (interviewerId.HasValue)
+            {
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value));
+            }
+
             foreach (var answerDto in interviewDto.Answers.Where(x => x.Comments != null))
             {
                 Guid questionId = answerDto.Id;
