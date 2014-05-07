@@ -279,3 +279,7 @@ h4.heading {
 .controls input {
     margin-bottom: 0;
 }
+
+.modal.fade {
+    z-index: -1;
+}
