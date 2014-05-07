@@ -283,3 +283,8 @@ h4.heading {
 .modal.fade {
     z-index: -1;
 }
+.modal.fade.in {
+    z-index: 10001;
+}
+
+    
