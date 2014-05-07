@@ -78,6 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InterviewViewModelTests\InterviewViewModelTestContext.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_contains_nested_group.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_all_groups_disabled_and_1_group_enabling_with_enabled_question_and_disabled_child_groups.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_chapter_with_nested_group_is_disabling.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_chapter_with_nested_roster_is_disabling.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_roster_row_is_added_to_roster_inside_disabled_chapter.cs" />
