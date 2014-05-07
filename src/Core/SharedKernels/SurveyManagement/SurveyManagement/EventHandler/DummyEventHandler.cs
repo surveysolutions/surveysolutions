@@ -24,13 +24,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<GroupsEnabled>,
         IEventHandler<InterviewSynchronized>,
         IEventHandler<InterviewSentToHeadquarters>,
+        IEventHandler<InterviewRestarted>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeclaredValid>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<InterviewApproved>,
-        IEventHandler
+        IEventHandler<InterviewRejected>,
+    IEventHandler
     {
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
 
@@ -93,6 +95,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public Type[] BuildsViews
         {
             get { return new Type[0]; }
+        }
+
+        public void Handle(IPublishedEvent<InterviewRestarted> evnt){}
+        public void Handle(IPublishedEvent<InterviewRejected> evnt)
+        {
         }
     }
 }
