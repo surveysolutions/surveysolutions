@@ -127,11 +127,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 {
                     question.SetParentEnabled(enabled);
                 }
-                var group = child as QuestionnaireNavigationPanelItem;
-                if (group != null)
-                {
-                    group.Enabled = enabled;
-                }
             }
 
             this.RaisePropertyChanged("Enabled");
