@@ -73,7 +73,7 @@
         </div>
     </script>
     <script type="text/html" id="DateTimeReadOnly">
-        <span data-bind=" text: moment(answer).format('l')"></span>
+        <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
     </script>
     <script type="text/html" id="TextListReadOnly">
         <div class="form-group">
@@ -107,7 +107,7 @@
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
-        <div>time stamp: <span data-bind="text: moment(timestamp).format('lll')"></span></div>
+        <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
     </script>
 
     <script type="text/html" id="SingleOptionFull">
@@ -149,7 +149,7 @@
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
     </script>
     <script type="text/html" id="DateTimeFull">
-        <span data-bind=" text: moment(answer).format('l')"></span>
+        <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
     </script>
     <script type="text/html" id="TextListFull">
         <div class="form-group">
@@ -188,7 +188,7 @@
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
-        <div>time stamp: <span data-bind="text: moment(timestamp).format('lll')"></span></div>
+        <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
     </script>
 
     <script type="text/html" id="SingleOption">
@@ -206,7 +206,7 @@
         <span data-bind=" text: answer"></span>
     </script>
     <script type="text/html" id="DateTime">
-        <span data-bind=" text: moment(answer).format('l')"></span>
+        <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
     </script>
     <script type="text/html" id="AutoPropagate">
         <span data-bind=" text: answer"></span>
@@ -221,7 +221,7 @@
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
-        <div>time stamp: <span data-bind="text: moment(timestamp).format('lll')"></span></div>
+        <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
     </script>
 }
 
