@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -24,8 +25,11 @@ namespace WB.UI.Supervisor.Controllers
             IHeadquartersLoginService headquartersLoginService)
             : this(authentication, globalProvider, passwordHasher, headquartersLoginService, Membership.ValidateUser) { }
 
-        internal AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher,
-            IHeadquartersLoginService headquartersLoginService, Func<string, string, bool> validateUserCredentials)
+        internal AccountController(IFormsAuthentication auth, 
+            IGlobalInfoProvider globalProvider, 
+            IPasswordHasher passwordHasher,
+            IHeadquartersLoginService headquartersLoginService, 
+            Func<string, string, bool> validateUserCredentials)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
@@ -42,12 +46,12 @@ namespace WB.UI.Supervisor.Controllers
         }
 
         [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
+        public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid)
             {
-                if (this.LoginIncludingHeadquartersData(model.UserName, model.Password))
+                if (await this.LoginIncludingHeadquartersData(model.UserName, model.Password))
                 {
                     bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
@@ -73,19 +77,22 @@ namespace WB.UI.Supervisor.Controllers
             return this.View(model);
         }
 
-        private bool LoginIncludingHeadquartersData(string login, string password)
+        private async Task<bool> LoginIncludingHeadquartersData(string login, string password)
         {
             if (this.LoginUsingLocalDatabase(login, password))
                 return true;
 
-            this.UpdateLocalDataFromHeadquarters(login, password);
+            if (Membership.GetUser(login) == null)
+            {
+                await this.UpdateLocalDataFromHeadquarters(login, password);
+            }
 
             return this.LoginUsingLocalDatabase(login, password);
         }
 
-        private void UpdateLocalDataFromHeadquarters(string login, string password)
+        private async Task UpdateLocalDataFromHeadquarters(string login, string password)
         {
-            this.headquartersLoginService.LoginAndCreateAccount(login, password);
+            await this.headquartersLoginService.LoginAndCreateAccount(login, password);
         }
 
         private bool LoginUsingLocalDatabase(string login, string password)
