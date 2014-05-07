@@ -1,7 +1,9 @@
-﻿namespace WB.Core.BoundedContexts.Supervisor.Users
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.Supervisor.Users
 {
     public interface IHeadquartersLoginService
     {
-        void LoginAndCreateAccount(string login, string password);
+        Task LoginAndCreateAccount(string login, string password);
     }
 }
