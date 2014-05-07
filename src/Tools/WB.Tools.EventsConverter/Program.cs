@@ -114,7 +114,9 @@ namespace WB.Tools.EventsConverter
 
         private static long ProcessEventsFromCommit(IEnumerable<CommittedEvent> eventsFromSingleCommit, long sequence, Guid commitId)
         {
-            var streamToSave = new UncommittedEventStream(commitId);
+            throw new Exception("When processing commits origin should be correctly preserved. Please add such functionality if you need to process events.");
+
+            var streamToSave = new UncommittedEventStream(commitId, origin: null);
 
             int currentFlushGroup = 0; 
 
