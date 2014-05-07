@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = new Dictionary<Guid, HashSet<InterviewItemId>>();
 
-            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(this.GetAllQuestionsWithSubstitution());
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(questionnaire);
 
             #endregion
 
@@ -81,19 +81,21 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             #endregion
         }
 
-        private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
-            new Dictionary<QuestionViewModel, IList<QuestionViewModel>>();
+        private Dictionary<Guid, IList<Guid>> questionsParticipationInSubstitutionReferences =
+            new Dictionary<Guid, IList<Guid>>();
 
         private Dictionary<Guid, IList<Guid>> rostersParticipationInSubstitutionReferences = new Dictionary<Guid, IList<Guid>>();
 
-        private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(IEnumerable<QuestionViewModel> questionsToSubscribe)
+        private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(IQuestionnaireDocument questionnaire)
         {
-            foreach (var questionsWithSubstitution in questionsToSubscribe)
+            var allQuestions = questionnaire.Find<IQuestion>(q => true).ToArray();
+            foreach (var questionsWithSubstitution in allQuestions)
             {
-                if (!questionsWithSubstitution.SubstitutionReferences.Any())
+                var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
+                if (!substitutionReferences.Any())
                     continue;
 
-                foreach (var substitutionReference in questionsWithSubstitution.SubstitutionReferences)
+                foreach (var substitutionReference in substitutionReferences)
                 {
                     if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
                         HandleRosterTitleInSubstitutions(questionsWithSubstitution);
@@ -103,10 +105,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        private void HandleRosterTitleInSubstitutions(QuestionViewModel questionsWithSubstitution)
+        private void HandleRosterTitleInSubstitutions(IQuestion questionsWithSubstitution)
         {
-            if (!questionsWithSubstitution.QuestionRosterScope.Any())
-                return;
             var rosterId = questionsWithSubstitution.QuestionRosterScope.Last();
             if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterId))
             {
@@ -121,50 +121,19 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         }
 
-        private void HandleQuestionReferenceInSubstitution(QuestionViewModel questionsWithSubstitution, string substitutionReference)
+        private void HandleQuestionReferenceInSubstitution(IQuestion questionsWithSubstitution, string substitutionReference)
         {
-            var referencedQuestion = this.FindReferencedQuestion(substitutionReference, questionsWithSubstitution);
-            if (referencedQuestion == null)
-                return;
+             var referencedQuestion =
+                        questionnaire.FirstOrDefault<IQuestion>(
+                            q => substitutionReference.Equals(q.StataExportCaption, StringComparison.InvariantCultureIgnoreCase));
 
-            if (this.questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion))
-                this.questionsParticipationInSubstitutionReferences[referencedQuestion].Add(questionsWithSubstitution);
-            else
-                this.questionsParticipationInSubstitutionReferences.Add(referencedQuestion, new List<QuestionViewModel> { questionsWithSubstitution });
+                    if (referencedQuestion==null)
+                        continue;
 
-            referencedQuestion.PropertyChanged += this.ReferencedQuestionPropertyChanged;
-            if (!string.IsNullOrEmpty(referencedQuestion.AnswerString))
-            {
-                this.ReferencedQuestionPropertyChanged(referencedQuestion, new PropertyChangedEventArgs("AnswerString"));
-            }
-        }
-
-        private void ReferencedQuestionPropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName != "AnswerString")
-                return;
-
-            var vm = sender as QuestionViewModel;
-            if (vm == null)
-                return;
-
-            if (!this.questionsParticipationInSubstitutionReferences.ContainsKey(vm))
-                return;
-
-            foreach (var participationQuestion in this.questionsParticipationInSubstitutionReferences[vm])
-            {
-                participationQuestion.SubstituteQuestionText(vm);
-            }
-        }
-
-        private QuestionViewModel FindReferencedQuestion(string variableName, QuestionViewModel subscribedQuestion)
-        {
-            var preFilledQuestion = this.FeaturedQuestions.Values.FirstOrDefault(q => q.Variable == variableName);
-            if (preFilledQuestion != null)
-                return preFilledQuestion;
-
-            return this.Questions.Values.FirstOrDefault(question => question.Variable == variableName &&
-                this.PropagationVectorIsTheSameOrHigher(subscribedQuestion, question));
+                    if (this.questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion.PublicKey))
+                        this.questionsParticipationInSubstitutionReferences[referencedQuestion.PublicKey].Add(questionsWithSubstitution.PublicKey);
+                    else
+                        this.questionsParticipationInSubstitutionReferences.Add(referencedQuestion.PublicKey, new List<Guid> { questionsWithSubstitution.PublicKey });
         }
 
 #warning nastya_k "subscribedQuestion.PublicKey.InterviewItemPropagationVector.Length > referencedQuestion.PublicKey.InterviewItemPropagationVector.Length" is not correct check for higher propagation level
@@ -173,11 +142,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (referencedQuestion.PublicKey.CompareWithVector(subscribedQuestion.PublicKey.InterviewItemPropagationVector))
                 return true;
             return subscribedQuestion.PublicKey.InterviewItemPropagationVector.Length > referencedQuestion.PublicKey.InterviewItemPropagationVector.Length;
-        }
-
-        private IEnumerable<QuestionViewModel> GetAllQuestionsWithSubstitution()
-        {
-            return this.Questions.Values.Where(x => x.SubstitutionReferences.Any());
         }
 
         private void BuildRosterTitleQuestions(QuestionnaireRosterStructure rosterStructure)
@@ -363,13 +327,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int? sortIndex)
         {
-            var propagationVector = this.BuildPropagationVectorForGroup(outerScopePropagationVector,
+            var propagationVector = BuildPropagationVectorForGroup(outerScopePropagationVector,
                 rosterInstanceId);
 
             if (this.Screens.ContainsKey(new InterviewItemId(screenId, propagationVector)))
                 return;
 
-            var screenPrototype = this.propagatedScreenPrototypes[screenId];
+            var screenPrototype = propagatedScreenPrototypes[screenId];
             var screen = screenPrototype.Clone(propagationVector, sortIndex);
 
             var questions = new List<QuestionViewModel>();
@@ -379,7 +343,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var question = child as QuestionViewModel;
                 if (question != null)
                 {
-                    this.UpdateQuestionHash(question);
+                    UpdateQuestionHash(question);
                     questions.Add(question);
                     continue;
                 }
@@ -397,10 +361,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 }
             }
 
-            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(questions);
-
             screen.PropertyChanged += this.rosterScreen_PropertyChanged;
-            this.Screens.Add(screen.ScreenId, screen);
+            Screens.Add(screen.ScreenId, screen);
             this.UpdateGrid(new InterviewItemId(screenId, outerScopePropagationVector));
         }
 
@@ -439,8 +401,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 if (question != null)
                 {
                     this.Questions.Remove(question.PublicKey);
-
-                    this.CleanQuestionsParticipationInSubstitutionReferencesBySubscribedQuestion(question);
                 }
                 var group = item as QuestionnaireNavigationPanelItem;
                 if (group != null)
@@ -455,19 +415,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             foreach (var rosterRow in roster.Rows)
             {
                 RemoveScreen(rosterRow.ScreenId);
-            }
-        }
-
-        private void CleanQuestionsParticipationInSubstitutionReferencesBySubscribedQuestion(QuestionViewModel question)
-        {
-            var allQuestionsSubstitutedAtQuestionText =
-                this.questionsParticipationInSubstitutionReferences.Where(q => q.Value.Contains(question));
-
-            foreach (var referencedQuestionWithSubscribers in allQuestionsSubstitutedAtQuestionText)
-            {
-                referencedQuestionWithSubscribers.Value.Remove(question);
-                if (referencedQuestionWithSubscribers.Value.Count == 0)
-                    referencedQuestionWithSubscribers.Key.PropertyChanged -= ReferencedQuestionPropertyChanged;
             }
         }
 
@@ -624,21 +571,44 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 .ForEach(linkedQuestionViewModel => linkedQuestionViewModel.HandleAnswerListChange());
         }
 
-        private void HeadQuestionPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void QuestionPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "AnswerString")
                 return;
 
             var question = sender as QuestionViewModel;
-            if (question == null || !this.listOfHeadQuestionsMappedOnScope.ContainsKey(question.PublicKey.Id))
+            if (question == null)
                 return;
 
-            this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[question.PublicKey.Id],
-                question.PublicKey.InterviewItemPropagationVector, question.AnswerString);
+            SubstituteDependantQuestions(question);
+
+            this.UpdateRosterTitlesForVectorByPossibleHeadQuestion(question.PublicKey.Id,question.PublicKey.InterviewItemPropagationVector, question.AnswerString);
         }
 
-        private void UpdatePropagationScopeTitleForVector(Guid scopeId, decimal[] propagationVector, string newTitle)
+        private void SubstituteDependantQuestions(QuestionViewModel question)
         {
+            if (!this.questionsParticipationInSubstitutionReferences.ContainsKey(question.PublicKey.Id))
+                return;
+
+            foreach (var participationQuestionId in this.questionsParticipationInSubstitutionReferences[question.PublicKey.Id])
+            {
+                var participationQuestion = this.Questions.Values.FirstOrDefault(q => q.PublicKey.Id == participationQuestionId &&
+                    q.PublicKey.InterviewItemPropagationVector.Take(question.PublicKey.InterviewItemPropagationVector.Length)
+                        .SequenceEqual(question.PublicKey.InterviewItemPropagationVector));
+
+                if (participationQuestion == null)
+                    continue;
+                participationQuestion.SubstituteQuestionText(question);
+            }
+        }
+
+        private void UpdateRosterTitlesForVectorByPossibleHeadQuestion(Guid possibleHeadQuestionId, decimal[] propagationVector, string newTitle)
+        {
+            if (!this.listOfHeadQuestionsMappedOnScope.ContainsKey(possibleHeadQuestionId))
+                return;
+
+            var scopeId = this.listOfHeadQuestionsMappedOnScope[possibleHeadQuestionId];
+
             var siblingsByPropagationScopeIds = this.rosterStructure.RosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.Keys;
 
             var screensSiblingByPropagationScopeWithVector =
@@ -719,10 +689,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             this.Questions.Add(question.PublicKey, question);
 
-            if (this.listOfHeadQuestionsMappedOnScope.ContainsKey(question.PublicKey.Id))
-            {
-                question.PropertyChanged += this.HeadQuestionPropertyChanged;
-            }
+            question.PropertyChanged += this.QuestionPropertyChanged;
         }
 
         protected void CreateGrid(IGroup group, List<IGroup> root, bool isNestedRoster)
