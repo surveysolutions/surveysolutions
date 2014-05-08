@@ -6,6 +6,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -245,7 +246,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
             Func<Guid, Dictionary<decimal[], string>> getAvailableOptions, string rosterTitle)
         {
-            if (variableName == StringUtil.RosterTitleSubstitutionReference)
+            if (variableName == SubstitutionUtils.RosterTitleSubstitutionReference)
             {
                 if (string.IsNullOrEmpty(rosterTitle))
                     return null;

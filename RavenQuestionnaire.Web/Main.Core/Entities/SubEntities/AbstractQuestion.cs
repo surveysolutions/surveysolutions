@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace Main.Core.Entities.SubEntities
 {
@@ -224,7 +225,7 @@ namespace Main.Core.Entities.SubEntities
 
         public IEnumerable<string> GetVariablesUsedInTitle()
         {
-            return StringUtil.GetAllSubstitutionVariableNames(QuestionText);
+            return SubstitutionUtils.GetAllSubstitutionVariableNames(QuestionText);
         }
 
         public override string ToString()
