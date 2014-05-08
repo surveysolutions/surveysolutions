@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = multiQuestionLinkedToQRBarcodeQuestionId,
                 StataExportCaption = "var",
-                LinkedToQuestionId = qrBarcodeQuestionId
+                LinkedToQuestionId = qrBarcodeQuestionId,
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
             questionnaire.Children.Add(new Group()
             {
