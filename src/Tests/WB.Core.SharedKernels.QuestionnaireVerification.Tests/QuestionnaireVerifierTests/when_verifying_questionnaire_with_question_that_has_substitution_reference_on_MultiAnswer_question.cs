@@ -27,7 +27,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = questionWithSubstitutionReferenceTomultiAnswerQuestionId,
                     StataExportCaption = "var",
-                    QuestionText = string.Format("hello %{0}%!", unsupported)
+                    QuestionText = string.Format("hello %{0}%!", unsupported),
+                    Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
                 });
 
             verifier = CreateQuestionnaireVerifier();

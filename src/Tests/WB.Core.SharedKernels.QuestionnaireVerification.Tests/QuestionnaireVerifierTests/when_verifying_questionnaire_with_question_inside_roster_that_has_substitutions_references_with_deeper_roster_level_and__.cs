@@ -33,7 +33,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             PublicKey = questionWithSubstitutionsId,
                             StataExportCaption = "var",
-                            QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName)
+                            QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName),
+                            Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
                         },
                         new Group()
                         {
