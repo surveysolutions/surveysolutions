@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.ServiceModel.Syndication;
 using System.Web.Http;
@@ -57,6 +58,11 @@ namespace WB.UI.Headquarters.API.Feeds
         public HttpResponseMessage Archive(int page)
         {
             var changedFeedEntries = feedReader.Query(_ => _.GetPage(page, PageSize).OrderBy(x => x.Timestamp).ToList());
+            if (changedFeedEntries.Count == 0)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Page is empty or not created yet");
+            }
+
             SyndicationFeed syndicationFeed = this.GetFeed(changedFeedEntries);
 
             if (page > 1)
