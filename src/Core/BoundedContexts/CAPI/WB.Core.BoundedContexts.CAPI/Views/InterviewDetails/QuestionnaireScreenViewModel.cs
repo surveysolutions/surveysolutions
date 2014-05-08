@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.ScreenId = screenId;
             this.Breadcrumbs = breadcrumbs;
             this.Title = title;
-            this.Enabled = enabled;
+            this.enabled = enabled;
             this.ScreenName = screenName;
 
             foreach (var item in this.Items)
@@ -42,7 +42,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public InterviewItemId ScreenId { get; private set; }
         public string Title { get; private set; }
         public string ScreenName { get; protected set; }
-        public bool Enabled { get; private set; }
+        public bool Enabled { get { return enabled && isParentEnabled; }}
+        private bool enabled;
         public IList<IQuestionnaireItemViewModel> Items { get; private set; }
         public virtual IEnumerable<InterviewItemId> Siblings { get; private set; }
         public IEnumerable<InterviewItemId> Breadcrumbs { get; protected set; }
@@ -113,24 +114,46 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
         }
 
-        public void SetEnabled(bool enabled)
+        public void SetEnabled(bool isEnabled)
         {
-            if (this.Enabled == enabled)
+            if (enabled == isEnabled)
                 return;
 
-            this.Enabled = enabled;
+            enabled = isEnabled;
 
+            SetEnableStatusForChildern(Enabled);
+        }
+
+        public void SetParentEnabled(bool parentEnabled)
+        {
+            if (this.isParentEnabled == parentEnabled)
+                return;
+
+            this.isParentEnabled = parentEnabled;
+
+            SetEnableStatusForChildern(Enabled);
+        }
+
+        private void SetEnableStatusForChildern(bool isEnabled)
+        {
             foreach (var child in this.Items)
             {
                 var question = child as QuestionViewModel;
                 if (question != null)
                 {
-                    question.SetParentEnabled(enabled);
+                    question.SetParentEnabled(isEnabled);
+                }
+                var group = child as QuestionnaireNavigationPanelItem;
+                if (group != null)
+                {
+                    group.SetParentEnabled(isEnabled);
                 }
             }
 
             this.RaisePropertyChanged("Enabled");
         }
+
+        private bool isParentEnabled = true;
 
         protected void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
