@@ -3,11 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using Main.Core.Documents;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.UI.Headquarters.API.Attributes;
-using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Formatters;
 
 namespace WB.UI.Headquarters.API.Resources
@@ -32,7 +30,7 @@ namespace WB.UI.Headquarters.API.Resources
 
             if (document == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Interview with id {0} and version {1} was not found", id, version));
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Questionnaire with id {0} and version {1} was not found", id, version));
             }
 
             var response = Request.CreateResponse(HttpStatusCode.OK, document, new JsonNetFormatter(new JsonSerializerSettings
