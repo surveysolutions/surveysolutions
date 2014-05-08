@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -78,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             !(question.Answer is GeoPosition || question.Answer is decimal[] || question.Answer is decimal[][] ||
                                 question.Answer is Tuple<decimal, string>[]))
                     .ToDictionary(
-                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
+                        question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => question.Answer);
 
             this.interviewState.LinkedSingleOptionAnswersBuggy = @event.InterviewData.Answers == null
@@ -86,7 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[]) // bug: here we get multioption questions as well
                     .ToDictionary(
-                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
+                        question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[]) question.Answer));
 
             this.interviewState.LinkedMultipleOptionsAnswers = @event.InterviewData.Answers == null
@@ -94,7 +93,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[][])
                     .ToDictionary(
-                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
+                        question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => Tuple.Create(question.Id, question.QuestionPropagationVector, (decimal[][]) question.Answer));
 
             this.interviewState.TextListAnswers = @event.InterviewData.Answers == null
@@ -102,13 +101,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is Tuple<decimal, string>[])
                     .ToDictionary(
-                        question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
+                        question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector),
                         question => (Tuple<decimal, string>[]) question.Answer
                     );
 
             this.interviewState.AnsweredQuestions = new HashSet<string>(
                 @event.InterviewData.Answers.Select(
-                    question => ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector)));
+                    question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionPropagationVector)));
 
             this.interviewState.DisabledGroups = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledGroups);
             this.interviewState.DisabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
@@ -127,7 +126,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(TextQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -135,7 +134,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(QRBarcodeQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -143,7 +142,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(NumericQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -151,7 +150,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(NumericRealQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -159,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(NumericIntegerQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -167,7 +166,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(DateTimeQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -175,7 +174,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(SingleOptionQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.SelectedValue;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -183,7 +182,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(MultipleOptionsQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.SelectedValues;
             this.interviewState.AnsweredQuestions.Add(questionKey);
@@ -191,21 +190,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(GeoLocationQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnsweredQuestions.Add(questionKey);
         }
 
         internal void Apply(TextListQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
             this.interviewState.TextListAnswers[questionKey] = @event.Answers;
             this.interviewState.AnsweredQuestions.Add(questionKey);
         }
 
         private void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.LinkedSingleOptionAnswersBuggy[questionKey] = Tuple.Create(@event.QuestionId, @event.PropagationVector,
                 @event.SelectedPropagationVector);
@@ -214,7 +213,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.LinkedMultipleOptionsAnswers[questionKey] = Tuple.Create(@event.QuestionId, @event.PropagationVector,
                 @event.SelectedPropagationVectors);
@@ -223,7 +222,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(AnswerDeclaredValid @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.ValidAnsweredQuestions.Add(questionKey);
             this.interviewState.InvalidAnsweredQuestions.Remove(questionKey);
@@ -231,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(AnswerDeclaredInvalid @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.ValidAnsweredQuestions.Remove(questionKey);
             this.interviewState.InvalidAnsweredQuestions.Add(questionKey);
@@ -249,14 +248,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(GroupDisabled @event)
         {
-            string groupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
 
             this.interviewState.DisabledGroups.Add(groupKey);
         }
 
         internal void Apply(GroupEnabled @event)
         {
-            string groupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
 
             this.interviewState.DisabledGroups.Remove(groupKey);
         }
@@ -273,14 +272,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         internal void Apply(QuestionDisabled @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.DisabledQuestions.Add(questionKey);
         }
 
         internal void Apply(QuestionEnabled @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.DisabledQuestions.Remove(questionKey);
         }
@@ -303,7 +302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(GroupPropagated @event)
         {
-            string rosterGroupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterScopePropagationVector);
+            string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterScopePropagationVector);
             var rosterRowInstances = new DistinctDecimalList();
 
             for (int i = 0; i < @event.Count; i++)
@@ -316,7 +315,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(RosterRowAdded @event)
         {
-            string rosterGroupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
+            string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
             DistinctDecimalList rosterRowInstances = this.interviewState.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                 ? this.interviewState.RosterGroupInstanceIds[rosterGroupKey]
                 : new DistinctDecimalList();
@@ -328,7 +327,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(RosterRowRemoved @event)
         {
-            string rosterGroupKey = ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
+            string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
 
             var rosterRowInstances = this.interviewState.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                 ? this.interviewState.RosterGroupInstanceIds[rosterGroupKey]
@@ -389,7 +388,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(AnswerRemoved @event)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions.Remove(questionKey);
             this.interviewState.LinkedSingleOptionAnswersBuggy.Remove(questionKey);
@@ -514,7 +513,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var newAnswer in answersToFeaturedQuestions)
                 {
-                    string key = ConvertIdAndRosterVectorToString(newAnswer.Key, preloadedLevel.RosterVector);
+                    string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, preloadedLevel.RosterVector);
 
                     interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
                     interviewChangeStructures.State.AnsweredQuestions.Add(key);
@@ -547,7 +546,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, EmptyRosterVector, interviewChangeStructures.State);
             foreach (var newAnswer in answersToFeaturedQuestions)
             {
-                string key = ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
+                string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
 
                 interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
@@ -585,7 +584,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var newAnswer in answersToFeaturedQuestions)
             {
-                string key = ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
+                string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
 
                 interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
@@ -666,7 +665,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static Dictionary<string, DistinctDecimalList> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
         {
             return synchronizationDto.RosterGroupInstances.ToDictionary(
-                pair => ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
+                pair => ConversionHelper.ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemPropagationVector),
                 pair => new DistinctDecimalList(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
         }
         
@@ -698,21 +697,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool IsGroupDisabled(InterviewStateDependentOnAnswers state, Identity group)
         {
-            string groupKey = ConvertIdAndRosterVectorToString(group.Id, group.RosterVector);
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector);
 
             return state.DisabledGroups.Contains(groupKey);
         }
 
         private static bool IsQuestionDisabled(InterviewStateDependentOnAnswers state, Identity question)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
 
             return state.DisabledQuestions.Contains(questionKey);
         }
 
         private static bool WasQuestionAnswered(InterviewStateDependentOnAnswers state, Identity question)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
 
             return state.AnsweredQuestions.Contains(questionKey);
         }
@@ -731,7 +730,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return null;
             }
 
-            string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
 
             return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
                 ? state.AnswersSupportedInExpressions[questionKey]
@@ -753,7 +752,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionBeingAnswered != null && AreEqual(question, questionBeingAnswered))
                 return answerBeingApplied;
 
-            string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
 
             return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
                 ? state.AnswersSupportedInExpressions[questionKey]
@@ -974,24 +973,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return new HashSet<string>(
                 synchronizationIdentities.Select(
-                    question => ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemPropagationVector)));
+                    question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemPropagationVector)));
         }
 
         private static Identity ToIdentity(InterviewItemId synchronizationIdentity)
         {
             return new Identity(synchronizationIdentity.Id, synchronizationIdentity.InterviewItemPropagationVector);
         }
-
-        /// <remarks>
-        /// The opposite operation (get id or vector from string) should never be performed!
-        /// This is one-way transformation. Opposite operation is too slow.
-        /// If you need to compactify data and get it back, you should use another datatype, not a string.
-        /// </remarks>
-        private static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector)
-        {
-            return string.Format("{0:N}[{1}]", id, string.Join("-", rosterVector));
-        }
-
+        
         private static void PutToCorrespondingListAccordingToEnablementStateChange(
             Identity entity, List<Identity> entitiesToBeEnabled, List<Identity> entitiesToBeDisabled, bool isNewStateEnabled,
             bool isOldStateEnabled)
@@ -1419,7 +1408,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         ? rosterInstanceIds
                         : GetRosterInstanceIds(this.interviewState, groupId, groupOuterRosterVector);
 
-            string questionKey = ConvertIdAndRosterVectorToString(questionId, rosterVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
 
             Tuple<decimal, string>[] currentAnswer = this.interviewState.TextListAnswers.ContainsKey(questionKey)
                 ? this.interviewState.TextListAnswers[questionKey]
@@ -1608,7 +1597,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (isQuestionDisabled(questionIdAtInterview))
                         continue;
 
-                    string questionKey = ConvertIdAndRosterVectorToString(questionIdAtInterview.Id, questionIdAtInterview.RosterVector);
+                    string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionIdAtInterview.Id, questionIdAtInterview.RosterVector);
 
                     if (!this.interviewState.AnsweredQuestions.Contains(questionKey))
                         continue;
@@ -1646,7 +1635,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (isQuestionDisabled(mandatoryQuestion) || wasQuestionValidationPerformed(mandatoryQuestion))
                     continue;
 
-                string questionKey = ConvertIdAndRosterVectorToString(mandatoryQuestion.Id, mandatoryQuestion.RosterVector);
+                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(mandatoryQuestion.Id, mandatoryQuestion.RosterVector);
 
                 bool hasQuestionAnswer = this.interviewState.AnsweredQuestions.Contains(questionKey);
 
@@ -3313,8 +3302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         return currentAnswer.ToDictionary(x => x.Item1, x => new Tuple<string, int?>(x.Item2, (int?) x.Item1));
                     }
 
-                    var questionKey =
-                        ConvertIdAndRosterVectorToString(rosterSizeQuestionIdentity.Id, rosterSizeQuestionIdentity.RosterVector);
+                    var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterSizeQuestionIdentity.Id, rosterSizeQuestionIdentity.RosterVector);
                     if (state.TextListAnswers.ContainsKey(questionKey))
                     {
                         return state.TextListAnswers[questionKey].ToDictionary(x => x.Item1,
@@ -3586,7 +3574,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var processedQuestionKeys = new HashSet<string>
             {
-                ConvertIdAndRosterVectorToString(questionBeingAnswered.Id, questionBeingAnswered.RosterVector)
+                ConversionHelper.ConvertIdAndRosterVectorToString(questionBeingAnswered.Id, questionBeingAnswered.RosterVector)
             };
             var affectingQuestions = new Queue<Identity>(new[] { questionBeingAnswered });
 
@@ -3607,7 +3595,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, dependentQuestion, questionnaire, getAnswer),
                         isOldStateEnabled: ! IsQuestionDisabled(state, dependentQuestion));
 
-                    processedQuestionKeys.Add(ConvertIdAndRosterVectorToString(dependentQuestion.Id, dependentQuestion.RosterVector));
+                    processedQuestionKeys.Add(ConversionHelper.ConvertIdAndRosterVectorToString(dependentQuestion.Id, dependentQuestion.RosterVector));
 
                     if (this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, dependentQuestion, questionnaire, getAnswer) !=
                         ! IsQuestionDisabled(state, dependentQuestion))
@@ -4013,7 +4001,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static DistinctDecimalList GetRosterInstanceIds(InterviewStateDependentOnAnswers state, Guid groupId,
             decimal[] outerRosterVector)
         {
-            string groupKey = ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
 
             return state.RosterGroupInstanceIds.ContainsKey(groupKey)
                 ? state.RosterGroupInstanceIds[groupKey]
@@ -4051,14 +4039,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool IsQuestionAnsweredValid(InterviewStateDependentOnAnswers state, Identity question)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
 
             return state.ValidAnsweredQuestions.Contains(questionKey);
         }
 
         private static bool IsQuestionAnsweredInvalid(InterviewStateDependentOnAnswers state, Identity question)
         {
-            string questionKey = ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
 
             return state.InvalidAnsweredQuestions.Contains(questionKey);
         }

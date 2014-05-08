@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var instance in instances)
             {
-                string rosterGroupKey = ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
+                string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
                 DistinctDecimalList rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                     ? RosterGroupInstanceIds[rosterGroupKey]
                     : new DistinctDecimalList();
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var instance in instances)
             {
-                string rosterGroupKey = ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
+                string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
 
                 var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                     ? RosterGroupInstanceIds[rosterGroupKey]
@@ -206,19 +206,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// </remarks>
         private static string ConvertEventIdentityToString(Events.Interview.Dtos.Identity identity)
         {
-            return ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
+            return ConversionHelper.ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
         }
-
-        /// <remarks>
-        /// The opposite operation (get id or vector from string) should never be performed!
-        /// This is one-way transformation. Opposite operation is too slow.
-        /// If you need to compactify data and get it back, you should use another datatype, not a string.
-        /// </remarks>
-        private static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector)
-        {
-            return string.Format("{0:N}[{1}]", id, string.Join("-", rosterVector));
-        }
-        
-        
     }
 }

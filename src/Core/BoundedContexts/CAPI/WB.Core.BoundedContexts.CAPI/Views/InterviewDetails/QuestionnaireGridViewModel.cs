@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Breadcrumbs = (breadcrumbs ?? new List<InterviewItemId>()).Union(new InterviewItemId[1] { this.ScreenId }).ToList();
             this.rowsValue = rows;
             this.Header = header;
-            this.Enabled = enabled;
+            this.enabled = enabled;
             this.Answered = answered;
             this.Total = total;
         }
@@ -57,7 +57,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public InterviewItemId ScreenId { get; private set; }
         public int Total { get; private set; }
         public int Answered { get; private set; }
-        public bool Enabled { get; private set; }
+        public bool Enabled { get { return enabled && isParentEnabled; }}
+        private bool enabled;
         public IList<HeaderItem> Header { get; private set; }
         [JsonIgnore]
         public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows
@@ -71,12 +72,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         }
         public IEnumerable<InterviewItemId> Breadcrumbs { get; private set; }
 
-        public void SetEnabled(bool enabled)
+        public void SetEnabled(bool isEnabled)
         {
-            if (this.Enabled == enabled)
+            if (this.Enabled == isEnabled)
                 return;
 
-            this.Enabled = enabled;
+            this.enabled = isEnabled;
 
             foreach (var model in this.Rows)
             {
@@ -86,14 +87,30 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.RaisePropertyChanged("Enabled");
         }
 
+        public void SetParentEnabled(bool parentEnabled)
+        {
+            if (this.isParentEnabled == parentEnabled)
+                return;
+
+            this.isParentEnabled = parentEnabled;
+
+            foreach (var model in this.Rows)
+            {
+                model.SetParentEnabled(isParentEnabled);
+            }
+
+            this.RaisePropertyChanged("Enabled");
+        }
+
+        private bool isParentEnabled = true;
+
         public void UpdateGridAfterRowsWereAdded()
         {
             var total = 0;
             var answered = 0;
             foreach (var screenViewModel in this.Rows)
             {
-                if (!Enabled)
-                    screenViewModel.SetEnabled(false);
+                screenViewModel.SetParentEnabled(isParentEnabled);
                 total = total + screenViewModel.Total;
                 answered = answered + screenViewModel.Answered;
             }
