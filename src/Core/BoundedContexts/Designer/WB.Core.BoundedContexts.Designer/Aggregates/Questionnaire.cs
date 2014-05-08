@@ -1243,9 +1243,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
+            this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
             variableName = variableName.Trim();
             title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
+            if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
+            {
+                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled);
+            }
+            this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NewQuestionAdded
             {
