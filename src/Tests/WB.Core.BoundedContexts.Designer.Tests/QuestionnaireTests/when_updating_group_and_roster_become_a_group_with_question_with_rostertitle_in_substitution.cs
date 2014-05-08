@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting_questions_substitution_question_with_substitution_variable_name = () =>
+        It should_throw_exception_with_message_containting__questions____substitution___and_variable_name_of_question_with_rostertitle_in_substitution = () =>
            new[] { "questions", "substitution", "var" }.ShouldEachConformTo(
            keyword => exception.Message.ToLower().Contains(keyword));
 
