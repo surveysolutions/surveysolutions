@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = questionWithMissingValues,
                 StataExportCaption = "var",
                 QuestionType = QuestionType.SingleOption,
-                Answers = new List<Answer>() { new Answer() { AnswerText = "some answer"} }
+                Answers = { new Answer() { AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
             verifier = CreateQuestionnaireVerifier();
