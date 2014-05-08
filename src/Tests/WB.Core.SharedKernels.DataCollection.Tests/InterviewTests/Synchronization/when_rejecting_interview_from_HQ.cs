@@ -1,10 +1,14 @@
 ﻿using System;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -14,8 +18,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
     {
         Establish context = () =>
         {
-            interview = CreateInterview();
-            eventContext = new EventContext();
             interviewSynchronizationDto = new InterviewSynchronizationDto();
             interviewSynchronizationDto.Status = InterviewStatus.RejectedByHeadquarters;
             commentedQuestionId = Guid.NewGuid();
@@ -26,6 +28,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
 
             rejectComment = "reject comment";
             synchronizationTime = DateTime.Now;
+
+            var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
+            questionnaireRepositoryMock.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<Guid>()))
+                .Returns(Mock.Of<IQuestionnaire>());
+
+            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepositoryMock.Object);
+
+            interview = CreateInterview();
+
+            eventContext = new EventContext();
         };
 
         Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), interviewerId, interviewSynchronizationDto, synchronizationTime, rejectComment);
