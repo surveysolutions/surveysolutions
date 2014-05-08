@@ -52,7 +52,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             rosterGroup2.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionFromLevel2,
-                StataExportCaption = questionSubstitutionsSourceFromLevel2VariableName
+                StataExportCaption = questionSubstitutionsSourceFromLevel2VariableName,
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
             questionnaire.Children.Add(rosterGroup2);
             verifier = CreateQuestionnaireVerifier();

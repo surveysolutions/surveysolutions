@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -23,7 +24,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionWithCustomValidation,
                 ValidationExpression = "some random expression",
-                StataExportCaption = "var"
+                StataExportCaption = "var",
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
