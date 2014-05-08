@@ -118,19 +118,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 {
                     try
                     {
-                        Uri interviewUri = interviewFeedEntry.InterviewUri;
-                        var interview = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
+                        var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
 
                         string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                            .Replace("{id}", interview.QuestionnaireId.FormatGuid())
-                            .Replace("{version}", interview.QuestionnaireVersion.ToString());
-
-                        var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
+                            .Replace("{id}", interviewDetails.QuestionnaireId.FormatGuid())
+                            .Replace("{version}", interviewDetails.QuestionnaireVersion.ToString());
 
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
-                                this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(interview.QuestionnaireId, interview.QuestionnaireVersion, new Uri(questionnaireDetailsUrl));
+                                this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion, new Uri(questionnaireDetailsUrl));
                                 this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId, interviewFeedEntry.UserId);
                                 break;
 
