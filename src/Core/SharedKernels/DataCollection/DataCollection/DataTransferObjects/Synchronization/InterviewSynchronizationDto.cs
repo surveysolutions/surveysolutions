@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
     {
         public InterviewSynchronizationDto()
         {
+            Answers = new AnsweredQuestionSynchronizationDto[0];
         }
 
         public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId, long questionnaireVersion,

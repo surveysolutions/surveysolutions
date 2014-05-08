@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -123,18 +125,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                             .Replace("{id}", interview.QuestionnaireId.FormatGuid())
                             .Replace("{version}", interview.QuestionnaireVersion.ToString());
 
+                        var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
+
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
                                 this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(interview.QuestionnaireId, interview.QuestionnaireVersion, new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewFeedEntry.InterviewUri, interviewFeedEntry.SupervisorId, interviewFeedEntry.UserId);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId, interviewFeedEntry.UserId);
                                 break;
 
                             case EntryType.InterviewUnassigned:
                                 this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
                                 break;
                             case EntryType.InterviewRejected:
-                                this.RejectInterview(interviewFeedEntry);
+                                this.RejectInterview(interviewFeedEntry, interviewDetails);
                                 break;
                             default:
                                 this.logger.Warn(string.Format(
@@ -166,20 +170,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
-        private void RejectInterview(LocalInterviewFeedEntry feedEntry)
+        private async Task<InterviewSynchronizationDto> GetInterviewDetails(LocalInterviewFeedEntry interviewFeedEntry)
         {
-            this.headquartersPullContext.PushMessage(string.Format("Loading interview using {0} URL", feedEntry.InterviewUri));
-            InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(feedEntry.InterviewUri).Result;
+            this.headquartersPullContext.PushMessage(string.Format("Loading interview using {0} URL", interviewFeedEntry.InterviewUri));
+            InterviewSynchronizationDto interviewDetails =
+                await this.headquartersInterviewReader.GetInterviewByUri(interviewFeedEntry.InterviewUri).ConfigureAwait(false);
+            return interviewDetails;
+        }
 
+        private void RejectInterview(LocalInterviewFeedEntry feedEntry, InterviewSynchronizationDto interviewDetails)
+        {
             var userIdGuid = Guid.Parse(feedEntry.UserId);
             var supervisorIdGuid = Guid.Parse(feedEntry.SupervisorId);
 
             this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", feedEntry.InterviewId));
-            this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDto.Id, 
+            this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDetails.Id, 
                 userIdGuid, 
                 supervisorIdGuid, 
-                feedEntry.InterviewId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null, 
-                interviewDto, 
+                feedEntry.InterviewId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null,
+                interviewDetails, 
                 DateTime.Now, 
                 feedEntry.Comment));
         }
@@ -210,13 +219,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         }
 
 
-        private void MarkAsProcessedWithError(LocalInterviewFeedEntry interviewFeedEntry, Exception ex)
-        {
-            interviewFeedEntry.ProcessedWithError = true;
-            this.headquartersPullContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}",
-                interviewFeedEntry.EntryId, ex.Message, string.Join(Environment.NewLine, ex.UnwrapAllInnerExceptions().Select(x => x.Message))));
-        }
-
         private void StoreQuestionnaireDocumentFromHeadquartersIfNeeded(Guid questionnaireId, long questionnaireVersion, Uri questionnareUri)
         {
             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireId, questionnaireVersion))
@@ -236,15 +238,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             return localQuestionnaireDocument != null;
         }
 
-        private void CreateOrUpdateInterviewFromHeadquarters(Uri interviewUri, string supervisorId, string userId)
+        private void CreateOrUpdateInterviewFromHeadquarters(InterviewSynchronizationDto interviewDetails, string supervisorId, string userId)
         {
-            this.headquartersPullContext.PushMessage(string.Format("Loading interview using {0} URL", interviewUri));
-            InterviewSynchronizationDto interviewDto = this.headquartersInterviewReader.GetInterviewByUri(interviewUri).Result;
-
             var userIdGuid = Guid.Parse(userId);
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
-            this.executeCommand(new SynchronizeInterviewFromHeadquarters(interviewDto.Id, userIdGuid, supervisorIdGuid, interviewDto, DateTime.Now));
+            this.executeCommand(new SynchronizeInterviewFromHeadquarters(interviewDetails.Id, userIdGuid, supervisorIdGuid, interviewDetails, DateTime.Now));
         }
 
         private void CancelInterview(string interviewId, string userId)
@@ -398,6 +397,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 .ToArray();
 
             return eventsToSend;
+        }
+
+        private void MarkAsProcessedWithError(LocalInterviewFeedEntry interviewFeedEntry, Exception ex)
+        {
+            interviewFeedEntry.ProcessedWithError = true;
+            this.headquartersPullContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}",
+                interviewFeedEntry.EntryId, ex.Message, string.Join(Environment.NewLine, ex.UnwrapAllInnerExceptions().Select(x => x.Message))));
         }
     }
 }
