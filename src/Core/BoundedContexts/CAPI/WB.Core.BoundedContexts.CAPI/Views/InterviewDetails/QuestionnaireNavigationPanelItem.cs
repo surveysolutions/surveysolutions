@@ -30,7 +30,16 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public bool Enabled
         {
             get { return this.Screen.Enabled; }
-            set { Screen.SetEnabled(value); }
+        }
+
+        public void SetParentEnabled(bool enabled)
+        {
+            this.Screen.SetParentEnabled(enabled);
+        }
+
+        public void SetEnabled(bool enabled)
+        {
+            this.Screen.SetEnabled(enabled);
         }
 
         public int Total
