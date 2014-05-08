@@ -30,7 +30,12 @@ namespace WB.UI.Headquarters.API.Resources
         {
             var document = this.versionedQuestionnaireReader.Get(id, version);
 
-            var response = Request.CreateResponse((HttpStatusCode)200, document, new JsonNetFormatter(new JsonSerializerSettings
+            if (document == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Interview with id {0} and version {1} was not found", id, version));
+            }
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, document, new JsonNetFormatter(new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto, 
                 NullValueHandling = NullValueHandling.Ignore
