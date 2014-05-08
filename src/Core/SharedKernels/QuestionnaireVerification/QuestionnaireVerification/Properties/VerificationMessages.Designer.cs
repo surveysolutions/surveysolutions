@@ -197,11 +197,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count..
+        ///   Looks up a localized string similar to Question has options count less than max allowed answers count..
         /// </summary>
-        internal static string WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount {
+        internal static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
-                return ResourceManager.GetString("WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
+                return ResourceManager.GetString("WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCou" +
+                        "nt", resourceCulture);
             }
         }
         
@@ -527,6 +528,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         internal static string WB0060_CategoricalQuestionHasLessThan2Options {
             get {
                 return ResourceManager.GetString("WB0060_CategoricalQuestionHasLessThan2Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has max allowed answers less than 2.
+        /// </summary>
+        internal static string WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2 {
+            get {
+                return ResourceManager.GetString("WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2", resourceCulture);
             }
         }
     }

@@ -162,8 +162,8 @@
   <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
     <value>Question with title substitution can't have reference questions with deeper roster level.</value>
   </data>
-  <data name="WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
-    <value>Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count.</value>
+  <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+    <value>Question has options count less than max allowed answers count.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be prefilled.</value>
@@ -272,5 +272,8 @@
   </data>
   <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
     <value>Question has less than 2 options</value>
+  </data>
+  <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+    <value>Question has max allowed answers less than 2</value>
   </data>
 </root>
