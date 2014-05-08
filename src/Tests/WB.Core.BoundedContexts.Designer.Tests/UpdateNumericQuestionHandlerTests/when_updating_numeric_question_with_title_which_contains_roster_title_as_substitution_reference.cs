@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateNumericQuestionHandlerTes
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting_unknown_substitution = () =>
+        It should_throw_exception_with_message_containting__unknown__and__substitution__ = () =>
             new[] { "unknown", "substitution" }.ShouldEachConformTo(
            keyword => exception.Message.ToLower().Contains(keyword));
 
