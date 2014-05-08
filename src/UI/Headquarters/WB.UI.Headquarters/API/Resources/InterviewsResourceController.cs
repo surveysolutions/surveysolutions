@@ -1,21 +1,18 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.UI.Headquarters.API.Attributes;
-using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Formatters;
 
 namespace WB.UI.Headquarters.API.Resources
 {
-    [TokenValidationAuthorizationAttribute]
+    [TokenValidationAuthorization]
     [RoutePrefix("api/resources/interviews/v1")]
     public class InterviewsResourceController : ApiController
     {
@@ -34,14 +31,19 @@ namespace WB.UI.Headquarters.API.Resources
         {
             var interviewData = this.interviewDataReader.GetById(id);
 
-            InterviewData document = interviewData.Document;
-            InterviewSynchronizationDto interviewSynchronizationDto = 
-                factory.BuildFrom(document);
-
-            var result = Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto, new JsonNetFormatter(new JsonSerializerSettings
+            if (interviewData == null)
             {
-                TypeNameHandling = TypeNameHandling.All
-            }));
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Interview with id {0} was not found", id));
+            }
+
+            InterviewData document = interviewData.Document;
+            InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document);
+
+            var result = this.Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto,
+                new JsonNetFormatter(new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                }));
 
             return result;
         }
