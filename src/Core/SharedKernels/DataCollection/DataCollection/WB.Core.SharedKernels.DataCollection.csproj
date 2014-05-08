@@ -120,6 +120,7 @@
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ConversionHelper.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs" />
