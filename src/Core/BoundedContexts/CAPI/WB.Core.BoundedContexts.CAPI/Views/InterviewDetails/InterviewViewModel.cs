@@ -11,6 +11,7 @@ using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -91,13 +92,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var allQuestions = questionnaire.Find<IQuestion>(q => true).ToArray();
             foreach (var questionsWithSubstitution in allQuestions)
             {
-                var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
+                var substitutionReferences = SubstitutionUtils.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
                 if (!substitutionReferences.Any())
                     continue;
 
                 foreach (var substitutionReference in substitutionReferences)
                 {
-                    if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
+                    if (substitutionReference == SubstitutionUtils.RosterTitleSubstitutionReference)
                         HandleRosterTitleInSubstitutions(questionsWithSubstitution);
                     else
                         HandleQuestionReferenceInSubstitution(questionnaire, questionsWithSubstitution, substitutionReference);
@@ -808,7 +809,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected HeaderItem BuildHeader(IQuestion question)
         {
-            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => current.ReplaceSubstitutionVariable(substitutionVariable, StringUtil.DefaultSubstitutionText));
+            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => current.ReplaceSubstitutionVariable(substitutionVariable, SubstitutionUtils.DefaultSubstitutionText));
             return new HeaderItem(question.PublicKey, text, question.Instructions);
         }
 

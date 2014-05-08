@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Newtonsoft.Json.Linq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using System.Linq;
 
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.QuestionRosterScope = questionRosterScope;
             this.ValidationMessage = validationMessage;
             this.SubstitutionReferences = substitutionReferences;
-            this.referencedQuestionAnswers = this.SubstitutionReferences.ToDictionary(x => x, y => StringUtil.DefaultSubstitutionText);
+            this.referencedQuestionAnswers = this.SubstitutionReferences.ToDictionary(x => x, y => SubstitutionUtils.DefaultSubstitutionText);
             this.SourceText = this.Text = text;
 
             this.ReplaceSubstitutionVariables();
@@ -99,7 +100,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
         {
             this.referencedQuestionAnswers[referencedQuestion.Variable] = string.IsNullOrEmpty(referencedQuestion.AnswerString)
-                ? StringUtil.DefaultSubstitutionText
+                ? SubstitutionUtils.DefaultSubstitutionText
                 : referencedQuestion.AnswerString;
 
             this.ReplaceSubstitutionVariables();
@@ -109,8 +110,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public virtual void SubstituteRosterTitle(string rosterTitle)
         {
-            this.referencedQuestionAnswers[StringUtil.RosterTitleSubstitutionReference] = string.IsNullOrEmpty(rosterTitle)
-             ? StringUtil.DefaultSubstitutionText
+            this.referencedQuestionAnswers[SubstitutionUtils.RosterTitleSubstitutionReference] = string.IsNullOrEmpty(rosterTitle)
+             ? SubstitutionUtils.DefaultSubstitutionText
              : rosterTitle;
 
             this.ReplaceSubstitutionVariables();

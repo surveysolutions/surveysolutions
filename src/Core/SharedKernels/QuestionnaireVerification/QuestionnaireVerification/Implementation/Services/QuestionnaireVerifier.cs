@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            return question.StataExportCaption == StringUtil.RosterTitleSubstitutionReference;
+            return question.StataExportCaption == SubstitutionUtils.RosterTitleSubstitutionReference;
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
@@ -598,7 +598,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
         {
             IEnumerable<IQuestion> questionsWithSubstitutions =
-                questionnaire.Find<IQuestion>(question => StringUtil.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
+                questionnaire.Find<IQuestion>(question => SubstitutionUtils.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
 
             var errorByAllQuestionsWithSubstitutions = new List<QuestionnaireVerificationError>();
 
@@ -610,7 +610,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     continue;
                 }
 
-                var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
+                var substitutionReferences = SubstitutionUtils.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
 
                 Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
                     GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
@@ -868,7 +868,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return QuestionWithTitleSubstitutionCantReferenceSelf(questionWithSubstitution);
             }
 
-            if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
+            if (substitutionReference == SubstitutionUtils.RosterTitleSubstitutionReference)
             {
                 if (vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions.Length == 0)
                 {
