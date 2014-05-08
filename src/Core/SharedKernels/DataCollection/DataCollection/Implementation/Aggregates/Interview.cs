@@ -845,9 +845,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string comment)
         {
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewRestored(userId));
+
+            if (this.status == InterviewStatus.Deleted)
+            {
+                this.ApplyEvent(new InterviewRestored(userId));
+            }
 
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
+            
             if (interviewerId.HasValue)
             {
                 this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value));
