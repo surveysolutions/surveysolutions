@@ -270,4 +270,7 @@
   <data name="WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
     <value>If question uses %rostertitle% in title it need to be placed inside roster</value>
   </data>
+  <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+    <value>Question has less than 2 options</value>
+  </data>
 </root>

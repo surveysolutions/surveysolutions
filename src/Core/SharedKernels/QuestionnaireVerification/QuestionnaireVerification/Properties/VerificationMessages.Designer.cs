@@ -520,5 +520,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has less than 2 options.
+        /// </summary>
+        internal static string WB0060_CategoricalQuestionHasLessThan2Options {
+            get {
+                return ResourceManager.GetString("WB0060_CategoricalQuestionHasLessThan2Options", resourceCulture);
+            }
+        }
     }
 }
