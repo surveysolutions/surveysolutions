@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
@@ -22,7 +23,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionId,
                 StataExportCaption = "rostertitle",
-                QuestionText = "hello "
+                QuestionText = "hello ",
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
             verifier = CreateQuestionnaireVerifier();

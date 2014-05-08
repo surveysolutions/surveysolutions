@@ -64,7 +64,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                         {
                             StataExportCaption = "var",
                             PublicKey = questionWithCustomCondition,
-                            ConditionExpression = "some random expression"
+                            ConditionExpression = "some random expression",
+                            Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
                         }
                     }
                 }

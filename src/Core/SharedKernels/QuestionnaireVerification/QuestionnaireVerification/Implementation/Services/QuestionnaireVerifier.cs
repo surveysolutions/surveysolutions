@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool CategoricalQuestionHasLessThan2Options(IQuestion question)
         {
-            if (question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption)
+            if (!IsCategoricalSingleAnswerQuestion(question) && !IsCategoricalMultiAnswersQuestion(question))
                 return false;
 
             return question.Answers == null || question.Answers.Count < 2;
@@ -334,8 +334,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool IsCategoricalRosterSizeQuestion(IQuestion question)
         {
-            var multiOptionQuestion = question as MultyOptionsQuestion;
-            return multiOptionQuestion != null && !multiOptionQuestion.LinkedToQuestionId.HasValue;
+            return IsCategoricalMultiAnswersQuestion(question) && !question.LinkedToQuestionId.HasValue;
+        }
+
+        private static bool IsCategoricalMultiAnswersQuestion(IQuestion question)
+        {
+            return question is MultyOptionsQuestion;
+        }
+
+        private static bool IsCategoricalSingleAnswerQuestion(IQuestion question)
+        {
+            return question is SingleQuestion;
         }
 
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, QuestionnaireDocument questionnaire)

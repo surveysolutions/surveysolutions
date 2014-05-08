@@ -70,7 +70,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                                 new SingleQuestion
                                 {
                                     StataExportCaption = "var",
-                                    PublicKey = underDeeperRosterLevelQuestionId
+                                    PublicKey = underDeeperRosterLevelQuestionId,
+                                    Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
                                 }
                             }
                         }

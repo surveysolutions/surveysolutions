@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
@@ -20,7 +21,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionWithNotExistingSubstitutionsId,
                 StataExportCaption = "var",
-                QuestionText = "hello %unknown%!"
+                QuestionText = "hello %unknown%!",
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
             verifier = CreateQuestionnaireVerifier();
