@@ -26,7 +26,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = rosterSizeQuestionId,
                 StataExportCaption = "var",
                 LinkedToQuestionId = referencedQuestionId,
-                QuestionType = QuestionType.MultyOption
+                QuestionType = QuestionType.MultyOption,
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
             var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
             rosterGroup.Children.Add(new NumericQuestion()

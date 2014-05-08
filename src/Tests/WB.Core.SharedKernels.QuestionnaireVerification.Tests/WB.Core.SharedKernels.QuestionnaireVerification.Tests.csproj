@@ -85,7 +85,12 @@
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_references_itself_in_condition.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_count_more___.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_with_1_option.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_with_nullable_options.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_nullable_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_circular_references.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_1_option.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question-inside_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
@@ -144,7 +149,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_question.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multianswer_invalid_max_allowed_answers.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_less_than_2.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_one_chapter_and_one_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_has_no_roster_size_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_substitutions_inside_roster_unattached_group.cs" />

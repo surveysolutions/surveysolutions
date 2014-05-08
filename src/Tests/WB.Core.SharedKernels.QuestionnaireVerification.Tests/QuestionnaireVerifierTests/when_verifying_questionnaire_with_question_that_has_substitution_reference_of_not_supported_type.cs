@@ -22,14 +22,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionSubstitutionReferencerOfNotSupportedTypeId,
                 StataExportCaption = unsupported,
-                QuestionType = QuestionType.MultyOption
+                QuestionType = QuestionType.MultyOption,
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionWithSubstitutionReferenceToNotSupportedTypeId,
                 StataExportCaption = "var",
-                QuestionText = string.Format("hello %{0}%!", unsupported)
+                QuestionText = string.Format("hello %{0}%!", unsupported),
+                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
             verifier = CreateQuestionnaireVerifier();

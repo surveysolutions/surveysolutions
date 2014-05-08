@@ -10,12 +10,11 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_with_multianswer_negative_max_allowed_answers : QuestionnaireVerifierTestsContext
+    class when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_count_more_than_options_count : QuestionnaireVerifierTestsContext
     {
 
         Establish context = () =>
         {
-            multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
             
             questionnaire.Children.Add(new MultyOptionsQuestion()
@@ -23,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = multyOptionsQuestionId,
                 StataExportCaption = "var",
                 Answers = new List<Answer>() { new Answer() { AnswerValue = "2" }, new Answer() { AnswerValue = "1" } },
-                MaxAllowedAnswers = -1
+                MaxAllowedAnswers = 3
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -43,6 +42,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
 
-        private static Guid multyOptionsQuestionId;
+        private static Guid multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
     }
 }
