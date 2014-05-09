@@ -38,6 +38,10 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             var typed = obj as ValueVector<T>;
             if (typed == null)
                 return false;
+
+            if (typed.Length != values.Count)
+                return false;
+            
             return this.values.SequenceEqual(typed);
         }
 
@@ -57,17 +61,17 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 
         public int IndexOf(T item)
         {
-            throw new NotImplementedException();
+            return values.IndexOf(item);
         }
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException();
+            values.Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            values.RemoveAt(index);
         }
 
         public T this[int index]
