@@ -78,6 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InterviewViewModelTests\InterviewViewModelTestContext.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_contains_nested_group.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_set_answer_on_question_which_referenced_in_substitiutions_of_questions_inside_roster.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_set_answer_on_roster_question_and_nested_roster_group_has_question_with_substitution_on_it.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_deleting_roster_row_with_question_inside_nested_group.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_all_groups_disabled_and_1_group_enabling_with_enabled_question_and_disabled_child_groups.cs" />
