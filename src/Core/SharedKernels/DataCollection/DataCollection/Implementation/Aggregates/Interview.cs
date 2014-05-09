@@ -844,13 +844,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             DateTime synchronizationTime,
             string comment)
         {
-            this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-
             if (this.status == InterviewStatus.Deleted)
             {
-                this.ApplyEvent(new InterviewRestored(userId));
+                this.Restore(userId);
             }
-
+            
+            this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
             
             if (interviewerId.HasValue)

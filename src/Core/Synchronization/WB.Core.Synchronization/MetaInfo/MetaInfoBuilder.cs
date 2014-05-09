@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -24,7 +22,7 @@ namespace WB.Core.Synchronization.MetaInfo
             if (doc == null)
                 return null;
 
-            var storedQuestionnarie = questionnarieStorage.GetById(doc.QuestionnaireId, doc.QuestionnaireVersion);
+            var storedQuestionnarie = this.questionnarieStorage.GetById(doc.QuestionnaireId, doc.QuestionnaireVersion);
             if (storedQuestionnarie == null)
                 return null;
             var questionnarie = storedQuestionnarie.Questionnaire;
@@ -44,7 +42,6 @@ namespace WB.Core.Synchronization.MetaInfo
 
                 if (answerOnFeaturedQuestion != null && answerOnFeaturedQuestion.Answer != null)
                 {
-
                     featuredQuestionList.Add(new FeaturedQuestionMeta(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
                         answerOnFeaturedQuestion.Answer.ToString()));
                 }
