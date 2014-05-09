@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
 
                 var scopeVectorsOfTriggers = groupsFromRosterSizeQuestionScope.Select(
                     roster =>
-                        this.GetScopeOfQuestionnaireItem(questionnaire.FirstOrDefault<IGroup>(g => g.PublicKey == roster.PublicKey),
+                        this.GetScopeOfQuestionnaireItem(roster,
                             groupsMappedOnPropagatableQuestion)).GroupBy(k => k);
 
                 foreach (var scopeVectorsOfTrigger in scopeVectorsOfTriggers)
