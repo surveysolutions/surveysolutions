@@ -83,8 +83,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
         Because of = () =>
             mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
-        It should_create_7_group_screens = () =>
-            mergeResult.Groups.Count.ShouldEqual(7);
+        It should_create_5_group_screens = () =>
+            mergeResult.Groups.Count.ShouldEqual(5);
 
         It should_have_in_first_row_parent_roster_as_separate_screen = () =>
             mergeResult.Groups.FirstOrDefault(g => g.Id == rosterId && g.RosterVector.SequenceEqual(new decimal[] { 0})).ShouldNotBeNull();
