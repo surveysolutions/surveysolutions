@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -15,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEv
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterScopeId = Guid.Parse("12222222222222222222222222222222");
             viewState = CreateViewWithSequenceOfInterviewData();
-            viewState.Document.Levels.Add("0", new InterviewLevel(rosterScopeId, null, new decimal[0]));
+            viewState.Document.Levels.Add("0", new InterviewLevel(new ValueVector<Guid>{ rosterScopeId }, null, new decimal[0]));
 
             var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId, rosterGroupId);
 

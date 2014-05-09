@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                 result =
                     preloadedDataService.GetAvalibleIdListForParent(
                         CreatePreloadedDataByFile(new string[] { "Id", rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" }, new string[][] { new string[] { "1", "3","" } },
-                            questionnaireDocument.Title), rosterSizeQuestionId, "1");
+                            questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, "1");
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

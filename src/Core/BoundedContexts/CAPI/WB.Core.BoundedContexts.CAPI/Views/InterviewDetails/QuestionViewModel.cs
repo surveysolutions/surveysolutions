@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Newtonsoft.Json.Linq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using System.Linq;
 
@@ -13,7 +14,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     {
         protected QuestionViewModel(
             InterviewItemId publicKey,
-            Guid[] questionRosterScope,
+            ValueVector<Guid> questionRosterScope,
             string text,
             QuestionType questionType,
             bool enabled,
@@ -57,7 +58,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         }
 
         public InterviewItemId PublicKey { get; private set; }
-        public Guid[] QuestionRosterScope { get; private set; }
+        public ValueVector<Guid> QuestionRosterScope { get; private set; }
         public string SourceText { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }

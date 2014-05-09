@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class LinkedQuestionUtils
     {
-        public static bool IsLevelAllowedToBeUsedAsLinkSourceInCurrentScope(decimal[] referensedLevelRosterVector, Guid[] referensedLevelRosterScopeVector,
-           decimal[] linkedQuestionRosterVector, Guid[] linkedQuestionRosterScopeVector)
+        public static bool IsLevelAllowedToBeUsedAsLinkSourceInCurrentScope(decimal[] referensedLevelRosterVector, ValueVector<Guid> referensedLevelRosterScopeVector,
+           decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScopeVector)
         {
             for (int i = 0; i < Math.Min(referensedLevelRosterVector.Length - 1, linkedQuestionRosterVector.Length); i++)
             {
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         public static string BuildLinkedQuestionOptionTitle(string referencedQuestionAnswer,
             Func<Guid, decimal[], string> getLevelName,
             decimal[] referensedQuestionRosterVector,
-            Guid[] referensedQuestionRosterScopeVector, decimal[] linkedQuestionRosterVector, Guid[] linkedQuestionRosterScope,
+            ValueVector<Guid> referensedQuestionRosterScopeVector, decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScope,
             QuestionnaireRosterStructure questionnaireRosters)
         {
             var combinedRosterTitles = new List<string>();
@@ -33,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             for (int i = 0; i < referensedQuestionRosterScopeVector.Length - 1; i++)
             {
                 var scopeId = referensedQuestionRosterScopeVector[i];
-                var rosterScopeDescription = questionnaireRosters.RosterScopes[scopeId];
+                var rosterScopeDescription = questionnaireRosters.RosterScopes[new ValueVector<Guid>(referensedQuestionRosterScopeVector.Take(i+1).ToArray())];
 
                 var firstScreenInScopeId = rosterScopeDescription.RosterIdToRosterTitleQuestionIdMap.Keys.First();
                 var firstScreeninScopeRosterVector =

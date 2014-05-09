@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -60,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
             interview = CreateInterviewData(interviewId);
 
             interview.Levels["#"].DisabledGroups.Add(chapterId);
-            AddInterviewLevel(interview, nestedGroupId, new decimal[] { 0 }, new Dictionary<Guid, object> { { questionInNestedGroupId, 5 } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { nestedGroupId }, new decimal[] { 0 }, new Dictionary<Guid, object> { { questionInNestedGroupId, 5 } });
 
             questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
             questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo();
