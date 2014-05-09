@@ -25,17 +25,16 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
                 throw new ArgumentException("ClientVersionIdentifier is incorrect.");
 
-            return syncProvider.CheckAndCreateNewSyncActivity(clientIdentifier);
+            return this.syncProvider.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
 
         public bool SendSyncPackage(SyncPackage package)
         {
-            ValidatePackage(package);
+            this.ValidatePackage(package);
 
             foreach (var syncItem in package.ItemsContainer)
             {
-
-                return syncProvider.HandleSyncItem(syncItem, package.SyncProcessKey);
+                return this.syncProvider.HandleSyncItem(syncItem, package.SyncProcessKey);
             }
 
             return true;
@@ -43,35 +42,35 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         private void ValidatePackage(SyncPackage package)
         {
-            if(package == null)
+            if (package == null)
                 throw new ArgumentException("Package is not valid.");
 
-            if(package.ItemsContainer == null || package.ItemsContainer.Count == 0)
+            if (package.ItemsContainer == null || package.ItemsContainer.Count == 0)
                 throw new ArgumentException("Package doesn't contain correct content.");
 
             if (package.SyncProcessKey == Guid.Empty)
             {
-                throw  new ArgumentException("Package doesn't contain valid sync process info.");
+                throw new ArgumentException("Package doesn't contain valid sync process info.");
             }
         }
 
         public bool SendSyncItem(SyncItem item)
         {
-            return syncProvider.HandleSyncItem(item, Guid.Empty);
+            return this.syncProvider.HandleSyncItem(item, Guid.Empty);
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
-            return syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, clientSequence);
+            return this.syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, clientSequence);
         }
 
-        
+
         public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, long sequence)
         {
             var syncPackage = new SyncPackage();
 
-            SyncItem item = syncProvider.GetSyncItem(clientRegistrationId, id, sequence);
-            
+            SyncItem item = this.syncProvider.GetSyncItem(clientRegistrationId, id, sequence);
+
             if (item != null)
             {
                 syncPackage.ItemsContainer.Add(item);
@@ -82,7 +81,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 syncPackage.IsErrorOccured = true;
                 syncPackage.ErrorMessage = "Item was not found";
             }
-            
+
             return syncPackage;
         }
 
@@ -90,7 +89,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             var syncPackage = new SyncPackage();
 
-            var items = syncProvider.GetSyncItemBulk(userId, clientRegistrationId, sequence);
+            var items = this.syncProvider.GetSyncItemBulk(userId, clientRegistrationId, sequence);
 
             if (items != null)
             {

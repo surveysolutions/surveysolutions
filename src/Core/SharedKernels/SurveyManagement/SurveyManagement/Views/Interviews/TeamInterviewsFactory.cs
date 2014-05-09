@@ -68,7 +68,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                     CanBeReassigned = x.Status == InterviewStatus.Created
                                       || x.Status == InterviewStatus.SupervisorAssigned
                                       || x.Status == InterviewStatus.InterviewerAssigned
-                                      || x.Status == InterviewStatus.RejectedBySupervisor
+                                      || x.Status == InterviewStatus.RejectedBySupervisor,
+                    CreatedOnClient = x.WasCreatedOnClient
                 })
             };   
         }
