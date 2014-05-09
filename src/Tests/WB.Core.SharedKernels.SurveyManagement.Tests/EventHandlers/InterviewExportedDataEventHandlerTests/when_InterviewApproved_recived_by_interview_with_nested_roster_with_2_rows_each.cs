@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -58,31 +59,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_4 = () =>
-           GetLevel(result, nestedRosterId).Records.Length.ShouldEqual(4);
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records.Length.ShouldEqual(4);
 
         It should_first_record_id_equals_0 = () =>
-           GetLevel(result, nestedRosterId).Records[0].RecordId.ShouldEqual("0");
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].RecordId.ShouldEqual("0");
 
         It should_second_record_id_equals_1 = () =>
-           GetLevel(result, nestedRosterId).Records[1].RecordId.ShouldEqual("1");
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[1].RecordId.ShouldEqual("1");
 
         It should_third_record_id_equals_1 = () =>
-           GetLevel(result, nestedRosterId).Records[2].RecordId.ShouldEqual("0");
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[2].RecordId.ShouldEqual("0");
 
         It should_fourth_record_id_equals_1 = () =>
-           GetLevel(result, nestedRosterId).Records[3].RecordId.ShouldEqual("1");
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[3].RecordId.ShouldEqual("1");
 
         It should_first_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-          GetLevel(result, nestedRosterId).Records[0].ParentRecordId.ShouldEqual("0");
+          GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].ParentRecordId.ShouldEqual("0");
 
         It should_second_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-           GetLevel(result, nestedRosterId).Records[1].ParentRecordId.ShouldEqual("0");
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[1].ParentRecordId.ShouldEqual("0");
 
         It should_third_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-          GetLevel(result, nestedRosterId).Records[2].ParentRecordId.ShouldEqual("1");
+          GetLevel(result, new[] { rosterId, nestedRosterId }).Records[2].ParentRecordId.ShouldEqual("1");
 
         It should_fourth_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-           GetLevel(result, nestedRosterId).Records[3].ParentRecordId.ShouldEqual("1");
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[3].ParentRecordId.ShouldEqual("1");
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
@@ -90,12 +91,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new decimal[1] { i };
-                var newLevel = new InterviewLevel(rosterId, null, vector);
+                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, null, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
                 for (int j = 0; j < levelCount; j++)
                 {
                     var nestedVector = new decimal[] { i, j };
-                    var nestedLevel = new InterviewLevel(nestedRosterId, null, nestedVector);
+                    var nestedLevel = new InterviewLevel(new ValueVector<Guid> { rosterId, nestedRosterId }, null, nestedVector);
                     interview.Levels.Add(string.Join(",", nestedVector), nestedLevel);
                     var question = nestedLevel.GetOrCreateQuestion(questionInsideRosterGroupId);
                     question.Answer = "some answer";

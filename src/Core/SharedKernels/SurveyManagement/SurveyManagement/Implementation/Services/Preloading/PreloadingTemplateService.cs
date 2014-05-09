@@ -62,11 +62,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var cleanedFileNamesForLevels =
               this.dataFileService.CreateCleanedFileNamesForLevels(
-                  questionnaire.HeaderToLevelMap.Values.ToDictionary(h => h.LevelId, h => h.LevelName));
+                  questionnaire.HeaderToLevelMap.Values.ToDictionary(h => h.LevelScopeVector, h => h.LevelName));
             foreach (var header in questionnaire.HeaderToLevelMap.Values)
             {
                 var interviewTemplateFilePath = this.fileSystemAccessor.CombinePath(dataDirectoryPath,
-                    dataFileExportService.GetInterviewExportedDataFileName(cleanedFileNamesForLevels[header.LevelId]));
+                    dataFileExportService.GetInterviewExportedDataFileName(cleanedFileNamesForLevels[header.LevelScopeVector]));
 
                 dataFileExportService.CreateHeader(header, interviewTemplateFilePath);
             }

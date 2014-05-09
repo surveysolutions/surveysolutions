@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -22,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Preloading
             var questionnaire = this.questionnaireDocumentVersionedStorage.GetById(input.QuestionnaireId, input.QuestionnaireVerstion);
             if (questionnaire == null)
                 return null;
-            var firstLevel = questionnaire.HeaderToLevelMap[input.QuestionnaireId];
+            var firstLevel = questionnaire.HeaderToLevelMap[new ValueVector<Guid>()];
             return new QuestionnairePreloadingDataItem(input.QuestionnaireId, input.QuestionnaireVerstion, firstLevel.LevelName,
                 this.BuildTopLevelQuestionList(firstLevel).ToArray());
         }

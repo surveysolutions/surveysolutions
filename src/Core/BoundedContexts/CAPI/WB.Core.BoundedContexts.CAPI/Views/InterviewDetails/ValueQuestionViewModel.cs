@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -9,7 +10,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class ValueQuestionViewModel : QuestionViewModel
     {
 
-        public ValueQuestionViewModel(InterviewItemId publicKey, Guid[] questionRosterScope, string text, QuestionType questionType, object answer, bool enabled,
+        public ValueQuestionViewModel(InterviewItemId publicKey, ValueVector<Guid> questionRosterScope, string text, QuestionType questionType, object answer, bool enabled,
             string instructions, string comments, bool valid, bool mandatory,
             string validationMessage, string variable, IEnumerable<string> substitutionReference, bool? isInteger, int? countOfDecimalPlaces)
             : base(publicKey, questionRosterScope, text, questionType, enabled, instructions, comments, valid, mandatory, answer, validationMessage, variable, substitutionReference)

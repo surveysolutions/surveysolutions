@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -60,18 +61,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
             interview = CreateInterviewData(interviewId);
 
 
-            AddInterviewLevel(interview, independantRosterId, new decimal[] { 0 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { independantRosterId }, new decimal[] { 0 },
                new Dictionary<Guid, object>(),
                new Dictionary<Guid, string>() { { independantRosterId, "1" } });
 
-            AddInterviewLevel(interview, rosterId, new decimal[] { 0 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, new decimal[] { 0 },
                 new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { rosterId, "a" } });
-            AddInterviewLevel(interview, rosterId, new decimal[] { 1 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, new decimal[] { 1 },
                 new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { rosterId, "b" } });
 
-            AddInterviewLevel(interview, rosterId, new decimal[] { 2 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, new decimal[] { 2 },
              new Dictionary<Guid, object>(),
              new Dictionary<Guid, string>() { { rosterId, "" } });
 

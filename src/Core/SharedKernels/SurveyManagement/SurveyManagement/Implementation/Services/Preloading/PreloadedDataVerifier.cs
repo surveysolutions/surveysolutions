@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 var parentIdValue = levelData.Content[y][parentIdColumnIndex];
                 var idValue = levelData.Content[y][idCoulmnIndexFile];
-                decimal[] ids = preloadedDataService.GetAvalibleIdListForParent(parentDataFile, levelExportStructure.LevelId, parentIdValue);
+                decimal[] ids = preloadedDataService.GetAvalibleIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector, parentIdValue);
                 
                 if(ids==null)
                     continue;

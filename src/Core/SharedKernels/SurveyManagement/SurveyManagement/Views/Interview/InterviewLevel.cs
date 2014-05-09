@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     public class InterviewLevel
     {
-        public InterviewLevel(Guid scopeId, int? sortIndex, decimal[] vector)
+        public InterviewLevel()
         {
-            this.ScopeIds = new Dictionary<Guid, int?> { { scopeId, sortIndex } };
-            this.RosterVector = vector;
+            this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?>();
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
             this.RosterTitleQuestionIdToRosterIdMap = new Dictionary<Guid, List<Guid>>();
             this.RosterTitleQuestionDescriptions = new Dictionary<Guid, RosterTitleQuestionDescription>();
         }
+        public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
+            : this()
+        {
+            this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?>() { { scopeVector, sortIndex } };
+            this.RosterVector = vector;
+        }
 
         public decimal[] RosterVector { get; private set; }
-        public Dictionary<Guid, int?> ScopeIds { get; private set; }
+        public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; private set; }
         private List<InterviewQuestion> Questions { get; set; }
         public HashSet<Guid> DisabledGroups { get; private set; }
         public Dictionary<Guid, string> RosterRowTitles { set; get; }

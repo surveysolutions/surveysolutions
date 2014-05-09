@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Factories.QuestionnaireRost
             questionnaireRosterStructure.RosterScopes.Count().ShouldEqual(1);
 
         It should_specify_roster_size_question_id_as_id_of_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Key.ShouldEqual(rosterSizeQuestionId);
+            questionnaireRosterStructure.RosterScopes.Single().Key.SequenceEqual(new[] { rosterSizeQuestionId });
 
         It should_specify_id_of_roster_title_question_as_roster_title_question_id_for_roster_id_in_roster_scope = () =>
             questionnaireRosterStructure.RosterScopes.Single().Value

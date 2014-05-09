@@ -11,6 +11,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views;
@@ -77,16 +78,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            AddInterviewLevel(interview, rosterSizeQuestionId, new decimal[] { 0 }, new Dictionary<Guid, object>(),
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, new decimal[] { 0 }, new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { firstLevelRosterId, "roster1" } });
-            AddInterviewLevel(interview, rosterSizeQuestionId, new decimal[] { 1 }, new Dictionary<Guid, object>(),
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, new decimal[] { 1 }, new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { firstLevelRosterId, "roster2" } });
 
-            AddInterviewLevel(interview, secondLevelRosterId, new decimal[] { 0, 0 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId, secondLevelRosterId }, new decimal[] { 0, 0 },
                 new Dictionary<Guid, object> { { sourceForLinkedQuestionId, 11 } }, new Dictionary<Guid, string>() { { secondLevelRosterId, "roster11" } });
-            AddInterviewLevel(interview, secondLevelRosterId, new decimal[] { 0, 1 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId, secondLevelRosterId }, new decimal[] { 0, 1 },
                 new Dictionary<Guid, object> { { sourceForLinkedQuestionId, 12 } }, new Dictionary<Guid, string>() { { secondLevelRosterId, "roster12" } });
-            AddInterviewLevel(interview, secondLevelRosterId, new decimal[] { 1, 0 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId, secondLevelRosterId }, new decimal[] { 1, 0 },
                 new Dictionary<Guid, object> { { sourceForLinkedQuestionId, 21 } }, new Dictionary<Guid, string>() { { secondLevelRosterId, "roster21" } });
 
 

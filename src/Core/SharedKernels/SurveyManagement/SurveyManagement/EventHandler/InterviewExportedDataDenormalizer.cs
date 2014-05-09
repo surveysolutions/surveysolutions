@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var interviewDataExportView = new InterviewDataExportView(interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion,
                 exportStructure.HeaderToLevelMap.Values.Select(
                     exportStructureForLevel => 
-                        new InterviewDataExportLevelView(exportStructureForLevel.LevelId, exportStructureForLevel.LevelName, 
+                        new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector, exportStructureForLevel.LevelName, 
                             this.BuildRecordsForHeader(interview.Document, exportStructureForLevel))).ToArray());
             
             this.dataExportService.AddExportedDataByInterview(interviewDataExportView);
@@ -58,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
-            var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelId);
+            var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelScopeVector);
           
             foreach (var dataByLevel in interviewDataByLevels)
             {
@@ -76,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
                 if (headerStructureForLevel.IsTextListScope)
                 {
-                    referenceValues = new string[]{ GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelId)};
+                    referenceValues = new string[]{ GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())};
                 }
 
                 dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordId,
@@ -145,11 +146,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return result.ToArray();
         }
 
-        private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, Guid levelId)
+        private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)
         {
-            if (levelId == interview.QuestionnaireId)
-                return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(interview.InterviewId));
-            return interview.Levels.Values.Where(level => level.ScopeIds.ContainsKey(levelId));
+            if (!levelVector.Any())
+                return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>()));
+            return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector));
         }
     }
 }

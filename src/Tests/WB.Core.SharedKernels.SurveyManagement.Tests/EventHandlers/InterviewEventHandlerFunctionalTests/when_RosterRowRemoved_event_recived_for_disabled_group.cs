@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -20,10 +21,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEv
             rosterScopeId = Guid.Parse("12222222222222222222222222222222");
             var someAdditionalScopeId = Guid.Parse("22222222222222222222222222222222");
             viewState = CreateViewWithSequenceOfInterviewData();
-            
-            var interviewLevel = new InterviewLevel(rosterScopeId, null, new decimal[0]);
+
+            var interviewLevel = new InterviewLevel(new ValueVector<Guid> { rosterScopeId }, null, new decimal[0]);
             interviewLevel.DisabledGroups.Add(disabledGroupId);
-            interviewLevel.ScopeIds.Add(someAdditionalScopeId,null);
+            interviewLevel.ScopeVectors.Add(new ValueVector<Guid> { someAdditionalScopeId }, null);
 
             viewState.Document.Levels.Add("0", interviewLevel);
 
