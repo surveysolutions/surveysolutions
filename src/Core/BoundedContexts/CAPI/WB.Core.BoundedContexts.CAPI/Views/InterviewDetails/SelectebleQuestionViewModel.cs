@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -10,7 +11,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class SelectebleQuestionViewModel : QuestionViewModel
     {
         public SelectebleQuestionViewModel(
-            InterviewItemId publicKey, Guid[] questionRosterScope,
+            InterviewItemId publicKey, ValueVector<Guid> questionRosterScope,
             string text,
             QuestionType questionType,
             IEnumerable<AnswerViewModel> answers,

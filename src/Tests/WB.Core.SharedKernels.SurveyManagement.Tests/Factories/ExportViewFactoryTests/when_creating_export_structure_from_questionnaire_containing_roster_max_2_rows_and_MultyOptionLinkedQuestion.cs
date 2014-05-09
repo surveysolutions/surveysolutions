@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -50,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFacto
             headerStructureForLevel = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
         It should_create_header_with_2_column = () =>
-            headerStructureForLevel.HeaderToLevelMap[autoPropagateQuestionId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
+            headerStructureForLevel.HeaderToLevelMap[new ValueVector<Guid> { autoPropagateQuestionId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
 
         private static QuestionnaireExportStructure headerStructureForLevel;
         private static ExportViewFactory exportViewFactory;

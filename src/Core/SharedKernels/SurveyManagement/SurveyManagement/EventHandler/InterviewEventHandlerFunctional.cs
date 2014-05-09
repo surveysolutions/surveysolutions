@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -103,12 +104,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire",
                                                       groupId));
         }
-        
-        private void RemoveLevelsFromInterview(InterviewData interview, Dictionary<string, Guid[]> levelKeysForDelete, Guid scopeId)
+
+        private void RemoveLevelsFromInterview(InterviewData interview, Dictionary<string, Guid[]> levelKeysForDelete, ValueVector<Guid> scopeVector)
         {
             foreach (var levelKey in levelKeysForDelete)
             {
-                this.RemoveLevelFromInterview(interview, levelKey.Key, levelKey.Value, scopeId);
+                this.RemoveLevelFromInterview(interview, levelKey.Key, levelKey.Value, scopeVector);
             }
         }
 
@@ -120,7 +121,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
         }
 
-        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid[] groupIds, Guid scopeId)
+        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid[] groupIds, ValueVector<Guid> scopeVector)
         {
             if (interview.Levels.ContainsKey(levelKey))
             {
@@ -131,14 +132,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     level.DisabledGroups.Remove(groupId);
                 }
 
-                if (!level.ScopeIds.ContainsKey(scopeId))
+                if (!level.ScopeVectors.ContainsKey(scopeVector))
                     return;
 
-                if (level.ScopeIds.Count == 1)
+                if (level.ScopeVectors.Count == 1)
                     interview.Levels.Remove(levelKey);
                 else
                 {
-                    level.ScopeIds.Remove(scopeId);
+                    level.ScopeVectors.Remove(scopeVector);
                 }
             }
         }
@@ -148,9 +149,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var newVector = this.CreateNewVector(vector, rosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
             if (!interview.Levels.ContainsKey(levelKey))
-                interview.Levels[levelKey] = new InterviewLevel(scope.ScopeId, sortIndex, newVector);
+                interview.Levels[levelKey] = new InterviewLevel(scope.ScopeVector, sortIndex, newVector);
             else
-                interview.Levels[levelKey].ScopeIds[scope.ScopeId] = sortIndex;
+                interview.Levels[levelKey].ScopeVectors[scope.ScopeVector] = sortIndex;
 
             var level = interview.Levels[levelKey];
             foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdToRosterTitleQuestionIdMap)
@@ -180,9 +181,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return scopeVecor;
         }
 
-        private List<string> GetLevelsByScopeFromInterview(InterviewData interview, Guid scopeId)
+        private List<string> GetLevelsByScopeFromInterview(InterviewData interview, ValueVector<Guid> scopeVector)
         {
-            return interview.Levels.Where(level => level.Value.ScopeIds.ContainsKey(scopeId))
+            return interview.Levels.Where(level => level.Value.ScopeVectors.ContainsKey(scopeVector))
                             .Select(level => level.Key).ToList();
         }
 
@@ -346,7 +347,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
             };
             var emptyVector = new decimal[0];
-            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(eventSourceId, null, emptyVector));
+            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(new ValueVector<Guid>(), null, emptyVector));
             return new ViewWithSequence<InterviewData>(interview, eventSequence);
         }
 
@@ -434,7 +435,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             var newVector = this.CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
             var levelKey = CreateLevelIdFromPropagationVector(newVector);
-            this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { evnt.Payload.GroupId }, scopeOfCurrentGroup.ScopeId);
+            this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { evnt.Payload.GroupId }, scopeOfCurrentGroup.ScopeVector);
 
             currentState.Sequence = evnt.EventSequence;
             return currentState;
@@ -463,7 +464,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
                 var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
 
-                this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { instance.GroupId }, scopeOfCurrentGroup.ScopeId);
+                this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { instance.GroupId }, scopeOfCurrentGroup.ScopeVector);
             }
 
             currentState.Sequence = evnt.EventSequence;
@@ -475,7 +476,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState.Document,
                                                           evnt.Payload.GroupId);
             List<string> keysOfLevelsByScope =
-                this.GetLevelsByScopeFromInterview(interview: currentState.Document, scopeId: scopeOfCurrentGroup.ScopeId);
+                this.GetLevelsByScopeFromInterview(interview: currentState.Document, scopeVector: scopeOfCurrentGroup.ScopeVector);
 
             int countOfLevelByScope = keysOfLevelsByScope.Count();
 
@@ -498,7 +499,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         .Take(countOfLevelByScope - evnt.Payload.Count)
                         .ToDictionary(keyOfLevelsByScope => keyOfLevelsByScope, keyOfLevelsByScope => scopeOfCurrentGroup.RosterIdToRosterTitleQuestionIdMap.Keys.ToArray());
 
-                this.RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup.ScopeId);
+                this.RemoveLevelsFromInterview(currentState.Document, keysOfLevelToBeDeleted, scopeOfCurrentGroup.ScopeVector);
             }
             currentState.Sequence = evnt.EventSequence;
             return currentState;

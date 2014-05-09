@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -55,10 +56,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            AddInterviewLevel(interview, rosterSizeQuestionId, new decimal[] { 0 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, new decimal[] { 0 },
                 new Dictionary<Guid, object> { { questionInNestedGroupId, 1 } });
 
-            AddInterviewLevel(interview, rosterSizeQuestionId, new decimal[] { 1 },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, new decimal[] { 1 },
                 new Dictionary<Guid, object> { { questionInNestedGroupId, 2 } });
             
             questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);

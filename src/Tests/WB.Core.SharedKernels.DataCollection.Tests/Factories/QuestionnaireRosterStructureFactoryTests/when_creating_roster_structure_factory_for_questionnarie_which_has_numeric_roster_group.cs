@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Factories.QuestionnaireRost
             questionnaireRosterStructure.RosterScopes.Count().ShouldEqual(1);
 
         It should_specify_numeric_question_id_as_id_of_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Key.ShouldEqual(numericQuestionId);
+            questionnaireRosterStructure.RosterScopes.Single().Key.SequenceEqual(new[] { numericQuestionId });
 
         It should_be_numeric_scope_type_for_numeric_roster_in_roster_scope = () =>
             questionnaireRosterStructure.RosterScopes.Single().Value.ScopeType.ShouldEqual(RosterScopeType.Numeric);

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -24,13 +25,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns("1st");
 
-            interviewLevelToExport = new InterviewDataExportLevelView(Guid.NewGuid(), "1st", null);
+            interviewLevelToExport = new InterviewDataExportLevelView(new ValueVector<Guid> { Guid.NewGuid() }, "1st", null);
             interviewToExport = new InterviewDataExportView(Guid.NewGuid(), 1,
                 new[] { interviewLevelToExport });
 
             dataFileServiceMock=new Mock<IDataFileService>();
-            dataFileServiceMock.Setup(x => x.CreateCleanedFileNamesForLevels(Moq.It.IsAny<IDictionary<Guid, string>>()))
-                .Returns(new Dictionary<Guid, string>() { { interviewLevelToExport.LevelId, interviewLevelToExport.LevelName } });
+            dataFileServiceMock.Setup(x => x.CreateCleanedFileNamesForLevels(Moq.It.IsAny<IDictionary<ValueVector<Guid>, string>>()))
+                .Returns(new Dictionary<ValueVector<Guid>, string>() { { interviewLevelToExport.LevelVector, interviewLevelToExport.LevelName } });
 
             fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object,null, dataFileServiceMock.Object);
         };

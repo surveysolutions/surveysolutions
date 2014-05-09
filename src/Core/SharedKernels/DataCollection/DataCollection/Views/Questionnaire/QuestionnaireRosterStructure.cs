@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
@@ -12,11 +13,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
     {
         public QuestionnaireRosterStructure()
         {
-            this.RosterScopes = new Dictionary<Guid, RosterScopeDescription>();
+            this.RosterScopes = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
         }
 
         public Guid QuestionnaireId { get; set; }
-        public Dictionary<Guid, RosterScopeDescription> RosterScopes { get; set; }
+        public Dictionary<ValueVector<Guid>, RosterScopeDescription> RosterScopes { get; set; }
         public long Version { get; set; }
     }
 }

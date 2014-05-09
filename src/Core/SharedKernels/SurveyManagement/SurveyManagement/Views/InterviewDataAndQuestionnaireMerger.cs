@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -99,13 +100,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private InterviewLevel GetRootLevel(InterviewData interview)
         {
-            return interview.Levels.FirstOrDefault(w => w.Value.ScopeIds.Count==1 && w.Value.ScopeIds.ContainsKey(interview.InterviewId)).Value;
+            return interview.Levels.FirstOrDefault(w => w.Value.ScopeVectors.Count==1 && w.Value.ScopeVectors.ContainsKey(new ValueVector<Guid>())).Value;
         }
 
         private IEnumerable<KeyValuePair<string, InterviewLevel>> GetRosterLevels(Guid groupId, InterviewData interviewData,
             QuestionnaireRosterStructure questionnaireRoster)
         {
-            Guid? rosterScope = null;
+        //    Guid[] rosterScope = null;
             //totally not efficient
             foreach (var scopeId in questionnaireRoster.RosterScopes.Keys)
             {
@@ -113,16 +114,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 {
                     if (trigger == groupId)
                     {
-                        rosterScope = scopeId;
-                        break;
+                      //  rosterScope = scopeId;
+
+
+                        return interviewData.Levels.Where(w => w.Value.ScopeVectors.ContainsKey(scopeId));
+                   //     break;
                     }
                 }
             }
-            if (!rosterScope.HasValue)
+           // if (rosterScope==null)
                 throw new ArgumentException(string.Format("group {0} is missing in any roster scope of questionnaire", groupId));
 
 
-            return interviewData.Levels.Where(w => w.Value.ScopeIds.ContainsKey(rosterScope.Value));
         }
 
         private IEnumerable<InterviewGroupView> GetCompletedRosterGroups(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
@@ -351,7 +354,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             return
                 interview.Levels.Values.Where(
                     level =>
-                        level.ScopeIds.ContainsKey(optionsSource.ReferencedQuestionRosterScope.Last()) &&
+                        level.ScopeVectors.ContainsKey(optionsSource.ReferencedQuestionRosterScope) &&
                             LinkedQuestionUtils.IsLevelAllowedToBeUsedAsLinkSourceInCurrentScope(level.RosterVector, optionsSource.ReferencedQuestionRosterScope,questionRosterVector,optionsSource.LinkedQuestionRosterScope));
         }
 

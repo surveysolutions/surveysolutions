@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -37,8 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             
             var referenceInfoForLinkedQuestions = this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaire, version);
 
-            result.HeaderToLevelMap.Add(questionnaire.PublicKey,
-                this.BuildHeaderByTemplate(questionnaire, questionnaire.PublicKey, questionnaireLevelStructure, referenceInfoForLinkedQuestions,
+            result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
+                this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), questionnaireLevelStructure, referenceInfoForLinkedQuestions,
                     maxValuesForRosterSizeQuestions));
 
             foreach (var rosterScopeDescription in questionnaireLevelStructure.RosterScopes)
@@ -56,10 +57,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             IEnumerable<IGroup> groupsInLevel,
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions,
-            Guid levelId)
+            ValueVector<Guid> levelVector)
         {
             var headerStructureForLevel = new HeaderStructureForLevel();
-            headerStructureForLevel.LevelId = levelId;
+            headerStructureForLevel.LevelScopeVector = levelVector;
             headerStructureForLevel.LevelIdColumnName = "Id";
 
             headerStructureForLevel.LevelName = levelTitle;
@@ -183,11 +184,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return collectedMaxValues;
         }
 
-        private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, Guid levelId,
+        private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, ValueVector<Guid>  levelVector,
             QuestionnaireRosterStructure questionnaireLevelStructure, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            var rootGroups = this.GetRootGroupsForLevel(questionnaire, questionnaireLevelStructure, levelId);
+            var rootGroups = this.GetRootGroupsForLevel(questionnaire, questionnaireLevelStructure, levelVector);
 
             if(!rootGroups.Any())
                 throw new InvalidOperationException("level is absent in template");
@@ -195,26 +196,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var levelTitle = rootGroups.First().Title;
             
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
-                maxValuesForRosterSizeQuestions, levelId);
+                maxValuesForRosterSizeQuestions, levelVector);
 
-            if (questionnaireLevelStructure.RosterScopes.ContainsKey(levelId) && questionnaireLevelStructure.RosterScopes[levelId].ScopeType==RosterScopeType.TextList)
+            if (questionnaireLevelStructure.RosterScopes.ContainsKey(levelVector) && questionnaireLevelStructure.RosterScopes[levelVector].ScopeType==RosterScopeType.TextList)
             {
                 structures.IsTextListScope = true;
-                structures.ReferencedNames = new string[]{questionnaireLevelStructure.RosterScopes[levelId].ScopeTriggerName};
+                structures.ReferencedNames = new string[]{questionnaireLevelStructure.RosterScopes[levelVector].ScopeTriggerName};
             }
 
             return structures;
         }
 
-        private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, Guid levelId)
+        private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireLevelStructure, ValueVector<Guid> levelVector)
         {
-            if (levelId == questionnaire.PublicKey)
+            if (!levelVector.Any())
             {
                 yield return questionnaire;
                 yield break;
             }
 
-            var rootGroupsForLevel = this.GetRootGroupsByLevelIdOrThrow(questionnaireLevelStructure, levelId);
+            var rootGroupsForLevel = this.GetRootGroupsByLevelIdOrThrow(questionnaireLevelStructure, levelVector);
 
             foreach (var rootGroup in rootGroupsForLevel)
             {
@@ -222,12 +223,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             }
         }
 
-        private HashSet<Guid> GetRootGroupsByLevelIdOrThrow(QuestionnaireRosterStructure questionnaireLevelStructure, Guid levelId)
+        private HashSet<Guid> GetRootGroupsByLevelIdOrThrow(QuestionnaireRosterStructure questionnaireLevelStructure, ValueVector<Guid> levelVector)
         {
-            if (!questionnaireLevelStructure.RosterScopes.ContainsKey(levelId))
+            if (!questionnaireLevelStructure.RosterScopes.ContainsKey(levelVector))
                 throw new InvalidOperationException("level is absent in template");
 
-            return new HashSet<Guid>(questionnaireLevelStructure.RosterScopes[levelId].RosterIdToRosterTitleQuestionIdMap.Keys);
+            return new HashSet<Guid>(questionnaireLevelStructure.RosterScopes[levelVector].RosterIdToRosterTitleQuestionIdMap.Keys);
         }
 
 
@@ -328,7 +329,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope);
         }
 
-        private int GetLengthOfRosterVectorWhichNeedToBeExported(Guid[] scopeOfLinkedQuestion, Guid[] scopeOfReferenceQuestion)
+        private int GetLengthOfRosterVectorWhichNeedToBeExported(ValueVector<Guid> scopeOfLinkedQuestion, ValueVector<Guid> scopeOfReferenceQuestion)
         {
             if (scopeOfLinkedQuestion.Length > scopeOfReferenceQuestion.Length)
             {

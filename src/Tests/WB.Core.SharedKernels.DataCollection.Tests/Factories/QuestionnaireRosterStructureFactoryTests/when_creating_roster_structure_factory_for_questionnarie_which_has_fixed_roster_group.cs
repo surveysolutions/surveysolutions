@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Factories.QuestionnaireRost
             questionnaireRosterStructure.RosterScopes.Count().ShouldEqual(1);
 
         It should_specify_fixed_roster_id_as_id_of_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Key.ShouldEqual(fixedRosterGroupId);
+            questionnaireRosterStructure.RosterScopes.Single().Key.SequenceEqual(new[] { fixedRosterGroupId });
 
         It should_be_null_roster_title_question_for_fixed_roster_in_roster_scope = () =>
             questionnaireRosterStructure.RosterScopes.Single().Value

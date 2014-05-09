@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -95,7 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
         protected static InterviewData CreateInterviewData()
         {
             var interviewData = new InterviewData() {InterviewId = Guid.NewGuid()};
-            interviewData.Levels.Add("#", new InterviewLevel(interviewData.InterviewId, null, new decimal[0]));
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
             return interviewData;
         }
 
@@ -119,9 +120,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
         }
 
 
-        protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid levelId)
+        protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
         {
-            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelId == levelId);
+            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelVector.SequenceEqual(levelVector));
         }
     }
 

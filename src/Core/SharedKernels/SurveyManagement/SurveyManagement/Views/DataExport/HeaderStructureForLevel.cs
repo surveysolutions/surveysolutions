@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
     public class HeaderStructureForLevel
     {
-        public Guid LevelId { get; set; }
+        public ValueVector<Guid> LevelScopeVector { get; set; }
         public string LevelName { get; set; }
         public LabelItem[] LevelLabels { get; set; }
         public string LevelIdColumnName { get; set; }

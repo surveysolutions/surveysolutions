@@ -231,6 +231,7 @@
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
+    <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswer.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswers.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
