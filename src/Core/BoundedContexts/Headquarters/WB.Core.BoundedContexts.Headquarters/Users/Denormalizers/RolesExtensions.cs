@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
         {
             if (roles == null) throw new ArgumentNullException("roles");
 
-            return roles.Contains(UserRoles.Supervisor) || roles.Contains(UserRoles.Operator);
+            return roles.Contains(UserRoles.Supervisor) || roles.Contains(UserRoles.Operator) || roles.Contains(UserRoles.Headquarter);
         }
     }
 }
