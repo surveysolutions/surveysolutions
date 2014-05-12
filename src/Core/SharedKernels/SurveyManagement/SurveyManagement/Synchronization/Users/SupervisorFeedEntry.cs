@@ -11,10 +11,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Users
             {
                 throw new ArgumentNullException("entryId");
             }
-            if (string.IsNullOrEmpty(supervisorId))
-            {
-                throw new ArgumentNullException("supervisorId");
-            }
 
             this.SupervisorId = supervisorId;
             this.EntryId = entryId;

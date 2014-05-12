@@ -74,11 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
             {
                 supervisorId = evnt.Payload.Supervisor.Id.FormatGuid();
             }
-            if (supervisorId == null)
-            {
-                throw new InvalidOperationException(string.Format(
-                    "Only supervisor related events are supported by this denormalizer. EventId: {0}", evnt.EventIdentifier));
-            }
+            
             return supervisorId;
         }
 

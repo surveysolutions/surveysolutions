@@ -46,6 +46,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         interviewLevel.RosterVector,
                         interviewQuestion.Answer, 
                         Monads.Maybe(() => interviewQuestion.Comments.LastOrDefault().Text));
+
+                    FillAllComments(answeredQuestion, interviewQuestion);
+
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
@@ -77,6 +80,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 null, 
                 propagatedGroupInstanceCounts, 
                 interview.WasCompleted);
+        }
+
+        private static void FillAllComments(AnsweredQuestionSynchronizationDto answeredQuestion, InterviewQuestion interviewQuestion)
+        {
+            answeredQuestion.AllComments = interviewQuestion.Comments.Select(x => new CommentSynchronizationDto
+            {
+                Date = x.Date,
+                UserId = x.CommenterId,
+                Text = x.Text
+            }).ToArray();
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
