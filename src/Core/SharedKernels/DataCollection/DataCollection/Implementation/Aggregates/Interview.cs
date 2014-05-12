@@ -293,8 +293,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.interviewState.EnableQuestions(@event.Questions);
         }
-        
-        private void Apply(AnswerCommented @event) {}
+
+        internal void Apply(AnswerCommented @event)
+        {
+            this.interviewState.AnswerComments.Add(new AnswerComment(@event.UserId, @event.CommentTime, @event.Comment, @event.QuestionId, @event.PropagationVector));
+        }
 
         private void Apply(FlagSetToAnswer @event) {}
 
@@ -857,11 +860,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value));
             }
 
-            foreach (var answerDto in interviewDto.Answers.Where(x => x.Comments != null))
+            foreach (var answerDto in interviewDto.Answers)
             {
                 Guid questionId = answerDto.Id;
                 decimal[] rosterVector = answerDto.QuestionPropagationVector;
-                this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, synchronizationTime, answerDto.Comments));
+
+                foreach (var answerComment in answerDto.AllComments)
+                {
+                    if (!this.interviewState.AnswerComments.Contains(new AnswerComment(answerComment.UserId, answerComment.Date, answerComment.Text, questionId, rosterVector)))
+                    {
+                        this.ApplyEvent(new AnswerCommented(answerComment.UserId, questionId, rosterVector, answerComment.Date, answerComment.Text));
+                    }
+                }
             }
         }
 

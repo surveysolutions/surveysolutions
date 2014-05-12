@@ -26,7 +26,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             {
                 Answer = answer;   
             }
-            
+           
+            AllComments = new CommentSynchronizationDto[]{};
             Comments = comments;
         }
 
@@ -51,6 +52,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public object Answer { get;  set; }
         public string Comments { get;  set; }
+
+        public CommentSynchronizationDto[] AllComments { get; set; }
 
         private decimal[] RestoreFromPropagationVectorInOldIntFormat()
         {
