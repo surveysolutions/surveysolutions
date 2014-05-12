@@ -76,13 +76,13 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(questionSourceOfSubstitutionId, new decimal[0]), "answer");
+            interviewViewModel.SetAnswer(Create.CreateInterviewItemId(questionSourceOfSubstitutionId, new decimal[0]), "answer");
 
         It should_title_of_question_with_substitution_in_first_row_be_substituted_with_answer_on_set_question = () =>
-            interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNesedGroupWithSubstitutionId, new decimal[] { 0 })).FirstOrDefault().Text.ShouldEqual("answer example");
+            interviewViewModel.FindQuestion(q => q.PublicKey == Create.CreateInterviewItemId(questionInNesedGroupWithSubstitutionId, new decimal[] { 0 })).FirstOrDefault().Text.ShouldEqual("answer example");
 
         It should_title_of_question_with_substitution_in_second_row_be_substituted_with_answer_on_set_question = () =>
-         interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNesedGroupWithSubstitutionId, new decimal[] { 1 })).FirstOrDefault().Text.ShouldEqual("answer example");
+         interviewViewModel.FindQuestion(q => q.PublicKey == Create.CreateInterviewItemId(questionInNesedGroupWithSubstitutionId, new decimal[] { 1 })).FirstOrDefault().Text.ShouldEqual("answer example");
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
