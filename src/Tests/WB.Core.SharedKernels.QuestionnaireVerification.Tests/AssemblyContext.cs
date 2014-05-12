@@ -1,6 +1,8 @@
 ﻿using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests
 {
@@ -9,6 +11,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests
         public void OnAssemblyStart()
         {
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+
+            serviceLocatorMock
+           .Setup(locator => locator.GetInstance<ISubstitutionService>())
+           .Returns(new SubstitutionService());
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }

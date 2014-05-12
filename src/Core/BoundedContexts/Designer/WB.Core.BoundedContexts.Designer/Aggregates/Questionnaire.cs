@@ -21,6 +21,7 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.SharedKernels.ExpressionProcessor;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -715,6 +716,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
+        }
+
+        protected ISubstitutionService SubstitutionService
+        {
+            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
         }
 
         private static IQuestionnaireDocumentUpgrader QuestionnaireDocumentUpgrader
@@ -2597,7 +2603,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
 
-            var keywords = new[] { "this", SubstitutionUtils.RosterTitleSubstitutionReference };
+            var keywords = new[] { "this", SubstitutionService.RosterTitleSubstitutionReference };
             foreach (var keyword in keywords)
             {
                 if (stataCaption.ToLower() == keyword)
@@ -2902,7 +2908,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias,
             Guid questionPublicKey, bool isFeatured, IGroup group)
         {
-            string[] substitutionReferences = SubstitutionUtils.GetAllSubstitutionVariableNames(questionTitle);
+            string[] substitutionReferences = SubstitutionService.GetAllSubstitutionVariableNames(questionTitle);
             if (substitutionReferences.Length == 0)
                 return;
 
@@ -3225,13 +3231,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.innerDocument.GetAllQuestions<AbstractQuestion>(@group)
                     .Any(
                         question =>
-                            SubstitutionUtils.GetAllSubstitutionVariableNames(question.QuestionText)
-                                .Contains(SubstitutionUtils.RosterTitleSubstitutionReference));
+                            SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
+                                .Contains(SubstitutionService.RosterTitleSubstitutionReference));
 
             if (!hasAnyQuestionsWithRosterTitleInSubstitutions) return;
 
-            var questionVariables = GetFilteredQuestionForException(@group, question => SubstitutionUtils.GetAllSubstitutionVariableNames(question.QuestionText)
-                                .Contains(SubstitutionUtils.RosterTitleSubstitutionReference));
+            var questionVariables = GetFilteredQuestionForException(@group, question => SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
+                                .Contains(SubstitutionService.RosterTitleSubstitutionReference));
 
             throw new QuestionnaireException(
                 string.Format(
@@ -3306,7 +3312,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var substitutionReference in substitutionReferences)
             {
-                if (substitutionReference == SubstitutionUtils.RosterTitleSubstitutionReference)
+                if (substitutionReference == SubstitutionService.RosterTitleSubstitutionReference)
                 {
                     if (propagationQuestionsVector.Length > 0)
                         continue;

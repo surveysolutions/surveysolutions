@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneDateTimeQuestionHandlerTes
                 ResponsibleId = responsibleId
             });
 
-            RegisterServiceLocator();
             RegisterExpressionProcessorMock(validationExpression, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };
