@@ -587,13 +587,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             foreach (var participationQuestionId in this.questionsParticipationInSubstitutionReferences[question.PublicKey.Id])
             {
-                var participationQuestion = this.Questions.Values.FirstOrDefault(q => q.PublicKey.Id == participationQuestionId &&
+                var questionsWhichUsesSubstitution= this.Questions.Values.Where(q => q.PublicKey.Id == participationQuestionId &&
                     q.PublicKey.InterviewItemPropagationVector.Take(question.PublicKey.InterviewItemPropagationVector.Length)
                         .SequenceEqual(question.PublicKey.InterviewItemPropagationVector));
-
-                if (participationQuestion == null)
-                    continue;
-                participationQuestion.SubstituteQuestionText(question);
+                foreach (var participationQuestion in questionsWhichUsesSubstitution)
+                {
+                    participationQuestion.SubstituteQuestionText(question);
+                }
             }
         }
 
