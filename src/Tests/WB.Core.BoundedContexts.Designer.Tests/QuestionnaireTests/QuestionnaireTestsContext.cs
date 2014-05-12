@@ -338,11 +338,5 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 .Setup(x => x.GetInstance<IExpressionProcessor>())
                 .Returns(expressionProcessor);
         }
-
-        protected static void RegisterServiceLocator()
-        {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
-        }
     }
 }

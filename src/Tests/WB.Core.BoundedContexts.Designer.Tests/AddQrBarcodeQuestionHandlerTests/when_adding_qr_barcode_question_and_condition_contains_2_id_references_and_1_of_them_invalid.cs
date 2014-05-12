@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddQrBarcodeQuestionHandlerTest
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NumericQuestionAdded() { PublicKey = existingQuestionId, GroupPublicKey = chapterId });
 
-            RegisterServiceLocator();
             RegisterExpressionProcessorMock(conditionExpression, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };
