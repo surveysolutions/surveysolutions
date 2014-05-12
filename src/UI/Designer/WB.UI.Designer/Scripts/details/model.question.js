@@ -148,7 +148,7 @@
 
                    self.maxAllowedAnswers.extend({
                        digit: true,
-                       min: 1,
+                       min: 2,
                        validation: [
                            {
                                validator: function (val) {
