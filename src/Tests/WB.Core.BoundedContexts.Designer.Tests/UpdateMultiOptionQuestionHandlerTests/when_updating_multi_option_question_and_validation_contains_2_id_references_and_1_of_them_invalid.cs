@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
 
             });
 
-            RegisterServiceLocator();
             RegisterExpressionProcessorMock(validationExpression, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };

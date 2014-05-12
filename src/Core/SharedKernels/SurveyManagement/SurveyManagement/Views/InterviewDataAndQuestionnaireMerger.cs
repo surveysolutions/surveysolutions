@@ -6,11 +6,15 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -18,6 +22,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
     public class InterviewDataAndQuestionnaireMerger : IInterviewDataAndQuestionnaireMerger
     {
+        protected static ISubstitutionService SubstitutionService
+        {
+            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
+        }
+
         public InterviewDetailsView Merge(InterviewData interview, 
             QuestionnaireDocumentVersioned questionnaire, 
             ReferenceInfoForLinkedQuestions questionnaireReferenceInfo,
@@ -249,7 +258,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
             Func<Guid, Dictionary<decimal[], string>> getAvailableOptions, string rosterTitle)
         {
-            if (variableName == SubstitutionUtils.RosterTitleSubstitutionReference)
+            if (variableName == SubstitutionService.RosterTitleSubstitutionReference)
             {
                 if (string.IsNullOrEmpty(rosterTitle))
                     return null;

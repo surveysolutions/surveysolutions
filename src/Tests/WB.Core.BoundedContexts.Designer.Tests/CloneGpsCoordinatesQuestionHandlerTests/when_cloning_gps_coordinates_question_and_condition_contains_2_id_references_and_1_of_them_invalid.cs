@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneGpsCoordinatesQuestionHand
                 ResponsibleId = responsibleId
             });
 
-            RegisterServiceLocator();
             RegisterExpressionProcessorMock(conditionExpression, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };

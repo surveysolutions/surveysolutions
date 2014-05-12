@@ -2,11 +2,15 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using System.Linq;
+using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
@@ -31,7 +35,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.QuestionRosterScope = questionRosterScope;
             this.ValidationMessage = validationMessage;
             this.SubstitutionReferences = substitutionReferences;
-            this.referencedQuestionAnswers = this.SubstitutionReferences.ToDictionary(x => x, y => SubstitutionUtils.DefaultSubstitutionText);
+            this.referencedQuestionAnswers = this.SubstitutionReferences.ToDictionary(x => x, y => SubstitutionService.DefaultSubstitutionText);
             this.SourceText = this.Text = text;
 
             this.ReplaceSubstitutionVariables();
@@ -101,7 +105,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
         {
             this.referencedQuestionAnswers[referencedQuestion.Variable] = string.IsNullOrEmpty(referencedQuestion.AnswerString)
-                ? SubstitutionUtils.DefaultSubstitutionText
+                ? SubstitutionService.DefaultSubstitutionText
                 : referencedQuestion.AnswerString;
 
             this.ReplaceSubstitutionVariables();
@@ -111,8 +115,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public virtual void SubstituteRosterTitle(string rosterTitle)
         {
-            this.referencedQuestionAnswers[SubstitutionUtils.RosterTitleSubstitutionReference] = string.IsNullOrEmpty(rosterTitle)
-             ? SubstitutionUtils.DefaultSubstitutionText
+            this.referencedQuestionAnswers[SubstitutionService.RosterTitleSubstitutionReference] = string.IsNullOrEmpty(rosterTitle)
+             ? SubstitutionService.DefaultSubstitutionText
              : rosterTitle;
 
             this.ReplaceSubstitutionVariables();
@@ -125,7 +129,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Text = this.SourceText;
             foreach (var substitutionReference in this.SubstitutionReferences)
             {
-                this.Text = this.Text.ReplaceSubstitutionVariable(substitutionReference,
+                this.Text = SubstitutionService.ReplaceSubstitutionVariable(this.Text,substitutionReference,
                     this.referencedQuestionAnswers[substitutionReference]);
             }
         }
@@ -185,6 +189,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             else
                 this.Status &= ~QuestionStatus.ParentEnabled;
             RaisePropertyChanged("Status");
+        }
+
+        protected ISubstitutionService SubstitutionService
+        {
+            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
         }
     }
 

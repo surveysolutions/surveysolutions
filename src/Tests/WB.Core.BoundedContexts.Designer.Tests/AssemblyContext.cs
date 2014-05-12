@@ -1,6 +1,8 @@
 ﻿using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
 {
@@ -8,9 +10,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests
     {
         public void OnAssemblyStart()
         {
-            var serviceLocator = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object;
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
 
-            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+            serviceLocatorMock
+           .Setup(locator => locator.GetInstance<ISubstitutionService>())
+           .Returns(new SubstitutionService());
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
 
         public void OnAssemblyComplete() {}

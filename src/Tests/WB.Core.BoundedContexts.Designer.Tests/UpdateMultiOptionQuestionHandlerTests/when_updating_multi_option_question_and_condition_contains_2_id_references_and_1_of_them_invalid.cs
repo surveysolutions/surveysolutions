@@ -29,7 +29,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
                 ResponsibleId = responsibleId
             });
 
-            RegisterServiceLocator();
             RegisterExpressionProcessorMock(enablementCondition, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };
