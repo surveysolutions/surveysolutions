@@ -24,8 +24,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
             this.IsValid = true;
-            this.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) && !isParentGroupDisabled;
-            this.IsReadOnly = !this.IsEnabled;
+            this.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) || (answeredQuestion == null) && !isParentGroupDisabled;
+            this.IsReadOnly = question.QuestionScope != QuestionScope.Supervisor;
             this.Scope = question.QuestionScope;
 
             if (question.Answers != null)
