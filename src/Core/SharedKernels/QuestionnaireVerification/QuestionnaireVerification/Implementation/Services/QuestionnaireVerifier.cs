@@ -130,7 +130,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!IsCategoricalSingleAnswerQuestion(question) && !IsCategoricalMultiAnswersQuestion(question))
                 return false;
 
-            return !question.LinkedToQuestionId.HasValue && (question.Answers == null || question.Answers.Count < 2);
+            if (question.LinkedToQuestionId.HasValue)
+                return false;
+
+            return question.Answers == null || question.Answers.Count < 2;
         }
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
