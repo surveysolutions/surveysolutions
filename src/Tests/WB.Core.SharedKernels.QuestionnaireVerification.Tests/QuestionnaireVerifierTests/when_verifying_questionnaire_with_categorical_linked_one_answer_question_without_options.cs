@@ -10,12 +10,12 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_that_have_linked_multiquestion_with_max_allowed_answers : QuestionnaireVerifierTestsContext
+    class when_verifying_questionnaire_with_categorical_linked_one_answer_question_without_options : QuestionnaireVerifierTestsContext
     {
 
         private Establish context = () =>
         {
-            multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
+            var questionId = Guid.Parse("10000000000000000000000000000000");
             var linkedQuestionId = Guid.Parse("20000000000000000000000000000000");
             var rosterSizeQuestion = Guid.Parse("30000000000000000000000000000000");
             var rosterGroup = Guid.Parse("40000000000000000000000000000000");
@@ -46,11 +46,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                             }
                         }
                     },
-                    new MultyOptionsQuestion()
+                    new SingleQuestion()
                     {
                         StataExportCaption = "var",
-                        PublicKey = multyOptionsQuestionId,
-                        MaxAllowedAnswers = 3,
+                        PublicKey = questionId,
                         LinkedToQuestionId = linkedQuestionId
                     }
                 }
@@ -69,7 +68,5 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         private static QuestionnaireDocument questionnaire;
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
-
-        private static Guid multyOptionsQuestionId;
     }
 }
