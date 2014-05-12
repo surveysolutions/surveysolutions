@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="Create.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTests.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTestsContext.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\when_handle_QRBarcodeQuestionAnswered_event.cs" />
