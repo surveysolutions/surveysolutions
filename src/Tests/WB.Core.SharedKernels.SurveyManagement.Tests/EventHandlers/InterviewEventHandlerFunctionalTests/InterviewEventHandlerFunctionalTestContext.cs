@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -46,11 +47,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEv
             Dictionary<Guid, Guid?> rosterGroupsWithTitleQuestionPairs)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterScopeDescription(scopeId, string.Empty, RosterScopeType.Fixed,
+            var scopeVector = new ValueVector<Guid>(new[] { scopeId });
+            var rosterDescription = new RosterScopeDescription(scopeVector, string.Empty, RosterScopeType.Fixed,
                 rosterGroupsWithTitleQuestionPairs.ToDictionary(roster => roster.Key,
-                    roster => roster.Value.HasValue ? new RosterTitleQuestionDescription(roster.Value.Value) : null), new Dictionary<Guid, Guid[]>());
+                    roster => roster.Value.HasValue ? new RosterTitleQuestionDescription(roster.Value.Value) : null));
 
-            rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
+            rosterStructure.RosterScopes.Add(scopeVector, rosterDescription);
             return rosterStructure;
         }
 
@@ -58,25 +60,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEv
            Dictionary<Guid, RosterTitleQuestionDescription> rosterGroupsWithTitleQuestionPairs)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
-            var rosterDescription = new RosterScopeDescription(scopeId, string.Empty, RosterScopeType.Fixed, rosterGroupsWithTitleQuestionPairs, new Dictionary<Guid, Guid[]>());
+            var scopeVector = new ValueVector<Guid>(new [] { scopeId });
+            var rosterDescription = new RosterScopeDescription(scopeVector, string.Empty, RosterScopeType.Fixed, rosterGroupsWithTitleQuestionPairs);
 
-            rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
+            rosterStructure.RosterScopes.Add(scopeVector, rosterDescription);
             return rosterStructure;
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId, params Guid[] groupIdsFromScope)
         {
             var rosterStructure = new QuestionnaireRosterStructure();
+            var scopeVector = new ValueVector<Guid>(new[] { scopeId });
             var rosterGroupsWithTitleQuestionPairs = groupIdsFromScope.ToDictionary<Guid, Guid, RosterTitleQuestionDescription>(groupId => groupId, groupId => null);
-            var rosterDescription = new RosterScopeDescription(scopeId, string.Empty, RosterScopeType.Fixed, rosterGroupsWithTitleQuestionPairs, new Dictionary<Guid, Guid[]>());
-            rosterStructure.RosterScopes.Add(scopeId, rosterDescription);
+            var rosterDescription = new RosterScopeDescription(scopeVector, string.Empty, RosterScopeType.Fixed, rosterGroupsWithTitleQuestionPairs);
+            rosterStructure.RosterScopes.Add(scopeVector, rosterDescription);
             return rosterStructure;
         }
 
         protected static ViewWithSequence<InterviewData> CreateViewWithSequenceOfInterviewData()
         {
             var result = new ViewWithSequence<InterviewData>(new InterviewData(), 1);
-            result.Document.Levels.Add("#", new InterviewLevel(result.Document.InterviewId, null, new decimal[0]));
+            result.Document.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
             return result;
         }
 

@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.Factories.QuestionnaireRost
             questionnaireRosterStructure.RosterScopes.Count().ShouldEqual(1);
 
         It should_specify_autoPropagated_question_id_as_id_of_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Key.ShouldEqual(numericRosterSizeQuestionId);
+            questionnaireRosterStructure.RosterScopes.Single().Key.SequenceEqual(new[] { numericRosterSizeQuestionId });
 
         It should_specify_id_of_capital_question_id_as_roster_title_question_for_roster_id_in_roster_scope = () =>
             questionnaireRosterStructure.RosterScopes.Single().Value

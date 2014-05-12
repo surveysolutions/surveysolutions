@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views;
@@ -25,31 +26,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
         {
             return new QuestionnaireRosterStructure()
             {
-                RosterScopes = new Dictionary<Guid, RosterScopeDescription>()
+                RosterScopes = new Dictionary<ValueVector<Guid>, RosterScopeDescription>()
                 {
                     {
-                        fixedRosterId,
-                        new RosterScopeDescription(fixedRosterId, string.Empty, RosterScopeType.Fixed, new Dictionary<Guid, RosterTitleQuestionDescription>()
+                        new ValueVector<Guid> { fixedRosterId },
+                        new RosterScopeDescription(new ValueVector<Guid> { fixedRosterId }, string.Empty, RosterScopeType.Fixed, new Dictionary<Guid, RosterTitleQuestionDescription>()
                         {
                             { fixedRosterId, null }
-                        }, new Dictionary<Guid, Guid[]>())
+                        })
                     }
                 }
             };
         }
 
-        internal static void AddInterviewLevel(InterviewData interview, Guid scopeId, decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions, Dictionary<Guid, string> rosterTitles=null)
+        internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector, decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions, Dictionary<Guid, string> rosterTitles = null)
         {
             InterviewLevel rosterLevel;
             var levelKey = string.Join(",", rosterVector);
             if (!interview.Levels.ContainsKey(levelKey))
             {
-                rosterLevel = new InterviewLevel(scopeId, null, rosterVector);
+                rosterLevel = new InterviewLevel(scopeVector, null, rosterVector);
             }
             else
             {
                 rosterLevel = interview.Levels[levelKey];
-                rosterLevel.ScopeIds.Add(scopeId, null);
+                rosterLevel.ScopeVectors.Add(scopeVector, null);
             }
 
             foreach (var answeredQuestion in answeredQuestions)
@@ -131,14 +132,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
                 {
                     {
                         "#", 
-                        new InterviewLevel(interviewId, null, new decimal[0])
+                        new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0])
                         {
                             RosterRowTitles = new Dictionary<Guid, string>()
                         }
                     },
                     {
                         "0",
-                        new InterviewLevel(fixedRosterId, null, new decimal[] { 0 })
+                        new InterviewLevel(new ValueVector<Guid>{fixedRosterId}, null, new decimal[] { 0 })
                         {
                             RosterRowTitles = new Dictionary<Guid, string>()
                             {
@@ -148,7 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
                     },
                     {
                         "1", 
-                        new InterviewLevel(fixedRosterId, null, new decimal[] { 1 })
+                        new InterviewLevel(new ValueVector<Guid>{fixedRosterId}, null, new decimal[] { 1 })
                         {
                             RosterRowTitles = new Dictionary<Guid, string>()
                             {
@@ -169,7 +170,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
                 {
                     {
                         "#", 
-                        new InterviewLevel(interviewId, null, new decimal[0])
+                        new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0])
                         {
                             RosterRowTitles = new Dictionary<Guid, string>()
                         }
@@ -185,7 +186,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
         {
-            return new QuestionnaireDocument
+           var result =  new QuestionnaireDocument
             {
                 Children = new List<IComposite>
                 {
@@ -196,6 +197,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
                     }
                 }
             };
+            result.ConnectChildrenWithParent();
+            return result;
         }
     }
 }

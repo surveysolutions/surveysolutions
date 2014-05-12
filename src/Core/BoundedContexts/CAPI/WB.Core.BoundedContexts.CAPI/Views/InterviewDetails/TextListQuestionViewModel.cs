@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class TextListQuestionViewModel : QuestionViewModel
     {
-        public TextListQuestionViewModel(InterviewItemId publicKey, Guid[] questionRosterScope, string text, QuestionType questionType,
+        public TextListQuestionViewModel(InterviewItemId publicKey, ValueVector<Guid> questionRosterScope, string text, QuestionType questionType,
             bool enabled, string instructions, string comments, bool valid, bool mandatory,
             string validationMessage, string variable, IEnumerable<string> substitutionReferences,
             int? maxAnswerCount, int maxAnswerCountLimit)

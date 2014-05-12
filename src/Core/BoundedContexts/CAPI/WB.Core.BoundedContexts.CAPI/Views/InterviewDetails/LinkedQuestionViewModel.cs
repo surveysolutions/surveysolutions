@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -10,8 +11,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class LinkedQuestionViewModel : QuestionViewModel
     {
         public LinkedQuestionViewModel(
-            InterviewItemId publicKey, Guid[] questionRosterScope, string text, QuestionType questionType, bool enabled, string instructions,
-            bool valid, bool mandatory, string validationMessage, Func<decimal[], Guid[], IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
+            InterviewItemId publicKey, ValueVector<Guid> questionRosterScope, string text, QuestionType questionType, bool enabled, string instructions,
+            bool valid, bool mandatory, string validationMessage, Func<decimal[], ValueVector<Guid>, IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
             string variable, IEnumerable<string> substitutionReferences, bool? areAnsewrsOrdered,int? maxAllowedAnswers)
             : base(
                 publicKey,questionRosterScope, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences)
@@ -22,7 +23,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.MaxAllowedAnswers = maxAllowedAnswers;
         }
 
-        private Func<decimal[], Guid[], IEnumerable<LinkedAnswerViewModel>> getAnswerOptions;
+        private Func<decimal[], ValueVector<Guid>, IEnumerable<LinkedAnswerViewModel>> getAnswerOptions;
 
         public IEnumerable<LinkedAnswerViewModel> AnswerOptions
         {

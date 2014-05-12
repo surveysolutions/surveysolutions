@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
@@ -35,8 +36,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,
             string levelName)
         {
-            questionnaireExportStructure.HeaderToLevelMap.Add(levelId,
-               new HeaderStructureForLevel() { LevelId = levelId, LevelName = levelName });
+            questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid> { levelId },
+               new HeaderStructureForLevel() { LevelScopeVector = new ValueVector<Guid> { levelId }, LevelName = levelName });
         }
     }
 }

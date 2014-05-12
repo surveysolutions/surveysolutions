@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         private void StoreRosterStructure(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
+            questionnaireDocument.ConnectChildrenWithParent();
             this.questionnries.Store(this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaireDocument, version), id);
         }
     }

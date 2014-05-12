@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
            result.ShouldNotBeNull();
 
         It should_result_levelId_be_equal_to_rosterGroupId = () =>
-          result.LevelId.ShouldEqual(rosterGroupId);
+          result.LevelScopeVector.SequenceEqual(new[] { rosterGroupId });
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
