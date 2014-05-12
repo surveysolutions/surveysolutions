@@ -202,7 +202,6 @@
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_first_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_top_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
-    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_question_of_wrong_data_type.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_questionnaire_is_absent.cs" />

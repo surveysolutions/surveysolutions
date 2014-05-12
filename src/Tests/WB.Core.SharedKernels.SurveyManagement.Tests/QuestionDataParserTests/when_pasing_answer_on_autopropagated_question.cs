@@ -1,30 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_autopropagated_question : QuestionDataParserTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             answer = "1";
-            questionDataParser = CreateQuestionDataParser(); 
+            questionDataParser = CreateQuestionDataParser();
         };
 
-        Because of =
-            () => result = questionDataParser.Parse(answer, questionVarName, CreateQuestionnaireDocumentWithOneChapter(new AutoPropagateQuestion() { PublicKey = questionId, QuestionType = QuestionType.AutoPropagate, StataExportCaption = questionVarName }));
+        private Because of =
+            () =>
+                parsingResult =
+                    questionDataParser.TryParse(answer, questionVarName,
+                        CreateQuestionnaireDocumentWithOneChapter(new AutoPropagateQuestion()
+                        {
+                            PublicKey = questionId,
+                            QuestionType = QuestionType.AutoPropagate,
+                            StataExportCaption = questionVarName
+                        }), out parcedValue);
 
-        It should_result_be_equal_to_1 = () =>
-            result.Value.Value.ShouldEqual(1);
+        private It should_result_be_equal_to_1 = () =>
+            parcedValue.Value.ShouldEqual(1);
 
-        It should_result_key_be_equal_to_questionId = () =>
-            result.Value.Key.ShouldEqual(questionId);
+        private It should_result_key_be_equal_to_questionId = () =>
+            parcedValue.Key.ShouldEqual(questionId);
+        
     }
 }
