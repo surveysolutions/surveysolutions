@@ -31,9 +31,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.plainStorage.Store(userChangedEvent.Select(@event => Tuple.Create(@event, @event.EntryId)));
         }
 
-        public IEnumerable<LocalUserChangedFeedEntry> GetNotProcessedSupervisorRelatedEvents(string supervisorId)
+        public IEnumerable<LocalUserChangedFeedEntry> GetNotProcessedSupervisorEvents(string supervisorId)
         {
-            return this.plainStorage.Query(_ => _.Where(x => x.IsProcessed == false && x.SupervisorId == supervisorId).OrderBy(x => x.Timestamp).ToList());
+            return this.plainStorage.Query(_ => _.Where(x => x.IsProcessed == false && (x.SupervisorId == supervisorId || x.SupervisorId == null))
+                                                 .OrderBy(x => x.Timestamp)
+                                                 .ToList());
         }
     }
 }
