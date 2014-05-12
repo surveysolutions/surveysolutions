@@ -171,6 +171,8 @@
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformation_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
     <Compile Include="InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
+    <Compile Include="InterviewQuestionViewTests\when_creating_view_for_supervisor_question_which_not_answered_and_parent_group_is_enabled.cs" />
+    <Compile Include="InterviewQuestionViewTests\when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled.cs" />
     <Compile Include="InterviewQuestionViewTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
     <Compile Include="MapReportTests\MapReportTestContext.cs" />
     <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_answer_collection.cs" />
