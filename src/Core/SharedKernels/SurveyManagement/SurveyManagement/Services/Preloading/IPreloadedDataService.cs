@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 
@@ -20,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         int GetParentIdColumnIndex(PreloadedDataByFile dataFile);
         decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string parentIdValue);
         Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
-        KeyValuePair<Guid, object>? ParseQuestion(string answer, string variableName);
+        ValueParsingResult ParseQuestion(string answer, string variableName, out KeyValuePair<Guid, object> parsedValue);
         PreloadedDataDto[] CreatePreloadedDataDto(PreloadedDataByFile[] allLevels);
     }
 }

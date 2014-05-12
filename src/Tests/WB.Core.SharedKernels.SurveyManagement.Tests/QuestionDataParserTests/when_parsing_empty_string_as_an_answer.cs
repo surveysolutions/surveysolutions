@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
@@ -14,9 +11,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
 
         Because of =
-            () => result = questionDataParser.Parse(string.Empty, "var", new QuestionnaireDocument());
+            () => parsingResult = questionDataParser.TryParse(string.Empty, "var", new QuestionnaireDocument(), out parcedValue);
 
-        It should_result_be_null = () =>
-            result.ShouldBeNull();
+        It should_result_be_ValueIsNullOrEmpty = () =>
+            parsingResult.ShouldEqual(ValueParsingResult.ValueIsNullOrEmpty);
     }
 }

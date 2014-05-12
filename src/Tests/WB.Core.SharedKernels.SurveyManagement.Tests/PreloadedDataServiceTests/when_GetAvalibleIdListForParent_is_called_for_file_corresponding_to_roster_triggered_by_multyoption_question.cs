@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -12,9 +10,10 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
 {
-    internal class when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_multyoption_question : PreloadedDataServiceTestContext
+    internal class when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_multyoption_question :
+        PreloadedDataServiceTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
@@ -36,17 +35,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of =
+        private Because of =
             () =>
                 result =
                     preloadedDataService.GetAvalibleIdListForParent(
-                        CreatePreloadedDataByFile(new string[] { "Id", rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" }, new string[][] { new string[] { "1", "3","" } },
-                            questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, "1");
+                        CreatePreloadedDataByFile(
+                            new string[] { "Id", rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" },
+                            new string[][] { new string[] { "1", "3", "" } },
+                            questionnaireDocument.Title),new ValueVector<Guid> { rosterSizeQuestionId}, "1");
 
-        It should_return_not_null_result = () =>
+        private It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
-        It should_result_have_2_ids_1_and_2 = () =>
+        private It should_result_have_2_ids_1_and_2 = () =>
             result.SequenceEqual(new decimal[] { 1 });
 
         private static PreloadedDataService preloadedDataService;

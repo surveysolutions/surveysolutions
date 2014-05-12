@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_nonexistent_question : QuestionDataParserTestContext
     {
-        Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
+        private Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
 
-        Because of =
-            () => result = questionDataParser.Parse("some answer", "var", new QuestionnaireDocument());
+        private Because of =
+            () => parsingResult = questionDataParser.TryParse("some answer", "var", new QuestionnaireDocument(), out parcedValue);
 
-        It should_result_be_null = () =>
-            result.ShouldBeNull();
+        private It should_result_be_QuestionWasNotFound = () =>
+            parsingResult.ShouldEqual(ValueParsingResult.QuestionWasNotFound);
+
     }
 }
