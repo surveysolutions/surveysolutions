@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question data type mismatch.
+        ///   Looks up a localized string similar to Value mismatches question data type .
         /// </summary>
         internal static string PL0005_QuestionDataTypeMismatch {
             get {
@@ -138,6 +138,96 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         internal static string PL0009_RosterIdIsInconsistantWithRosterSizeQuestion {
             get {
                 return ResourceManager.GetString("PL0009_RosterIdIsInconsistantWithRosterSizeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked question is not supported in data preloading.
+        /// </summary>
+        internal static string PL0010_UnsupportedLinkedQuestion {
+            get {
+                return ResourceManager.GetString("PL0010_UnsupportedLinkedQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General error occured.
+        /// </summary>
+        internal static string PL0011_GeneralError {
+            get {
+                return ResourceManager.GetString("PL0011_GeneralError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question was not found.
+        /// </summary>
+        internal static string PL0012_QuestionWasNotFound {
+            get {
+                return ResourceManager.GetString("PL0012_QuestionWasNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provided value is null or empty.
+        /// </summary>
+        internal static string PL0013_ValueIsNullOrEmpty {
+            get {
+                return ResourceManager.GetString("PL0013_ValueIsNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parsed value not allowed for this question.
+        /// </summary>
+        internal static string PL0014_ParsedValueIsNotAllowed {
+            get {
+                return ResourceManager.GetString("PL0014_ParsedValueIsNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type of question is not correct.
+        /// </summary>
+        internal static string PL0015_QuestionTypeIsIncorrect {
+            get {
+                return ResourceManager.GetString("PL0015_QuestionTypeIsIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected Date or Time value was not recognized.
+        /// </summary>
+        internal static string PL0016_ExpectedDateTimeNotParsed {
+            get {
+                return ResourceManager.GetString("PL0016_ExpectedDateTimeNotParsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected Gps value was not recognized.
+        /// </summary>
+        internal static string PL0017_ExpectedGpsNotParsed {
+            get {
+                return ResourceManager.GetString("PL0017_ExpectedGpsNotParsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected Integer value was not recognized.
+        /// </summary>
+        internal static string PL0018_ExpectedIntNotParsed {
+            get {
+                return ResourceManager.GetString("PL0018_ExpectedIntNotParsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected Decimal value was not recognized.
+        /// </summary>
+        internal static string PL0019_ExpectedDecimalNotParsed {
+            get {
+                return ResourceManager.GetString("PL0019_ExpectedDecimalNotParsed", resourceCulture);
             }
         }
     }
