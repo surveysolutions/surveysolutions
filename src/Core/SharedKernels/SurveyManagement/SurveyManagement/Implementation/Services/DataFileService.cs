@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
@@ -16,9 +17,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public Dictionary<Guid, string> CreateCleanedFileNamesForLevels(IDictionary<Guid, string> levels)
+        public Dictionary<ValueVector<Guid>, string> CreateCleanedFileNamesForLevels(IDictionary<ValueVector<Guid>, string> levels)
         {
-            var result = new Dictionary<Guid, string>();
+            var result = new Dictionary<ValueVector<Guid>, string>();
             var createdFileNames = new HashSet<string>();
             foreach (var allegedLevelName in levels)
             {

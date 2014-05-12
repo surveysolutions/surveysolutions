@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewDeclaredValid>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        IEventHandler<SynchronizationMetadataApplied>,
+        //IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
     IEventHandler
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) {}
 
-        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt) {}
+        //public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt) {}
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt) { }
 

@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -39,22 +40,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFacto
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
         It should_create_header_with_2_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
 
         It should_create_header_with_2_header_labeles = () =>
-            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels.Length.ShouldEqual(2);
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels.Length.ShouldEqual(2);
 
         It should_create_header_with_first_header_label_title_equal_1 = () =>
-            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[0].Title.ShouldEqual("1");
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[0].Title.ShouldEqual("1");
 
         It should_create_header_with_first_header_label_caption_equal_1 = () =>
-            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[0].Caption.ShouldEqual("0");
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[0].Caption.ShouldEqual("0");
 
         It should_create_header_with_second_header_label_title_equal_1 = () =>
-            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[1].Title.ShouldEqual("2");
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[1].Title.ShouldEqual("2");
 
         It should_create_header_with_second_header_label_caption_equal_1 = () =>
-            questionnaireExportStructure.HeaderToLevelMap[rosterGroupId].LevelLabels[1].Caption.ShouldEqual("1");
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels[1].Caption.ShouldEqual("1");
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static ExportViewFactory exportViewFactory;

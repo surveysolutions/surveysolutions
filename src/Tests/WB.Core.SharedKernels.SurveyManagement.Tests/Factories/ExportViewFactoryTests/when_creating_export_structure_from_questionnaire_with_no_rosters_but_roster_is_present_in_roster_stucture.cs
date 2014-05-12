@@ -11,6 +11,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using It = Machine.Specifications.It;
@@ -32,9 +33,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFacto
                             new QuestionnaireRosterStructure()
                             {
                                 RosterScopes =
-                                    new Dictionary<Guid, RosterScopeDescription>()
+                                    new Dictionary<ValueVector<Guid>, RosterScopeDescription>()
                                     {
-                                        { misteriousRosterGroupId, new RosterScopeDescription(misteriousRosterGroupId, string.Empty, RosterScopeType.Fixed, null, new Dictionary<Guid, Guid[]>()) }
+                                        {
+                                            new ValueVector<Guid> { misteriousRosterGroupId },
+                                            new RosterScopeDescription(new ValueVector<Guid>() { misteriousRosterGroupId }, string.Empty,
+                                                RosterScopeType.Fixed, null)
+                                        }
                                     }
                             });
 

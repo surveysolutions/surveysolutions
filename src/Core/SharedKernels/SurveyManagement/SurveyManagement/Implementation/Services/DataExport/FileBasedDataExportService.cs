@@ -95,11 +95,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             var cleanedFileNamesForLevels =
                 this.dataFileService.CreateCleanedFileNamesForLevels(
-                    questionnaireExportStructure.HeaderToLevelMap.Values.ToDictionary(h => h.LevelId, h => h.LevelName));
+                    questionnaireExportStructure.HeaderToLevelMap.Values.ToDictionary(h => h.LevelScopeVector, h => h.LevelName));
 
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                string levelFileName = cleanedFileNamesForLevels[headerStructureForLevel.LevelId];
+                string levelFileName = cleanedFileNamesForLevels[headerStructureForLevel.LevelScopeVector];
 
                 var interviewExportedDataFileName = this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName);
                 var contentOfAdditionalFileName = this.environmentContentService.GetEnvironmentContentFileName(levelFileName);
@@ -119,12 +119,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.ThrowArgumentExceptionIfDataFolderMissing(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion, dataFolderForTemplatePath);
 
             var cleanedFileNamesForLevels =
-                this.dataFileService.CreateCleanedFileNamesForLevels(interviewDataExportView.Levels.ToDictionary(l => l.LevelId,
+                this.dataFileService.CreateCleanedFileNamesForLevels(interviewDataExportView.Levels.ToDictionary(l => l.LevelVector,
                     l => l.LevelName));
 
             foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
             {
-                string levelFileName = cleanedFileNamesForLevels[interviewDataExportLevelView.LevelId];
+                string levelFileName = cleanedFileNamesForLevels[interviewDataExportLevelView.LevelVector];
 
                 this.dataFileExportService.AddRecord(interviewDataExportLevelView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName)));
             }

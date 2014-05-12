@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -38,19 +39,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_4 = () =>
-           GetLevel(result,propagationScopeKey).Records.Length.ShouldEqual(2);
+           GetLevel(result, new[] { propagationScopeKey }).Records.Length.ShouldEqual(2);
 
         It should_first_record_id_equals_0 = () =>
-           GetLevel(result, propagationScopeKey).Records[0].RecordId.ShouldEqual("0");
+           GetLevel(result, new[] { propagationScopeKey }).Records[0].RecordId.ShouldEqual("0");
 
         It should_second_record_id_equals_1 = () =>
-           GetLevel(result, propagationScopeKey).Records[1].RecordId.ShouldEqual("1");
+           GetLevel(result, new[] { propagationScopeKey }).Records[1].RecordId.ShouldEqual("1");
 
         It should_first_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-          GetLevel(result, propagationScopeKey).Records[0].ParentRecordId.ShouldEqual(GetLevel(result, questionnarie.PublicKey).Records[0].RecordId);
+          GetLevel(result, new[] { propagationScopeKey }).Records[0].ParentRecordId.ShouldEqual(GetLevel(result, new Guid[0]).Records[0].RecordId);
 
         It should_second_rosters_record_parent_id_equals_to_main_level_record_id = () =>
-           GetLevel(result, propagationScopeKey).Records[1].ParentRecordId.ShouldEqual(GetLevel(result, questionnarie.PublicKey).Records[0].RecordId);
+           GetLevel(result, new[] { propagationScopeKey }).Records[1].ParentRecordId.ShouldEqual(GetLevel(result, new Guid[0]).Records[0].RecordId);
 
         private static QuestionnaireDocument CreateQuestionnaireDocumentWith1PropagationLevel()
         {
@@ -74,7 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new decimal[1] { i };
-                var newLevel = new InterviewLevel(propagationScopeKey, null, vector);
+                var newLevel = new InterviewLevel(new ValueVector<Guid> { propagationScopeKey }, null, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
 
                 foreach (var questionId in variableNameAndQuestionId)

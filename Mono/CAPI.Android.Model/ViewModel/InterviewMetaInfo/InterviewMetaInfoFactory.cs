@@ -1,14 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.View;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -30,23 +21,31 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
 
         public WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo Load(InterviewMetaInfoInputModel input)
         {
-            var interview = questionnaireDtoDocumentStorage.GetById(input.InterviewId);
+            var interview = this.questionnaireDtoDocumentStorage.GetById(input.InterviewId);
             if (interview == null)
                 return null;
 
             var status = (InterviewStatus) interview.Status;
+
+            var featuredQuestionList = interview.CreatedOnClient != null && interview.CreatedOnClient.Value
+                ? interview.GetProperties()
+                    .Select(
+                        featuredQuestion =>
+                            new FeaturedQuestionMeta(featuredQuestion.PublicKey, featuredQuestion.Title, featuredQuestion.Value)).ToList()
+                : null;
+
             return new WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo()
-                {
-                    PublicKey = input.InterviewId,
-                    ResponsibleId = Guid.Parse(interview.Responsible),
-                    Status = (int) status,
-                    TemplateId = Guid.Parse(interview.Survey),
-                    Comments = interview.Comments,
-                    Valid = interview.Valid,
-                    
-                    CreatedOnClient = interview.CreatedOnClient,
-                    TemplateVersion = interview.SurveyVersion
-                };
+            {
+                PublicKey = input.InterviewId,
+                ResponsibleId = Guid.Parse(interview.Responsible),
+                Status = (int) status,
+                TemplateId = Guid.Parse(interview.Survey),
+                Comments = interview.Comments,
+                Valid = interview.Valid,
+                FeaturedQuestionsMeta = featuredQuestionList,
+                CreatedOnClient = interview.CreatedOnClient,
+                TemplateVersion = interview.SurveyVersion
+            };
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
@@ -8,10 +10,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
     {
         public QuestionnaireExportStructure()
         {
-            this.HeaderToLevelMap = new Dictionary<Guid, HeaderStructureForLevel>();
+            this.HeaderToLevelMap = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
         }
         public Guid QuestionnaireId { get; set; }
-        public Dictionary<Guid, HeaderStructureForLevel> HeaderToLevelMap { get; set; }
+        public Dictionary<ValueVector<Guid>, HeaderStructureForLevel> HeaderToLevelMap { get; set; }
         public long Version { get; set; }
     }
 }

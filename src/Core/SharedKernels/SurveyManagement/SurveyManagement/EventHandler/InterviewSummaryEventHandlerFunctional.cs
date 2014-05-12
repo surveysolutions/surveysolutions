@@ -34,7 +34,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewRestored>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
-        ICreateHandler<InterviewSummary, InterviewOnClientCreated>
+        ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
+        IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>
+
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -268,6 +270,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.HasErrors = false;
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<SynchronizationMetadataApplied> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                if (currentState.WasCreatedOnClient && evnt.Payload.FeaturedQuestionsMeta != null)
+                {
+                    foreach (var answeredQuestionSynchronizationDto in evnt.Payload.FeaturedQuestionsMeta)
+                    {
+                        if (interview.AnswersToFeaturedQuestions.ContainsKey(answeredQuestionSynchronizationDto.Id))
+                        {
+                            interview.AnswersToFeaturedQuestions[answeredQuestionSynchronizationDto.Id].Answer = answeredQuestionSynchronizationDto.Answer.ToString();
+                        }
+                    }
+                }
             });
         }
     }

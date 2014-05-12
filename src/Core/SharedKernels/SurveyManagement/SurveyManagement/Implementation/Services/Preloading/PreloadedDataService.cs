@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -46,24 +47,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (levelExportStructure == null)
                 return null;
 
-            if (!questionnaireRosterStructure.RosterScopes.ContainsKey(levelExportStructure.LevelId))
+            if (!questionnaireRosterStructure.RosterScopes.ContainsKey(levelExportStructure.LevelScopeVector))
                 return null;
 
-            var rosterScopeDescription = questionnaireRosterStructure.RosterScopes[levelExportStructure.LevelId];
-            var scopeVector = rosterScopeDescription.RosterIdToRosterVectorMap.Values.FirstOrDefault();
+            var rosterScopeDescription = questionnaireRosterStructure.RosterScopes[levelExportStructure.LevelScopeVector];
 
-            var parentLevelId = scopeVector == null || scopeVector.Length == 0
-                ? questionnaireRosterStructure.QuestionnaireId
-                : scopeVector.Last();
-
-            var parentLevel = exportStructure.HeaderToLevelMap.Values.FirstOrDefault(l => l.LevelId == parentLevelId);
+            var parentLevel =
+                exportStructure.HeaderToLevelMap.Values.FirstOrDefault(
+                    l =>
+                        l.LevelScopeVector.Length == rosterScopeDescription.ScopeVector.Length - 1 &&
+                          rosterScopeDescription.ScopeVector.Take(l.LevelScopeVector.Length).SequenceEqual(l.LevelScopeVector));
             if (parentLevel == null)
                 return null;
 
             return GetDataFileByLevelName(allLevels, parentLevel.LevelName);
         }
 
-        public decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, Guid levelId, string parentIdValue)
+        public decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string parentIdValue)
         {
             var idIndexInParentDataFile = this.GetIdColumnIndex(parentDataFile);
 
@@ -71,20 +71,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (row == null)
                 return null;
 
-            if (!questionnaireRosterStructure.RosterScopes.ContainsKey(levelId))
+            if (!questionnaireRosterStructure.RosterScopes.ContainsKey(levelScopeVector))
                 return null;
 
-            var rosterScopeDescription = questionnaireRosterStructure.RosterScopes[levelId];
+            var rosterScopeDescription = questionnaireRosterStructure.RosterScopes[levelScopeVector];
 
             if (rosterScopeDescription.ScopeType == RosterScopeType.Fixed)
             {
                 return
-                    questionnaireDocument.FirstOrDefault<IGroup>(g => g.PublicKey == levelId)
+                    questionnaireDocument.FirstOrDefault<IGroup>(g => g.PublicKey == levelScopeVector.Last())
                         .RosterFixedTitles.Select((t, i) => (decimal) i)
                         .ToArray();
             }
 
-            var rosterSizeQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelId);
+            var rosterSizeQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelScopeVector.Last());
 
             var levelExportStructure = FindLevelInPreloadedData(parentDataFile.FileName);
             if (levelExportStructure == null)
@@ -263,22 +263,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (levelExportStructure == null)
                 return new PreloadedDataByFile[0];
             IEnumerable<RosterScopeDescription> children = Enumerable.Empty<RosterScopeDescription>();
-            if (levelExportStructure.LevelId == questionnaireRosterStructure.QuestionnaireId)
+            if (levelExportStructure.LevelScopeVector.Length == 0)
             {
                 children =
                     questionnaireRosterStructure.RosterScopes.Values.Where(
-                        scope => scope.RosterIdToRosterVectorMap.Values.Any(r => r.Length == 0));
+                        scope => scope.ScopeVector.Length == 0);
             }
             else
                 children =
                     questionnaireRosterStructure.RosterScopes.Values.Where(
                         scope =>
-                            scope.RosterIdToRosterVectorMap.Values.Any(r => r.LastOrDefault() == levelExportStructure.LevelId) &&
-                                exportStructure.HeaderToLevelMap.ContainsKey(levelExportStructure.LevelId));
+                            scope.ScopeVector.Length == levelExportStructure.LevelScopeVector.Length + 1 &&
+                                scope.ScopeVector.Take(levelExportStructure.LevelScopeVector.Length)
+                                    .SequenceEqual(levelExportStructure.LevelScopeVector) &&
+                                exportStructure.HeaderToLevelMap.ContainsKey(levelExportStructure.LevelScopeVector));
 
             return
                 children
-                    .Select(scope => exportStructure.HeaderToLevelMap[scope.ScopeId]).Select(
+                    .Select(scope => exportStructure.HeaderToLevelMap[scope.ScopeVector]).Select(
                         child =>
                             GetDataFileByLevelName(allLevels, child.LevelName)).Where(file => file != null).ToArray();
         }
