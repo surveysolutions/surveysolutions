@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.RosterGroupInstanceIds = new Dictionary<string, DistinctDecimalList>();
             this.ValidAnsweredQuestions = new HashSet<string>();
             this.InvalidAnsweredQuestions = new HashSet<string>();
+            this.AnswerComments = new List<AnswerComment>();
         }
 
         public Dictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -32,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Dictionary<string, DistinctDecimalList> RosterGroupInstanceIds { set; get; }
         public HashSet<string> ValidAnsweredQuestions { set; get; }
         public HashSet<string> InvalidAnsweredQuestions { set; get; }
+        public List<AnswerComment> AnswerComments { get; set; }
 
         public void ApplyInterviewChanges(InterviewChanges changes)
         {
