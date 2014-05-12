@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -39,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return referenceInfoForLinkedQuestions;
         }
 
-        private Guid[] GetScopeOfReferencedQuestions(IQuestion referencedQuestion,
+        private ValueVector<Guid> GetScopeOfReferencedQuestions(IQuestion referencedQuestion,
             IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion)
         {
             var result = new List<Guid>();
@@ -56,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             }
             result.Reverse();
 
-            return result.ToArray();
+            return new ValueVector<Guid>(result);
         }
 
 

@@ -8,6 +8,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -56,8 +57,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
             for (int i = 0; i < levelCount; i++)
             {
 
-                questionnaireExportStructure.HeaderToLevelMap.Add(Guid.NewGuid(),
-                    new HeaderStructureForLevel() { LevelName = "level" + i, LevelId = Guid.NewGuid() });
+                questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid> { Guid.NewGuid() },
+                    new HeaderStructureForLevel() { LevelName = "level" + i, LevelScopeVector = new ValueVector<Guid> { Guid.NewGuid() } });
             }
             return questionnaireExportStructure;
         }

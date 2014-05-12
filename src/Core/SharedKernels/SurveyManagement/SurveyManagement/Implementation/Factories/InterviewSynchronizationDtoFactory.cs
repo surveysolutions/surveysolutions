@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             var outerVector = this.CreateOuterVector(interviewLevel);
 
-            foreach (var scopeId in interviewLevel.ScopeIds)
+            foreach (var scopeId in interviewLevel.ScopeVectors)
             {
                 foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key].RosterIdToRosterTitleQuestionIdMap.Keys)
                 {

@@ -11,9 +11,11 @@ using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -84,20 +86,20 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private Dictionary<Guid, IList<Guid>> questionsParticipationInSubstitutionReferences =
             new Dictionary<Guid, IList<Guid>>();
 
-        private Dictionary<Guid, IList<Guid>> rostersParticipationInSubstitutionReferences = new Dictionary<Guid, IList<Guid>>();
+        private Dictionary<ValueVector<Guid>, IList<Guid>> rostersParticipationInSubstitutionReferences = new Dictionary<ValueVector<Guid>, IList<Guid>>();
 
         private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(IQuestionnaireDocument questionnaire)
         {
             var allQuestions = questionnaire.Find<IQuestion>(q => true).ToArray();
             foreach (var questionsWithSubstitution in allQuestions)
             {
-                var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
+                var substitutionReferences = SubstitutionUtils.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
                 if (!substitutionReferences.Any())
                     continue;
 
                 foreach (var substitutionReference in substitutionReferences)
                 {
-                    if (substitutionReference == StringUtil.RosterTitleSubstitutionReference)
+                    if (substitutionReference == SubstitutionUtils.RosterTitleSubstitutionReference)
                         HandleRosterTitleInSubstitutions(questionsWithSubstitution);
                     else
                         HandleQuestionReferenceInSubstitution(questionnaire, questionsWithSubstitution, substitutionReference);
@@ -107,15 +109,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void HandleRosterTitleInSubstitutions(IQuestion questionsWithSubstitution)
         {
-            var rosterId = GetQuestionRosterScope(questionsWithSubstitution).Last();
-            if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterId))
+            var rosterVector = GetQuestionRosterScope(questionsWithSubstitution);
+            if (rostersParticipationInSubstitutionReferences.ContainsKey(rosterVector))
             {
-                if (!rostersParticipationInSubstitutionReferences[rosterId].Contains(questionsWithSubstitution.PublicKey))
-                    rostersParticipationInSubstitutionReferences[rosterId].Add(questionsWithSubstitution.PublicKey);
+                if (!rostersParticipationInSubstitutionReferences[rosterVector].Contains(questionsWithSubstitution.PublicKey))
+                    rostersParticipationInSubstitutionReferences[rosterVector].Add(questionsWithSubstitution.PublicKey);
             }
             else
             {
-                rostersParticipationInSubstitutionReferences.Add(rosterId,
+                rostersParticipationInSubstitutionReferences.Add(rosterVector,
                     new List<Guid> { questionsWithSubstitution.PublicKey });
             }
         }
@@ -144,15 +146,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 foreach (var headQuestionId in rosterDescription.RosterIdToRosterTitleQuestionIdMap.Values)
                 {
                     if (headQuestionId != null)
-                        this.listOfHeadQuestionsMappedOnScope[headQuestionId.QuestionId] = rosterDescription.ScopeId;
+                        this.listOfHeadQuestionsMappedOnScope[headQuestionId.QuestionId] = rosterDescription.ScopeVector;
                 }
             }
         }
 
-        public Guid GetScopeOfPropagatedScreen(Guid itemKey)
+        public ValueVector<Guid> GetScopeOfPropagatedScreen(Guid itemKey)
         {
             var itemScope = this.rosterStructure.RosterScopes.FirstOrDefault(s => s.Value.RosterIdToRosterTitleQuestionIdMap.ContainsKey(itemKey));
-            if (itemScope.Equals(default(KeyValuePair<Guid, HashSet<Guid>>)))
+            if (itemScope.Equals(default(KeyValuePair<ValueVector<Guid>, RosterScopeDescription>)))
                 throw new ArgumentException("item is absent in any scope");
             return itemScope.Key;
         }
@@ -277,7 +279,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
         private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions;
-        private readonly Dictionary<Guid, Guid> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, Guid>();
+        private readonly Dictionary<Guid, ValueVector<Guid>> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, ValueVector<Guid>>();
         private readonly Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
         private readonly QuestionnaireRosterStructure rosterStructure;
         private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> propagatedScreenPrototypes =
@@ -501,14 +503,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void UpdateRosterTitleSubstitution(InterviewItemId rosterId)
         {
-            var level = rosterStructure.RosterScopes.Values.FirstOrDefault(scope => scope.RosterIdToRosterVectorMap.ContainsKey(rosterId.Id));
+            var level = rosterStructure.RosterScopes.Values.FirstOrDefault(scope => scope.RosterIdToRosterTitleQuestionIdMap.ContainsKey(rosterId.Id));
             if (level == null)
                 return;
 
-            if (!this.rostersParticipationInSubstitutionReferences.ContainsKey(level.ScopeId))
+            if (!this.rostersParticipationInSubstitutionReferences.ContainsKey(level.ScopeVector))
                 return;
 
-            foreach (var participationQuestion in this.rostersParticipationInSubstitutionReferences[level.ScopeId])
+            foreach (var participationQuestion in this.rostersParticipationInSubstitutionReferences[level.ScopeVector])
             {
                 var rosterScreen =
                     Screens[rosterId] as
@@ -808,7 +810,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected HeaderItem BuildHeader(IQuestion question)
         {
-            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => current.ReplaceSubstitutionVariable(substitutionVariable, StringUtil.DefaultSubstitutionText));
+            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => current.ReplaceSubstitutionVariable(substitutionVariable, SubstitutionUtils.DefaultSubstitutionText));
             return new HeaderItem(question.PublicKey, text, question.Instructions);
         }
 
@@ -950,7 +952,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
-        private Guid[] GetQuestionRosterScope(IQuestion question)
+        private ValueVector<Guid> GetQuestionRosterScope(IQuestion question)
         {
             var result = new List<Guid>();
 
@@ -968,10 +970,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 parentGroup = parentGroup.GetParent() as IGroup;
             }
             result.Reverse();
-            return result.ToArray();
+            return new ValueVector<Guid>(result.ToArray());
         }
 
-        protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId, decimal[] linkedQuestionRosterVector, Guid[] linkedQuestionRosterScope)
+        protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId, decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScope)
         {
             return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId)
                 ? Enumerable.Empty<LinkedAnswerViewModel>()
@@ -993,7 +995,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                                     linkedQuestionRosterVector, linkedQuestionRosterScope)));
         }
 
-        private string BuildLinkedQuestionOptionTitle(QuestionViewModel referencedQuestion, decimal[] linkedQuestionRosterVector, Guid[] linkedQuestionRosterScope)
+        private string BuildLinkedQuestionOptionTitle(QuestionViewModel referencedQuestion, decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScope)
         {
             return LinkedQuestionUtils.BuildLinkedQuestionOptionTitle(referencedQuestion.AnswerString,
                 (firstScreenInScopeId, firstScreeninScopeRosterVector) =>

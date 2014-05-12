@@ -10,9 +10,11 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -99,6 +101,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSu
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(answer.ToString()));
         }
 
+        [Test]
+        [TestCase(QuestionType.Text, "answer text")]
+        public void Update_When_event_SynchronizationMetadataApplied_Then_featured_answer_value_be_equal_passed_valuesr(QuestionType type,
+            object answer)
+        {
+            var questionnaireId = Guid.Parse("10000000000000000000000000000000");
+            var questionId = Guid.Parse("10000000000000000000000000000000");
+            var userId = Guid.Parse("20000000000000000000000000000002");
+
+            var savedInterviewSummary = CreateInterviewSummaryQuestions(
+                    new QuestionAnswer()
+                    {
+                        Id = questionId
+                    });
+
+            savedInterviewSummary.WasCreatedOnClient = true;
+
+
+            var featuredQuestionsMeta = new AnsweredQuestionSynchronizationDto[]{new AnsweredQuestionSynchronizationDto(
+                    questionId, new decimal[0], answer, string.Empty ) };
+
+            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
+
+            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId, InterviewStatus.Created, featuredQuestionsMeta);
+
+            var updatedInterviewSummary = CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
+                synchronizationMetadataApplied);
+
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(answer.ToString()));
+        }
+
         private QuestionAnswered CreateQuestionAnsweredEventByQuestionType(Guid questionId, QuestionType type, object answer)
         {
             switch (type)
@@ -120,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSu
         }
 
         private InterviewSummary CallUpdateMethod(InterviewSummaryEventHandlerFunctional eventHandler, InterviewSummary currentState,
-            QuestionAnswered updateEvent)
+            object updateEvent)
         {
             MethodInfo method = this.GetType().GetMethod("CreatePublishableEvent", BindingFlags.Instance | BindingFlags.NonPublic);
             MethodInfo generic = method.MakeGenericMethod(updateEvent.GetType());
@@ -128,9 +161,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSu
 
             var eventType = typeof (IPublishedEvent<>).MakeGenericType(updateEvent.GetType());
 
-            return
-                (InterviewSummary)
-                    eventHandler.GetType()
+            return (InterviewSummary) eventHandler.GetType()
                         .GetMethod("Update", new Type[] { typeof (InterviewSummary), eventType })
                         .Invoke(eventHandler, new object[] { currentState, publishableEvent });
         }

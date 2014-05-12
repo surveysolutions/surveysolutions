@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -56,52 +57,52 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
              interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
 
         It should_records_count_equals_4 = () =>
-           GetLevel(result, rosterSizeQuestionId).Records.Length.ShouldEqual(2);
+           GetLevel(result, new[] { rosterSizeQuestionId }).Records.Length.ShouldEqual(2);
 
         It should_first_record_id_equals_0 = () =>
-           GetLevel(result, rosterSizeQuestionId).Records[0].RecordId.ShouldEqual("0");
+           GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].RecordId.ShouldEqual("0");
 
         It should_first_record_has_one_question = () =>
-          GetLevel(result, rosterSizeQuestionId).Records[0].Questions.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions.Length.ShouldEqual(1);
 
         It should_first_record_has_question_with_id_of_questionInsideRosterGroupId = () =>
-          GetLevel(result, rosterSizeQuestionId).Records[0].Questions[0].QuestionId.ShouldEqual(questionInsideRosterGroupId);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions[0].QuestionId.ShouldEqual(questionInsideRosterGroupId);
 
         It should_first_record_has_question_with_one_answer = () =>
-          GetLevel(result, rosterSizeQuestionId).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
 
         It should_first_record_has_question_with_answer_equal_to_some_answer = () =>
-         GetLevel(result, rosterSizeQuestionId).Records[0].Questions[0].Answers[0].ShouldEqual(someAnswer);
+         GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions[0].Answers[0].ShouldEqual(someAnswer);
 
         It should_second_record_id_equals_1 = () =>
-           GetLevel(result, rosterSizeQuestionId).Records[1].RecordId.ShouldEqual("1");
+           GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].RecordId.ShouldEqual("1");
 
         It should_second_record_has_one_question = () =>
-          GetLevel(result, rosterSizeQuestionId).Records[1].Questions.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions.Length.ShouldEqual(1);
 
         It should_second_record_has_question_with_id_of_questionInsideRosterGroupId = () =>
-          GetLevel(result, rosterSizeQuestionId).Records[1].Questions[0].QuestionId.ShouldEqual(questionInsideRosterGroupId);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions[0].QuestionId.ShouldEqual(questionInsideRosterGroupId);
 
         It should_second_record_has_question_with_one_answer = () =>
-          GetLevel(result, rosterSizeQuestionId).Records[1].Questions[0].Answers.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions[0].Answers.Length.ShouldEqual(1);
 
         It should_second_record_has_question_with_answer_equal_to_some_answer = () =>
-         GetLevel(result, rosterSizeQuestionId).Records[1].Questions[0].Answers[0].ShouldEqual(someAnswer);
+         GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions[0].Answers[0].ShouldEqual(someAnswer);
 
         It should_have_one_question_on_top_level = () =>
-            GetLevel(result, questionnarie.PublicKey).Records[0].Questions.Length.ShouldEqual(1);
+            GetLevel(result, new Guid[0]).Records[0].Questions.Length.ShouldEqual(1);
 
         It should_have_five_columns_for_question_on_top_level = () =>
-            GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers.Length.ShouldEqual(5);
+            GetLevel(result, new Guid[0]).Records[0].Questions[0].Answers.Length.ShouldEqual(5);
 
         It should_have_first_column_with_value_a1_for_question_on_top_level = () =>
-            GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers[0].ShouldEqual("a1");
+            GetLevel(result, new Guid[0]).Records[0].Questions[0].Answers[0].ShouldEqual("a1");
 
         It should_have_second_column_with_value_a1_for_question_on_top_level = () =>
-            GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers[1].ShouldEqual("a2");
+            GetLevel(result, new Guid[0]).Records[0].Questions[0].Answers[1].ShouldEqual("a2");
 
         It should_have_all_other_coulmns_with_empty_values_for_question_on_top_level = () =>
-           GetLevel(result, questionnarie.PublicKey).Records[0].Questions[0].Answers.Skip(2).Any(a=>!string.IsNullOrEmpty(a)).ShouldBeFalse();
+           GetLevel(result, new Guid[0]).Records[0].Questions[0].Answers.Skip(2).Any(a => !string.IsNullOrEmpty(a)).ShouldBeFalse();
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
@@ -113,7 +114,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new decimal[1] { i };
-                var newLevel = new InterviewLevel(rosterSizeQuestionId, null, vector);
+                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterSizeQuestionId }, null, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
 
                 var question = newLevel.GetOrCreateQuestion(questionInsideRosterGroupId);
