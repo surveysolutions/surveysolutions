@@ -78,6 +78,7 @@
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="DataTransferObjects\Preloading\PreloadedDataDto.cs" />
     <Compile Include="DataTransferObjects\Preloading\PreloadedLevelDto.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\CommentSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredInvalid.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerComment.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ConversionHelper.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />

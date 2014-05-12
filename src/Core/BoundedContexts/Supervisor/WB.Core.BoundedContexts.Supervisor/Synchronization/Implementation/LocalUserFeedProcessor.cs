@@ -53,8 +53,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             foreach (var localSupervisor in localSupervisors)
             {
                 this.headquartersPullContext.PushMessage(string.Format("Processing events for supervisor {0} with Id {1}", localSupervisor.UserName, localSupervisor.PublicKey));
-                IEnumerable<LocalUserChangedFeedEntry> events = this.localFeedStorage.GetNotProcessedSupervisorRelatedEvents(localSupervisor.PublicKey.FormatGuid());
-                this.headquartersPullContext.PushMessage(string.Format("Reveived {0} non processed events for supervisor {1}", events.Count(), localSupervisor.UserName));
+                IEnumerable<LocalUserChangedFeedEntry> events = this.localFeedStorage.GetNotProcessedSupervisorEvents(localSupervisor.PublicKey.FormatGuid());
+                this.headquartersPullContext.PushMessage(string.Format("Received {0} non processed events for supervisor {1}", events.Count(), localSupervisor.UserName));
 
                 foreach (var userChanges in events.GroupBy(x => x.ChangedUserId))
                 {
@@ -96,15 +96,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             ICommand userCommand = null;
 
+            UserRoles[] userRoles = userDetails.Roles.ToArray();
+            bool userShouldBeLockedByHq = userDetails.IsLockedByHQ || userRoles.Contains(UserRoles.Headquarter);
+
             if (this.users.GetById(userDetails.PublicKey) == null)
             {
                 userCommand = new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
-                    userDetails.Roles.ToArray(), userDetails.isLockedBySupervisor, userDetails.IsLockedByHQ, userDetails.Supervisor);
+                    userRoles, userDetails.isLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor);
             }
             else
             {
                 userCommand = new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
-                    userDetails.Roles.ToArray(), null, userDetails.IsLockedByHQ, userDetails.Password, Guid.Empty);
+                    userRoles, null, userShouldBeLockedByHq, userDetails.Password, Guid.Empty);
             }
 
             this.executeCommand(userCommand);
