@@ -1,6 +1,6 @@
 ﻿<div class="breadcrumbs">
     <ul>
-        <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
+        <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs"><a ng-href="{{breadcrumb.id}}">{{breadcrumb.title}}</a></li>
     </ul>
 </div>
 
@@ -10,18 +10,18 @@
         <label for="edit-question-title">Question Title</label>
         <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control">
     </div>
-    
+
 
     <div class="form-group">
         <label for="edit-question-variable-name">Variable name</label>
         <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variableName" class="form-control">
     </div>
-    
+
     <div class="form-group">
         <label for="edit-question-type">Type</label>
-        <select id="edit-question-type" class="form-control" ng-model="activeQuestion.type" ng-options="scope.value as scope.text for scope in activeQuestion.questionTypes"></select>
+        <select id="edit-question-type" class="form-control" ng-model="activeQuestion.type" ng-options="scope.value as scope.text for scope in activeQuestion.questionTypeOptions"></select>
     </div>
-    
+
     <div class="checkbox">
         <label>
             <input type="checkbox" ng-model="activeQuestion.isPreFilled">
@@ -35,12 +35,14 @@
             mandatory question
         </label>
     </div>
-    
+    <div ng-include="activeQuestion.type + '-template.html'">
+    </div>
+
     <div class="form-group">
         <label for="edit-question-validation-expression">Validation expression</label>
         <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression" class="form-control">
     </div>
-    
+
     <div class="form-group">
         <label for="edit-question-validation-message">Validation expression</label>
         <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage" class="form-control">
@@ -51,7 +53,7 @@
     </div>
     <div class="form-group">
         <label for="edit-question-scope">Question scope</label>
-        <select for="edit-question-scope"  ng-model="activeQuestion.questionScope" ng-options="scope.value as scope.text for scope in activeQuestion.questionScopes " class="form-control"></select>
+        <select for="edit-question-scope" ng-model="activeQuestion.questionScope" ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions " class="form-control"></select>
     </div>
     <div class="form-group">
         <label for="edit-question-instructions">Instructions</label>
@@ -61,3 +63,55 @@
         <input type="submit" value="Save" id="edit-question-save-button" ng-click="saveQuestion()">
     </p>
 </form>
+
+<script type="text/ng-template" id="SingleOption-template.html">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="activeQuestion.isLinked">
+            Is linked
+        </label>
+    </div>
+    <div ng-repeat="option in activeQuestion.options">
+        <div class="form-group">
+            <div class="col-xs-4">
+                <input type="text" ng-model="option.value" class="form-control">
+            </div>
+            <div class="col-xs-8">
+                <input type="text" ng-model="option.title" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            <input type="text" ng-model="optionValue" class="form-control">
+        </div>
+        <div class="col-xs-8">
+            <input type="text" ng-model="optionTitle" class="form-control">
+        </div>
+    </div>
+    <p>
+        <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+    </p>
+</script>
+<script type="text/ng-template" id="MultyOption-template.html">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="activeQuestion.isLinked">
+            Is linked
+        </label>
+    </div>
+</script>
+<script type="text/ng-template" id="Numeric-template.html">
+    <p>Hello, im Numeric</p>
+</script>
+<script type="text/ng-template" id="DateTime-template.html">
+</script>
+<script type="text/ng-template" id="Text-template.html">
+</script>
+<script type="text/ng-template" id="GpsCoordinates-template.html">
+</script>
+<script type="text/ng-template" id="TextList-template.html">
+    <p>Hello, im TextList</p>
+</script>
+<script type="text/ng-template" id="QRBarcode-template.html">
+</script>
