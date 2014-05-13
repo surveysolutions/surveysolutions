@@ -80,6 +80,12 @@
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
+    <Compile Include="QuestionnaireVerifierTests\Categorical\when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_to_single_linked_.cs" />
+    <Compile Include="QuestionnaireVerifierTests\Categorical\when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_to_multi_linked_.cs" />
+    <Compile Include="QuestionnaireVerifierTests\Categorical\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_to_single_linked_.cs" />
+    <Compile Include="QuestionnaireVerifierTests\Categorical\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_to_multi_linked_.cs" />
+    <Compile Include="QuestionnaireVerifierTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_single_linked_.cs" />
+    <Compile Include="QuestionnaireVerifierTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_multi_linked_.cs" />
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_qr_barcode_question.cs" />
