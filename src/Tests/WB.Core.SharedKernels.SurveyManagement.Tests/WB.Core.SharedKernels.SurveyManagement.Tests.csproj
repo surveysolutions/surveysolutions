@@ -202,7 +202,6 @@
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_first_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_top_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
-    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_question_of_wrong_data_type.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_questionnaire_is_absent.cs" />
@@ -260,7 +259,6 @@
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_present.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_CreateExportedDataStructureByTemplate_is_called_and_directory_is_present.cs" />
-    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_CreateExportedDataStructureByTemplate_is_called_and_questionnaire_has_2_rosters_.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_method_clear_with_one_file_and_one_dir_present.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_level_labels.cs" />

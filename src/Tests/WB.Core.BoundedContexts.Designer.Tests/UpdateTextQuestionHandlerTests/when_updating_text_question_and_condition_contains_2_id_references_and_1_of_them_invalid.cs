@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateTextQuestionHandlerTests
                 ResponsibleId = responsibleId
             });
 
-            RegisterServiceLocator();
             RegisterExpressionProcessorMock(enablementCondition, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };

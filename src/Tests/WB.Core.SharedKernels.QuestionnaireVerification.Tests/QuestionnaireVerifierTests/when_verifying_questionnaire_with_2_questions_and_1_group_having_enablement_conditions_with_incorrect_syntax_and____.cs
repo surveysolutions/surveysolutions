@@ -13,9 +13,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and_1_question_and_1_group_having_correct_syntax : QuestionnaireVerifierTestsContext
+    internal class
+        when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and_1_question_and_1_group_having_correct_syntax :
+            QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             const string InvalidExpression = "[hehe] &=+< 5";
             const string ValidExpression = "[33333333333333333333333333333333] == 2";
@@ -27,58 +29,73 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             correctGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion { PublicKey = firstIncorrectQuestionId, ConditionExpression = InvalidExpression, StataExportCaption = "var" },
-                new TextQuestion { PublicKey = secondIncorrectQuestionId, ConditionExpression = InvalidExpression, StataExportCaption = "var" },
+                new TextQuestion
+                {
+                    PublicKey = firstIncorrectQuestionId,
+                    ConditionExpression = InvalidExpression,
+                    StataExportCaption = firstIncorrectQuestionId.ToString()
+                },
+                new TextQuestion
+                {
+                    PublicKey = secondIncorrectQuestionId,
+                    ConditionExpression = InvalidExpression,
+                    StataExportCaption = secondIncorrectQuestionId.ToString()
+                },
                 new Group { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
-                new NumericQuestion { PublicKey = correctQuestionId, ConditionExpression = ValidExpression, StataExportCaption = "var" },
+                new NumericQuestion
+                {
+                    PublicKey = correctQuestionId,
+                    ConditionExpression = ValidExpression,
+                    StataExportCaption = correctQuestionId.ToString()
+                },
                 new Group { PublicKey = correctGroupId, ConditionExpression = ValidExpression }
-            );
+                );
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.IsSyntaxValid(InvalidExpression) == false
-                && processor.IsSyntaxValid(ValidExpression) == true);
+                    && processor.IsSyntaxValid(ValidExpression) == true);
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
         };
 
-        Because of = () =>
+        private Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_3_errors = () =>
+        private It should_return_3_errors = () =>
             resultErrors.Count().ShouldEqual(3);
 
-        It should_return_errors_each_with_code__WB0003__ = () =>
+        private It should_return_errors_each_with_code__WB0003__ = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.Code == "WB0003");
 
-        It should_return_errors_each_having_single_reference = () =>
+        private It should_return_errors_each_having_single_reference = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        It should_return_error_referencing_first_incorrect_question = () =>
+        private It should_return_error_referencing_first_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
-                && error.References.Single().Id == firstIncorrectQuestionId);
+                    && error.References.Single().Id == firstIncorrectQuestionId);
 
-        It should_return_error_referencing_second_incorrect_question = () =>
+        private It should_return_error_referencing_second_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
-                && error.References.Single().Id == secondIncorrectQuestionId);
+                    && error.References.Single().Id == secondIncorrectQuestionId);
 
-        It should_return_error_referencing_incorrect_group = () =>
+        private It should_return_error_referencing_incorrect_group = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
-                && error.References.Single().Id == incorrectGroupId);
+                    && error.References.Single().Id == incorrectGroupId);
 
-        It should_not_return_error_referencing_correct_question = () =>
+        private It should_not_return_error_referencing_correct_question = () =>
             resultErrors.ShouldNotContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
-                && error.References.Single().Id == correctQuestionId);
+                    && error.References.Single().Id == correctQuestionId);
 
-        It should_not_return_error_referencing_correct_group = () =>
+        private It should_not_return_error_referencing_correct_group = () =>
             resultErrors.ShouldNotContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
-                && error.References.Single().Id == correctGroupId);
+                    && error.References.Single().Id == correctGroupId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;

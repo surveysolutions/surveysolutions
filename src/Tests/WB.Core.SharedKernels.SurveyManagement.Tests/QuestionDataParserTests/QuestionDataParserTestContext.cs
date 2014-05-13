@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
@@ -41,5 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         protected static Guid questionId = Guid.NewGuid();
         protected static string questionVarName = "var";
         protected static string answer;
+        protected static KeyValuePair<Guid, object> parcedValue;
+        protected static ValueParsingResult parsingResult;
     }
 }

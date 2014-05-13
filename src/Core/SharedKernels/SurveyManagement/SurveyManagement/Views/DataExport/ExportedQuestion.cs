@@ -59,15 +59,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             if (arrayOfInteger != null)
                 return arrayOfInteger.Select(i => (object) i);
 
-            var listOfAnswers = value as IEnumerable<object>;
-            if (listOfAnswers != null)
-                return listOfAnswers;
-
             var interviewTextListAnswer = value as InterviewTextListAnswers;
             if (interviewTextListAnswer != null)
             {
                 return interviewTextListAnswer.Answers.Select(a => a.Answer).ToArray();
             }
+
+            var listOfAnswers = value as IEnumerable<object>;
+            if (listOfAnswers != null)
+                return listOfAnswers;
 
             return null;
         }
