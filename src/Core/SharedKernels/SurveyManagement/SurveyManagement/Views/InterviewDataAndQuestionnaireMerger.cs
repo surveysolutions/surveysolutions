@@ -330,7 +330,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         private static InterviewQuestion GetQuestion(Guid questionId, InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels)
         {
             return GetQuestion(questionId, currentInterviewLevel)
-                ?? upperInterviewLevels.Select(level => GetQuestion(questionId, level)).FirstOrDefault();
+                ?? upperInterviewLevels.Select(level => GetQuestion(questionId, level)).FirstOrDefault(q => q != null);
         }
 
         private static InterviewQuestion GetQuestion(Guid questionId, InterviewLevel currentInterviewLevel)
