@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -199,6 +200,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
             };
             result.ConnectChildrenWithParent();
             return result;
+        }
+
+        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
+        {
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<TInstance>())
+                .Returns(instance);
         }
     }
 }
