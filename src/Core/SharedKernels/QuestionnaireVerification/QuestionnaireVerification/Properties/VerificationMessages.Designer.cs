@@ -397,7 +397,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression cannot reference to the question from the deeper roster level..
+        ///   Looks up a localized string similar to Condition expression cannot refer to the question from the deeper roster level..
         /// </summary>
         internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
@@ -442,7 +442,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Groups can not custom enablement  condition referencing child question.
+        ///   Looks up a localized string similar to Groups cannot have custom condition expression referencing child question.
         /// </summary>
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
