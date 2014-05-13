@@ -19,7 +19,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
     {
         Establish context = () =>
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             merger = CreateMerger();
             
             var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
