@@ -539,5 +539,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has not unique variable name .
+        /// </summary>
+        internal static string WB0062_VariableNameForQuestionIsNotUnique {
+            get {
+                return ResourceManager.GetString("WB0062_VariableNameForQuestionIsNotUnique", resourceCulture);
+            }
+        }
     }
 }

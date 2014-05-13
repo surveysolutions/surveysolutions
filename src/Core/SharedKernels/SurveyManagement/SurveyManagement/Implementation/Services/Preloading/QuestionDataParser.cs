@@ -2,98 +2,113 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
     internal class QuestionDataParser : IQuestionDataParser
     {
-        public KeyValuePair<Guid, object>? Parse(string answer, string variableName, QuestionnaireDocument questionnaire)
+        public ValueParsingResult TryParse(string answer, string variableName, QuestionnaireDocument questionnaire, out KeyValuePair<Guid, object> parsedValue)
         {
+            parsedValue = new KeyValuePair<Guid, object>();
+
             if (string.IsNullOrEmpty(answer))
-                return null;
+                return ValueParsingResult.ValueIsNullOrEmpty;
             var question = GetQuestionByVariableName(questionnaire, variableName);
             if (question == null)
-                return null;
+                return ValueParsingResult.QuestionWasNotFound;
             if (question.LinkedToQuestionId.HasValue)
-                return null;
+                return ValueParsingResult.UnsupportedLinkedQuestion;
 
             switch (question.QuestionType)
             {
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
                 case QuestionType.TextList:
-                    return new KeyValuePair<Guid, object>(question.PublicKey, answer);
+                    parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, answer);
+                    return ValueParsingResult.OK;
                 case QuestionType.GpsCoordinates:
                     var parsedAnswer = GeoPosition.Parse(answer);
-                    if(parsedAnswer==null)
-                        break;
-                    return new KeyValuePair<Guid, object>(question.PublicKey, parsedAnswer);
+                    if (parsedAnswer == null)
+                        return ValueParsingResult.AnswerAsGpsWasNotParsed;
+
+                    parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, parsedAnswer);
+                    return ValueParsingResult.OK;
+                
                 case QuestionType.AutoPropagate:
                     int intValue;
-                    if (int.TryParse(answer, out intValue))
-                        return new KeyValuePair<Guid, object>(question.PublicKey, intValue);
-                    break;
+                    if (!int.TryParse(answer, out intValue))
+                        return ValueParsingResult.AnswerAsIntWasNotParsed;
 
+                    parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, intValue);
+                    return ValueParsingResult.OK;
+                                        
                 case QuestionType.Numeric:
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion == null)
-                        break;
+                        return ValueParsingResult.QuestionTypeIsIncorrect;
                     // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
                     if (numericQuestion.IsInteger)
                     {
                         int intNumericValue;
-                        if (int.TryParse(answer, out intNumericValue))
-                            return new KeyValuePair<Guid, object>(question.PublicKey, intNumericValue);
+                        if (!int.TryParse(answer, out intNumericValue))
+                            return ValueParsingResult.AnswerAsIntWasNotParsed;
+                        
+                        parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, intNumericValue);
+                        return ValueParsingResult.OK;
                     }
                     else
                     {
                         decimal decimalNumericValue;
-                        if (decimal.TryParse(answer, out decimalNumericValue))
-                            return new KeyValuePair<Guid, object>(question.PublicKey, decimalNumericValue);
+                        if (!decimal.TryParse(answer, out decimalNumericValue))
+                            return ValueParsingResult.AnswerAsDecimalWasNotParsed;
+                        {
+                            parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, decimalNumericValue);
+                            return ValueParsingResult.OK;
+                        }
                     }
-                    break;
 
                 case QuestionType.DateTime:
                     DateTime date;
                     if (!DateTime.TryParse(answer, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out date))
-                        break;
-                    return new KeyValuePair<Guid, object>(question.PublicKey, date);
+                        return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
+                    parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, date);
+                    return ValueParsingResult.OK;
 
                 case QuestionType.SingleOption:
                     var singleOption = question as SingleQuestion;
-                    if (singleOption != null)
-                    {
-                        decimal answerValue;
-                        if (!decimal.TryParse(answer, out answerValue))
-                            break;
-                        if (!GetAnswerOptionsAsValues(question).Contains(answerValue))
-                            break;
-                        return new KeyValuePair<Guid, object>(question.PublicKey, answerValue);
-                    }
-                    break;
+                    if (singleOption == null)
+                        return ValueParsingResult.QuestionTypeIsIncorrect;
+
+                    decimal decimalAnswerValue;
+                    if (!decimal.TryParse(answer, out decimalAnswerValue))
+                        return ValueParsingResult.AnswerAsDecimalWasNotParsed;
+                    if (!GetAnswerOptionsAsValues(question).Contains(decimalAnswerValue))
+                        return ValueParsingResult.ParsedValueIsNotAllowed;
+
+                    parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, decimalAnswerValue);
+                    return ValueParsingResult.OK;
 
                 case QuestionType.MultyOption:
                     var multyOption = question as MultyOptionsQuestion;
-                    if (multyOption != null)
-                    {
-                        decimal answerValue;
-                        if (!decimal.TryParse(answer, out answerValue))
-                            break;
-                        if (!GetAnswerOptionsAsValues(question).Contains(answerValue))
-                            break;
-                        return new KeyValuePair<Guid, object>(question.PublicKey, answerValue);
-                    }
-                    break;
+                    if (multyOption == null)
+                        return ValueParsingResult.QuestionTypeIsIncorrect;
+                    
+                    decimal answerValue;
+                    if (!decimal.TryParse(answer, out answerValue))
+                        return ValueParsingResult.AnswerAsDecimalWasNotParsed;
+                    if (!GetAnswerOptionsAsValues(question).Contains(answerValue))
+                        return ValueParsingResult.ParsedValueIsNotAllowed;
+                    parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, answerValue);
+                    return ValueParsingResult.OK;                    
             }
 
-            return null;
+            return ValueParsingResult.GeneralErrorOccured;                    
+
         }
 
         public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(string[] answers, string variableName, QuestionnaireDocument questionnaire)
@@ -102,10 +117,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             foreach (var answer in answers)
             {
-                var parsedAnswer = Parse(answer, variableName, questionnaire);
-                if (!parsedAnswer.HasValue)
+                KeyValuePair<Guid, object> parsedAnswer;
+                if(this.TryParse(answer, variableName, questionnaire, out parsedAnswer) != ValueParsingResult.OK)
                     continue;
-                typedAnswers.Add(parsedAnswer.Value.Value);
+                
+                typedAnswers.Add(parsedAnswer.Value);
             }
 
             if (typedAnswers.Count == 0)

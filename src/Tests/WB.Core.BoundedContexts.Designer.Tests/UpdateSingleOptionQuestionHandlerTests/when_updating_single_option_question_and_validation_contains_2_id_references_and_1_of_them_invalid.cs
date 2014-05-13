@@ -29,7 +29,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
 
             });
 
-            RegisterServiceLocator();
             RegisterExpressionProcessorMock(validationExpression, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };

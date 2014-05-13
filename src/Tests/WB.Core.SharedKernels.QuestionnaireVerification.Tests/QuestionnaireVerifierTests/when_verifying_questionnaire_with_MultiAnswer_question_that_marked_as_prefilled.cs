@@ -15,19 +15,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Establish context = () =>
         {
             prefilledTextListquestionId = Guid.Parse("10000000000000000000000000000000");
+            textQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = prefilledTextListquestionId,
-                StataExportCaption = "var",
+                StataExportCaption = prefilledTextListquestionId.ToString(),
                 Featured = true
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
-                StataExportCaption = "var",
-                PublicKey = Guid.Parse("20000000000000000000000000000000")
+                StataExportCaption = textQuestionId.ToString(),
+                PublicKey = textQuestionId
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -56,5 +57,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         private static QuestionnaireDocument questionnaire;
 
         private static Guid prefilledTextListquestionId;
+        private static Guid textQuestionId;
     }
 }

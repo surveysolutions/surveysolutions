@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Xml;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Properties;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
@@ -61,6 +59,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         #endregion
 
         private readonly IExpressionProcessor expressionProcessor;
+
+        protected static ISubstitutionService SubstitutionService
+        {
+            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
+        }
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor)
         {
@@ -116,6 +119,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
+                    ErrorsByQuestionsWithDuplicateVariableName
                 };
             }
         }
@@ -138,7 +142,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            return question.StataExportCaption == SubstitutionUtils.RosterTitleSubstitutionReference;
+            return question.StataExportCaption == SubstitutionService.RosterTitleSubstitutionReference;
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
@@ -598,10 +602,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
         }
 
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithDuplicateVariableName(QuestionnaireDocument questionnaire)
+        {
+            var questionsDuplicates = questionnaire.Find<IQuestion>(q => true)
+                .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
+                .SelectMany(group => group.Skip(1));
+
+            foreach (IQuestion questionsDuplicate in questionsDuplicates)
+                yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
+        }
+
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
         {
             IEnumerable<IQuestion> questionsWithSubstitutions =
-                questionnaire.Find<IQuestion>(question => SubstitutionUtils.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
+                questionnaire.Find<IQuestion>(question => SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
 
             var errorByAllQuestionsWithSubstitutions = new List<QuestionnaireVerificationError>();
 
@@ -613,7 +627,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     continue;
                 }
 
-                var substitutionReferences = SubstitutionUtils.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
+                var substitutionReferences = SubstitutionService.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
 
                 Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
                     GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
@@ -871,7 +885,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return QuestionWithTitleSubstitutionCantReferenceSelf(questionWithSubstitution);
             }
 
-            if (substitutionReference == SubstitutionUtils.RosterTitleSubstitutionReference)
+            if (substitutionReference == SubstitutionService.RosterTitleSubstitutionReference)
             {
                 if (vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions.Length == 0)
                 {
@@ -1027,6 +1041,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(sourceQuestion));
         }
 
+        private static QuestionnaireVerificationError VariableNameIsUsedAsOtherQuestionVariableName(IQuestion sourseQuestion)
+        {
+            return new QuestionnaireVerificationError("WB0062",
+                VerificationMessages.WB0062_VariableNameForQuestionIsNotUnique,
+                CreateReference(sourseQuestion));
+        }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
             List<QuestionnaireVerificationError> errorList, Func<T, QuestionnaireVerificationError> getErrorOrNull)

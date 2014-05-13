@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                 new NumericQuestion
                 {
                     PublicKey = rosterSizeQuestionId,
-                    StataExportCaption = "var",
+                    StataExportCaption = rosterSizeQuestionId.ToString(),
                     IsInteger = true,
                     MaxValue = 5
                 },
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                             {
                                 new NumericQuestion
                                 {
-                                    StataExportCaption = "var",
+                                    StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
                                     PublicKey = underDeeperRosterLevelQuestionId
                                 }
                             }

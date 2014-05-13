@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {

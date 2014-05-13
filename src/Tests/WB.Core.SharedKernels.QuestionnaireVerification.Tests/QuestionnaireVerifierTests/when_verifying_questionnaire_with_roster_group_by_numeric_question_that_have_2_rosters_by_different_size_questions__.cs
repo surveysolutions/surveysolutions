@@ -18,14 +18,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new NumericQuestion("roster size question 1")
             {
                 PublicKey = rosterSizeQuestion1Id,
-                StataExportCaption = "var",
+                StataExportCaption = rosterSizeQuestion1Id.ToString(),
                 IsInteger = true,
                 MaxValue = 5
             });
             questionnaire.Children.Add(new NumericQuestion("roster size question 2")
             {
                 PublicKey = rosterSizeQuestion2Id,
-                StataExportCaption = "var",
+                StataExportCaption = rosterSizeQuestion2Id.ToString(),
                 IsInteger = true,
                 MaxValue = 5
             });
