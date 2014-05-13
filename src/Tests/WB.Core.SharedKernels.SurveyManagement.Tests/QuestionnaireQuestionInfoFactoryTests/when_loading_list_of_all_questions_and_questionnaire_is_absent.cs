@@ -14,8 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionnaireQuestionInfo
     {
         private Establish context = () =>
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-
             factory = CreateQuestionnaireQuestionInfoFactory();
 
             input = CreateQuestionnaireQuestionInfoInputModel(questionnaireId: questionnaireId, version: version, questionType:null);
