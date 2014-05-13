@@ -397,7 +397,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression cannot refer to the question from the deeper roster level..
+        ///   Looks up a localized string similar to Condition expression cannot refer to a question from a deeper roster level..
         /// </summary>
         internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
