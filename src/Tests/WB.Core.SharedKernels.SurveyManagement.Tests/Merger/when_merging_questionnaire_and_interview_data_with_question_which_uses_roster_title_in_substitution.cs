@@ -12,6 +12,8 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -59,6 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
 
             interview = CreateInterviewData(interviewId);
 
+            SetupInstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
 
             AddInterviewLevel(interview, new ValueVector<Guid> { independantRosterId }, new decimal[] { 0 },
                new Dictionary<Guid, object>(),
