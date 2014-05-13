@@ -210,7 +210,7 @@
                             if (data.FinishedAt) {
                                 title += '<br /> last successful sync {0} <br/> applied changes with {1} errors'.f(moment(data.FinisedAt).fromNow(), data.ErrorsCount);
                             }
-                            if (data.IsHqReachable === false) {
+                            if (!data.IsHqReachable) {
                                 title += '<br /> During last sync HQ was unreachable';
                             }
 
