@@ -32,8 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
             Func<QuestionnaireDocument> templateCreationAction,
             Func<InterviewData> dataCreationAction = null, Action<InterviewDataExportView> returnStoredView = null)
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-
             var interviewDataStorageMock = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
             var questionnaire = templateCreationAction();
 
