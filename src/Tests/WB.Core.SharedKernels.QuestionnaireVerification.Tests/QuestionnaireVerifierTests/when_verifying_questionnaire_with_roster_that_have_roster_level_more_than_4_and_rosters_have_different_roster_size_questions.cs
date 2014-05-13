@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             var rosterSizeLevel5Id = Guid.Parse("60000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new NumericQuestion() {PublicKey = rosterSizeLevel1Id, IsInteger = true, MaxValue = 5, StataExportCaption = "var"},
+                new NumericQuestion() {PublicKey = rosterSizeLevel1Id, IsInteger = true, MaxValue = 5, StataExportCaption = rosterSizeLevel1Id.ToString()},
                 new Group()
                 {
                     PublicKey = Guid.NewGuid(),
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     RosterSizeQuestionId = rosterSizeLevel1Id,
                     Children = new List<IComposite>()
                     {
-                        new NumericQuestion() {PublicKey = rosterSizeLevel2Id, IsInteger = true, MaxValue = 5, StataExportCaption = "var"},
+                        new NumericQuestion() {PublicKey = rosterSizeLevel2Id, IsInteger = true, MaxValue = 5, StataExportCaption = rosterSizeLevel2Id.ToString()},
                         new Group()
                         {
                             PublicKey = Guid.NewGuid(),
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                             RosterSizeQuestionId = rosterSizeLevel2Id,
                             Children = new List<IComposite>()
                             {
-                                new NumericQuestion() {PublicKey = rosterSizeLevel3Id, IsInteger = true, MaxValue = 5, StataExportCaption = "var"},
+                                new NumericQuestion() {PublicKey = rosterSizeLevel3Id, IsInteger = true, MaxValue = 5, StataExportCaption = rosterSizeLevel3Id.ToString()},
                                 new Group()
                                 {
                                     PublicKey = Guid.NewGuid(),
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                     RosterSizeQuestionId = rosterSizeLevel3Id,
                                     Children = new List<IComposite>()
                                     {
-                                        new NumericQuestion() {PublicKey = rosterSizeLevel4Id, IsInteger = true, MaxValue = 5, StataExportCaption = "var"},
+                                        new NumericQuestion() {PublicKey = rosterSizeLevel4Id, IsInteger = true, MaxValue = 5, StataExportCaption = rosterSizeLevel4Id.ToString()},
                                         new Group()
                                         {
                                             PublicKey = Guid.NewGuid(),
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                             RosterSizeQuestionId = rosterSizeLevel4Id,
                                             Children = new List<IComposite>()
                                             {
-                                                new NumericQuestion() {PublicKey = rosterSizeLevel5Id, IsInteger = true, MaxValue = 5, StataExportCaption = "var"},
+                                                new NumericQuestion() {PublicKey = rosterSizeLevel5Id, IsInteger = true, MaxValue = 5, StataExportCaption = rosterSizeLevel5Id.ToString()},
                                                 new Group()
                                                 {
                                                     PublicKey = rosterGroupId,

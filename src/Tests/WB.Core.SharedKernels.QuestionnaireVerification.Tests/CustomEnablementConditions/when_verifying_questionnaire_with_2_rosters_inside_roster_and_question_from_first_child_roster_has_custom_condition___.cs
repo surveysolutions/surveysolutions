@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                 new NumericQuestion
                 {
                     PublicKey = rosterQuestionId,
-                    StataExportCaption = "var",
+                    StataExportCaption = rosterQuestionId.ToString(),
                     IsInteger = true,
                     MaxValue = 5
                 },
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                         new NumericQuestion
                         {
                             PublicKey = rosterInsideRosterQuestionId,
-                            StataExportCaption = "var",
+                            StataExportCaption = rosterInsideRosterQuestionId.ToString(),
                             IsInteger = true,
                             MaxValue = 5
                         },
@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                             {
                                 new NumericQuestion
                                 {
-                                    StataExportCaption = "var",
+                                    StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
                                     PublicKey = underDeeperRosterLevelQuestionId
                                 }
                             }
@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                                 new SingleQuestion
                                 {
                                     PublicKey = questionWithCustomCondition,
-                                    StataExportCaption = "var",
+                                    StataExportCaption = questionWithCustomCondition.ToString(),
                                     ConditionExpression = "some random expression",
                                     Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
                                 }

@@ -50,8 +50,10 @@
     <Compile Include="ExtentionFunctions.cs" />
     <Compile Include="Implementation\Services\ExpressionProcessor.cs" />
     <Compile Include="Implementation\Services\IdentifierCollector.cs" />
+    <Compile Include="Implementation\Services\SubstitutionService.cs" />
     <Compile Include="Services\IExpressionProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ISubstitutionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">

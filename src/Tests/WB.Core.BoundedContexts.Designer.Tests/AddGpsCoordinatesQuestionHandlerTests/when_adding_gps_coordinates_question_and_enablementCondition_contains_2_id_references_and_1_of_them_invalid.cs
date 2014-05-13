@@ -16,8 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddGpsCoordinatesQuestionHandle
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NumericQuestionAdded() { PublicKey = existingQuestionId, GroupPublicKey = chapterId });
-
-            RegisterServiceLocator();
+            
             RegisterExpressionProcessorMock(enablementCondition, new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
         };

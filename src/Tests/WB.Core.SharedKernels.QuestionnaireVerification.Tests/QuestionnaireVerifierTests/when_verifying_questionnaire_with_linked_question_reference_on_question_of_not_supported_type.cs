@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = notSupportedForLinkingQuestionId,
-                StataExportCaption = "var",
+                StataExportCaption = notSupportedForLinkingQuestionId.ToString(),
                 QuestionType = QuestionType.SingleOption,
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = linkedQuestionId,
                 LinkedToQuestionId = notSupportedForLinkingQuestionId,
-                StataExportCaption = "var",
+                StataExportCaption = linkedQuestionId.ToString(),
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
             verifier = CreateQuestionnaireVerifier();

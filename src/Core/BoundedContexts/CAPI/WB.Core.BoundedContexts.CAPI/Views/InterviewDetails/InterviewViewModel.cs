@@ -18,6 +18,9 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
@@ -34,6 +37,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         protected ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
+        protected ISubstitutionService SubstitutionService
+        {
+            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
         }
 
         public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interview)
@@ -93,13 +101,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var allQuestions = questionnaire.Find<IQuestion>(q => true).ToArray();
             foreach (var questionsWithSubstitution in allQuestions)
             {
-                var substitutionReferences = SubstitutionUtils.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
+                var substitutionReferences = SubstitutionService.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
                 if (!substitutionReferences.Any())
                     continue;
 
                 foreach (var substitutionReference in substitutionReferences)
                 {
-                    if (substitutionReference == SubstitutionUtils.RosterTitleSubstitutionReference)
+                    if (substitutionReference == SubstitutionService.RosterTitleSubstitutionReference)
                         HandleRosterTitleInSubstitutions(questionsWithSubstitution);
                     else
                         HandleQuestionReferenceInSubstitution(questionnaire, questionsWithSubstitution, substitutionReference);
@@ -810,7 +818,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected HeaderItem BuildHeader(IQuestion question)
         {
-            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => current.ReplaceSubstitutionVariable(substitutionVariable, SubstitutionUtils.DefaultSubstitutionText));
+            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => SubstitutionService.ReplaceSubstitutionVariable(current, substitutionVariable, SubstitutionService.DefaultSubstitutionText));
             return new HeaderItem(question.PublicKey, text, question.Instructions);
         }
 

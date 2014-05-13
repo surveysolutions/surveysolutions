@@ -17,19 +17,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Establish context = () =>
         {
             multiAnswerQuestionWithValidationId = Guid.Parse("10000000000000000000000000000000");
+            textQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = multiAnswerQuestionWithValidationId,
-                StataExportCaption = "var",
+                StataExportCaption = multiAnswerQuestionWithValidationId.ToString(),
                 ValidationExpression = "some expression"
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
-                StataExportCaption = "var",
-                PublicKey = Guid.Parse("20000000000000000000000000000000")
+                StataExportCaption = textQuestionId.ToString(),
+                PublicKey = textQuestionId
             });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(x => x.IsSyntaxValid(Moq.It.IsAny<string>())== true);
@@ -60,5 +61,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         private static QuestionnaireDocument questionnaire;
 
         private static Guid multiAnswerQuestionWithValidationId;
+        private static Guid textQuestionId;
     }
 }
