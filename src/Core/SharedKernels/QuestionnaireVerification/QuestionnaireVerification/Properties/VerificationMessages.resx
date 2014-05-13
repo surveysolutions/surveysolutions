@@ -229,7 +229,7 @@
     <value>Question has option(s) with empty value.</value>
   </data>
   <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Condition expression cannot refer to the question from the deeper roster level.</value>
+    <value>Condition expression cannot refer to a question from a deeper roster level.</value>
   </data>
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
     <value>Groups cannot have custom condition expression referencing child question</value>
