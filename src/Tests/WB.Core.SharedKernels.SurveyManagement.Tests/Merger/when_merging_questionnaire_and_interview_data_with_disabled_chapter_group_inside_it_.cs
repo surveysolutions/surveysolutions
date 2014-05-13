@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
     {
         Establish context = () =>
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             merger = CreateMerger();
 
             var chapterId = Guid.Parse("44444444444444444444444444444444");
