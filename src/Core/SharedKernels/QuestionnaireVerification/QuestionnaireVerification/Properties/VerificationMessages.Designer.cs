@@ -548,5 +548,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0062_VariableNameForQuestionIsNotUnique", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation expressions..
+        /// </summary>
+        internal static string WB0063_CategoricalLinkedQuestionUsedInValidationExpression {
+            get {
+                return ResourceManager.GetString("WB0063_CategoricalLinkedQuestionUsedInValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in enablement conditions..
+        /// </summary>
+        internal static string WB0064_CategoricalLinkedQuestionUsedInEnablementCondition {
+            get {
+                return ResourceManager.GetString("WB0064_CategoricalLinkedQuestionUsedInEnablementCondition", resourceCulture);
+            }
+        }
     }
 }

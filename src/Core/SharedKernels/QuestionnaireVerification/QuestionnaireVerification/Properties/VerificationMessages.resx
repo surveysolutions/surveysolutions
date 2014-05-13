@@ -279,4 +279,10 @@
   <data name="WB0062_VariableNameForQuestionIsNotUnique" xml:space="preserve">
     <value>Question has not unique variable name </value>
   </data>
+  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+    <value>Categorical linked question cannot be used in validation expressions.</value>
+  </data>
+  <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+    <value>Categorical linked question cannot be used in enablement conditions.</value>
+  </data>
 </root>
