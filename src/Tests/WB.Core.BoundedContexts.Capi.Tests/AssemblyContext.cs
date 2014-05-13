@@ -10,11 +10,19 @@ namespace WB.Core.BoundedContexts.Capi.Tests
     {
         public void OnAssemblyStart()
         {
+            SetupServiceLocatorIfNeeded();
+        }
+
+        internal static void SetupServiceLocatorIfNeeded()
+        {
+            if (ServiceLocator.IsLocationProviderSet)
+                return;
+
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
 
             serviceLocatorMock
-           .Setup(locator => locator.GetInstance<ISubstitutionService>())
-           .Returns(new SubstitutionService());
+                .Setup(locator => locator.GetInstance<ISubstitutionService>())
+                .Returns(new SubstitutionService());
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }

@@ -17,7 +17,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
     internal class InterviewViewModelDenormalizerTestsContext {
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionnaireId)
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocatorIfNeeded();
+
             var innerDocument = new QuestionnaireDocument
             {
                 Title = string.Format("Questionnaire {0}", questionnaireId),
