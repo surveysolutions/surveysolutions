@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = rosterSizeQiestionId,
                 IsInteger = true,
                 MaxValue = 5,
-                StataExportCaption = "var"
+                StataExportCaption = rosterSizeQiestionId.ToString()
             });
             questionnaire.Children.Add(new Group()
             {
@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 RosterSizeQuestionId = rosterSizeQiestionId,
                 Children = new List<IComposite>()
                 {
-                    new TextQuestion("Title"){ PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = "var" }
+                    new TextQuestion("Title"){ PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = prefilledQuestionId.ToString() }
                 }
             });
 

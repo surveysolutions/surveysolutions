@@ -23,14 +23,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new NumericQuestion
                 {
                     PublicKey = rosterSizeQuestionId,
-                    StataExportCaption = "var",
+                    StataExportCaption = rosterSizeQuestionId.ToString(),
                     IsInteger = true,
                     MaxValue = 5
                 },
                 new NumericQuestion
                 {
                     PublicKey = rosterSizeQuestionForChildRoster1Id,
-                    StataExportCaption = "var",
+                    StataExportCaption = rosterSizeQuestionForChildRoster1Id.ToString(),
                     IsInteger = true,
                     MaxValue = 5
                 },
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                 new NumericQuestion
                                 {
                                     PublicKey = rosterSizeQuestionWithInvalidRosterLevelId,
-                                    StataExportCaption = "var",
+                                    StataExportCaption = rosterSizeQuestionWithInvalidRosterLevelId.ToString(),
                                     IsInteger = true,
                                     MaxValue = 5
                                 },
