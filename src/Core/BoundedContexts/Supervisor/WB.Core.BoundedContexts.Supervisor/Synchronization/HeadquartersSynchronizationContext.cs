@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         public void PushMessage(string message)
         {
-            this.synchronizationMessages.Add(message);
+            this.synchronizationMessages.Add(DateTime.Now + ": " + message);
         }
 
         public void PushError(string message)
