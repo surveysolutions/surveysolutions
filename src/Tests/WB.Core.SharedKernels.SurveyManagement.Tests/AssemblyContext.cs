@@ -12,10 +12,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests
         {
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
 
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<ISubstitutionService>())
-                .Returns(new SubstitutionService());
-
             ServiceLocator.SetLocatorProvider(() =>
             {
                 return serviceLocatorMock.Object;
