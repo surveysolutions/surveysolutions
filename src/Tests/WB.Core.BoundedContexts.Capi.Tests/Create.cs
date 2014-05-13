@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests
 {
     internal static class Create
     {
-        public static InterviewItemId CreateInterviewItemId(Guid id, decimal[] rosterVector = null)
+        public static InterviewItemId InterviewItemId(Guid id, decimal[] rosterVector = null)
         {
             return new InterviewItemId(id, rosterVector);
         }
