@@ -114,6 +114,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
                     Verifier<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
+                    Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression),
+                    Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
+                    Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -517,6 +520,41 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 group, group.ConditionExpression, questionnaire,
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
+
+
+        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                question, question.ValidationExpression, questionnaire,
+                isReferencedQuestionIncorrect:
+                    referencedQuestion =>
+                        IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
+                        IsCategoricalSingleAnswerQuestion(referencedQuestion) &&
+                        referencedQuestion.LinkedToQuestionId.HasValue);
+        }
+
+        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                question, question.ConditionExpression, questionnaire,
+                isReferencedQuestionIncorrect:
+                    referencedQuestion =>
+                        IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
+                        IsCategoricalSingleAnswerQuestion(referencedQuestion) &&
+                        referencedQuestion.LinkedToQuestionId.HasValue);
+        }
+
+        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                group, group.ConditionExpression, questionnaire,
+                isReferencedQuestionIncorrect:
+                    referencedQuestion =>
+                        IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
+                        IsCategoricalSingleAnswerQuestion(referencedQuestion) &&
+                        referencedQuestion.LinkedToQuestionId.HasValue);
+        }
+
 
         private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
             IComposite entity, string expression, QuestionnaireDocument questionnaire, Func<IQuestion, bool> isReferencedQuestionIncorrect)
