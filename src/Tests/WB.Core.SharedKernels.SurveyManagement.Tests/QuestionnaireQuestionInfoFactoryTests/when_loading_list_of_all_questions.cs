@@ -22,8 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionnaireQuestionInfo
     {
         private Establish context = () =>
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-
             questionnaireDocumentReaderMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>();
 
             var questionnaire = new QuestionnaireDocument()

@@ -22,10 +22,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionnaireCacheInitial
         Establish context = () =>
         {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                  => processor.GetIdentifiersUsedInExpression(expression) == new[] { referencedInConditionQuestionsVariableName });
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-            serviceLocatorMock.Setup(x => x.GetInstance<IExpressionProcessor>()).Returns(expressionProcessor);
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+                => processor.GetIdentifiersUsedInExpression(expression) == new[] { referencedInConditionQuestionsVariableName });
+
+              Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+                .Returns(expressionProcessor);
 
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
