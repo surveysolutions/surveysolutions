@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterQuestionId,
-                        StataExportCaption = "var",
+                        StataExportCaption = rosterQuestionId.ToString(),
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = "var",
+                                StataExportCaption = questionIdFromRoster.ToString(),
                                 PublicKey = questionIdFromRoster
                             }
                         }
@@ -65,12 +65,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         protected static QuestionnaireDocument CreateQuestionnaireWithTwoRosterWithConditionInLastOneRosterReferencingQuestionFromFirstOne(
             Guid questionIdFromOtherRosterWithSameLevel, Guid rosterWithCustomCondition)
         {
+            var numId = Guid.Parse("a3333333333333333333333333333333");
+
             var questionnaire = CreateQuestionnaireDocument(new IComposite[]
                 {
                     new NumericQuestion
                     {
-                        PublicKey = Guid.Parse("a3333333333333333333333333333333"), 
-                        StataExportCaption = "var",
+                        PublicKey = numId, 
+                        StataExportCaption = numId.ToString(),
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -78,12 +80,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         PublicKey = Guid.Parse("13333333333333333333333333333333"),
                         IsRoster = true,
-                        RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
+                        RosterSizeQuestionId = numId,
                         Children = new List<IComposite>
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = "var",
+                                StataExportCaption = questionIdFromOtherRosterWithSameLevel.ToString(),
                                 PublicKey = questionIdFromOtherRosterWithSameLevel
                             }
                         }
@@ -109,7 +111,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterGroupId, 
-                        StataExportCaption = "var",
+                        StataExportCaption = rosterGroupId.ToString(),
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -122,7 +124,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = "var",
+                                StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
@@ -139,12 +141,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
         protected static QuestionnaireDocument CreateQuestionnaireWithTwoRosterWithSomeConditionInOneRoster(Guid underDeeperRosterLevelQuestionId, Guid groupWithCustomValidation)
         {
+            Guid numKey1 = Guid.Parse("a3333333333333333333333333333333");
+
             var questionnaire = CreateQuestionnaireDocument(new IComposite[]
                 {
                     new NumericQuestion
                     {
-                        PublicKey = Guid.Parse("a3333333333333333333333333333333"), 
-                        StataExportCaption = "var",
+                        PublicKey = numKey1, 
+                        StataExportCaption = numKey1.ToString(),
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -152,12 +156,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         PublicKey = Guid.Parse("13333333333333333333333333333333"),
                         IsRoster = true,
-                        RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
+                        RosterSizeQuestionId = numKey1,
                         Children = new List<IComposite>
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = "var",
+                                StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
@@ -184,7 +188,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterGroupId, 
-                        StataExportCaption = "var",
+                        StataExportCaption = rosterGroupId.ToString(),
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -197,14 +201,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = "var",
+                                StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
                     },
                     new SingleQuestion
                     {
-                        StataExportCaption = "var",
+                        StataExportCaption = questionWithCustomValidation.ToString(),
                         PublicKey = questionWithCustomValidation,
                         ConditionExpression = "some random expression",
                         Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}

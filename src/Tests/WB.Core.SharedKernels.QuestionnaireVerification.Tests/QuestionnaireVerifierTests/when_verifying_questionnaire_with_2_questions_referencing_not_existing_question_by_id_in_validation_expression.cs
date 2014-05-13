@@ -21,11 +21,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
             firstIncorrectQuestionId = Guid.Parse("11111111111111111111111111111111");
             secondIncorrectQuestionId = Guid.Parse("22222222222222222222222222222222");
+            textQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = "var" },
-                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = "var" },
-                new TextQuestion { PublicKey = Guid.NewGuid(), StataExportCaption = "var" },
+                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = firstIncorrectQuestionId.ToString() },
+                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = secondIncorrectQuestionId.ToString() },
+                new TextQuestion { PublicKey = textQuestionId, StataExportCaption = textQuestionId.ToString() },
                 new Group { PublicKey = Guid.NewGuid() }
             );
 
@@ -64,6 +65,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
         private static Guid firstIncorrectQuestionId;
         private static Guid secondIncorrectQuestionId;
+        private static Guid textQuestionId;
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;

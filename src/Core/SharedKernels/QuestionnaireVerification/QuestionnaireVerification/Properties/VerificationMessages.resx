@@ -276,4 +276,7 @@
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
     <value>Question has max allowed answers less than 2</value>
   </data>
+  <data name="WB0062_VariableNameForQuestionIsNotUnique" xml:space="preserve">
+    <value>Question has not unique variable name </value>
+  </data>
 </root>

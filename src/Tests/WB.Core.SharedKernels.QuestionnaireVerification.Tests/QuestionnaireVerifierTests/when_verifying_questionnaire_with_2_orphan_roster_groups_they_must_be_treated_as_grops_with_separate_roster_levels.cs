@@ -29,14 +29,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = rosterQuestionId1,
                 IsInteger = true,
                 MaxValue = 3,
-                StataExportCaption = "var"
+                StataExportCaption = rosterQuestionId1.ToString()
             });
             questionnaire.Children.Add(new NumericQuestion()
             {
                 PublicKey = rosterQuestionId2,
                 IsInteger = true,
                 MaxValue = 3,
-                StataExportCaption = "var"
+                StataExportCaption = rosterQuestionId2.ToString()
             });
 
             var rosterGroup1 = new Group() { PublicKey = rosterGroupId1, IsRoster = true, RosterSizeQuestionId = rosterQuestionId1 };
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionWithSubstitutionsIdFromLevel1,
                 QuestionText = string.Format("hello %{0}%", questionSubstitutionsSourceFromLevel2VariableName),
-                StataExportCaption = "var"
+                StataExportCaption = questionWithSubstitutionsIdFromLevel1.ToString()
             });
             questionnaire.Children.Add(rosterGroup1);
 

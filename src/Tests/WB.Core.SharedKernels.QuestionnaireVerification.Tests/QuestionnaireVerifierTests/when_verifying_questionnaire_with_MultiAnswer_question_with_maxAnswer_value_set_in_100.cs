@@ -14,19 +14,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         Establish context = () =>
         {
             multiAnswerQuestionWithMaxCountId = Guid.Parse("10000000000000000000000000000000");
+            textQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
 
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = multiAnswerQuestionWithMaxCountId,
-                StataExportCaption = "var",
+                StataExportCaption = multiAnswerQuestionWithMaxCountId.ToString(),
                 MaxAnswerCount = 100
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
-                PublicKey = Guid.Parse("20000000000000000000000000000000"),
-                StataExportCaption = "var",
+                PublicKey = textQuestionId,
+                StataExportCaption = textQuestionId.ToString(),
                 MaxAnswerCount = null
             });
          
@@ -56,5 +57,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         private static QuestionnaireDocument questionnaire;
 
         private static Guid multiAnswerQuestionWithMaxCountId;
+        private static Guid textQuestionId;
+        
     }
 }

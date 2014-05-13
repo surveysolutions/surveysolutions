@@ -12,9 +12,10 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_with_2_with_correct : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_with_2_with_correct :
+        QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             const string InvalidExpression = "[hehe] &=+< 5";
             const string ValidExpression = "[33333333333333333333333333333333] == 2";
@@ -26,55 +27,80 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             secondCorrectQuestionId = Guid.Parse("2222EEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = InvalidExpression, StataExportCaption = "var" },
-                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = InvalidExpression, StataExportCaption = "var" },
-                new NumericQuestion { PublicKey = thirdIncorrectQuestionId, ValidationExpression = InvalidExpression, StataExportCaption = "var" },
-                new NumericQuestion { PublicKey = firstCorrectQuestionId, ValidationExpression = ValidExpression, StataExportCaption = "var" },
-                new NumericQuestion { PublicKey = secondCorrectQuestionId, ValidationExpression = ValidExpression, StataExportCaption = "var" }
-            );
+                new NumericQuestion
+                {
+                    PublicKey = firstIncorrectQuestionId,
+                    ValidationExpression = InvalidExpression,
+                    StataExportCaption = firstIncorrectQuestionId.ToString()
+                },
+                new NumericQuestion
+                {
+                    PublicKey = secondIncorrectQuestionId,
+                    ValidationExpression = InvalidExpression,
+                    StataExportCaption = secondIncorrectQuestionId.ToString()
+                },
+                new NumericQuestion
+                {
+                    PublicKey = thirdIncorrectQuestionId,
+                    ValidationExpression = InvalidExpression,
+                    StataExportCaption = thirdIncorrectQuestionId.ToString()
+                },
+                new NumericQuestion
+                {
+                    PublicKey = firstCorrectQuestionId,
+                    ValidationExpression = ValidExpression,
+                    StataExportCaption = firstCorrectQuestionId.ToString()
+                },
+                new NumericQuestion
+                {
+                    PublicKey = secondCorrectQuestionId,
+                    ValidationExpression = ValidExpression,
+                    StataExportCaption = secondCorrectQuestionId.ToString()
+                }
+                );
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.IsSyntaxValid(InvalidExpression) == false
-                && processor.IsSyntaxValid(ValidExpression) == true);
+                    && processor.IsSyntaxValid(ValidExpression) == true);
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
         };
 
-        Because of = () =>
+        private Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_3_errors = () =>
+        private It should_return_3_errors = () =>
             resultErrors.Count().ShouldEqual(3);
 
-        It should_return_errors_each_with_code__WB0002__ = () =>
+        private It should_return_errors_each_with_code__WB0002__ = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.Code == "WB0002");
 
-        It should_return_errors_each_having_single_reference = () =>
+        private It should_return_errors_each_having_single_reference = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        It should_return_errors_each_referencing_question = () =>
+        private It should_return_errors_each_referencing_question = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_referencing_first_incorrect_question = () =>
+        private It should_return_error_referencing_first_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Id == firstIncorrectQuestionId);
 
-        It should_return_error_referencing_secong_incorrect_question = () =>
+        private It should_return_error_referencing_secong_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Id == secondIncorrectQuestionId);
 
-        It should_return_error_referencing_third_incorrect_question = () =>
+        private It should_return_error_referencing_third_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Id == thirdIncorrectQuestionId);
 
-        It should_not_return_error_referencing_first_correct_question = () =>
+        private It should_not_return_error_referencing_first_correct_question = () =>
             resultErrors.ShouldNotContain(error
                 => error.References.Single().Id == firstCorrectQuestionId);
 
-        It should_not_return_error_referencing_second_correct_question = () =>
+        private It should_not_return_error_referencing_second_correct_question = () =>
             resultErrors.ShouldNotContain(error
                 => error.References.Single().Id == secondCorrectQuestionId);
 
