@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion("Roster Size Question")
                     {
                         PublicKey = rosterSizeQuestion,
-                        StataExportCaption = "var",
+                        StataExportCaption = rosterSizeQuestion.ToString(),
                         IsInteger = true,
                         MaxValue = 5
                     },
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new TextQuestion("TextQuestion")
                             {
-                                StataExportCaption = "var",
+                                StataExportCaption = linkedQuestionId.ToString(),
                                 QuestionType = QuestionType.Text,
                                 PublicKey = linkedQuestionId
                             }
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     },
                     new MultyOptionsQuestion()
                     {
-                        StataExportCaption = "var",
+                        StataExportCaption = multyOptionsQuestionId.ToString(),
                         PublicKey = multyOptionsQuestionId,
                         MaxAllowedAnswers = 3,
                         LinkedToQuestionId = linkedQuestionId

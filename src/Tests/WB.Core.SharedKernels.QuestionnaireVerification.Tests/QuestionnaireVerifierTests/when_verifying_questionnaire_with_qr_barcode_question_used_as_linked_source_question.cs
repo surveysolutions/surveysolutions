@@ -23,12 +23,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = rosterSizeQuestionId,
                 IsInteger = true,
                 MaxValue = 5,
-                StataExportCaption = "var"
+                StataExportCaption = rosterSizeQuestionId.ToString()
             });
             questionnaire.Children.Add(new MultyOptionsQuestion()
             {
                 PublicKey = multiQuestionLinkedToQRBarcodeQuestionId,
-                StataExportCaption = "var",
+                StataExportCaption = multiQuestionLinkedToQRBarcodeQuestionId.ToString(),
                 LinkedToQuestionId = qrBarcodeQuestionId,
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new QRBarcodeQuestion()
                     {
                         PublicKey = qrBarcodeQuestionId,
-                        StataExportCaption = "var"
+                        StataExportCaption = qrBarcodeQuestionId.ToString()
                     }
                 }
             });
@@ -71,15 +71,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(multiQuestionLinkedToQRBarcodeQuestionId);
 
         It should_return_error_reference_with_id_of_qrBarcodeQuestionId = () =>
-            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(multiQuestionLinkedToQRBarcodeQuestionId);
+            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static Guid multiQuestionLinkedToQRBarcodeQuestionId = Guid.Parse("10000000000000000000000000000000");
-        private static Guid qrBarcodeQuestionId = Guid.Parse("10000000000000000000000000000000");
-        private static Guid rosterSizeQuestionId = Guid.Parse("20000000000000000000000000000000");
+        private static Guid multiQuestionLinkedToQRBarcodeQuestionId = Guid.Parse("a0000000000000000000000000000000");
+        private static Guid qrBarcodeQuestionId = Guid.Parse("b0000000000000000000000000000000");
+        private static Guid rosterSizeQuestionId = Guid.Parse("c0000000000000000000000000000000");
         private static Guid groupId = Guid.Parse("30000000000000000000000000000000");
     }
 }

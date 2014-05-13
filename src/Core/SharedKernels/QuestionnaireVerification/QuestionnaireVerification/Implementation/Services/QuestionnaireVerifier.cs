@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Xml;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor;
@@ -124,6 +119,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
+                    ErrorsByQuestionsWithDuplicateVariableName
                 };
             }
         }
@@ -606,6 +602,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
         }
 
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithDuplicateVariableName(QuestionnaireDocument questionnaire)
+        {
+            var questionsDuplicates = questionnaire.Find<IQuestion>(q => true)
+                .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
+                .SelectMany(group => group.Skip(1));
+
+            foreach (IQuestion questionsDuplicate in questionsDuplicates)
+                yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
+        }
+
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
         {
             IEnumerable<IQuestion> questionsWithSubstitutions =
@@ -1035,6 +1041,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(sourceQuestion));
         }
 
+        private static QuestionnaireVerificationError VariableNameIsUsedAsOtherQuestionVariableName(IQuestion sourseQuestion)
+        {
+            return new QuestionnaireVerificationError("WB0062",
+                VerificationMessages.WB0062_VariableNameForQuestionIsNotUnique,
+                CreateReference(sourseQuestion));
+        }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
             List<QuestionnaireVerificationError> errorList, Func<T, QuestionnaireVerificationError> getErrorOrNull)

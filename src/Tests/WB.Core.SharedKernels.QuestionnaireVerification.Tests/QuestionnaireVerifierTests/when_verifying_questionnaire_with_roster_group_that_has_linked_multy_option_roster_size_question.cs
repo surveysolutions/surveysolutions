@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
-                StataExportCaption = "var",
+                StataExportCaption = rosterSizeQuestionId.ToString(),
                 LinkedToQuestionId = referencedQuestionId,
                 QuestionType = QuestionType.MultyOption,
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = referencedQuestionId,
                 QuestionType = QuestionType.Numeric,
-                StataExportCaption = "var"
+                StataExportCaption = referencedQuestionId.ToString()
             });
             questionnaire.Children.Add(rosterGroup);
             verifier = CreateQuestionnaireVerifier();
