@@ -40,3 +40,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("LoadTestDataGenerator")]
 [assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
 [assembly: InternalsVisibleTo("WB.Tools.EventsConverter")]
+[assembly: InternalsVisibleTo("WB.Tools.InterviewExtractor")]
