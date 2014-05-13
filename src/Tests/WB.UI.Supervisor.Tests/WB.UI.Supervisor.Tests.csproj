@@ -252,8 +252,7 @@
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+  <ItemGroup>    
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
