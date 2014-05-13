@@ -847,31 +847,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             DateTime synchronizationTime,
             string comment)
         {
+          
+            var commentedAnswers = (
+                from answerDto in interviewDto.Answers
+                from answerComment in answerDto.AllComments 
+                where !this.interviewState.AnswerComments.Contains(new AnswerComment(answerComment.UserId, answerComment.Date, answerComment.Text, answerDto.Id, answerDto.QuestionPropagationVector)) 
+                select new {
+                    UserId = answerComment.UserId, 
+                    Date = answerComment.Date, 
+                    Text = answerComment.Text, 
+                    QuestionId = answerDto.Id,
+                    RosterVector = answerDto.QuestionPropagationVector
+                });
+
             if (this.status == InterviewStatus.Deleted)
             {
-                this.Restore(userId);
+                this.ApplyEvent(new InterviewRestored(userId));
             }
-            
+
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
-            
+
             if (interviewerId.HasValue)
             {
                 this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value));
             }
 
-            foreach (var answerDto in interviewDto.Answers)
+            foreach (var commentedAnswer in commentedAnswers)
             {
-                Guid questionId = answerDto.Id;
-                decimal[] rosterVector = answerDto.QuestionPropagationVector;
-
-                foreach (var answerComment in answerDto.AllComments)
-                {
-                    if (!this.interviewState.AnswerComments.Contains(new AnswerComment(answerComment.UserId, answerComment.Date, answerComment.Text, questionId, rosterVector)))
-                    {
-                        this.ApplyEvent(new AnswerCommented(answerComment.UserId, questionId, rosterVector, answerComment.Date, answerComment.Text));
-                    }
-                }
+                this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId, commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
             }
         }
 
