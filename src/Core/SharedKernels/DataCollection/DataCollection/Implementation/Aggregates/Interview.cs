@@ -827,6 +827,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (indexOfPreviousRoster == rosterVector.Length)
                 {
                     yield return extendedRoster;
+                    continue;
                 }
                 foreach (var nextVector in GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, extendedRoster))
                 {
@@ -2043,10 +2044,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRosterEvents(RosterCalculationData data)
         {
-            if (data.RosterInstancesToAdd.Any())
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.RosterInstancesToAdd, new RosterIdentityComparer());
+
+            if (rosterInstancesToAdd.Any())
             {
-                AddedRosterInstance[] instances = data
-                    .RosterInstancesToAdd
+                AddedRosterInstance[] instances = rosterInstancesToAdd
                     .Select(
                         roster =>
                             new AddedRosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex))
@@ -2055,40 +2057,73 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesAdded(instances));
             }
 
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer());
+
             if (data.RosterInstancesToRemove.Any())
             {
-                RosterInstance[] instances = data
-                    .RosterInstancesToRemove
+                RosterInstance[] instances = rosterInstancesToRemove
                     .Select(roster => new RosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
                     .ToArray();
 
                 this.ApplyEvent(new RosterInstancesRemoved(instances));
             }
 
+            this.ApplyRosterTitleEvents(data);
+
+            this.ApplyAnswersRemovanceEvents(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
+                d => d.AnswersToRemoveByDecreasedRosterSize, new IdentityComparer()));
+
+            this.ApplyEnablementChangesEvents(
+                new EnablementChanges(
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedGroupsToBeDisabled, new IdentityComparer()),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedGroupsToBeEnabled, new IdentityComparer()),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeDisabled, new IdentityComparer()),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeEnabled, new IdentityComparer())));
+
+            this.ApplyValidityChangesEvents(new ValidityChanges(null,
+                this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeInvalid, new IdentityComparer())));
+        }
+
+        private void ApplyRosterTitleEvents(RosterCalculationData data)
+        {
             if (data.TitlesForRosterInstancesToAdd != null)
             {
-                data.RosterInstancesToAdd.ForEach(
-                    roster =>
-                        this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId,
-                            data.TitlesForRosterInstancesToAdd[roster.RosterInstanceId])));
+                var rosterRowTitlesChanged = new HashSet<RosterIdentity>(data.RosterInstancesToAdd, new RosterIdentityComparer());
+                if (data.RosterInstancesToChange != null)
+                {
+                    foreach (var rosterIdentity in data.RosterInstancesToChange)
+                    {
+                        rosterRowTitlesChanged.Add(rosterIdentity);
+                    }
+                }
+
+                foreach (var rosterIdentity in rosterRowTitlesChanged)
+                {
+                    this.ApplyEvent(new RosterRowTitleChanged(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                        rosterIdentity.RosterInstanceId,
+                        data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId]));
+                }
             }
 
-            if (data.RosterInstancesToChange != null)
+            foreach (var nestedRosterData in data.RosterInstantiatesFromNestedLevels)
             {
-                data.RosterInstancesToChange.ForEach(
-                    roster =>
-                        this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId,
-                            data.TitlesForRosterInstancesToAdd[roster.RosterInstanceId])));
+                ApplyRosterTitleEvents(nestedRosterData);
+            }
+        }
+
+        private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(RosterCalculationData data, Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer)
+        {
+            var result = new List<T>();
+
+            result.AddRange(getProperty(data));
+
+            foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
+            {
+                result.AddRange(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(rosterInstantiatesFromNestedLevel, getProperty, equalityComparer));
             }
 
-            this.ApplyAnswersRemovanceEvents(data.AnswersToRemoveByDecreasedRosterSize);
-
-            this.ApplyEnablementChangesEvents(new EnablementChanges(data.InitializedGroupsToBeDisabled,
-                data.InitializedGroupsToBeEnabled, data.InitializedQuestionsToBeDisabled, data.InitializedQuestionsToBeEnabled));
-
-            this.ApplyValidityChangesEvents(new ValidityChanges(null, data.InitializedQuestionsToBeInvalid));
-
-            data.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterEvents);
+            return result.Distinct(equalityComparer).ToList();
         }
 
         private void ApplyAnswersEvents(IEnumerable<AnswerChange> interviewByAnswerChanges)

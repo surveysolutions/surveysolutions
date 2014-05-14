@@ -1,5 +1,6 @@
 ﻿using System;
-using WB.Core.GenericSubdomains.Utils;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
