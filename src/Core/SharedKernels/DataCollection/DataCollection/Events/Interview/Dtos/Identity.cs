@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
@@ -12,6 +13,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
         {
             this.Id = id;
             this.RosterVector = rosterVector;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}<{1}>", this.Id.FormatGuid(), string.Join("-", this.RosterVector));
         }
     }
 }

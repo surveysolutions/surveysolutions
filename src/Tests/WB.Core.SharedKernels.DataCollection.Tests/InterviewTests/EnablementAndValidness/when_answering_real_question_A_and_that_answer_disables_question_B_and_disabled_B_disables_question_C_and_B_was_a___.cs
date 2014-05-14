@@ -8,13 +8,12 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAndValidness
 {
     internal class when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : InterviewTestsContext
     {
