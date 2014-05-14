@@ -1,3 +1,4 @@
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReadyToSendToHe
         };
 
         Because of = () =>
-            result = denormalizer.Update(null, ToPublishedEvent(new InterviewStatusChanged(status, null)));
+            result = denormalizer.Update(null, ToPublishedEvent(new InterviewStatusChanged(status, null, new Guid())));
 
         It should_return_null = () =>
             result.ShouldBeNull();

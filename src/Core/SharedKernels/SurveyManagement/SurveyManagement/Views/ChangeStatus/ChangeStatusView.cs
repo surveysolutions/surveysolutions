@@ -22,5 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
         public string Comment { get; set; }
         public DateTime Date { get; set; }
         public InterviewStatus Status { get; set; }
+        public string Responsible { get; set; }
     }
 }

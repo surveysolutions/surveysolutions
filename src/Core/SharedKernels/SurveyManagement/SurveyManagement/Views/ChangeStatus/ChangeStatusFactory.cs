@@ -31,7 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
                         {
                             Comment = x.Comment,
                             Date = x.Date,
-                            Status = x.Status
+                            Status = x.Status,
+                            Responsible = x.Responsible
                         }).ToList(),
                     FeaturedQuestions = interviewSummary.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion
                     {
