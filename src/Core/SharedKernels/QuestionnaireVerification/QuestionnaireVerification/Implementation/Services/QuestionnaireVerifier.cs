@@ -528,8 +528,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 question, question.ValidationExpression, questionnaire,
                 isReferencedQuestionIncorrect:
                     referencedQuestion =>
-                        IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
-                        IsCategoricalSingleAnswerQuestion(referencedQuestion) &&
+                        (IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
+                        IsCategoricalSingleAnswerQuestion(referencedQuestion)) &&
                         referencedQuestion.LinkedToQuestionId.HasValue);
         }
 
@@ -539,8 +539,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 question, question.ConditionExpression, questionnaire,
                 isReferencedQuestionIncorrect:
                     referencedQuestion =>
-                        IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
-                        IsCategoricalSingleAnswerQuestion(referencedQuestion) &&
+                        (IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
+                        IsCategoricalSingleAnswerQuestion(referencedQuestion)) &&
                         referencedQuestion.LinkedToQuestionId.HasValue);
         }
 
@@ -550,8 +550,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 group, group.ConditionExpression, questionnaire,
                 isReferencedQuestionIncorrect:
                     referencedQuestion =>
-                        IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
-                        IsCategoricalSingleAnswerQuestion(referencedQuestion) &&
+                        (IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
+                        IsCategoricalSingleAnswerQuestion(referencedQuestion)) &&
                         referencedQuestion.LinkedToQuestionId.HasValue);
         }
 
