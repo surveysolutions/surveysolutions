@@ -991,6 +991,8 @@
     <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
     <Content Include="UpdatedDesigner\data\editQuestion\20ec89157c0e41e49d77db46e929db5d.json" />
     <Content Include="UpdatedDesigner\data\questionnaire\7c97b1925b0244b782ed6741a5035fae.json" />
+    <Content Include="UpdatedDesigner\.jscsrc" />
+    <Content Include="UpdatedDesigner\.jshintrc" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
