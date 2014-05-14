@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DeployManagedPipelineMode>Integrated</DeployManagedPipelineMode>
+    <OnBeforePackageUsingManifest>AddCustomSkipRules</OnBeforePackageUsingManifest>
+  </PropertyGroup>
+  <Target Name="AddCustomSkipRules">
+    <ItemGroup>
+      <MsDeploySkipRules Include="SkipExportedData">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>filePath</ObjectName>
+        <AbsolutePath>\\ExportedData\\.*</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipExportedDataFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\ExportedData$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipIncomingData">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>filePath</ObjectName>
+        <AbsolutePath>\\IncomingData\\.*</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipIncomingDataFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\IncomingData$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="Skiplogs">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>filePath</ObjectName>
+        <AbsolutePath>\\logs\\.*</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkiplogsFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\logs$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipQuestionnaireExportStructureStorage">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>filePath</ObjectName>
+        <AbsolutePath>\\QuestionnaireExportStructureStorage\\.*</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipQuestionnaireExportStructureStorageFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\QuestionnaireExportStructureStorage$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipTabletInformationStorage">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>filePath</ObjectName>
+        <AbsolutePath>\\TabletInformationStorage\\.*</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipTabletInformationStorageFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\TabletInformationStorage$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+    </ItemGroup>
+  </Target>
+</Project>

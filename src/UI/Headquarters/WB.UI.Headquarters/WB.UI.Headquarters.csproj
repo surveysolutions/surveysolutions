@@ -240,6 +240,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\details.js" />
     <Content Include="Scripts\director.js" />
+    <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
     </Content>

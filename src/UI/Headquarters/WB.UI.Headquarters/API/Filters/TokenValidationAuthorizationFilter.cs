@@ -6,8 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using WB.UI.Headquarters.API.Attributes;
 
-namespace WB.UI.Headquarters.API.Attributes
+namespace WB.UI.Headquarters.API.Filters
 {
     public class TokenValidationAuthorizationFilter : IAuthorizationFilter
     {
@@ -39,7 +40,7 @@ namespace WB.UI.Headquarters.API.Attributes
                         ReasonPhrase = "Invalid token",
                         Content = new StringContent("Invalid token")
                     };
-                    return FromResult(actionContext.Response);
+                    return this.FromResult(actionContext.Response);
                 }
             }
             catch (Exception)
@@ -52,7 +53,7 @@ namespace WB.UI.Headquarters.API.Attributes
                     Content = new StringContent("Authorization token is missing")
                 };
 
-                return FromResult(actionContext.Response);
+                return this.FromResult(actionContext.Response);
             }
 
             return continuation();

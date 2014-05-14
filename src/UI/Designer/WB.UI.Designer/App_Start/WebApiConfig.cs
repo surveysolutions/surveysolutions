@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using WB.UI.Designer.Code.MessageHandlers;
 
 namespace WB.UI.Designer
 {
@@ -7,8 +8,9 @@ namespace WB.UI.Designer
         public static void Register(HttpConfiguration config)
         {
             //Temporary comment Web API auth during investigation how it works with Angular
-            //config.MessageHandlers.Add(new HttpsVerifier());
             //config.MessageHandlers.Add(new BasicAuthMessageHandler());
+
+            config.MessageHandlers.Add(new HttpsVerifier());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",
