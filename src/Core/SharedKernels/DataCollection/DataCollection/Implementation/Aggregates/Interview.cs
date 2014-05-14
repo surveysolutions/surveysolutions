@@ -342,6 +342,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(RosterRowTitleChanged @event) {}
 
+        private void Apply(RosterRowsTitleChanged @event) { }
+
         internal void Apply(RosterInstancesAdded @event)
         {
             this.interviewState.AddRosterInstances(@event.Instances);
@@ -1253,9 +1255,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            rosterInstancesWithAffectedTitles.ForEach(
-                roster =>
-                    this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answer)));
+            if (rosterInstancesWithAffectedTitles.Any())
+                this.ApplyEvent(new RosterRowsTitleChanged(
+                    rosterInstancesWithAffectedTitles.Select(
+                        rosterIdentity =>
+                            new ChangedRosterRowTitleDto(
+                                new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                                    rosterIdentity.RosterInstanceId),
+                                answer)).ToArray()));
         }
 
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
@@ -2037,9 +2044,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRosterRowsTitleChangedEvents(List<RosterIdentity> rosterInstances, string rosterTitle)
         {
-            rosterInstances.ForEach(
-                roster =>
-                    this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, rosterTitle)));
+            if (rosterInstances.Any())
+                this.ApplyEvent(new RosterRowsTitleChanged(
+                    rosterInstances.Select(
+                        rosterIdentity =>
+                            new ChangedRosterRowTitleDto(
+                                new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                                    rosterIdentity.RosterInstanceId),
+                                rosterTitle)).ToArray()));
         }
 
         private void ApplyRosterEvents(RosterCalculationData data)
@@ -2069,7 +2081,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesRemoved(instances));
             }
 
-            this.ApplyRosterTitleEvents(data);
+            var changedRosterRowTitleDtoFromRosterData = CreateChangedRosterRowTitleDtoFromRosterData(data);
+            if(changedRosterRowTitleDtoFromRosterData.Any())
+                this.ApplyEvent(new RosterRowsTitleChanged(CreateChangedRosterRowTitleDtoFromRosterData(data)));
 
             this.ApplyAnswersRemovanceEvents(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
                 d => d.AnswersToRemoveByDecreasedRosterSize, new IdentityComparer()));
@@ -2085,8 +2099,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeInvalid, new IdentityComparer())));
         }
 
-        private void ApplyRosterTitleEvents(RosterCalculationData data)
+        private ChangedRosterRowTitleDto[] CreateChangedRosterRowTitleDtoFromRosterData(RosterCalculationData data)
         {
+            var result = new List<ChangedRosterRowTitleDto>();
             if (data.TitlesForRosterInstancesToAdd != null)
             {
                 var rosterRowTitlesChanged = new HashSet<RosterIdentity>(data.RosterInstancesToAdd, new RosterIdentityComparer());
@@ -2100,16 +2115,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var rosterIdentity in rosterRowTitlesChanged)
                 {
-                    this.ApplyEvent(new RosterRowTitleChanged(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
-                        rosterIdentity.RosterInstanceId,
-                        data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId]));
+                    result.Add(new ChangedRosterRowTitleDto(new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                        rosterIdentity.RosterInstanceId), data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId]));
                 }
             }
 
             foreach (var nestedRosterData in data.RosterInstantiatesFromNestedLevels)
             {
-                ApplyRosterTitleEvents(nestedRosterData);
+                result.AddRange(CreateChangedRosterRowTitleDtoFromRosterData(nestedRosterData));
             }
+            return result.ToArray();
         }
 
         private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(RosterCalculationData data, Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer)
