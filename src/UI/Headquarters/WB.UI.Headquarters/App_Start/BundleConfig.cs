@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/modernizr-{version}.js",
                 "~/Scripts/bootstrap.js",
+                "~/Scripts/director.js",
                 "~/Scripts/knockout-{version}.js",
                 "~/Scripts/knockout.mapping-latest.js",
                 "~/Scripts/query-string.js",
@@ -65,7 +66,6 @@ namespace WB.UI.Headquarters
             bundles.Add(
                 new ScriptBundle("~/js/interview-details").Include(
                     "~/Scripts/moment.js",
-                    "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/details/mapper.js",
