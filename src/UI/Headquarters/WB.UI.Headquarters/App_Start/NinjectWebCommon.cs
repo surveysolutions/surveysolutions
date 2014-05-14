@@ -32,6 +32,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code.CommandDeserialization;
 using WB.UI.Headquarters.Injections;
 using WebActivatorEx;
