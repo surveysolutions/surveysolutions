@@ -8,15 +8,14 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : InterviewTestsContext
+    internal class when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -40,9 +39,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>
             (_
                 => _.HasQuestion(it.Is(abcQuestionId)) == true
-                && _.GetQuestionType(it.Is(abcQuestionId)) == QuestionType.Numeric
-                && _.IsQuestionInteger(it.Is(abcQuestionId)) == true
-                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
+                && _.GetQuestionType(it.Is(abcQuestionId)) == QuestionType.Text
+                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new [] { questionBId }
                 && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new [] { questionCId }
                 && _.GetCustomEnablementConditionForQuestion(questionBId) == questionBEnablementCondition
                 && _.GetCustomEnablementConditionForQuestion(questionCId) == questionCEnablementCondition
@@ -71,13 +69,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, 42));
+            interview.Apply(new TextQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, "answer to B"));
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.AnswerNumericIntegerQuestion(userId, questionAId, emptyRosterVector, DateTime.Now, +100500);
+            interview.AnswerTextQuestion(userId, questionAId, emptyRosterVector, DateTime.Now, "disable B please");
 
         Cleanup stuff = () =>
         {
