@@ -107,6 +107,7 @@
                 question.validationExpression.valueHasMutated();
                 question.condition.valueHasMutated();
                 question.title.valueHasMutated();
+                question.isFeatured.valueHasMutated();
              
                 question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
                 selectedQuestion(question);
