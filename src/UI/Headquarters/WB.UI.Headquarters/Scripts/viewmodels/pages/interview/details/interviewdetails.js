@@ -331,7 +331,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
                 return "level" + group.depth + (group.isSelected() ? " selected" : "");
             });
             group.href = ko.computed(function () {
-                return "#group/" + group.uiId;
+                return "#/group/" + group.uiId;
             });
             group.visibleQuestionsCount = ko.computed(function () {
                 return _.reduce(group.questions, function (count, question) {
