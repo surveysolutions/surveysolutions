@@ -28,9 +28,12 @@
                 $resource('./data/editGroup/ddfaab0f37394a679f088add19325cfe.json').get()
             );
 
+            $httpBackend.whenGET('../api/questionnaire/verify/7c97b1925b0244b782ed6741a5035fae').respond(
+                $resource('./data/verify/with-errors.json').get()
+            );
+
             $httpBackend.whenPOST('../command/execute').respond();
 
-            ////$httpBackend.whenGET(/questionnaire\/.*/).passThrough();
             $httpBackend.whenGET(/views\/.*/).passThrough();
             $httpBackend.whenGET(/data\/.*/).passThrough();
         });

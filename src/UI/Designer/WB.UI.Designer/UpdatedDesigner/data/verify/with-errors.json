@@ -1,0 +1,291 @@
+{
+    "errors": [{
+        "code": "WB0056",
+        "message": "Circular references are not allowed",
+        "references": [{
+            "type": "Question",
+            "id": "20ec8915-7c0e-41e4-9d77-db46e929db5d",
+            "title": "Q111"
+        }, {
+            "type": "Question",
+            "id": "a6aa60ac-221c-441e-9215-ad3882c81204",
+            "title": "Q2"
+        }]
+    }, {
+        "code": "WB0056",
+        "message": "Circular references are not allowed",
+        "references": [{
+            "type": "Question",
+            "id": "a6aa60ac-221c-441e-9215-ad3882c81204",
+            "title": "Q2"
+        }, {
+            "type": "Question",
+            "id": "20ec8915-7c0e-41e4-9d77-db46e929db5d",
+            "title": "Q111"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "94cbc135-1191-14d0-97b6-fbc3a42f8501",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "21cf422f-263c-3330-bfd9-ee7e853b1ada",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "4a2833a0-044d-0a92-8085-9857fdcce8c5",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "d7cdd72b-b076-d2b4-f367-05c65de4d100",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "4b2d3153-ca69-de89-8958-b064b82f03fd",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "027980aa-e71a-eab9-7f88-4bfa4349d2d8",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "f3fdc3cd-4fb4-55cc-2c85-d951db1a7771",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "de179061-d9ad-9dce-29bf-f65fbea26e13",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "74e09fd3-3489-1379-fe7f-ac8c7c01737d",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "0d7307f0-95b0-89e6-33e2-7d15466cc5cc",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "2ad98c35-df07-99be-312d-47eb7ac11e2e",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "aad8a67e-3760-c9cc-19bc-1c8053adb77f",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "26de7b2b-a321-18d8-7f54-91c1e4a170a4",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "1a071042-7e44-b84c-0c00-bf63fcdbc157",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "050d963e-20e6-6b0a-5df6-f20eb380c6fd",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "3d5bc2c5-80c0-3f0e-ea34-3b48af95eafc",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0057",
+        "message": "Question has empty variable name.",
+        "references": [{
+            "type": "Question",
+            "id": "bfaef47c-3c6d-6478-6a51-dbb448d8bf1a",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "21cf422f-263c-3330-bfd9-ee7e853b1ada",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "4a2833a0-044d-0a92-8085-9857fdcce8c5",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "d7cdd72b-b076-d2b4-f367-05c65de4d100",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "4b2d3153-ca69-de89-8958-b064b82f03fd",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "027980aa-e71a-eab9-7f88-4bfa4349d2d8",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "f3fdc3cd-4fb4-55cc-2c85-d951db1a7771",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "de179061-d9ad-9dce-29bf-f65fbea26e13",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "74e09fd3-3489-1379-fe7f-ac8c7c01737d",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "0d7307f0-95b0-89e6-33e2-7d15466cc5cc",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "2ad98c35-df07-99be-312d-47eb7ac11e2e",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "aad8a67e-3760-c9cc-19bc-1c8053adb77f",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "26de7b2b-a321-18d8-7f54-91c1e4a170a4",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "1a071042-7e44-b84c-0c00-bf63fcdbc157",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "050d963e-20e6-6b0a-5df6-f20eb380c6fd",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "3d5bc2c5-80c0-3f0e-ea34-3b48af95eafc",
+            "title": "New Question"
+        }]
+    }, {
+        "code": "WB0062",
+        "message": "Question has not unique variable name ",
+        "references": [{
+            "type": "Question",
+            "id": "bfaef47c-3c6d-6478-6a51-dbb448d8bf1a",
+            "title": "New Question"
+        }]
+    }]
+}
