@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
         public List<CommentedStatusHistroyView> StatusHistory { get; set; }
         public IEnumerable<InterviewFeaturedQuestion> FeaturedQuestions { get; set; }
         public InterviewStatus Status { get; set; }
+        public string Responsible { get; set; }
     }
 
     public class CommentedStatusHistroyView

@@ -4592,6 +4592,10 @@ a.pseudo-link:hover {
     padding-right: 5px;
 }
 
+.margin-top5 {
+    margin-top: 5px;
+}
+
 .text-right-gray-italic {
     color: #dadada;
     font-weight: 400;
