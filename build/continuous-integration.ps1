@@ -37,6 +37,10 @@ try {
 
 	RunTests $BuildConfiguration
 
+	$artifactsFolder = (Get-Location).Path +  "\Artifacts"
+	If (Test-Path "$artifactsFolder"){
+		Remove-Item "$artifactsFolder" -Force -Recurse
+	}
 
 	$Project = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 	RunConfigTransform $Project $BuildConfiguration
@@ -53,6 +57,8 @@ try {
 	CopyCapi -Project $Project -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration -folder "Supervisor"
+
+	Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
 }
 catch {
 	Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred']"
