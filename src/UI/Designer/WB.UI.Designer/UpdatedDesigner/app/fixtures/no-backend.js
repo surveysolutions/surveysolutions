@@ -28,7 +28,7 @@
                 $resource('./data/editGroup/ddfaab0f37394a679f088add19325cfe.json').get()
             );
 
-            $httpBackend.whenPOST('command/execute').respond();
+            $httpBackend.whenPOST('../command/execute').respond();
 
             ////$httpBackend.whenGET(/questionnaire\/.*/).passThrough();
             $httpBackend.whenGET(/views\/.*/).passThrough();
