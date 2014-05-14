@@ -412,6 +412,7 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="UpdatedDesigner\app\fixtures\no-backend.js" />
     <Content Include="UpdatedDesigner\index.html" />
     <Content Include="UpdatedDesigner\app\app.js" />
     <Content Include="UpdatedDesigner\app\components\contextMenu.js" />
@@ -985,6 +986,11 @@
     <Content Include="UpdatedDesigner\vendor\prettycheckable\dev\prettyCheckable.scss" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\package.json" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\README.md" />
+    <Content Include="UpdatedDesigner\data\chapter\34e31f00cdbff703a680db5fa66bf8b5.json" />
+    <Content Include="UpdatedDesigner\data\chapter\6e240642274c4bdea937baa78cd4ad6f.json" />
+    <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
+    <Content Include="UpdatedDesigner\data\editQuestion\20ec89157c0e41e49d77db46e929db5d.json" />
+    <Content Include="UpdatedDesigner\data\questionnaire\7c97b1925b0244b782ed6741a5035fae.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
