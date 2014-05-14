@@ -871,7 +871,6 @@
     <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.css" />
     <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.js" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.min.js" />
     <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\mCSB_buttons.png" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\.gitignore" />
