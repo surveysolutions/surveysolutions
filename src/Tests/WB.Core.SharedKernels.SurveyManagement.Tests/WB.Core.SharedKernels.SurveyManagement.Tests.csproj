@@ -206,6 +206,14 @@
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_questionnaire_is_absent.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_empty_value.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_question_was_not_found.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_decimal_value.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_geo_location_value.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_datetime_value.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_type.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_not_allowed_value.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_empty_id_cell.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_id_dublicats.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_inconsistent_roster_row.cs" />
