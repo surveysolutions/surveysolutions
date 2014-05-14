@@ -75,6 +75,13 @@
 
                 self.rosterTitleQuestion = ko.observable();
 
+                self.rosterSizeQuestion.subscribe(function (questionId) {
+                    if (_.isUndefined(Group.datacontext) || _.isEmpty(Group.datacontext()) || _.isEmpty(Group.datacontext().questions)) {
+                        return;
+                    }
+                    self.rosterTitlesForNumericRosterSizeQuestion(Group.datacontext().questions.getRosterTitleQuestionsForSelect(questionId));
+                });
+
                 self.level = ko.observable();
                 self.description = ko.observable('');
                 self.condition = ko.observable('');

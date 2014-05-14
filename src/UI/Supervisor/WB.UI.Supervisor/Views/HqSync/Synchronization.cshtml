@@ -28,13 +28,13 @@
         </div>
         <div class="span6">
             <h5>Messages</h5>
-            <div id="messages" class="well well-small" data-bind="foreach: PullMessages" style="overflow-y: scroll">
+            <div id="messages" class="well well-small" data-bind="foreach: PullMessages" style="overflow-y: scroll;  max-height: 500px">
                 <p data-bind="text: $data"></p>
             </div>
         </div>
         <div class="span5">
             <h5>Errors</h5>
-            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: PullErrors">
+            <div id="erros" class="well well-small" style="overflow-y: scroll;  max-height: 500px" data-bind="foreach: PullErrors">
                 <p data-bind="text: $data"></p>
             </div>
         </div>
@@ -47,13 +47,13 @@
         </div>
         <div class="span6">
             <h5>Messages</h5>
-            <div id="messages" class="well well-small" data-bind="foreach: PushMessages" style="overflow-y: scroll">
+            <div id="messages" class="well well-small" data-bind="foreach: PushMessages" style="overflow-y: scroll; max-height: 500px">
                 <p data-bind="text: $data"></p>
             </div>
         </div>
         <div class="span5">
             <h5>Errors</h5>
-            <div id="erros" class="well well-small" style="overflow-y: scroll" data-bind="foreach: PushErrors">
+            <div id="erros" class="well well-small" style="overflow-y: scroll;  max-height: 500px" data-bind="foreach: PushErrors">
                 <p data-bind="text: $data"></p>
             </div>
         </div>
