@@ -15,7 +15,7 @@
                 return base.SendAsync(request, cancellationToken);
 
 
-            HttpResponseMessage response= request.CreateErrorResponse(HttpStatusCode.BadRequest, 
+            HttpResponseMessage response= request.CreateErrorResponse(HttpStatusCode.Forbidden, 
                     "HTTPS is required");
 
             var taskCompletionSource = new TaskCompletionSource<HttpResponseMessage>();
