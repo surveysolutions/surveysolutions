@@ -248,7 +248,8 @@
         <div class="row-fluid" data-bind="with: questionnaire">
             <h3 class="span10 text-overflow-ellipsis">
                 <span data-bind="html: title"></span>
-                <a class="btn-link small" data-bind="text: status" data-toggle="modal" data-target="#statusHistoryModal"></a>
+                <span class="small">Status:</span><a class="btn-link" data-bind="text: status" data-toggle="modal" data-target="#statusHistoryModal"></a>
+                <span class="small">Responsible:</span><span data-bind="text: responsible"></span>
             </h3>
         </div>
         <div class="panel panel-default">

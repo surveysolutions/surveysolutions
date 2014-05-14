@@ -112,7 +112,7 @@ namespace WB.UI.Supervisor.Controllers
         [Authorize(Roles = "Supervisor, Headquarter")]
         public NewInterviewDetailsView InterviewDetails(InterviewDetailsViewModel data)
         {
-            var a = this.interviewDetailsFactory.Load(
+            var view = this.interviewDetailsFactory.Load(
                 new InterviewDetailsInputModel()
                 {
                     CompleteQuestionnaireId = data.InterviewId,
@@ -125,12 +125,13 @@ namespace WB.UI.Supervisor.Controllers
             {
                 InterviewInfo = new InterviewInfoModel()
                 {
-                    id = a.PublicKey.ToString(),
-                    questionnaireId = a.QuestionnairePublicKey.ToString(),
-                    title = a.Title,
-                    status = a.Status.ToLocalizeString()
+                    id = view.PublicKey.ToString(),
+                    questionnaireId = view.QuestionnairePublicKey.ToString(),
+                    title = view.Title,
+                    status = view.Status.ToLocalizeString(),
+                    responsible = view.Responsible.Name
                 },
-                Groups = a.Groups.Select(group => new GroupModel(group.ParentId)
+                Groups = view.Groups.Select(group => new GroupModel(group.ParentId)
                 {
                     id = group.Id.ToString(),
                     depth = group.Depth,
@@ -367,6 +368,7 @@ namespace WB.UI.Supervisor.Controllers
         public string title { get; set; }
         public string status { get; set; }
         public string questionnaireId { get; set; }
+        public string responsible { get; set; }
     }
     public class NewInterviewDetailsView
     {

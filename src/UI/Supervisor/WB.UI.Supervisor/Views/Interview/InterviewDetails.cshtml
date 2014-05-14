@@ -249,7 +249,11 @@
     <div id="content">
         <div class="row-fluid" data-bind="with: questionnaire">
             <h3 class="span10 text-overflow-ellipsis pad-left10" data-bind="html: title"></h3>
-            <h3 class="span2 nowrap pad-right5 text-right-gray-italic"><a class="btn-link" data-bind="text: status, click: $root.showStatesHistory"></a></h3>
+            <span class="span2 margin-top5 pad-right5 text-right-gray-italic">
+                <a class="btn-link" data-bind="text: status, click: $root.showStatesHistory"></a>
+                <br/>
+                <span class="pad-right5" data-bind="text: responsible"></span>
+            </span>
             <div id="statesHistoryPopover" class="popover bottom">
                 <div class="arrow"></div>
                 <h3 class="popover-title">State change history</h3>
