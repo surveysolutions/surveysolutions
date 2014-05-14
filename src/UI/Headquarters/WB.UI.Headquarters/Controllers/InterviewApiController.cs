@@ -129,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
                     id = view.PublicKey.ToString(),
                     questionnaireId = view.QuestionnairePublicKey.ToString(),
                     title = view.Title,
-                    status = Enum.GetName(typeof(InterviewStatus), view.Status)
+                    status = view.Status.ToLocalizeString()
                 },
                 Groups = view.Groups.Select(group => new GroupModel(group.ParentId)
                 {
