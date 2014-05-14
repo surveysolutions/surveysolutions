@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers
             ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
             if (interviewInfo == null)
             {
-                return this.RedirectToInterviewList(template);
+                return HttpNotFound();
             }
 
             return
@@ -74,15 +74,5 @@ namespace WB.UI.Headquarters.Controllers
             var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = interviewId });
             return this.View("ConfirmRevalidation", model);
         }
-
-        private ActionResult RedirectToInterviewList(string templateId)
-        {
-            var query = new { id = templateId };
-            return this.GlobalInfo.IsHeadquarter
-                       ? this.RedirectToAction("Interviews", "HQ", query)
-                       : this.RedirectToAction("Interviews", "Survey", query);
-        }
-
-
     }
 }
