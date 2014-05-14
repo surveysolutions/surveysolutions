@@ -531,7 +531,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewFromPreloadedDataCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, responsibleId: userId));
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
@@ -564,11 +564,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null, responsibleId: userId));
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
             fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, responsibleId: userId));
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
@@ -620,15 +620,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //apply events
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaire.Version));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null, responsibleId: userId));
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
             fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, responsibleId: userId));
 
             this.ApplyEvent(new InterviewerAssigned(userId, userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null, responsibleId: userId));
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
@@ -866,7 +866,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment, responsibleId: userId));
 
             if (interviewerId.HasValue)
             {
@@ -1708,7 +1708,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, responsibleId: userId));
         }
 
         public void AssignInterviewer(Guid userId, Guid interviewerId)
@@ -1719,7 +1719,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
             if (!this.wasCompleted && this.status != InterviewStatus.InterviewerAssigned)
             {
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null, responsibleId: userId));
             }
         }
 
@@ -1730,13 +1730,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.Created, InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restored);
 
             this.ApplyEvent(new InterviewDeleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null, responsibleId: userId));
         }
 
         public void MarkInterviewAsSentToHeadquarters(Guid userId)
         {
             this.ApplyEvent(new InterviewDeleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null, responsibleId: userId));
             this.ApplyEvent(new InterviewSentToHeadquarters());
         }
 
@@ -1745,7 +1745,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Deleted);
 
             this.ApplyEvent(new InterviewRestored(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null, responsibleId: userId));
         }
 
         public void Complete(Guid userId, string comment)
@@ -1757,7 +1757,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isInterviewInvalid = this.HasInvalidAnswers() /*|| this.HasNotAnsweredMandatoryQuestions(questionnaire)*/;
 
             this.ApplyEvent(new InterviewCompleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment, responsibleId: userId));
 
             this.ApplyEvent(isInterviewInvalid
                 ? new InterviewDeclaredInvalid() as object
@@ -1769,7 +1769,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
 
             this.ApplyEvent(new InterviewRestarted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment, responsibleId: userId));
         }
 
         public void Approve(Guid userId, string comment)
@@ -1779,7 +1779,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewApproved(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment, responsibleId: userId));
         }
 
         public void Reject(Guid userId, string comment)
@@ -1789,7 +1789,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewRejected(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, responsibleId: userId));
         }
 
         public void HqApprove(Guid userId, string comment)
@@ -1797,7 +1797,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewApprovedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment, responsibleId: userId));
         }
 
         public void HqReject(Guid userId, string comment)
@@ -1805,7 +1805,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.ApprovedByHeadquarters);
 
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, responsibleId: userId));
         }
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
@@ -1833,7 +1833,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null, responsibleId: userId));
 
             rosters.ForEach(this.ApplyRosterEvents);
 
@@ -1915,7 +1915,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewStatus,
                 featuredQuestionsMeta));
 
-            this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
+            this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments, responsibleId: userId));
 
             if (valid)
                 this.ApplyEvent(new InterviewDeclaredValid());

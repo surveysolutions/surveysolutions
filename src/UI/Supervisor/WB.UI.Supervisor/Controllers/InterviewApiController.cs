@@ -103,7 +103,8 @@ namespace WB.UI.Supervisor.Controllers
                         {
                             Comment = x.Comment,
                             Date = x.Date.ToShortDateString(),
-                            State = x.Status.ToLocalizeString()
+                            State = x.Status.ToLocalizeString(),
+                            Responsible = x.Responsible
                         })
             };
         }
