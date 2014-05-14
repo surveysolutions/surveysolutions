@@ -38,7 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
                         Id = a.Id,
                         Answer = a.Answer,
                         Question = a.Title
-                    }).ToList()
+                    }).ToList(),
+                    Responsible = interviewSummary.ResponsibleName
                 };
         }
     }
