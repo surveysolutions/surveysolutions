@@ -209,7 +209,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         }
 
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PreloadedDataVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile[] allLevels,
+            IPreloadedDataService preloadedDataService)
         {
             foreach (var levelData in allLevels)
             {
@@ -238,101 +239,96 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                     continue;
                                 case ValueParsingResult.AnswerAsDecimalWasNotParsed:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0019", PreloadingVerificationMessages.PL0019_ExpectedDecimalNotParsed,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0019",
+                                            PreloadingVerificationMessages.PL0019_ExpectedDecimalNotParsed,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.AnswerAsIntWasNotParsed:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0018", PreloadingVerificationMessages.PL0018_ExpectedIntNotParsed,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0018",
+                                            PreloadingVerificationMessages.PL0018_ExpectedIntNotParsed,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.AnswerAsGpsWasNotParsed:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0017", PreloadingVerificationMessages.PL0017_ExpectedGpsNotParsed,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0017",
+                                            PreloadingVerificationMessages.PL0017_ExpectedGpsNotParsed,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.AnswerAsDateTimeWasNotParsed:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0016", PreloadingVerificationMessages.PL0016_ExpectedDateTimeNotParsed,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0016",
+                                            PreloadingVerificationMessages.PL0016_ExpectedDateTimeNotParsed,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.QuestionTypeIsIncorrect:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0015", PreloadingVerificationMessages.PL0015_QuestionTypeIsIncorrect,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0015",
+                                            PreloadingVerificationMessages.PL0015_QuestionTypeIsIncorrect,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.ParsedValueIsNotAllowed:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0014", PreloadingVerificationMessages.PL0014_ParsedValueIsNotAllowed,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0014",
+                                            PreloadingVerificationMessages.PL0014_ParsedValueIsNotAllowed,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.ValueIsNullOrEmpty:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0013", PreloadingVerificationMessages.PL0013_ValueIsNullOrEmpty,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0013",
+                                            PreloadingVerificationMessages.PL0013_ValueIsNullOrEmpty,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.QuestionWasNotFound:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0012", PreloadingVerificationMessages.PL0012_QuestionWasNotFound,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0012",
+                                            PreloadingVerificationMessages.PL0012_QuestionWasNotFound,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.UnsupportedLinkedQuestion:
                                     yield return
-                                        new PreloadedDataVerificationError("PL0010", PreloadingVerificationMessages.PL0010_UnsupportedLinkedQuestion,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                        new PreloadedDataVerificationError("PL0010",
+                                            PreloadingVerificationMessages.PL0010_UnsupportedLinkedQuestion,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
                                 case ValueParsingResult.GeneralErrorOccured:
                                 default:
                                     yield return
                                         new PreloadedDataVerificationError("PL0011", PreloadingVerificationMessages.PL0011_GeneralError,
-                                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName));
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
                                     break;
-
-
                             }
                         }
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<PreloadedDataVerificationReference> QuestionWasntParsed(PreloadedDataByFile levelData,
-            PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
-        {
-            var presentQuestions = preloadedDataService.GetColumnIndexesGoupedByQuestionVariableName(levelData);
-
-            if (presentQuestions == null)
-                yield break;
-
-            for (int y = 0; y < levelData.Content.Length; y++)
-            {
-                var row = levelData.Content[y];
-                foreach (var presentQuestion in presentQuestions)
-                {
-                    foreach (var answerIndex in presentQuestion.Value)
-                    {
-                        var answer = row[answerIndex];
-                        if (string.IsNullOrEmpty(answer))
-                            continue;
-
-                        KeyValuePair<Guid, object> value;
-                        var parsedResult = preloadedDataService.ParseQuestion(answer, presentQuestion.Key, out value);
-                        if (parsedResult == ValueParsingResult.OK)
-                            continue;
-
-                        yield return
-                            new PreloadedDataVerificationReference(answerIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]), levelData.FileName);
                     }
                 }
             }

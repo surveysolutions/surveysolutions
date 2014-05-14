@@ -194,3 +194,68 @@ function RunTests($BuildConfiguration) {
 
     Write-Host "##teamcity[blockClosed name='Running tests']"
 }
+
+function RunConfigTransform($Project, $BuildConfiguration){
+	$file = get-childitem $Project
+	$PathToConfigFile = Join-Path $file.directoryname "Web.config"
+	$PathToTransformFile = Join-Path $file.directoryname "Web.$BuildConfiguration.config"
+
+	$command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
+	iex $command
+}
+
+function AddArtifacts($Project, $BuildConfiguration, $folder) {
+	$file = get-childitem $project
+	$packagepath = $file.directoryname + "\obj\" + $BuildConfiguration + "\package\"
+
+	$filename = $packagepath + $file.basename
+	$zipfile = $filename + ".zip"
+	$cmdfile = $filename + ".deploy.cmd"
+
+	$artifactsFolder = "Artifacts"
+	If (Test-Path "$artifactsFolder"){
+		If (Test-Path "$artifactsFolder\$folder"){
+			Remove-Item "$artifactsFolder\$folder" -Force -Recurse
+		}
+	}
+	else{
+		New-Item -ItemType directory -Path "$artifactsFolder"
+	}
+	New-Item -ItemType directory -Path "$artifactsFolder\$folder"
+
+	Copy-Item "$zipfile" "$artifactsFolder\$folder"
+	Copy-Item "$cmdfile" "$artifactsFolder\$folder"
+}
+
+function BuildWebPackage($Project, $BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
+    Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
+
+    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" '/verbosity:minimal' '/p:username=' '/p:CodeContractsRunCodeAnalysis=false' | Write-Host
+
+    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+
+    if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to build web package for project $Project']"
+        Write-Host "##teamcity[buildProblem description='Failed to build web package for project $Project']"
+    }
+
+    Write-Host "##teamcity[progressFinish 'Building web package for project $Project']"
+    Write-Host "##teamcity[blockClosed name='Building web package for project $Project']"
+
+    return $wasBuildSuccessfull
+}
+
+function CopyCapi($Project, $PathToFinalCapi, $BuildNumber) {
+	$file = get-childitem $Project
+	$SourceFolder = $file.directoryname + "\Externals\Capi"
+
+	If (Test-Path "$SourceFolder"){
+		Remove-Item "$SourceFolder" -Force -Recurse
+	}
+	else{
+		New-Item -ItemType directory -Path "$SourceFolder"
+	}
+	New-Item -ItemType directory -Path "$SourceFolder\$BuildNumber"
+	Copy-Item "$PathToFinalCapi" "$SourceFolder\$BuildNumber" -Recurse
+}

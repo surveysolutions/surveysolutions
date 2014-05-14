@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="ChangeLogManipulatorTests.cs" />
     <Compile Include="FilterableDenormalizerStorageStub.cs" />
+    <Compile Include="InterviewMetaInfo\InterviewMetaInfoFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

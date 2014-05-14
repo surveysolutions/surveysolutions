@@ -139,8 +139,7 @@ function PathToFinalCapi($CapiProject) {
 }
 
 # Main part
-
-CleanBinAndObjFolders
+$ErrorActionPreference = "Stop"
 
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
