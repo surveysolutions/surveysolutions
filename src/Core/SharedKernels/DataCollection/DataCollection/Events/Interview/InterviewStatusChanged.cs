@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+﻿using System;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
@@ -7,11 +8,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public InterviewStatus Status { get; private set; }
         public string Comment { get; private set; }
+        public Guid ResponsibleId { get; private set; }
 
-        public InterviewStatusChanged(InterviewStatus status, string comment)
+        public InterviewStatusChanged(InterviewStatus status, string comment, Guid responsibleId)
         {
             this.Status = status;
             this.Comment = comment;
+            this.ResponsibleId = responsibleId;
         }
     }
 }

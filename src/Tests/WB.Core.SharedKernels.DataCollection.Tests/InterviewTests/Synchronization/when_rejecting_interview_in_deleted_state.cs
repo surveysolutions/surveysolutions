@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
         Establish context = () =>
         {
             interview = CreateInterview();
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null, new Guid()));
             eventContext = new EventContext();
         };
 
