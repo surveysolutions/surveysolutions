@@ -13,7 +13,7 @@
 
     public class BasicAuthMessageHandler : DelegatingHandler
     {
-        protected bool Authorize(string username, string password)
+        private bool Authorize(string username, string password)
         {
             return Membership.ValidateUser(username, password);
         }

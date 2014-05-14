@@ -114,7 +114,7 @@
         <hr>
         <footer>
             <div class="text-center">
-                © 2013 <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
+                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
             </div>
             <div class="text-center">
                 @ViewContext.Controller.GetType().Assembly.GetName().Version @*(@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) *@

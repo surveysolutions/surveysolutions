@@ -11,13 +11,14 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
 {
-    [Authorize]
+    [ApiBasicAuth]
     public class TesterController : ApiController
     {
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
@@ -47,7 +48,6 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
         }
         
-        [Authorize]
         [HttpGet]
         public QuestionnaireListCommunicationPackage GetAllTemplates()
         {
@@ -87,8 +87,7 @@ namespace WB.UI.Designer.Api
 
             return questionnaireSyncPackage;
         }
-
-        [Authorize]
+        
         [HttpPost]
         public bool ValidateCredentials()
         {
@@ -101,7 +100,6 @@ namespace WB.UI.Designer.Api
             return true;
         }
 
-        [Authorize]
         [HttpGet]
         public QuestionnaireCommunicationPackage GetTemplate(Guid id)
         {
