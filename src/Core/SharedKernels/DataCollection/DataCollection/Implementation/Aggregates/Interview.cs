@@ -241,7 +241,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.DeclareAnswersValid(@event.Questions);
         }
 
-        private void Apply(AnswersDeclaredInvalid @event)
+        internal void Apply(AnswersDeclaredInvalid @event)
         {
             this.interviewState.DeclareAnswersInvalid(@event.Questions);
         }
@@ -2258,7 +2258,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
+                enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -2322,7 +2322,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
+                enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -2367,7 +2367,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
+                enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
             var interviewByAnswerChange = new List<AnswerChange>
@@ -2434,7 +2434,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
+                enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -2483,7 +2483,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
+                enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -2527,7 +2527,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled,
+                enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -3401,7 +3401,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStateDependentOnAnswers state,
             Identity answeredQuestion, IQuestionnaire questionnaire, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             Func<Identity, bool?> getNewQuestionStatus,
-            List<Identity> groupsToBeEnabled, List<Identity> questionsToBeEnabled,
+            EnablementChanges enablementChanges,
             out List<Identity> questionsToBeDeclaredValid, out List<Identity> questionsToBeDeclaredInvalid)
         {
             questionsToBeDeclaredValid = new List<Identity>();
@@ -3419,15 +3419,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     break;
             }
 
-            List<Identity> dependentQuestionsDeclaredValid;
-            List<Identity> dependentQuestionsDeclaredInvalid;
-            this.PerformValidationOfDependentQuestionsAndJustEnabledQuestions(state, answeredQuestion, questionnaire, getAnswer,
+            List<Identity> affectedQuestionsDeclaredValid;
+            List<Identity> affectedQuestionsDeclaredInvalid;
+            this.PerformValidationOfAffectedQuestions(state, answeredQuestion, questionnaire, getAnswer,
                 GetRosterInstanceIds, getNewQuestionStatus,
-                groupsToBeEnabled, questionsToBeEnabled,
-                out dependentQuestionsDeclaredValid, out dependentQuestionsDeclaredInvalid);
+                enablementChanges,
+                out affectedQuestionsDeclaredValid, out affectedQuestionsDeclaredInvalid);
 
-            questionsToBeDeclaredValid.AddRange(dependentQuestionsDeclaredValid);
-            questionsToBeDeclaredInvalid.AddRange(dependentQuestionsDeclaredInvalid);
+            questionsToBeDeclaredValid.AddRange(affectedQuestionsDeclaredValid);
+            questionsToBeDeclaredInvalid.AddRange(affectedQuestionsDeclaredInvalid);
 
             questionsToBeDeclaredValid = RemoveQuestionsAlreadyDeclaredValid(state, questionsToBeDeclaredValid);
             questionsToBeDeclaredInvalid = RemoveQuestionsAlreadyDeclaredInvalid(state, questionsToBeDeclaredInvalid);
@@ -3445,45 +3445,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionsToBeDeclaredInvalid.Where(question => ! IsQuestionAnsweredInvalid(state, question)).ToList();
         }
 
-        private void PerformValidationOfDependentQuestionsAndJustEnabledQuestions(InterviewStateDependentOnAnswers state,
-            Identity question, IQuestionnaire questionnaire,
+        private void PerformValidationOfAffectedQuestions(InterviewStateDependentOnAnswers state,
+            Identity answeredQuestion, IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds,
             Func<Identity, bool?> getNewQuestionStatus,
-            List<Identity> groupsToBeEnabled, List<Identity> questionsToBeEnabled,
+            EnablementChanges enablementChanges,
             out List<Identity> questionsDeclaredValid, out List<Identity> questionsDeclaredInvalid)
         {
             questionsDeclaredValid = new List<Identity>();
             questionsDeclaredInvalid = new List<Identity>();
 
-            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(question.Id);
+            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(answeredQuestion.Id);
             IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                dependentQuestionIds, question.RosterVector, questionnaire, getRosterInstanceIds);
+                dependentQuestionIds, answeredQuestion.RosterVector, questionnaire, getRosterInstanceIds);
 
             IEnumerable<Identity> mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions =
-                this.GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(state,
-                    questionnaire, groupsToBeEnabled, questionsToBeEnabled, getRosterInstanceIds);
+                GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(state,
+                    questionnaire, enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled, getRosterInstanceIds);
 
-            var dependendQuestionsAndJustEnabled =
-                dependentQuestions.Union(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions).ToList();
+            IEnumerable<Identity> questionsWithCustomValidationDependentOnEnablementChanges =
+                GetQuestionsWithCustomValidationDependentOnEnablementChanges(state, questionnaire, enablementChanges, getRosterInstanceIds);
 
-            foreach (Identity dependentQuestion in dependendQuestionsAndJustEnabled)
+            var questionsToBeValidated =
+                dependentQuestions
+                    .Union(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions, new IdentityComparer())
+                    .Union(questionsWithCustomValidationDependentOnEnablementChanges, new IdentityComparer())
+                    .ToList();
+
+            foreach (Identity questionToValidate in questionsToBeValidated)
             {
-                bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(state, dependentQuestion, questionnaire,
+                bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(state, questionToValidate, questionnaire,
                     getAnswer, getNewQuestionStatus);
                 switch (dependentQuestionValidationResult)
                 {
                     case true:
-                        questionsDeclaredValid.Add(dependentQuestion);
+                        questionsDeclaredValid.Add(questionToValidate);
                         break;
                     case false:
-                        questionsDeclaredInvalid.Add(dependentQuestion);
+                        questionsDeclaredInvalid.Add(questionToValidate);
                         break;
                 }
             }
         }
 
-        private IEnumerable<Identity> GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(
+        private static IEnumerable<Identity> GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(
             InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
             List<Identity> groupsToBeEnabled, List<Identity> questionsToBeEnabled,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
@@ -3507,6 +3513,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var underlyingQuestionInstance in affectedUnderlyingQuestionInstances)
                 {
                     yield return underlyingQuestionInstance;
+                }
+            }
+        }
+
+        private static IEnumerable<Identity> GetQuestionsWithCustomValidationDependentOnEnablementChanges(
+            InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire, EnablementChanges enablementChanges,
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
+        {
+            IEnumerable<Identity> changedQuestions = Enumerable.Concat(enablementChanges.QuestionsToBeDisabled, enablementChanges.QuestionsToBeEnabled);
+            IEnumerable<Identity> changedGroups = Enumerable.Concat(enablementChanges.GroupsToBeDisabled, enablementChanges.GroupsToBeEnabled);
+
+            foreach (Identity changedQuestion in changedQuestions)
+            {
+                IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(changedQuestion.Id);
+
+                IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                    state, dependentQuestionIds, changedQuestion.RosterVector, questionnaire, getRosterInstanceIds);
+
+                foreach (Identity dependentQuestion in dependentQuestions)
+                {
+                    yield return dependentQuestion;
+                }
+            }
+
+            foreach (Identity changedGroup in changedGroups)
+            {
+                IEnumerable<Guid> dependentQuestionIds = questionnaire
+                    .GetAllUnderlyingQuestions(changedGroup.Id)
+                    .SelectMany(underlyingQuestionId => questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(underlyingQuestionId))
+                    .Distinct();
+
+                IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                    state, dependentQuestionIds, changedGroup.RosterVector, questionnaire, getRosterInstanceIds);
+
+                foreach (Identity dependentQuestion in dependentQuestions)
+                {
+                    yield return dependentQuestion;
                 }
             }
         }
