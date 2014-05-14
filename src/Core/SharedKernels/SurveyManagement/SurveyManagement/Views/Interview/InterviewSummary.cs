@@ -67,6 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public string Comment { get; set; }
         public DateTime Date { get; set; }
         public InterviewStatus Status { get; set; }
+        public string Responsible { get; set; }
     }
 
     public class QuestionAnswer

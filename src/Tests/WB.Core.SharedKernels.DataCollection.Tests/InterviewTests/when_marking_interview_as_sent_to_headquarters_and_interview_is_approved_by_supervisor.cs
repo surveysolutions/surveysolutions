@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Spec;
@@ -18,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview();
 
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment: null));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment: null, responsibleId: new Guid()));
 
             eventContext = new EventContext();
         };
