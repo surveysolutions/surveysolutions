@@ -594,6 +594,7 @@
     <Content Include="UpdatedDesigner\app\views\main.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
+    <Content Include="UpdatedDesigner\test.html" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.js" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.min.js" />
@@ -992,6 +993,8 @@
     <Content Include="UpdatedDesigner\data\questionnaire\7c97b1925b0244b782ed6741a5035fae.json" />
     <Content Include="UpdatedDesigner\.jscsrc" />
     <Content Include="UpdatedDesigner\.jshintrc" />
+    <Content Include="UpdatedDesigner\data\verify\no-errors.json" />
+    <Content Include="UpdatedDesigner\data\verify\with-errors.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
