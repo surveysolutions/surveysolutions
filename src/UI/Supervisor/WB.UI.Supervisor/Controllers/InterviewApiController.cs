@@ -128,7 +128,7 @@ namespace WB.UI.Supervisor.Controllers
                     id = a.PublicKey.ToString(),
                     questionnaireId = a.QuestionnairePublicKey.ToString(),
                     title = a.Title,
-                    status = Enum.GetName(typeof(InterviewStatus), a.Status)
+                    status = a.Status.ToLocalizeString()
                 },
                 Groups = a.Groups.Select(group => new GroupModel(group.ParentId)
                 {
