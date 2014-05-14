@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<RosterRowAdded>,
         IEventHandler<RosterRowRemoved>,
         IEventHandler<RosterRowTitleChanged>,
+        IEventHandler<RosterRowsTitleChanged>,
         IEventHandler<RosterInstancesAdded>,
         IEventHandler<RosterInstancesRemoved>,
         IEventHandler<InterviewCompleted>,
@@ -365,6 +366,15 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             
             doc.UpdateRosterRowTitle(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.Title);
+        }
+
+        public void Handle(IPublishedEvent<RosterRowsTitleChanged> evnt)
+        {
+            var doc = this.GetStoredViewModel(evnt.EventSourceId);
+            foreach (var changedRosterRowTitleDto in evnt.Payload.ChangedRows)
+            {
+                doc.UpdateRosterRowTitle(changedRosterRowTitleDto.Row.GroupId, changedRosterRowTitleDto.Row.OuterRosterVector, changedRosterRowTitleDto.Row.RosterInstanceId, changedRosterRowTitleDto.Title);
+            }
         }
 
         public void Handle(IPublishedEvent<RosterInstancesAdded> evnt)
