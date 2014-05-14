@@ -1,0 +1,15 @@
+{
+  "name": "prettycheckable",
+  "homepage": "https://github.com/arthurgouveia/prettyCheckable",
+  "version": "2.1.2",
+  "_release": "2.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.1.2",
+    "commit": "de29b5b06dba465751d7477eab1666b333c41afd"
+  },
+  "_source": "git://github.com/arthurgouveia/prettyCheckable.git",
+  "_target": "~2.1.2",
+  "_originalSource": "prettycheckable",
+  "_direct": true
+}

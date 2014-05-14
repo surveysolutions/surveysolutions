@@ -1,0 +1,60 @@
+.wb-inline-button {
+  padding: 5px 6px;
+  height: 22px;
+  border: none;
+  background: @inline-button-bg-color;
+  font-style: normal;
+  &:hover { background: darken(@inline-button-bg-color, 5%); }
+  &.lighter-hover {
+    &:hover { background: lighten(@inline-button-bg-color, 5%); }
+  }
+  border-radius: 3px;
+  vertical-align: text-bottom;
+  color: @inline-button-normal-color;
+
+  .inline-button-fontstyle();
+
+  &.error {
+    color: @inline-button-error-color;
+  }
+}
+
+
+.wb-dropdown-button() {
+  vertical-align: middle;
+  width: 37px;
+  height: 30px;
+  background: url(../i/btn-dropdown-blue.png) center -5px no-repeat;
+  &:hover {
+    background-position: center -42px;
+  }
+}
+
+.dropdown {
+  &.width60 {
+    width: 60%;
+  }
+
+  > .wb-dropdown-button, ul.dropdown-menu {
+    width: 100%;
+
+    .arrow {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 40px;
+      background: url(../i/dropdown-arrow.png) no-repeat center center;
+    }
+  }
+
+  > .wb-dropdown-button {
+    background-color: #fff;
+    width: 100%;
+    text-align: left;
+    .wb-input-text-fontstyle();
+
+  }
+
+}
+

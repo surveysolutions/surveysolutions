@@ -1,0 +1,29 @@
+{
+  "name": "Designer",
+  "version": "0.0.0",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cookies": "1.2.6",
+    "angular-mocks": "1.2.6",
+    "angular-resource": "1.2.6",
+    "angular-route": "1.2.6",
+    "angular-sanitize": "1.2.6",
+    "angular-scenario": "1.2.6",
+    "angular-underscore": "*",
+    "bootstrap-select": "~1.5.2",
+    "es5-shim": "~2.1.0",
+    "bootstrap": "~3.1.1",
+    "underscore": "1.6.0",
+    "json3": "~3.2.6",
+    "malihu-custom-scrollbar-plugin": "~2.8.5",
+    "prettycheckable": "~2.1.2"
+  }
+}
