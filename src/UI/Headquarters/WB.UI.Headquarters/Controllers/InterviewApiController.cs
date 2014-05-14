@@ -129,7 +129,8 @@ namespace WB.UI.Headquarters.Controllers
                     id = view.PublicKey.ToString(),
                     questionnaireId = view.QuestionnairePublicKey.ToString(),
                     title = view.Title,
-                    status = view.Status.ToLocalizeString()
+                    status = view.Status.ToLocalizeString(),
+                    responsible = view.Responsible.Name
                 },
                 Groups = view.Groups.Select(group => new GroupModel(group.ParentId)
                 {
@@ -347,6 +348,7 @@ namespace WB.UI.Headquarters.Controllers
         public string title { get; set; }
         public string status { get; set; }
         public string questionnaireId { get; set; }
+        public string responsible { get; set; }
     }
     public class NewInterviewDetailsView
     {
