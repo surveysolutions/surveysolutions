@@ -85,6 +85,24 @@
                    return false;
                });
 
+               var isGroupIsRosterOrInsideIt = function (group) {
+                   return !_.isUndefined(Question.datacontext)
+                       && !_.isEmpty(Question.datacontext())
+                       && !_.isEmpty(Question.datacontext().groups)
+                       && Question.datacontext().groups.isRosterOrInsideRoster(group);
+               };
+
+               self.isFeaturedOptionIsVisible = ko.computed(function () {
+                   var isInsideRoster = isGroupIsRosterOrInsideIt(self.parent());
+                   if (self.isFeatured() && isInsideRoster) {
+                       return true;
+                   }
+                   if (isInsideRoster) {
+                       return false;
+                   }
+                   return !(self.qtype() == 'TextList' && self.isFeatured() == false);
+               });
+
                self.addAnswer = function () {
                    var answer = new answerOption().id(Math.uuid()).title('').value('');
 
@@ -237,7 +255,20 @@
                        }
                    });
 
-
+                   self.isFeatured.extend({
+                       validatable: true,
+                       validation: [
+                           {
+                               validator: function (val) {
+                                   if (_.isBoolean(val) &&  val && isGroupIsRosterOrInsideIt(self.parent())) {
+                                       return false;
+                                   }
+                                   return true;
+                               },
+                               message: 'Pre-filled question can not be inside any roster'
+                           }],
+                       throttle: 1000
+                   });
                   
 
                    self.answerOptions.extend({
