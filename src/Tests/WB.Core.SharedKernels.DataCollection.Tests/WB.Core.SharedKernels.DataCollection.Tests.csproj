@@ -95,6 +95,8 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_which_enables_B_which_makes_C_valid_and_B_was_disabled_and_answered_and_C_was_i___.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
@@ -151,12 +153,11 @@
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="InterviewTests\when_answer_on_multy_option_question_increases_roster_size.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_on_the_third_level.cs" />
-    <Compile Include="InterviewTests\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
-    <Compile Include="InterviewTests\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
-    <Compile Include="InterviewTests\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_wa___.cs" />
     <Compile Include="InterviewTests\when_answering_integer_question_with_14400_and_max_value_is_3600.cs" />
     <Compile Include="InterviewTests\when_answering_mandatory_multy_option_question_with_empty_list_of_options.cs" />
-    <Compile Include="InterviewTests\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_with_1000_and_max_value_is_567.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_decreases_roster_size.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size.cs" />
