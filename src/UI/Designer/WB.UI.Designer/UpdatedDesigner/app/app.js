@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('designerApp', [
+var app = angular.module('designerApp', [
         'ngCookies',
         'ngResource',
         'ngSanitize',

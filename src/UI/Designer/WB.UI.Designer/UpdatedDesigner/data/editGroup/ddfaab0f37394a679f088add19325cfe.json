@@ -1,0 +1,12 @@
+{
+    "group": {
+        "id": "ddfaab0f-3739-4a67-9f08-8add19325cfe",
+        "title": "Group 1",
+        "description": "desr123",
+        "enablementCondition": ""
+    },
+    "breadcrumbs": [{
+        "id": "6e240642-274c-4bde-a937-baa78cd4ad6f",
+        "title": "Chapter"
+    }]
+}
