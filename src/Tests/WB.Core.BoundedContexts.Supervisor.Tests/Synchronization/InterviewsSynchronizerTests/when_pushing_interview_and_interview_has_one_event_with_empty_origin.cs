@@ -29,6 +29,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
     {
         Establish context = () =>
         {
+            string positiveResponse = ":)";
+
             loggerMock
                 .Setup(logger => logger.Error(it.IsAny<string>(), it.IsAny<Exception>()))
                 .Callback<string, Exception>((error, exception) => lastLoggedException = exception);
@@ -54,10 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
-                => utils.GetItemAsContent(it.IsAny<AggregateRootEvent[]>()) == eventsJson
-                && utils.GetItemAsContent(it.IsAny<InterviewMetaInfo>()) == metadataJson
-                && utils.GetItemAsContent(it.IsAny<SyncItem>()) == syncItemJson
-                && utils.Deserrialize<bool>(positiveResponse) == true);
+                => utils.Deserrialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
                 .Setup(utils => utils.GetItemAsContent(it.IsAny<AggregateRootEvent[]>()))
@@ -121,7 +120,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Mock<ILogger> loggerMock = new Mock<ILogger>();
         private static Exception lastLoggedException;
-        private static string positiveResponse = ":)";
         private static string contentSentToHq;
         private static string syncItemJson = "sync item json";
         private static string eventsJson = "events json";
