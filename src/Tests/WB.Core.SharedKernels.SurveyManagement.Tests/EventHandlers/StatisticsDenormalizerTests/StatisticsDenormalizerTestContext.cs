@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.StatisticsD
 
         protected static IPublishedEvent<InterviewStatusChanged> CreateInterviewStatusChangedEvent(InterviewStatus status, Guid eventSourceId)
         {
-            var evnt = ToPublishedEvent(new InterviewStatusChanged(status, String.Empty, new Guid()), eventSourceId);
+            var evnt = ToPublishedEvent(new InterviewStatusChanged(status, String.Empty), eventSourceId);
             return evnt;
         }
 
