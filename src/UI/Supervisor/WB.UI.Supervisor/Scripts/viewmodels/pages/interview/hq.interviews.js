@@ -3,9 +3,11 @@
 
     var self = this;
 
-    self.deleteInterview = function() {
+    self.deleteInterview = function () {
+        var selectedItems = [];
         var commands = ko.utils.arrayMap(self.SelectedItems(), function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
+            selectedItems.push(rawItem);
             return ko.toJSON({
                 InterviewId: item.InterviewId
             });
@@ -17,7 +19,7 @@
         };
 
         self.SendCommands(command, function (failedCommandIds) {
-            var deletedInterviews = ko.utils.arrayFilter(self.SelectedItems(), function(item) {
+            var deletedInterviews = ko.utils.arrayFilter(selectedItems, function (item) {
                 return $.inArray(item.InterviewId(), failedCommandIds) == -1;
             });
 

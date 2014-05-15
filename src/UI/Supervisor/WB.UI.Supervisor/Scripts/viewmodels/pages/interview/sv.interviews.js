@@ -3,9 +3,11 @@
 
     var self = this;
 
-    self.Assign = function(user) {
+    self.Assign = function (user) {
+        var selectedItems = [];
         var commands = ko.utils.arrayMap(self.SelectedItems(), function(rawItem) {
             var item = ko.mapping.toJS(rawItem);
+            selectedItems.push(rawItem);
             return ko.toJSON({
                 InterviewerId: user.UserId,
                 InterviewId: item.InterviewId
@@ -18,7 +20,7 @@
         };
 
         self.SendCommands(command, function(failedCommandIds) {
-            var assignedInterviews = ko.utils.arrayFilter(self.SelectedItems(), function(item) {
+            var assignedInterviews = ko.utils.arrayFilter(selectedItems, function (item) {
                 return $.inArray(item.InterviewId(), failedCommandIds) == -1;
             });
 
