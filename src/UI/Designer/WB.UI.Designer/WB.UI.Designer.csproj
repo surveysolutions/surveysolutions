@@ -269,7 +269,6 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
-    <Compile Include="Controllers\TesterController.cs" />
     <Compile Include="Code\CamelCaseAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -760,6 +759,7 @@
     <Content Include="UpdatedDesigner\vendor\underscore\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\underscore\package.json" />
     <Content Include="UpdatedDesigner\vendor\underscore\README.md" />
+    <Content Include="Views\Shared\_commonFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
