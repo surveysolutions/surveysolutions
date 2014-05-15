@@ -3519,8 +3519,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var questionsToBeValidated =
                 dependentQuestions
-                    .Union(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions, new IdentityComparer())
-                    .Union(questionsWithCustomValidationDependentOnEnablementChanges, new IdentityComparer())
+                    .Concat(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions)
+                    .Concat(questionsWithCustomValidationDependentOnEnablementChanges)
+                    .Distinct(new IdentityComparer())
                     .ToList();
 
             foreach (Identity questionToValidate in questionsToBeValidated)
@@ -3574,28 +3575,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Identity> changedQuestions = Enumerable.Concat(enablementChanges.QuestionsToBeDisabled, enablementChanges.QuestionsToBeEnabled);
             IEnumerable<Identity> changedGroups = Enumerable.Concat(enablementChanges.GroupsToBeDisabled, enablementChanges.GroupsToBeEnabled);
 
-            foreach (Identity changedQuestion in changedQuestions)
+            IEnumerable<Identity> underlyingQuestionsFromChangedGroups =
+                from changedGroup in changedGroups
+                let underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(changedGroup.Id)
+                let underlyingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                    state, underlyingQuestionIds, changedGroup.RosterVector, questionnaire, getRosterInstanceIds)
+                from underlyingQuestion in underlyingQuestions
+                select underlyingQuestion;
+
+            IEnumerable<Identity> allChangedQuestions = Enumerable.Concat(changedQuestions, underlyingQuestionsFromChangedGroups);
+
+            IEnumerable<Identity> allChangedQuestionsWhichAreAnswered =
+                from changedQuestion in allChangedQuestions
+                let changedQuestionKey = ConversionHelper.ConvertIdAndRosterVectorToString(changedQuestion.Id, changedQuestion.RosterVector)
+                where state.AnsweredQuestions.Contains(changedQuestionKey)
+                select changedQuestion;
+
+            foreach (Identity changedQuestion in allChangedQuestionsWhichAreAnswered)
             {
                 IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(changedQuestion.Id);
 
                 IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                     state, dependentQuestionIds, changedQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (Identity dependentQuestion in dependentQuestions)
-                {
-                    yield return dependentQuestion;
-                }
-            }
-
-            foreach (Identity changedGroup in changedGroups)
-            {
-                IEnumerable<Guid> dependentQuestionIds = questionnaire
-                    .GetAllUnderlyingQuestions(changedGroup.Id)
-                    .SelectMany(underlyingQuestionId => questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(underlyingQuestionId))
-                    .Distinct();
-
-                IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                    state, dependentQuestionIds, changedGroup.RosterVector, questionnaire, getRosterInstanceIds);
 
                 foreach (Identity dependentQuestion in dependentQuestions)
                 {
