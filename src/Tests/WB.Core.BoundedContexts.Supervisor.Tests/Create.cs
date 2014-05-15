@@ -97,14 +97,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 interviewsPushUrl ?? new Uri("http://localhost"));
         }
 
-        public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null)
+        public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
+            Guid? eventIdentifier = null, long eventSequence = 1)
         {
             return new CommittedEvent(
                 Guid.Parse("33330000333330000003333300003333"),
                 origin,
-                Guid.Parse("44440000444440000004444400004444"),
+                eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
                 eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
-                1,
+                eventSequence,
                 new DateTime(2014, 10, 22),
                 payload ?? "some payload",
                 new Version());
