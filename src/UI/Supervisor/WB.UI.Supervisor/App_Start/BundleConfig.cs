@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Supervisor.App_Start
+﻿using WB.UI.Supervisor.Code.Bundling;
+
+namespace WB.UI.Supervisor.App_Start
 {
     using System.Web.Optimization;
 
@@ -12,18 +14,17 @@
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new StyleBundle("~/Content/main").Include(
-                "~/Content/css/bootstrap.css",
-                "~/Content/font-awesome.min.css",
-                "~/Content/bootstrap-mvc-validation.css",
-                "~/Content/jquery.pnotify.default.css",
-                "~/Content/supervisor.css",
-                "~/Content/main.css"));
+            bundles.Add(new StyleImagePathBundle("~/Content/bootstrap-bundle")
+                .Include("~/Content/bootstrap/bootstrap.css")
+                .Include("~/Content/bootstrap/bootstrap-mvc-validation.css"));
+
+            bundles.Add(new StyleBundle("~/Content/main")
+                .Include("~/Content/jquery.pnotify.default.css")
+                .Include("~/Content/supervisor.css")
+                .Include("~/Content/main.css"))
+               ;
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
-                "~/Content/css/bootstrap.css",
-                "~/Content/bootstrap-mvc-validation.css",
-                "~/Content/css/bootstrap-responsive.css",
                  "~/Content/main-not-logged.css"));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
