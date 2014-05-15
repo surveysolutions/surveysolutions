@@ -70,11 +70,11 @@ namespace WB.Core.Synchronization.SyncStorage
                             .Select(q => new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value, string.Empty))
                             .ToArray();
 
-                    commandService.Execute(new CreateInterviewOnClientCommand(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                    commandService.Execute(new CreateInterviewOnClientCommand(meta.PublicKey, meta.ResponsibleId, meta.TemplateId, // TODO: Vitaliy. Please do not executed 2 commands for single action. This operation is executed in two separate transactions, and produces AR in the half way when first operation succeeded, but second failed
                         meta.TemplateVersion, DateTime.UtcNow, user.Supervisor.Id));
                 }
 
-                commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId, // This is second command that should be wrapped in 1
                     (InterviewStatus) meta.Status, prefilledQuestions, meta.Comments, meta.Valid));
 
                 File.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
