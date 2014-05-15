@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -32,6 +33,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
         IUpdateHandler<InterviewSummary, InterviewDeleted>,
         IUpdateHandler<InterviewSummary, InterviewRestored>,
+        IUpdateHandler<InterviewSummary, InterviewRestarted>,
+        IUpdateHandler<InterviewSummary, InterviewCompleted>,
+        IUpdateHandler<InterviewSummary, InterviewRejected>,
+        IUpdateHandler<InterviewSummary, InterviewApproved>,
+        IUpdateHandler<InterviewSummary, InterviewRejectedByHQ>,
+        IUpdateHandler<InterviewSummary, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
         ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
@@ -95,19 +102,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument responsible = this.users.GetById(userId);
             var questionnarie = this.questionnaires.GetById(questionnaireId,
                 questionnaireVersion);
-            return
-                new InterviewSummary(questionnarie.Questionnaire)
-                {
-                    InterviewId = eventSourceId,
-                    WasCreatedOnClient = wasCreatedOnClient,
-                    UpdateDate = eventTimeStamp,
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion,
-                    QuestionnaireTitle = questionnarie.Questionnaire.Title,
-                    ResponsibleId = userId, // Creator is responsible
-                    ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
-                    ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
-                };
+
+            var interviewSummary = new InterviewSummary(questionnarie.Questionnaire)
+            {
+                InterviewId = eventSourceId,
+                WasCreatedOnClient = wasCreatedOnClient,
+                UpdateDate = eventTimeStamp,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                QuestionnaireTitle = questionnarie.Questionnaire.Title,
+                ResponsibleId = userId, // Creator is responsible
+                ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
+                ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
+            };
+            AddInterviewStatus(summary: interviewSummary, status: InterviewStatus.Created, date: eventTimeStamp,
+                comment: null, responsibleId: userId);
+
+            return interviewSummary;
         }
 
         public InterviewSummary Create(IPublishedEvent<InterviewCreated> evnt)
@@ -133,13 +144,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.Status = evnt.Payload.Status;
-
-                interview.CommentedStatusesHistory.Add(new InterviewCommentedStatus
-                {
-                    Status = interview.Status,
-                    Date = evnt.EventTimeStamp,
-                    Comment = evnt.Payload.Comment
-                });
             });
         }
 
@@ -155,6 +159,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interview.ResponsibleRole = UserRoles.Supervisor;
                 interview.TeamLeadId = evnt.Payload.SupervisorId;
                 interview.TeamLeadName = supervisorName;
+                
+                AddInterviewStatus(summary: interview, status: InterviewStatus.SupervisorAssigned,
+                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
             });
         }
 
@@ -238,6 +245,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interview.ResponsibleId = evnt.Payload.InterviewerId;
                 interview.ResponsibleName = interviewerName;
                 interview.ResponsibleRole = UserRoles.Operator;
+
+                AddInterviewStatus(summary: interview, status: InterviewStatus.InterviewerAssigned,
+                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
             });
         }
 
@@ -246,6 +256,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.IsDeleted = true;
+
+                AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
+                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
             });
         }
 
@@ -254,6 +267,63 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.IsDeleted = false;
+
+                AddInterviewStatus(summary: interview, status: InterviewStatus.Restored,
+                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewRestarted> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                AddInterviewStatus(summary: interview, status: InterviewStatus.Restarted,
+                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewCompleted> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                AddInterviewStatus(summary: interview, status: InterviewStatus.Completed,
+                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewRejected> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                AddInterviewStatus(summary: interview, status: InterviewStatus.RejectedBySupervisor,
+                    date: evnt.EventTimeStamp, comment: evnt.Payload.Comment, responsibleId: evnt.Payload.UserId);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewApproved> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                AddInterviewStatus(summary: interview, status: InterviewStatus.ApprovedBySupervisor,
+                    date: evnt.EventTimeStamp, comment: evnt.Payload.Comment, responsibleId: evnt.Payload.UserId);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewRejectedByHQ> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                AddInterviewStatus(summary: interview, status: InterviewStatus.RejectedByHeadquarters,
+                    date: evnt.EventTimeStamp, comment: evnt.Payload.Comment, responsibleId: evnt.Payload.UserId);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewApprovedByHQ> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                AddInterviewStatus(summary: interview, status: InterviewStatus.ApprovedByHeadquarters,
+                    date: evnt.EventTimeStamp, comment: evnt.Payload.Comment, responsibleId: evnt.Payload.UserId);
             });
         }
 
@@ -287,6 +357,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         }
                     }
                 }
+            });
+        }
+
+        private void AddInterviewStatus(InterviewSummary summary, InterviewStatus status, DateTime date,
+            string comment, Guid responsibleId)
+        {
+            var responsible = this.users.GetById(responsibleId);
+            var responsibleName = responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
+
+            summary.CommentedStatusesHistory.Add(new InterviewCommentedStatus()
+            {
+                Status = status,
+                Date = date,
+                Comment = comment,
+                Responsible = responsibleName
             });
         }
     }
