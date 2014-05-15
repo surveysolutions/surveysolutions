@@ -134,15 +134,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 interview.Status = evnt.Payload.Status;
 
-                var responsibleUser = this.users.GetById(evnt.Payload.ResponsibleId);
-                var responsibleUserName = responsibleUser != null ? responsibleUser.UserName : "<UNKNOWN USER>";
-
                 interview.CommentedStatusesHistory.Add(new InterviewCommentedStatus
                 {
                     Status = interview.Status,
                     Date = evnt.EventTimeStamp,
-                    Comment = evnt.Payload.Comment,
-                    Responsible = responsibleUserName
+                    Comment = evnt.Payload.Comment
                 });
             });
         }

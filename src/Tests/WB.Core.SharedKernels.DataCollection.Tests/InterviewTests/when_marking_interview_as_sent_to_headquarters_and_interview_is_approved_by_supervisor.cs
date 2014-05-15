@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview();
 
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment: null, responsibleId: new Guid()));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment: null));
 
             eventContext = new EventContext();
         };
