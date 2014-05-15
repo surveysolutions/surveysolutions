@@ -51,8 +51,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IJsonUtils jsonUtils;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
+        private readonly HttpMessageHandler httpMessageHandler;
 
-        public InterviewsSynchronizer(IAtomFeedReader feedReader, 
+        public InterviewsSynchronizer(
+            IAtomFeedReader feedReader,
             HeadquartersSettings settings, 
             ILogger logger,
             ICommandService commandService,
@@ -66,7 +68,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IEventStore eventStore,
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
-            IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter)
+            IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
+            HttpMessageHandler httpMessageHandler)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -83,6 +86,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
             if (readyToSendInterviewsRepositoryWriter == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryWriter");
+            if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
 
             this.feedReader = feedReader;
             this.settings = settings;
@@ -99,6 +103,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.jsonUtils = jsonUtils;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
             this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
+            this.httpMessageHandler = httpMessageHandler;
         }
 
         public void Pull()
@@ -339,7 +344,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private bool SendInterviewData(Guid interviewId, string interviewData)
         {
-            using (var client = new HttpClient().AppendAuthToken(this.settings))
+            using (var client = new HttpClient(this.httpMessageHandler).AppendAuthToken(this.settings))
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, this.settings.InterviewsPushUrl) {
                     Content = new StringContent(interviewData)
