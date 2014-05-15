@@ -12,6 +12,7 @@
     @{
         var page = ViewBag.ActivePage ?? MenuItem.Logon;
     }
+    @Styles.Render("~/Content/bootstrap-bundle")
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
