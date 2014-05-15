@@ -342,6 +342,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(RosterRowTitleChanged @event) {}
 
+        private void Apply(RosterRowsTitleChanged @event) { }
+
         internal void Apply(RosterInstancesAdded @event)
         {
             this.interviewState.AddRosterInstances(@event.Instances);
@@ -827,6 +829,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (indexOfPreviousRoster == rosterVector.Length)
                 {
                     yield return extendedRoster;
+                    continue;
                 }
                 foreach (var nextVector in GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, extendedRoster))
                 {
@@ -1252,9 +1255,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
-            rosterInstancesWithAffectedTitles.ForEach(
-                roster =>
-                    this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, answer)));
+            if (rosterInstancesWithAffectedTitles.Any())
+                this.ApplyEvent(new RosterRowsTitleChanged(
+                    rosterInstancesWithAffectedTitles.Select(
+                        rosterIdentity =>
+                            new ChangedRosterRowTitleDto(
+                                new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                                    rosterIdentity.RosterInstanceId),
+                                answer)).ToArray()));
         }
 
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
@@ -2036,17 +2044,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRosterRowsTitleChangedEvents(List<RosterIdentity> rosterInstances, string rosterTitle)
         {
-            rosterInstances.ForEach(
-                roster =>
-                    this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, rosterTitle)));
+            if (rosterInstances.Any())
+                this.ApplyEvent(new RosterRowsTitleChanged(
+                    rosterInstances.Select(
+                        rosterIdentity =>
+                            new ChangedRosterRowTitleDto(
+                                new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                                    rosterIdentity.RosterInstanceId),
+                                rosterTitle)).ToArray()));
         }
 
         private void ApplyRosterEvents(RosterCalculationData data)
         {
-            if (data.RosterInstancesToAdd.Any())
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.RosterInstancesToAdd, new RosterIdentityComparer());
+
+            if (rosterInstancesToAdd.Any())
             {
-                AddedRosterInstance[] instances = data
-                    .RosterInstancesToAdd
+                AddedRosterInstance[] instances = rosterInstancesToAdd
                     .Select(
                         roster =>
                             new AddedRosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex))
@@ -2055,40 +2069,76 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesAdded(instances));
             }
 
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer());
+
             if (data.RosterInstancesToRemove.Any())
             {
-                RosterInstance[] instances = data
-                    .RosterInstancesToRemove
+                RosterInstance[] instances = rosterInstancesToRemove
                     .Select(roster => new RosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
                     .ToArray();
 
                 this.ApplyEvent(new RosterInstancesRemoved(instances));
             }
 
+            var changedRosterRowTitleDtoFromRosterData = CreateChangedRosterRowTitleDtoFromRosterData(data);
+            if(changedRosterRowTitleDtoFromRosterData.Any())
+                this.ApplyEvent(new RosterRowsTitleChanged(CreateChangedRosterRowTitleDtoFromRosterData(data)));
+
+            this.ApplyAnswersRemovanceEvents(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
+                d => d.AnswersToRemoveByDecreasedRosterSize, new IdentityComparer()));
+
+            this.ApplyEnablementChangesEvents(
+                new EnablementChanges(
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedGroupsToBeDisabled, new IdentityComparer()),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedGroupsToBeEnabled, new IdentityComparer()),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeDisabled, new IdentityComparer()),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeEnabled, new IdentityComparer())));
+
+            this.ApplyValidityChangesEvents(new ValidityChanges(null,
+                this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeInvalid, new IdentityComparer())));
+        }
+
+        private ChangedRosterRowTitleDto[] CreateChangedRosterRowTitleDtoFromRosterData(RosterCalculationData data)
+        {
+            var result = new List<ChangedRosterRowTitleDto>();
             if (data.TitlesForRosterInstancesToAdd != null)
             {
-                data.RosterInstancesToAdd.ForEach(
-                    roster =>
-                        this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId,
-                            data.TitlesForRosterInstancesToAdd[roster.RosterInstanceId])));
+                var rosterRowTitlesChanged = new HashSet<RosterIdentity>(data.RosterInstancesToAdd, new RosterIdentityComparer());
+                if (data.RosterInstancesToChange != null)
+                {
+                    foreach (var rosterIdentity in data.RosterInstancesToChange)
+                    {
+                        rosterRowTitlesChanged.Add(rosterIdentity);
+                    }
+                }
+
+                foreach (var rosterIdentity in rosterRowTitlesChanged)
+                {
+                    result.Add(new ChangedRosterRowTitleDto(new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                        rosterIdentity.RosterInstanceId), data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId]));
+                }
             }
 
-            if (data.RosterInstancesToChange != null)
+            foreach (var nestedRosterData in data.RosterInstantiatesFromNestedLevels)
             {
-                data.RosterInstancesToChange.ForEach(
-                    roster =>
-                        this.ApplyEvent(new RosterRowTitleChanged(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId,
-                            data.TitlesForRosterInstancesToAdd[roster.RosterInstanceId])));
+                result.AddRange(CreateChangedRosterRowTitleDtoFromRosterData(nestedRosterData));
+            }
+            return result.ToArray();
+        }
+
+        private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(RosterCalculationData data, Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer)
+        {
+            var result = new List<T>();
+
+            result.AddRange(getProperty(data));
+
+            foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
+            {
+                result.AddRange(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(rosterInstantiatesFromNestedLevel, getProperty, equalityComparer));
             }
 
-            this.ApplyAnswersRemovanceEvents(data.AnswersToRemoveByDecreasedRosterSize);
-
-            this.ApplyEnablementChangesEvents(new EnablementChanges(data.InitializedGroupsToBeDisabled,
-                data.InitializedGroupsToBeEnabled, data.InitializedQuestionsToBeDisabled, data.InitializedQuestionsToBeEnabled));
-
-            this.ApplyValidityChangesEvents(new ValidityChanges(null, data.InitializedQuestionsToBeInvalid));
-
-            data.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterEvents);
+            return result.Distinct(equalityComparer).ToList();
         }
 
         private void ApplyAnswersEvents(IEnumerable<AnswerChange> interviewByAnswerChanges)
@@ -3469,8 +3519,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var questionsToBeValidated =
                 dependentQuestions
-                    .Union(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions, new IdentityComparer())
-                    .Union(questionsWithCustomValidationDependentOnEnablementChanges, new IdentityComparer())
+                    .Concat(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions)
+                    .Concat(questionsWithCustomValidationDependentOnEnablementChanges)
+                    .Distinct(new IdentityComparer())
                     .ToList();
 
             foreach (Identity questionToValidate in questionsToBeValidated)
@@ -3524,28 +3575,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Identity> changedQuestions = Enumerable.Concat(enablementChanges.QuestionsToBeDisabled, enablementChanges.QuestionsToBeEnabled);
             IEnumerable<Identity> changedGroups = Enumerable.Concat(enablementChanges.GroupsToBeDisabled, enablementChanges.GroupsToBeEnabled);
 
-            foreach (Identity changedQuestion in changedQuestions)
+            IEnumerable<Identity> underlyingQuestionsFromChangedGroups =
+                from changedGroup in changedGroups
+                let underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(changedGroup.Id)
+                let underlyingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                    state, underlyingQuestionIds, changedGroup.RosterVector, questionnaire, getRosterInstanceIds)
+                from underlyingQuestion in underlyingQuestions
+                select underlyingQuestion;
+
+            IEnumerable<Identity> allChangedQuestions = Enumerable.Concat(changedQuestions, underlyingQuestionsFromChangedGroups);
+
+            IEnumerable<Identity> allChangedQuestionsWhichAreAnswered =
+                from changedQuestion in allChangedQuestions
+                let changedQuestionKey = ConversionHelper.ConvertIdAndRosterVectorToString(changedQuestion.Id, changedQuestion.RosterVector)
+                where state.AnsweredQuestions.Contains(changedQuestionKey)
+                select changedQuestion;
+
+            foreach (Identity changedQuestion in allChangedQuestionsWhichAreAnswered)
             {
                 IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(changedQuestion.Id);
 
                 IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                     state, dependentQuestionIds, changedQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (Identity dependentQuestion in dependentQuestions)
-                {
-                    yield return dependentQuestion;
-                }
-            }
-
-            foreach (Identity changedGroup in changedGroups)
-            {
-                IEnumerable<Guid> dependentQuestionIds = questionnaire
-                    .GetAllUnderlyingQuestions(changedGroup.Id)
-                    .SelectMany(underlyingQuestionId => questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(underlyingQuestionId))
-                    .Distinct();
-
-                IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                    state, dependentQuestionIds, changedGroup.RosterVector, questionnaire, getRosterInstanceIds);
 
                 foreach (Identity dependentQuestion in dependentQuestions)
                 {

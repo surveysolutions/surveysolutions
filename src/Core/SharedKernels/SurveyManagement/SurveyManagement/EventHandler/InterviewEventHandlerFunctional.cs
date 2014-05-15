@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -33,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowTitleChanged>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowsTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
@@ -774,6 +776,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     }
 
                 }), evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowsTitleChanged> evnt)
+        {
+            foreach (var changedRosterRowTitleDto in evnt.Payload.ChangedRows)
+            {
+                var newVector = this.CreateNewVector(changedRosterRowTitleDto.Row.OuterRosterVector, changedRosterRowTitleDto.Row.RosterInstanceId);
+                ChangedRosterRowTitleDto dto = changedRosterRowTitleDto;
+
+                PreformActionOnLevel(currentState.Document, newVector, (level) =>
+                {
+                    if (level.RosterRowTitles.ContainsKey(dto.Row.GroupId))
+                    {
+                        level.RosterRowTitles[dto.Row.GroupId] = dto.Title;
+                    }
+                    else
+                    {
+                        level.RosterRowTitles.Add(dto.Row.GroupId, dto.Title);
+                    }
+                });
+            }
+
+            return new ViewWithSequence<InterviewData>(currentState.Document, evnt.EventSequence);
         }
 
         private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedToUser(InterviewData interview, Guid userId,

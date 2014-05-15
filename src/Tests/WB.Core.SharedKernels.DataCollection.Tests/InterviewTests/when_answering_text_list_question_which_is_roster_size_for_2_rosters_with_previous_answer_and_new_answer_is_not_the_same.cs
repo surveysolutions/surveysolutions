@@ -104,14 +104,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_raise_RosterInstancesAdded_event_with_2_instances_with_sort_index_equals_to_5 = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.SortIndex == 5).ShouldEqual(2);
 
-        It should_raise_2_RosterRowTitleChanged_events = () =>
-            eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 2);
+        It should_raise_1_RosterRowsTitleChanged_events = () =>
+            eventContext.ShouldContainEvents<RosterRowsTitleChanged>(count: 1);
 
-        It should_raise_2_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_5 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 5).Count().ShouldEqual(2);
+        It should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_5 = () =>
+             eventContext.ShouldContainEvent<RosterRowsTitleChanged>(
+                @event => @event.ChangedRows.Count(row => row.Row.RosterInstanceId == 5) == 2);
 
-        It should_set_2_affected_roster_ids_in_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Select(@event => @event.GroupId).Distinct().ToArray()
+        It should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events = () =>
+            eventContext.GetEvents<RosterRowsTitleChanged>().SelectMany(@event => @event.ChangedRows.Select(r => r.Row.GroupId)).ToArray()
                 .ShouldContainOnly(rosterAId, rosterBId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>

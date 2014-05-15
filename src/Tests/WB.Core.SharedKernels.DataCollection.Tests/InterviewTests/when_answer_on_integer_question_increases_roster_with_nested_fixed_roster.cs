@@ -87,13 +87,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 1 })));
 
-        It should_rise_RosterRowTitleChanged_for_first_row_of_fixed_roster_by_first_row = () =>
-            eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
-                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0 && @event.Title==title1);
+        It should_rise_RosterRowsTitleChanged_event_with_title_of_first_row_of_fixed_roster_by_first_row = () =>
+            eventContext.ShouldContainEvent<RosterRowsTitleChanged>(@event
+                => @event.ChangedRows.Any(row =>
+                    row.Row.GroupId == fixedRosterGroupId && row.Row.RosterInstanceId == 0 && row.Row.OuterRosterVector.Length == 1 &&
+                        row.Row.OuterRosterVector[0] == 0 && row.Title == title1));
 
-        It should_rise_RosterRowTitleChanged_for_first_row_of_fixed_roster_by_second_row = () =>
-            eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
-                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 0 && @event.OuterRosterVector.Length == 1 && @event.OuterRosterVector[0] == 0 && @event.Title == title1);
+        It should_rise_RosterRowsTitleChanged_event_with_title_of_first_row_of_fixed_roster_by_second_row = () =>
+            eventContext.ShouldContainEvent<RosterRowsTitleChanged>(@event
+                => @event.ChangedRows.Any(row =>
+               row.Row.GroupId == fixedRosterGroupId && row.Row.RosterInstanceId == 0 && row.Row.OuterRosterVector.Length == 1 && row.Row.OuterRosterVector[0] == 0 && row.Title == title1));
 
         It should_raise_RosterInstancesAdded_for_second_row_of_fixed_roster_by_first_row = () =>
            eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
@@ -103,19 +106,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 1 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 1 })));
 
-        It should_rise_RosterRowTitleChanged_for_second_row_of_fixed_roster_by_first_row = () =>
-            eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
-                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 1 && @event.OuterRosterVector.SequenceEqual(new decimal[] { 0 }) && @event.Title == title2);
+        It should_rise_RosterRowsTitleChanged_event_with_title_of_second_row_of_fixed_roster_by_first_row = () =>
+            eventContext.ShouldContainEvent<RosterRowsTitleChanged>(@event
+                => @event.ChangedRows.Any(row
+                => row.Row.GroupId == fixedRosterGroupId && row.Row.RosterInstanceId == 1 && row.Row.OuterRosterVector.SequenceEqual(new decimal[] { 0 }) && row.Title == title2));
 
-        It should_rise_RosterRowTitleChanged_for_second_row_of_fixed_roster_by_second_row = () =>
-            eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
-                => @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 1 && @event.OuterRosterVector.SequenceEqual(new decimal[] { 1 }) && @event.Title == title2);
+        It should_rise_RosterRowsTitleChanged_event_with_title_of_second_row_of_fixed_roster_by_second_row = () =>
+            eventContext.ShouldContainEvent<RosterRowsTitleChanged>(@event
+                => @event.ChangedRows.Any(row
+                => row.Row.GroupId == fixedRosterGroupId && row.Row.RosterInstanceId == 1 && row.Row.OuterRosterVector.SequenceEqual(new decimal[] { 1 }) && row.Title == title2));
 
-        It should_raise_RosterRowTitleChanged_event_for_first_nested_row = () =>
-            eventContext.ShouldContainEvent<RosterRowTitleChanged>(@event
+        It should_raise_RosterRowsTitleChanged_event_with_title_of_first_nested_row = () =>
+            eventContext.ShouldContainEvent<RosterRowsTitleChanged>(@event
+                => @event.ChangedRows.Any(row
                 =>
-                @event.Title == "t1" && @event.GroupId == fixedRosterGroupId && @event.RosterInstanceId == 0 &&
-                    @event.OuterRosterVector.SequenceEqual(new decimal[] { 0 }));
+                row.Title == "t1" && row.Row.GroupId == fixedRosterGroupId && row.Row.RosterInstanceId == 0 &&
+                    row.Row.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
 
         private static EventContext eventContext;
         private static Interview interview;
