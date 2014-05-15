@@ -227,6 +227,15 @@
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="UserARTests.cs" />
+    <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_empty_vector_inside.cs" />
+    <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_not_empty_vector_inside.cs" />
+    <Compile Include="ValueVectorTests\when_comparing_ValueVector_with_non_ValueVector_object.cs" />
+    <Compile Include="ValueVectorTests\when_comparing_ValueVector_with_ValueVector_wich_contais_other_vector_inside.cs" />
+    <Compile Include="ValueVectorTests\when_comparing_ValueVector_with_ValueVector_wich_contais_the_same_vector_inside.cs" />
+    <Compile Include="ValueVectorTests\when_implicitly_casting_empty_string_to_ValueVector.cs" />
+    <Compile Include="ValueVectorTests\when_implicitly_casting__1_2_3__array_to_ValueVector_of_decimals.cs" />
+    <Compile Include="ValueVectorTests\when_implicitly_casting__1_2_3__string_to_ValueVector.cs" />
+    <Compile Include="ValueVectorTests\when_implicitly_casting__Empty__string_to_ValueVector.cs" />
     <Compile Include="VersionedReadSideRepositoryReaderExtensionsTests\when_getting_view_by_guid_id.cs" />
     <Compile Include="VersionedReadSideRepositoryWriterExtensionsTests\when_getting_view_by_guid_id.cs" />
     <Compile Include="VersionedReadSideRepositoryWriterExtensionsTests\when_removing_view_by_guid_id.cs" />
