@@ -251,11 +251,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!GetAllParentGroupsForQuestion(rosterTitleQuestion, questionnaire).Any(IsRosterGroup))
                 return true;
 
-            var rostersByRosterTitleQuestion =
-                questionnaire.Find<IGroup>(
-                    g => g.RosterTitleQuestionId.HasValue && (g.RosterTitleQuestionId.Value == group.RosterTitleQuestionId.Value));
+            Guid[] rosterScopeForGroup = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(group, questionnaire);
+            Guid[] rosterScopeForTitleQuestion = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(rosterTitleQuestion, questionnaire);
 
-            return rostersByRosterTitleQuestion.Any(g => g.RosterSizeQuestionId.HasValue && (g.RosterSizeQuestionId.Value != group.RosterSizeQuestionId.Value));
+            if (!Enumerable.SequenceEqual(rosterScopeForGroup, rosterScopeForTitleQuestion))
+                return true;
+
+            return false;
+
+            //var rostersByRosterTitleQuestion =
+            //    questionnaire.Find<IGroup>(
+            //        g => g.RosterTitleQuestionId.HasValue && (g.RosterTitleQuestionId.Value == group.RosterTitleQuestionId.Value));
+
+            //return rostersByRosterTitleQuestion.Any(g => g.RosterSizeQuestionId.HasValue && (g.RosterSizeQuestionId.Value != group.RosterSizeQuestionId.Value));
         }
 
         private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
@@ -319,7 +327,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             int rosterLevel = 0;
             while (questionnaireItem != null)
             {
-                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup) questionnaireItem))
+                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup)questionnaireItem))
                     rosterLevel++;
 
                 questionnaireItem = questionnaireItem.GetParent();
@@ -364,33 +372,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
-        }
-
-        private static bool RosterHasRosterInsideItself(IGroup group, QuestionnaireDocument questionnaire)
-        {
-            if (!IsRosterGroup(group))
-                return false;
-
-            foreach (var nestedGroup in group.Children.OfType<IGroup>())
-            {
-                if (HasRosterInsideGroup(nestedGroup))
-                    return true;
-            }
-
-            return false;
-        }
-
-        private static bool HasRosterInsideGroup(IGroup group)
-        {
-            if (IsRosterGroup(group))
-                return true;
-
-            foreach (var nestedGroup in group.Children.OfType<IGroup>())
-            {
-                if (HasRosterInsideGroup(nestedGroup))
-                    return true;
-            }
-            return false;
         }
 
         private static bool QuestionnaireHaveAutopropagatedQuestions(IQuestion question, QuestionnaireDocument questionnaire)
@@ -1172,7 +1153,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             Guid[] rosterSizeQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parent, questionnaire)
                     .Where(IsRosterGroup)
-                    .Select(g => g.RosterSizeQuestionId.HasValue?g.RosterSizeQuestionId.Value:g.PublicKey)
+                    .Select(g => g.RosterSizeQuestionId.HasValue ? g.RosterSizeQuestionId.Value : g.PublicKey)
                     .ToArray();
 
             return rosterSizeQuestions.ToArray();
@@ -1216,7 +1197,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             {
                 return true;
             }
-            
+
         }
 
         private static bool IsSpecialThisIdentifier(string identifier)
