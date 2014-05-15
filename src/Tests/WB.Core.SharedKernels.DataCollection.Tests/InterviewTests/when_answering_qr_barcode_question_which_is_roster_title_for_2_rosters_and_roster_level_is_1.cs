@@ -50,11 +50,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_raise_TextListQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<QRBarcodeQuestionAnswered>();
 
-        It should_raise_2_RosterRowTitleChanged_events = () =>
-            eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 2);
+        It should_raise_1_RosterRowsTitleChanged_events = () =>
+            eventContext.ShouldContainEvents<RosterRowsTitleChanged>(count: 1);
 
-        It should_set_2_affected_roster_ids_in_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Select(@event => @event.GroupId).ToArray()
+        It should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events = () =>
+            eventContext.GetEvents<RosterRowsTitleChanged>().SelectMany(@event => @event.ChangedRows.Select(r => r.Row.GroupId)).ToArray()
                 .ShouldContainOnly(rosterAId, rosterBId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
