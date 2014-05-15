@@ -39,9 +39,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             if (typed == null)
                 return false;
 
-            if (typed.Length != values.Count)
-                return false;
-            
             return this.values.SequenceEqual(typed);
         }
 
@@ -134,11 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 
             var values = value.Split(',');
 
-            var result = new List<T>();
-            foreach (var v in values)
-            {
-                result.Add((T)TypeDescriptor.GetConverter(typeof (T)).ConvertFromString(v));
-            }
+            var result = values.Select(v => (T) TypeDescriptor.GetConverter(typeof (T)).ConvertFromString(v)).ToList();
 
             return new ValueVector<T>(result);
         }
