@@ -269,7 +269,6 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
-    <Compile Include="Controllers\TesterController.cs" />
     <Compile Include="Code\CamelCaseAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -996,6 +995,7 @@
     <Content Include="UpdatedDesigner\.jshintrc" />
     <Content Include="UpdatedDesigner\data\verify\no-errors.json" />
     <Content Include="UpdatedDesigner\data\verify\with-errors.json" />
+    <Content Include="Views\Shared\_commonFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
