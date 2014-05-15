@@ -23,7 +23,7 @@ namespace WB.UI.Supervisor.Tests.InterviewApiControllerTests
                         new InterviewDetailsView()
                         {
                             Status = verifiedStatus,
-                            Responsible = new UserLight(new Guid(), "some user")
+                            Responsible = new UserLight(new Guid(), responsibleUserName)
                         });
 
             controller = CreateController(interviewDetailsFactory: interviewDetailsFactoryMock.Object);
@@ -35,8 +35,12 @@ namespace WB.UI.Supervisor.Tests.InterviewApiControllerTests
         It should_view_model_contains_localized_interview_status_from_resources = () =>
             viewModel.InterviewInfo.status.ShouldEqual(verifiedStatus.ToLocalizeString());
 
+        It should_view_model_contains_responsibleUserName_in_responsible_field = () =>
+            viewModel.InterviewInfo.responsible.ShouldEqual(responsibleUserName);
+
         private static InterviewApiController controller;
         private static NewInterviewDetailsView viewModel;
         private static InterviewStatus verifiedStatus = InterviewStatus.SupervisorAssigned;
+        private static string responsibleUserName = "some user";
     }
 }
