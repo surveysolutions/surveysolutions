@@ -1,20 +1,31 @@
 ﻿using System;
 using System.Net.Http;
+using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NSubstitute;
+using WB.Core.BoundedContexts.Supervisor.Interviews;
+using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
+using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
+using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests
 {
     internal static class Create
     {
-        internal static HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null, 
+        public static HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null, 
             HttpMessageHandler messageHandler = null, 
             ILogger logger = null, 
             ICommandService commandService = null, 
@@ -31,7 +42,44 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
         {
             return new UserChangedFeedReader(settings ?? HeadquartersSettings(), 
                 messageHandler ?? Substitute.For<HttpMessageHandler>(),
-                new HeadquartersPullContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>()));
+                HeadquartersPullContext());
+        }
+
+        public static HeadquartersPullContext HeadquartersPullContext()
+        {
+            return new HeadquartersPullContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>());
+        }
+
+        public static HeadquartersPushContext HeadquartersPushContext()
+        {
+            return new HeadquartersPushContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>());
+        }
+
+        public static InterviewsSynchronizer InterviewsSynchronizer(
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter = null,
+            IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter = null,
+            HttpMessageHandler httpMessageHandler = null,
+            IEventStore eventStore = null,
+            ILogger logger = null,
+            IJsonUtils jsonUtils = null)
+        {
+            return new InterviewsSynchronizer(
+                Mock.Of<IAtomFeedReader>(),
+                HeadquartersSettings(),
+                logger ?? Mock.Of<ILogger>(),
+                Mock.Of<ICommandService>(),
+                Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
+                Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
+                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IHeadquartersQuestionnaireReader>(),
+                Mock.Of<IHeadquartersInterviewReader>(),
+                HeadquartersPullContext(),
+                HeadquartersPushContext(),
+                eventStore ?? Mock.Of<IEventStore>(),
+                jsonUtils ?? Mock.Of<IJsonUtils>(),
+                interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
+                readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(),
+                httpMessageHandler ?? Mock.Of<HttpMessageHandler>());
         }
 
         public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null, 
@@ -47,6 +95,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 questionnaireDetailsEndpoint, 
                 accessToken,
                 interviewsPushUrl ?? new Uri("http://localhost"));
+        }
+
+        public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
+            Guid? eventIdentifier = null, long eventSequence = 1)
+        {
+            return new CommittedEvent(
+                Guid.Parse("33330000333330000003333300003333"),
+                origin,
+                eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
+                eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
+                eventSequence,
+                new DateTime(2014, 10, 22),
+                payload ?? "some payload",
+                new Version());
+        }
+
+        public static InterviewSummary InterviewSummary()
+        {
+            return new InterviewSummary();
         }
     }
 }
