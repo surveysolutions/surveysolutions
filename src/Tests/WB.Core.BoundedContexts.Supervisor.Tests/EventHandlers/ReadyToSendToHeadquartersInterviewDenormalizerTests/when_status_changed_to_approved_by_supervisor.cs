@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReadyToSendToHe
         };
 
         Because of = () =>
-            result = denormalizer.Update(null, ToPublishedEvent(new InterviewStatusChanged(status, null, new Guid()), interviewId));
+            result = denormalizer.Update(null, ToPublishedEvent(new InterviewStatusChanged(status, null), interviewId));
 
         It should_return_not_null = () =>
             result.ShouldNotBeNull();
