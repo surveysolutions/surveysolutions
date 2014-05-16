@@ -10,6 +10,8 @@ using Main.Core;
 using Main.Core.Events;
 using Moq;
 using Moq.Protected;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -19,6 +21,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -79,7 +82,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 eventStore: eventStore,
                 logger: loggerMock.Object,
                 jsonUtils: jsonUtils,
-                httpMessageHandler: httpMessageHandler);
+                httpMessageHandler: httpMessageHandler,
+                commandService: commandServiceMock.Object);
         };
 
         Because of = () =>
@@ -115,6 +119,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         It should_put_interview_event_to_events = () =>
             events.Single().Payload.ShouldEqual(interviewEvent.Payload);
 
+        It should_mark_interview_as_sent_to_hq_using_hq_synchronization_origin = () =>
+            commandServiceMock.Verify(service => 
+                service.Execute(it.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), HQSynchronizationOrigin),
+                Times.Once);
+
+        It should_execute_only_one_command = () =>
+            commandServiceMock.Verify(service =>
+                service.Execute(it.IsAny<ICommand>(), it.IsAny<string>()),
+                Times.Once);
+
         private static InterviewsSynchronizer interviewsSynchronizer;
         private static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -128,5 +142,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         private static InterviewMetaInfo metadata;
         private static SyncItem syncItem;
         private static CommittedEvent interviewEvent;
+        private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
+        private static readonly string HQSynchronizationOrigin = "hq-sync";
     }
 }
