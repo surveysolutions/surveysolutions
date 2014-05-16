@@ -285,4 +285,7 @@
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
     <value>Categorical linked question cannot be used in enablement conditions.</value>
   </data>
+  <data name="WB0065_QuestionHasValidationExpressionWithoutValidationMessage" xml:space="preserve">
+    <value>Validation message is required if question has validation expression</value>
+  </data>
 </root>

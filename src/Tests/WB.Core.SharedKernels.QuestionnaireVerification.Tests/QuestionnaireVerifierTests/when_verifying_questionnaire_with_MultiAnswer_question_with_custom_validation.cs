@@ -24,7 +24,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = multiAnswerQuestionWithValidationId,
                 StataExportCaption = multiAnswerQuestionWithValidationId.ToString(),
-                ValidationExpression = "some expression"
+                ValidationExpression = "some expression",
+                ValidationMessage = "some message"
             });
 
             questionnaire.Children.Add(new TextListQuestion()
