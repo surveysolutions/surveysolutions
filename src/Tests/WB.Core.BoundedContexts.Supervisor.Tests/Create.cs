@@ -61,13 +61,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             HttpMessageHandler httpMessageHandler = null,
             IEventStore eventStore = null,
             ILogger logger = null,
-            IJsonUtils jsonUtils = null)
+            IJsonUtils jsonUtils = null,
+            ICommandService commandService = null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
                 HeadquartersSettings(),
                 logger ?? Mock.Of<ILogger>(),
-                Mock.Of<ICommandService>(),
+                commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
                 Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),

@@ -104,15 +104,20 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         private FeaturedItem CreateFeaturedItem(Guid questionId, string answerString, IQuestion featuredQuestion)
         {
-
             if (questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
             {
                 var answerValues = QuestionUtils.ExtractSelectedOptions(answerString);
+                if (answerValues != null && answerValues.Length > 0)
+                {
+                    var options =
+                       featuredQuestion.Answers.Where(o => answerValues.Contains(decimal.Parse(o.AnswerValue))).Select(o => o.AnswerText);
 
-                var options =
-                    featuredQuestion.Answers.Where(o => answerValues.Contains(decimal.Parse(o.AnswerValue))).Select(o => o.AnswerText);
-
-                answerString = string.Join(",", options);
+                    answerString = string.Join(",", options);   
+                }
+                else
+                {
+                    answerString = string.Empty;
+                }
             }
 
             return new FeaturedItem(questionId, featuredQuestion.QuestionText, answerString);
