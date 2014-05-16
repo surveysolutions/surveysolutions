@@ -2707,7 +2707,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (outerRosterVector == null)
                 outerRosterVector = EmptyRosterVector;
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) => string.Empty;
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) => null;
 
             List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
 
