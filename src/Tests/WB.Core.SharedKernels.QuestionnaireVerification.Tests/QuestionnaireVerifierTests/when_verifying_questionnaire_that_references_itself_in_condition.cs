@@ -14,7 +14,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    [Ignore("Failed test for verifier. Circular references")]
     internal class when_verifying_questionnaire_that_has_question_that_references_itself_in_condition : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
