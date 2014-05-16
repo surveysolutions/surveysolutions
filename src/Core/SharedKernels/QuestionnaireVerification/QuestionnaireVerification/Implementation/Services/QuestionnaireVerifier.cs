@@ -117,6 +117,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression),
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
+                    Verifier<IQuestion>(QuestionHasValidationExpressionWithoutValidationMessage, "WB0065", VerificationMessages.WB0065_QuestionHasValidationExpressionWithoutValidationMessage),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -779,6 +780,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return false;
 
             return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
+        }
+
+        private bool QuestionHasValidationExpressionWithoutValidationMessage(IQuestion question)
+        {
+            if (string.IsNullOrWhiteSpace(question.ValidationExpression) || question.QuestionType == QuestionType.QRBarcode)
+                return false;
+
+            return string.IsNullOrWhiteSpace(question.ValidationMessage);
         }
 
         private bool CustomEnablementConditionHasIncorrectSyntax(IComposite entity)

@@ -38,6 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionWithCustomValidation,
                 ValidationExpression = "some random expression",
+                ValidationMessage = "some random message",
                 StataExportCaption = questionWithCustomValidation.ToString(),
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });

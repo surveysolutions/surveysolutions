@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionId,
                 StataExportCaption = "var",
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
             });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
