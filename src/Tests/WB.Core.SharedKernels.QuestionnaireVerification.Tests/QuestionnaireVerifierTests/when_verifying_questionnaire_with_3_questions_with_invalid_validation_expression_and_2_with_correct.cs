@@ -31,30 +31,35 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = firstIncorrectQuestionId,
                     ValidationExpression = InvalidExpression,
+                    ValidationMessage = "some message",
                     StataExportCaption = firstIncorrectQuestionId.ToString()
                 },
                 new NumericQuestion
                 {
                     PublicKey = secondIncorrectQuestionId,
                     ValidationExpression = InvalidExpression,
+                    ValidationMessage = "some message",
                     StataExportCaption = secondIncorrectQuestionId.ToString()
                 },
                 new NumericQuestion
                 {
                     PublicKey = thirdIncorrectQuestionId,
                     ValidationExpression = InvalidExpression,
+                    ValidationMessage = "some message",
                     StataExportCaption = thirdIncorrectQuestionId.ToString()
                 },
                 new NumericQuestion
                 {
                     PublicKey = firstCorrectQuestionId,
                     ValidationExpression = ValidExpression,
+                    ValidationMessage = "some message",
                     StataExportCaption = firstCorrectQuestionId.ToString()
                 },
                 new NumericQuestion
                 {
                     PublicKey = secondCorrectQuestionId,
                     ValidationExpression = ValidExpression,
+                    ValidationMessage = "some message",
                     StataExportCaption = secondCorrectQuestionId.ToString()
                 }
                 );
