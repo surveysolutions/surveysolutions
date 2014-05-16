@@ -1,4 +1,3 @@
-using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
@@ -10,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public RosterInstancesTitleChanged(ChangedRosterInstanceTitleDto[] changedInstances)
         {
-            this.ChangedInstances = changedInstances.ToArray();
+            this.ChangedInstances = changedInstances;
         }
     }
 }

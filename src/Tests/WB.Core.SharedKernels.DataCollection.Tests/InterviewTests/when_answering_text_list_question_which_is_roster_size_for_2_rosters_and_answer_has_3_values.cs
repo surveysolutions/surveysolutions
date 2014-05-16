@@ -98,22 +98,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.SortIndex == 3).ShouldEqual(2);
 
         It should_raise_1_RosterRowsTitleChanged_events = () =>
-            eventContext.ShouldContainEvents<RosterRowsTitleChanged>(count: 1);
+            eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
 
         It should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_1 = () =>
-            eventContext.ShouldContainEvent<RosterRowsTitleChanged>(
-                @event => @event.ChangedRows.Count(row => row.Row.RosterInstanceId == 1) == 2);
+            eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
+                @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == 1) == 2);
 
         It should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_2 = () =>
-             eventContext.ShouldContainEvent<RosterRowsTitleChanged>(
-                @event => @event.ChangedRows.Count(row => row.Row.RosterInstanceId == 2) == 2);
+             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
+                @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == 2) == 2);
 
         It should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_3 = () =>
-             eventContext.ShouldContainEvent<RosterRowsTitleChanged>(
-                @event => @event.ChangedRows.Count(row => row.Row.RosterInstanceId == 3) == 2);
+             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
+                @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == 3) == 2);
 
         It should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowsTitleChanged>().SelectMany(@event => @event.ChangedRows.Select(r => r.Row.GroupId)).ToArray()
+            eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray()
                 .ShouldContain(rosterAId, rosterBId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
