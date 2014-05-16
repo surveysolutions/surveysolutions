@@ -13,6 +13,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     [Subject(typeof(InterviewSummaryEventHandlerFunctional))]
     internal class InterviewSummaryEventHandlerFunctionalTestsContext
     {
+        public static InterviewSummaryEventHandlerFunctional CreateDenormalizer()
+        {
+            return CreateDenormalizer(users: Mock.Of<IReadSideRepositoryWriter<UserDocument>>());
+        }
+
         public static InterviewSummaryEventHandlerFunctional CreateDenormalizer(string userId, string userName)
         {
             return CreateDenormalizer(users: CreateUsersWriterWith1User(userId, userName));
@@ -24,15 +29,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             return CreateDenormalizer(users: CreateUsersWriterWith2Users(user1Id, user1Name, user2Id, user2Name));
         }
 
-        public static InterviewSummaryEventHandlerFunctional CreateDenormalizer(
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummary = null,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires = null,
-            IReadSideRepositoryWriter<UserDocument> users = null)
+        public static InterviewSummaryEventHandlerFunctional CreateDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null)
         {
             return
                 new InterviewSummaryEventHandlerFunctional(
-                    interviewSummary: CreateInterviewSummaryWriter(),
-                    questionnaires: questionnaires ?? CreateQuestionnaire(),
+                    interviewSummary: CreateInterviewSummaryWriter(), questionnaires: CreateQuestionnaire(),
                     users: users ?? CreateUsersWriterWith1User(new Guid().ToString(), new Guid().ToString()));
         }
 
