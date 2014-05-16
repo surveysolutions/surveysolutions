@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowTitleChanged>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowsTitleChanged>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
@@ -778,22 +778,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 }), evnt.EventSequence);
         }
 
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowsTitleChanged> evnt)
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterInstancesTitleChanged> evnt)
         {
-            foreach (var changedRosterRowTitleDto in evnt.Payload.ChangedRows)
+            foreach (var changedRosterRowTitleDto in evnt.Payload.ChangedInstances)
             {
-                var newVector = this.CreateNewVector(changedRosterRowTitleDto.Row.OuterRosterVector, changedRosterRowTitleDto.Row.RosterInstanceId);
-                ChangedRosterRowTitleDto dto = changedRosterRowTitleDto;
+                var newVector = this.CreateNewVector(changedRosterRowTitleDto.RosterInstance.OuterRosterVector, changedRosterRowTitleDto.RosterInstance.RosterInstanceId);
+                ChangedRosterInstanceTitleDto dto = changedRosterRowTitleDto;
 
                 PreformActionOnLevel(currentState.Document, newVector, (level) =>
                 {
-                    if (level.RosterRowTitles.ContainsKey(dto.Row.GroupId))
+                    if (level.RosterRowTitles.ContainsKey(dto.RosterInstance.GroupId))
                     {
-                        level.RosterRowTitles[dto.Row.GroupId] = dto.Title;
+                        level.RosterRowTitles[dto.RosterInstance.GroupId] = dto.Title;
                     }
                     else
                     {
-                        level.RosterRowTitles.Add(dto.Row.GroupId, dto.Title);
+                        level.RosterRowTitles.Add(dto.RosterInstance.GroupId, dto.Title);
                     }
                 });
             }
