@@ -509,35 +509,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                question, question.ValidationExpression, questionnaire,
-                isReferencedQuestionIncorrect:
-                    referencedQuestion =>
-                        (IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
-                        IsCategoricalSingleAnswerQuestion(referencedQuestion)) &&
-                        referencedQuestion.LinkedToQuestionId.HasValue);
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question,
+                question.ValidationExpression, questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
         }
 
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                question, question.ConditionExpression, questionnaire,
-                isReferencedQuestionIncorrect:
-                    referencedQuestion =>
-                        (IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
-                        IsCategoricalSingleAnswerQuestion(referencedQuestion)) &&
-                        referencedQuestion.LinkedToQuestionId.HasValue);
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, question.ConditionExpression,
+                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
         }
 
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
         {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                group, group.ConditionExpression, questionnaire,
-                isReferencedQuestionIncorrect:
-                    referencedQuestion =>
-                        (IsCategoricalMultiAnswersQuestion(referencedQuestion) ||
-                        IsCategoricalSingleAnswerQuestion(referencedQuestion)) &&
-                        referencedQuestion.LinkedToQuestionId.HasValue);
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(group, group.ConditionExpression,
+                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
         }
 
 
@@ -1225,6 +1210,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static bool IsPreFilledQuestion(IQuestion question)
         {
             return question.Featured;
+        }
+
+        private static bool IsCategoricalLinkedQuestion(IQuestion question)
+        {
+            return (IsCategoricalMultiAnswersQuestion(question) || IsCategoricalSingleAnswerQuestion(question)) &&
+                   question.LinkedToQuestionId.HasValue;
         }
     }
 }
