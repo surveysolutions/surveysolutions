@@ -2072,7 +2072,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer());
 
-            if (data.RosterInstancesToRemove.Any())
+            if (rosterInstancesToRemove.Any())
             {
                 RosterInstance[] instances = rosterInstancesToRemove
                     .Select(roster => new RosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId))
@@ -2130,8 +2130,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(RosterCalculationData data, Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer)
         {
             var result = new List<T>();
-
-            result.AddRange(getProperty(data));
+            var propertyValue = getProperty(data);
+            if(propertyValue!=null)
+                result.AddRange(propertyValue);
 
             foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
             {
@@ -2960,17 +2961,58 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstancesToRemove.AddRange(
                         listOfRosterInstanceIdsForRemove);
 
-                    var rosterInstancesIdBeingChanged = rosterInstanceIdsBeingAdded.Union(listOfRosterInstanceIdsForRemove);
-
-                    foreach (var rosterInstanceIdBeingChanged in rosterInstancesIdBeingChanged)
+                    foreach (var rosterInstanceIdBeingAdded in rosterInstanceIdsBeingAdded)
                     {
-                        var outerRosterVector = ExtendRosterVectorWithOneValue(rosterInstanceIdBeingChanged.OuterRosterVector,
-                            rosterInstanceIdBeingChanged.RosterInstanceId);
+                        var outerRosterVector = ExtendRosterVectorWithOneValue(rosterInstanceIdBeingAdded.OuterRosterVector,
+                            rosterInstanceIdBeingAdded.RosterInstanceId);
                         rosterInstantiatesFromNestedLevels.AddRange(
                             this.CalculateDynamicRostersData(state, questionnaire, outerRosterVector, rosterId, getAnswer).ToList());
                     }
+
+                    rosterInstantiatesFromNestedLevels.Add(CalculateNestedRostersDataForDelete(state, questionnaire, rosterId,
+                        listOfRosterInstanceIdsForRemove.Select(i => i.RosterInstanceId).ToList(), outerVectorForExtend));
                 }
             }
+        }
+
+        private RosterCalculationData CalculateNestedRostersDataForDelete(InterviewStateDependentOnAnswers state,
+            IQuestionnaire questionnaire, Guid rosterId, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector)
+        {
+            var nestedRosterIds = questionnaire.GetNestedRostersOfGroupById(rosterId);
+
+            int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
+
+            List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state,
+                nestedRosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector,
+                questionnaire);
+
+            var listOfRosterInstanceIdsForRemove = new List<RosterIdentity>();
+
+            var rosterInstantiatesFromNestedLevels = new List<RosterCalculationData>();
+            foreach (var nestedRosterId in nestedRosterIds)
+            {
+                Guid[] rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(nestedRosterId).ToArray();
+                var outerVectorsForExtend = ExtendRosterVector(state, nearestToOuterRosterVector, rosterGroupsStartingFromTop.Length, rosterGroupsStartingFromTop, GetRosterInstanceIds);
+
+                foreach (var outerVectorForExtend in outerVectorsForExtend)
+                {
+                    if (!rosterInstanceIdsBeingRemoved.Contains(outerVectorForExtend[indexOfRosterInRosterVector]))
+                        continue;
+              
+                    var rosterIdForDelete = new RosterIdentity(nestedRosterId,
+                        outerVectorForExtend.Take(outerVectorForExtend.Length - 1).ToArray(), outerVectorForExtend.Last(), null);
+
+                    listOfRosterInstanceIdsForRemove.Add(rosterIdForDelete);
+
+                    rosterInstantiatesFromNestedLevels.Add(CalculateNestedRostersDataForDelete(state, questionnaire, nestedRosterId,
+                        new List<decimal> { rosterIdForDelete.RosterInstanceId}, outerVectorForExtend));
+                }
+            }
+
+            return new RosterCalculationData(new List<RosterIdentity>(), listOfRosterInstanceIdsForRemove, new List<RosterIdentity>(),
+                answersToRemoveByDecreasedRosterSize, new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>(),
+                new List<Identity>(), new Dictionary<decimal, string>(),
+                rosterInstantiatesFromNestedLevels);
         }
 
         private static List<RosterIdentity> CalculateRosterInstancesWhichTitlesAreAffected(Guid questionId, decimal[] rosterVector,
