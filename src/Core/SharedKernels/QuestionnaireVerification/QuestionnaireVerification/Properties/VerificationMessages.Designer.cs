@@ -566,5 +566,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0064_CategoricalLinkedQuestionUsedInEnablementCondition", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation message is required if question has validation expression.
+        /// </summary>
+        internal static string WB0065_QuestionHasValidationExpressionWithoutValidationMessage {
+            get {
+                return ResourceManager.GetString("WB0065_QuestionHasValidationExpressionWithoutValidationMessage", resourceCulture);
+            }
+        }
     }
 }

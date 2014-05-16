@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_2_questions_referencing_not_existing_question_by_id_in_validation_expression :  QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_2_questions_referencing_not_existing_question_by_id_in_validation_expression : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -24,8 +24,21 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             textQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion { PublicKey = firstIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = firstIncorrectQuestionId.ToString() },
-                new NumericQuestion { PublicKey = secondIncorrectQuestionId, ValidationExpression = ValidationExpressionWithNotExistingQuestion, StataExportCaption = secondIncorrectQuestionId.ToString() },
+                new NumericQuestion
+                {
+                    PublicKey = firstIncorrectQuestionId,
+
+                    ValidationMessage = "some message",
+                    ValidationExpression = ValidationExpressionWithNotExistingQuestion,
+                    StataExportCaption = firstIncorrectQuestionId.ToString()
+                },
+                new NumericQuestion
+                {
+                    PublicKey = secondIncorrectQuestionId,
+                    ValidationMessage = "some message",
+                    ValidationExpression = ValidationExpressionWithNotExistingQuestion,
+                    StataExportCaption = secondIncorrectQuestionId.ToString()
+                },
                 new TextQuestion { PublicKey = textQuestionId, StataExportCaption = textQuestionId.ToString() },
                 new Group { PublicKey = Guid.NewGuid() }
             );
