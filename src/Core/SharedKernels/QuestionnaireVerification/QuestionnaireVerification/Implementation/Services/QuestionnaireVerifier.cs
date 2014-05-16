@@ -434,7 +434,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     if (internalQuestion.PublicKey == entity.PublicKey)
                     {
                         referencedEntities.Add(entity);
-                        referencedEntities.Add(question);
+                        if (entity.PublicKey != question.PublicKey)
+                        {
+                            referencedEntities.Add(question);
+                        }
                     }
                 }
             }
