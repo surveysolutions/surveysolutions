@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .SortIndex.ShouldEqual(3);
 
         It should_raise_1_RosterRowsTitleChanged_events = () =>
-            eventContext.ShouldContainEvents<RosterRowsTitleChanged>(count: 1);
+            eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
 
         It should_set_roster_id_to_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterRowTitleChanged>()
@@ -107,16 +107,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .ShouldEachConformTo(@event => @event.OuterRosterVector.Length == 0);
 
         It should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterRowsTitleChanged_events = () =>
-           eventContext.GetEvents<RosterRowsTitleChanged>().SelectMany(@event => @event.ChangedRows.Select(r => r.Row.RosterInstanceId)).ToArray()
+           eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.RosterInstanceId)).ToArray()
                .ShouldContain(option2, option2);
 
         It should_set_title_to_2nd_option_title_in_RosterRowsTitleChanged_event_with_roster_instance_id_equal_to_2nd_option = () =>
-            eventContext.ShouldContainEvent<RosterRowsTitleChanged>(
-                @event => @event.ChangedRows.Count(row => row.Row.RosterInstanceId == option2 && row.Title == option2Title) == 1);
+            eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
+                @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == option2 && row.Title == option2Title) == 1);
 
         It should_set_title_to_4th_option_title_in_RostersRowTitleChanged_event_with_roster_instance_id_equal_to_4th_option = () =>
-             eventContext.ShouldContainEvent<RosterRowsTitleChanged>(
-                @event => @event.ChangedRows.Count(row => row.Row.RosterInstanceId == option4 && row.Title == option4Title) == 1);
+             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
+                @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == option4 && row.Title == option4Title) == 1);
 
         private static EventContext eventContext;
         private static Interview interview;
