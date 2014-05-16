@@ -1,4 +1,4 @@
-﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
 /**
@@ -5846,6 +5846,7 @@ body {
   vertical-align: text-bottom;
   color: #2a81cb;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
+  text-transform: uppercase;
   font-weight: bold;
   font-size: 12px;
   line-height: 12px;
@@ -5858,6 +5859,21 @@ body {
 }
 .wb-inline-button.error {
   color: #d20426;
+}
+.wb-inline-button-medium {
+  padding: 17px;
+  border: none;
+  background-color: #2fc507;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 12px;
+  text-transform: uppercase;
+  color: #ffffff;
+  border-radius: 3px;
+}
+.wb-inline-button-medium:hover {
+  background: #29ac06;
 }
 .dropdown.width60 {
   width: 60%;
@@ -6626,6 +6642,45 @@ body {
 #designer-editor.container section#main > .question-editor > .group > .form-holder > a.right {
   float: right;
 }
+#designer-editor.container section#main > .question-editor .form-buttons-holder {
+  margin: 16px 0px;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder:before,
+#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+  content: " ";
+  display: table;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+  clear: both;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder:before,
+#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+  content: " ";
+  display: table;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+  clear: both;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-left,
+#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-right {
+  height: 42px;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-left > * {
+  margin-right: 12px;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-right > * {
+  margin-left: 12px;
+  vertical-align: middle;
+  padding-top: 17px;
+}
+#designer-editor.container section#main > .question-editor .form-buttons-holder > div a {
+  cursor: pointer;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 12px;
+}
 /*
 #chapter-panel-context-menu {
   .wb-context-menu();
@@ -6852,4 +6907,3 @@ body {
   color: #ff4200;
   font-size: 12px;
 }
-/*# sourceMappingURL=markup.css.css.map */

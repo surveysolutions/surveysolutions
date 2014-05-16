@@ -59,9 +59,14 @@
         <label for="edit-question-instructions">Instructions</label>
         <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions" class="form-control">
     </div>
-    <p>
-        <input type="submit" value="Save" id="edit-question-save-button" ng-click="saveQuestion()">
-    </p>
+    <div class="form-buttons-holder">
+        <div class="pull-left">
+            <input id="edit-question-save-button" class="wb-inline-button-medium" type="submit" value="Save" ng-click="saveQuestion()">
+            <a ng-click="cancel()">Cancel</a>
+        </div>
+        <div class="pull-right">
+        </div>
+    </div>
 </form>
 
 <script type="text/ng-template" id="SingleOption-template.html">

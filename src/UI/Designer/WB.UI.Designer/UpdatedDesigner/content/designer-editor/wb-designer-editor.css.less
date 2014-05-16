@@ -360,6 +360,31 @@
           }
         }
       }
+
+      .form-buttons-holder {
+        margin: 16px 0px;
+        .clearfix();
+
+        .pull-left, .pull-right {
+          height: 42px;
+        }
+
+        .pull-left {
+          > * { margin-right: 12px; }
+        }
+        .pull-right {
+          > * {
+            margin-left: 12px;
+            vertical-align: middle;
+            padding-top: 17px;
+          }
+        }
+
+        > div a {
+          cursor: pointer;
+          .inline-button-fontstyle();
+        }
+      }
     }
   }
 }

@@ -19,6 +19,19 @@
   }
 }
 
+.wb-inline-button-medium {
+  //height: 42px;
+  padding: 17px;
+  border: none;
+  background-color: @inline-button-medium-bg-color;
+  &:hover { background: darken(@inline-button-medium-bg-color, 5%); }
+
+  .inline-button-fontstyle();
+  text-transform: uppercase;
+  color: @inline-button-medium-fg-color;
+  border-radius: 3px;
+}
+
 
 .wb-dropdown-button() {
   vertical-align: middle;

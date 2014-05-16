@@ -21,12 +21,12 @@
         <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
         <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.enablementCondition">
     </div>
-    
-    <div class="form-holder">
+
+    <div class="form-buttons-holder">
         <div class="pull-left">
-            <input id="edit-chapter-save-button" type="submit" value="Save" ng-click="saveChapter()">
+            <input id="edit-chapter-save-button" class="wb-inline-button-medium" type="submit" value="Save" ng-click="saveChapter()">
             <a ng-click="cancel()">Cancel</a>
-        </div>        
+        </div>
         <div class="pull-right">
             <a ng-click="deleteChapter()">Delete</a>
             <a ng-click="cloneChapter()">Clone</a>
