@@ -27,7 +27,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 StataExportCaption = questionWithCustomValidation.ToString(),
                 IsInteger = true,
                 MaxValue = 5,
-                ValidationExpression = "some validation"
+                ValidationExpression = "some validation",
+                ValidationMessage = "some message"
             });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
