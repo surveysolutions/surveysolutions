@@ -83,10 +83,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<SingleOptionLinkedQuestionAnswered>();
 
         It should_raise_1_RosterRowsTitleChanged_events = () =>
-            eventContext.ShouldContainEvents<RosterRowsTitleChanged>(count: 1);
+            eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
 
         It should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowsTitleChanged>().SelectMany(@event => @event.ChangedRows.Select(r => r.Row.GroupId)).ToArray()
+            eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray()
                 .ShouldContainOnly(rosterAId, rosterBId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>

@@ -92,10 +92,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Interview\Dtos\AddedRosterInstance.cs" />
-    <Compile Include="Events\Interview\Dtos\ChangedRosterRowTitleDto.cs" />
+    <Compile Include="Events\Interview\Dtos\ChangedRosterInstanceTitleDto.cs" />
     <Compile Include="Events\Interview\Dtos\Identity.cs" />
     <Compile Include="Events\Interview\Dtos\RosterInstance.cs" />
-    <Compile Include="Events\Interview\Dtos\RosterRowIdentity.cs" />
     <Compile Include="Events\Interview\GroupsDisabled.cs" />
     <Compile Include="Events\Interview\GroupsEnabled.cs" />
     <Compile Include="Events\Interview\InterviewApprovedByHQ.cs" />
@@ -116,7 +115,7 @@
     <Compile Include="Events\Interview\RosterRowRemoved.cs" />
     <Compile Include="Events\Interview\RosterInstancesAdded.cs" />
     <Compile Include="Events\Interview\RosterInstancesRemoved.cs" />
-    <Compile Include="Events\Interview\RosterRowsTitleChanged.cs" />
+    <Compile Include="Events\Interview\RosterInstancesTitleChanged.cs" />
     <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
@@ -342,7 +343,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(RosterRowTitleChanged @event) {}
 
-        private void Apply(RosterRowsTitleChanged @event) { }
+        private void Apply(RosterInstancesTitleChanged @event) { }
 
         internal void Apply(RosterInstancesAdded @event)
         {
@@ -568,7 +569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
+            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
@@ -604,7 +605,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version));
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
+            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion, DateTime answersTime, Guid supervisorId)
@@ -625,7 +626,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            fixedRosterCalculationDatas.ForEach(this.ApplyRosterEvents);
+            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
 
@@ -1256,11 +1257,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new QRBarcodeQuestionAnswered(userId, questionId, rosterVector, answerTime, answer));
 
             if (rosterInstancesWithAffectedTitles.Any())
-                this.ApplyEvent(new RosterRowsTitleChanged(
+                this.ApplyEvent(new RosterInstancesTitleChanged(
                     rosterInstancesWithAffectedTitles.Select(
                         rosterIdentity =>
-                            new ChangedRosterRowTitleDto(
-                                new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
                                     rosterIdentity.RosterInstanceId),
                                 answer)).ToArray()));
         }
@@ -1843,8 +1844,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
 
-            rosters.ForEach(this.ApplyRosterEvents);
-
+            this.ApplyRostersEvents(rosters.ToArray());
             foreach (var answerDto in interviewDto.Answers.Where(x => x.Answer != null))
             {
                 Guid questionId = answerDto.Id;
@@ -1947,7 +1947,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyValidityChangesEvents(interviewChanges.ValidityChanges);
 
             if (interviewChanges.RosterCalculationData != null)
-                this.ApplyRosterEvents(interviewChanges.RosterCalculationData);
+                this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
 
             if (interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling != null)
                 this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling);
@@ -1971,7 +1971,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     validityChanges.Add(interviewChanges.ValidityChanges);
 
                 if (interviewChanges.RosterCalculationData != null)
-                    this.ApplyRosterEvents(interviewChanges.RosterCalculationData);
+                    this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
 
                 if (interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling != null)
                     this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling);
@@ -2045,18 +2045,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ApplyRosterRowsTitleChangedEvents(List<RosterIdentity> rosterInstances, string rosterTitle)
         {
             if (rosterInstances.Any())
-                this.ApplyEvent(new RosterRowsTitleChanged(
+                this.ApplyEvent(new RosterInstancesTitleChanged(
                     rosterInstances.Select(
                         rosterIdentity =>
-                            new ChangedRosterRowTitleDto(
-                                new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
                                     rosterIdentity.RosterInstanceId),
                                 rosterTitle)).ToArray()));
         }
 
-        private void ApplyRosterEvents(RosterCalculationData data)
+        private void ApplyRostersEvents(params RosterCalculationData[] rosterDatas)
         {
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.RosterInstancesToAdd, new RosterIdentityComparer());
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterDatas);
 
             if (rosterInstancesToAdd.Any())
             {
@@ -2069,8 +2069,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesAdded(instances));
             }
 
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
-                d => d.RosterInstancesToRemove, new RosterIdentityComparer());
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterDatas);
 
             if (rosterInstancesToRemove.Any())
             {
@@ -2081,62 +2081,70 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesRemoved(instances));
             }
 
-            var changedRosterRowTitleDtoFromRosterData = CreateChangedRosterRowTitleDtoFromRosterData(data);
-            if(changedRosterRowTitleDtoFromRosterData.Any())
-                this.ApplyEvent(new RosterRowsTitleChanged(CreateChangedRosterRowTitleDtoFromRosterData(data)));
+            var changedRosterRowTitleDtoFromRosterData = CreateChangedRosterRowTitleDtoFromRosterData(rosterDatas);
+            if (changedRosterRowTitleDtoFromRosterData.Any())
+                this.ApplyEvent(new RosterInstancesTitleChanged(CreateChangedRosterRowTitleDtoFromRosterData(rosterDatas)));
 
-            this.ApplyAnswersRemovanceEvents(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data,
-                d => d.AnswersToRemoveByDecreasedRosterSize, new IdentityComparer()));
+            this.ApplyAnswersRemovanceEvents(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.AnswersToRemoveByDecreasedRosterSize, new IdentityComparer(), rosterDatas));
 
             this.ApplyEnablementChangesEvents(
                 new EnablementChanges(
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedGroupsToBeDisabled, new IdentityComparer()),
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedGroupsToBeEnabled, new IdentityComparer()),
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeDisabled, new IdentityComparer()),
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeEnabled, new IdentityComparer())));
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedGroupsToBeDisabled, new IdentityComparer(), rosterDatas),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedGroupsToBeEnabled, new IdentityComparer(), rosterDatas),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedQuestionsToBeDisabled, new IdentityComparer(), rosterDatas),
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedQuestionsToBeEnabled, new IdentityComparer(), rosterDatas)));
 
             this.ApplyValidityChangesEvents(new ValidityChanges(null,
-                this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(data, d => d.InitializedQuestionsToBeInvalid, new IdentityComparer())));
+                this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedQuestionsToBeInvalid, new IdentityComparer(), rosterDatas)));
         }
 
-        private ChangedRosterRowTitleDto[] CreateChangedRosterRowTitleDtoFromRosterData(RosterCalculationData data)
+        private ChangedRosterInstanceTitleDto[] CreateChangedRosterRowTitleDtoFromRosterData(params RosterCalculationData[] datas)
         {
-            var result = new List<ChangedRosterRowTitleDto>();
-            if (data.TitlesForRosterInstancesToAdd != null)
+            var result = new List<ChangedRosterInstanceTitleDto>();
+            foreach (var data in datas)
             {
-                var rosterRowTitlesChanged = new HashSet<RosterIdentity>(data.RosterInstancesToAdd, new RosterIdentityComparer());
-                if (data.RosterInstancesToChange != null)
+                if (data.TitlesForRosterInstancesToAdd != null)
                 {
-                    foreach (var rosterIdentity in data.RosterInstancesToChange)
+                    var rosterRowTitlesChanged = new HashSet<RosterIdentity>(data.RosterInstancesToAdd, new RosterIdentityComparer());
+                    if (data.RosterInstancesToChange != null)
                     {
-                        rosterRowTitlesChanged.Add(rosterIdentity);
+                        foreach (var rosterIdentity in data.RosterInstancesToChange)
+                        {
+                            rosterRowTitlesChanged.Add(rosterIdentity);
+                        }
+                    }
+
+                    foreach (var rosterIdentity in rosterRowTitlesChanged)
+                    {
+                        result.Add(
+                            new ChangedRosterInstanceTitleDto(new RosterInstance(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
+                                rosterIdentity.RosterInstanceId), data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId]));
                     }
                 }
 
-                foreach (var rosterIdentity in rosterRowTitlesChanged)
+                foreach (var nestedRosterData in data.RosterInstantiatesFromNestedLevels)
                 {
-                    result.Add(new ChangedRosterRowTitleDto(new RosterRowIdentity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
-                        rosterIdentity.RosterInstanceId), data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId]));
+                    result.AddRange(CreateChangedRosterRowTitleDtoFromRosterData(nestedRosterData));
                 }
-            }
-
-            foreach (var nestedRosterData in data.RosterInstantiatesFromNestedLevels)
-            {
-                result.AddRange(CreateChangedRosterRowTitleDtoFromRosterData(nestedRosterData));
             }
             return result.ToArray();
         }
 
-        private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(RosterCalculationData data, Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer)
+        private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer, params RosterCalculationData[] datas)
         {
             var result = new List<T>();
-            var propertyValue = getProperty(data);
-            if(propertyValue!=null)
-                result.AddRange(propertyValue);
-
-            foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
+            foreach (var data in datas)
             {
-                result.AddRange(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(rosterInstantiatesFromNestedLevel, getProperty, equalityComparer));
+                var propertyValue = getProperty(data);
+                if (propertyValue != null)
+                    result.AddRange(propertyValue);
+
+                foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
+                {
+                    result.AddRange(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                        getProperty, equalityComparer, rosterInstantiatesFromNestedLevel));
+                }
             }
 
             return result.Distinct(equalityComparer).ToList();
@@ -2765,7 +2773,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             ? rosterInstanceIds.ToDictionary(x => x.Key, x => x.Value.Item1)
                             : null,
                         questionnaire,
-                        GetEnabledQuestionAnswerSupportedInExpressions,
+                        getAnswer,
                         getRosterInstanceIds);
             }
         }
