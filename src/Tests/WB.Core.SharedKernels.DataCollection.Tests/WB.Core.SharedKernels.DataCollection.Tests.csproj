@@ -101,6 +101,7 @@
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
     <Compile Include="InterviewTests\when_answering_top_level_question_which_enables_nested_roster.cs" />
+    <Compile Include="InterviewTests\when_answer_numeric_which_triggers_4_rosters_3_rosters_one_inside_other_and_1_separate_roster.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_decreases_roster_size_of_roster_with_nested_roster_with_answered_questions_inside_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_nested_roster_size_and_roster_size_question_3_level_above.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by__.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_numeric.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_textlist.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
+    <Compile Include="InterviewTests\when_create_interview_with_3_fixed_rosters_one_inside_other_and_1_separate_fixed_roster.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_no_featured_questions.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_preloaded_data.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_pre_filled_question_of_allowed_type_for_tester.cs" />

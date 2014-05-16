@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<RosterRowAdded>,
         IEventHandler<RosterRowRemoved>,
         IEventHandler<RosterRowTitleChanged>,
-        IEventHandler<RosterRowsTitleChanged>,
+        IEventHandler<RosterInstancesTitleChanged>,
         IEventHandler<RosterInstancesAdded>,
         IEventHandler<RosterInstancesRemoved>,
         IEventHandler<InterviewCompleted>,
@@ -368,12 +368,12 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             doc.UpdateRosterRowTitle(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.Title);
         }
 
-        public void Handle(IPublishedEvent<RosterRowsTitleChanged> evnt)
+        public void Handle(IPublishedEvent<RosterInstancesTitleChanged> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            foreach (var changedRosterRowTitleDto in evnt.Payload.ChangedRows)
+            foreach (var changedRosterRowTitleDto in evnt.Payload.ChangedInstances)
             {
-                doc.UpdateRosterRowTitle(changedRosterRowTitleDto.Row.GroupId, changedRosterRowTitleDto.Row.OuterRosterVector, changedRosterRowTitleDto.Row.RosterInstanceId, changedRosterRowTitleDto.Title);
+                doc.UpdateRosterRowTitle(changedRosterRowTitleDto.RosterInstance.GroupId, changedRosterRowTitleDto.RosterInstance.OuterRosterVector, changedRosterRowTitleDto.RosterInstance.RosterInstanceId, changedRosterRowTitleDto.Title);
             }
         }
 
