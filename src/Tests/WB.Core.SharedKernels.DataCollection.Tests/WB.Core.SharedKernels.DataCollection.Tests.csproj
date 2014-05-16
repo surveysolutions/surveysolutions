@@ -104,6 +104,7 @@
     <Compile Include="InterviewTests\when_answer_on_integer_question_decreases_roster_size_of_roster_with_nested_roster_with_answered_questions_inside_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_nested_roster_size_and_roster_size_question_3_level_above.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by__.cs" />
+    <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_mandatory_questions_inside_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_multyoption.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_numeric.cs" />
