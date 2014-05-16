@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = questionWithValidationExpressionId,
                 ValidationExpression = "some validation",
+                ValidationMessage = "some message",
                 StataExportCaption = questionWithValidationExpressionId.ToString()
             });
 
