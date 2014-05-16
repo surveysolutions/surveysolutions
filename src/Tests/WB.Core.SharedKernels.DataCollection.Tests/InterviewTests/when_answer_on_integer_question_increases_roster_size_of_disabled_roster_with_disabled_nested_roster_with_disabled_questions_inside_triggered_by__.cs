@@ -89,15 +89,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => @event.Instances.Count(instance => instance.GroupId == parentRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 0)==1
                 && @event.Instances.Count(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 }))==1);
 
-        It should_raise_GroupsDisabled_event_for_parent_roster_row_and_for_nested_roster_row = () =>
+        It should_raise_GroupsDisabled_event_for_parent_roster_row = () =>
          eventContext.ShouldContainEvent<GroupsDisabled>(@event
-             => @event.Groups.Count(instance => instance.Id == parentRosterGroupId && instance.RosterVector.SequenceEqual(new decimal[] { 0 }))==1
-             && @event.Groups.Count(instance => instance.Id == nestedRosterGroupId && instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1);
+             => @event.Groups.Count(instance => instance.Id == nestedRosterGroupId && instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1);
 
-        It should_raise_QuestionsDisabled_event_for_parent_roster_row_and_for_nested_roster_row = () =>
+        It should_raise_GroupsDisabled_event_for_nested_roster_row = () =>
+        eventContext.ShouldContainEvent<GroupsDisabled>(@event
+            => @event.Groups.Count(instance => instance.Id == parentRosterGroupId && instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1
+          );
+
+        It should_raise_QuestionsDisabled_event_for_parent_roster_row = () =>
         eventContext.ShouldContainEvent<QuestionsDisabled>(@event
-            => @event.Questions.Count(instance => instance.Id == questionFromRosterId && instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1
-            && @event.Questions.Count(instance => instance.Id == questionFromNestedRosterId && instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1);
+            => @event.Questions.Count(instance => instance.Id == questionFromRosterId && instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1);
+
+        It should_raise_QuestionsDisabled_event_for_nested_roster_row = () =>
+        eventContext.ShouldContainEvent<QuestionsDisabled>(@event
+            => @event.Questions.Count(instance => instance.Id == questionFromNestedRosterId && instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1);
 
         It should_not_raise_RosterInstancesRemoved_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
