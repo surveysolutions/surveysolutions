@@ -346,6 +346,8 @@
     <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\AppSettings.cs" />
+    <Compile Include="Code\Bundling\PathExtension.cs" />
+    <Compile Include="Code\Bundling\StyleImagePathBundle.cs" />
     <Compile Include="Code\Bundling\StyleRelativePathTransform.cs" />
     <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
     <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializer.cs" />
