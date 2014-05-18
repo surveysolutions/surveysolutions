@@ -6568,6 +6568,7 @@ body {
   height: 100%;
   padding: 36px 40px;
   background: white;
+  overflow: auto;
 }
 #designer-editor.container section#main > .question-editor > .breadcrumbs > ul {
   list-style: none;
