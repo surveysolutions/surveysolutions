@@ -57,13 +57,13 @@ namespace WB.UI.Supervisor.Controllers
             }
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult Packages()
         {
             return this.View(tabletInformationService.GetAllTabletInformationPackages());
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult DownloadPackages(string fileName)
         {
             return this.File(tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
