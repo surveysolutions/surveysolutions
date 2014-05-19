@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 {
@@ -128,14 +130,45 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             {
                 return new ValueVector<T>();
             }
-
+           
             var values = value.Split(',');
 
-            var result = values.Select(v => (T) TypeDescriptor.GetConverter(typeof (T)).ConvertFromString(v)).ToList();
+            var result = values.Select(v =>
+            {
+                try
+                {
+                    var converter = CreateTypeConverter();
+
+                    return (T) converter.ConvertFromString(v);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("parse exception", e);
+                    throw;
+                }
+            }).ToList();
 
             return new ValueVector<T>(result);
         }
 
+        private static TypeConverter CreateTypeConverter()
+        {
+            /*
+             please don't remove check on Guid.
+             * it is made because of monodroid bug
+             * in monodroid in Release configuration TypeDescriptor.GetConverter(typeof (Guid)) gives MissingMethodException
+             */
+            if (typeof (T) == typeof (Guid))
+                return new GuidConverter();
+
+            return TypeDescriptor.GetConverter(typeof (T));
+        }
+
         private const string Empty = "Empty";
+
+        static ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
     }
 }
