@@ -53,12 +53,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             this.statusStorage.Store(status, this.StorageDocumentId);
         }
 
-        public void PushMessage(string message)
+        public virtual void PushMessage(string message)
         {
             this.synchronizationMessages.Add(DateTime.Now + ": " + message);
         }
 
-        public void PushError(string message)
+        public virtual void PushError(string message)
         {
             this.synchronizationErrors.Add(message);
         }

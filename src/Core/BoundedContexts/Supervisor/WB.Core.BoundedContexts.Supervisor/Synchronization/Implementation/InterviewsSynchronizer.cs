@@ -298,12 +298,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             string dataToBeSent = this.GetInterviewDataToBeSentAsString(interviewId, eventsToSend);
 
-            bool interviewSuccessfullySent = this.SendInterviewData(interviewId, dataToBeSent);
+            this.SendInterviewData(interviewId, dataToBeSent);
 
-            if (interviewSuccessfullySent)
-            {
-                this.MarkInterviewAsSentToHeadquarters(interviewId, userId);
-            }
+            this.MarkInterviewAsSentToHeadquarters(interviewId, userId);
         }
 
         private void MarkInterviewAsSentToHeadquarters(Guid interviewId, Guid userId)
@@ -342,7 +339,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             return this.jsonUtils.GetItemAsContent(syncItem);
         }
 
-        private bool SendInterviewData(Guid interviewId, string interviewData)
+        private void SendInterviewData(Guid interviewId, string interviewData)
         {
             using (var client = new HttpClient(this.httpMessageHandler).AppendAuthToken(this.settings))
             {
@@ -355,10 +352,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 string result = response.Content.ReadAsStringAsync().Result;
                 if (!response.IsSuccessStatusCode)
                 {
-                    this.logger.Error(string.Format("Failed to send interview {0}. Server response: {1}",
+                    throw new Exception(string.Format("Failed to send interview {0}. Server response: {1}",
                         interviewId, result));
-
-                    return false;
                 }
 
                 bool serverOperationSucceeded;
@@ -369,19 +364,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error(
+                    throw new Exception(
                         string.Format("Failed to read server response while sending interview {0}. Server response: {1}", interviewId, result),
                         exception);
-
-                    return false;
                 }
 
                 if (!serverOperationSucceeded)
                 {
-                    this.logger.Error(string.Format("Failed to send interview {0} because server returned negative response.", interviewId));
+                    throw new Exception(string.Format("Failed to send interview {0} because server returned negative response.", interviewId));
                 }
-
-                return serverOperationSucceeded;
             }
         }
 
