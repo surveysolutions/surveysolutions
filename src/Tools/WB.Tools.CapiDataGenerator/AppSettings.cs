@@ -13,7 +13,6 @@ namespace WB.Tools.CapiDataGenerator
         }
 
         public bool AreSupervisorEventsNowPublishing { get; set; }
-
       
         public GenerationMode CurrentMode { set; get; }
     }

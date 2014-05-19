@@ -3,6 +3,7 @@ using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Wpf.Platform;
 using Cirrious.MvvmCross.Wpf.Views;
+using WB.Tools.CapiDataGenerator.MVVMCross;
 
 namespace CapiDataGenerator
 {

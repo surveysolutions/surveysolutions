@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using System.Windows.Documents;
 using Cirrious.MvvmCross.Wpf.Views;
 
-namespace CapiDataGenerator.Views
+namespace WB.Tools.CapiDataGenerator.Views
 {
     /// <summary>
     /// Interaction logic for MainPage.xaml

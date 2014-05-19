@@ -7,7 +7,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-namespace WB.Tools.CapiDataGenerator.Models
+namespace WB.Tools.CapiDataGenerator.Ninject
 {
     public class CapiDataGeneratorEventStore : IStreamableEventStore
     {
@@ -36,17 +36,17 @@ namespace WB.Tools.CapiDataGenerator.Models
             if (AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterApproved ||
                 AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterRejected)
             {
-                return headquartersEventStore.ReadFrom(id, minVersion, maxVersion);
+                return this.headquartersEventStore.ReadFrom(id, minVersion, maxVersion);
             }
 
-            return supevisorEventStore.ReadFrom(id, minVersion, maxVersion);
+            return this.supevisorEventStore.ReadFrom(id, minVersion, maxVersion);
         }
 
         public void Store(UncommittedEventStream eventStream)
         {
             if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitSupervisorHeadquarter)
             {
-                supevisorEventStore.Store(eventStream);
+                this.supevisorEventStore.Store(eventStream);
 
                 Func<object, bool> isHQEvent = (o) => o is NewUserCreated ||
                                                       o is TemplateImported ||
@@ -57,13 +57,13 @@ namespace WB.Tools.CapiDataGenerator.Models
 
                 if (committedEvents.Any(isHQEvent))
                 {
-                    StoreInternal(eventStream: eventStream, eventsequences: headquartersSequences, eventstore: headquartersEventStore);
+                    StoreInternal(eventStream: eventStream, eventsequences: this.headquartersSequences, eventstore: this.headquartersEventStore);
                 }
             }
             else if (AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterApproved || 
                 AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterRejected)
             {
-                headquartersEventStore.Store(eventStream);
+                this.headquartersEventStore.Store(eventStream);
             }
 
             else if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor)
@@ -86,13 +86,36 @@ namespace WB.Tools.CapiDataGenerator.Models
 
                 if (!committedEvents.Any(isCapiNotAllowedEvent))
                 {
-                    StoreInternal(eventStream: eventStream, eventsequences: capiSequences, eventstore: capiEventStore);
+                    StoreInternal(eventStream: eventStream, eventsequences: this.capiSequences, eventstore: this.capiEventStore);
                 }
                 if (committedEvents.Any(isSupervisorEvent))
                 {
-                    StoreInternal(eventStream: eventStream, eventsequences: supervisorSequences, eventstore: supevisorEventStore);
+                    StoreInternal(eventStream: eventStream, eventsequences: this.supervisorSequences, eventstore: this.supevisorEventStore);
                 }
             }
+            else if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)
+            {
+                Func<object, bool> isSupervisorEvent = (o) => o is NewUserCreated ||
+                    o is TemplateImported;
+
+                Func<object, bool> isCapiNotAllowedEvent = (o) => o is InterviewCreated ||
+                                                        o is InterviewApproved;
+
+                var committedEvents = eventStream.Select(x => x.Payload);
+
+                //analyze icomming stream to determine target store to save
+                //could be saved to one or both 
+
+                if (!committedEvents.Any(isCapiNotAllowedEvent))
+                {
+                    StoreInternal(eventStream: eventStream, eventsequences: this.capiSequences, eventstore: this.capiEventStore);
+                }
+                if (committedEvents.Any(isSupervisorEvent))
+                {
+                    StoreInternal(eventStream: eventStream, eventsequences: this.supervisorSequences, eventstore: this.supevisorEventStore);
+                }
+            }
+
         }
 
         private static void StoreInternal(UncommittedEventStream eventStream, IDictionary<Guid, long> eventsequences, IEventStore eventstore)

@@ -111,6 +111,7 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Converters\BoolToNegotiationVisibilityConverter.cs" />
     <Compile Include="Models\LogMessage.cs" />
+    <Compile Include="Models\ModeSelectorPageModel.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Ninject\CapiDataGeneratorEventStore.cs" />
     <Compile Include="MVVMCross\CapiDataGeneratorApplication.cs" />
@@ -127,6 +128,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="GenerationMode.cs" />
+    <Compile Include="Views\ModeSelectorPage.xaml.cs">
+      <DependentUpon>ModeSelectorPage.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -142,6 +146,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModeSelectorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

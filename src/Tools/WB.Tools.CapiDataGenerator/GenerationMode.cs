@@ -3,10 +3,9 @@
     public enum GenerationMode
     {
         DataSplitCapiAndSupervisor,
-        //DataOnSupervisor,
+        DataSplitOnCapiCreatedAndSupervisor,
         DataSplitSupervisorHeadquarter,
         DataOnHeadquarterRejected,
-        DataOnHeadquarterApproved,
-
+        DataOnHeadquarterApproved
     }
 }

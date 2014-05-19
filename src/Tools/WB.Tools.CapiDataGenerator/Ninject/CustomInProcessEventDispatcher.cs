@@ -6,10 +6,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Tools.CapiDataGenerator;
 
-namespace CapiDataGenerator
+namespace WB.Tools.CapiDataGenerator.Ninject
 {
     public class CustomInProcessEventDispatcher : InProcessEventBus, IEventDispatcher
     {
@@ -20,7 +18,7 @@ namespace CapiDataGenerator
         {
             var eventDataType = typeof(TEvent);
 
-            RegisterHandler(eventDataType, DoActionForHandler(handler));
+            this.RegisterHandler(eventDataType, this.DoActionForHandler(handler));
         }
 
         protected Action<PublishedEvent> DoActionForHandler<TEvent>(IEventHandler<TEvent> handler)
@@ -31,16 +29,11 @@ namespace CapiDataGenerator
                 {
                     handler.Handle((IPublishedEvent<TEvent>)evnt);
                 }
-                else if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor)
+                else if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor ||
+                         AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)
                 {
                     bool isCapiHandler = handler.GetType().ToString().Contains("CAPI");
-
-                   /* Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
-
-                    Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || 
-                                                            o is NewUserCreated ||
-                                                            o is TemplateImported */
-
+                    
                     Func<object, bool> isSupervisorEvent = (o) => o is NewUserCreated ||
                                               o is TemplateImported ||
                                               o is InterviewCreated ||
