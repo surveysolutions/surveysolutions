@@ -117,5 +117,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
         {
             return new InterviewSummary();
         }
+
+        public static Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)
+        {
+            return new Synchronizer(
+                Mock.Of<ILocalFeedStorage>(),
+                Mock.Of<IUserChangedFeedReader>(),
+                Mock.Of<ILocalUserFeedProcessor>(),
+                interviewsSynchronizer ?? Mock.Of<IInterviewsSynchronizer>(),
+                HeadquartersPullContext(),
+                HeadquartersPushContext());
+        }
     }
 }
