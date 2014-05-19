@@ -39,78 +39,78 @@
             model.load();
         });
     </script>
-    
-<script type="text/html" id="SingleOptionReadOnly">
-    <div class="control-group">
-        <div class="controls">
-            <div data-bind="foreach: options">
-                <label class="radio" data-bind='attr: { "for": optionFor }'>
-                    <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption" disabled="disabled">
-                    <span data-bind="html: label"></span>
-                </label>
+
+    <script type="text/html" id="SingleOptionReadOnly">
+        <div class="control-group">
+            <div class="controls">
+                <div data-bind="foreach: options">
+                    <label class="radio" data-bind='attr: { "for": optionFor }'>
+                        <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption" disabled="disabled">
+                        <span data-bind="html: label"></span>
+                    </label>
+                </div>
             </div>
         </div>
-    </div>
-</script>
-<script type="text/html" id="MultyOptionReadOnly">
-    <div class="control-group">
-        <div class="controls">
-            <div data-bind="foreach: options">
-                <label class="checkbox" data-bind='attr: { "for": optionFor }'>
-                    <span class="badge" data-bind="text: orderNo"></span>
-                    <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value" disabled="disabled" />
-                    <span data-bind="html: label"></span>
-                </label>
+    </script>
+    <script type="text/html" id="MultyOptionReadOnly">
+        <div class="control-group">
+            <div class="controls">
+                <div data-bind="foreach: options">
+                    <label class="checkbox" data-bind='attr: { "for": optionFor }'>
+                        <span class="badge" data-bind="text: orderNo"></span>
+                        <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value" disabled="disabled" />
+                        <span data-bind="html: label"></span>
+                    </label>
+                </div>
             </div>
         </div>
-    </div>
-</script>
-<script type="text/html" id="NumericReadOnly">
-    <div class="control-group">
-        <div class="controls">
-            <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
-        </div>
-    </div>
-</script>
-<script type="text/html" id="DateTimeReadOnly">
-    <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
-</script>
-<script type="text/html" id="TextListReadOnly">
-    <div class="control-group">
-        <div class="controls">
-            <div data-bind="foreach: options">
-                <label class="checkbox">
-                    <span data-bind="html: label"></span>
-                </label>
+    </script>
+    <script type="text/html" id="NumericReadOnly">
+        <div class="control-group">
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
             </div>
         </div>
-    </div>
-</script>
-<script type="text/html" id="AutoPropagateReadOnly">
-    <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
-</script>
-<script type="text/html" id="TextReadOnly">
-    <div class="control-group">
-        <div class="controls">
-            <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+    </script>
+    <script type="text/html" id="DateTimeReadOnly">
+        <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
+    </script>
+    <script type="text/html" id="TextListReadOnly">
+        <div class="control-group">
+            <div class="controls">
+                <div data-bind="foreach: options">
+                    <label class="checkbox">
+                        <span data-bind="html: label"></span>
+                    </label>
+                </div>
+            </div>
         </div>
-    </div>
-</script>
-<script type="text/html" id="QRBarcodeReadOnly">
-    <div class="control-group">
-        <div class="controls">
-            <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+    </script>
+    <script type="text/html" id="AutoPropagateReadOnly">
+        <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+    </script>
+    <script type="text/html" id="TextReadOnly">
+        <div class="control-group">
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+            </div>
         </div>
-    </div>
-</script>
+    </script>
+    <script type="text/html" id="QRBarcodeReadOnly">
+        <div class="control-group">
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+            </div>
+        </div>
+    </script>
     <script type="text/html" id="GpsCoordinatesReadOnly">
-    <div>latitude: <span data-bind="text: latitude"></span></div>
-    <div>longitude: <span data-bind="text: longitude"></span></div>
-    <div>accuracy: <span data-bind="text: accuracy"></span></div>
-    <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
-</script>
-    
-    
+        <div>latitude: <span data-bind="text: latitude"></span></div>
+        <div>longitude: <span data-bind="text: longitude"></span></div>
+        <div>accuracy: <span data-bind="text: accuracy"></span></div>
+        <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
+    </script>
+
+
 
 
     <script type="text/html" id="SingleOptionFull">
@@ -251,7 +251,7 @@
             <h3 class="span10 text-overflow-ellipsis pad-left10" data-bind="html: title"></h3>
             <span class="span2 margin-top5 pad-right5 text-right-gray-italic">
                 <a class="btn-link" data-bind="text: status, click: $root.showStatesHistory"></a>
-                <br/>
+                <br />
                 <span class="pad-right5" data-bind="text: responsible"></span>
             </span>
             <div id="statesHistoryPopover" class="popover bottom">
@@ -373,14 +373,26 @@
                 <div data-bind="with: currentQuestion">
                     <button class="close" data-bind="click: $root.closeDetails">&times;</button>
                     <h3 class="heading" data-bind="html: title"></h3>
-                    <!-- ko if: scope == 'Supervisor' -->
-                    <div data-bind="template: { name: questionType + 'Full' }"></div>
-                    <!-- /ko -->
-                    <!-- ko ifnot: scope == 'Supervisor' -->
-                    <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
-                    <!-- /ko -->
+                    @if (GlobalInfo.IsSupervisor)
+                    {
+                        <!-- ko if: scope == 'Supervisor' -->
+                        <div data-bind="template: { name: questionType + 'Full' }"></div>
+                        <!-- /ko -->
+                        <!-- ko ifnot: scope == 'Supervisor' -->
+                        <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
+                        <!-- /ko -->
+                    }
+                    else
+                    {
+                        <!-- ko if: scope == 'Headquarter' -->
+                        <div data-bind="template: { name: questionType + 'Full' }"></div>
+                        <!-- /ko -->
+                        <!-- ko ifnot: scope == 'Headquarter' -->
+                        <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
+                        <!-- /ko -->
+                    }
                     <h4 class="heading">Comments</h4>
-                    <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
+                    <dl data-bind="foreach: comments">
                         <dt data-bind="text: userName"></dt>
                         <dd>
                             <span data-bind="html: text"></span>
