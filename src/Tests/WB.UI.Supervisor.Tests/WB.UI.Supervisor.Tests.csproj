@@ -69,6 +69,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications, Version=0.8.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.0.8.1\lib\net45\Machine.Specifications.dll</HintPath>
@@ -80,6 +84,10 @@
     <Reference Include="Machine.Specifications.Should, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETPortable\v4.0\Profile\Profile24\Microsoft.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,6 +112,10 @@
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=2.2.3.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -156,6 +168,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Create.cs" />
     <Compile Include="DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
     <Compile Include="DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="ApiTests\ApiTestContext.cs" />
@@ -174,6 +187,9 @@
     <Compile Include="HQControllerTests\HQControllerTestContext.cs" />
     <Compile Include="HQControllerTests\when_BatchUploadModel_model_contains_property__File__to_upload_file_data.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />
+    <Compile Include="HQSyncControllerTests\HQSyncControllerTestsContext.cs" />
+    <Compile Include="HQSyncControllerTests\when_pushing_data_to_hq.cs" />
+    <Compile Include="HQSyncControllerTests\when_requesting_push_status.cs" />
     <Compile Include="ImportExportControllerTests\ImportExportControllerTestContext.cs" />
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_and_exception_occured.cs" />
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_empty_id.cs" />
