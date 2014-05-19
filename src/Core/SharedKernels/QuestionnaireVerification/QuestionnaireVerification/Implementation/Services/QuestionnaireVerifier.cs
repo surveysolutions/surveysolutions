@@ -509,8 +509,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question,
-                question.ValidationExpression, questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, question.ValidationExpression,
+                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
         }
 
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
