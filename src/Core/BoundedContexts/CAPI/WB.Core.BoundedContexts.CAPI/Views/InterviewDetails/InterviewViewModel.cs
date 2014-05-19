@@ -347,7 +347,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 if (question != null)
                 {
                     UpdateQuestionHash(question);
+
                     questions.Add(question);
+
+                    ApplySubstitutionsOnAddedQuestions(question);
+
                     continue;
                 }
                 var group = child as QuestionnaireNavigationPanelItem;
@@ -367,6 +371,24 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             screen.PropertyChanged += this.rosterScreen_PropertyChanged;
             Screens.Add(screen.ScreenId, screen);
             this.UpdateGrid(new InterviewItemId(screenId, outerScopePropagationVector));
+        }
+
+        private void ApplySubstitutionsOnAddedQuestions(QuestionViewModel question)
+        {
+            var questionsUsedAsSubstitutionReferences =
+                this.questionsParticipationInSubstitutionReferences.Where(r => r.Value.Contains(question.PublicKey.Id))
+                    .Select(r => r.Key)
+                    .ToList();
+
+            foreach (var questionsUsedAsSubstitutionReference in questionsUsedAsSubstitutionReferences)
+            {
+                var questionSourceOfSubstitution = this.Questions.Values.FirstOrDefault(q => q.PublicKey.Id == questionsUsedAsSubstitutionReference &&
+                    question.PublicKey.InterviewItemPropagationVector.Take(q.PublicKey.InterviewItemPropagationVector.Length)
+                        .SequenceEqual(q.PublicKey.InterviewItemPropagationVector));
+
+                if (questionSourceOfSubstitution != null)
+                    question.SubstituteQuestionText(questionSourceOfSubstitution);
+            }
         }
 
         public void RemovePropagatedScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal index)
