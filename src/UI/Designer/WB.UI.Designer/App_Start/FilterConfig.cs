@@ -6,7 +6,8 @@
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //errors are handled in global.asax Application_Error
+            //filters.Add(new HandleErrorAttribute());
         }
     }
 }

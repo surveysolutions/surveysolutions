@@ -124,6 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="AttributesTests\AttributesTestContext.cs" />
+    <Compile Include="AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
+    <Compile Include="AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
+    <Compile Include="AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
     <Compile Include="CommandDeserializerTests\CommandControllerTests.cs" />
     <Compile Include="CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
@@ -131,6 +135,9 @@
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
     <Compile Include="Integration\ZipUtilsTests.cs" />
+    <Compile Include="MessageHandlerTests\MessageHandlerTestContext.cs" />
+    <Compile Include="MessageHandlerTests\when_https_verifier_reseives_https_request.cs" />
+    <Compile Include="MessageHandlerTests\when_https_verifier_reseives_non_https_request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireApiControllerTests\QuestionnaireApiControllerTestContext.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_getting_absent_chapter.cs" />
