@@ -108,7 +108,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (activity == null)
                 return;
 
-            this.geoservice.GetPositionAsync(20000, this.cancelSource.Token).ContinueWith((Task<Position>t) => activity.RunOnUiThread(() =>
+            this.geoservice.GetPositionAsync(300000, this.cancelSource.Token).ContinueWith((Task<Position>t) => activity.RunOnUiThread(() =>
             {
                 if (this.progress != null)
                     this.progress.Dismiss();
