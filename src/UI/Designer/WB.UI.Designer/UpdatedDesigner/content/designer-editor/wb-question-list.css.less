@@ -70,6 +70,7 @@
     &.section {
       font-weight: bold;
       text-transform: uppercase;
+      padding-left: 14px;
     }
 
     &.question {
@@ -90,6 +91,25 @@
         color: #9ca4aa;
       }
       font-weight: normal;
+    }
+
+    > span.btn-collapse, > span.btn-expand {
+      @side: 16px;
+      display: inline-block;
+      position: relative;
+      top: 2px;
+      margin-right: 5px;
+      width: @side;
+      height: @side;
+      background: url(../i/section-collapse-glyph.png) no-repeat;
+      //outline: 1px red dotted;
+    }
+
+    > span.btn-collapse {
+      background-position: center -8px;
+    }
+    > span.btn-expand {
+      background-position: center -40px;
     }
 
     .icon {

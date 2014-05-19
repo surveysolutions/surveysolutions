@@ -6398,6 +6398,7 @@ body {
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.section {
   font-weight: bold;
   text-transform: uppercase;
+  padding-left: 14px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item.question {
   margin-left: 20px;
@@ -6409,6 +6410,22 @@ body {
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item > span.parenthesis {
   color: #9ca4aa;
   font-weight: normal;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item > span.btn-collapse,
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item > span.btn-expand {
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+  background: url(i/section-collapse-glyph.png) no-repeat;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item > span.btn-collapse {
+  background-position: center -8px;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .item > span.btn-expand {
+  background-position: center -40px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item .icon {
   position: absolute;
@@ -6731,12 +6748,29 @@ body {
 #verify-popover-content .question-list .item.section {
   font-weight: bold;
   text-transform: uppercase;
+  padding-left: 14px;
 }
 #verify-popover-content .question-list .item > span.var {
   font-style: italic;
 }
 #verify-popover-content .question-list .item > span.parenthesis {
   font-weight: normal;
+}
+#verify-popover-content .question-list .item > span.btn-collapse,
+#verify-popover-content .question-list .item > span.btn-expand {
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+  background: url(i/section-collapse-glyph.png) no-repeat;
+}
+#verify-popover-content .question-list .item > span.btn-collapse {
+  background-position: center -8px;
+}
+#verify-popover-content .question-list .item > span.btn-expand {
+  background-position: center -40px;
 }
 #verify-popover-content .question-list .item .icon {
   position: absolute;

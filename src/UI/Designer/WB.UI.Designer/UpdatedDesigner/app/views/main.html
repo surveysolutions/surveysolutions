@@ -92,8 +92,8 @@
                  ng-click="setItem(item)"
                  ng-class="{'selected' : item.itemId == currentItemId}"
                  ng-if="!isQuestion(item) && !item.isDeleted">
-                <span ng-click="collapse(item)" ng-show="!item.collapsed">&nbsp;[-]&nbsp;&nbsp;</span>
-                <span ng-click="expand(item)" ng-show="item.collapsed">&nbsp;[+]&nbsp;&nbsp;</span>
+                <span ng-click="collapse(item)" ng-show="!item.collapsed" class="btn-collapse"></span>
+                <span ng-click="expand(item)" ng-show="item.collapsed" class="btn-expand"></span>
                 {{item.title}}
             </div>
 
