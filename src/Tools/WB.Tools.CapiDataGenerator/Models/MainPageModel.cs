@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -11,6 +12,7 @@ using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Events.User;
 using Main.Core.Utility;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
@@ -131,19 +133,16 @@ namespace CapiDataGenerator
         {
             base.InitFromBundle(parameters);
 
-            this.SupervisorList = new ObservableCollection<UserListItem>(
-                    userListViewFactory.Load(new UserListViewInputModel() { Role = UserRoles.Supervisor }).Items);
-            if (this.SupervisorList.Count == 0)
-            {
-                var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now, false, false, null);
-                this.SupervisorList = new ObservableCollection<UserListItem>() { emptySupervisor };
-                this.SelectedSupervisor = emptySupervisor;
-            }
-            var hq = userListViewFactory.Load(new UserListViewInputModel() { Role = UserRoles.Headquarter })
-                .Items.FirstOrDefault();
+            //create hq if none was found needed
+            var hq = userListViewFactory.Load(new UserListViewInputModel() { Role = UserRoles.Headquarter }).Items.FirstOrDefault();
             if (hq == null)
             {
-                this.HeadquarterName = "Please, create new headquarter";
+                Guid hqId = Guid.Parse("DF120CFD-B624-4E3F-BED8-7BE9033CCBC6");
+                string userName = "hq";
+                commandService.Execute(new CreateUserCommand(hqId, userName, "Headquarter1", "hq@example.com", new UserRoles[]{UserRoles.Headquarter}, false, false, null));
+
+                this._headquarterUser = new UserLight(hqId, userName);
+                this.HeadquarterName = this._headquarterUser.Name;
             }
             else
             {
@@ -151,7 +150,26 @@ namespace CapiDataGenerator
                 this.HeadquarterName = this._headquarterUser.Name;
             }
 
+            //create supervisor if none was found needed
+            this.SupervisorList = new ObservableCollection<UserListItem>(userListViewFactory.Load(new UserListViewInputModel() 
+                { Role = UserRoles.Supervisor }).Items);
+            
+            if (this.SupervisorList.Count == 0)
+            {
+                Guid superId = Guid.Parse("1A94734B-DEAD-462D-98F1-C8F44136C4E4");
+                string userName = "supervisor";
+                string userEmail = "s@example.com";
+                commandService.Execute(new CreateUserCommand(superId, userName, "Supervisor1", userEmail, new UserRoles[] { UserRoles.Supervisor}, false, false, null));
+
+
+                //var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now, false, false, null);
+                var createdSupervisor = new UserListItem(superId, userName, userEmail, DateTime.Now, false, false, null);
+                this.SupervisorList = new ObservableCollection<UserListItem>() { createdSupervisor };
+                this.SelectedSupervisor = createdSupervisor;
+            }
+            
             this.WorkingModeList = new ObservableCollection<string>(Enum.GetNames(typeof(GenerationMode)));
+            this.SelectedWorkingMode = AppSettings.Instance.CurrentMode;
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -412,13 +430,21 @@ namespace CapiDataGenerator
 
                 try
                 {
-                    questionnaireDocument = ReadTemplate(this.TemplatePath);
+                    questionnaireDocument = ReadTemplate(this.TemplatePath, false);
                     questionnaireDocument.Title = "(generated) " + questionnaireDocument.Title;
                 }
                 catch (Exception)
                 {
-                    
-                    Log("bad template (do not forget to unzip it)");
+                    try
+                    {
+                        questionnaireDocument = ReadTemplate(this.TemplatePath, true);
+                        questionnaireDocument.Title = "(generated) " + questionnaireDocument.Title;
+                    }
+                    catch (Exception)
+                    {
+
+                        Log("bad template (do not forget to unzip it)");
+                    }
                 }
 
                 if (questionnaireDocument != null)
@@ -440,10 +466,10 @@ namespace CapiDataGenerator
                         StatusesCount = statusesCount.ToString();
                     }
                     
-                    AppSettings.Instance.CurrentMode = this.SelectedWorkingMode.Value;
+                    //AppSettings.Instance.CurrentMode = this.SelectedWorkingMode.Value;
 
-                    var questions = questionnaireDocument.GetAllQuestions().Where(x => !x.Featured).ToList();
-                    var questionsCount = questions.Count();
+                    var notFeaturedQuestions = questionnaireDocument.GetAllQuestions().Where(x => !x.Featured).ToList();
+                    var questionsCount = notFeaturedQuestions.Count();
 
                     answersCount = (int) (questionsCount*((double) answersCount/100));
                     commentsCount = (int) (questionsCount*((double) commentsCount/100));
@@ -462,11 +488,12 @@ namespace CapiDataGenerator
 
                         var interviews = this.CreateInterviews(questionnaireDocument, interviewsCount, users, questionnaire, state);
 
-                        CreateAnswers(answersCount, interviews, questions, questionnaire, questionnaireDocument, state);
-                        CreateComments(commentsCount, interviews, questions, questionnaire);
+                        CreateAnswers(answersCount, interviews, notFeaturedQuestions, questionnaire, questionnaireDocument, state);
+                        CreateComments(commentsCount, interviews, notFeaturedQuestions, questionnaire);
                         ChangeStatuses(statusesCount, interviews);
 
-                        if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor)
+                        if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor 
+                            || AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)
                         {
                             Log("create backup");
                             string backupPath = backupService.Backup();
@@ -498,6 +525,7 @@ namespace CapiDataGenerator
             this.Log("import template");
             this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template));
 
+            //incorrect. should be saved on denormalizer
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, 1, template as QuestionnaireDocument);
 
             //this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, 1));
@@ -511,7 +539,9 @@ namespace CapiDataGenerator
 
                 commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment"));
 
-                changeLogManipulator.CloseDraftRecord(interview.Key);
+                if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor ||
+                    AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)
+                    changeLogManipulator.CloseDraftRecord(interview.Key);
 
                 if (AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterApproved || 
                     AppSettings.Instance.CurrentMode == GenerationMode.DataOnHeadquarterRejected ||
@@ -600,15 +630,36 @@ namespace CapiDataGenerator
 
                     Guid interviewId = Guid.NewGuid();
 
-                    commandService.Execute(new CreateInterviewCommand(interviewId: interviewId,
-                        questionnaireId: template.PublicKey,
-                        supervisorId: SelectedSupervisor.UserId,
-                        userId: interviewer.Id,
-                        answersTime: DateTime.UtcNow,
-                        answersToFeaturedQuestions: this.GetAnswersByFeaturedQuestions(featuredQuestions)));
+                    if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)
+                    {
+                        //version of template should be resolved correctly
+                        var questionnaireVersion = 1;
+ 
+                        commandService.Execute(new CreateInterviewOnClientCommand(interviewId: interviewId,
+                            questionnaireId: template.PublicKey,
+                            supervisorId: SelectedSupervisor.UserId,
+                            userId: interviewer.Id,
+                            answersTime: DateTime.UtcNow,
+                            questionnaireVersion: questionnaireVersion));
 
-                    commandService.Execute(new AssignInterviewerCommand(interviewId: interviewId, userId: SelectedSupervisor.UserId, interviewerId: interviewer.Id));
-                    
+                        //featured questions should also be filled
+
+                        changeLogManipulator.CreateOrReopenDraftRecord(interviewId);
+                    }
+                    else
+                    {
+                        commandService.Execute(new CreateInterviewCommand(interviewId: interviewId,
+                            questionnaireId: template.PublicKey,
+                            supervisorId: SelectedSupervisor.UserId,
+                            userId: interviewer.Id,
+                            answersTime: DateTime.UtcNow,
+                            answersToFeaturedQuestions: this.GetAnswersByFeaturedQuestions(featuredQuestions)));
+
+                        commandService.Execute(new AssignInterviewerCommand(interviewId: interviewId, userId: SelectedSupervisor.UserId, interviewerId: interviewer.Id));
+
+                    }
+
+                                        
                     interviews.Add(interviewId, interviewer.Id);
 
                     UpdateProgress();
@@ -902,12 +953,31 @@ namespace CapiDataGenerator
                     (decimal) answer);
         }
 
-        private QuestionnaireDocument ReadTemplate(string path)
+        private QuestionnaireDocument ReadTemplate(string path, bool treateAsGzipped)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            var template = JsonConvert.DeserializeObject<QuestionnaireDocument>(File.OpenText(path).ReadToEnd(), settings);
+            var template = JsonConvert.DeserializeObject<QuestionnaireDocument>(GetFileContent(path, treateAsGzipped), settings);
             template.PublicKey = Guid.NewGuid();
             return template;
+        }
+
+        private string GetFileContent(string path, bool treateAsGzipped)
+        {
+            string fileContent;
+            if (!treateAsGzipped)
+                fileContent = File.OpenText(path).ReadToEnd();
+            else
+            {
+                using (Stream fileStream = File.OpenRead(path), zippedStream = new GZipStream(fileStream, CompressionMode.Decompress))
+                {
+                    using (StreamReader reader = new StreamReader(zippedStream))
+                    {
+                        fileContent = reader.ReadToEnd();
+                    }
+                }
+            }
+
+            return fileContent;
         }
 
         private void UpdateProgress()
