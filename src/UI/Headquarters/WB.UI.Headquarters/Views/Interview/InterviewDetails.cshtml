@@ -348,10 +348,10 @@
                 <h5 class="heading" data-bind="html: title"></h5>
             </div>
             <div class="panel-body">
-                <!-- ko if: scope == 'Supervisor' -->
+                <!-- ko if: scope == 'Headquarter' -->
                 <div data-bind="template: { name: questionType + 'Full' }"></div>
                 <!-- /ko -->
-                <!-- ko ifnot: scope == 'Supervisor' -->
+                <!-- ko ifnot: scope == 'Headquarter' -->
                 <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
                 <!-- /ko -->
                 <h4 class="heading">Comments</h4>
