@@ -7,12 +7,16 @@ namespace WB.UI.Supervisor.Code.Bundling
         public StyleImagePathBundle(string virtualPath)
             : base(virtualPath)
         {
-            base.Transforms.Add(new StyleRelativePathTransform());
-            base.Transforms.Add(new CssMinify());
+            this.RegisterTransformers();
         }
 
         public StyleImagePathBundle(string virtualPath, string cdnPath)
-            : base(virtualPath, cdnPath)
+            : base(virtualPath, cdnPath) 
+        {
+            this.RegisterTransformers();
+        }
+
+        private void RegisterTransformers()
         {
             base.Transforms.Add(new StyleRelativePathTransform());
             base.Transforms.Add(new CssMinify());
