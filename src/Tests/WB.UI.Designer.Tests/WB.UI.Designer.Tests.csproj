@@ -151,6 +151,7 @@
     <Compile Include="VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
