@@ -14,7 +14,15 @@ namespace WB.UI.Designer.Api.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        public ApiBasicAuthAttribute() {}
+        private readonly Func<string, string, bool> validateUserCredentials;
+
+        public ApiBasicAuthAttribute()
+            : this(Membership.ValidateUser){}
+
+        internal ApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials)
+        {
+            this.validateUserCredentials = validateUserCredentials;
+        }
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
@@ -82,8 +90,7 @@ namespace WB.UI.Designer.Api.Attributes
 
         private bool Authorize(string username, string password)
         {
-            return Membership.ValidateUser(username, password);
+            return validateUserCredentials(username, password);
         }
-
     }
 }
