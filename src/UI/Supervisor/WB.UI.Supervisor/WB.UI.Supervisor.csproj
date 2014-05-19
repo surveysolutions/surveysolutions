@@ -366,7 +366,7 @@
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\HqSyncController.cs" />
+    <Compile Include="Controllers\HQSyncController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
@@ -669,7 +669,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Views\HQ\VerifySample.cshtml" />
-    <Content Include="Views\HqSync\Synchronization.cshtml" />
+    <Content Include="Views\HQSync\Synchronization.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />

@@ -10,7 +10,7 @@ using WB.Core.GenericSubdomains.Logging;
 namespace WB.UI.Supervisor.Controllers
 {
     [Authorize(Roles = "Supervisor")]
-    public class HqSyncController : BaseController
+    public class HQSyncController : BaseController
     {
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly HeadquartersPushContext headquartersPushContext;
@@ -18,8 +18,8 @@ namespace WB.UI.Supervisor.Controllers
         private readonly ISynchronizer synchronizer;
         private readonly IGlobalInfoProvider globalInfoProvider;
 
-        public HqSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, HeadquartersPullContext headquartersPullContext, HeadquartersPushContext headquartersPushContext, IScheduler scheduler, ISynchronizer synchronizer, IGlobalInfoProvider globalInfoProvider)
-            : base(commandService, globalInfo, logger)
+        public HQSyncController(ICommandService commandService, ILogger logger, HeadquartersPullContext headquartersPullContext, HeadquartersPushContext headquartersPushContext, IScheduler scheduler, ISynchronizer synchronizer, IGlobalInfoProvider globalInfoProvider)
+            : base(commandService, globalInfoProvider, logger)
         {
             this.headquartersPullContext = headquartersPullContext;
             this.headquartersPushContext = headquartersPushContext;

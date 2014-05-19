@@ -4,6 +4,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class HeadquartersPushContext : HeadquartersSynchronizationContext
     {
+        /// <remarks>For tests only.</remarks>
+        internal HeadquartersPushContext()
+            : base(null) {}
+
         public HeadquartersPushContext(IPlainStorageAccessor<SynchronizationStatus> statusStorage)
             : base(statusStorage) {}
 

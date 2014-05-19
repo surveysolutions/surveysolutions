@@ -16,12 +16,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         protected HeadquartersSynchronizationContext(IPlainStorageAccessor<SynchronizationStatus> statusStorage)
         {
-            if (statusStorage == null) throw new ArgumentNullException("statusStorage");
-
             this.statusStorage = statusStorage;
         }
 
-        public bool IsRunning { get; private set; }
+        public virtual bool IsRunning { get; private set; }
 
         public void Start()
         {
@@ -65,17 +63,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             this.synchronizationErrors.Add(message);
         }
 
-        public string GetStatus()
+        public virtual string GetStatus()
         {
             return this.synchronizationMessages.LastOrDefault();
         }
 
-        public IReadOnlyCollection<string> GetMessages()
+        public virtual IReadOnlyCollection<string> GetMessages()
         {
             return new ReadOnlyCollection<string>(this.synchronizationMessages);
         }
 
-        public IReadOnlyCollection<string> GetErrors()
+        public virtual IReadOnlyCollection<string> GetErrors()
         {
             return new ReadOnlyCollection<string>(this.synchronizationErrors);
         }

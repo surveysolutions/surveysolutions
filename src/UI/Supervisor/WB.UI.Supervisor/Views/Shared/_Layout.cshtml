@@ -80,7 +80,7 @@
                         @if (!LegacyOptions.HqFunctionsEnabled)
                         {
                             <li>
-                                <a href="@Url.Action("Synchronization", "HqSync")" target="_blank">
+                                <a href="@Url.Action("Synchronization", "HQSync")" target="_blank">
                                     <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     Synchronization
                                 </a>
@@ -201,7 +201,7 @@
                     $.ajax({
                         method: 'GET',
                         cache: false,
-                        url: '@Url.Action("GetSyncStatus", "HqSync")',
+                        url: '@Url.Action("GetSyncStatus", "HQSync")',
                         success: function (dataString) {
                             var data = JSON.parse(dataString);
                             if (!data.StartedAt) {
