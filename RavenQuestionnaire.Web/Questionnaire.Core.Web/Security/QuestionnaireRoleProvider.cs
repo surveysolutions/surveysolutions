@@ -206,7 +206,7 @@ namespace Questionnaire.Core.Web.Security
         public override bool IsUserInRole(string username, string roleName)
         {
             string contextKey = "user-in-role:" + username.ToLower() + ":" + roleName;
-            var cachedValue = (bool?)HttpContext.Current.Items[contextKey];
+            var cachedValue = HttpContext.Current.Items.Contains(contextKey) ? (bool?)HttpContext.Current.Items[contextKey] : null;
 
             if (cachedValue.HasValue)
                 return cachedValue.Value;
