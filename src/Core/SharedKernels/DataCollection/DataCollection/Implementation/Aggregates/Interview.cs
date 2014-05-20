@@ -1742,6 +1742,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
         }
 
+        public void CancelByHQ(Guid userId)
+        {
+            this.ApplyEvent(new InterviewDeleted(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+        }
+
         public void MarkInterviewAsSentToHeadquarters(Guid userId)
         {
             this.ApplyEvent(new InterviewDeleted(userId));
