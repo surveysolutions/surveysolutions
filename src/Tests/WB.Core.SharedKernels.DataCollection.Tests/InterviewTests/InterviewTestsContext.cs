@@ -55,8 +55,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 wasCompleted ?? false);
         }
 
-        protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
+        protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
+            questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
+
             return Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire);
