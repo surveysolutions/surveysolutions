@@ -107,7 +107,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
 #warning it's bad to write data to other storage, but I've wrote this code for backward compatibility with old versions of CAPI where QuestionnaireRosterStructureDenormalizer haven't been running
 
-            questionnaire.Questionnaire.ConnectChildrenWithParent();
             propagationStructure = questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaire.Questionnaire, questionnaire.Version);
             this.questionnaireRosterStructureStorage.Store(propagationStructure, propagationStructure.QuestionnaireId);
             return propagationStructure;

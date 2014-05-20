@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
     {
         public QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(QuestionnaireDocument questionnaire, long version)
         {
+            questionnaire.ConnectChildrenWithParent();
             var result = new QuestionnaireRosterStructure();
             result.QuestionnaireId = questionnaire.PublicKey;
             result.Version = version;
