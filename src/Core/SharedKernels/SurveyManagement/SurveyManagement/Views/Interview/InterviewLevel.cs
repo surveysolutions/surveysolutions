@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.RosterVector = vector;
         }
 
-        public decimal[] RosterVector { get; private set; }
+        public decimal[] RosterVector { get; set; }
         public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; private set; }
         private List<InterviewQuestion> Questions { get; set; }
         public HashSet<Guid> DisabledGroups { get; private set; }
