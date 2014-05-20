@@ -8,6 +8,7 @@
             $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
         })
         .run(function($httpBackend, $resource) {
+            //Default Questionnaire
             $httpBackend.whenGET('../api/questionnaire/get/7c97b1925b0244b782ed6741a5035fae').respond(
                 $resource('./data/questionnaire/7c97b1925b0244b782ed6741a5035fae.json').get()
             );
@@ -24,6 +25,12 @@
                 $resource('./data/editQuestion/20ec89157c0e41e49d77db46e929db5d.json').get()
             );
 
+            //Empty Questionnaire
+            $httpBackend.whenGET('../api/questionnaire/get/C772F0868D6E4B46B2EB281382F280AB').respond(
+                $resource('./data/questionnaire/C772F0868D6E4B46B2EB281382F280AB.json').get()
+            );
+
+            //Verifier
             $httpBackend.whenGET('../api/questionnaire/editGroup/7c97b1925b0244b782ed6741a5035fae?groupId=ddfaab0f37394a679f088add19325cfe').respond(
                 $resource('./data/editGroup/ddfaab0f37394a679f088add19325cfe.json').get()
             );
@@ -32,9 +39,13 @@
                 $resource('./data/verify/with-errors.json').get()
             );
 
+            //Comands
             $httpBackend.whenPOST('../command/execute').respond();
 
+            //Views
             $httpBackend.whenGET(/views\/.*/).passThrough();
+
+            //Data files
             $httpBackend.whenGET(/data\/.*/).passThrough();
         });
 }(app));
