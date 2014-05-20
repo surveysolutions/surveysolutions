@@ -27,7 +27,7 @@
 
             //Empty Questionnaire
             $httpBackend.whenGET('../api/questionnaire/get/C772F0868D6E4B46B2EB281382F280AB').respond(
-                $resource('./data/questionnaire/C772F0868D6E4B46B2EB281382F280AB.json').get()
+                $resource('./data/questionnaire/empty.json').get()
             );
 
             //Verifier

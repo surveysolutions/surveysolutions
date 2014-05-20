@@ -113,6 +113,10 @@
             <div ng-repeat="item in items" ng-include="'tree_item_renderer.html'">
             </div>
         </div>
+        
+        <div ng-show="currentChapter==undefined">
+            start box
+        </div>
     </div>
 
     <div class="question-editor col-xs-6" ng-if="activeChapter != undefined" ng-include src="'app/views/chapter.html'" ng-controller="ChapterCtrl">

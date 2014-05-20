@@ -105,7 +105,7 @@ angular.module('designerApp')
                     "items": []
                 };
 
-                commandService.addRoster($routeParams.questionnaireId, emptyRoster, item.itemId).success(function () {
+                commandService.addRoster($routeParams.questionnaireId, emptyRoster, item.itemId).success(function() {
                     item.items.push(emptyRoster);
                 });
             };
@@ -133,9 +133,11 @@ angular.module('designerApp')
                             $scope.currentChapterId = $routeParams.chapterId;
                             $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
                         } else {
-                            $scope.currentChapter = result.chapters[0];
-                            $scope.currentChapterId = $scope.currentChapter.itemId;
-                            $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                            if (result.chapters.length > 0) {
+                                $scope.currentChapter = result.chapters[0];
+                                $scope.currentChapterId = $scope.currentChapter.itemId;
+                                $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                            }
                         }
                         if ($routeParams.itemId) {
                             $scope.currentItemId = $routeParams.itemId;
