@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -12,6 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     /// and to reduce parameters count in calculation methods.
     /// Should not be made public or be used in any form in events or commands.
     /// </remarks>
+    [DebuggerDisplay("Id = {Id}, RosterVector = {RosterVector}")]
     internal class Identity
     {
         public Guid Id { get; private set; }
