@@ -333,7 +333,7 @@
                                             </div>
                                         </td>
                                         <td class="question-answer" data-bind="click: $root.showDetails">
-                                            <div class="cell-content" data-bind="visible: isEnabled">
+                                            <div class="cell-content" data-bind="visible: isEnabled || isAnswered">
                                                 <div class="question-clickable">
                                                     <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                     <span data-bind="template: { name: questionType }"></span>
