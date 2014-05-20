@@ -57,6 +57,7 @@
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\CancelInterviewByHQCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />

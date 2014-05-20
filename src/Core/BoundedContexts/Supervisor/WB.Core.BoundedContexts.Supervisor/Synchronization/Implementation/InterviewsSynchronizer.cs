@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             Guid interviewIdGuid = Guid.Parse(interviewId);
             Guid userIdGuid = Guid.Parse(userId);
 
-            this.executeCommand(new DeleteInterviewCommand(interviewId: interviewIdGuid, userId: userIdGuid));
+            this.executeCommand(new CancelInterviewByHQCommand(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
         private void StoreEventsToLocalStorage()
