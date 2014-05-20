@@ -4,10 +4,10 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootMethod(typeof (Implementation.Aggregates.Interview), "CancelByHQ")]
-    public class CancelInterviewByHQCommand : InterviewCommand
+    [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "CancelByHQSynchronization")]
+    public class CancelInterviewByHQSynchronizationCommand : InterviewCommand
     {
-        public CancelInterviewByHQCommand(Guid interviewId, Guid userId)
+        public CancelInterviewByHQSynchronizationCommand(Guid interviewId, Guid userId)
             : base(interviewId, userId) {}
     }
 }
