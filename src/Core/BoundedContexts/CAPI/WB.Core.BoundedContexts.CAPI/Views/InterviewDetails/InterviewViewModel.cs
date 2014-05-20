@@ -787,8 +787,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         protected IEnumerable<InterviewItemId> GetSiblings(InterviewItemId publicKey)
         {
             return
-                this.Screens.Where(s => s.Key.Id == publicKey.Id && s.Key.CompareWithVector(publicKey.InterviewItemPropagationVector)).Select(
-                    s => new InterviewItemId(publicKey.Id, s.Key.InterviewItemPropagationVector)).ToList();
+                this.Screens.Where(
+                    s =>
+                        s.Key.Id == publicKey.Id &&
+                            s.Key.InterviewItemPropagationVector.Length == publicKey.InterviewItemPropagationVector.Length &&
+                            s.Key.InterviewItemPropagationVector.Take(s.Key.InterviewItemPropagationVector.Length - 1)
+                                .SequenceEqual(
+                                    publicKey.InterviewItemPropagationVector.Take(publicKey.InterviewItemPropagationVector.Length - 1)))
+                    .Select(
+                        s => new InterviewItemId(publicKey.Id, s.Key.InterviewItemPropagationVector)).ToList();
         }
 
         protected void UpdateGrid(InterviewItemId gridkey)
