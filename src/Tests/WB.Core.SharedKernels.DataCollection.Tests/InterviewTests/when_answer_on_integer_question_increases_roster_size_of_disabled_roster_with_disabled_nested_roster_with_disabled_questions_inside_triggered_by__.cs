@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -70,6 +71,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
+
+            var expressionProcessor = new Mock<IExpressionProcessor>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+                .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             eventContext = new EventContext();
