@@ -15,10 +15,6 @@ namespace Questionnaire.Core.Web.Security
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
-    using Ninject;
-
-    using Questionnaire.Core.Web.Helpers;
-
     public class QuestionnaireRoleProvider : RoleProvider
     {
         private string applicationName = "Questionnaire";
@@ -206,7 +202,7 @@ namespace Questionnaire.Core.Web.Security
         public override bool IsUserInRole(string username, string roleName)
         {
             string contextKey = "user-in-role:" + username.ToLower() + ":" + roleName;
-            var cachedValue = HttpContext.Current.Items.Contains(contextKey) ? (bool?)HttpContext.Current.Items[contextKey] : null;
+            var cachedValue = (bool?)HttpContext.Current.Items[contextKey];
 
             if (cachedValue.HasValue)
                 return cachedValue.Value;
