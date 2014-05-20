@@ -101,6 +101,7 @@
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
     <Compile Include="InterviewTests\when_answering_top_level_question_which_enables_nested_roster.cs" />
+    <Compile Include="InterviewTests\when_creating_interview_with_fixed_roster_and_roster_size_numeric_question_inside_it.cs" />
     <Compile Include="InterviewTests\when_answer_numeric_which_triggers_4_rosters_3_rosters_one_inside_other_and_1_separate_roster.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_decreases_roster_size_of_roster_with_nested_roster_with_answered_questions_inside_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_nested_roster_size_and_roster_size_question_3_level_above.cs" />
