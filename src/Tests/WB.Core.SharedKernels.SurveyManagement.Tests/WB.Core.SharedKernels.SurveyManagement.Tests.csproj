@@ -206,6 +206,8 @@
     <Compile Include="InterviewQuestionViewTests\when_creating_view_for_supervisor_question_which_not_answered_and_parent_group_is_enabled.cs" />
     <Compile Include="InterviewQuestionViewTests\when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled.cs" />
     <Compile Include="InterviewQuestionViewTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
+    <Compile Include="InterviewSynchronizationDtoFactoryTests\InterviewSynchronizationDtoFactoryTestContext.cs" />
+    <Compile Include="InterviewSynchronizationDtoFactoryTests\when_build_from_interview_with_nested_rosters.cs" />
     <Compile Include="MapReportTests\MapReportTestContext.cs" />
     <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_answer_collection.cs" />
     <Compile Include="MapReportTests\when_map_report_data_is_being_queried_and_where_is_no_answer_collection.cs" />
