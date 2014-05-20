@@ -2,6 +2,8 @@
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
 {
@@ -43,6 +45,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
             return
                 ToPublishedEvent(new InterviewOnClientCreated(userId: GetGuidIdByStringId(userId),
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: questionnaireVersion));
+        }
+
+        public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChangedEvent(InterviewStatus status, string comment = null)
+        {
+            return ToPublishedEvent(new InterviewStatusChanged(status, comment));
         }
 
         public static IPublishedEvent<SupervisorAssigned> SupervisorAssignedEvent(string userId = null,
