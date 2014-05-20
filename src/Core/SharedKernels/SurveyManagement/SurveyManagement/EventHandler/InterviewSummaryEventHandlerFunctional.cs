@@ -144,6 +144,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.Status = evnt.Payload.Status;
+                if (interview.CommentedStatusesHistory.Count > 0)
+                {
+                    var lastHistoryStatus = interview.CommentedStatusesHistory.Last();
+                    lastHistoryStatus.Comment = evnt.Payload.Comment;
+                }
             });
         }
 
