@@ -22,15 +22,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
     {
         Establish context = () =>
         {
-            questionnaireId = Guid.Parse("10000000000000000000000000000000");
+            var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
-
-            topRosterId = Guid.Parse("11111111111111111111111111111111");
-            nestedRosterId = Guid.Parse("21111111111111111111111111111111");
-            nestedNestedRosterId = Guid.Parse("31111111111111111111111111111111");
-            separateRosterId = Guid.Parse("22222222222222222222222222222222");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion("roster size question")
@@ -42,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 },
                 new Group("top level roster")
                 {
-                    PublicKey = topRosterId,
+                    PublicKey = Guid.Parse("11111111111111111111111111111111"),
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     RosterSizeQuestionId = rosterSizeQuestionId,
@@ -50,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     {
                         new Group("nested roster")
                         {
-                            PublicKey = nestedRosterId,
+                            PublicKey = Guid.Parse("21111111111111111111111111111111"),
                             IsRoster = true,
                             RosterSizeSource = RosterSizeSourceType.Question,
                             RosterSizeQuestionId = rosterSizeQuestionId,
@@ -58,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                             {
                                 new Group("nested nested roster")
                                 {
-                                    PublicKey = nestedNestedRosterId,
+                                    PublicKey = Guid.Parse("31111111111111111111111111111111"),
                                     IsRoster = true,
                                     RosterSizeSource = RosterSizeSourceType.Question,
                                     RosterSizeQuestionId = rosterSizeQuestionId,
@@ -69,7 +64,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 },
                 new Group("separate roster")
                 {
-                    PublicKey = separateRosterId,
+                    PublicKey = Guid.Parse("22222222222222222222222222222222"),
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     RosterSizeQuestionId = rosterSizeQuestionId,
@@ -104,11 +99,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
-        private static Guid topRosterId;
-        private static Guid nestedRosterId;
-        private static Guid nestedNestedRosterId;
-        private static Guid separateRosterId;
         private static Guid rosterSizeQuestionId;
-        private static Guid questionnaireId;
     }
 }
