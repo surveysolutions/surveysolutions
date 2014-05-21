@@ -3,7 +3,6 @@ using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.BoundedContexts.Capi.Views.Statistics;
 using WB.UI.Shared.Android.Extensions;
 using WB.UI.Shared.Android.Frames;
 
