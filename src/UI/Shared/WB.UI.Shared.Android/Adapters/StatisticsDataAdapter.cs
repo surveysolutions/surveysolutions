@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
-using WB.Core.BoundedContexts.Capi.Views.Statistics;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Events;
 
 namespace WB.UI.Shared.Android.Adapters
 {
-    public class StatisticsDataAdapter : SmartAdapter<StatisticsQuestionViewModel>
+    public class StatisticsDataAdapter : SmartAdapter<QuestionViewModel>
     {
-        protected readonly IList<Func<StatisticsQuestionViewModel, string>> valueFucntions;
+        protected readonly IList<Func<QuestionViewModel, string>> valueFucntions;
         private readonly Context context;
-        private readonly Action<ScreenChangedEventArgs> notifier;
+        private readonly Action<InterviewItemId> notifier;
 
-        public StatisticsDataAdapter(IList<StatisticsQuestionViewModel> items, IList<Func<StatisticsQuestionViewModel, string>> valueFucntions, Context context, Action<ScreenChangedEventArgs> notifier) : base(items)
+        public StatisticsDataAdapter(IList<QuestionViewModel> items, IList<Func<QuestionViewModel, string>> valueFucntions, Context context, Action<InterviewItemId> notifier)
+            : base(items)
         {
             this.valueFucntions = valueFucntions;
             this.context = context;
             this.notifier = notifier;
         }
 
-        protected override View BuildViewItem(StatisticsQuestionViewModel dataItem, int position)
+        protected override View BuildViewItem(QuestionViewModel dataItem, int position)
         {
             LinearLayout view = new LinearLayout(this.context);
             view.Orientation = Orientation.Horizontal;
@@ -31,7 +32,7 @@ namespace WB.UI.Shared.Android.Adapters
 
             view.Clickable = true;
             view.Click += this.tr_Click;
-            view.SetTag(Resource.Id.ScreenId, dataItem.ParentKey.ToString());
+            view.SetTag(Resource.Id.ScreenId, dataItem.PublicKey.ToString());
             view.SetBackgroundResource(Resource.Drawable.statistics_row_style);
 
             for (int i = 0; i < this.valueFucntions.Count; i++)
@@ -42,7 +43,6 @@ namespace WB.UI.Shared.Android.Adapters
                 tvQuestion.Text = string.IsNullOrEmpty(text) ? "NA" : text;
                 tvQuestion.Gravity = GravityFlags.Left;
                 tvQuestion.SetPadding(10, 10, 10, 10);
-                //TypedValue.ApplyDimension(ComplexUnitType.Dip, 0,context.Resources.DisplayMetrics)
                 view.AddView(tvQuestion, new LinearLayout.LayoutParams(0,
                                                                    ViewGroup.LayoutParams.WrapContent, 1));
             }
@@ -53,8 +53,7 @@ namespace WB.UI.Shared.Android.Adapters
         void tr_Click(object sender, EventArgs e)
         {
             var typedSender = sender as LinearLayout;
-            var screenId = InterviewItemId.Parse(typedSender.GetTag(Resource.Id.ScreenId).ToString());
-            this.notifier(new ScreenChangedEventArgs(screenId));
+            this.notifier(InterviewItemId.Parse(typedSender.GetTag(Resource.Id.ScreenId).ToString()));
         }
     }
 }
