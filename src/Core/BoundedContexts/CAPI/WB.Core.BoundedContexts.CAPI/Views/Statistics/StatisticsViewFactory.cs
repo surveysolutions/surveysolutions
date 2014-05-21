@@ -27,22 +27,22 @@ namespace WB.Core.BoundedContexts.Capi.Views.Statistics
             var answered =
                 enabledQuestion.Where(q => q.Status.HasFlag(QuestionStatus.Answered)).Select(
                     q =>
-                    new StatisticsQuestionViewModel(q.PublicKey, this.CalculateScreen(doc, q.PublicKey),
+                    new StatisticsQuestionViewModel(q.PublicKey, 
                                                     q.Text,
                                                     q.AnswerString, "")).ToList();
             var invalid = enabledQuestion.Where(q => !q.Status.HasFlag(QuestionStatus.Valid)).Select(
                 q =>
-                new StatisticsQuestionViewModel(q.PublicKey, this.CalculateScreen(doc, q.PublicKey), q.Text,
+                new StatisticsQuestionViewModel(q.PublicKey,  q.Text,
                                                 q.AnswerString, q.ValidationMessage)).ToList();
 
             var unanswered = enabledQuestion.Where(q => !q.Status.HasFlag(QuestionStatus.Answered)).Select(
                 q =>
-                new StatisticsQuestionViewModel(q.PublicKey, this.CalculateScreen(doc, q.PublicKey), q.Text,
+                new StatisticsQuestionViewModel(q.PublicKey,  q.Text,
                                                 q.AnswerString, "")).ToList();
 
             var result = new StatisticsViewModel(doc.PublicKey, doc.Title,
                                                  doc.Status, doc.FindQuestion(q => true).Count(), unanswered,
-                                                 answered, invalid);
+                                                 answered, invalid, (id) => CalculateScreen(doc, id));
             return result;
         }
 

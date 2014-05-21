@@ -9,8 +9,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.Statistics
         public StatisticsViewModel(Guid questionnaireId, string title, InterviewStatus status, int totalQuestionCount,
                                    IList<StatisticsQuestionViewModel> unansweredQuestions,
                                    IList<StatisticsQuestionViewModel> answeredQuestions,
-                                   IList<StatisticsQuestionViewModel> invalidQuestions)
+                                   IList<StatisticsQuestionViewModel> invalidQuestions, Func<InterviewItemId, InterviewItemId> getQuestionScreenId)
         {
+            this.getQuestionScreenId = getQuestionScreenId;
             this.QuestionnaireId = questionnaireId;
             this.Title = title;
             this.Status = status;
@@ -28,5 +29,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.Statistics
         public IList<StatisticsQuestionViewModel> UnansweredQuestions { get; private set; }
         public IList<StatisticsQuestionViewModel> AnsweredQuestions { get; private set; }
         public IList<StatisticsQuestionViewModel> InvalidQuestions { get; private set; }
+
+        public InterviewItemId GetQuestionScreenId(InterviewItemId questionId)
+        {
+            return getQuestionScreenId(questionId);
+        }
+
+        private Func<InterviewItemId, InterviewItemId> getQuestionScreenId;
     }
 }
