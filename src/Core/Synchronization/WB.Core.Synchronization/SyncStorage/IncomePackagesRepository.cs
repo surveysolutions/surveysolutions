@@ -56,26 +56,24 @@ namespace WB.Core.Synchronization.SyncStorage
             try
             {
                 var meta = this.GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
-
-                var user = this.userStorage.Query(_ => _.Where(u => u.PublicKey == meta.ResponsibleId).ToList().FirstOrDefault());
-
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-
-                AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
 
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value)
                 {
+                    var user = this.userStorage.Query(_ => _.Where(u => u.PublicKey == meta.ResponsibleId).ToList().FirstOrDefault());
+                    AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
                     if (meta.FeaturedQuestionsMeta != null)
                         prefilledQuestions = meta.FeaturedQuestionsMeta
                             .Select(q => new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value, string.Empty))
                             .ToArray();
 
-                    commandService.Execute(new CreateInterviewOnClientCommand(meta.PublicKey, meta.ResponsibleId, meta.TemplateId, // TODO: Vitaliy. Please do not executed 2 commands for single action. This operation is executed in two separate transactions, and produces AR in the half way when first operation succeeded, but second failed
-                        meta.TemplateVersion, DateTime.UtcNow, user.Supervisor.Id));
+                    commandService.Execute(new CreateInterviewCreatedOnClientCommand(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                        meta.TemplateVersion, DateTime.UtcNow, user.Supervisor.Id, (InterviewStatus)meta.Status, prefilledQuestions, meta.Comments, meta.Valid));
+                    
                 }
-
-                commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId, // This is second command that should be wrapped in 1
-                    (InterviewStatus) meta.Status, prefilledQuestions, meta.Comments, meta.Valid));
+                else
+                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid));
 
                 File.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }

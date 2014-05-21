@@ -89,6 +89,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InterviewViewModelTests\InterviewViewModelTestContext.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_adding_roster_row_and_row_contains_question_with_substitution_on_upper_level_of_interview.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_add_nested_roster_row_method_called_and_1_row_in_roster_already_present_and_other_row_present_in_other_parent_roster_row.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_2_rows_in_roster_already_present.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_contains_nested_group.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_is_nested_roster.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_set_answer_on_question_which_referenced_in_substitiutions_of_questions_inside_roster.cs" />
