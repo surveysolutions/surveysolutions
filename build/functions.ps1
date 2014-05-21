@@ -293,5 +293,5 @@ function UpdateProjectVersion([string]$BuildNumber, [string]$Project)
 {
 	$ver = (GetVersionString $Project) + "." + $BuildNumber
 	UpdateSourceVersion -Version $ver -file (GetAssemblyFilePath $Project)
-	Write-Host "##teamcity['Updated AssemblyInfo to version $ver']"
+	Write-Host "##teamcity[message text='Updated AssemblyInfo in $Project to version $ver']"
 }
