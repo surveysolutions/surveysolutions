@@ -284,7 +284,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public IDictionary<InterviewItemId, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
+        public InterviewStatistics Statistics
+        {
+            get
+            {
+                if (statistics == null)
+                    statistics = new InterviewStatistics(Questions.Values);
 
+                return statistics;
+            }
+        }
+
+        private InterviewStatistics statistics;
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
         private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions;
         private readonly Dictionary<Guid, ValueVector<Guid>> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, ValueVector<Guid>>();
@@ -371,6 +382,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             screen.PropertyChanged += this.rosterScreen_PropertyChanged;
             Screens.Add(screen.ScreenId, screen);
             this.UpdateGrid(new InterviewItemId(screenId, outerScopePropagationVector));
+            UpdateStatistics();
         }
 
         private void ApplySubstitutionsOnAddedQuestions(QuestionViewModel question)
@@ -398,6 +410,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             this.RemoveScreen(new InterviewItemId(screenId, propagationVector));
             this.UpdateGrid(new InterviewItemId(screenId, outerScopePropagationVector));
+            UpdateStatistics();
         }
 
         private void RemoveScreen(InterviewItemId screenId)
@@ -598,16 +611,28 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void QuestionPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "AnswerString")
-                return;
-
             var question = sender as QuestionViewModel;
             if (question == null)
+                return;
+         
+            if (e.PropertyName == "Status")
+            {
+                UpdateStatistics();
+                return;
+            }
+
+            if (e.PropertyName != "AnswerString")
                 return;
 
             SubstituteDependantQuestions(question);
 
             this.UpdateRosterTitlesForVectorByPossibleHeadQuestion(question.PublicKey.Id,question.PublicKey.InterviewItemPropagationVector, question.AnswerString);
+        }
+
+        private void UpdateStatistics()
+        {
+            statistics = null;
+            this.RaisePropertyChanged("Statistics");
         }
 
         private void SubstituteDependantQuestions(QuestionViewModel question)

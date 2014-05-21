@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
-using WB.Core.BoundedContexts.Capi.Views.Statistics;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Events;
 
 namespace WB.UI.Shared.Android.Adapters
 {
-    public class StatisticsDataAdapter : SmartAdapter<StatisticsQuestionViewModel>
+    public class StatisticsDataAdapter : SmartAdapter<QuestionViewModel>
     {
-        protected readonly IList<Func<StatisticsQuestionViewModel, string>> valueFucntions;
+        protected readonly IList<Func<QuestionViewModel, string>> valueFucntions;
         private readonly Context context;
         private readonly Action<InterviewItemId> notifier;
 
-        public StatisticsDataAdapter(IList<StatisticsQuestionViewModel> items, IList<Func<StatisticsQuestionViewModel, string>> valueFucntions, Context context, Action<InterviewItemId> notifier)
+        public StatisticsDataAdapter(IList<QuestionViewModel> items, IList<Func<QuestionViewModel, string>> valueFucntions, Context context, Action<InterviewItemId> notifier)
             : base(items)
         {
             this.valueFucntions = valueFucntions;
@@ -23,7 +23,7 @@ namespace WB.UI.Shared.Android.Adapters
             this.notifier = notifier;
         }
 
-        protected override View BuildViewItem(StatisticsQuestionViewModel dataItem, int position)
+        protected override View BuildViewItem(QuestionViewModel dataItem, int position)
         {
             LinearLayout view = new LinearLayout(this.context);
             view.Orientation = Orientation.Horizontal;
