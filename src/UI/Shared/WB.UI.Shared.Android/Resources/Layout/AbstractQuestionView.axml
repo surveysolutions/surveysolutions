@@ -24,6 +24,13 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:textColor="#FF0000"
+    android:id="@+id/tvMError"
+    android:textSize="20dip"
+    local:MvxBind="Text MandatoryValidationMessage; MandatoryValidationMessage IsMandatoryAndEmpty"/>
+    <TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:textColor="#FF0000"
     android:id="@+id/tvError"
     android:textSize="20dip"
     local:MvxBind="Text ValidationMessage; ValidationMessage Status"/>

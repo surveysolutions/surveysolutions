@@ -19,6 +19,8 @@ namespace WB.UI.Shared.Android
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("Html", (button) => new HtmlBinding(button)));
             registry.RegisterFactory(new MvxCustomBindingFactory<View>("Visible", (button) => new VisibilityBinding(button)));
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("ValidationMessage", (button) => new ValidationMessageBinding(button)));
+            
+            registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("MandatoryValidationMessage", (value) => new MandatoryValidationMessageBinding(value)));
 
             base.FillTargetFactories(registry);
         }
