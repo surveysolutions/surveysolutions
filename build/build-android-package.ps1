@@ -7,11 +7,6 @@ param([string]$VersionName,
 [string]$CapiProject,
 [string]$OutFileName)
 
-if([string]::IsNullOrWhiteSpace($VersionName)){
-	Write-Host "##teamcity[buildProblem description='VersionName param is not set']"
-	Exit
-}
-
 if(!$VersionCode){
 	Write-Host "##teamcity[buildProblem description='VersionCode param is not set']"
 	Exit
@@ -140,6 +135,11 @@ function PathToFinalCapi($CapiProject) {
 
 # Main part
 $ErrorActionPreference = "Stop"
+
+if([string]::IsNullOrWhiteSpace($VersionName)){
+	$VersionName = (GetVersionString $CapiProject)
+}
+$VersionName = $VersionName + "." + $VersionCode
 
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }

@@ -11,6 +11,14 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
+	$ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
+	$ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
+	$ProjectSupervisor = 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj'
+
+	UpdateProjectVersion $BuildNumber $ProjectDesigner
+	UpdateProjectVersion $BuildNumber $ProjectHeadquarters
+	UpdateProjectVersion $BuildNumber $ProjectSupervisor
+
 try {
 
 	CheckPrerequisites | %{ if (-not $_) { Exit } }
@@ -23,7 +31,7 @@ try {
 	}
 
 	$PackageName = 'WBCapi.apk'
-	$VersionName = $VersionPrefix + $BuildNumber
+	$VersionName = (GetVersionString $ProjectSupervisor) + "." + $BuildNumber # Capi is always the same as Supervisor
 	. "$scriptFolder\build-android-package.ps1" `
 		-VersionName $VersionName `
 		-VersionCode $BuildNumber `
@@ -37,26 +45,23 @@ try {
 
 	RunTests $BuildConfiguration
 
+	RunConfigTransform $ProjectDesigner $BuildConfiguration
+	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
+
+	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
+	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
+
+	RunConfigTransform $ProjectSupervisor $BuildConfiguration
+	CopyCapi -Project $ProjectSupervisor -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
+	BuildWebPackage $ProjectSupervisor $BuildConfiguration | %{ if (-not $_) { Exit } }
+
 	$artifactsFolder = (Get-Location).Path +  "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
-
-	$Project = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
-	RunConfigTransform $Project $BuildConfiguration
-	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
-	AddArtifacts $Project $BuildConfiguration -folder "Designer"
-
-	$Project = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
-	RunConfigTransform $Project $BuildConfiguration
-	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
-	AddArtifacts $Project $BuildConfiguration -folder "Headquarters"
-
-	$Project = 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj'
-	RunConfigTransform $Project $BuildConfiguration
-	CopyCapi -Project $Project -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
-	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
-	AddArtifacts $Project $BuildConfiguration -folder "Supervisor"
+	AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
+	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+	AddArtifacts $ProjectSupervisor $BuildConfiguration -folder "Supervisor"
 
 	Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
 }
