@@ -150,6 +150,7 @@
     <Compile Include="Controls\ScreenItems\SingleOptionQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\TextListQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\TextQuestionView.cs" />
+    <Compile Include="Events\AnswerSavedEventArgs.cs" />
     <Compile Include="Events\AnswerSetEventArgs.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ContextExtensions.cs" />

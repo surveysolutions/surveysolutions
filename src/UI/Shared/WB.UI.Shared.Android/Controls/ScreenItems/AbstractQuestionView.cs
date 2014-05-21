@@ -21,6 +21,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
     public abstract class AbstractQuestionView : LinearLayout, IMvxBindingContextOwner
     {
         public event EventHandler<AnswerSetEventArgs> AnswerSet;
+        public event EventHandler<AnswerSavedEventArgs> AnswerSaved;
+        
         public bool IsCommentsEditorFocused { get; private set; }
         protected QuestionViewModel Model { get; private set; }
         protected IAuthentication Membership { get; private set; }
@@ -118,6 +120,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 handler(this, new AnswerSetEventArgs(this.Model.PublicKey, newAnswer));
         }
 
+        private void FireAnswerSavedEvent()
+        {
+            var handler = this.AnswerSaved;
+            if (handler != null)
+                handler(this, new AnswerSavedEventArgs(this.Model.PublicKey));
+        }
+
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
         {
             this.IsCommentsEditorFocused = true;
@@ -129,11 +138,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             this.IsCommentsEditorFocused = e.HasFocus;
-          /*  if (!e.HasFocus)
-            {
-                SaveComment();
-                HideKeyboard(etComments);
-            }*/
         }
 
         private void SaveComment()
@@ -158,7 +162,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             this.tvError.Visibility = ViewStates.Gone;
-            this.AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler);
+            this.AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler, this.SaveAnswerSuccessHandler);
         }
 
         private void SaveAnswerErrorHandler(Exception ex)
@@ -172,6 +176,20 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     return;
 
                 this.SaveAnswerErrorHandlerImpl(ex);
+            });
+        }
+
+        private void SaveAnswerSuccessHandler(string ex)
+        {
+            if (this.isDisposed)
+                return;
+
+            ((Activity)this.Context).RunOnUiThread(() =>
+            {
+                if (this.isDisposed)
+                    return;
+
+                this.FireAnswerSavedEvent();
             });
         }
 

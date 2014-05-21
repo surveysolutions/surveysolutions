@@ -74,6 +74,7 @@ namespace WB.UI.Shared.Android.Controls.Roster
             var setAnswerPopup = new AlertDialog.Builder(this.context);
             this.questionView = this.questionViewFactory.CreateQuestionView(this.context, this.Model, this.questionnaireId);
             this.questionView.AnswerSet += this.questionView_AnswerSet;
+            this.questionView.AnswerSaved += this.questionView_AnswerSaved;
             
             ScrollView scrollPane = new ScrollView(this.context);
             scrollPane.AddView(questionView);
@@ -87,9 +88,15 @@ namespace WB.UI.Shared.Android.Controls.Roster
         private void questionView_AnswerSet(object sender, AnswerSetEventArgs e)
         {
             this.tvTitle.Text = e.AnswerSting;
-            if (!this.questionView.IsCommentsEditorFocused)
-                if (!multiAnswersTypes.Contains(this.Model.QuestionType))
-                    this.dialog.Dismiss();
+            //if (!this.questionView.IsCommentsEditorFocused)
+            //    if (!multiAnswersTypes.Contains(this.Model.QuestionType) )
+            //        this.dialog.Dismiss();
+        }
+
+        private void questionView_AnswerSaved(object sender, AnswerSavedEventArgs e)
+        {
+            if (!multiAnswersTypes.Contains(this.Model.QuestionType))
+                this.dialog.Dismiss();
         }
 
         private readonly QuestionType[] multiAnswersTypes = {QuestionType.MultyOption, QuestionType.TextList};
