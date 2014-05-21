@@ -5,6 +5,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
     public interface IAnswerOnQuestionCommandService
     {
-        void AnswerOnQuestion(AnswerQuestionCommand command, Action<Exception> errorCallback);
+        void AnswerOnQuestion(AnswerQuestionCommand command, Action<Exception> errorCallback, Action<string> succeedCallback);
     }
 }
