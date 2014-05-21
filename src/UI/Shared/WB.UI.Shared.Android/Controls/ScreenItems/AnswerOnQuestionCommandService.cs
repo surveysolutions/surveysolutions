@@ -31,9 +31,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             });
         }
 
-        public void AnswerOnQuestion(AnswerQuestionCommand command, Action<Exception> errorCallback)
+        public void AnswerOnQuestion(AnswerQuestionCommand command, Action<Exception> errorCallback, Action<string> succeedCallback = null)
         {
-            this.UpdateExecutionFlow(new CommandAndErrorCallback(command, errorCallback));
+            this.UpdateExecutionFlow(new CommandAndErrorCallback(command, errorCallback, succeedCallback));
         }
 
         private void UpdateExecutionFlow(CommandAndErrorCallback command)
@@ -70,6 +70,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             try
             {
                 this.commandService.Execute(nextCommand.Command);
+                nextCommand.SucceedCallback("Ok");
             }
             catch (Exception ex)
             {
@@ -79,14 +80,16 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         class CommandAndErrorCallback
         {
-            public CommandAndErrorCallback(AnswerQuestionCommand command, Action<Exception> errorCallback)
+            public CommandAndErrorCallback(AnswerQuestionCommand command, Action<Exception> errorCallback, Action<string> succeedCallback = null)
             {
                 this.Command = command;
                 this.ErrorCallback = errorCallback;
+                this.SucceedCallback = succeedCallback;
             }
 
             public AnswerQuestionCommand Command { get; private set; }
             public Action<Exception> ErrorCallback { get; private set; }
+            public Action<string> SucceedCallback { get; private set; }
         }
     }
 }
