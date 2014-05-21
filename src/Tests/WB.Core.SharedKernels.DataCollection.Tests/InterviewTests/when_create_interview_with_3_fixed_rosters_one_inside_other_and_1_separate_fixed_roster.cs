@@ -22,16 +22,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
-            userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-
-            topFixedRosterId = Guid.Parse("11111111111111111111111111111111");
-            nestedFixedRosterId = Guid.Parse("21111111111111111111111111111111");
-            separateFixedRosterId = Guid.Parse("22222222222222222222222222222222");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group("top level fixed group")
                 {
-                    PublicKey = topFixedRosterId,
+                    PublicKey = Guid.Parse("11111111111111111111111111111111"),
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     RosterFixedTitles = new[] { "1", "2" },
@@ -39,16 +34,26 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     {
                         new Group("nested fixed group")
                         {
-                            PublicKey = nestedFixedRosterId,
+                            PublicKey = Guid.Parse("21111111111111111111111111111111"),
                             IsRoster = true,
                             RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a", "b" }
+                            RosterFixedTitles = new[] { "a", "b" },
+                            Children = new List<IComposite>
+                            {
+                                new Group("nested fixed subgroup")
+                                {
+                                    PublicKey = Guid.Parse("31111111111111111111111111111111"),
+                                    IsRoster = true,
+                                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                                    RosterFixedTitles = new[] { "x", "y" },
+                                }
+                            }
                         }
                     }
                 },
                 new Group("separate fixed group")
                 {
-                    PublicKey = separateFixedRosterId,
+                    PublicKey = Guid.Parse("22222222222222222222222222222222"),
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     RosterFixedTitles = new[] { "I", "II" }
@@ -71,26 +76,21 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            CreateInterview(questionnaireId: questionnaireId);
 
         It should_produce_one_event_roster_instance_added = () =>
             eventContext.GetEvents<RosterInstancesAdded>().Count().ShouldEqual(1);
 
-        It should_put_8_instances_to_RosterInstancesAdded_event = () =>
-            eventContext.ShouldContainEvent<RosterInstancesAdded>(@event=>@event.Instances.Length==8);
+        It should_put_16_instances_to_RosterInstancesAdded_event = () =>
+            eventContext.ShouldContainEvent<RosterInstancesAdded>(@event=>@event.Instances.Length == 16);
 
         It should_produce_one_event_rosters_title_changed =()=>
-             eventContext.GetEvents<RosterInstancesTitleChanged>().Count().ShouldEqual(1);
+            eventContext.GetEvents<RosterInstancesTitleChanged>().Count().ShouldEqual(1);
 
-        It should_put_8_instances_to_RosterInstancesTitleChanged_event = () =>
-            eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event => @event.ChangedInstances.Length == 8);
+        It should_put_16_instances_to_RosterInstancesTitleChanged_event = () =>
+            eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event => @event.ChangedInstances.Length == 16);
 
         private static EventContext eventContext;
-        private static Interview interview;
-        private static Guid userId;
-        private static Guid topFixedRosterId;
-        private static Guid nestedFixedRosterId;
-        private static Guid separateFixedRosterId;
         private static Guid questionnaireId;
     }
 }
