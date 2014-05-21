@@ -260,18 +260,22 @@ function CopyCapi($Project, $PathToFinalCapi, $BuildNumber) {
 	Copy-Item "$PathToFinalCapi" "$SourceFolder\$BuildNumber" -Recurse
 }
 
-function UpdateSourceVersion([string]$Version, [string]$file) {
+function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
 
-	$NewVersion = 'AssemblyVersion("' + $Version + '")';
-	$NewFileVersion = 'AssemblyFileVersion("' + $Version + '")';
+	$ver = $Version + "." + $BuildNumber
+	$NewVersion = 'AssemblyVersion("' + $ver + '")';
+	$NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
+	$NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (Build ' + $BuildNumber + ')")'
 
 	$TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
 
 	get-content $file | 
 		%{$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
-		%{$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } > $TmpFile
+		%{$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } |
+		%{$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(Build [0-9]+\)"\)', $NewInformationalVerson } > $TmpFile
 
 	move-item $TmpFile $file -force
+	Write-Host "##teamcity[message text='Updated $file to version $ver']"
 }
 
 function GetAssemblyFilePath([string]$Project)
@@ -291,7 +295,7 @@ function GetVersionString([string]$Project)
 
 function UpdateProjectVersion([string]$BuildNumber, [string]$Project)
 {
-	$ver = (GetVersionString $Project) + "." + $BuildNumber
-	UpdateSourceVersion -Version $ver -file (GetAssemblyFilePath $Project)
-	Write-Host "##teamcity[message text='Updated AssemblyInfo in $Project to version $ver']"
+	UpdateSourceVersion -Version (GetVersionString $Project) `
+		-BuildNumber $BuildNumber `
+		-file (GetAssemblyFilePath $Project)
 }
