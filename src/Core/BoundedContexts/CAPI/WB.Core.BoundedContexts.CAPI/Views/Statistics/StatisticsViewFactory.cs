@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.Statistics
             var enabledQuestion =
                 doc.FindQuestion(
                     q => q.IsEnabled());
-            
+
             var answered =
                 enabledQuestion.Where(q => q.Status.HasFlag(QuestionStatus.Answered)).Select(
                     q =>
@@ -32,8 +32,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.Statistics
                                                     q.AnswerString, "")).ToList();
             var invalid = enabledQuestion.Where(q => !q.Status.HasFlag(QuestionStatus.Valid)).Select(
                 q =>
-                new StatisticsQuestionViewModel(q.PublicKey, this.CalculateScreen(doc, q.PublicKey), q.Text,
-                                                q.AnswerString, q.ValidationMessage)).ToList();
+                new StatisticsQuestionViewModel(q.PublicKey, this.CalculateScreen(doc, q.PublicKey), q.Text, q.AnswerString,
+                    q.IsMandatoryAndEmpty ? q.MandatoryValidationMessage : q.ValidationMessage)).ToList();
 
             var unanswered = enabledQuestion.Where(q => !q.Status.HasFlag(QuestionStatus.Answered)).Select(
                 q =>

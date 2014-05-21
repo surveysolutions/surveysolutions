@@ -117,6 +117,7 @@
     <Compile Include="Bindings\BackgroundBinding.cs" />
     <Compile Include="Bindings\HtmlBinding.cs" />
     <Compile Include="Bindings\MvvmBindingWrapper.cs" />
+    <Compile Include="Bindings\MandatoryValidationMessageBinding.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
