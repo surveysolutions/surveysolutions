@@ -1,19 +1,20 @@
 using System;
 using CAPI.Android.Core.Model;
 using Ninject;
+using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.BoundedContexts.Capi.Views.Statistics;
 using WB.UI.Shared.Android.Frames;
 
 namespace WB.UI.Capi.Implementations.Fragments
 {
     public class DataCollectionStatisticsContentFragment : StatisticsContentFragment
     {
-        protected override StatisticsViewModel GetStatisticsViewModel(Guid questionnaireId)
+        protected override InterviewViewModel GetInterviewViewModel(Guid interviewId)
         {
-            return CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireId));
+            return CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(new QuestionnaireScreenInput(interviewId));
         }
+
         protected override void PreCompleteAction()
         {
             base.PreCompleteAction();
@@ -23,16 +24,16 @@ namespace WB.UI.Capi.Implementations.Fragments
             if (this.Model.Status == InterviewStatus.Completed)
             {
                 CapiApplication.CommandService.Execute(
-                    new RestartInterviewCommand(this.Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text));
+                    new RestartInterviewCommand(this.Model.PublicKey, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text));
 
-                logManipulator.CreateOrReopenDraftRecord(this.Model.QuestionnaireId);
+                logManipulator.CreateOrReopenDraftRecord(this.Model.PublicKey);
             }
             else
             {
                 CapiApplication.CommandService.Execute(
-                    new CompleteInterviewCommand(this.Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text));
+                    new CompleteInterviewCommand(this.Model.PublicKey, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text));
 
-                logManipulator.CloseDraftRecord(this.Model.QuestionnaireId);
+                logManipulator.CloseDraftRecord(this.Model.PublicKey);
             }
 
             this.Activity.Finish();

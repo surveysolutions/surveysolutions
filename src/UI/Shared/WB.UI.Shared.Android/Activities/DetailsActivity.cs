@@ -214,8 +214,8 @@ namespace WB.UI.Shared.Android.Activities
             if (index >= 0)
             {
                 this.VpContent.CurrentItem = this.adapter.GetScreenIndex(e.ScreenId);
-
                 this.adapter.NotifyDataSetChanged();
+
                 return;
             }
             this.adapter.UpdateScreenData(e.ScreenId);
@@ -244,9 +244,6 @@ namespace WB.UI.Shared.Android.Activities
         {
             if (this.adapter.IsRoot)
                 this.navList.SelectItem(e.Position);
-            var statistic = this.adapter.GetItem(e.Position) as StatisticsContentFragment;
-            if (statistic != null)
-                statistic.RecalculateStatistics();
         }
 
         protected override void OnDestroy()

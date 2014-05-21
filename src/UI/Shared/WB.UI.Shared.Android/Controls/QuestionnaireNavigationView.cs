@@ -45,7 +45,7 @@ namespace WB.UI.Shared.Android.Controls
                 tvITem.Text = chapter.ScreenName;
                 UpdateCounters(chapter, tvCount);
                 view.SetTag(Resource.Id.ScreenId, chapter.ScreenId.ToString());
-                view.Click += view_Click;
+                view.Touch += view_Touch;
                 this.linearLayout.AddView(view);
             }
 
@@ -54,17 +54,21 @@ namespace WB.UI.Shared.Android.Controls
             var tvLastCount = lastView.FindViewById<TextView>(Resource.Id.tvCount);
             tvLastItem.Text = this.model.Status == InterviewStatus.Completed ? "Summary" : "Complete";
             tvLastCount.Visibility = ViewStates.Gone;
-            lastView.Click += view_Click;
+            lastView.Touch += view_Touch;
             this.linearLayout.AddView(lastView);
 
             this.linearLayout.GetChildAt(0).SetBackgroundColor(Color.LightBlue);
         }
 
-        private void view_Click(object sender, EventArgs e)
+        private void view_Touch(object sender, View.TouchEventArgs e)
         {
             var view = sender as View;
             if (view == null)
                 return;
+            
+            if (e.Event.Action != MotionEventActions.Down)
+                return;
+         
             this.SelectItem(view);
             var tag = view.GetTag(Resource.Id.ScreenId);
             InterviewItemId? screenId = null;
@@ -74,7 +78,6 @@ namespace WB.UI.Shared.Android.Controls
             }
             this.OnItemClick(screenId);
         }
-
 
         private static void UpdateCounters(QuestionnaireScreenViewModel dataItem, TextView tvCount)
         {
