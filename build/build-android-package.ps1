@@ -141,6 +141,8 @@ function PathToFinalCapi($CapiProject) {
 # Main part
 $ErrorActionPreference = "Stop"
 
+$VersionName = (GetVersionString $CapiProject) + "." + $VersionCode
+
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
 
