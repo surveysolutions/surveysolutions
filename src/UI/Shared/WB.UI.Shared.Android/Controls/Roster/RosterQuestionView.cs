@@ -88,14 +88,11 @@ namespace WB.UI.Shared.Android.Controls.Roster
         private void questionView_AnswerSet(object sender, AnswerSetEventArgs e)
         {
             this.tvTitle.Text = e.AnswerSting;
-            //if (!this.questionView.IsCommentsEditorFocused)
-            //    if (!multiAnswersTypes.Contains(this.Model.QuestionType) )
-            //        this.dialog.Dismiss();
         }
 
         private void questionView_AnswerSaved(object sender, AnswerSavedEventArgs e)
         {
-            if (!multiAnswersTypes.Contains(this.Model.QuestionType))
+            if (!this.questionView.IsCommentsEditorFocused && !this.multiAnswersTypes.Contains(this.Model.QuestionType))
                 this.dialog.Dismiss();
         }
 
