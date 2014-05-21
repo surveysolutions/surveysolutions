@@ -4,6 +4,7 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
@@ -60,6 +61,7 @@ namespace WB.UI.Shared.Android.Controls
         {
             Button crumb = new Button(this.Context);
             crumb.Text = questionnaireNavigationPanelItem.ScreenName;
+            crumb.SetTextSize(ComplexUnitType.Pt, 6);
             crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.ScreenId.ToString());
             crumb.Click += this.crumb_Click;
             var butParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
@@ -68,8 +70,8 @@ namespace WB.UI.Shared.Android.Controls
             var img = this.Context.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
             //img.SetBounds(0, 0, 45, 45);
             crumb.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-
-            butParam.SetMargins(0, 0, 10, 0);
+            crumb.SetHeight(50);
+            butParam.SetMargins(0, 0, 5, 0);
             crumb.LayoutParameters = butParam;
             return crumb;
         }
@@ -110,7 +112,7 @@ namespace WB.UI.Shared.Android.Controls
 
                 var breadcrumbWith = this.AssignMesuredWidthToBreadcrumbAndReturnIt(breadcrumbView);
 
-                widthSoFar += breadcrumbWith;
+                widthSoFar += breadcrumbWith + 10;
 
                 if (widthSoFar >= screenWidth)
                 {
@@ -165,15 +167,15 @@ namespace WB.UI.Shared.Android.Controls
             var wholeBreadCrumbContainer = currentLine.Parent as LinearLayout;
             var currentLinePosition = this.GetCurrentLinePositionInContainer(wholeBreadCrumbContainer, currentLine);
             LinearLayout nextLine = null;
-            if (currentLinePosition < wholeBreadCrumbContainer.ChildCount - 1)
-            {
-                nextLine = wholeBreadCrumbContainer.GetChildAt(currentLinePosition + 1) as LinearLayout;
-            }
-            else
-            {
+            //if (currentLinePosition < wholeBreadCrumbContainer.ChildCount - 1)
+            //{
+            //    nextLine = wholeBreadCrumbContainer.GetChildAt(currentLinePosition + 1) as LinearLayout;
+            //}
+            //else
+            //{
                 nextLine = this.CreateOneLineOfBreadcrumbs();
                 wholeBreadCrumbContainer.AddView(nextLine);
-            }
+            //}
             currentLine.RemoveView(breadcrumbView);
             nextLine.AddView(breadcrumbView);
             return nextLine;
