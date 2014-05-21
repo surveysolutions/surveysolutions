@@ -259,3 +259,39 @@ function CopyCapi($Project, $PathToFinalCapi, $BuildNumber) {
 	New-Item -ItemType directory -Path "$SourceFolder\$BuildNumber"
 	Copy-Item "$PathToFinalCapi" "$SourceFolder\$BuildNumber" -Recurse
 }
+
+function UpdateSourceVersion([string]$Version, [string]$file) {
+
+	$NewVersion = 'AssemblyVersion("' + $Version + '")';
+	$NewFileVersion = 'AssemblyFileVersion("' + $Version + '")';
+
+	$TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
+
+	get-content $file | 
+		%{$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
+		%{$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } > $TmpFile
+
+	move-item $TmpFile $file -force
+}
+
+function GetAssemblyFilePath([string]$Project)
+{
+	$file = get-childitem $Project
+	$ret = Join-Path $file.directoryname "Properties\AssemblyInfo.cs"
+	return $ret
+}
+
+function GetVersionString([string]$Project)
+{
+	$file = get-childitem $Project
+	$file = Join-Path $file.directoryname ".version"
+	$ret = Get-Content $file
+	return $ret
+}
+
+function UpdateProjectVersion([string]$BuildNumber, [string]$Project)
+{
+	$ver = (GetVersionString $Project) + "." + $BuildNumber
+	UpdateSourceVersion -Version $ver -file (GetAssemblyFilePath $Project)
+	Write-Host "##teamcity['Updated AssemblyInfo to version $ver']"
+}
