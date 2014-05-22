@@ -239,6 +239,7 @@
     <Compile Include="PreloadedDataServiceTests\when_GetColumnIndexesGoupedByQuestionVariableName_is_called_for_top_level_file.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_first_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_top_level_of_questionnaire.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_PreparePreloadedData_is_called_for_array_from_one_element.cs" />
     <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
