@@ -290,15 +290,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interviewId);
 
-            if (eventsToSend.Length == 0)
+            if (eventsToSend.Length > 0)
+            {
+                string dataToBeSent = this.GetInterviewDataToBeSentAsString(interviewId, eventsToSend);
+
+                this.SendInterviewData(interviewId, dataToBeSent);
+            }
+            else
             {
                 this.logger.Info(string.Format("Interview {0} was not sent to Headquarters because there are no events which should be sent.", interviewId.FormatGuid()));
-                return;
             }
-
-            string dataToBeSent = this.GetInterviewDataToBeSentAsString(interviewId, eventsToSend);
-
-            this.SendInterviewData(interviewId, dataToBeSent);
 
             this.MarkInterviewAsSentToHeadquarters(interviewId, userId);
         }
