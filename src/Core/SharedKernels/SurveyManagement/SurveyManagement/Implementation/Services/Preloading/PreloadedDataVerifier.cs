@@ -47,12 +47,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             questionnaire.Questionnaire.ConnectChildrenWithParent();
 
+            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
+                questionnaireRosterStructure, questionnaire.Questionnaire);
+            
+            data = preloadedDataService.PreparePreloadedData(data);
+
             var errorsMessagess =
                 from verifier in this.AtomicVerifiers
                 let errors =
-                    verifier.Invoke(data,
-                        this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
-                            questionnaireRosterStructure, questionnaire.Questionnaire))
+                    verifier.Invoke(data, preloadedDataService)
                 from error in errors
                 select error;
 

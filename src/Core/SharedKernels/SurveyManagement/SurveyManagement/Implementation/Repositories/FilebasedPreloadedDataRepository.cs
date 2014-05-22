@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
@@ -61,23 +62,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
                 return null;
 
-            var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath).Where(archiveUtils.IsZipFile).ToArray();
-            if (filesInDirectory.Length == 0)
-                return null;
+            var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
 
-            try
+            var zipFilesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
+            if (zipFilesInDirectory.Length > 0)
             {
-                return new PreloadedContentMetaData(id,
-                    fileSystemAccessor.GetFileName(filesInDirectory[0]),
-                    archiveUtils.GetArchivedFileNamesAndSize(filesInDirectory[0])
-                        .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(CsvExtension)))
-                        .ToArray());
+                try
+                {
+                    return new PreloadedContentMetaData(id,
+                        fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
+                        archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
+                            .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(CsvExtension)))
+                            .ToArray());
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.Message, e);
+                    return null;
+                }
             }
-            catch (Exception e)
-            {
-                Logger.Error(e.Message, e);
+
+            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
+            if (csvFilesInDirectory.Length == 0)
                 return null;
-            }
+            var csvFile = csvFilesInDirectory[0];
+            var csvFileName = fileSystemAccessor.GetFileName(csvFile);
+            return new PreloadedContentMetaData(id, csvFileName,
+                new [] { new PreloadedFileMetaData(csvFileName, fileSystemAccessor.GetFileSize(csvFile), true) });
         }
 
         public PreloadedDataByFile[] GetPreloadedData(string id)
@@ -86,7 +97,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
                 return new PreloadedDataByFile[0];
 
-            var archivesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath).Where(archiveUtils.IsZipFile).ToArray();
+            var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
+            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
+            if (csvFilesInDirectory.Length != 0)
+            {
+                return new[] { GetPreloadedDataFromFile(id, csvFilesInDirectory[0]) };
+            }
+
+            var archivesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
             if (archivesInDirectory.Length == 0)
                 return new PreloadedDataByFile[0];
 
@@ -105,8 +123,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                     return new PreloadedDataByFile[0];
                 }
             }
-            var unzippedFiles = fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath).Where(filename => filename.EndsWith(CsvExtension)).ToArray();
-            
+            var unzippedFiles =
+                fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath).Where(filename => filename.EndsWith(CsvExtension)).ToArray();
+
             if (unzippedFiles.Length == 0)
             {
                 var unzippedDirectories = fileSystemAccessor.GetDirectoriesInDirectory(unzippedDirectoryPath);
@@ -117,10 +136,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             }
 
             return unzippedFiles
-                    .Where(filename => filename.EndsWith(CsvExtension))
-                    .Select(file => GetPreloadedDataFromFile(id, file))
-                    .Where(data => data != null)
-                    .ToArray();
+                .Where(filename => filename.EndsWith(CsvExtension))
+                .Select(file => GetPreloadedDataFromFile(id, file))
+                .Where(data => data != null)
+                .ToArray();
         }
 
         private PreloadedDataByFile GetPreloadedDataFromFile(string id, string fileInDirectory)
