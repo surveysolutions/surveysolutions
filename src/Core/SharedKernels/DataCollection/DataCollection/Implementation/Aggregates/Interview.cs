@@ -3451,8 +3451,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool ShouldGroupBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity groupId, IQuestionnaire questionnaire)
         {
-            return !this.ShouldGroupBeDisabledByCustomCondition(state, groupId, questionnaire);
-        }
+            return !ShouldGroupBeEnabledByCustomEnablementCondition(state, groupId, questionnaire, (s, questionId) =>
+            {
+                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId.Id, questionId.RosterVector);
+                return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
+                    ? state.AnswersSupportedInExpressions[questionKey]
+                    : null;
+            });
+        } 
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
