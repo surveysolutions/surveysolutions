@@ -152,7 +152,7 @@ namespace WB.UI.Shared.Android.Frames
                     {
                         (s) => s.Text,
                         (s) => s.AnswerString,
-                        (s) => s.ValidationMessage
+                        (s) => s.IsMandatoryAndEmpty ? s.MandatoryValidationMessage : s.ValidationMessage
                     });
 
             popupBuilder.SetView(invalidQuestionsView);
