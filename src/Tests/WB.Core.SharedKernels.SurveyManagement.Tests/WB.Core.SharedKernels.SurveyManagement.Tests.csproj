@@ -166,6 +166,7 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewDeleted_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewStatusChanged_event_and_no_status_history.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewStatusChanged_event_and_status_history_has_1_item.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewStatusChanged_event_and_status_history_has_2_item_with_not_same_last_status.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCreated_event.cs" />
