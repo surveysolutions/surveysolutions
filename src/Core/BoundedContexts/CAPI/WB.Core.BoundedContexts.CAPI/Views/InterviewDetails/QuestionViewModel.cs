@@ -1,21 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
-using Newtonsoft.Json.Linq;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using System.Linq;
-using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
+        private const string mandatoryValidationMessage = "This question cannot be empty";
+
         protected QuestionViewModel(
             InterviewItemId publicKey,
             ValueVector<Guid> questionRosterScope,
@@ -35,7 +32,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.QuestionRosterScope = questionRosterScope;
             this.ValidationMessage = validationMessage;
             this.SubstitutionReferences = substitutionReferences;
-            this.referencedQuestionAnswers = this.SubstitutionReferences.ToDictionary(x => x, y => SubstitutionService.DefaultSubstitutionText);
+            this.referencedQuestionAnswers = this.SubstitutionReferences.ToDictionary(x => x,
+                y => this.SubstitutionService.DefaultSubstitutionText);
             this.SourceText = this.Text = text;
 
             this.ReplaceSubstitutionVariables();
@@ -80,6 +78,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public object AnswerObject { get; private set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
+
+
+        public bool IsMandatoryAndEmpty
+        {
+            get { return this.Mandatory && String.IsNullOrEmpty(this.AnswerString); }
+        }
+
+        public string MandatoryValidationMessage
+        {
+            get { return mandatoryValidationMessage; }
+        }
+        
         public string ValidationMessage { get; private set; }
 
         public abstract IQuestionnaireItemViewModel Clone(decimal[] propagationVector);
@@ -92,36 +102,37 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
 
             this.AnswerObject = answer;
-            
+
             if (!this.Status.HasFlag(QuestionStatus.Answered))
             {
                 this.Status = this.Status | QuestionStatus.Answered;
-                RaisePropertyChanged("Status");
+                this.RaisePropertyChanged("Status");
             }
 
-            RaisePropertyChanged("AnswerString");
+            this.RaisePropertyChanged("AnswerString");
+            this.RaisePropertyChanged("IsMandatoryAndEmpty");
         }
 
         public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
         {
             this.referencedQuestionAnswers[referencedQuestion.Variable] = string.IsNullOrEmpty(referencedQuestion.AnswerString)
-                ? SubstitutionService.DefaultSubstitutionText
+                ? this.SubstitutionService.DefaultSubstitutionText
                 : referencedQuestion.AnswerString;
 
             this.ReplaceSubstitutionVariables();
 
-            RaisePropertyChanged(() => this.Text);
+            this.RaisePropertyChanged(() => this.Text);
         }
 
         public virtual void SubstituteRosterTitle(string rosterTitle)
         {
-            this.referencedQuestionAnswers[SubstitutionService.RosterTitleSubstitutionReference] = string.IsNullOrEmpty(rosterTitle)
-             ? SubstitutionService.DefaultSubstitutionText
-             : rosterTitle;
+            this.referencedQuestionAnswers[this.SubstitutionService.RosterTitleSubstitutionReference] = string.IsNullOrEmpty(rosterTitle)
+                ? this.SubstitutionService.DefaultSubstitutionText
+                : rosterTitle;
 
             this.ReplaceSubstitutionVariables();
 
-            RaisePropertyChanged(() => this.Text);
+            this.RaisePropertyChanged(() => this.Text);
         }
 
         private void ReplaceSubstitutionVariables()
@@ -129,7 +140,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Text = this.SourceText;
             foreach (var substitutionReference in this.SubstitutionReferences)
             {
-                this.Text = SubstitutionService.ReplaceSubstitutionVariable(this.Text,substitutionReference,
+                this.Text = this.SubstitutionService.ReplaceSubstitutionVariable(this.Text, substitutionReference,
                     this.referencedQuestionAnswers[substitutionReference]);
             }
         }
@@ -145,12 +156,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
 
             this.RaisePropertyChanged("AnswerString");
+            this.RaisePropertyChanged("IsMandatoryAndEmpty");
         }
 
         public virtual void SetComment(string comment)
         {
             this.Comments = comment;
-            RaisePropertyChanged("Comments");
+            this.RaisePropertyChanged("Comments");
         }
 
         public virtual void SetEnabled(bool enabled)
@@ -161,7 +173,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Status = this.Status | QuestionStatus.Enabled;
             else
                 this.Status &= ~QuestionStatus.Enabled;
-            RaisePropertyChanged("Status");
+            this.RaisePropertyChanged("Status");
         }
 
         public virtual void SetValid(bool valid)
@@ -172,7 +184,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Status = this.Status | QuestionStatus.Valid;
             else
                 this.Status &= ~QuestionStatus.Valid;
-            RaisePropertyChanged("Status");
+            this.RaisePropertyChanged("Status");
         }
 
         public bool IsEnabled()
@@ -188,7 +200,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Status = this.Status | QuestionStatus.ParentEnabled;
             else
                 this.Status &= ~QuestionStatus.ParentEnabled;
-            RaisePropertyChanged("Status");
+            this.RaisePropertyChanged("Status");
         }
 
         protected ISubstitutionService SubstitutionService
@@ -206,4 +218,4 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         Answered = 4,
         ParentEnabled = 8
     }
-}
+ }

@@ -81,6 +81,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Id.tvError = global::WB.UI.QuestionnaireTester.Resource.Id.tvError;
 			global::WB.UI.Shared.Android.Resource.Id.tvErrorWarning = global::WB.UI.QuestionnaireTester.Resource.Id.tvErrorWarning;
 			global::WB.UI.Shared.Android.Resource.Id.tvITem = global::WB.UI.QuestionnaireTester.Resource.Id.tvITem;
+			global::WB.UI.Shared.Android.Resource.Id.tvMError = global::WB.UI.QuestionnaireTester.Resource.Id.tvMError;
 			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::WB.UI.QuestionnaireTester.Resource.Id.tvTitle;
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.QuestionnaireTester.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.QuestionnaireTester.Resource.Layout.AbstractQuestionView;
@@ -208,8 +209,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040000
 			public const int MvxBindingTagUnique = 2130968576;
 			
-			// aapt resource value: 0x7f04001c
-			public const int MyLayout = 2130968604;
+			// aapt resource value: 0x7f04001d
+			public const int MyLayout = 2130968605;
 			
 			// aapt resource value: 0x7f040003
 			public const int PrpagationKey = 2130968579;
@@ -220,137 +221,140 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f04002c
-			public const int btnAnswered = 2130968620;
+			// aapt resource value: 0x7f04002d
+			public const int btnAnswered = 2130968621;
 			
-			// aapt resource value: 0x7f040030
-			public const int btnComplete = 2130968624;
+			// aapt resource value: 0x7f040031
+			public const int btnComplete = 2130968625;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f04002f
-			public const int btnInvalid = 2130968623;
-			
-			// aapt resource value: 0x7f040025
-			public const int btnLogin = 2130968613;
-			
-			// aapt resource value: 0x7f040010
-			public const int btnLogout = 2130968592;
-			
-			// aapt resource value: 0x7f040019
-			public const int btnNavigation = 2130968601;
-			
-			// aapt resource value: 0x7f040013
-			public const int btnNext = 2130968595;
-			
-			// aapt resource value: 0x7f040028
-			public const int btnSave = 2130968616;
-			
-			// aapt resource value: 0x7f04001b
-			public const int btnStart = 2130968603;
-			
-			// aapt resource value: 0x7f04002d
-			public const int btnUnanswered = 2130968621;
-			
-			// aapt resource value: 0x7f040033
-			public const int contentFrame = 2130968627;
-			
-			// aapt resource value: 0x7f04000e
-			public const int etComments = 2130968590;
-			
-			// aapt resource value: 0x7f040012
-			public const int flFragmentHolder = 2130968594;
-			
-			// aapt resource value: 0x7f040021
-			public const int footer = 2130968609;
-			
-			// aapt resource value: 0x7f040020
-			public const int header = 2130968608;
-			
-			// aapt resource value: 0x7f040016
-			public const int lNavigationContainer = 2130968598;
-			
-			// aapt resource value: 0x7f04002b
-			public const int llButtom = 2130968619;
-			
-			// aapt resource value: 0x7f040014
-			public const int llContainer = 2130968596;
-			
-			// aapt resource value: 0x7f04002a
-			public const int llContent = 2130968618;
+			// aapt resource value: 0x7f040030
+			public const int btnInvalid = 2130968624;
 			
 			// aapt resource value: 0x7f040026
-			public const int llDesignerPath = 2130968614;
+			public const int btnLogin = 2130968614;
 			
-			// aapt resource value: 0x7f040017
-			public const int llNavigationButton = 2130968599;
+			// aapt resource value: 0x7f040011
+			public const int btnLogout = 2130968593;
 			
 			// aapt resource value: 0x7f04001a
-			public const int llNavigationHolder = 2130968602;
+			public const int btnNavigation = 2130968602;
 			
-			// aapt resource value: 0x7f040031
-			public const int llQuestionnairie = 2130968625;
+			// aapt resource value: 0x7f040014
+			public const int btnNext = 2130968596;
+			
+			// aapt resource value: 0x7f040029
+			public const int btnSave = 2130968617;
+			
+			// aapt resource value: 0x7f04001c
+			public const int btnStart = 2130968604;
+			
+			// aapt resource value: 0x7f04002e
+			public const int btnUnanswered = 2130968622;
+			
+			// aapt resource value: 0x7f040034
+			public const int contentFrame = 2130968628;
+			
+			// aapt resource value: 0x7f04000f
+			public const int etComments = 2130968591;
+			
+			// aapt resource value: 0x7f040013
+			public const int flFragmentHolder = 2130968595;
+			
+			// aapt resource value: 0x7f040022
+			public const int footer = 2130968610;
+			
+			// aapt resource value: 0x7f040021
+			public const int header = 2130968609;
+			
+			// aapt resource value: 0x7f040017
+			public const int lNavigationContainer = 2130968599;
+			
+			// aapt resource value: 0x7f04002c
+			public const int llButtom = 2130968620;
+			
+			// aapt resource value: 0x7f040015
+			public const int llContainer = 2130968597;
+			
+			// aapt resource value: 0x7f04002b
+			public const int llContent = 2130968619;
+			
+			// aapt resource value: 0x7f040027
+			public const int llDesignerPath = 2130968615;
+			
+			// aapt resource value: 0x7f040018
+			public const int llNavigationButton = 2130968600;
+			
+			// aapt resource value: 0x7f04001b
+			public const int llNavigationHolder = 2130968603;
+			
+			// aapt resource value: 0x7f040032
+			public const int llQuestionnairie = 2130968626;
 			
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
 			
-			// aapt resource value: 0x7f040018
-			public const int llSpaceFiller = 2130968600;
+			// aapt resource value: 0x7f040019
+			public const int llSpaceFiller = 2130968601;
 			
-			// aapt resource value: 0x7f040029
-			public const int llTop = 2130968617;
+			// aapt resource value: 0x7f04002a
+			public const int llTop = 2130968618;
 			
 			// aapt resource value: 0x7f040009
 			public const int llWrapper = 2130968585;
 			
-			// aapt resource value: 0x7f040022
-			public const int loginForm = 2130968610;
-			
-			// aapt resource value: 0x7f040011
-			public const int svQuery = 2130968593;
-			
 			// aapt resource value: 0x7f040023
-			public const int teLogin = 2130968611;
+			public const int loginForm = 2130968611;
+			
+			// aapt resource value: 0x7f040012
+			public const int svQuery = 2130968594;
 			
 			// aapt resource value: 0x7f040024
-			public const int tePassword = 2130968612;
+			public const int teLogin = 2130968612;
 			
-			// aapt resource value: 0x7f040027
-			public const int tePathToDesigner = 2130968615;
+			// aapt resource value: 0x7f040025
+			public const int tePassword = 2130968613;
 			
-			// aapt resource value: 0x7f04001f
-			public const int topView = 2130968607;
+			// aapt resource value: 0x7f040028
+			public const int tePathToDesigner = 2130968616;
 			
-			// aapt resource value: 0x7f040032
-			public const int tvArrow = 2130968626;
+			// aapt resource value: 0x7f040020
+			public const int topView = 2130968608;
 			
-			// aapt resource value: 0x7f04000c
-			public const int tvComments = 2130968588;
+			// aapt resource value: 0x7f040033
+			public const int tvArrow = 2130968627;
 			
 			// aapt resource value: 0x7f04000d
-			public const int tvCommentsTitle = 2130968589;
+			public const int tvComments = 2130968589;
 			
-			// aapt resource value: 0x7f04001e
-			public const int tvCount = 2130968606;
+			// aapt resource value: 0x7f04000e
+			public const int tvCommentsTitle = 2130968590;
 			
-			// aapt resource value: 0x7f04000a
-			public const int tvError = 2130968586;
-			
-			// aapt resource value: 0x7f04002e
-			public const int tvErrorWarning = 2130968622;
-			
-			// aapt resource value: 0x7f04001d
-			public const int tvITem = 2130968605;
+			// aapt resource value: 0x7f04001f
+			public const int tvCount = 2130968607;
 			
 			// aapt resource value: 0x7f04000b
-			public const int tvTitle = 2130968587;
+			public const int tvError = 2130968587;
 			
-			// aapt resource value: 0x7f04000f
-			public const int tvTitlte = 2130968591;
+			// aapt resource value: 0x7f04002f
+			public const int tvErrorWarning = 2130968623;
 			
-			// aapt resource value: 0x7f040015
-			public const int vpContent = 2130968597;
+			// aapt resource value: 0x7f04001e
+			public const int tvITem = 2130968606;
+			
+			// aapt resource value: 0x7f04000a
+			public const int tvMError = 2130968586;
+			
+			// aapt resource value: 0x7f04000c
+			public const int tvTitle = 2130968588;
+			
+			// aapt resource value: 0x7f040010
+			public const int tvTitlte = 2130968592;
+			
+			// aapt resource value: 0x7f040016
+			public const int vpContent = 2130968598;
 			
 			static Id()
 			{
