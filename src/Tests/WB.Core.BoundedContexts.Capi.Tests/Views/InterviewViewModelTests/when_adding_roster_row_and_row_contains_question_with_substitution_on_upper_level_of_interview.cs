@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             questionWithSubstitutionInTitleId = Guid.Parse("11111111111111111111111111111111");
             rosterId = Guid.Parse("10000000000000000000000000000000");
 
-            var substitutionSourceQuestionId = Guid.Parse("33333333333333333333333333333333");
+            substitutionSourceQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
@@ -64,6 +64,21 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                 question => question.PublicKey == new InterviewItemId(questionWithSubstitutionInTitleId, new decimal[] { 0 }))
                 .FirstOrDefault().Text.ShouldEqual("I'am substitute 1");
 
+        It should_unansweredQuestions_in_statistic_contain_questionWithSubstitutionInTitleId = () =>
+         interviewViewModel.Statistics.UnansweredQuestions.Any(q => q.PublicKey == new InterviewItemId(questionWithSubstitutionInTitleId, new decimal[]{0})).ShouldBeTrue();
+
+        It should_count_of_unansweredQuestions_in_statistic_be_equal_to_1 = () =>
+           interviewViewModel.Statistics.UnansweredQuestions.Count.ShouldEqual(1);
+
+        It should_answeredQuestions_in_statistic_contain_substitutionSourceQuestionId = () =>
+          interviewViewModel.Statistics.AnsweredQuestions.Any(q => q.PublicKey == new InterviewItemId(substitutionSourceQuestionId, new decimal[0])).ShouldBeTrue();
+
+        It should_count_of_answeredQuestions_in_statistic_be_equal_to_1 = () =>
+           interviewViewModel.Statistics.AnsweredQuestions.Count.ShouldEqual(1);
+
+        It should_invalidQuestions_in_statistic_be_empty = () =>
+          interviewViewModel.Statistics.InvalidQuestions.ShouldBeEmpty();
+
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
@@ -71,5 +86,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 
         private static Guid rosterId;
         private static Guid questionWithSubstitutionInTitleId;
+        private static Guid substitutionSourceQuestionId;
     }
 }
