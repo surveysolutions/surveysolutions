@@ -129,6 +129,7 @@
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_no_interviews_are_ready.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_one_interview_is_ready_and_has_different_events.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interview_and_interview_has_one_event_with_empty_origin.cs" />
+    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_one_interview_with_all_events_having_hq_synchronization_origin.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_one_interview_with_one_event_and_headquarters_returns_negative_response.cs" />
     <Compile Include="Synchronization\MockHelpers.cs" />
     <Compile Include="Synchronization\SynchronizerTests\SynchronizerTestsContext.cs" />
