@@ -46,27 +46,27 @@ namespace WB.UI.Supervisor.Controllers
                 });
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult Revalidate()
         {
             return this.View(new RevalidateModel());
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult Revalidate(RevalidateModel input)
         {
             return this.RedirectToAction("ConfirmInterviewRevalidation", new {id = input.InterviewId });
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult ConfirmRevalidation(Guid id)
         {
             var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = id });
             return this.View(model);
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult ConfirmInterviewRevalidation(Guid interviewId)
         {
