@@ -139,7 +139,7 @@ namespace CapiDataGenerator
             {
                 Guid hqId = Guid.Parse("DF120CFD-B624-4E3F-BED8-7BE9033CCBC6");
                 string userName = "hq";
-                commandService.Execute(new CreateUserCommand(hqId, userName, "Headquarter1", "hq@example.com", new UserRoles[]{UserRoles.Headquarter}, false, false, null));
+                commandService.Execute(new CreateUserCommand(hqId, userName, SimpleHash.ComputeHash("Headquarter1"), "hq@example.com", new UserRoles[] { UserRoles.Headquarter }, false, false, null));
 
                 this._headquarterUser = new UserLight(hqId, userName);
                 this.HeadquarterName = this._headquarterUser.Name;
@@ -159,7 +159,7 @@ namespace CapiDataGenerator
                 Guid superId = Guid.Parse("1A94734B-DEAD-462D-98F1-C8F44136C4E4");
                 string userName = "supervisor";
                 string userEmail = "s@example.com";
-                commandService.Execute(new CreateUserCommand(superId, userName, "Supervisor1", userEmail, new UserRoles[] { UserRoles.Supervisor}, false, false, null));
+                commandService.Execute(new CreateUserCommand(superId, userName, SimpleHash.ComputeHash("Supervisor1"), userEmail, new UserRoles[] { UserRoles.Supervisor}, false, false, null));
 
 
                 //var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now, false, false, null);
