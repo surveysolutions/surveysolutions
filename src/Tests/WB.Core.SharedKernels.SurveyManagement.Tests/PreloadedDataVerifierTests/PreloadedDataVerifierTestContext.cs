@@ -49,7 +49,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ =>
                             _.CreatePreloadedDataService(Moq.It.IsAny<QuestionnaireExportStructure>(), Moq.It.IsAny<QuestionnaireRosterStructure>(), Moq.It.IsAny<QuestionnaireDocument>()) ==
-                                (preloadedDataService ?? Mock.Of<IPreloadedDataService>())));
+                                CreateDefaultPreloadedDataService(preloadedDataService)));
+        }
+
+        private static IPreloadedDataService CreateDefaultPreloadedDataService(IPreloadedDataService preloadedDataService)
+        {
+            var preloadedDataServiceMock = preloadedDataService == null ? new Mock<IPreloadedDataService>() : Mock.Get(preloadedDataService);
+            preloadedDataServiceMock.Setup(x => x.PreparePreloadedData(Moq.It.IsAny<PreloadedDataByFile[]>()))
+                .Returns<PreloadedDataByFile[]>(files => files);
+            return preloadedDataServiceMock.Object;
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)

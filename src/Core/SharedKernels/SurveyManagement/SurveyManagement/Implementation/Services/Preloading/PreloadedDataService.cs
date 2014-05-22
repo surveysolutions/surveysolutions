@@ -139,6 +139,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public PreloadedDataDto[] CreatePreloadedDataDto(PreloadedDataByFile[] allLevels)
         {
+            allLevels = this.PreparePreloadedData(allLevels);
+
             var topLevelData = GetDataFileByLevelName(allLevels, questionnaireDocument.Title);
 
             if (topLevelData == null)
@@ -160,6 +162,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 result.Add(new PreloadedDataDto(rowId, levels.ToArray()));
             }
             return result.ToArray();
+        }
+
+        public PreloadedDataByFile[] PreparePreloadedData(PreloadedDataByFile[] allLevels)
+        {
+            if (allLevels.Length == 1)
+            {
+                return new[] { new PreloadedDataByFile(allLevels[0].Id, questionnaireDocument.Title, allLevels[0].Header, allLevels[0].Content) };
+            }
+
+            return allLevels;
         }
 
         public Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
@@ -268,7 +280,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 children =
                     questionnaireRosterStructure.RosterScopes.Values.Where(
-                        scope => scope.ScopeVector.Length == 0);
+                        scope => scope.ScopeVector.Length == 1);
             }
             else
                 children =
