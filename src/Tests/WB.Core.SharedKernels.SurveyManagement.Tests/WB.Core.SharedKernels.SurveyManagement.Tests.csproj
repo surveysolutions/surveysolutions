@@ -202,6 +202,8 @@
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_and_unzipped_with_2_files_GetPreloadedData_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_and_zipped_GetPreloadedData_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformation_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_single_csv_is_present_and_GetPreloadedDataMetaInformation_is_called.cs" />
+    <Compile Include="FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_single_csv_is_present_and_GetPreloadedData_is_called.cs" />
     <Compile Include="FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
     <Compile Include="InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
     <Compile Include="InterviewQuestionViewTests\when_creating_view_for_supervisor_question_which_not_answered_and_parent_group_is_enabled.cs" />
