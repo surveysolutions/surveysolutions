@@ -64,31 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
 
             var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
 
-            var zipFilesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
-            if (zipFilesInDirectory.Length > 0)
-            {
-                try
-                {
-                    return new PreloadedContentMetaData(id,
-                        fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
-                        archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
-                            .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(CsvExtension)))
-                            .ToArray());
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e.Message, e);
-                    return null;
-                }
-            }
-
-            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
-            if (csvFilesInDirectory.Length == 0)
-                return null;
-            var csvFile = csvFilesInDirectory[0];
-            var csvFileName = fileSystemAccessor.GetFileName(csvFile);
-            return new PreloadedContentMetaData(id, csvFileName,
-                new [] { new PreloadedFileMetaData(csvFileName, fileSystemAccessor.GetFileSize(csvFile), true) });
+            return  TryToGetMetaDataFromZipArchive(filesInDirectory, id) ?? TryToGetMetaDataFromCsvFile(filesInDirectory, id);
         }
 
         public PreloadedDataByFile[] GetPreloadedData(string id)
@@ -98,12 +74,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 return new PreloadedDataByFile[0];
 
             var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
+
+            return TryToGetPreloadedDataFromCsvFile(filesInDirectory, id) ??
+                this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath);
+        }
+
+        private PreloadedDataByFile[] TryToGetPreloadedDataFromCsvFile(IEnumerable<string> filesInDirectory, string id)
+        {
             var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
             if (csvFilesInDirectory.Length != 0)
             {
                 return new[] { GetPreloadedDataFromFile(id, csvFilesInDirectory[0]) };
             }
+            return null;
+        }
 
+        private PreloadedDataByFile[] TryToGetPreloadedDataFromZipArchive(IEnumerable<string> filesInDirectory, string id, string currentFolderPath)
+        {
             var archivesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
             if (archivesInDirectory.Length == 0)
                 return new PreloadedDataByFile[0];
@@ -120,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 catch (Exception e)
                 {
                     Logger.Error(e.Message, e);
-                    return new PreloadedDataByFile[0];
+                    return null;
                 }
             }
             var unzippedFiles =
@@ -140,6 +127,40 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 .Select(file => GetPreloadedDataFromFile(id, file))
                 .Where(data => data != null)
                 .ToArray();
+        }
+
+        private PreloadedContentMetaData TryToGetMetaDataFromCsvFile(IEnumerable<string> filesInDirectory, string id)
+        {
+            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
+            if (csvFilesInDirectory.Length == 0)
+                return null;
+
+            var csvFile = csvFilesInDirectory[0];
+            var csvFileName = fileSystemAccessor.GetFileName(csvFile);
+            return new PreloadedContentMetaData(id, csvFileName,
+                new[] { new PreloadedFileMetaData(csvFileName, fileSystemAccessor.GetFileSize(csvFile), true) });
+        }
+
+        private PreloadedContentMetaData TryToGetMetaDataFromZipArchive(IEnumerable<string> filesInDirectory, string id)
+        {
+            var zipFilesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
+            if (zipFilesInDirectory.Length > 0)
+            {
+                try
+                {
+                    return new PreloadedContentMetaData(id,
+                        fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
+                        archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
+                            .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(CsvExtension)))
+                            .ToArray());
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.Message, e);
+                    return null;
+                }
+            }
+            return null;
         }
 
         private PreloadedDataByFile GetPreloadedDataFromFile(string id, string fileInDirectory)
