@@ -3451,13 +3451,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool ShouldGroupBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity groupId, IQuestionnaire questionnaire)
         {
-            return !ShouldGroupBeEnabledByCustomEnablementCondition(state, groupId, questionnaire, (s, questionId) =>
-            {
-                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId.Id, questionId.RosterVector);
-                return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
-                    ? state.AnswersSupportedInExpressions[questionKey]
-                    : null;
-            });
+            return !ShouldGroupBeEnabledByCustomEnablementCondition(state, groupId, questionnaire,
+                (currentState, questionInCondition) =>
+                    GetEnabledQuestionAnswerSupportedInExpressions(state,
+                        questionInCondition,
+                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire),
+                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire),
+                        questionnaire));
         } 
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
