@@ -10,6 +10,7 @@
    <parameter name="Events database name"
       description="The database where the events will be stored"
       defaultValue="Events">
+   <parameterValidation kind="AllowEmpty" />
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.Databases.Events']/@value" />
