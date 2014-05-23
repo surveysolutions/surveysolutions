@@ -207,9 +207,9 @@
                             if (!data.StartedAt) {
                                 return;
                             }
-                            var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAt).fromNow());
+                            var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAtUtc).fromNow());
                             if (data.FinishedAt) {
-                                title += '<br /> last successful sync {0} <br/> applied changes with {1} errors'.f(moment(data.FinisedAt).fromNow(), data.ErrorsCount);
+                                title += '<br /> last successful sync {0} <br/> applied changes with {1} errors'.f(moment(data.FinisedAtUtc).fromNow(), data.ErrorsCount);
                             }
                             if (!data.IsHqReachable) {
                                 title += '<br /> During last sync HQ was unreachable';
