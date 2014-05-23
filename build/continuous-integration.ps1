@@ -31,9 +31,8 @@ try {
 	}
 
 	$PackageName = 'WBCapi.apk'
-	$VersionName = (GetVersionString $ProjectSupervisor) + "." + $BuildNumber # Capi is always the same as Supervisor
 	. "$scriptFolder\build-android-package.ps1" `
-		-VersionName $VersionName `
+		-VersionName (GetVersionString $ProjectSupervisor) `
 		-VersionCode $BuildNumber `
 		-BuildConfiguration $BuildConfiguration `
 		-KeystorePassword $KeystorePassword `
