@@ -28,10 +28,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEv
             return new InterviewEventHandlerFunctional(
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object,
                 questionnaireRosterStructureMockStorage.Object,
-                new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object,new Mock<ISynchronizationDataStorage>().Object);
+                new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object, 
+                new Mock<ISynchronizationDataStorage>().Object);
         }
 
-        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(UserDocument user = null)
+        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(ISynchronizationDataStorage synchronizationDataStorage = null, UserDocument user = null)
         {
             var userDocumentMockStorage = new Mock<IReadSideRepositoryWriter<UserDocument>>();
             userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEv
                 userDocumentMockStorage.Object,
                 new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>().Object,
                 new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object, 
-                new Mock<ISynchronizationDataStorage>().Object);
+                synchronizationDataStorage ?? Mock.Of<ISynchronizationDataStorage>());
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
