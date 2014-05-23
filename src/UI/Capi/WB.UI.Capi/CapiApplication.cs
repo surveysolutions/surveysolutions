@@ -104,13 +104,10 @@ namespace WB.UI.Capi
 
         }
 
-        private void InitInterviewStorage(InProcessEventBus bus)
+        private void RegisterInterviewHandlerInBus(InProcessEventBus bus, InterviewViewModelDenormalizer eventHandler, 
+            AnswerOptionsForLinkedQuestionsDenormalizer answerOptionsForLinkedQuestionsDenormalizer)
         {
-            var eventHandler =
-                new InterviewViewModelDenormalizer(
-                    this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
-
+            
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericIntegerQuestionAnswered));
@@ -147,11 +144,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(RosterRowTitleChanged));
-
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
-
-
-            var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswersRemoved));
@@ -244,11 +237,25 @@ namespace WB.UI.Capi
             
             #region register handlers
 
+
+            var interviewViewBus = new InProcessEventBus();
+            this.kernel.Bind<IEventBus>().ToConstant(interviewViewBus).Named("interviewViewBus");
+
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            
+
+            var eventHandler =
+                new InterviewViewModelDenormalizer(
+                    this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(),
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
+                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>());
+
+            var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
+
+            this.RegisterInterviewHandlerInBus(bus, eventHandler, answerOptionsForLinkedQuestionsDenormalizer);
+            this.RegisterInterviewHandlerInBus(interviewViewBus, eventHandler, answerOptionsForLinkedQuestionsDenormalizer);
 
             this.InitTemplateStorage(bus);
-
-            this.InitInterviewStorage(bus);
 
             this.InitUserStorage(bus);
 

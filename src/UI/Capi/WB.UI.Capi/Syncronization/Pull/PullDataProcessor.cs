@@ -131,22 +131,28 @@ namespace WB.UI.Capi.Syncronization.Pull
         private void ExecuteInterview(SyncItem item)
         {
             string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
-
             var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
-
-            ////todo: 
-            //save item to sync cache for handling on demand
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
-            syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
-            this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
-                (InterviewStatus) metaInfo.Status,
-                metaInfo.FeaturedQuestionsMeta.Select(
-                    q =>
-                        new AnsweredQuestionSynchronizationDto(
-                            q.PublicKey, new decimal[0], q.Value,
-                            string.Empty))
-                    .ToArray(), string.Empty, true));
+            try
+            {
+                syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
+
+                this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
+                    (InterviewStatus)metaInfo.Status,
+                    metaInfo.FeaturedQuestionsMeta.Select(
+                        q =>
+                            new AnsweredQuestionSynchronizationDto(
+                                q.PublicKey, new decimal[0], q.Value,
+                                string.Empty))
+                        .ToArray(), string.Empty, true));
+
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
 
         private void ExecuteTemplate(SyncItem item)
