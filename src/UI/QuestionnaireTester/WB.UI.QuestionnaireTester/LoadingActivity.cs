@@ -59,7 +59,7 @@ namespace WB.UI.QuestionnaireTester
             var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                 new QuestionnaireScreenInput(interviewId));
 
-            if (questionnaire == null) 
+            if (questionnaire == null || ct.IsCancellationRequested) 
                 return;
 
             var intent = new Intent(this, typeof(CreateInterviewActivity));

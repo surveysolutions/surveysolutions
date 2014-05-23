@@ -16,11 +16,13 @@ namespace WB.Core.GenericSubdomains.Rest.Android
         private readonly string baseAddress;
         private readonly IJsonUtils jsonUtils;
         private readonly ILogger logger;
+        private readonly bool acceptUnsignedCertificate;
 
-        public AndroidRestServiceWrapper(string baseAddress, IJsonUtils jsonUtils)
+        public AndroidRestServiceWrapper(string baseAddress, IJsonUtils jsonUtils, bool acceptUnsignedCertificate)
         {
             this.baseAddress = baseAddress;
             this.jsonUtils = jsonUtils;
+            this.acceptUnsignedCertificate = acceptUnsignedCertificate;
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
@@ -83,7 +85,10 @@ namespace WB.Core.GenericSubdomains.Rest.Android
         {
             var restClient = new RestClient(this.baseAddress);
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            if (acceptUnsignedCertificate)
+            {
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            }
 
             if (!string.IsNullOrEmpty(login) || !string.IsNullOrEmpty(password))
                 restClient.Authenticator = new HttpBasicAuthenticator(login, password);
