@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
 
         private Because of =
             () =>
-                result = preloadedDataVerifier.Verify(questionnaireId, 1, new[] { preloadedDataByFile });
+                result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
         private It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);

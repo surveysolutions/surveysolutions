@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
         Because of =
             () =>
                 result =
-                    preloadedDataService.CreatePreloadedDataDto(new[]
+                    preloadedDataService.CreatePreloadedDataDtosFromPanelData(new[]
                     {
                         CreatePreloadedDataByFile(new[] { "Id", "nq1" }, new[] { new[] { "1", "2" } }, questionnaireDocument.Title),
                         CreatePreloadedDataByFile(new[] { "Id", "nq2", "ParentId" }, new[] { new[] { "1", "2", "1" } }, "Roster Group")

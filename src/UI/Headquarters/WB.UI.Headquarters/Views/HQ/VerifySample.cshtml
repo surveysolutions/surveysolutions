@@ -1,5 +1,6 @@
 ﻿@using Lucene.Net.Index
 @using Mono.CSharp
+@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
@@ -60,7 +61,7 @@
     else
     {
         <h3>Data is valid</h3>
-        using (Html.BeginForm("ImportPreloadedData", "HQ", new { id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+        using (Html.BeginForm(Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData", "HQ", new { id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
         {
             <fieldset class="form-horizontal">
                 <div class="control-group">

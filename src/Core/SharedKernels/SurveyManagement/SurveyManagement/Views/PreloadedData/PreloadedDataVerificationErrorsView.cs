@@ -9,8 +9,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 {
     public class PreloadedDataVerificationErrorsView
     {
-        public PreloadedDataVerificationErrorsView(Guid questionnaireId, long version, PreloadedDataVerificationError[] errors, string id)
+        public PreloadedDataVerificationErrorsView(Guid questionnaireId, long version, PreloadedDataVerificationError[] errors, string id, PreloadedContentType preloadedContentType)
         {
+            this.PreloadedContentType = preloadedContentType;
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
@@ -24,5 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
         public long Version { get; private set; }
 
         public PreloadedDataVerificationError[] Errors { get; private set; }
+
+        public PreloadedContentType PreloadedContentType { get; private set; }
     }
 }

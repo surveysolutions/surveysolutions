@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             preloadedDataVerifier = CreatePreloadedDataVerifier();
         };
 
-        Because of = () => result = preloadedDataVerifier.Verify(Guid.NewGuid(),1, new PreloadedDataByFile[0]);
+        Because of = () => result = preloadedDataVerifier.VerifyPanel(Guid.NewGuid(), 1, new PreloadedDataByFile[0]);
 
         It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);

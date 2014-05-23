@@ -56,37 +56,70 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             return currentFolderId;
         }
 
-        public PreloadedContentMetaData GetPreloadedDataMetaInformation(string id)
+        public PreloadedContentMetaData GetPreloadedDataMetaInformationForSampleData(string id)
         {
-            var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
-            if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
+            var filesInDirectory = GetFiles(id);
+            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
+            if (csvFilesInDirectory.Length == 0)
                 return null;
 
-            var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
-
-            return  TryToGetMetaDataFromZipArchive(filesInDirectory, id) ?? TryToGetMetaDataFromCsvFile(filesInDirectory, id);
+            var csvFile = csvFilesInDirectory[0];
+            var csvFileName = fileSystemAccessor.GetFileName(csvFile);
+            return new PreloadedContentMetaData(id, csvFileName,
+                new[] { new PreloadedFileMetaData(csvFileName, fileSystemAccessor.GetFileSize(csvFile), true) }, PreloadedContentType.Sample);
         }
 
-        public PreloadedDataByFile[] GetPreloadedData(string id)
+        public PreloadedContentMetaData GetPreloadedDataMetaInformationForPanelData(string id)
+        {
+            var filesInDirectory = GetFiles(id);
+            var zipFilesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
+            if (zipFilesInDirectory.Length > 0)
+            {
+                try
+                {
+                    return new PreloadedContentMetaData(id,
+                        fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
+                        archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
+                            .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(CsvExtension)))
+                            .ToArray(), PreloadedContentType.Panel);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.Message, e);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        public PreloadedDataByFile GetPreloadedDataOfSample(string id)
+        {
+            var filesInDirectory = GetFiles(id);
+            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
+            if (csvFilesInDirectory.Length != 0)
+            {
+                return this.GetPreloadedDataFromFile(id, csvFilesInDirectory[0]);
+            }
+            return null;
+        }
+
+        public PreloadedDataByFile[] GetPreloadedDataOfPanel(string id)
         {
             var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
             if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
                 return new PreloadedDataByFile[0];
 
             var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
-
-            return TryToGetPreloadedDataFromCsvFile(filesInDirectory, id) ??
-                this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath);
+            return this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath);
         }
 
-        private PreloadedDataByFile[] TryToGetPreloadedDataFromCsvFile(IEnumerable<string> filesInDirectory, string id)
+        private IEnumerable<string> GetFiles(string id)
         {
-            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
-            if (csvFilesInDirectory.Length != 0)
-            {
-                return new[] { GetPreloadedDataFromFile(id, csvFilesInDirectory[0]) };
-            }
-            return null;
+            var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
+            if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
+                return new string[0];
+
+            return fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
         }
 
         private PreloadedDataByFile[] TryToGetPreloadedDataFromZipArchive(IEnumerable<string> filesInDirectory, string id, string currentFolderPath)
@@ -127,40 +160,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 .Select(file => GetPreloadedDataFromFile(id, file))
                 .Where(data => data != null)
                 .ToArray();
-        }
-
-        private PreloadedContentMetaData TryToGetMetaDataFromCsvFile(IEnumerable<string> filesInDirectory, string id)
-        {
-            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(CsvExtension)).ToArray();
-            if (csvFilesInDirectory.Length == 0)
-                return null;
-
-            var csvFile = csvFilesInDirectory[0];
-            var csvFileName = fileSystemAccessor.GetFileName(csvFile);
-            return new PreloadedContentMetaData(id, csvFileName,
-                new[] { new PreloadedFileMetaData(csvFileName, fileSystemAccessor.GetFileSize(csvFile), true) });
-        }
-
-        private PreloadedContentMetaData TryToGetMetaDataFromZipArchive(IEnumerable<string> filesInDirectory, string id)
-        {
-            var zipFilesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
-            if (zipFilesInDirectory.Length > 0)
-            {
-                try
-                {
-                    return new PreloadedContentMetaData(id,
-                        fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
-                        archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
-                            .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(CsvExtension)))
-                            .ToArray());
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e.Message, e);
-                    return null;
-                }
-            }
-            return null;
         }
 
         private PreloadedDataByFile GetPreloadedDataFromFile(string id, string fileInDirectory)

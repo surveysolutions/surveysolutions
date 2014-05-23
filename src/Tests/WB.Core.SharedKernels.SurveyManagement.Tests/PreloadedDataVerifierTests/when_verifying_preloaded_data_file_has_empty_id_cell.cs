@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.Verify(questionnaireId, 1, new[] { preloadedDataByFile });
+                    preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
         It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);
