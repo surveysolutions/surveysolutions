@@ -25,7 +25,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.TabletInformationSender
                         && _.ReadAllBytes(It.IsAny<string>()) == new byte[0]),
                 Mock.Of<IJsonUtils>(), string.Empty, string.Empty, string.Empty,
                 Mock.Of<IRestServiceWrapperFactory>(_ => _.CreateRestServiceWrapper(
-                    Moq.It.IsAny<string>()) ==
+                    Moq.It.IsAny<string>(), true) ==
                     Mock.Of<IRestServiceWrapper>(r_ => r_.ExecuteRestRequestAsync<bool>(It.IsAny<string>(), It.IsAny<CancellationToken>(),
                         It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()) == isSentSuccessfully)));
         }
