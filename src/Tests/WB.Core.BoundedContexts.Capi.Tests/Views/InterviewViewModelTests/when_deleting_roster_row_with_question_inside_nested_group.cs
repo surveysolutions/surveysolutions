@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             questionInNestedGroupId = Guid.Parse("20000000000000000000000000000000");
             nestedGroupId = Guid.Parse("30000000000000000000000000000000");
 
-            var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
+            rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             questionnarie = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
@@ -78,6 +78,18 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         It should_not_contain_question_from_nested_group = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNestedGroupId, new decimal[] { 0 })).ShouldBeEmpty();
 
+        It should_unansweredQuestions_in_statistic_contain_rosterSizeQuestionId = () =>
+           interviewViewModel.Statistics.UnansweredQuestions.Any(q => q.PublicKey == new InterviewItemId(rosterSizeQuestionId, new decimal[0])).ShouldBeTrue();
+
+        It should_count_of_unansweredQuestions_in_statistic_be_equal_to_1 = () =>
+           interviewViewModel.Statistics.UnansweredQuestions.Count.ShouldEqual(1);
+
+        It should_answeredQuestions_in_statistic_be_empty = () =>
+          interviewViewModel.Statistics.AnsweredQuestions.ShouldBeEmpty();
+
+        It should_invalidQuestions_in_statistic_be_empty = () =>
+          interviewViewModel.Statistics.InvalidQuestions.ShouldBeEmpty();
+
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
@@ -86,5 +98,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         private static Guid rosterId;
         private static Guid nestedGroupId;
         private static Guid questionInNestedGroupId;
+        private static Guid rosterSizeQuestionId;
     }
 }

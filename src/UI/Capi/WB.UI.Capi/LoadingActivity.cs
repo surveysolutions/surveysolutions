@@ -3,8 +3,6 @@ using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Views;
-using Android.Widget;
 using Android.Content.PM;
 using CAPI.Android.Core.Model.SyncCacher;
 using Main.Core;
@@ -26,28 +24,42 @@ namespace WB.UI.Capi
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : Activity
     {
+        private object syncLock = new object();
+        private CancellationTokenSource cancellationToken;
+
         protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+            cancellationToken = this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+        }
+
+        public override void OnBackPressed()
+        {
+            if (cancellationToken != null)
+                cancellationToken.Cancel();
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            if(cancellationToken != null)
+                cancellationToken.Cancel();
         }
 
         protected void Restore(CancellationToken ct, Guid publicKey)
         {
             this.CheckAndRestoreFromSyncPackage(publicKey);
-            
+
             InterviewViewModel interview = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                 new QuestionnaireScreenInput(publicKey));
             
-            if (interview == null)
+            if (interview == null || ct.IsCancellationRequested)
             {
                 this.RunOnUiThread(this.Finish);
                 return;
             }
-
-            /*if (interview.)*/
 
             var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
             intent.PutExtra("publicKey", publicKey.ToString());
@@ -58,27 +70,33 @@ namespace WB.UI.Capi
         {
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
 
-            if (!syncCacher.DoesCachedItemExist(itemKey))
-                return;
-
-            var item = syncCacher.LoadItem(itemKey);
-            if (!string.IsNullOrWhiteSpace(item))
+            lock (this.syncLock)
             {
-                try
-                {
-                    string content = PackageHelper.DecompressString(item);
-                    var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
+                if (!syncCacher.DoesCachedItemExist(itemKey))
+                    return;
 
-                    NcqrsEnvironment.Get<ICommandService>()
-                        .Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
-
-                    syncCacher.DeleteItem(itemKey);
-                }
-                catch(Exception e)
+                var item = syncCacher.LoadItem(itemKey);
+                if (!string.IsNullOrWhiteSpace(item))
                 {
-                    logger.Error("error during restor after synchronization", e);
+                    try
+                    {
+                        string content = PackageHelper.DecompressString(item);
+                        var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
+
+                        NcqrsEnvironment.Get<ICommandService>()
+                            .Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
+
+                        syncCacher.DeleteItem(itemKey);
+                    }
+                    catch (Exception e)
+                    {
+                        //if state is saved as event but denormalizer failed we won't delete file
+                        logger.Error("Error occured during restoring interview after synchronization", e);
+                    }
                 }
             }
         }
+
+
     }
 }
