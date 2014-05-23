@@ -118,6 +118,8 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewCreated_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer_in_RejectedByHQ_status.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultipleOptionsQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericIntegerQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericRealQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
