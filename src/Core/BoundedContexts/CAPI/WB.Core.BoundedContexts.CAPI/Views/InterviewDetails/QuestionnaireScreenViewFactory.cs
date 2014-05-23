@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public QuestionnaireScreenViewFactory(IReadSideRepositoryReader<InterviewViewModel> documentStorage)
         {
             this.documentStorage = documentStorage;
-            this.bus = NcqrsEnvironment.Get<IEventBus>();
+            this.bus = ServiceLocator.Current.GetInstance<IEventBus>("interviewViewBus"); //NcqrsEnvironment.Get<IEventBus>();
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
         }
