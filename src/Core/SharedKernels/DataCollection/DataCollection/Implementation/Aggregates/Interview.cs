@@ -2757,6 +2757,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
             var affectingQuestions = new Queue<Identity>(new[] { answeredQuestion });
 
+            Func<Identity, bool> isQuestionNeedToBeAdded =
+                (questionId) =>
+                    !affectingQuestions.Any(q => q.Id == questionId.Id && q.RosterVector.SequenceEqual(questionId.RosterVector));
+
             while (affectingQuestions.Count > 0)
             {
                 Identity affectingQuestion = affectingQuestions.Dequeue();
@@ -2776,13 +2780,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     if (isNewStateEnabled != isOldStateEnabled)
                     {
-                        var underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(dependentGroup.Id);
+                        var underlyingQuestionIds =
+                            questionnaire.GetAllUnderlyingQuestions(dependentGroup.Id);
+
                         IEnumerable<Identity> underlyingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                             state, underlyingQuestionIds, dependentGroup.RosterVector, questionnaire, getRosterInstanceIds);
 
                         foreach (var underlyingQuestion in underlyingQuestions)
                         {
-                            affectingQuestions.Enqueue(underlyingQuestion);
+                            if (isQuestionNeedToBeAdded(underlyingQuestion))
+                                affectingQuestions.Enqueue(underlyingQuestion); 
                         }
                     }
                 }
@@ -2805,7 +2812,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     if (isNewStateEnabled != isOldStateEnabled)
                     {
-                        affectingQuestions.Enqueue(dependentQuestion);
+                        if (isQuestionNeedToBeAdded(dependentQuestion))
+                            affectingQuestions.Enqueue(dependentQuestion);
                     }
                 }
             }
