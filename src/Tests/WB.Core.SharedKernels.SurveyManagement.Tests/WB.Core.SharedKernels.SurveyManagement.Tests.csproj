@@ -232,7 +232,8 @@
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_roster_inside_roster_by_different_roster_size_ids.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_roster_inside_roster_by_the_same_roster_size_ids.cs" />
     <Compile Include="PreloadedDataServiceTests\PreloadedDataServiceTestContext.cs" />
-    <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDto_is_called_for_2_data_files.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_is_called.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_is_called_for_2_data_files.cs" />
     <Compile Include="PreloadedDataServiceTests\when_FindLevelInPreloadedData_is_called_with_lower_case_file_name.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_fixed_roster.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_multyoption_question.cs" />
@@ -244,7 +245,7 @@
     <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
-    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_questionnaire_is_absent.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_panel_preloaded_data_and_questionnaire_is_absent.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_linked_question.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_general_error.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_empty_value.cs" />
@@ -261,6 +262,8 @@
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_no_id_and_parent_columns.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_orphan_roster_data.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_roster_row_with_invalid_id.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_sample_preloaded_data_and_questionnaire_is_absent.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_sample_preloaded_data_file_has_no_id_and_parent_columns.cs" />
     <Compile Include="PreloadingTemplateServiceTests\PreloadingTemplateServiceTestContext.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_archive_were_build_before_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="PreloadingTemplateServiceTests\when_questionnaire_has_2_levels_and_GetFilePathToPreloadingTemplate_called.cs" />

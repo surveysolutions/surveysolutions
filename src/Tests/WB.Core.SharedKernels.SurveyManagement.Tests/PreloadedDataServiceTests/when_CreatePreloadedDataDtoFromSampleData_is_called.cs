@@ -10,11 +10,10 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
 {
-    internal class when_CreatePreloadedDataDto_is_called_for_2_data_files : PreloadedDataServiceTestContext
+    internal class when_CreatePreloadedDataDtoFromSampleData_is_called : PreloadedDataServiceTestContext
     {
         Establish context = () =>
         {
@@ -27,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                         IsRoster = true,
                         RosterSizeSource = RosterSizeSourceType.FixedTitles,
                         PublicKey = rosterGroupId,
-                        RosterFixedTitles = new []{"a"},
+                        RosterFixedTitles = new[] { "a" },
                         Children = new List<IComposite> { new NumericQuestion() { StataExportCaption = "nq2", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() } }
                     });
 
@@ -37,11 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
         Because of =
             () =>
                 result =
-                    preloadedDataService.CreatePreloadedDataDtosFromPanelData(new[]
-                    {
-                        CreatePreloadedDataByFile(new[] { "Id", "nq1" }, new[] { new[] { "1", "2" } }, questionnaireDocument.Title),
-                        CreatePreloadedDataByFile(new[] { "Id", "nq2", "ParentId" }, new[] { new[] { "1", "2", "1" } }, "Roster Group")
-                    });
+                    preloadedDataService.CreatePreloadedDataDtoFromSampleData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, new[] { new[] { "1", "2" } }, "some file name"));
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
