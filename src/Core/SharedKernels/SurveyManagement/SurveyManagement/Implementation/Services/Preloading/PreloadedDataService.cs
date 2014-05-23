@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -137,10 +138,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return dataFile.Header.ToList().FindIndex(header => header == "ParentId");
         }
 
-        public PreloadedDataDto[] CreatePreloadedDataDto(PreloadedDataByFile[] allLevels)
+        public PreloadedDataDto[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
         {
-            allLevels = this.PreparePreloadedData(allLevels);
-
             var topLevelData = GetDataFileByLevelName(allLevels, questionnaireDocument.Title);
 
             if (topLevelData == null)
@@ -164,14 +163,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return result.ToArray();
         }
 
-        public PreloadedDataByFile[] PreparePreloadedData(PreloadedDataByFile[] allLevels)
+        public PreloadedDataDto[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile)
         {
-            if (allLevels.Length == 1)
+            var result = new List<PreloadedDataDto>();
+            foreach (var topLevelRow in sampleDataFile.Content)
             {
-                return new[] { new PreloadedDataByFile(allLevels[0].Id, questionnaireDocument.Title, allLevels[0].Header, allLevels[0].Content) };
-            }
+                var answersToFeaturedQuestions = BuildAnswerForLevel(topLevelRow, sampleDataFile.Header, questionnaireDocument.Title);
 
-            return allLevels;
+                result.Add(new PreloadedDataDto(Guid.NewGuid().FormatGuid(), new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions) }));
+            }
+            return result.ToArray();
         }
 
         public Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)

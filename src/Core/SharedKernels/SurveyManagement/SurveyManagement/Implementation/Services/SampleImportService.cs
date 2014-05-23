@@ -54,10 +54,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
         }
 
-        public void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
+        public void CreatePanel(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId,
+            Guid responsibleSupervisorId)
         {
             this.tempSampleCreationStorage.Store(new SampleCreationStatus(id), id);
-            new Task(() => this.CreateSampleInternal(questionnaireId, version, id, data, responsibleHeadquarterId, responsibleSupervisorId))
+            new Task(() => this.CreateInterviewInternal(questionnaireId, version, id, (preloadedDataService) => preloadedDataService.CreatePreloadedDataDtosFromPanelData(data), responsibleHeadquarterId, responsibleSupervisorId))
+                .Start();
+        }
+
+        public void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile data, Guid responsibleHeadquarterId,
+            Guid responsibleSupervisorId)
+        {
+
+            this.tempSampleCreationStorage.Store(new SampleCreationStatus(id), id);
+            new Task(() => this.CreateInterviewInternal(questionnaireId, version, id, (preloadedDataService) => preloadedDataService.CreatePreloadedDataDtoFromSampleData(data), responsibleHeadquarterId, responsibleSupervisorId))
                 .Start();
         }
 
@@ -66,16 +76,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return this.tempSampleCreationStorage.GetByName(id);
         }
 
-        private void CreateSampleInternal(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data,
+        private void CreateInterviewInternal(Guid questionnaireId, long version, string id, Func<IPreloadedDataService, PreloadedDataDto[]> preloadedDataDtoCreator/*PreloadedDataByFile[] data*/,
             Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
         {
             var result = this.GetSampleCreationStatus(id);
-            if (data.Length == 0)
-            {
-                result.SetErrorMessage("Data is absent");
-                this.tempSampleCreationStorage.Store(result, id);
-                return;
-            }
 
             var bigTemplateObject = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
             var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaireId, version);
@@ -95,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             result.SetStatusMessage("Data parsing");
             this.tempSampleCreationStorage.Store(result, id);
 
-            var interviewForCreate = preloadedDataService.CreatePreloadedDataDto(data);
+            var interviewForCreate =preloadedDataDtoCreator(preloadedDataService);
 
             if (interviewForCreate == null)
             {

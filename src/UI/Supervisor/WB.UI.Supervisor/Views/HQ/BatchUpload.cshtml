@@ -1,8 +1,10 @@
-﻿@model WB.UI.Supervisor.Models.BatchUploadModel
+﻿@using WB.UI.Supervisor.Models
+@model WB.UI.Supervisor.Models.BatchUploadModel
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
 }
+
 <div class="row-fluid">
     <h3>Upload sample </h3>
     <div>
@@ -13,34 +15,30 @@
         <table class="table table-striped table-bordered table-condensed table-break-words">
             <thead>
                 <tr>
-                    <th>Id</th>
                     @foreach (var item in Model.FeaturedQuestions)
                     {
                         <th>@Html.DisplayFor(modelItem => item.Caption)</th>
                     }
-                    <th>ParentId</th>
                 </tr>
             </thead>
             <tbody>
                 @for (int i = 0; i < 5; i++)
                 {
-                     
+
                     <tr>
-                        <th>@((i + 1).ToString())</th>
                         @foreach (var item in Model.FeaturedQuestions)
                         {
                             <th>_</th>
                         }
-                        <th></th>
                     </tr>
-                    
+
                 }
             </tbody>
         </table>
     </div>
 
     <div>
-        @using (Html.BeginForm("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("SampleBatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
 
             @Html.HiddenFor(x => x.QuestionnaireId)
@@ -64,7 +62,7 @@
     <a href="@Url.Action("TemplateDownload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion })" class="btn">download template archive button</a>
 
     <div>
-        @using (Html.BeginForm("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("PanelBatchUpload", "HQ", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
         {
 
             @Html.HiddenFor(x => x.QuestionnaireId)
@@ -80,3 +78,4 @@
         }
     </div>
 </div>
+
