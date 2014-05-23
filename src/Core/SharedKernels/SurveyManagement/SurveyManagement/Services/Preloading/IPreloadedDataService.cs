@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -23,5 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
         ValueParsingResult ParseQuestion(string answer, string variableName, out KeyValuePair<Guid, object> parsedValue);
         PreloadedDataDto[] CreatePreloadedDataDto(PreloadedDataByFile[] allLevels);
+
+        PreloadedDataByFile[] PreparePreloadedData(PreloadedDataByFile[] allLevels);
     }
 }

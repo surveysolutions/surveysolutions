@@ -398,8 +398,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void ResendInterviewForPerson(InterviewData interview, Guid responsibleId)
         {
-            var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned);
-
+            InterviewSynchronizationDto interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned);
             this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
 
@@ -417,7 +416,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             currentState.Document.ResponsibleId = evnt.Payload.InterviewerId;
             currentState.Document.ResponsibleRole = UserRoles.Operator;
             currentState.Sequence = evnt.EventSequence;
-            this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId);
+
+            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters)
+            {
+                this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId);
+            }
+
             return currentState;
         }
 
