@@ -49,19 +49,15 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                 });
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
 
-            rosterSizeQuestionItemId = new InterviewItemId(mandatoryQuestionToBeAnsweredId, new decimal[] { });
-            rosterTitleQuestionItemId = new InterviewItemId(notAnsweredMandatoryQuestionId, new decimal[] { });
+            mandatoryQuestionToBeAnsweredItemId = new InterviewItemId(mandatoryQuestionToBeAnsweredId, new decimal[] { });
+            notAnsweredMandatoryQuestionItemId = new InterviewItemId(notAnsweredMandatoryQuestionId, new decimal[] { });
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(rosterSizeQuestionItemId, 1);
+            interviewViewModel.SetAnswer(mandatoryQuestionToBeAnsweredItemId, 1);
 
         private It should_answered_question_has_IsMandatoryAndEmpty_property_value_false = () =>
-            interviewViewModel.FindQuestion(q => q.PublicKey == rosterSizeQuestionItemId).SingleOrDefault().IsMandatoryAndEmpty.ShouldEqual(false);
-
-        private It should_not_answered_question_has_IsMandatoryAndEmpty_property_value_true = () =>
-            interviewViewModel.FindQuestion(q => q.PublicKey == rosterTitleQuestionItemId).SingleOrDefault().IsMandatoryAndEmpty.ShouldEqual(true);
-            
+            interviewViewModel.FindQuestion(q => q.PublicKey == mandatoryQuestionToBeAnsweredItemId).SingleOrDefault().IsMandatoryAndEmpty.ShouldEqual(false);
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
@@ -70,7 +66,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         private static Guid notAnsweredMandatoryQuestionId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
 
-        private static InterviewItemId rosterSizeQuestionItemId;
-        private static InterviewItemId rosterTitleQuestionItemId;
+        private static InterviewItemId mandatoryQuestionToBeAnsweredItemId;
+        private static InterviewItemId notAnsweredMandatoryQuestionItemId;
     }
 }

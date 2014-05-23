@@ -16,16 +16,16 @@ namespace WB.UI.Shared.Android.Bindings
 
         protected override void SetValueToView(TextView view, object value)
         {
-            var validationStatus = (QuestionStatus) value;
+            var status = (QuestionStatus) value;
 
-
-            if (validationStatus.HasFlag(QuestionStatus.Valid))
+            var enabled = status.HasFlag(QuestionStatus.Enabled) && status.HasFlag(QuestionStatus.ParentEnabled);
+            if (!status.HasFlag(QuestionStatus.Valid) && enabled)
             {
-                view.Visibility = ViewStates.Gone;
+                view.Visibility = ViewStates.Visible;
             }
             else
             {
-                view.Visibility = ViewStates.Visible;
+                view.Visibility = ViewStates.Gone;
             }
         }
 
