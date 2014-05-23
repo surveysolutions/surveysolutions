@@ -48,7 +48,7 @@
       scope="\\web.config$"
       match="/configuration/system.net/mailSettings/smtp/network" />
    </parameter>
-   <parameter name="Enable ReCaptcha"
+   <parameter name="Enable ReCaptcha">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='IsReCaptchaEnabled']/@value" />
