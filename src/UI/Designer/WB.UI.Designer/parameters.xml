@@ -43,7 +43,7 @@
       match="/configuration/system.net/defaultProxy/@enabled" />
    </parameter>
    <parameter name="Setup email address"
-      description="Email from which registration response comes"
+      description="Email from which registration response comes">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/system.net/mailSettings/smtp/network" />
