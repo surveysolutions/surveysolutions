@@ -2,6 +2,6 @@
 {
     public interface IRestServiceWrapperFactory
     {
-        IRestServiceWrapper CreateRestServiceWrapper(string baseAddress, bool acceptUnsignedCertificate = true);
+        IRestServiceWrapper CreateRestServiceWrapper(string baseAddress, bool acceptUnsignedCertificate = false);
     }
 }
