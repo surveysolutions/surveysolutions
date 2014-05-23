@@ -83,11 +83,13 @@
       match="/configuration/appSettings/add[@key='IsReCaptchaEnabled']/@value" />
    </parameter>
    <parameter name="ReCaptcha private key">
+   <parameterValidation kind="AllowEmpty" />
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='ReCaptchaPrivateKey']/@value" />
    </parameter>
   <parameter name="ReCaptcha public key">
+   <parameterValidation kind="AllowEmpty" />
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='ReCaptchaPublicKey']/@value" />
