@@ -42,6 +42,7 @@ namespace WB.UI.Supervisor.Controllers
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
+        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
                             IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
@@ -49,7 +50,7 @@ namespace WB.UI.Supervisor.Controllers
                             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
                             ISampleImportService sampleImportService,
                             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
-                                allUsersAndQuestionnairesFactory, IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository, IPreloadedDataVerifier preloadedDataVerifier)
+                                allUsersAndQuestionnairesFactory, IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository, IPreloadedDataVerifier preloadedDataVerifier, IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -60,6 +61,7 @@ namespace WB.UI.Supervisor.Controllers
             this.preloadingTemplateService = preloadingTemplateService;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
+            this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -97,7 +99,8 @@ namespace WB.UI.Supervisor.Controllers
             var viewModel = new BatchUploadModel()
             {
                 QuestionnaireId = id,
-                QuestionnaireVersion = version
+                QuestionnaireVersion = version,
+                FeaturedQuestions = questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions
             };
 
             return this.View(viewModel);

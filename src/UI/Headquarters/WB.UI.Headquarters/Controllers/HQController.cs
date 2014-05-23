@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
-
+        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers
                 allUsersAndQuestionnairesFactory,
             IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
             IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository,
-            IPreloadedDataVerifier preloadedDataVerifier)
+            IPreloadedDataVerifier preloadedDataVerifier, IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -61,6 +61,7 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadingTemplateService = preloadingTemplateService;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
+            this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -98,7 +99,8 @@ namespace WB.UI.Headquarters.Controllers
             var viewModel = new BatchUploadModel()
             {
                 QuestionnaireId = id,
-                QuestionnaireVersion = version
+                QuestionnaireVersion = version,
+                FeaturedQuestions = questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions
             };
 
             return this.View(viewModel);
