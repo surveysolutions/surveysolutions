@@ -23,7 +23,6 @@
       match="/configuration/appSettings/add[@key='Raven.Databases.Views']/@value" />
    </parameter>
    <parameter name="Plain storage"
-      description=""
       defaultValue="PlainStorage">
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
@@ -43,17 +42,55 @@
       scope="\\web.config$"
       match="/configuration/system.net/defaultProxy/@enabled" />
    </parameter>
-   <parameter name="Setup network element for email"
-      description="Network node under smtp element from which registration response comes">
+   <parameter name="Network defaultCredentials"
+      defaultValue="false">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
-      match="/configuration/system.net/mailSettings/smtp" />
+      match="/configuration/system.net/mailSettings/smtp/network/@defaultCredentials" />
+   </parameter>
+   <parameter name="Network host">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/system.net/mailSettings/smtp/network/@host" />
+   </parameter>
+   <parameter name="Network port">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/system.net/mailSettings/smtp/network/@port" />
+   </parameter>
+   <parameter name="Network userName">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/system.net/mailSettings/smtp/network/@userName" />
+   </parameter>
+   <parameter name="Network password">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/system.net/mailSettings/smtp/network/@password" />
+   </parameter>
+   <parameter name="Network enableSsl"
+      defaultValue="false">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/system.net/mailSettings/smtp/network/@enableSsl" />
    </parameter>
    <parameter name="Enable ReCaptcha"
       defaultValue="true">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='IsReCaptchaEnabled']/@value" />
+   </parameter>
+   <parameter name="ReCaptcha private key">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/appSettings/add[@key='ReCaptchaPrivateKey']/@value" />
+   </parameter>
+  <parameter name="ReCaptcha public key">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/appSettings/add[@key='ReCaptchaPublicKey']/@value" />
    </parameter>
    <parameter name="Enable Tracking"
       defaultValue="true">
