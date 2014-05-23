@@ -37,18 +37,25 @@
    </parameter>
    <parameter name="Enable defaultproxy"
       description="Enable/disable default proxy setting"
-      defaultValue="false">
+      defaultValue="true">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/system.net/defaultProxy/@enabled" />
    </parameter>
-   <parameter name="Setup email address"
-      description="Email from which registration response comes">
+   <parameter name="Setup network element for email"
+      description="Network node under smtp element from which registration response comes">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/system.net/mailSettings/smtp/network" />
    </parameter>
-   <parameter name="Enable ReCaptcha">
+   <parameter name="Enable ReCaptcha"
+      defaultValue="true">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/appSettings/add[@key='IsReCaptchaEnabled']/@value" />
+   </parameter>
+   <parameter name="Enable Tracking"
+      defaultValue="true">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='IsReCaptchaEnabled']/@value" />
