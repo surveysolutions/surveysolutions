@@ -47,7 +47,7 @@
       description="Network node under smtp element from which registration response comes">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
-      match="/configuration/system.net/mailSettings/smtp/network" />
+      match="/configuration/system.net/mailSettings/smtp" />
    </parameter>
    <parameter name="Enable ReCaptcha"
       defaultValue="true">
@@ -59,6 +59,6 @@
       defaultValue="true">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
-      match="/configuration/appSettings/add[@key='IsReCaptchaEnabled']/@value" />
+      match="/configuration/appSettings/add[@key='IsTrackingEnabled']/@value" />
    </parameter>
   </parameters>
