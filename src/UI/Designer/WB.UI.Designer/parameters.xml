@@ -29,10 +29,28 @@
       match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
    </parameter>
    <parameter name="Enable Updated Designer"
-      description="This parameter show if Updated Designer should be enabled"
+      description="This parameter shows if updated designer page should be enabled"
       defaultValue="false">
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='IsNewDesignerEditPageEnabled']/@value" />
+   </parameter>
+   <parameter name="Enable defaultproxy"
+      description="Enable/disable default proxy setting"
+      defaultValue="false">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/system.net/defaultProxy/@enabled" />
+   </parameter>
+   <parameter name="Setup email address"
+      description="Email from which registration response comes">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/system.net/mailSettings/smtp/network" />
+   </parameter>
+   <parameter name="Enable ReCaptcha">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/appSettings/add[@key='IsReCaptchaEnabled']/@value" />
    </parameter>
   </parameters>
