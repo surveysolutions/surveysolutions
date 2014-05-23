@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRepositoryTests
 {
-    internal class when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformation_is_called : FilebasedPreloadedDataRepositoryTestContext
+    internal class when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformationForPanelData_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
         private Establish context = () =>
         {
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformation(archiveId);
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(archiveId);
 
         It should_result_has_info_about_2_elements = () =>
             result.FilesMetaInformation.Length.ShouldEqual(2);

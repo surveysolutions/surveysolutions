@@ -107,19 +107,35 @@ namespace WB.UI.Supervisor.Controllers
         }
 
         [HttpPost]
-        public ActionResult BatchUpload(BatchUploadModel model)
+        public ActionResult SampleBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View("BatchUpload", model);
             }
 
             var preloadedDataId = preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
-            var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformation(preloadedDataId);
-      
-            return this.View("ImportSample",new PreloadedMetaDataView(model.QuestionnaireId,model.QuestionnaireVersion, preloadedMetadata));
+            var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
+        }
+
+        [HttpPost]
+        public ActionResult PanelBatchUpload(BatchUploadModel model)
+        {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
+            if (!ModelState.IsValid)
+            {
+                return View("BatchUpload", model);
+            }
+
+            var preloadedDataId = preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
         }
 
         public ActionResult TemplateDownload(Guid id, long version)
@@ -130,16 +146,30 @@ namespace WB.UI.Supervisor.Controllers
 
         public ActionResult VerifySample(Guid questionnaireId, long version, string id)
         {
-            var errors = preloadedDataVerifier.Verify(questionnaireId, version, preloadedDataRepository.GetPreloadedData(id));
+            var errors = preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedDataRepository.GetPreloadedDataOfSample(id));
             this.ViewBag.SupervisorList =
               this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
-            return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id));
+            return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Sample));
         }
 
-
-        public ActionResult ImportPreloadedData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        public ActionResult VerifyPanel(Guid questionnaireId, long version, string id)
         {
-            this.sampleImportService.CreateSample(questionnaireId, version, id, preloadedDataRepository.GetPreloadedData(id),
+            var errors = preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedDataRepository.GetPreloadedDataOfPanel(id));
+            this.ViewBag.SupervisorList =
+              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+            return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Panel));
+        }
+
+        public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        {
+            this.sampleImportService.CreatePanel(questionnaireId, version, id, preloadedDataRepository.GetPreloadedDataOfPanel(id),
+                this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
+            return this.RedirectToAction("SampleCreationResult", new { id });
+        }
+
+        public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        {
+            this.sampleImportService.CreateSample(questionnaireId, version, id, preloadedDataRepository.GetPreloadedDataOfSample(id),
                 this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
             return this.RedirectToAction("SampleCreationResult", new { id });
         }

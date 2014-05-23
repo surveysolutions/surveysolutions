@@ -26,14 +26,14 @@ namespace WB.UI.Supervisor.Tests.HQControllerTests
 
         Because of = () =>
         {
-            actionResult = controller.BatchUpload(inputModel);
+            actionResult = controller.SampleBatchUpload(inputModel);
         };
 
         It should_return_ViewResult = () =>
             actionResult.ShouldBeOfExactType<ViewResult>();
 
-        It should_return_view_with_name_empty_name = () =>
-            ((ViewResult)actionResult).ViewName.ShouldBeEmpty();
+        It should_return_view_with_name_BatchUpload = () =>
+            ((ViewResult)actionResult).ViewName.ShouldEqual("BatchUpload");
 
         It should_return_view_of_type__BatchUploadModel__ = () =>
             ((ViewResult)actionResult).Model.ShouldBeOfExactType<BatchUploadModel>();
