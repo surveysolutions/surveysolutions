@@ -161,8 +161,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
-            this.tvError.Visibility = ViewStates.Gone;
+            //HideAllErrorMessages();
             this.AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler, this.SaveAnswerSuccessHandler);
+        }
+
+        protected void HideAllErrorMessages()
+        {
+            this.tvError.Visibility = ViewStates.Gone;
+            this.tvMError.Visibility = ViewStates.Gone;
         }
 
         private void SaveAnswerErrorHandler(Exception ex)
@@ -305,6 +311,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected TextView tvError
         {
             get { return this.FindViewById<TextView>(Resource.Id.tvError); }
+        }
+        protected TextView tvMError
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.tvMError); }
         }
         protected EditText etComments
         {
