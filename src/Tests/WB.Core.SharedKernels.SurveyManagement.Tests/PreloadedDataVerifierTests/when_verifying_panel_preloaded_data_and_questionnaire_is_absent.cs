@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_and_questionnaire_is_absent : PreloadedDataVerifierTestContext
+    internal class when_verifying_panel_preloaded_data_and_questionnaire_is_absent : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
