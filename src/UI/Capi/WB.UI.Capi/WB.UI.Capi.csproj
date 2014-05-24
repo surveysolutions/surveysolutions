@@ -166,6 +166,7 @@
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
+    <Compile Include="Syncronization\ISyncPackageApplier.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Setup.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="SynchronizationActivity.cs" />
+    <Compile Include="Syncronization\SyncPackageApplier.cs" />
     <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
     <Compile Include="Syncronization\Pull\PullDataProcessor.cs" />
     <Compile Include="Syncronization\Pull\RestPull.cs" />

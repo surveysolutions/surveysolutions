@@ -34,23 +34,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
         }
 
-        public IEnumerable<PreloadedDataVerificationError> Verify(Guid questionnaireId, long version, PreloadedDataByFile[] data)
+        public IEnumerable<PreloadedDataVerificationError> VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
-            var questionnaire = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaireId, version);
-            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(questionnaireId, version);
-            if (questionnaire == null || questionnaireExportStructure == null || questionnaireRosterStructure == null)
+            var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
+            if (preloadedDataService == null)
+            {
+                return new []{new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire)};
+            }
+            var result = new List<PreloadedDataVerificationError>();
+            var datas = new [] { data };
+            result.AddRange(
+                this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
+                    PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
+                        preloadedDataService));
+            result.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
+            return result;
+        }
+
+        public IEnumerable<PreloadedDataVerificationError> VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
+        {
+            var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
+            if (preloadedDataService == null)
             {
                 yield return new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire);
                 yield break;
             }
-
-            questionnaire.Questionnaire.ConnectChildrenWithParent();
-
-            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
-                questionnaireRosterStructure, questionnaire.Questionnaire);
-            
-            data = preloadedDataService.PreparePreloadedData(data);
 
             var errorsMessagess =
                 from verifier in this.AtomicVerifiers
@@ -63,6 +71,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 yield return preloadedDataVerificationError;
             }
+        }
+
+        private IPreloadedDataService CreatePreloadedDataService(Guid questionnaireId, long version)
+        {
+            var questionnaire = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
+            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaireId, version);
+            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(questionnaireId, version);
+            if (questionnaire == null || questionnaireExportStructure == null || questionnaireRosterStructure == null)
+            {
+                return null;
+            }
+
+            questionnaire.Questionnaire.ConnectChildrenWithParent();
+
+            return this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
+                questionnaireRosterStructure, questionnaire.Questionnaire);
         }
 
         private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>>> AtomicVerifiers

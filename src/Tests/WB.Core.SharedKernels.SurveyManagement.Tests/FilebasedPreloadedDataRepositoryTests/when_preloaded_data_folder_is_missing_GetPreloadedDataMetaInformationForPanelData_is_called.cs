@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRepositoryTests
 {
-    internal class when_preloaded_data_folder_is_missing_GetPreloadedDataMetaInformation_is_called : FilebasedPreloadedDataRepositoryTestContext
+    internal class when_preloaded_data_folder_is_missing_GetPreloadedDataMetaInformationForPanelData_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
         private Establish context = () =>
         {
@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformation(Guid.NewGuid().FormatGuid());
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(Guid.NewGuid().FormatGuid());
 
         It should_result_be_null = () =>
          result.ShouldBeNull();

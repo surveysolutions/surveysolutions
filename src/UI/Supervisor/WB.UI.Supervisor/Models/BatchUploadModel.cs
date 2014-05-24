@@ -14,5 +14,6 @@ namespace WB.UI.Supervisor.Models
         [ValidateFile(ErrorMessage = "Please select file")]
         [Display(Name = "CSV File")]
         public HttpPostedFileBase File { get; set; }
+        public FeaturedQuestionItem[] FeaturedQuestions { get; set; }
     }
 }

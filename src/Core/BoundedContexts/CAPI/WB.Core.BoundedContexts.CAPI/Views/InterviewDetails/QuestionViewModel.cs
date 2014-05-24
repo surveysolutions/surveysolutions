@@ -82,7 +82,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public bool IsMandatoryAndEmpty
         {
-            get { return this.Mandatory && String.IsNullOrEmpty(this.AnswerString); }
+            get
+            {
+                return this.Mandatory &&
+                    String.IsNullOrEmpty(this.AnswerString) &&
+                    !this.Status.HasFlag(QuestionStatus.Valid) &&
+                    this.Status.HasFlag(QuestionStatus.Enabled) &&
+                    Status.HasFlag(QuestionStatus.ParentEnabled);
+            }
         }
 
         public string MandatoryValidationMessage
@@ -174,6 +181,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             else
                 this.Status &= ~QuestionStatus.Enabled;
             this.RaisePropertyChanged("Status");
+            this.RaisePropertyChanged("IsMandatoryAndEmpty");
         }
 
         public virtual void SetValid(bool valid)
@@ -185,6 +193,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             else
                 this.Status &= ~QuestionStatus.Valid;
             this.RaisePropertyChanged("Status");
+            this.RaisePropertyChanged("IsMandatoryAndEmpty");
         }
 
         public bool IsEnabled()
@@ -201,6 +210,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             else
                 this.Status &= ~QuestionStatus.ParentEnabled;
             this.RaisePropertyChanged("Status");
+            this.RaisePropertyChanged("IsMandatoryAndEmpty");
         }
 
         protected ISubstitutionService SubstitutionService

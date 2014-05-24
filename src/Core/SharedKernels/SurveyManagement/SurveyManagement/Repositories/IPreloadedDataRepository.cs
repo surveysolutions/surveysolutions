@@ -11,7 +11,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Repositories
     public interface IPreloadedDataRepository
     {
         string Store(Stream preloadedDataFile, string fileName);
-        PreloadedContentMetaData GetPreloadedDataMetaInformation(string id);
-        PreloadedDataByFile[] GetPreloadedData(string id);
+        PreloadedContentMetaData GetPreloadedDataMetaInformationForSampleData(string id);
+        PreloadedContentMetaData GetPreloadedDataMetaInformationForPanelData(string id);
+        PreloadedDataByFile GetPreloadedDataOfSample(string id);
+        PreloadedDataByFile[] GetPreloadedDataOfPanel(string id);
     }
 }
