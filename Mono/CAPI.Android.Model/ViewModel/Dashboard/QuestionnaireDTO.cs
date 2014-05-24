@@ -11,7 +11,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     public class QuestionnaireDTO : DenormalizerRow
     {
         public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IList<FeaturedItem> properties,
-            long surveyVersion, bool createdOnClient)
+            long surveyVersion, bool? createdOnClient = false)
         {
             Id = id.FormatGuid();
             Status = (int)status;

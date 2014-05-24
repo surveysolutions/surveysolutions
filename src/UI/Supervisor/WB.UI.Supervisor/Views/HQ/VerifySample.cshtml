@@ -1,5 +1,6 @@
 ﻿@using Lucene.Net.Index
 @using Mono.CSharp
+@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @using WB.UI.Supervisor.Utils
@@ -8,6 +9,7 @@
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
 }
+
 
 <div class="row-fluid">
     @if (Model.Errors.Length > 0)
@@ -57,12 +59,12 @@
                 </tbody>
             </table>
         </div>
-         <a href="@Url.Action("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version })" class="btn btn-primary"><i class="icon-white"></i>Upload new data</a>
+        <a href="@Url.Action("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version })" class="btn btn-primary"><i class="icon-white"></i>Upload new data</a>
     }
     else
     {
         <h3>Data is valid</h3>
-        using (Html.BeginForm("ImportPreloadedData", "HQ", new { id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+        using (Html.BeginForm(Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData", "HQ", new { id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
         {
             <fieldset class="form-horizontal">
                 <div class="control-group">

@@ -1,6 +1,7 @@
 ﻿@using System.Activities.Expressions
 @using System.ServiceModel.Channels
 @using Mono.CSharp
+@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedMetaDataView
@@ -38,6 +39,7 @@
                 </tbody>
             </table>
         </div>
-        <a href="@Url.Action("VerifySample", new { id = Model.MetaData.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version })" class="btn btn-primary">Verify</a>
+        <a href="@Url.Action(Model.MetaData.PreloadedContentType == PreloadedContentType.Sample ? "VerifySample" : "VerifyPanel", new { id = Model.MetaData.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version })" 
+           class="btn btn-primary">Verify</a>
     }
 </div>

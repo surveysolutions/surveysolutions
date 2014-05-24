@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
 {
     public interface IPreloadedDataVerifier
     {
-        IEnumerable<PreloadedDataVerificationError> Verify(Guid questionnaireId, long version, PreloadedDataByFile[] data);
+        IEnumerable<PreloadedDataVerificationError> VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data);
+        IEnumerable<PreloadedDataVerificationError> VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data);
     }
 }

@@ -23,8 +23,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string parentIdValue);
         Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
         ValueParsingResult ParseQuestion(string answer, string variableName, out KeyValuePair<Guid, object> parsedValue);
-        PreloadedDataDto[] CreatePreloadedDataDto(PreloadedDataByFile[] allLevels);
 
-        PreloadedDataByFile[] PreparePreloadedData(PreloadedDataByFile[] allLevels);
+        PreloadedDataDto[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
+        PreloadedDataDto[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile);
     }
 }

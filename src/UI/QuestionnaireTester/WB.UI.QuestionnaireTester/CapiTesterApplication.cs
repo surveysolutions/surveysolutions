@@ -237,6 +237,7 @@ namespace WB.UI.QuestionnaireTester
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
             this.InitInterviewStorage(bus);
             this.InitTemplateStorage(bus);
