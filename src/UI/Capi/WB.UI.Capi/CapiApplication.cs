@@ -45,6 +45,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Injections;
+using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
@@ -277,15 +278,16 @@ namespace WB.UI.Capi
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
+
+            this.kernel.Unbind<ISyncPackageApplier>();
+            this.kernel.Bind<ISyncPackageApplier>().To<SyncPackageApplier>().InSingletonScope();
             
             #region register handlers
-
 
             var interviewViewBus = new InProcessEventBus();
             this.kernel.Bind<IEventBus>().ToConstant(interviewViewBus).Named("interviewViewBus");
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-            
 
             var eventHandler =
                 new InterviewViewModelDenormalizer(
