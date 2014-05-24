@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRepositoryTests
 {
-    internal class when_preloaded_data_with_single_csv_is_present_and_GetPreloadedData_is_called : FilebasedPreloadedDataRepositoryTestContext
+    internal class when_preloaded_data_with_single_csv_is_present_and_GetPreloadedDataOfSample_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
         private Establish context = () =>
         {
@@ -33,32 +33,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedData(csvFileId);
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfSample(csvFileId);
 
-        It should_result_has_1_elements = () =>
-            result.Length.ShouldEqual(1);
 
         It should_first_pre_loaded_data_name_should_be_test_csv = () =>
-            result[0].FileName.ShouldEqual("test.csv");
+            result.FileName.ShouldEqual("test.csv");
 
         It should_first_pre_loaded_data_has_one_row = () =>
-            result[0].Content.Length.ShouldEqual(1);
+            result.Content.Length.ShouldEqual(1);
 
         It should_first_pre_loaded_data_has_one_element_in_row = () =>
-            result[0].Content[0].Length.ShouldEqual(1);
+            result.Content[0].Length.ShouldEqual(1);
 
         It should_first_pre_loaded_data_has_one_element_in__first_row_be_equal_to_1 = () =>
-           result[0].Content[0][0].ShouldEqual("1");
+           result.Content[0][0].ShouldEqual("1");
 
         It should_first_pre_loaded_data_header_has_one_column = () =>
-           result[0].Header.Length.ShouldEqual(1);
+           result.Header.Length.ShouldEqual(1);
 
         It should_first_pre_loaded_data_header_has_value_equal_to_q1 = () =>
-           result[0].Header[0].ShouldEqual("q1");
+           result.Header[0].ShouldEqual("q1");
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;
-        private static PreloadedDataByFile[] result;
+        private static PreloadedDataByFile result;
         private static Mock<IArchiveUtils> archiveUtils;
         private static Mock<IRecordsAccessorFactory> recordsAccessorFactory;
         private static string csvFileName = "test";

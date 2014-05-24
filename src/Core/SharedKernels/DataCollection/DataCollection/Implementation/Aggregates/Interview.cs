@@ -2757,6 +2757,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
             var affectingQuestions = new Queue<Identity>(new[] { answeredQuestion });
 
+            Func<Identity, bool> isQuestionNeedToBeAdded =
+                (questionId) =>
+                    !affectingQuestions.Any(q => q.Id == questionId.Id && q.RosterVector.SequenceEqual(questionId.RosterVector));
+
             while (affectingQuestions.Count > 0)
             {
                 Identity affectingQuestion = affectingQuestions.Dequeue();
@@ -2776,13 +2780,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     if (isNewStateEnabled != isOldStateEnabled)
                     {
-                        var underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(dependentGroup.Id);
+                        var underlyingQuestionIds =
+                            questionnaire.GetAllUnderlyingQuestions(dependentGroup.Id);
+
                         IEnumerable<Identity> underlyingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                             state, underlyingQuestionIds, dependentGroup.RosterVector, questionnaire, getRosterInstanceIds);
 
                         foreach (var underlyingQuestion in underlyingQuestions)
                         {
-                            affectingQuestions.Enqueue(underlyingQuestion);
+                            if (isQuestionNeedToBeAdded(underlyingQuestion))
+                                affectingQuestions.Enqueue(underlyingQuestion); 
                         }
                     }
                 }
@@ -2805,7 +2812,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     if (isNewStateEnabled != isOldStateEnabled)
                     {
-                        affectingQuestions.Enqueue(dependentQuestion);
+                        if (isQuestionNeedToBeAdded(dependentQuestion))
+                            affectingQuestions.Enqueue(dependentQuestion);
                     }
                 }
             }
@@ -3451,13 +3459,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool ShouldGroupBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity groupId, IQuestionnaire questionnaire)
         {
-            return !ShouldGroupBeEnabledByCustomEnablementCondition(state, groupId, questionnaire, (s, questionId) =>
-            {
-                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId.Id, questionId.RosterVector);
-                return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
-                    ? state.AnswersSupportedInExpressions[questionKey]
-                    : null;
-            });
+            return !ShouldGroupBeEnabledByCustomEnablementCondition(state, groupId, questionnaire,
+                (currentState, questionInCondition) =>
+                    GetEnabledQuestionAnswerSupportedInExpressions(state,
+                        questionInCondition,
+                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire),
+                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire),
+                        questionnaire));
         } 
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)

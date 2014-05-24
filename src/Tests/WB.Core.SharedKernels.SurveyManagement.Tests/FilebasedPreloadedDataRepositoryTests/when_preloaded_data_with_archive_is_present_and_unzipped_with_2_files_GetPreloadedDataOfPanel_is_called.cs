@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRepositoryTests
 {
-    internal class when_preloaded_data_with_archive_is_present_and_unzipped_with_2_files_GetPreloadedData_is_called : FilebasedPreloadedDataRepositoryTestContext
+    internal class when_preloaded_data_with_archive_is_present_and_unzipped_with_2_files_GetPreloadedDataOfPanel_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
         private Establish context = () =>
         {
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedData(archiveId);
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId);
 
         It should_result_has_2_elements = () =>
             result.Length.ShouldEqual(2);

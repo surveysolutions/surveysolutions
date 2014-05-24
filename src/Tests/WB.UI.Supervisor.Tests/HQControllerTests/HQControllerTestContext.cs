@@ -52,7 +52,7 @@ namespace WB.UI.Supervisor.Tests.HQControllerTests
                 Mock.Of<IViewFactory<UserListViewInputModel, UserListView>>(),
                 sampleImportServiceMock ?? Mock.Of<ISampleImportService>(),
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(),
-                Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(), Mock.Of<IPreloadedDataVerifier>());
+                Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(), Mock.Of<IPreloadedDataVerifier>(), Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>());
         }
     }
 }
