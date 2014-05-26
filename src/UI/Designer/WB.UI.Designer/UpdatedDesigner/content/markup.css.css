@@ -5850,6 +5850,7 @@ body {
   font-weight: bold;
   font-size: 12px;
   line-height: 12px;
+  letter-spacing: 1px;
 }
 .wb-inline-button:hover {
   background: #dfe3e4;
@@ -5860,7 +5861,8 @@ body {
 .wb-inline-button.error {
   color: #d20426;
 }
-.wb-inline-button-medium {
+.btn-lg,
+.btn-group-lg > .btn {
   padding: 17px;
   border: none;
   background-color: #2fc507;
@@ -5868,11 +5870,12 @@ body {
   font-weight: bold;
   font-size: 12px;
   line-height: 12px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: #ffffff;
   border-radius: 3px;
 }
-.wb-inline-button-medium:hover {
+.btn-lg:hover {
   background: #29ac06;
 }
 .dropdown.width60 {
@@ -6700,6 +6703,7 @@ body {
   font-weight: bold;
   font-size: 12px;
   line-height: 12px;
+  letter-spacing: 1px;
 }
 /*
 #chapter-panel-context-menu {
