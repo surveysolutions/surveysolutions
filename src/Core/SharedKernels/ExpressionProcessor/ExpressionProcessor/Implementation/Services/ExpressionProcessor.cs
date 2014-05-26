@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
             return identifierCollector.GetCollectedIdentifiers();
         }
 
-        public bool EvaluateBooleanExpression(string expression, Func<string, object> getValueForIdentifier)
+        public virtual bool EvaluateBooleanExpression(string expression, Func<string, object> getValueForIdentifier)
         {
             var evaluatableExpression = new Expression(expression);
 

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -58,6 +60,27 @@ namespace WB.Tests.Integration.InterviewTests
             return Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire);
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
+        {
+            var result = new QuestionnaireDocument();
+            var chapter = new Group("Chapter");
+            result.Children.Add(chapter);
+
+            foreach (var child in children)
+            {
+                chapter.Children.Add(child);
+            }
+
+            return result;
+        }
+
+        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
+        {
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<TInstance>())
+                .Returns(instance);
         }
     }
 }

@@ -15,5 +15,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return string.Format("{0:N}[{1}]", id, string.Join("-", rosterVector.Select(v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
         }
+
+        public static string ConvertIdentityToString(Identity identity)
+        {
+            return ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
+        }
     }
 }
