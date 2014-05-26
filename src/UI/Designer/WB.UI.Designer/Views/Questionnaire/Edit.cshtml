@@ -185,8 +185,8 @@
                 <ul data-bind="with: questionnaire" class="list">
                     <li>
                         <button type="button" id="toggleAllChapters" class="btn btn-info btn-mini" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip">
-                            <span data-bind="visible: $root.isAllChaptersExpanded"><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
-                            <span data-bind="visible:  $root.isAllChaptersExpanded()==false"><sup><i class="icon-plus icon-white"></i></sup><sub><i class="icon-plus icon-white"></i></sub></span>
+                            <span data-bind="visible: $root.isAllChaptersExpanded"><sup><i class="fa fa-minus"></i></sup><sub><i class="fa fa-minus"></i></sub></span>
+                            <span data-bind="visible:  $root.isAllChaptersExpanded()==false"><sup><i class="fa fa-plus"></i></sup><sub><i class="fa fa-plus"></i></sub></span>
                         </button>
                         <div class="q-item-wrap q-questionnaire" data-bind="css: {selected : isSelected}">
 
