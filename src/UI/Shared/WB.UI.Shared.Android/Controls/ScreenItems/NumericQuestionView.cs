@@ -58,7 +58,11 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             if (!this.IsParseAnswerStringSucceeded(newAnswer, out answer))
                 return;
 
-            if (this.Model.AnswerObject!=null && answer.Equals(this.Model.AnswerObject)) return;
+            if (this.Model.AnswerObject != null && answer.Equals(this.Model.AnswerObject))
+            {
+                base.FireAnswerSavedEvent();
+                return;
+            }
 
             if (!this.IsCommentsEditorFocused)
                 this.HideKeyboard(this.etAnswer);
