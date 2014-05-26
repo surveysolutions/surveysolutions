@@ -6373,7 +6373,7 @@ body {
   cursor: pointer;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item:first-child {
-  margin-top: 20px;
+  margin-top: 5px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list .item:hover {
   background-image: url(i/question-item-dots.png);
@@ -6747,7 +6747,7 @@ body {
   color: #c80000;
 }
 #verify-popover-content .question-list .item:first-child {
-  margin-top: 20px;
+  margin-top: 5px;
 }
 #verify-popover-content .question-list .item.section {
   font-weight: bold;
