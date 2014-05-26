@@ -97,6 +97,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.llWrapper.LongClick += this.AbstractQuestionView_LongClick;
             this.llWrapper.FocusChange += this.llWrapper_FocusChange;
             this.llWrapper.Clickable = true;
+            
             /*llWrapper.Focusable = true;
             llWrapper.FocusableInTouchMode = true;*/
         }
@@ -120,7 +121,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 handler(this, new AnswerSetEventArgs(this.Model.PublicKey, newAnswer));
         }
 
-        private void FireAnswerSavedEvent()
+        protected void FireAnswerSavedEvent()
         {
             var handler = this.AnswerSaved;
             if (handler != null)
