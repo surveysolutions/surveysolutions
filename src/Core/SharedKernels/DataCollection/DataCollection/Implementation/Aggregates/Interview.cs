@@ -2755,11 +2755,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 ConversionHelper.ConvertIdAndRosterVectorToString(answeredQuestion.Id, answeredQuestion.RosterVector)
             };
-            var affectingQuestions = new Queue<Identity>(new[] { answeredQuestion });
+            var processsedGroupKeys = new HashSet<string> { };
 
-            Func<Identity, bool> isQuestionNeedToBeAdded =
-                (questionId) =>
-                    !affectingQuestions.Any(q => q.Id == questionId.Id && q.RosterVector.SequenceEqual(questionId.RosterVector));
+            var affectingQuestions = new Queue<Identity>(new[] { answeredQuestion });
 
             while (affectingQuestions.Count > 0)
             {
@@ -2772,11 +2770,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (Identity dependentGroup in dependentGroups)
                 {
+                    if (processsedGroupKeys.Contains(ConversionHelper.ConvertIdentityToString(dependentGroup))) continue;
+
                     bool isNewStateEnabled = this.ShouldGroupBeEnabledByCustomEnablementCondition(state, dependentGroup, questionnaire, getAnswer);
                     bool isOldStateEnabled = !IsGroupDisabled(state, dependentGroup);
                     PutToCorrespondingListAccordingToEnablementStateChange(dependentGroup, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled: isNewStateEnabled,
                         isOldStateEnabled: isOldStateEnabled);
+
+                    processsedGroupKeys.Add(ConversionHelper.ConvertIdentityToString(dependentGroup));
 
                     if (isNewStateEnabled != isOldStateEnabled)
                     {
@@ -2788,8 +2790,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                         foreach (var underlyingQuestion in underlyingQuestions)
                         {
-                            if (isQuestionNeedToBeAdded(underlyingQuestion))
-                                affectingQuestions.Enqueue(underlyingQuestion); 
+                            affectingQuestions.Enqueue(underlyingQuestion); 
                         }
                     }
                 }
@@ -2801,6 +2802,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (Identity dependentQuestion in dependentQuestions)
                 {
+                    if (processedQuestionKeys.Contains(ConversionHelper.ConvertIdentityToString(dependentQuestion))) continue;
+
                     bool isNewStateEnabled = this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, dependentQuestion, questionnaire, getAnswer);
                     bool isOldStateEnabled = !IsQuestionDisabled(state, dependentQuestion);
                     PutToCorrespondingListAccordingToEnablementStateChange(dependentQuestion,
@@ -2812,8 +2815,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     if (isNewStateEnabled != isOldStateEnabled)
                     {
-                        if (isQuestionNeedToBeAdded(dependentQuestion))
-                            affectingQuestions.Enqueue(dependentQuestion);
+                        affectingQuestions.Enqueue(dependentQuestion);
                     }
                 }
             }
