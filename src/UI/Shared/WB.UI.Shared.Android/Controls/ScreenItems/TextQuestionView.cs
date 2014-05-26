@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
     public class TextQuestionView : AbstractQuestionView
     {
         public TextQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source,
-                                Guid questionnairePublicKey, ICommandService commandService, 
+                                Guid questionnairePublicKey, ICommandService commandService,
                                 IAnswerOnQuestionCommandService answerCommandService, IAuthentication membership)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService, membership)
         {
@@ -55,6 +55,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     new AnswerTextQuestionCommand(
                         this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
                         this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, newAnswer));
+            }
+            else
+            {
+                base.FireAnswerSavedEvent();
             }
         }
 
