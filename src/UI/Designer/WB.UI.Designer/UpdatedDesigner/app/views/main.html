@@ -10,9 +10,12 @@
         <div class="header-menu">
             This document is <span>private</span>, shared with <span>alex.smith@worldbank.org</span> and <a href="">2 other</a>
             <div class="buttons">
-                <input class="wb-inline-button" type="button" value="SETTINGS">
+                <!--<input class="wb-inline-button" type="button" value="SETTINGS">
                 <input class="wb-inline-button" type="button" value="HELP">
-                <input class="wb-inline-button" type="button" value="LOG OUT">
+                <input class="wb-inline-button" type="button" value="LOG OUT">-->
+                <button class="btn">SETTINGS</button>
+                <button class="btn">HELP</button>
+                <button class="btn">LOG OUT</button>
             </div>
         </div>
     </div>
@@ -112,10 +115,16 @@
         <div class="question-list">
             <div ng-repeat="item in items" ng-include="'tree_item_renderer.html'">
             </div>
-        </div>
-        
-        <div ng-show="currentChapter==undefined">
-            start box
+
+            <div class="start-box" ng-show="currentChapter==undefined">
+                <p>This questionnaire is empty.</p>
+
+                <p>You can start by using <button class="btn" disabled>ADD QUESTION</button> and <button class="btn" disabled>ADD GROUP</button> buttons<br/>
+                    on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel</p>
+
+                <p>Language of survey, device types, collaboration and other options<br/>
+                    can be found at <button class="btn" disabled>SETTINGS</button> panel (top right corner)</p>
+            </div>
         </div>
     </div>
 
