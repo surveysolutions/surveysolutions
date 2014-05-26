@@ -41,4 +41,5 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Designer.Tests")]
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.QuestionnaireVerification.Tests")]
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement.Tests")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
