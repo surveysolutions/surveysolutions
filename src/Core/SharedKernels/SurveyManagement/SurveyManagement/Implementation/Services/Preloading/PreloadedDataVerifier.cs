@@ -36,14 +36,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public IEnumerable<PreloadedDataVerificationError> VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
-            var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
+            var questionnaire = GetQuestionnaireDocument(questionnaireId, version);
+            var preloadedDataService = CreatePreloadedDataService(questionnaire);
             if (preloadedDataService == null)
             {
                 return new []{new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire)};
             }
             var result = new List<PreloadedDataVerificationError>();
-            var datas = new [] { data };
-            result.AddRange(
+
+            var datas = new[] { new PreloadedDataByFile(data.Id, questionnaire.Questionnaire.Title, data.Header, data.Content) };
+           
+ result.AddRange(
                 this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
                     PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
                         preloadedDataService));
@@ -53,7 +56,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public IEnumerable<PreloadedDataVerificationError> VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
         {
-            var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
+            var questionnaire = GetQuestionnaireDocument(questionnaireId, version);
+            var preloadedDataService = CreatePreloadedDataService(questionnaire);
             if (preloadedDataService == null)
             {
                 yield return new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire);
@@ -73,17 +77,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
-        private IPreloadedDataService CreatePreloadedDataService(Guid questionnaireId, long version)
+        private QuestionnaireDocumentVersioned GetQuestionnaireDocument(Guid questionnaireId, long version)
         {
             var questionnaire = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaireId, version);
-            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(questionnaireId, version);
-            if (questionnaire == null || questionnaireExportStructure == null || questionnaireRosterStructure == null)
+            if (questionnaire == null)
+                return null;
+            questionnaire.Questionnaire.ConnectChildrenWithParent();
+            return questionnaire;
+        }
+
+        private IPreloadedDataService CreatePreloadedDataService(QuestionnaireDocumentVersioned questionnaire)
+        {
+            if (questionnaire == null)
+                return null;
+
+            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaire.Questionnaire.PublicKey, questionnaire.Version);
+            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(questionnaire.Questionnaire.PublicKey, questionnaire.Version);
+            
+            if (questionnaireExportStructure == null || questionnaireRosterStructure == null)
             {
                 return null;
             }
-
-            questionnaire.Questionnaire.ConnectChildrenWithParent();
 
             return this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                 questionnaireRosterStructure, questionnaire.Questionnaire);
