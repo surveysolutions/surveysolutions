@@ -377,7 +377,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.LinkedVariables = questionsUsedInConditionExpression;
         }
 
-        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, int orderIndex = -1)
+        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, int? orderIndex = null)
         {
             var parentGroup = string.IsNullOrEmpty(parentGroupId)
                 ? questionnaire
@@ -396,9 +396,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 QuestionsCount = 0
             };
 
-            if (orderIndex > -1)
+            if (orderIndex.HasValue)
             {
-                parentGroup.Items.Insert(orderIndex, groupInfoView);
+                parentGroup.Items.Insert(orderIndex.Value, groupInfoView);
             }
             else
             {
