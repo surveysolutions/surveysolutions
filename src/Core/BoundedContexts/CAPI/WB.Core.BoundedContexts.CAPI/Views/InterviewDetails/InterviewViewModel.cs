@@ -53,6 +53,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.SetAnswers(interview);
             this.DisableInterviewElements(interview);
             this.MarkAnswersAsInvalid(interview);
+
+            this.CreateInterviewTitle(questionnaire);
             #endregion
         }
 
