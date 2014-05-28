@@ -130,10 +130,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
                 yield break;
+            var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
             foreach (var columnName in levelData.Header)
             {
                 if (this.serviceColumns.Contains(columnName))
                     continue;
+
+                if (referenceNames.Contains(columnName))
+                    continue;
+                
                 if (!levelExportStructure.HeaderItems.Values.Any(headerItem => headerItem.ColumnNames.Contains(columnName)))
                     yield return columnName;
             }
