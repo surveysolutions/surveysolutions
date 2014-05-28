@@ -288,6 +288,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             });
         }
 
+        public static IPublishedEvent<GroupBecameARoster> GroupBecameARosterEvent(string groupId)
+        {
+            return ToPublishedEvent(new GroupBecameARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId)));
+        }
+
+        public static IPublishedEvent<GroupStoppedBeingARoster> GroupStoppedBeingARosterEvent(string groupId)
+        {
+            return ToPublishedEvent(new GroupStoppedBeingARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId)));
+        }
+
         public static IPublishedEvent<GroupDeleted> GroupDeletedEvent(string groupId)
         {
             return ToPublishedEvent(new GroupDeleted()

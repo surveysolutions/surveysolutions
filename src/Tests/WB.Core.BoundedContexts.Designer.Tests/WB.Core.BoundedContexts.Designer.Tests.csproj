@@ -183,6 +183,8 @@
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupStoppedBeingARoster_event_received.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupBecameARoster_event_received.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="QuestionnaireTests\when_moving_numeric_question_with_title_which_contains_roster_title_as_substitution_reference_from_roster_to_group.cs" />
