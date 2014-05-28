@@ -130,10 +130,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
                 yield break;
+            var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
             foreach (var columnName in levelData.Header)
             {
                 if (this.serviceColumns.Contains(columnName))
                     continue;
+
+                if (referenceNames.Contains(columnName))
+                    continue;
+                
                 if (!levelExportStructure.HeaderItems.Values.Any(headerItem => headerItem.ColumnNames.Contains(columnName)))
                     yield return columnName;
             }
@@ -169,6 +174,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
             var idCoulmnIndexInParentFile = preloadedDataService.GetIdColumnIndex(parentDataFile);
+            if (idCoulmnIndexInParentFile < 0 || parentIdColumnIndex < 0)
+                yield break;
+
             var parentIds = parentDataFile.Content.Select(row => row[idCoulmnIndexInParentFile]).ToList();
 
             for (int y = 0; y < levelData.Content.Length; y++)
@@ -195,6 +203,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var idCoulmnIndexFile = preloadedDataService.GetIdColumnIndex(levelData);
             var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
+
+            if (idCoulmnIndexFile < 0 || parentIdColumnIndex < 0)
+                yield break;
+
             for (int y = 0; y < levelData.Content.Length; y++)
             {
                 var parentIdValue = levelData.Content[y][parentIdColumnIndex];
