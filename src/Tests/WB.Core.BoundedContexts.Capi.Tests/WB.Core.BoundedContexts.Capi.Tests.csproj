@@ -93,6 +93,7 @@
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_2_rows_in_roster_already_present.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_contains_nested_group.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_is_nested_roster.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_one_answered_prefilled_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_one_unanswered_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_disabling_answered_invalid_question_question_in_interview.cs" />
