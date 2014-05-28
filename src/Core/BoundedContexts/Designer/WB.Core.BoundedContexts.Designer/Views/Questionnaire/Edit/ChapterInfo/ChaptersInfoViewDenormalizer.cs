@@ -34,8 +34,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionAdded>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionUpdated>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionCloned>,
-        IUpdateHandler<GroupInfoView, QuestionnaireItemMoved>
-
+        IUpdateHandler<GroupInfoView, QuestionnaireItemMoved>,
+        IUpdateHandler<GroupInfoView, GroupBecameARoster>,
+        IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
     {
         private readonly IExpressionProcessor expressionProcessor;
 
@@ -270,6 +271,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 parentOfGroup.Items.Remove(groupOrQuestionView);
                 targetGroup.Items.Insert(Math.Min(evnt.Payload.TargetIndex, targetGroup.Items.Count), groupOrQuestionView);
             }
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupBecameARoster> evnt)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: currentState,
+               groupId: evnt.Payload.GroupId.FormatGuid());
+
+            groupView.IsRoster = true;
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupStoppedBeingARoster> evnt)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: currentState,
+                groupId: evnt.Payload.GroupId.FormatGuid());
+
+            groupView.IsRoster = false;
 
             return currentState;
         }
