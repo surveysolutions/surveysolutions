@@ -71,7 +71,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                                         || x.Status == InterviewStatus.InterviewerAssigned
                                         || x.Status == InterviewStatus.SentToCapi,
                             QuestionnaireId = x.QuestionnaireId,
-                            QuestionnaireVersion = x.QuestionnaireVersion
+                            QuestionnaireVersion = x.QuestionnaireVersion,
+                            CreatedOnClient = x.WasCreatedOnClient
                         })
                 };
         }
