@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "ParentId" }, new string[][] { new string[] { "1", "1" }, new string[] { "1", "1" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id"}, new string[][] { new string[] { "1" }, new string[] { "1" } },
                 QuestionnaireCsvFileName);
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
           result.First().References.First().PositionY.ShouldEqual(1);
 
         It should_error_has_content_with_id_and_parent_id = () =>
-            result.First().References.First().Content.ShouldEqual("id:1, parentId: 1");
+            result.First().References.First().Content.ShouldEqual("id:1, parentId: ");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
         private static IEnumerable<PreloadedDataVerificationError> result;
