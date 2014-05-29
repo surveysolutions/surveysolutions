@@ -316,6 +316,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             InterviewCommentedStatus lastInterviewCommentedStatus = interviewSummary.CommentedStatusesHistory.LastOrDefault();
             string lastComment = lastInterviewCommentedStatus != null ? lastInterviewCommentedStatus.Comment : string.Empty;
 
+
+            var featuredQuestionList = interviewSummary.WasCreatedOnClient
+                ? interviewSummary.AnswersToFeaturedQuestions
+                    .Select(
+                        featuredQuestion =>
+                            new FeaturedQuestionMeta(featuredQuestion.Key, featuredQuestion.Value.Title, featuredQuestion.Value.Answer)).ToList()
+                : null;
+
             var metadata = new InterviewMetaInfo
             {
                 PublicKey = interviewId,
@@ -326,6 +334,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 Valid = !interviewSummary.HasErrors,
                 CreatedOnClient = interviewSummary.WasCreatedOnClient,
                 TemplateVersion = interviewSummary.QuestionnaireVersion,
+                FeaturedQuestionsMeta = featuredQuestionList
             };
 
             var syncItem = new SyncItem
