@@ -28,31 +28,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             base.Initialize();
 
-            #region create ui controls and put them to the parent control
-
-            // place holder for text control and button
-            var wrapper = new GridLayout(this.Context)
-            {
-                ColumnCount = 2,
-                LayoutParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                    ViewGroup.LayoutParams.FillParent)
-            };
-
-            var wrapContenLayout = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                               ViewGroup.LayoutParams.WrapContent);
-            wrapContenLayout.AddRule(LayoutRules.AlignParentRight);
-
             this.qrBarcodeView = new TextView(this.Context);
             this.qrBarcodeView.SetTypeface(null, TypefaceStyle.Bold);
 
-            var scanButton = new Button(this.Context) { Text = "Scan", LayoutParameters = wrapContenLayout };
-            scanButton.Click += this.ScanQRBarcode;
-
-            wrapper.AddView(scanButton);
-            wrapper.AddView(this.qrBarcodeView);
-
-            this.llWrapper.AddView(wrapper);
-            #endregion
+            this.InitializeTextAndButtonView(this.qrBarcodeView, "Scan", this.ScanQRBarcode);
 
             this.PutAnswerStoredInModelToUI();
         }
