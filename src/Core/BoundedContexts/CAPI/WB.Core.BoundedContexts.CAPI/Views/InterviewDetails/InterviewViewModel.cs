@@ -32,6 +32,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             this.FeaturedQuestions = new Dictionary<InterviewItemId, QuestionViewModel>();
+            this.SuperviorQuestions = new Dictionary<InterviewItemId, AnsweredQuestionSynchronizationDto>();
+            this.SuperviorQuestionIds = new Dictionary<Guid, ValueVector<Guid>>();
         }
 
         protected ILogger Logger
@@ -171,7 +173,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void SetAnswers(InterviewSynchronizationDto interview)
         {
-            foreach (var answeredQuestion in interview.Answers)
+            foreach (AnsweredQuestionSynchronizationDto answeredQuestion in interview.Answers)
             {
                 var questionKey = new InterviewItemId(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector);
                 if (this.Questions.ContainsKey(questionKey))
@@ -183,6 +185,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 {
                     var question = this.FeaturedQuestions[questionKey];
                     question.SetAnswer(answeredQuestion.Answer);
+                }
+                else if (this.SuperviorQuestionIds.ContainsKey(answeredQuestion.Id))
+                {
+                    if (!this.SuperviorQuestions.ContainsKey(questionKey))
+                    {
+                        this.SuperviorQuestions.Add(questionKey, null);
+                    }
+                    this.SuperviorQuestions[questionKey] = answeredQuestion;
                 }
 
                 if (IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
@@ -310,7 +320,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
           new Dictionary<Guid, QuestionnaireGridViewModel>();
 
         public IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; private set; }
-
+        public IDictionary<InterviewItemId, AnsweredQuestionSynchronizationDto> SuperviorQuestions { get; private set; }
+        public IDictionary<Guid, ValueVector<Guid>> SuperviorQuestionIds { get; private set; }
+        
         #endregion
 
         public void UpdatePropagateGroupsByTemplate(Guid publicKey, decimal[] outerScopePropagationVector, int count)
@@ -616,7 +628,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var question = sender as QuestionViewModel;
             if (question == null)
                 return;
-         
+
             if (e.PropertyName == "Status")
             {
                 UpdateStatistics();
@@ -628,7 +640,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             SubstituteDependantQuestions(question);
 
-            this.UpdateRosterTitlesForVectorByPossibleHeadQuestion(question.PublicKey.Id,question.PublicKey.InterviewItemPropagationVector, question.AnswerString);
+            this.UpdateRosterTitlesForVectorByPossibleHeadQuestion(question.PublicKey.Id, question.PublicKey.InterviewItemPropagationVector, question.AnswerString);
         }
 
         private void UpdateStatistics()
@@ -644,7 +656,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             foreach (var participationQuestionId in this.questionsParticipationInSubstitutionReferences[question.PublicKey.Id])
             {
-                var questionsWhichUsesSubstitution= this.Questions.Values.Where(q => q.PublicKey.Id == participationQuestionId &&
+                var questionsWhichUsesSubstitution = this.Questions.Values.Where(q => q.PublicKey.Id == participationQuestionId &&
                     q.PublicKey.InterviewItemPropagationVector.Take(question.PublicKey.InterviewItemPropagationVector.Length)
                         .SequenceEqual(question.PublicKey.InterviewItemPropagationVector));
                 foreach (var participationQuestion in questionsWhichUsesSubstitution)
@@ -891,6 +903,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             if (question != null)
             {
+                if (question.QuestionScope != QuestionScope.Interviewer)
+                {
+                    this.SuperviorQuestionIds.Add(question.PublicKey, this.GetQuestionRosterScope(question));
+                }
+
                 if (this.IfQuestionNeedToBeSkipped(question))
                     return null;
 
@@ -987,7 +1004,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var textListQuestion = question as TextListQuestion;
 
             return new TextListQuestionViewModel(
-                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
+                new InterviewItemId(question.PublicKey), 
+                GetQuestionRosterScope(question), 
+                question.QuestionText,
                 newType,
                 true,
                 textListQuestion.Instructions,
@@ -1039,35 +1058,60 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId, decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScope)
         {
-            return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId)
-                ? Enumerable.Empty<LinkedAnswerViewModel>()
-                : this
-                    .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
-                    .Select(
-                        instanceId => this.Questions.ContainsKey(instanceId) ? this.Questions[instanceId] : null)
-                    .Where(
-                        questionInstance =>
-                            questionInstance != null && questionInstance.IsEnabled() &&
-                                LinkedQuestionUtils.IsLevelAllowedToBeUsedAsLinkSourceInCurrentScope(
-                                    questionInstance.PublicKey.InterviewItemPropagationVector, questionInstance.QuestionRosterScope,
-                                    linkedQuestionRosterVector, linkedQuestionRosterScope)
-                    )
+            if (!this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId))
+                return Enumerable.Empty<LinkedAnswerViewModel>();
+
+            if (this.SuperviorQuestionIds.ContainsKey(referencedQuestionId))
+            {
+                var questionRosterScope = this.SuperviorQuestionIds[referencedQuestionId];
+                return this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
+                    .Select(instanceId => this.SuperviorQuestions.ContainsKey(instanceId) ? this.SuperviorQuestions[instanceId] : null)
+                    .Where(questionInstance => questionInstance != null)
                     .Select(
                         questionInstance =>
-                            new LinkedAnswerViewModel(questionInstance.PublicKey.InterviewItemPropagationVector,
-                                BuildLinkedQuestionOptionTitle(questionInstance,
-                                    linkedQuestionRosterVector, linkedQuestionRosterScope)));
+                            new LinkedAnswerViewModel(
+                                questionInstance.QuestionPropagationVector,
+                                this.BuildLinkedQuestionOptionTitle(
+                                    linkedQuestionRosterVector,
+                                    linkedQuestionRosterScope,
+                                    questionRosterScope,
+                                    questionInstance.QuestionPropagationVector,
+                                    AnswerUtils.AnswerToString(questionInstance.Answer)))
+                    );
+            }
+            return this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
+                .Select(instanceId => this.Questions.ContainsKey(instanceId) ? this.Questions[instanceId] : null)
+                .Where(
+                    questionInstance =>
+                        questionInstance != null && questionInstance.IsEnabled() &&
+                            LinkedQuestionUtils.IsLevelAllowedToBeUsedAsLinkSourceInCurrentScope(
+                                questionInstance.PublicKey.InterviewItemPropagationVector, questionInstance.QuestionRosterScope,
+                                linkedQuestionRosterVector, linkedQuestionRosterScope)
+                )
+                .Select(
+                    questionInstance =>
+                        new LinkedAnswerViewModel(questionInstance.PublicKey.InterviewItemPropagationVector,
+                            this.BuildLinkedQuestionOptionTitle(linkedQuestionRosterVector, linkedQuestionRosterScope, questionInstance.QuestionRosterScope, questionInstance.PublicKey.InterviewItemPropagationVector, questionInstance.AnswerString)));
         }
 
-        private string BuildLinkedQuestionOptionTitle(QuestionViewModel referencedQuestion, decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScope)
+        private string BuildLinkedQuestionOptionTitle(decimal[] linkedQuestionRosterVector, 
+            ValueVector<Guid> linkedQuestionRosterScope, 
+            ValueVector<Guid> referensedQuestionRosterScopeVector, 
+            decimal[] referencedQuestionPropagationVector, 
+            string referencedQuestionAnswer)
         {
-            return LinkedQuestionUtils.BuildLinkedQuestionOptionTitle(referencedQuestion.AnswerString,
+            return LinkedQuestionUtils.BuildLinkedQuestionOptionTitle(
+                referencedQuestionAnswer,
                 (firstScreenInScopeId, firstScreeninScopeRosterVector) =>
                 {
                     var screenFromScope = this.Screens[new InterviewItemId(firstScreenInScopeId, firstScreeninScopeRosterVector)];
                     return screenFromScope.ScreenName;
-                }, referencedQuestion.PublicKey.InterviewItemPropagationVector, referencedQuestion.QuestionRosterScope,
-                linkedQuestionRosterVector, linkedQuestionRosterScope, rosterStructure);
+                }, 
+                referencedQuestionPropagationVector, 
+                referensedQuestionRosterScopeVector,
+                linkedQuestionRosterVector, 
+                linkedQuestionRosterScope, 
+                this.rosterStructure);
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)
