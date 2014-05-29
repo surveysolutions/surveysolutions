@@ -22,29 +22,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var rosterId = Guid.NewGuid();
             questionnaire =
                 CreateQuestionnaireDocumentWithOneChapter(new Group(rosterTitle)
                 {
                     IsRoster = true,
-                    PublicKey = Guid.NewGuid(),
+                    PublicKey = rosterId,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     RosterFixedTitles = new[] { "a" }
                 });
             questionnaire.Title = questionnaireTitle;
-            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId" }, new string[0][],
+            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { "Id" }, new string[0][],
                 questionnaireTitle + ".csv");
-            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId" }, new string[][] { new string[] { "0", "1" } },
+            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId1" }, new string[][] { new string[] { "0", "1" } },
                 rosterTitle + ".csv");
             files = new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel };
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);
-            preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(1);
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(Moq.It.IsAny<string>())).Returns(new HeaderStructureForLevel());
+            preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFileRosterLevel)).Returns(new []{1});
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName)).Returns(new HeaderStructureForLevel());
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
+                .Returns(new HeaderStructureForLevel() { LevelScopeVector = new ValueVector<Guid>(new[] { rosterId }) });
             preloadedDataServiceMock.Setup(x => x.GetParentDataFile(preloadedDataByFileRosterLevel.FileName, files))
                 .Returns(preloadedDataByFileTopLevel);
 
-            preloadedDataServiceMock.Setup(x => x.GetAvalibleIdListForParent(preloadedDataByFileTopLevel, Moq.It.IsAny<ValueVector<Guid>>(), "1"))
+            preloadedDataServiceMock.Setup(x => x.GetAvailableIdListForParent(preloadedDataByFileTopLevel, Moq.It.IsAny<ValueVector<Guid>>(), new []{"1"}))
                 .Returns((decimal[])null);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
