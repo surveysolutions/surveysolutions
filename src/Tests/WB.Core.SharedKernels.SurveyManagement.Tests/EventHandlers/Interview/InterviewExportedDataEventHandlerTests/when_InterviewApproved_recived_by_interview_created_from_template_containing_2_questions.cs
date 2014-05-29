@@ -34,8 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
         It should_first_record_id_equals_0 = () =>
             result.Levels[0].Records[0].RecordId.ShouldEqual(result.Levels[0].Records[0].InterviewId.FormatGuid());
 
-        It should_first_parent_id_equals_null = () =>
-            result.Levels[0].Records[0].ParentRecordId.ShouldBeNull();
+        It should_first_parent_ids_be_empty = () =>
+            result.Levels[0].Records[0].ParentRecordIds.ShouldBeEmpty();
 
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;

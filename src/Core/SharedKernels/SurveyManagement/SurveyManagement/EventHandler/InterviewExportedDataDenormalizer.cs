@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.Globalization;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -69,9 +70,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     interview.InterviewId.FormatGuid() :
                     dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
-                string parentRecordId = vectorLength == 0 ?
-                    null:
-                    (vectorLength == 1 ? interview.InterviewId.FormatGuid() : dataByLevel.RosterVector[vectorLength - 2].ToString(CultureInfo.InvariantCulture));
+                var parentRecordIds = new string[dataByLevel.RosterVector.Length];
+                if (parentRecordIds.Length > 0)
+                {
+                    parentRecordIds[0] = interview.InterviewId.FormatGuid();
+                    for (int i = 0; i < dataByLevel.RosterVector.Length-1; i++)
+                    {
+                        parentRecordIds[i+1] = dataByLevel.RosterVector[i].ToString(CultureInfo.InvariantCulture);
+                    }
+
+                    parentRecordIds = parentRecordIds.Reverse().ToArray();
+                }
 
                 string[] referenceValues = new string[0];
 
@@ -80,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     referenceValues = new string[]{ GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())};
                 }
 
-                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordId,
+                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordIds,
                     this.GetQuestionsForExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
             }
 
