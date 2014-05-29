@@ -27,5 +27,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
 
         PreloadedDataDto[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
         PreloadedDataDto[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile);
+        string GetValidFileNameForTopLevelQuestionnaire();
     }
 }
