@@ -322,5 +322,22 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }
         }
 
+        protected void InitializeTextAndButtonView(TextView textView, string buttonText, EventHandler buttonClickHandler)
+        {
+            var wrapper = new RelativeLayout(this.Context)
+            {
+                LayoutParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent)
+            };
+
+            var buttonLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
+            buttonLayoutParams.AddRule(LayoutRules.AlignParentRight);
+            var button = new Button(this.Context) { Text = buttonText, LayoutParameters = buttonLayoutParams };
+            button.Click += buttonClickHandler;
+
+            wrapper.AddView(button);
+            wrapper.AddView(textView);
+
+            this.llWrapper.AddView(wrapper);
+        }
     }
 }
