@@ -199,11 +199,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var result = new List<PreloadedDataDto>();
             foreach (var topLevelRow in sampleDataFile.Content)
             {
-                var answersToFeaturedQuestions = BuildAnswerForLevel(topLevelRow, sampleDataFile.Header, questionnaireDocument.Title);
+                var answersToFeaturedQuestions = BuildAnswerForLevel(topLevelRow, sampleDataFile.Header,
+                    GetValidFileNameForTopLevelQuestionnaire());
 
                 result.Add(new PreloadedDataDto(Guid.NewGuid().FormatGuid(), new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions) }));
             }
             return result.ToArray();
+        }
+
+        public string GetValidFileNameForTopLevelQuestionnaire()
+        {
+            return dataFileService.CreateValidFileName(questionnaireDocument.Title);
         }
 
         public Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
