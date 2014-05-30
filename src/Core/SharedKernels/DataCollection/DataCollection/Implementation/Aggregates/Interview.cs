@@ -212,7 +212,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnsweredQuestions.Add(questionKey);
         }
 
-        private void Apply(MultipleOptionsLinkedQuestionAnswered @event)
+        internal void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -1341,7 +1341,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime,
                 selectedPropagationVectors));
 
-            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
+            if (questionnaire.IsQuestionMandatory(questionId) && !answeredLinkedQuestions.Any())
+            {
+                this.ApplySingleAnswerDeclaredInvalidEvent(questionId, rosterVector);
+            }
+            else
+            {
+                this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
+            }
 
             this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
@@ -2095,6 +2102,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyValidityChangesEvents(new ValidityChanges(
                 answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
                 answersDeclaredInvalid: null));
+        }
+
+        private void ApplySingleAnswerDeclaredInvalidEvent(Guid questionId, decimal[] rosterVector)
+        {
+            this.ApplyValidityChangesEvents(new ValidityChanges(
+                answersDeclaredValid: null,
+                answersDeclaredInvalid: new List<Identity> { new Identity(questionId, rosterVector) }));
         }
 
         private void ApplyRosterRowsTitleChangedEvents(List<RosterIdentity> rosterInstances, string rosterTitle)
