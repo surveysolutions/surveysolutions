@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Web.Http;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
@@ -8,7 +9,7 @@ using WB.UI.Headquarters.Models.API;
 
 namespace WB.UI.Headquarters.API
 {
-    [Authorize (Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Headquarter, Supervisor")]
     public class InterviewsController : BaseApiServiceController
     {
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
@@ -22,10 +23,10 @@ namespace WB.UI.Headquarters.API
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
- 
+
         [HttpGet]
         [Route("apis/v1/interviews")] //?{templateId}&{templateVersion}&{status}&{interviewerId}&{limit=10}&{offset=1}
-        public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null, 
+        public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null,
             InterviewStatus? status = null, Guid? interviewerId = null, int limit = 10, int offset = 1)
         {
             var input = new AllInterviewsInputModel
@@ -42,7 +43,7 @@ namespace WB.UI.Headquarters.API
 
             return new InterviewApiView(interviews);
         }
-        
+
         [HttpGet]
         [Route("apis/v1/questionnaires/{id:guid}/{version:long}/interviews")]
         public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
@@ -59,7 +60,7 @@ namespace WB.UI.Headquarters.API
 
             return new InterviewApiView(interviews);
         }
-        
+
         [HttpGet]
         [Route("apis/v1/interviews/{id:guid}/details")]
         public InterviewApiDetails InterviewDetails(Guid id)
@@ -71,7 +72,14 @@ namespace WB.UI.Headquarters.API
 
             var interview = this.interviewDetailsViewFactory.Load(inputModel);
 
-            return new InterviewApiDetails(interview);
+            if (interview == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            var interviewDetails = new InterviewApiDetails(interview);
+
+            return interviewDetails;
         }
     }
 }
