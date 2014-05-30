@@ -43,6 +43,10 @@ angular.module('designerApp')
                     $scope.activeRoster = undefined;
                     $scope.activeChapter = undefined;
                     $scope.activeQuestion = item;
+                } else if (item.isRoster) {
+                    $scope.activeRoster = item;
+                    $scope.activeQuestion = undefined;
+                    $scope.activeChapter = undefined;
                 } else {
                     $scope.activeRoster = undefined;
                     $scope.activeQuestion = undefined;

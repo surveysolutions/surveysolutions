@@ -1,2 +1,37 @@
-﻿<h3>Roster</h3>
+﻿<div class="breadcrumbs">
+    <ul>
+        <li ng-repeat="breadcrumb in activeChapter.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
+    </ul>
+</div>
 
+<form role="form">
+    <h3>Roster</h3>
+
+    <div class="comment-block">
+        <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
+        <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" style="font-weight: bold;" ng-model="activeRoster.title">
+    </div>
+
+    <div class="comment-block">
+        <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
+        <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.description">
+    </div>
+
+    <div class="comment-block">
+        <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
+        <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
+    </div>
+
+    <div class="form-buttons-holder">
+        <div class="pull-left">
+            <!--<input id="edit-chapter-save-button" class="wb-inline-button-medium" type="submit" value="Save" ng-click="saveChapter()">-->
+            <button id="edit-chapter-save-button" class="btn-lg" ng-click="saveChapter()">Save</button>
+            <a ng-click="cancel()">Cancel</a>
+        </div>
+        <div class="pull-right">
+            <a ng-click="deleteChapter()">Delete</a>
+            <a ng-click="cloneChapter()">Clone</a>
+        </div>
+    </div>
+
+</form>
