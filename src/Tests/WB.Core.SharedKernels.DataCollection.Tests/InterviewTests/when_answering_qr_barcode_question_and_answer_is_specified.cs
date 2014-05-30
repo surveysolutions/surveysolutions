@@ -44,6 +44,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         It should_raise_QRBarcodeQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<QRBarcodeQuestionAnswered>();
 
+        It should_raise_ValidityChanges_event = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredValid>();
+
         It should_raise_QRBarcodeQuestionAnswered_event_with_QuestionId_equal_to_questionId = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().QuestionId.ShouldEqual(questionId);
 
