@@ -27,6 +27,7 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
         private readonly ILogger logger;
+        private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
 
         private const string FolderName = "IncomingData";
@@ -34,7 +35,7 @@ namespace WB.Core.Synchronization.SyncStorage
         private const string FileExtension = "sync";
 
         public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger,
-            SyncSettings syncSettings)
+            SyncSettings syncSettings, ICommandService commandService)
         {
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(this.path))
@@ -46,6 +47,7 @@ namespace WB.Core.Synchronization.SyncStorage
             this.userStorage = userStorage;
             this.logger = logger;
             this.syncSettings = syncSettings;
+            this.commandService = commandService;
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -56,20 +58,19 @@ namespace WB.Core.Synchronization.SyncStorage
             try
             {
                 var meta = this.GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value)
                 {
-                    var user = this.userStorage.Query(_ => _.Where(u => u.PublicKey == meta.ResponsibleId).ToList().FirstOrDefault());
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
                     if (meta.FeaturedQuestionsMeta != null)
                         prefilledQuestions = meta.FeaturedQuestionsMeta
                             .Select(q => new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value, string.Empty))
                             .ToArray();
 
-                    commandService.Execute(new CreateInterviewCreatedOnClientCommand(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                        meta.TemplateVersion, DateTime.UtcNow, user.Supervisor.Id, (InterviewStatus)meta.Status, prefilledQuestions, meta.Comments, meta.Valid));
-                    
+                    commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
+                        userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
+                        questionnaireVersion: meta.TemplateVersion.Value, status: (InterviewStatus) meta.Status,
+                        featuredQuestionsMeta: prefilledQuestions, comments: meta.Comments));
+
                 }
                 else
                     commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
