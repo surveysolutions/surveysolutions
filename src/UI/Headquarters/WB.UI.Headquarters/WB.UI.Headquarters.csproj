@@ -400,6 +400,8 @@
     <Compile Include="Models\API\InterviewApiDetails.cs" />
     <Compile Include="Models\API\InterviewApiItem.cs" />
     <Compile Include="Models\API\InterviewApiView.cs" />
+    <Compile Include="Models\API\Interview\QuestionApiItem.cs" />
+    <Compile Include="Models\API\Interview\RosterApiItem.cs" />
     <Compile Include="Models\API\QuestionnaireApiItem.cs" />
     <Compile Include="Models\API\QuestionnaireApiView.cs" />
     <Compile Include="Models\API\UserApiDetails.cs" />
