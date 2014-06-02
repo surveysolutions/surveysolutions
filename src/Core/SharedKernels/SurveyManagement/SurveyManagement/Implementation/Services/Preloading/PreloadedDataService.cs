@@ -129,12 +129,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return dataParser.TryParse(answer, variableName, questionnaireDocument, out parsedValue);
         }
 
-        public decimal GetRecordIdValueAsDecimal(string[] dataFileRecord, int idColumnIndex)
-        {
-            var cellValue = dataFileRecord[idColumnIndex];
-            return decimal.Parse(cellValue);
-        }
-
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
         {
             return dataFile.Header.ToList().FindIndex(header => header == "Id");
@@ -183,11 +177,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             foreach (var topLevelRow in topLevelData.Content)
             {
                 var rowId = topLevelRow[idColumnIndex];
-                var answersToFeaturedQuestions = BuildAnswerForLevel(topLevelRow, topLevelData.Header, topLevelData.FileName);
-
-                var rosterAnswers = this.GetAnswers(topLevelData.FileName, new[] { rowId }, new decimal[0], allLevels);
-                var levels = new List<PreloadedLevelDto>() { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions) };
-                levels.AddRange(rosterAnswers);
+                var answersByTopLevel = BuildAnswerForLevel(topLevelRow, topLevelData.Header, topLevelData.FileName);
+                var levels = new List<PreloadedLevelDto>() { new PreloadedLevelDto(new decimal[0], answersByTopLevel) };
+                var answersinsideRosters = this.GetHierarchicalAnswersByLevelName(topLevelData.FileName, new[] { rowId }, allLevels);
+                levels.AddRange(answersinsideRosters);
 
                 result.Add(new PreloadedDataDto(rowId, levels.ToArray()));
             }
@@ -239,7 +232,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return allLevels.FirstOrDefault(l => l.FileName.IndexOf(dataFileService.CreateValidFileName(name), StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-        private PreloadedLevelDto[] GetAnswers(string levelName, string[] parentIds, decimal[] rosterVector, PreloadedDataByFile[] rosterData)
+        private PreloadedLevelDto[] GetHierarchicalAnswersByLevelName(string levelName, string[] parentIds, PreloadedDataByFile[] rosterData)
         {
             var result = new List<PreloadedLevelDto>();
             var childFiles = GetChildDataFiles(levelName, rosterData);
@@ -255,25 +248,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                 foreach (var rosterRow in childRecordsOfCurrentRow)
                 {
-                    var newRosterVetor = new decimal[rosterVector.Length + 1];
-                    rosterVector.CopyTo(newRosterVetor, 0);
-                    newRosterVetor[newRosterVetor.Length - 1] = GetRecordIdValueAsDecimal(rosterRow, idColumnIndex);
-
                     var rosterAnswers = BuildAnswerForLevel(rosterRow, preloadedDataByFile.Header, preloadedDataByFile.FileName);
 
+                    var newParentIds = this.ExtendParentIdsVectorWithCurrentRecordIdOnAFirstPlace(parentIds, rosterRow[idColumnIndex]);
+                    var newRosterVetor = this.CreateRosterVectorFromParentIds(newParentIds);
+                 
                     result.Add(new PreloadedLevelDto(newRosterVetor, rosterAnswers));
-
-                    var newParentIds = new string[parentIds.Length+1];
-                    newParentIds[0] = rosterRow[idColumnIndex];
-                    for (int i = 0; i < parentIds.Length; i++)
-                    {
-                        newParentIds[i + 1] = parentIds[i];
-                    }
-
-                    result.AddRange(this.GetAnswers(preloadedDataByFile.FileName, newParentIds, newRosterVetor, rosterData));
+                    result.AddRange(this.GetHierarchicalAnswersByLevelName(preloadedDataByFile.FileName, newParentIds, rosterData));
                 }
             }
 
+            return result.ToArray();
+        }
+
+        private string[] ExtendParentIdsVectorWithCurrentRecordIdOnAFirstPlace(string[] parentIds, string currentRecordId)
+        {
+            var newParentIds = new string[parentIds.Length + 1];
+            newParentIds[0] = currentRecordId;
+            for (int i = 0; i < parentIds.Length; i++)
+            {
+                newParentIds[i + 1] = parentIds[i];
+            }
+            return newParentIds;
+        }
+
+        private decimal[] CreateRosterVectorFromParentIds(string[] parentIds)
+        {
+            var result = new List<decimal>();
+            for (int i = 0; i < parentIds.Length-1; i++)
+            {
+                result.Add(decimal.Parse(parentIds[i]));
+            }
+            result.Reverse();
             return result.ToArray();
         }
 

@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
 }
-
 <div class="row-fluid">
     <h3>Upload sample </h3>
     <div>
@@ -46,7 +45,7 @@
             <br />
             <div class="control-group">
                 <div class="controls">
-                    <input type="file" name="file" /><span> – add .csv filter to the open file dialog</span>
+                    <input type="file" name="file" accept=".csv" />
                     @Html.ValidationMessageFor(x => x.File)
                 </div>
             </div>
@@ -59,7 +58,7 @@
         In order to pre-load data to more sections and variables, you can prepare a set of .csv files that correspond to the structure of your questionnaire and put in a .zip archive . Please use the template archive below. You can put only those files and columns that you wish to upload. Any columns left missing or with titles not corresponding to an existing variable in the questionnaire will be ignored.
     </div>
     <br />
-    <a href="@Url.Action("TemplateDownload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion })" class="btn">download template archive button</a>
+    <a href="@Url.Action("TemplateDownload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion })" class="btn">download template archive</a>
 
     <div>
         @using (Html.BeginForm("PanelBatchUpload", "HQ", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
@@ -70,7 +69,7 @@
             <br />
             <div class="control-group">
                 <div class="controls">
-                    <input type="file" name="file" /><span> -add .zip filter to the open file dialog</span>
+                    <input type="file" name="file" accept=".zip" />
                     @Html.ValidationMessageFor(x => x.File)
                 </div>
             </div>
@@ -78,4 +77,3 @@
         }
     </div>
 </div>
-
