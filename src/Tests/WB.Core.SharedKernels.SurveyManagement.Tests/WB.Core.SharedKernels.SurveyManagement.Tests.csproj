@@ -234,14 +234,17 @@
     <Compile Include="PreloadedDataServiceTests\PreloadedDataServiceTestContext.cs" />
     <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_is_called.cs" />
     <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_is_called_for_2_data_files.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_is_called_for_3_data_files.cs" />
     <Compile Include="PreloadedDataServiceTests\when_FindLevelInPreloadedData_is_called_with_lower_case_file_name.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_fixed_roster.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_nested_fixed_roster.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_multyoption_question.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_numeric_question.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_textlist_question.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetColumnIndexesGoupedByQuestionVariableName_is_called_for_top_level_file.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_first_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_top_level_of_questionnaire.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_valid_data_by_nested_roster.cs" />
     <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />

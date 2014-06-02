@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         PreloadedDataVerificationReferenceType.Column),
                     this.Verifier(this.IdDuplication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
                     this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
-                    this.Verifier(this.RosterIdIsInconsistantWithRosterSizeQuestion, "PL0009",
+                    this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
                         PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
                     this.ErrorsByQuestionsWasntParsed
                 };
@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return result;
         }
 
-        private IEnumerable<PreloadedDataVerificationReference> RosterIdIsInconsistantWithRosterSizeQuestion(PreloadedDataByFile levelData,
+        private IEnumerable<PreloadedDataVerificationReference> RosterIdIsInconsistencyWithRosterSizeQuestion(PreloadedDataByFile levelData,
             PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
         {
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);

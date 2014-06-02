@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
     {
         HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName);
         PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels);
-        decimal GetRecordIdValueAsDecimal(string[] dataFileRecord, int idColumnIndex);
+        
         int GetIdColumnIndex(PreloadedDataByFile dataFile);
         int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile);
         decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues);
