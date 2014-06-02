@@ -28,14 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.StatisticsD
         }
 
 
-        protected static Mock<IReadSideRepositoryWriter<StatisticsLineGroupedByUserAndTemplate>> CreateStatisticsStorage(StatisticsLineGroupedByUserAndTemplate statistics)
-        {
-            var statisticsStorage = new Mock<IReadSideRepositoryWriter<StatisticsLineGroupedByUserAndTemplate>>();
-            statisticsStorage.Setup(x => x.GetById(Moq.It.IsAny<string>())).Returns(statistics);
-            
-            return statisticsStorage;
-        }
-
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId)
             where T : class
         {
