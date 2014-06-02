@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -108,18 +109,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var answerObject = answerOnRosterSizeQuestion.Value.Value;
             if (rosterScopeDescription.ScopeType == RosterScopeType.Numeric)
             {
+                var triggerQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(g => g.PublicKey == levelScopeVector.Last());
+                if (triggerQuestion == null)
+                    return null;
+
                 var intValueOfNumericQuestion = (int) answerObject;
+                var numericQuestion = triggerQuestion as INumericQuestion;
+                if (numericQuestion == null)
+                    return null;
+                if (numericQuestion.MaxValue.HasValue && intValueOfNumericQuestion > numericQuestion.MaxValue)
+                    intValueOfNumericQuestion = numericQuestion.MaxValue.Value;
+
                 return Enumerable.Range(0, intValueOfNumericQuestion).Select(i => (decimal) i).ToArray();
             }
 
             if (rosterScopeDescription.ScopeType == RosterScopeType.MultyOption)
             {
-                return (decimal[]) answerObject;
+                return answerObject as decimal[];
             }
 
             if (rosterScopeDescription.ScopeType == RosterScopeType.TextList)
             {
-                return ((Tuple<decimal, string>[]) answerObject).Select(a => a.Item1).ToArray();
+                return ((Tuple<decimal, string>[])answerObject).Select(a => a.Item1).ToArray();
             }
             return null;
         }
