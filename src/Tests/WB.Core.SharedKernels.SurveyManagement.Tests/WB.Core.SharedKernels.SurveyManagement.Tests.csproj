@@ -172,6 +172,8 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCreated_event.cs" />
+    <Compile Include="TestInMemoryWriter.cs" />
+    <Compile Include="EventHandlers\Interview\StatisticsDenormalizerTests\when_duplicate_creation_event_exists_in_event_stream.cs" />
     <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
